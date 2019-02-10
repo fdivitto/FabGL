@@ -1,0 +1,260 @@
+/*
+  Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
+  Copyright (c) 2019 Fabrizio Di Vittorio.
+  All rights reserved.
+
+  This file is part of FabGL Library.
+
+  FabGL is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  FabGL is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with FabGL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+
+#ifndef _FABGL_H_INCLUDED
+#define _FABGL_H_INCLUDED
+
+/**
+ * @file
+ *
+ * @brief This file is the all in one include file. Application can just include this file to use FabGL library.
+ *
+ */
+
+
+
+/**
+ * @mainpage FabGL Library
+ *
+ * [www.FabGL.com](http://www.fabgl.com) - 2019 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
+ *
+ * @version 0.1a
+ * @date 2019
+ *
+ * - - -
+ *
+ * This is a VGA Controller, PS/2 Keyboard Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.<br>
+ * This library works well with ESP32 revision 1 or upper.
+ *
+ * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
+ *
+ * Three fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts and resolutions can be used.
+ *
+ * Sprites can have up to 64 colors (RGB, 2 bits per channel + transparency).<br>
+ * A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.<br>
+ * Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.
+ *
+ * When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.<br>
+ * In this case drawing primitives always draw on the back buffer.
+ *
+ * Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing, so no flickering is visible.<br>
+ * If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.
+ *
+ * - - -
+ *
+ * The main classes of FabGL library are:
+ *    * fabgl::VGAControllerClass (instanced as \b VGAController), that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.
+ *    * fabgl::CanvasClass (instanced as \b Canvas), that provides a set of drawing primitives (lines, rectangles, text...).
+ *    * fabgl::TerminalClass (instanced as \b Terminal), that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
+ *    * fabgl::KeyboardClass (instanced as \b Keyboard), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
+ *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
+ *
+ * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
+ *
+ * See @ref confPS2 "Configuring PS/2 port" for PS/2 connection sample schema.
+ *
+ * - - -
+ * <CENTER> @link SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link ModelineStudio/ModelineStudio.ino Modeline Studio Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link LoopbackTerminal/LoopbackTerminal.ino Loopback Terminal Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link DoubleBuffer/DoubleBuffer.ino Double Buffering Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link CollisionDetection/CollisionDetection.ino Collision Detection Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ *
+ * Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com> <br>
+ * Copyright (c) 2019 Fabrizio Di Vittorio. <br>
+ * All rights reserved. <br>
+ *
+ * This file is part of FabGL Library.
+ *
+ * FabGL is free software: you can redistribute it and/or modify<br>
+ * it under the terms of the GNU General Public License as published by<br>
+ * the Free Software Foundation, either version 3 of the License, or<br>
+ * (at your option) any later version.<br>
+ *
+ * FabGL is distributed in the hope that it will be useful,<br>
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br>
+ * GNU General Public License for more details.<br>
+ *
+ * You should have received a copy of the GNU General Public License<br>
+ * along with FabGL.  If not, see <http://www.gnu.org/licenses/>.<br>
+ */
+
+
+
+/**
+ * @page confVGA Configuring VGA outputs
+ *
+ * VGA output can be configured such as 8 colors or 64 colors are displayed.
+ * Eight colors require 5 outputs (R, G, B, H and V), while sixty-four colors require 8 outputs (R0, R1, G0, G1, B0, B1, H and V).
+ *
+ * Following an example of outputs configuration and a simple digital to analog converter circuit:
+ *
+ *
+ *       === 8 colors, 1 bit per channel, 3 bit per pixel ===
+ *
+ *       Sample connection scheme:
+ *                            -----------
+ *        GPIO22 (red0) ------|R 270 Ohm|---- VGA_R
+ *                            -----------
+ *
+ *                            -----------
+ *        GPIO21 (green0) ----|R 270 Ohm|---- VGA_G
+ *                            -----------
+ *
+ *                            -----------
+ *        GPIO19 (blue0) -----|R 270 Ohm|---- VGA_B
+ *                            -----------
+ *
+ *        GPIO18 ---------------------------- VGA_HSYNC
+ *
+ *        GPIO5  ---------------------------- VGA_VSYNC
+ *
+ *       Using above GPIOs the VGA Controller may be initialized in this way:
+ *         VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);
+ *
+ *       === 64 colors, 2 bit per channel, 6 bit per pixel ===
+ *
+ *            One resistor for each R0, R1, G0, G1, B0 and B1. Low bit (LSB) should have
+ *            twice resistance value than high bit (MSB), for example 800Ohm (LSB) and 400Ohm (MSB).
+ *
+ *                            ------------
+ *        GPIO22 (red1) ------|R 400 Ohm |------*---- VGA_R
+ *                            ------------      |
+ *                            ------------      |
+ *        GPIO21 (red0) ------|R 800 Ohm |------*
+ *                            ------------
+ *
+ *                            ------------
+ *        GPIO19 (green1) ----|R 400 Ohm |------*---- VGA_G
+ *                            ------------      |
+ *                            ------------      |
+ *        GPIO18 (green0) ----|R 800 Ohm |------*
+ *                            ------------
+ *
+ *                            ------------
+ *        GPIO5 (blue1) ------|R 400 Ohm |------*---- VGA_B
+ *                            ------------      |
+ *                            ------------      |
+ *        GPIO4 (blue0) ------|R 800 Ohm |------*
+ *                            ------------
+ *
+ *        GPIO23 ------------------------------------ VGA_HSYNC
+ *
+ *        GPIO15 ------------------------------------ VGA_VSYNC
+ *
+ *       Using above GPIOs the VGA Controller may be initialized in this way:
+ *         VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
+ *
+ *     Note: Do not connect GPIO_NUM_2 (led) to the VGA signals.
+ *
+ */
+
+
+
+/**
+ * @page confPS2 Configuring PS/2 port
+ *
+ * PS2 Keyboard connection uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
+ *
+ *                                             +5V
+ *                                              |
+ *                                              |
+ *                                              *-----+
+ *                                              |     |
+ *                                             ---   ---
+ *                                             | |   | |
+ *                                             |R|   |R|
+ *                                             |2|   |2|
+ *                                             |K|   |K|
+ *                                             | |   | |
+ *                                             ---   ---
+ *                            ------------      |     |
+ *        GPIO33 (CLK)    ----|R 120 Ohm |------*--------- PS/2 KEYBOARD CLK
+ *                            ------------            |
+ *                            ------------            |
+ *        GPIO32 (DAT)    ----|R 120 Ohm |------------*--- PS/2 KEYBOARD DAT
+ *                            ------------
+ *
+ *       Using above GPIOs the PS2 Keyboard Controller may be initialized in this way:
+ *         Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
+ *
+ *
+ */
+
+
+
+/**
+ * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
+ * @example NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
+ * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
+ * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
+ * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game.
+ * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
+ * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
+ */
+
+
+
+#include "terminal.h"
+#include "vgacontroller.h"
+#include "keyboard.h"
+#include "scene.h"
+#include "collisiondetector.h"
+
+
+
+using fabgl::Color;
+using fabgl::ScreenBlock;
+using fabgl::GlyphOptions;
+using fabgl::Scene;
+using fabgl::RGB;
+using fabgl::Bitmap;
+using fabgl::Sprite;
+using fabgl::CollisionDetector;
+using fabgl::Point;
+
+
+
+
+
+#endif /* _FABGL_H_INCLUDED */

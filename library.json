@@ -1,0 +1,22 @@
+{
+  "name": "FabGL",
+  "keywords": "sprite, terminal, VT100, ansi, keyboard, VGA, I2S, game, engine, PS2, graphics, font, arduino, esp32, display",
+  "description": "VGA Controller, PS/2 Keyboard Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/fdivitto/FabGL.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Fabrizio Di Vittorio",
+      "email": "fdivitto2013@gmail.com",
+      "url": "https://github.com/fdivitto",
+      "maintainer": true
+    }
+  ],
+  "version": "0.0.1",
+  "frameworks": "arduino",
+  "platforms": "espressif32"
+}
