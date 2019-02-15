@@ -25,7 +25,7 @@
 
 
 #include "collisiondetector.h"
-#include "utils.h"
+#include "fabutils.h"
 
 
 
@@ -274,10 +274,10 @@ bool QuadTree::objectIntersectsQuadTree(QuadTreeObject * object, QuadTree * quad
 bool QuadTree::checkMaskCollision(QuadTreeObject * objectA, QuadTreeObject * objectB, Point * collisionPoint)
 {
   // intersection rectangle
-  int x1 = max(objectA->sprite->x, objectB->sprite->x);
-  int y1 = max(objectA->sprite->y, objectB->sprite->y);
-  int x2 = min(objectA->sprite->x + objectA->sprite->getWidth() - 1, objectB->sprite->x + objectB->sprite->getWidth() - 1);
-  int y2 = min(objectA->sprite->y + objectA->sprite->getHeight() - 1, objectB->sprite->y + objectB->sprite->getHeight() - 1);
+  int x1 = tmax(objectA->sprite->x, objectB->sprite->x);
+  int y1 = tmax(objectA->sprite->y, objectB->sprite->y);
+  int x2 = tmin(objectA->sprite->x + objectA->sprite->getWidth() - 1, objectB->sprite->x + objectB->sprite->getWidth() - 1);
+  int y2 = tmin(objectA->sprite->y + objectA->sprite->getHeight() - 1, objectB->sprite->y + objectB->sprite->getHeight() - 1);
 
   // look for matching non trasparent pixels inside the intersection area
   for (int y = y1; y <= y2; ++y) {

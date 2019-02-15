@@ -21,8 +21,8 @@
 
 
 
-#ifndef _UTILS_H_INCLUDED
-#define _UTILS_H_INCLUDED
+#ifndef _FABUTILS_H_INCLUDED
+#define _FABUTILS_H_INCLUDED
 
 
 
@@ -32,35 +32,35 @@ namespace fabgl {
 
 
 template <typename T>
-const T & max(const T & a, const T & b)
+const T & tmax(const T & a, const T & b)
 {
   return (a < b) ? b : a;
 }
 
 
 template <typename T>
-const T & min(const T & a, const T & b)
+const T & tmin(const T & a, const T & b)
 {
   return !(b < a) ? a : b;
 }
 
 
 template <typename T>
-const T & clamp(const T & v, const T & lo, const T & hi)
+const T & tclamp(const T & v, const T & lo, const T & hi)
 {
   return (v < lo ? lo : (v > hi ? hi : v));
 }
 
 
 template <typename T>
-const T & wrap(const T & v, const T & lo, const T & hi)
+const T & twrap(const T & v, const T & lo, const T & hi)
 {
   return (v < lo ? hi : (v > hi ? lo : v));
 }
 
 
 template <typename T>
-void swap(T & v1, T & v2)
+void tswap(T & v1, T & v2)
 {
   T t = v1;
   v1 = v2;
@@ -85,4 +85,4 @@ inline bool calcParity(uint8_t v)
 
 
 
-#endif  // _UTILS_H_INCLUDED
+#endif  // _FABUTILS_H_INCLUDED

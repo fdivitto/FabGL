@@ -37,7 +37,7 @@
 #include "rom/lldesc.h"
 #include "soc/rtc.h"
 
-#include "utils.h"
+#include "fabutils.h"
 #include "vgacontroller.h"
 #include "swgenerator.h"
 
@@ -298,7 +298,7 @@ void VGAControllerClass::allocateViewPort()
   // allocate pools
   while (remainingLines > 0 && poolsCount < FABGLIB_VIEWPORT_MEMORY_POOL_COUNT) {
     int largestBlock = heap_caps_get_largest_free_block(MALLOC_CAP_DMA);
-    linesCount[poolsCount] = min(remainingLines, largestBlock / m_viewPortWidth);
+    linesCount[poolsCount] = tmin(remainingLines, largestBlock / m_viewPortWidth);
     if (linesCount[poolsCount] == 0)  // no more memory available for lines
       break;
     m_viewPortMemoryPool[poolsCount] = (uint8_t*) heap_caps_malloc(linesCount[poolsCount] * m_viewPortWidth, MALLOC_CAP_DMA);
@@ -443,8 +443,8 @@ int VGAControllerClass::calcRequiredDMABuffersCount(int viewPortHeight)
 void VGAControllerClass::fillVertBuffers(int offsetY)
 {
   int16_t porchSum = m_timings.VFrontPorch + m_timings.VBackPorch;
-  m_timings.VFrontPorch = max(1, (int16_t)m_timings.VFrontPorch - offsetY);
-  m_timings.VBackPorch  = max(1, porchSum - m_timings.VFrontPorch);
+  m_timings.VFrontPorch = tmax(1, (int16_t)m_timings.VFrontPorch - offsetY);
+  m_timings.VBackPorch  = tmax(1, porchSum - m_timings.VFrontPorch);
   m_timings.VFrontPorch = porchSum - m_timings.VBackPorch;
 
   // associate buffers pointer to DMA info buffers
@@ -542,8 +542,8 @@ void VGAControllerClass::fillHorizBuffers(int offsetX)
   // calculate hsync pos and fill it
 
   int16_t porchSum = m_timings.HFrontPorch + m_timings.HBackPorch;
-  m_timings.HFrontPorch = max(8, (int16_t)m_timings.HFrontPorch - offsetX);
-  m_timings.HBackPorch  = max(8, porchSum - m_timings.HFrontPorch);
+  m_timings.HFrontPorch = tmax(8, (int16_t)m_timings.HFrontPorch - offsetX);
+  m_timings.HBackPorch  = tmax(8, porchSum - m_timings.HFrontPorch);
   m_timings.HFrontPorch = porchSum - m_timings.HBackPorch;
 
   int syncPos = 0;
@@ -585,11 +585,11 @@ void VGAControllerClass::shrinkScreen(int shrinkX, int shrinkY)
 {
   Timings * currTimings = getResolutionTimings();
 
-  currTimings->HBackPorch  = max(currTimings->HBackPorch + 4 * shrinkX, 4);
-  currTimings->HFrontPorch = max(currTimings->HFrontPorch + 4 * shrinkX, 4);
+  currTimings->HBackPorch  = tmax(currTimings->HBackPorch + 4 * shrinkX, 4);
+  currTimings->HFrontPorch = tmax(currTimings->HFrontPorch + 4 * shrinkX, 4);
 
-  currTimings->VBackPorch  = max(currTimings->VBackPorch + shrinkY, 1);
-  currTimings->VFrontPorch = max(currTimings->VFrontPorch + shrinkY, 1);
+  currTimings->VBackPorch  = tmax(currTimings->VBackPorch + shrinkY, 1);
+  currTimings->VFrontPorch = tmax(currTimings->VFrontPorch + shrinkY, 1);
 
   setResolution(*currTimings, m_viewPortWidth, m_viewPortHeight, m_doubleBuffered);
 }
@@ -751,7 +751,7 @@ void VGAControllerClass::suspendBackgroundPrimitiveExecution()
 // Can be nested
 void VGAControllerClass::resumeBackgroundPrimitiveExecution()
 {
-  m_VSyncInterruptSuspended = max(0, m_VSyncInterruptSuspended - 1);
+  m_VSyncInterruptSuspended = tmax(0, m_VSyncInterruptSuspended - 1);
   if (m_VSyncInterruptSuspended == 0)
     attachInterrupt(digitalPinToInterrupt(m_VSyncGPIO), VSyncInterrupt, m_timings.VSyncLogic == '-' ? FALLING : RISING);
 }
@@ -973,15 +973,15 @@ void IRAM_ATTR VGAControllerClass::swapRows(int yA, int yB, int x1, int x2)
   // swap first bytes before full 32 bits word
   int x = x1;
   for (; x <= x2 && (x & 3) != 0; ++x)
-    swap(PIXELINROW(rowA, x), PIXELINROW(rowB, x));
+    tswap(PIXELINROW(rowA, x), PIXELINROW(rowB, x));
   // swap whole 32 bits words (don't care about PIXELINROW adjusted alignment)
   uint32_t * a = (uint32_t*)(rowA + x);
   uint32_t * b = (uint32_t*)(rowB + x);
   for (int right = (x2 & ~3); x < right; x += 4)
-    swap(*a++, *b++);
+    tswap(*a++, *b++);
   // swap last unaligned bytes
   for (x = (x2 & ~3); x <= x2; ++x)
-    swap(PIXELINROW(rowA, x), PIXELINROW(rowB, x));
+    tswap(PIXELINROW(rowA, x), PIXELINROW(rowB, x));
 }
 
 
@@ -989,10 +989,10 @@ void IRAM_ATTR VGAControllerClass::execFillRect(Rect const & rect)
 {
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.penColor) : preparePixel(m_paintState.brushColor);
-  int x1 = clamp<int>(rect.X1, 0, m_viewPortWidth - 1);
-  int y1 = clamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
-  int x2 = clamp<int>(rect.X2, 0, m_viewPortWidth - 1);
-  int y2 = clamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
+  int x1 = tclamp<int>(rect.X1, 0, m_viewPortWidth - 1);
+  int y1 = tclamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
+  int x2 = tclamp<int>(rect.X2, 0, m_viewPortWidth - 1);
+  int y2 = tclamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
   for (int y = y1; y <= y2; ++y)
     fillRow(y, x1, x2, pattern);
 }
@@ -1015,8 +1015,8 @@ void IRAM_ATTR VGAControllerClass::execFillEllipse(Size const & size)
   int originY = m_paintState.position.Y;
 
   if (originY >= 0 && originY < m_viewPortHeight) {
-    int col1 = clamp<int>(originX - halfWidth, 0, m_viewPortWidth - 1);
-    int col2 = clamp<int>(originX + halfWidth, 0, m_viewPortWidth - 1);
+    int col1 = tclamp<int>(originX - halfWidth, 0, m_viewPortWidth - 1);
+    int col2 = tclamp<int>(originX + halfWidth, 0, m_viewPortWidth - 1);
     for (int x = col1; x <= col2; ++x)
       PIXEL(x, originY) = pattern;
   }
@@ -1030,8 +1030,8 @@ void IRAM_ATTR VGAControllerClass::execFillEllipse(Size const & size)
     dx = x0 - x1;
     x0 = x1;
 
-    int col1 = clamp<int>(originX - x0, 0, m_viewPortWidth - 1);
-    int col2 = clamp<int>(originX + x0, 0, m_viewPortWidth - 1);
+    int col1 = tclamp<int>(originX - x0, 0, m_viewPortWidth - 1);
+    int col2 = tclamp<int>(originX + x0, 0, m_viewPortWidth - 1);
 
     int y1 = originY - y;
     if (y1 >= 0 && y1 < m_viewPortHeight)
@@ -1129,7 +1129,7 @@ void IRAM_ATTR VGAControllerClass::execVScroll(int scroll)
         swapRows(Y1 + i, Y1 + i - scroll, X2 + 1, m_viewPortWidth - 1);
 
       // swap scan lines
-      swap(m_viewPort[Y1 + i], m_viewPort[Y1 + i - scroll]);
+      tswap(m_viewPort[Y1 + i], m_viewPort[Y1 + i - scroll]);
     }
 
     // fill lower area with brush color
@@ -1148,7 +1148,7 @@ void IRAM_ATTR VGAControllerClass::execVScroll(int scroll)
         swapRows(Y1 + i, Y1 + i + scroll, X2 + 1, m_viewPortWidth - 1);
 
       // swap scan lines
-      swap(m_viewPort[Y1 + i], m_viewPort[Y1 + i + scroll]);
+      tswap(m_viewPort[Y1 + i], m_viewPort[Y1 + i + scroll]);
     }
 
     // fill upper area with brush color
@@ -1222,7 +1222,7 @@ void IRAM_ATTR VGAControllerClass::execHScroll(int scroll)
             int sz = (s & ~3) >> 2;
             for (int i = 0; i < width32 - sz; ++i, w += 4)
               *((uint32_t*)w) = *((uint32_t*)w + sz);
-            for (int i = max(0, width32 - sz); i < width32; ++i, w += 4)
+            for (int i = tmax(0, width32 - sz); i < width32; ++i, w += 4)
               *((uint32_t*)w) = pattern32;
             s -= (s & ~3);
           } else if ((s & 3) == 3) {
@@ -1282,7 +1282,7 @@ void IRAM_ATTR VGAControllerClass::execHScroll(int scroll)
             uint8_t * w = row + width - 4;
             for (int i = 0; i < width32 - sz; ++i, w -= 4)
               *((uint32_t*)w) = *((uint32_t*)w - sz);
-            for (int i = max(0, width32 - sz); i < width32; ++i, w -= 4)
+            for (int i = tmax(0, width32 - sz); i < width32; ++i, w -= 4)
               *((uint32_t*)w) = pattern32;
             s -= (s & ~3);
           } else if ((s & 3) == 3) {
@@ -1423,7 +1423,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
     YCount = m_viewPortHeight - destY;
 
   if (glyphOptions.invert ^ m_paintState.paintOptions.swapFGBG)
-    swap(penColor, brushColor);
+    tswap(penColor, brushColor);
 
   // a very simple and ugly reduce luminosity (faint) implementation!
   if (glyphOptions.reduceLuminosity) {
@@ -1537,7 +1537,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
     YCount = m_viewPortHeight - destY;
 
   if (glyphOptions.invert ^ m_paintState.paintOptions.swapFGBG)
-    swap(penColor, brushColor);
+    tswap(penColor, brushColor);
 
   // a very simple and ugly reduce luminosity (faint) implementation!
   if (glyphOptions.reduceLuminosity) {
@@ -1565,10 +1565,10 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
 void IRAM_ATTR VGAControllerClass::execInvertRect(Rect const & rect)
 {
   hideSprites();
-  int x1 = clamp<int>(rect.X1, 0, m_viewPortWidth - 1);
-  int y1 = clamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
-  int x2 = clamp<int>(rect.X2, 0, m_viewPortWidth - 1);
-  int y2 = clamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
+  int x1 = tclamp<int>(rect.X1, 0, m_viewPortWidth - 1);
+  int y1 = tclamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
+  int x2 = tclamp<int>(rect.X2, 0, m_viewPortWidth - 1);
+  int y2 = tclamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
   for (int y = y1; y <= y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
     for (int x = x1; x <= x2; ++x) {
@@ -1585,10 +1585,10 @@ void IRAM_ATTR VGAControllerClass::execSwapFGBG(Rect const & rect)
   hideSprites();
   uint8_t penPattern   = preparePixel(m_paintState.penColor);
   uint8_t brushPattern = preparePixel(m_paintState.brushColor);
-  int x1 = clamp<int>(rect.X1, 0, m_viewPortWidth - 1);
-  int y1 = clamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
-  int x2 = clamp<int>(rect.X2, 0, m_viewPortWidth - 1);
-  int y2 = clamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
+  int x1 = tclamp<int>(rect.X1, 0, m_viewPortWidth - 1);
+  int y1 = tclamp<int>(rect.Y1, 0, m_viewPortHeight - 1);
+  int x2 = tclamp<int>(rect.X2, 0, m_viewPortWidth - 1);
+  int y2 = tclamp<int>(rect.Y2, 0, m_viewPortHeight - 1);
   for (int y = y1; y <= y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
     for (int x = x1; x <= x2; ++x) {
@@ -1805,8 +1805,8 @@ void IRAM_ATTR VGAControllerClass::showSprites()
 
 void IRAM_ATTR VGAControllerClass::execSwapBuffers()
 {
-  swap(m_DMABuffers, m_DMABuffersVisible);
-  swap(m_viewPort, m_viewPortVisible);
+  tswap(m_DMABuffers, m_DMABuffersVisible);
+  tswap(m_viewPort, m_viewPortVisible);
   m_DMABuffersHead->qe.stqe_next = (lldesc_t*) &m_DMABuffersVisible[0];
 }
 
@@ -1838,8 +1838,8 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
     if (path.points[i].Y > maxY)
       maxY = path.points[i].Y;
   }
-  minY = max(0, minY);
-  maxY = min(m_viewPortHeight - 1, maxY);
+  minY = tmax(0, minY);
+  maxY = tmin(m_viewPortHeight - 1, maxY);
 
   int16_t nodeX[path.pointsCount];
 
@@ -1859,7 +1859,7 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
     int i = 0;
     while (i < nodes - 1) {
       if (nodeX[i] > nodeX[i + 1]) {
-        swap(nodeX[i], nodeX[i + 1]);
+        tswap(nodeX[i], nodeX[i + 1]);
         if (i)
           --i;
       } else
@@ -1916,7 +1916,7 @@ void Sprite::allocRequiredBackgroundBuffer()
   if (!VGAController.isDoubleBuffered()) {
     int reqBackBufferSize = 0;
     for (int i = 0; i < framesCount; ++i)
-      reqBackBufferSize = max<int>(reqBackBufferSize, frames[i]->width * frames[i]->height);
+      reqBackBufferSize = tmax(reqBackBufferSize, frames[i]->width * frames[i]->height);
     savedBackground = (uint8_t*) realloc(savedBackground, reqBackBufferSize);
   }
 }

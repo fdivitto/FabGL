@@ -32,7 +32,7 @@
 #include "rom/lldesc.h"
 #include "soc/rtc.h"
 
-#include "utils.h"
+#include "fabutils.h"
 #include "swgenerator.h"
 
 
@@ -367,20 +367,20 @@ static void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_
       // apll_freq = XTAL * (4 + sdm2 + sdm1 / 256) / divisor   ->   sdm1 = (apll_freq * divisor - XTAL * 4 - XTAL * sdm2) * 256 / XTAL
       int startSDM1 = ((apll_freq * idivisor - FXTAL * 4.0 - FXTAL * sdm2) * 256.0 / FXTAL);
 #if FABGLIB_USE_APLL_AB_COEF
-      for (int isdm1 = max(minSDM1, startSDM1); isdm1 <= maxSDM1; ++isdm1) {
+      for (int isdm1 = tmax(minSDM1, startSDM1); isdm1 <= maxSDM1; ++isdm1) {
 #else
       int isdm1 = startSDM1; {
 #endif
 
         int sdm1 = isdm1;
-        sdm1 = max(minSDM1, sdm1);
-        sdm1 = min(maxSDM1, sdm1);
+        sdm1 = tmax(minSDM1, sdm1);
+        sdm1 = tmin(maxSDM1, sdm1);
 
         // apll_freq = XTAL * (4 + sdm2 + sdm1 / 256 + sdm0 / 65536) / divisor   ->   sdm0 = (apll_freq * divisor - XTAL * 4 - XTAL * sdm2 - XTAL * sdm1 / 256) * 65536 / XTAL
         int sdm0 = ((apll_freq * idivisor - FXTAL * 4.0 - FXTAL * sdm2 - FXTAL * sdm1 / 256.0) * 65536.0 / FXTAL);
         // from tables above
-        sdm0 = (sdm2 == 8 && sdm1 == 128 ? 0 : min(255, sdm0));
-        sdm0 = max(0, sdm0);
+        sdm0 = (sdm2 == 8 && sdm1 == 128 ? 0 : tmin(255, sdm0));
+        sdm0 = tmax(0, sdm0);
 
         // dividend inside 350-500Mhz?
         double dividend = FXTAL * (4.0 + sdm2 + sdm1 / 256.0 + sdm0 / 65536.0);
@@ -398,8 +398,8 @@ static void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_
           if (abr > 0 && abr < 1) {
             int num, den;
             floatToFraction(abr, 63, &num, &den);
-            ob = clamp(num, 0, 63);
-            oa = clamp(den, 0, 63);
+            ob = tclamp(num, 0, 63);
+            oa = tclamp(den, 0, 63);
           }
 #endif
 

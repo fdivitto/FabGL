@@ -29,7 +29,7 @@
 #include "soc/sens_reg.h"
 
 #include "ps2controller.h"
-#include "utils.h"
+#include "fabutils.h"
 
 
 fabgl::PS2ControllerClass PS2Controller;

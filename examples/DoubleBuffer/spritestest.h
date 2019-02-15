@@ -20,7 +20,10 @@
  */
 
 
-#include "utils.h"
+#include "fabutils.h"
+
+
+using fabgl::twrap;
 
 
 const uint8_t spaceship_data[] = {
@@ -51,7 +54,7 @@ struct MySprite : Sprite {
 };
 
 
-inline double wrap(double v, double lo, double hi) { return (v < lo ? hi : (v > hi ? lo : v)); }
+
 
 
 class SpritesTest : public Test {
@@ -75,8 +78,8 @@ public:
 
     for (int i = 0; i < spritesCount_; ++i) {
       MySprite * sprite = &sprites_[i];
-      sprite->fx = wrap(sprite->fx + 3 * cos(sprite->dir), 0, Canvas.getWidth());
-      sprite->fy = wrap(sprite->fy + 3 * sin(sprite->dir), 0, Canvas.getHeight());
+      sprite->fx = twrap<double>(sprite->fx + 3 * cos(sprite->dir), 0, Canvas.getWidth());
+      sprite->fy = twrap<double>(sprite->fy + 3 * sin(sprite->dir), 0, Canvas.getHeight());
       sprite->moveTo(ceil(sprite->fx), ceil(sprite->fy));
     }
     VGAController.refreshSprites();

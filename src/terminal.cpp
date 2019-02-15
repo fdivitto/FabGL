@@ -26,7 +26,7 @@
 #include "freertos/task.h"
 #include "freertos/timers.h"
 
-#include "utils.h"
+#include "fabutils.h"
 #include "terminal.h"
 
 
@@ -326,8 +326,8 @@ void TerminalClass::loadFont(FontInfo const * font)
   m_font.data = font->data;
 #endif
 
-  m_columns = min<int>(Canvas.getWidth() / m_font.width, 132);
-  m_rows    = min<int>(Canvas.getHeight() / m_font.height, 25);
+  m_columns = tmin(Canvas.getWidth() / m_font.width, 132);
+  m_rows    = tmin(Canvas.getHeight() / m_font.height, 25);
 
   freeTabStops();
   m_emuState.tabStop = (uint8_t*) malloc(m_columns);
@@ -469,8 +469,8 @@ bool TerminalClass::moveDown()
 
 void TerminalClass::setCursorPos(int X, int Y)
 {
-  m_emuState.cursorX = clamp(X, 1, (int)m_columns);
-  m_emuState.cursorY = clamp(Y, 1, (int)m_rows);
+  m_emuState.cursorX = tclamp(X, 1, (int)m_columns);
+  m_emuState.cursorY = tclamp(Y, 1, (int)m_rows);
   m_emuState.cursorPastLastCol = false;
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCSALL
@@ -487,7 +487,7 @@ int TerminalClass::getAbsoluteRow(int Y)
 
   if (m_emuState.originMode) {
     Y += m_emuState.scrollingRegionTop - 1;
-    Y = clamp(Y, m_emuState.scrollingRegionTop, m_emuState.scrollingRegionDown);
+    Y = tclamp(Y, m_emuState.scrollingRegionTop, m_emuState.scrollingRegionDown);
   }
   return Y;
 }
@@ -709,8 +709,8 @@ void TerminalClass::scrollUpAt(int startingRow)
 
 void TerminalClass::setScrollingRegion(int top, int down, bool resetCursorPos)
 {
-  m_emuState.scrollingRegionTop  = clamp(top, 1, (int)m_rows);
-  m_emuState.scrollingRegionDown = clamp(down, 1, (int)m_rows);
+  m_emuState.scrollingRegionTop  = tclamp(top, 1, (int)m_rows);
+  m_emuState.scrollingRegionDown = tclamp(down, 1, (int)m_rows);
   updateCanvasScrollingRegion();
 
   if (resetCursorPos)
@@ -735,7 +735,7 @@ void TerminalClass::insertAt(int column, int row, int count)
   logFmt("insertAt(%d, %d, %d)\n", column, row, count);
   #endif
 
-  count = min((int)m_columns, count);
+  count = tmin((int)m_columns, count);
 
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
@@ -764,7 +764,7 @@ void TerminalClass::deleteAt(int column, int row, int count)
   logFmt("deleteAt(%d, %d, %d)\n", column, row, count);
   #endif
 
-  count = min((int)m_columns, count);
+  count = tmin((int)m_columns, count);
 
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
@@ -798,10 +798,10 @@ void TerminalClass::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainD
   logFmt("erase(%d, %d, %d, %d, %d, %d)\n", X1, Y1, X2, Y2, (int)c, (int)maintainDoubleWidth);
   #endif
 
-  X1 = clamp(X1 - 1, 0, (int)m_columns - 1);
-  Y1 = clamp(Y1 - 1, 0, (int)m_rows - 1);
-  X2 = clamp(X2 - 1, 0, (int)m_columns - 1);
-  Y2 = clamp(Y2 - 1, 0, (int)m_rows - 1);
+  X1 = tclamp(X1 - 1, 0, (int)m_columns - 1);
+  Y1 = tclamp(Y1 - 1, 0, (int)m_rows - 1);
+  X2 = tclamp(X2 - 1, 0, (int)m_columns - 1);
+  Y2 = tclamp(Y2 - 1, 0, (int)m_rows - 1);
 
   if (c == ASCII_SPC && !selective) {
     int charWidth = getCharWidthAt(m_emuState.cursorY);
@@ -904,9 +904,9 @@ void TerminalClass::useAlternateScreenBuffer(bool value)
       m_alternateCursorX = 1;
       m_alternateCursorY = 1;
     }
-    swap(m_alternateMap, m_glyphsBuffer.map);
-    swap(m_emuState.cursorX, m_alternateCursorX);
-    swap(m_emuState.cursorY, m_alternateCursorY);
+    tswap(m_alternateMap, m_glyphsBuffer.map);
+    tswap(m_emuState.cursorX, m_alternateCursorX);
+    tswap(m_emuState.cursorY, m_alternateCursorY);
     m_emuState.cursorPastLastCol = false;
     refresh();
   }
@@ -1605,17 +1605,17 @@ void TerminalClass::consumeCSI()
 
     // ESC [ C : CUF, Move cursor right the indicated # of columns.
     case 'C':
-      setCursorPos(m_emuState.cursorX + max(1, params[0]), m_emuState.cursorY);
+      setCursorPos(m_emuState.cursorX + tmax(1, params[0]), m_emuState.cursorY);
       break;
 
     // ESC [ P : DCH, Delete the indicated # of characters on current line.
     case 'P':
-      deleteAt(m_emuState.cursorX, m_emuState.cursorY, max(1, params[0]));
+      deleteAt(m_emuState.cursorX, m_emuState.cursorY, tmax(1, params[0]));
       break;
 
     // ESC [ A : CUU, Move cursor up the indicated # of rows.
     case 'A':
-      setCursorPos(m_emuState.cursorX, getAbsoluteRow(m_emuState.cursorY - max(1, params[0])));
+      setCursorPos(m_emuState.cursorX, getAbsoluteRow(m_emuState.cursorY - tmax(1, params[0])));
       break;
 
     // ESC [ Ps J : ED, Erase display
@@ -1663,12 +1663,12 @@ void TerminalClass::consumeCSI()
     // ESC [ Pn X : ECH, Erase Characters
     // Pn: number of characters to erase from cursor position (default is 1) up to the end of line
     case 'X':
-      erase(m_emuState.cursorX, m_emuState.cursorY, min((int)m_columns, m_emuState.cursorX + max(1, params[0]) - 1), m_emuState.cursorY, ASCII_SPC, true, false);
+      erase(m_emuState.cursorX, m_emuState.cursorY, tmin((int)m_columns, m_emuState.cursorX + tmax(1, params[0]) - 1), m_emuState.cursorY, ASCII_SPC, true, false);
       break;
 
     // ESC [ r : DECSTBM, Set scrolling region; parameters are top and bottom row.
     case 'r':
-      setScrollingRegion(max(params[0], 1), (params[1] < 1 ? m_rows : params[1]));
+      setScrollingRegion(tmax(params[0], 1), (params[1] < 1 ? m_rows : params[1]));
       break;
 
     // ESC [ d : VPA, Move cursor to the indicated row, current column.
@@ -1683,20 +1683,20 @@ void TerminalClass::consumeCSI()
 
     // ESC [ S : SU, Scroll up # lines (default = 1)
     case 'S':
-      for (int i = max(1, params[0]); i > 0; --i)
+      for (int i = tmax(1, params[0]); i > 0; --i)
         scrollUp();
       break;
 
     // ESC [ T : SD, Scroll down # lines (default = 1)
     case 'T':
-      for (int i = max(1, params[0]); i > 0; --i)
+      for (int i = tmax(1, params[0]); i > 0; --i)
         scrollDown();
       break;
 
     // ESC [ D : CUB, Cursor left
     case 'D':
     {
-      int newX = m_emuState.cursorX - max(1, params[0]);
+      int newX = m_emuState.cursorX - tmax(1, params[0]);
       if (m_emuState.reverseWraparoundMode && newX < 1) {
         newX = -newX;
         int newY = m_emuState.cursorY - newX / 80 - 1;
@@ -1705,13 +1705,13 @@ void TerminalClass::consumeCSI()
         newX = m_columns - (newX % m_columns);
         setCursorPos(newX, newY);
       } else
-        setCursorPos(max(1, newX), m_emuState.cursorY);
+        setCursorPos(tmax(1, newX), m_emuState.cursorY);
       break;
     }
 
     // ESC [ B : CUD, Cursor down
     case 'B':
-      setCursorPos(m_emuState.cursorX, getAbsoluteRow(m_emuState.cursorY + max(1, params[0])));
+      setCursorPos(m_emuState.cursorX, getAbsoluteRow(m_emuState.cursorY + tmax(1, params[0])));
       break;
 
     // ESC [ m : SGR, Character Attributes
@@ -1721,13 +1721,13 @@ void TerminalClass::consumeCSI()
 
     // ESC [ L : IL, Insert Lines starting at cursor (default 1 line)
     case 'L':
-      for (int i = max(1, params[0]); i > 0; --i)
+      for (int i = tmax(1, params[0]); i > 0; --i)
         scrollDownAt(m_emuState.cursorY);
       break;
 
     // ESC [ M : DL, Delete Lines starting at cursor (default 1 line)
     case 'M':
-      for (int i = max(1, params[0]); i > 0; --i)
+      for (int i = tmax(1, params[0]); i > 0; --i)
         scrollUpAt(m_emuState.cursorY);
       break;
 
@@ -1757,7 +1757,7 @@ void TerminalClass::consumeCSI()
 
     // ESC [ @ : ICH, Insert Character (default 1 character)
     case '@':
-      insertAt(m_emuState.cursorX, m_emuState.cursorY, max(1, params[0]));
+      insertAt(m_emuState.cursorX, m_emuState.cursorY, tmax(1, params[0]));
       break;
 
     // ESC [ 0 c : Send Device Attributes
@@ -1770,7 +1770,7 @@ void TerminalClass::consumeCSI()
 
     // ESC [ Ps q : DECLL, Load LEDs
     case 'q':
-      paramsCount = max(1, paramsCount);  // default paramater in case no params are provided
+      paramsCount = tmax(1, paramsCount);  // default paramater in case no params are provided
       for (int i = 0; i < paramsCount; ++i) {
         bool numLock, capsLock, scrollLock;
         Keyboard.getLEDs(&numLock, &capsLock, &scrollLock);

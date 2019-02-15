@@ -21,12 +21,12 @@
 
 
 #include "fabgl.h"
-#include "utils.h"
+#include "fabutils.h"
 
 #include "sprites.h"
 
 
-using fabgl::clamp;
+using fabgl::tclamp;
 
 
 
@@ -394,7 +394,7 @@ struct GameScene : public Scene {
       } else if (playerVelX_) {
         // move player
         player_->x += playerVelX_;
-        player_->x = clamp<int>(player_->x, 0, getWidth() - player_->getWidth());
+        player_->x = tclamp<int>(player_->x, 0, getWidth() - player_->getWidth());
         updateSprite(player_);
       }
 
@@ -474,8 +474,8 @@ struct GameScene : public Scene {
     int x = collisionPoint.X - shield->x;
     int y = collisionPoint.Y - shield->y;
     for (int i = 0; i < 64; ++i) {
-      int px = clamp<int>(x + random(-4, 5), 0, shield->getWidth() - 1);
-      int py = clamp<int>(y + random(-4, 5), 0, shield->getHeight() - 1);
+      int px = tclamp<int>(x + random(-4, 5), 0, shield->getWidth() - 1);
+      int py = tclamp<int>(y + random(-4, 5), 0, shield->getHeight() - 1);
       *(data + px + shield->getWidth() * py) = 0;
     }
   }
