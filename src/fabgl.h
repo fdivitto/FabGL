@@ -36,10 +36,11 @@
 /**
  * @mainpage FabGL Library
  *
- * [www.FabGL.com](http://www.fabgl.com) - 2019 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
+ * @htmlonly
+ * <a href="https://www.github.com/fdivitto/fabgl"> <img src="github.png" style="width:230px;height:80px;border:0;"> </a>
+ * @endhtmlonly
  *
- * @version 0.1a
- * @date 2019
+ * [www.FabGL.com](http://www.fabgl.com) - 2019 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
  *
  * - - -
  *
