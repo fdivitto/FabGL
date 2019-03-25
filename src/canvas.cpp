@@ -27,6 +27,7 @@
 // Embedded fonts
 #include "font_4x6.h"
 #include "font_8x8.h"
+#include "font_8x9.h"
 #include "font_8x14.h"
 
 
@@ -333,6 +334,7 @@ FontInfo const * CanvasClass::getPresetFontInfo(int columns, int rows)
     // please, bigger fonts first!
     &FONT_8x14,
     &FONT_8x8,
+    &FONT_8x9,
     &FONT_4x6,
   };
 

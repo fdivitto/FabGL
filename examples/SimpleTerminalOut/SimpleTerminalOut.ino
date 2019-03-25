@@ -36,6 +36,7 @@ void setup()
   VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
 
   VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
