@@ -32,6 +32,7 @@ const char * PresetResolutions[] = {
   VGA_512x448_60Hz,
   VGA_512x512_58Hz,
   VGA_640x200_70Hz,
+  VGA_640x240_60Hz,
   VGA_640x350_70Hz,
   VGA_640x350_70HzAlt1,
   VESA_640x350_85Hz,

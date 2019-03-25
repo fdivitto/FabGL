@@ -167,6 +167,9 @@
 /** Modeline for 640x200@70Hz resolution */
 #define VGA_640x200_70Hz "\"640x200@70Hz\" 25.175 640 656 752 800 200 208 211 226 -HSync -VSync DoubleScan"
 
+/** Modeline for 640x240@60Hz (DoubleScan) resolution */
+#define VGA_640x240_60Hz "\"640x240@60Hz\" 25.175 640 656 752 800 240 245 247 262 -HSync -VSync DoubleScan"
+
 /** Modeline for 640x350@70Hz resolution */
 #define VGA_640x350_70Hz "\"640x350@70Hz\" 25.175 640 656 752 800 350 387 389 449 -HSync -VSync"
 
