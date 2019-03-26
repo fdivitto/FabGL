@@ -506,7 +506,7 @@ void PS2ControllerClass::begin(gpio_num_t clkGPIO, gpio_num_t datGPIO)
   // process, load and execute ULP program
   size_t size = sizeof(ULPCode) / sizeof(ulp_insn_t);
   ulp_process_macros_and_load(RTC_MEM_PROG_START, ULPCode, &size);            // convert macros to ULP code
-  replace_placeholders(RTC_MEM_PROG_START, size, GPIO_NUM_33, GPIO_NUM_32);   // replace GPIO placeholders
+  replace_placeholders(RTC_MEM_PROG_START, size, clkGPIO, datGPIO);           // replace GPIO placeholders
   REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTC_MEM_PROG_START);  // set entry point
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
