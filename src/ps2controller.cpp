@@ -30,6 +30,7 @@
 
 #include "ps2controller.h"
 #include "fabutils.h"
+#include "ulp_macro_ex.h"
 
 
 fabgl::PS2ControllerClass PS2Controller;
@@ -126,293 +127,518 @@ namespace fabgl {
 ////////////////////////////////////////////////////////////////////////////
 // placeholders
 
-#define OPCODE_PLACEHOLDER             12 // fortunately there is an unused ULP opcode we can use as placeholder
-#define SUB_OPCODE_DAT_ENABLE_OUTPUT   0
-#define SUB_OPCODE_DAT_ENABLE_INPUT    1
-#define SUB_OPCODE_CLK_ENABLE_OUTPUT   2
-#define SUB_OPCODE_CLK_ENABLE_INPUT    3
-#define SUB_OPCODE_READ_CLK            4
-#define SUB_OPCODE_READ_DAT            5
-#define SUB_OPCODE_WRITE_CLK           6
-#define SUB_OPCODE_WRITE_DAT           7
+#define OPCODE_PLACEHOLDER             12 // 12 is an unused ULP opcode we can use as placeholder
+
+#define SUB_OPCODE_DAT_ENABLE_OUTPUT    0
+#define SUB_OPCODE_DAT_ENABLE_INPUT     1
+#define SUB_OPCODE_CLK_ENABLE_OUTPUT    2
+#define SUB_OPCODE_CLK_ENABLE_INPUT     3
+#define SUB_OPCODE_READ_CLK             4
+#define SUB_OPCODE_READ_DAT             5
+#define SUB_OPCODE_WRITE_CLK            6
+#define SUB_OPCODE_WRITE_DAT            7
+
+#define PS2_PORT0 0
+#define PS2_PORT1 1
 
 
-#define DAT_ENABLE_OUTPUT(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define DAT_ENABLE_OUTPUT(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_DAT_ENABLE_OUTPUT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
-#define DAT_ENABLE_INPUT(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define DAT_ENABLE_INPUT(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_DAT_ENABLE_INPUT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
-#define CLK_ENABLE_OUTPUT(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define CLK_ENABLE_OUTPUT(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_CLK_ENABLE_OUTPUT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
-#define CLK_ENABLE_INPUT(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define CLK_ENABLE_INPUT(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_CLK_ENABLE_INPUT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
 // equivalent to rtc_gpio_get_level()
-#define READ_CLK() { .macro = { \
-    .label = 0, \
-    .unused = 0, \
+#define READ_CLK(ps2port) { .macro = { \
+    .label      = 0, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_READ_CLK, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
 // equivalent to rtc_gpio_get_level()
-#define READ_DAT() { .macro = { \
-    .label = 0, \
-    .unused = 0, \
+#define READ_DAT(ps2port) { .macro = { \
+    .label      = 0, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_READ_DAT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
 // equivalent to rtc_gpio_set_level()
-#define WRITE_CLK(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define WRITE_CLK(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_WRITE_CLK, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
 // equivalent to rtc_gpio_set_level()
-#define WRITE_DAT(value) { .macro = { \
-    .label = value, \
-    .unused = 0, \
+#define WRITE_DAT(ps2port, value) { .macro = { \
+    .label      = value, \
+    .unused     = ps2port, \
     .sub_opcode = SUB_OPCODE_WRITE_DAT, \
-    .opcode = OPCODE_PLACEHOLDER } }
+    .opcode     = OPCODE_PLACEHOLDER } }
 
 
 ////////////////////////////////////////////////////////////////////////////
 // macro instructions
 
 // equivalent to rtc_gpio_set_direction(..., RTC_GPIO_MODE_INPUT_ONLY)
-#define CONFIGURE_DAT_INPUT() \
-    DAT_ENABLE_OUTPUT(0), \
-    DAT_ENABLE_INPUT(1)
+#define CONFIGURE_DAT_INPUT(ps2port) \
+    DAT_ENABLE_OUTPUT(ps2port, 0), \
+    DAT_ENABLE_INPUT(ps2port, 1)
 
 // equivalent to rtc_gpio_set_direction(..., RTC_GPIO_MODE_OUTPUT_ONLY)
-#define CONFIGURE_DAT_OUTPUT() \
-    DAT_ENABLE_OUTPUT(1), \
-    DAT_ENABLE_INPUT(0)
+#define CONFIGURE_DAT_OUTPUT(ps2port) \
+    DAT_ENABLE_OUTPUT(ps2port, 1), \
+    DAT_ENABLE_INPUT(ps2port, 0)
 
 // equivalent to rtc_gpio_set_direction(..., RTC_GPIO_MODE_INPUT_ONLY)
-#define CONFIGURE_CLK_INPUT() \
-    CLK_ENABLE_OUTPUT(0), \
-    CLK_ENABLE_INPUT(1)
+#define CONFIGURE_CLK_INPUT(ps2port) \
+    CLK_ENABLE_OUTPUT(ps2port, 0), \
+    CLK_ENABLE_INPUT(ps2port, 1)
 
 // equivalent to rtc_gpio_set_direction(..., RTC_GPIO_MODE_OUTPUT_ONLY)
-#define CONFIGURE_CLK_OUTPUT() \
-    CLK_ENABLE_OUTPUT(1), \
-    CLK_ENABLE_INPUT(0)
+#define CONFIGURE_CLK_OUTPUT(ps2port) \
+    CLK_ENABLE_OUTPUT(ps2port, 1), \
+    CLK_ENABLE_INPUT(ps2port, 0)
 
 // equivalent to rtc_gpio_set_level()
 // WRITE bit 0 of R0
-#define WRITE_DAT_R0() \
+#define WRITE_DAT_R0(ps2port) \
     I_BL(3, 1), \
-    WRITE_DAT(1), \
+    WRITE_DAT(ps2port, 1), \
     I_BGE(2, 1), \
-    WRITE_DAT(0)
+    WRITE_DAT(ps2port, 0)
+
+// performs [addr] = value
+// changes: R0, R1
+#define MEM_WRITEI(addr, value) \
+    I_MOVI(R0, addr), \
+    I_MOVI(R1, value), \
+    I_ST(R1, R0, 0)
+
+// performs [[addr]] = value
+// changes: R0, R1
+#define MEM_INDWRITEI(addr, value) \
+    I_MOVI(R0, addr), \
+    I_LD(R0, R0, 0), \
+    I_MOVI(R1, value), \
+    I_ST(R1, R0, 0)
+
+// performs [addr] = reg  (reg cannot be R0)
+// changes R0
+#define MEM_WRITER(addr, reg) \
+    I_MOVI(R0, addr), \
+    I_ST(reg, R0, 0)
+
+// performs [[addr]] = reg  (reg cannot be R0)
+// changes R0
+#define MEM_INDWRITER(addr, reg) \
+    I_MOVI(R0, addr), \
+    I_LD(R0, R0, 0), \
+    I_ST(reg, R0, 0)
+
+// performs reg = [addr]
+#define MEM_READR(reg, addr) \
+    I_MOVI(reg, addr), \
+    I_LD(reg, reg, 0)
+
+// performs reg = [[addr]]  (reg cannot be R0)
+#define MEM_INDREADR(reg, addr) \
+    I_MOVI(reg, addr), \
+    I_LD(reg, reg, 0), \
+    I_LD(reg, reg, 0)
+
+// performs [addr] = [addr] + 1
+// changes: R0, R1
+#define MEM_INC(addr) \
+    I_MOVI(R0, addr),   \
+    I_LD(R1, R0, 0),    \
+    I_ADDI(R1, R1, 1),  \
+    I_ST(R1, R0, 0)
+
+// jump to "label" if [addr] < value
+// changes: R0
+#define MEM_BL(label, addr, value) \
+    I_MOVI(R0, addr), \
+    I_LD(R0, R0, 0), \
+    M_BL(label, value)
+
+// jump to "label" if [addr] >= value
+// changes: R0
+#define MEM_BGE(label, addr, value) \
+    I_MOVI(R0, addr), \
+    I_LD(R0, R0, 0), \
+    M_BGE(label, value)
+
+// long jump version of M_BGE
+#define M_LONG_BGE(label, value) \
+    I_BL(2, value), \
+    M_BX(label)
 
 
 ////////////////////////////////////////////////////////////////////////////
 
 
-// Locations inside RTC low speed memory
-#define RTC_MEM_PROG_START         0x000
-#define RTC_MEM_MODE               0x400
-#define RTC_MEM_SEND_WORD          0x401
-#define RTC_MEM_WRITE_POS          0x402
-#define RTC_MEM_WORD_SENT_FLAG     0x403  // 1 when word has been sent (reset by ISR)
-#define RTC_MEM_WORD_RECEIVED_FLAG 0x404  // 1 when a word has been received (reset by ISR)
-#define RTC_MEM_BUFFER_BTM         0x405
-#define RTC_MEM_BUFFER_TOP         0x800
+#define PORT0_RX_BUFFER_SIZE 128
+#define PORT1_RX_BUFFER_SIZE 512
 
-// values for RTC_MEM_MODE
-#define MODE_RECEIVE       0
-#define MODE_SEND          1
+
+// Locations inside RTC low speed memory
+
+#define RTCMEM_PROG_START           0x000  // where the program begins
+#define RTCMEM_VARS_START           0x100  // where the variables begin
+
+#define RTCMEM_PORT0_MODE           (RTCMEM_VARS_START +  0)  // MODE_RECEIVE or MODE_SEND
+#define RTCMEM_PORT0_WRITE_POS      (RTCMEM_VARS_START +  1)  // position of the next word to receive
+#define RTCMEM_PORT0_WORD_RX_READY  (RTCMEM_VARS_START +  2)  // 1 when a word has been received (reset by ISR)
+#define RTCMEM_PORT0_BIT            (RTCMEM_VARS_START +  3)  // receive or send bit counter
+#define RTCMEM_PORT0_STATE          (RTCMEM_VARS_START +  4)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
+#define RTCMEM_PORT0_SEND_WORD      (RTCMEM_VARS_START +  5)  // contains the word to send
+#define RTCMEM_PORT0_WORD_SENT_FLAG (RTCMEM_VARS_START +  6)  // 1 when word has been sent (reset by ISR)
+
+#define RTCMEM_PORT1_ENABLED        (RTCMEM_VARS_START +  7)  // if 1 then port 1 is enabled
+#define RTCMEM_PORT1_MODE           (RTCMEM_VARS_START +  8)  // MODE_RECEIVE or MODE_SEND
+#define RTCMEM_PORT1_WRITE_POS      (RTCMEM_VARS_START +  9)  // position of the next word to receive
+#define RTCMEM_PORT1_WORD_RX_READY  (RTCMEM_VARS_START + 10)  // 1 when a word has been received (reset by ISR)
+#define RTCMEM_PORT1_BIT            (RTCMEM_VARS_START + 11)  // receive or send bit counter
+#define RTCMEM_PORT1_STATE          (RTCMEM_VARS_START + 12)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
+#define RTCMEM_PORT1_SEND_WORD      (RTCMEM_VARS_START + 13)  // contains the word to send
+#define RTCMEM_PORT1_WORD_SENT_FLAG (RTCMEM_VARS_START + 14)  // 1 when word has been sent (reset by ISR)
+
+#define RTCMEM_PORT0_BUFFER_START   (RTCMEM_VARS_START + 15)  // where the receive buffer begins
+#define RTCMEM_PORT0_BUFFER_END     (RTCMEM_PORT0_BUFFER_START + PORT0_RX_BUFFER_SIZE)  // where the receive buffer ends
+
+#define RTCMEM_PORT1_BUFFER_START   RTCMEM_PORT0_BUFFER_END  // where the receive buffer begins
+#define RTCMEM_PORT1_BUFFER_END     (RTCMEM_PORT1_BUFFER_START + PORT1_RX_BUFFER_SIZE)  // where the receive buffer ends
+
+
+// values for RTCMEM_PORT0_MODE
+#define MODE_RECEIVE                  0
+#define MODE_SEND                     1
+
+// values for RTCMEM_PORT0_STATE
+#define STATE_WAIT_CLK_HIGH           0
+#define STATE_WAIT_CLK_LOW            1
 
 
 // ULP program labels
-#define READY_TO_RECEIVE          0
-#define RECEIVE_NEXT_WORD         1
-#define RECEIVE_NEXT_BIT          2
-#define RECEIVE_WAIT_FOR_CLK_HIGH 3
-#define RECEIVE_WORD_READY        4
-#define SEND_WORD                 5
-#define SEND_NEXT_BIT             6
-#define SEND_WAIT_FOR_CLK_HIGH    7
+#define READY_TO_RECEIVE              0
+#define PORT0_RECEIVE_WORD_READY      1
+#define PORT0_SEND_WORD               2
+#define PORT0_SEND_NEXT_BIT           3
+#define PORT0_SEND_WAIT_FOR_CLK_HIGH  4
+#define PORT0_CLK_IS_HIGH             5
+#define PORT1_RECEIVE_WORD_READY      6
+#define PORT1_SEND_WORD               7
+#define PORT1_SEND_NEXT_BIT           8
+#define PORT1_SEND_WAIT_FOR_CLK_HIGH  9
+#define PORT1_RECEIVE                10
+#define PORT1_CLK_IS_HIGH            11
+#define MAIN_LOOP                    12
 
 
 
-const ulp_insn_t ULPCode[] = {
+
+
+
+
+const ulp_insn_t ULP_code[] = {
 
   // Stop ULP timer, not necessary because this routine never ends
   I_END(),
 
 M_LABEL(READY_TO_RECEIVE),
 
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT0 Initialization
+
   // Configure CLK and DAT as inputs
-  CONFIGURE_CLK_INPUT(),
-  CONFIGURE_DAT_INPUT(),
+  CONFIGURE_CLK_INPUT(PS2_PORT0),
+  CONFIGURE_DAT_INPUT(PS2_PORT0),
 
-M_LABEL(RECEIVE_NEXT_WORD),
+  MEM_WRITEI(RTCMEM_PORT0_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT0_STATE] = STATE_WAIT_CLK_LOW
 
-  // reset the word that will contain the received word
-  I_MOVI(R3, 0),                                       // R3 = 0
+  // reset the word that will contain the received data
+  MEM_INDWRITEI(RTCMEM_PORT0_WRITE_POS, 0),                 // [[RTCMEM_PORT0_WRITE_POS]] = 0
 
-  // reset the bit counter (STAGE regiser, 0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
-  I_STAGERSTI(),                                       // STAGE = 0
+  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                          // [RTCMEM_PORT0_BIT] = 0
 
-M_LABEL(RECEIVE_NEXT_BIT),
+  // port 1 enabled?
+  MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
+  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
 
-  // Wait for CLK = LOW or another job to do
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
-  // is there something to SEND?
-  // read RTC_MEM_MODE variable
-  I_MOVI(R0, RTC_MEM_MODE),                            // R0 = RTC_MEM_MODE
-  I_LD(R0, R0, 0),                                     // R0 = [R0 + 0]
-  M_BGE(SEND_WORD, MODE_SEND),                         // jump to SEND_WORD if R0 >= MODE_SEND
 
-  // RTC_MEM_MODE is MODE_RECEIVE
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT1 Initialization
+
+  // Configure CLK and DAT as inputs
+  CONFIGURE_CLK_INPUT(PS2_PORT1),
+  CONFIGURE_DAT_INPUT(PS2_PORT1),
+
+  MEM_WRITEI(RTCMEM_PORT1_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT1_STATE] = STATE_WAIT_CLK_LOW
+
+  // reset the word that will contain the received data
+  MEM_INDWRITEI(RTCMEM_PORT1_WRITE_POS, 0),                 // [[RTCMEM_PORT1_WRITE_POS]] = 0
+
+  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT1_BIT, 0),                          // [RTCMEM_PORT1_BIT] = 0
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+M_LABEL(MAIN_LOOP),
+
+  // is there something to SEND on port 0?
+  MEM_READR(R0, RTCMEM_PORT0_MODE),                         // R0 = [RTCMEM_PORT0_MODE]
+  M_LONG_BGE(PORT0_SEND_WORD, MODE_SEND),                   // jump to PORT0_SEND_WORD if R0 >= MODE_SEND
+
+  // is there something to SEND on port 1?
+  MEM_READR(R0, RTCMEM_PORT1_MODE),                         // R0 = [RTCMEM_PORT1_MODE]
+  M_LONG_BGE(PORT1_SEND_WORD, MODE_SEND),                   // jump to PORT1_SEND_WORD if R0 >= MODE_SEND
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT0 Receive
+
+  // wait for CLK low or high?
+  MEM_READR(R1, RTCMEM_PORT0_STATE),                        // R1 = [RTCMEM_PORT0_STATE]
 
   // read CLK
-  READ_CLK(),                                          // R0 = CLK
+  READ_CLK(PS2_PORT0),                                      // R0 = CLK
 
-  // repeat if CLK is high
-  M_BGE(RECEIVE_NEXT_BIT, 1),                          // jump to RECEIVE_NEXT_BIT if R0 >= 1
+  // ALU result is Zero when [RTCMEM_PORT0_STATE] = CLK, that means "need to wait"
+  I_SUBR(R1, R1, R0),                                       // R1 = R1 - R0
+  M_BXZ(PORT1_RECEIVE),                                     // bypass if ALU is ZERO
 
-  // now CLK is LOW, get DAT value
-  READ_DAT(),                                          // R0 = DAT
+  // is CLK high?
+  M_BGE(PORT0_CLK_IS_HIGH, 1),
 
-  // shift R0 left by 10
-  I_LSHI(R0, R0, 11),                                  // R0 = R0 << 11
+  // CLK is LOW
+  MEM_WRITEI(RTCMEM_PORT0_STATE, STATE_WAIT_CLK_HIGH),      // [RTCMEM_PORT0_STATE] = STATE_WAIT_CLK_HIGH
+
+  // get DAT value
+  READ_DAT(PS2_PORT0),                                      // R0 = DAT
 
   // merge with data word and shift right by 1 the received word
-  I_ORR(R3, R3, R0),                                   // R3 = R3 | R0
-  I_RSHI(R3, R3, 1),                                   // R3 = R3 >> 1
+  I_LSHI(R0, R0, 11),                                       // R0 = R0 << 11
+  MEM_INDREADR(R1, RTCMEM_PORT0_WRITE_POS),                 // R1 = [[RTCMEM_PORT0_WRITE_POS]]
+  I_ORR(R1, R1, R0),                                        // R1 = R1 | R0
+  I_RSHI(R1, R1, 1),                                        // R1 = R1 >> 1
+  MEM_INDWRITER(RTCMEM_PORT0_WRITE_POS, R1),                // [[RTCMEM_PORT0_WRITE_POS]] = R1
 
-M_LABEL(RECEIVE_WAIT_FOR_CLK_HIGH),
+  // check port 1
+  M_BX(PORT1_RECEIVE),
 
-  // Wait for CLK = HIGH
+M_LABEL(PORT0_CLK_IS_HIGH),
 
-  // read CLK
-  READ_CLK(),                                          // R0 = CLK
-
-  // repeat if CLK is low
-  M_BL(RECEIVE_WAIT_FOR_CLK_HIGH, 1),                  // jump to RECEIVE_WAIT_FOR_CLK_HIGH if R0 < 1
+  // CLK is high
+  MEM_WRITEI(RTCMEM_PORT0_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT0_STATE] = STATE_WAIT_CLK_LOW
 
   // increment bit count
-  I_STAGEINCI(1),                                      // STAGE = STAGE + 1
+  MEM_INC(RTCMEM_PORT0_BIT),                                // [RTCMEM_PORT0_BIT] = [RTCMEM_PORT0_BIT] + 1
 
   // end of word? if not get another bit
-  M_STAGEBL(RECEIVE_NEXT_BIT, 11),                     // jump to RECEIVE_NEXT_BIT if STAGE < 11
+  MEM_BL(PORT1_RECEIVE, RTCMEM_PORT0_BIT, 11),              // jump to PORT1_RECEIVE if [RTCMEM_PORT0_BIT] < 11
 
   // End of word
 
-  // put R3 into [RTC_MEM_WRITE_POS]
-  I_MOVI(R1, RTC_MEM_WRITE_POS),                       // R1 = RTC_MEM_WRITE_POS
-  I_LD(R0, R1, 0),                                     // R0 = [R1 + 0]
-  I_ST(R3, R0, 0),                                     // [R0 + 0] = R3
+  // increments RTCMEM_PORT0_WRITE_POS and check if reached the upper bound
+  MEM_INC(RTCMEM_PORT0_WRITE_POS),                                                    // [RTCMEM_PORT0_WRITE_POS] = [RTCMEM_PORT0_WRITE_POS] + 1
+  MEM_BL(PORT0_RECEIVE_WORD_READY, RTCMEM_PORT0_WRITE_POS, RTCMEM_PORT0_BUFFER_END),  // jump to PORT0_RECEIVE_WORD_READY if RTCMEM_PORT0_WRITE_POS < RTCMEM_PORT0_BUFFER_END
 
-  // increments RTC_MEM_WRITE_LOC and check if reched the upper bound
-  I_ADDI(R0, R0, 1),                                   // R0 = R0 + 1
-  M_BL(RECEIVE_WORD_READY, RTC_MEM_BUFFER_TOP),        // jump to RECEIVE_WORD_READY if R0 < RTC_MEM_BUFFER_TOP
+  // reset RTCMEM_PORT0_WRITE_POS
+  MEM_WRITEI(RTCMEM_PORT0_WRITE_POS, RTCMEM_PORT0_BUFFER_START),   // [RTCMEM_PORT0_WRITE_POS] = RTCMEM_PORT0_BUFFER_START
 
-  // reset RTC_MEM_WRITE_POS
-  I_MOVI(R0, RTC_MEM_BUFFER_BTM),                      // R0 = RTC_MEM_BUFFER_BTM
+M_LABEL(PORT0_RECEIVE_WORD_READY),
 
-M_LABEL(RECEIVE_WORD_READY),
-
-  // update RTC_MEM_WRITE_POS actual value
-  I_ST(R0, R1, 0),                                     // [R1 + 0] = R0
-
-  // set word received flag (RTC_MEM_WORD_RECEIVED_FLAG)
-  I_MOVI(R1, RTC_MEM_WORD_RECEIVED_FLAG),              // R1 = RTC_MEM_WORD_RECEIVED_FLAG
-  I_MOVI(R0, 1),                                       // R0 = 1
-  I_ST(R0, R1, 0),                                     // [R1 + 0] = R0
+  // set word received flag (RTCMEM_PORT0_WORD_RX_READY)
+  MEM_WRITEI(RTCMEM_PORT0_WORD_RX_READY, 1),                // [RTCMEM_PORT0_WORD_RX_READY] = 1
 
   // trig ETS_RTC_CORE_INTR_SOURCE interrupt
   I_WAKE(),
 
+  // reset the word that will contain the received data
+  MEM_INDWRITEI(RTCMEM_PORT0_WRITE_POS, 0),                 // [[RTCMEM_PORT0_WRITE_POS]] = 0
+
+  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                          // [RTCMEM_PORT0_BIT] = 0
+
   // do the next job
-  M_BX(RECEIVE_NEXT_WORD),                             // jump to RECEIVE_NEXT_WORD
+  M_BX(PORT1_RECEIVE),                                      // jump to PORT1_RECEIVE
 
-M_LABEL(SEND_WORD),
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Send the word in RTC_MEM_SEND_WORD
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT1 Receive
+
+M_LABEL(PORT1_RECEIVE),
+
+  // port 1 enabled?
+  MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
+  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
+
+  // wait for CLK low or high?
+  MEM_READR(R1, RTCMEM_PORT1_STATE),                        // R1 = [RTCMEM_PORT1_STATE]
+
+  // read CLK
+  READ_CLK(PS2_PORT1),                                      // R0 = CLK
+
+  // ALU result is Zero when [RTCMEM_PORT1_STATE] = CLK, that means "need to wait"
+  I_SUBR(R1, R1, R0),                                       // R1 = R1 - R0
+  M_BXZ(MAIN_LOOP),                                         // repeat if ALU is ZERO
+
+  // is CLK high?
+  M_BGE(PORT1_CLK_IS_HIGH, 1),
+
+  // CLK is LOW
+  MEM_WRITEI(RTCMEM_PORT1_STATE, STATE_WAIT_CLK_HIGH),      // [RTCMEM_PORT1_STATE] = STATE_WAIT_CLK_HIGH
+
+  // get DAT value
+  READ_DAT(PS2_PORT1),                                      // R0 = DAT
+
+  // merge with data word and shift right by 1 the received word
+  I_LSHI(R0, R0, 11),                                       // R0 = R0 << 11
+  MEM_INDREADR(R1, RTCMEM_PORT1_WRITE_POS),                 // R1 = [[RTCMEM_PORT1_WRITE_POS]]
+  I_ORR(R1, R1, R0),                                        // R1 = R1 | R0
+  I_RSHI(R1, R1, 1),                                        // R1 = R1 >> 1
+  MEM_INDWRITER(RTCMEM_PORT1_WRITE_POS, R1),                // [[RTCMEM_PORT1_WRITE_POS]] = R1
+
+  // go to main loop
+  M_BX(MAIN_LOOP),
+
+M_LABEL(PORT1_CLK_IS_HIGH),
+
+  // CLK is high
+  MEM_WRITEI(RTCMEM_PORT1_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT1_STATE] = STATE_WAIT_CLK_LOW
+
+  // increment bit count
+  MEM_INC(RTCMEM_PORT1_BIT),                                // [RTCMEM_PORT1_BIT] = [RTCMEM_PORT1_BIT] + 1
+
+  // end of word? if not get another bit
+  MEM_BL(MAIN_LOOP, RTCMEM_PORT1_BIT, 11),                  // jump to MAIN_LOOP if [RTCMEM_PORT1_BIT] < 11
+
+  // End of word
+
+  // increments RTCMEM_PORT1_WRITE_POS and check if reached the upper bound
+  MEM_INC(RTCMEM_PORT1_WRITE_POS),                          // [RTCMEM_PORT1_WRITE_POS] = [RTCMEM_PORT1_WRITE_POS] + 1
+  MEM_BL(PORT1_RECEIVE_WORD_READY, RTCMEM_PORT1_WRITE_POS, RTCMEM_PORT1_BUFFER_END),  // jump to PORT1_RECEIVE_WORD_READY if RTCMEM_PORT1_WRITE_POS < RTCMEM_PORT1_BUFFER_END
+
+  // reset RTCMEM_PORT1_WRITE_POS
+  MEM_WRITEI(RTCMEM_PORT1_WRITE_POS, RTCMEM_PORT1_BUFFER_START),   // [RTCMEM_PORT1_WRITE_POS] = RTCMEM_PORT1_BUFFER_START
+
+M_LABEL(PORT1_RECEIVE_WORD_READY),
+
+  // set word received flag (RTCMEM_PORT1_WORD_RX_READY)
+  MEM_WRITEI(RTCMEM_PORT1_WORD_RX_READY, 1),                // [RTCMEM_PORT1_WORD_RX_READY] = 1
+
+  // trig ETS_RTC_CORE_INTR_SOURCE interrupt
+  I_WAKE(),
+
+  // reset the word that will contain the received data
+  MEM_INDWRITEI(RTCMEM_PORT1_WRITE_POS, 0),                 // [[RTCMEM_PORT1_WRITE_POS]] = 0
+
+  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT1_BIT, 0),                          // [RTCMEM_PORT1_BIT] = 0
+
+  // go to the main loop
+  M_BX(MAIN_LOOP),
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT0 Send
+
+M_LABEL(PORT0_SEND_WORD),
+
+  // Send the word in RTCMEM_PORT0_SEND_WORD
 
   // maintain CLK low for about 200us
-  CONFIGURE_CLK_OUTPUT(),
-  WRITE_CLK(0),
+  CONFIGURE_CLK_OUTPUT(PS2_PORT0),
+  WRITE_CLK(PS2_PORT0, 0),
   I_DELAY(1600),
 
   // set DAT low
-  CONFIGURE_DAT_OUTPUT(),
-  WRITE_DAT(0),
+  CONFIGURE_DAT_OUTPUT(PS2_PORT0),
+  WRITE_DAT(PS2_PORT0, 0),
 
   // configure CLK as input
-  CONFIGURE_CLK_INPUT(),
+  CONFIGURE_CLK_INPUT(PS2_PORT0),
 
   // put in R3 the word to send (10 bits: data, parity and stop bit)
-  I_MOVI(R0, RTC_MEM_SEND_WORD),                       // R0 = RTC_MEM_SEND_WORD
-  I_LD(R3, R0, 0),                                     // R3 = [R0 + 0]
+  MEM_READR(R3, RTCMEM_PORT0_SEND_WORD),               // R3 = [RTCMEM_PORT0_SEND_WORD]
 
-  // reset the bit counter (STAGE register, 0...7 = data0, 8 = parity, 9 = stop bit)
-  I_STAGERSTI(),                                       // STAGE = 0
+  // reset the bit counter (0...7 = data0, 8 = parity, 9 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                     // [RTCMEM_PORT0_BIT] = 0
 
-M_LABEL(SEND_NEXT_BIT),
+M_LABEL(PORT0_SEND_NEXT_BIT),
 
   // wait for CLK = LOW
 
   // read CLK
-  READ_CLK(),                                          // R0 = CLK
+  READ_CLK(PS2_PORT0),                                 // R0 = CLK
 
   // repeat if CLK is high
-  M_BGE(SEND_NEXT_BIT, 1),                             // jump to SEND_NEXT_BIT if R0 >= 1
+  M_BGE(PORT0_SEND_NEXT_BIT, 1),                       // jump to PORT0_SEND_NEXT_BIT if R0 >= 1
 
   // bit 10 is the ACK from keyboard, don't send anything, just bypass
-  M_STAGEBGE(SEND_WAIT_FOR_CLK_HIGH, 10),              // jump to SEND_WAIT_FOR_CLK_HIGH if STAGE >= 10
+  MEM_BGE(PORT0_SEND_WAIT_FOR_CLK_HIGH, RTCMEM_PORT0_BIT, 10),  // jump to PORT0_SEND_WAIT_FOR_CLK_HIGH if [RTCMEM_PORT0_BIT] >= 10
 
   // CLK is LOW, we are ready to send the bit (LSB of R0)
   I_ANDI(R0, R3, 1),                                   // R0 = R3 & 1
-  WRITE_DAT_R0(),                                      // DAT = LSB of R0
+  WRITE_DAT_R0(PS2_PORT0),                             // DAT = LSB of R0
 
-M_LABEL(SEND_WAIT_FOR_CLK_HIGH),
+M_LABEL(PORT0_SEND_WAIT_FOR_CLK_HIGH),
 
   // Wait for CLK = HIGH
 
   // read CLK
-  READ_CLK(),                                          // R0 = CLK
+  READ_CLK(PS2_PORT0),                                 // R0 = CLK
 
   // repeat if CLK is low
-  M_BL(SEND_WAIT_FOR_CLK_HIGH, 1),                     // jump to SEND_WAIT_FOR_CLK_HIGH if R0 < 1
+  M_BL(PORT0_SEND_WAIT_FOR_CLK_HIGH, 1),               // jump to PORT0_SEND_WAIT_FOR_CLK_HIGH if R0 < 1
 
   // shift the sending word 1 bit to the right (prepare next bit to send)
   I_RSHI(R3, R3, 1),                                   // R3 = R3 >> 1
 
   // increment bit count
-  I_STAGEINCI(1),                                      // STAGE = STAGE + 1
+  MEM_INC(RTCMEM_PORT0_BIT),                           // [RTCMEM_PORT0_BIT] = [RTCMEM_PORT0_BIT] + 1
 
   // end of word? if not send another bit
-  M_STAGEBL(SEND_NEXT_BIT, 11),                        // jump to SEND_NEXT_BIT if STAGE < 11
+  MEM_BL(PORT0_SEND_NEXT_BIT, RTCMEM_PORT0_BIT, 11),   // jump to PORT0_SEND_NEXT_BIT if [RTCMEM_PORT0_BIT] < 11
 
   // switch to receive mode
-  I_MOVI(R0, RTC_MEM_MODE),                            // R0 = RTC_MEM_MODE
-  I_MOVI(R1, MODE_RECEIVE),                            // R1 = MODE_RECEIVE
-  I_ST(R1, R0, 0),                                     // [R0 + 0] = R1
+  MEM_WRITEI(RTCMEM_PORT0_MODE, MODE_RECEIVE),         // [RTCMEM_PORT0_MODE] = MODE_RECEIVE
 
-  // set word sent flag (RTC_MEM_WORD_SENT_FLAG)
-  I_MOVI(R1, RTC_MEM_WORD_SENT_FLAG),                  // R1 = RTC_MEM_WORD_SENT_FLAG
-  I_MOVI(R0, 1),                                       // R0 = 1
-  I_ST(R0, R1, 0),                                     // [R1 + 0] = R0
+  // set word sent flag (RTCMEM_PORT0_WORD_SENT_FLAG)
+  MEM_WRITEI(RTCMEM_PORT0_WORD_SENT_FLAG, 1),          // [RTCMEM_PORT0_WORD_SENT_FLAG] = 1
 
   // trig ETS_RTC_CORE_INTR_SOURCE interrupt
   I_WAKE(),
@@ -420,60 +646,143 @@ M_LABEL(SEND_WAIT_FOR_CLK_HIGH),
   // perform another job
   M_BX(READY_TO_RECEIVE),                              // jump to READY_TO_RECEIVE
 
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT1 SEND
+
+M_LABEL(PORT1_SEND_WORD),
+
+  // Send the word in RTCMEM_PORT1_SEND_WORD
+
+  // maintain CLK low for about 200us
+  CONFIGURE_CLK_OUTPUT(PS2_PORT1),
+  WRITE_CLK(PS2_PORT1, 0),
+  I_DELAY(1600),
+
+  // set DAT low
+  CONFIGURE_DAT_OUTPUT(PS2_PORT1),
+  WRITE_DAT(PS2_PORT1, 0),
+
+  // configure CLK as input
+  CONFIGURE_CLK_INPUT(PS2_PORT1),
+
+  // put in R3 the word to send (10 bits: data, parity and stop bit)
+  MEM_READR(R3, RTCMEM_PORT1_SEND_WORD),               // R3 = [RTCMEM_PORT1_SEND_WORD]
+
+  // reset the bit counter (0...7 = data0, 8 = parity, 9 = stop bit)
+  MEM_WRITEI(RTCMEM_PORT1_BIT, 0),                     // [RTCMEM_PORT1_BIT] = 0
+
+M_LABEL(PORT1_SEND_NEXT_BIT),
+
+  // wait for CLK = LOW
+
+  // read CLK
+  READ_CLK(PS2_PORT1),                                 // R0 = CLK
+
+  // repeat if CLK is high
+  M_BGE(PORT1_SEND_NEXT_BIT, 1),                       // jump to PORT1_SEND_NEXT_BIT if R0 >= 1
+
+  // bit 10 is the ACK from keyboard, don't send anything, just bypass
+  MEM_BGE(PORT1_SEND_WAIT_FOR_CLK_HIGH, RTCMEM_PORT1_BIT, 10),  // jump to PORT1_SEND_WAIT_FOR_CLK_HIGH if [RTCMEM_PORT1_BIT] >= 10
+
+  // CLK is LOW, we are ready to send the bit (LSB of R0)
+  I_ANDI(R0, R3, 1),                                   // R0 = R3 & 1
+  WRITE_DAT_R0(PS2_PORT1),                             // DAT = LSB of R0
+
+M_LABEL(PORT1_SEND_WAIT_FOR_CLK_HIGH),
+
+  // Wait for CLK = HIGH
+
+  // read CLK
+  READ_CLK(PS2_PORT1),                                 // R0 = CLK
+
+  // repeat if CLK is low
+  M_BL(PORT1_SEND_WAIT_FOR_CLK_HIGH, 1),               // jump to PORT1_SEND_WAIT_FOR_CLK_HIGH if R0 < 1
+
+  // shift the sending word 1 bit to the right (prepare next bit to send)
+  I_RSHI(R3, R3, 1),                                   // R3 = R3 >> 1
+
+  // increment bit count
+  MEM_INC(RTCMEM_PORT1_BIT),                           // [RTCMEM_PORT1_BIT] = [RTCMEM_PORT1_BIT] + 1
+
+  // end of word? if not send another bit
+  MEM_BL(PORT1_SEND_NEXT_BIT, RTCMEM_PORT1_BIT, 11),   // jump to PORT1_SEND_NEXT_BIT if [RTCMEM_PORT1_BIT] < 11
+
+  // switch to receive mode
+  MEM_WRITEI(RTCMEM_PORT1_MODE, MODE_RECEIVE),         // [RTCMEM_PORT1_MODE] = MODE_RECEIVE
+
+  // set word sent flag (RTCMEM_PORT1_WORD_SENT_FLAG)
+  MEM_WRITEI(RTCMEM_PORT1_WORD_SENT_FLAG, 1),          // [RTCMEM_PORT1_WORD_SENT_FLAG] = 1
+
+  // trig ETS_RTC_CORE_INTR_SOURCE interrupt
+  I_WAKE(),
+
+  // perform another job
+  M_BX(READY_TO_RECEIVE),                              // jump to READY_TO_RECEIVE
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
 };
 
 
-////////////////////////////////////////////////////////////////////////////
 
 
 // Allowed GPIOs: GPIO_NUM_0, GPIO_NUM_2, GPIO_NUM_4, GPIO_NUM_12, GPIO_NUM_13, GPIO_NUM_14, GPIO_NUM_15, GPIO_NUM_25, GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_32, GPIO_NUM_33
-// Not allowed from GPIO_NUM_34 to GPIO_NUM_39 because these pins are Input Only (use only if Send is not required)
+// Not allowed from GPIO_NUM_34 to GPIO_NUM_39
 // prg_start in 32 bit words
 // size in 32 bit words
-void replace_placeholders(uint32_t prg_start, int size, gpio_num_t clkGPIO, gpio_num_t datGPIO)
+void replace_placeholders(uint32_t prg_start, int size, gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  uint32_t CLK_rtc_gpio_num = rtc_gpio_desc[clkGPIO].rtc_num;
-  uint32_t DAT_rtc_gpio_num = rtc_gpio_desc[datGPIO].rtc_num;
+  uint32_t CLK_rtc_gpio_num[2] = { (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num, (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num };
+  uint32_t DAT_rtc_gpio_num[2] = { (uint32_t) rtc_gpio_desc[port0_datGPIO].rtc_num, (uint32_t) rtc_gpio_desc[port1_datGPIO].rtc_num };
 
-  uint32_t CLK_rtc_gpio_reg = rtc_gpio_desc[clkGPIO].reg;
-  uint32_t DAT_rtc_gpio_reg = rtc_gpio_desc[datGPIO].reg;
+  uint32_t CLK_rtc_gpio_reg[2] = { rtc_gpio_desc[port0_clkGPIO].reg, rtc_gpio_desc[port1_clkGPIO].reg };
+  uint32_t DAT_rtc_gpio_reg[2] = { rtc_gpio_desc[port0_datGPIO].reg, rtc_gpio_desc[port1_datGPIO].reg };
 
-  uint32_t CLK_rtc_gpio_ie_s = ffs(rtc_gpio_desc[clkGPIO].ie) - 1;  // ffs() because we need the bit position (from 0)
-  uint32_t DAT_rtc_gpio_ie_s = ffs(rtc_gpio_desc[datGPIO].ie) - 1;  // ffs() because we need the bit position (from 0)
+  // just to remember, ffs() finds first set bit in an integer!
+  uint32_t CLK_rtc_gpio_ie_s[2] = { (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1, (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1 };
+  uint32_t DAT_rtc_gpio_ie_s[2] = { (uint32_t) ffs(rtc_gpio_desc[port0_datGPIO].ie) - 1, (uint32_t) ffs(rtc_gpio_desc[port1_datGPIO].ie) - 1 };
 
   for (uint32_t i = 0; i < size; ++i) {
     ulp_insn_t * ins = (ulp_insn_t *) RTC_SLOW_MEM + i;
     if (ins->macro.opcode == OPCODE_PLACEHOLDER) {
+      int ps2port = ins->macro.unused;
+      ins->macro.unused = 0;
       switch (ins->macro.sub_opcode) {
         case SUB_OPCODE_DAT_ENABLE_OUTPUT:
           if (ins->macro.label)
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, DAT_rtc_gpio_num + RTC_GPIO_ENABLE_W1TS_S, 1);
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
           else
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, DAT_rtc_gpio_num + RTC_GPIO_ENABLE_W1TC_S, 1);
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
           break;
         case SUB_OPCODE_DAT_ENABLE_INPUT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(DAT_rtc_gpio_reg, DAT_rtc_gpio_ie_s, ins->macro.label);
+          *ins = (ulp_insn_t) I_WR_REG_BIT(DAT_rtc_gpio_reg[ps2port], DAT_rtc_gpio_ie_s[ps2port], ins->macro.label);
           break;
         case SUB_OPCODE_CLK_ENABLE_OUTPUT:
           if (ins->macro.label)
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, CLK_rtc_gpio_num + RTC_GPIO_ENABLE_W1TS_S, 1);
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
           else
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, CLK_rtc_gpio_num + RTC_GPIO_ENABLE_W1TC_S, 1);
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
           break;
         case SUB_OPCODE_CLK_ENABLE_INPUT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(CLK_rtc_gpio_reg, CLK_rtc_gpio_ie_s, ins->macro.label);
+          *ins = (ulp_insn_t) I_WR_REG_BIT(CLK_rtc_gpio_reg[ps2port], CLK_rtc_gpio_ie_s[ps2port], ins->macro.label);
           break;
         case SUB_OPCODE_READ_CLK:
-          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, CLK_rtc_gpio_num + RTC_GPIO_IN_NEXT_S, CLK_rtc_gpio_num + RTC_GPIO_IN_NEXT_S);
+          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
           break;
         case SUB_OPCODE_READ_DAT:
-          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, DAT_rtc_gpio_num + RTC_GPIO_IN_NEXT_S, DAT_rtc_gpio_num + RTC_GPIO_IN_NEXT_S);
+          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
           break;
         case SUB_OPCODE_WRITE_CLK:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, CLK_rtc_gpio_num + RTC_GPIO_IN_NEXT_S, ins->macro.label);
+          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
           break;
         case SUB_OPCODE_WRITE_DAT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, DAT_rtc_gpio_num + RTC_GPIO_IN_NEXT_S, ins->macro.label);
+          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
           break;
       }
     }
@@ -481,37 +790,54 @@ void replace_placeholders(uint32_t prg_start, int size, gpio_num_t clkGPIO, gpio
 }
 
 
-void PS2ControllerClass::begin(gpio_num_t clkGPIO, gpio_num_t datGPIO)
+// Note: GPIO_NUM_39 is a placeholder used to disable PS/2 port 1.
+void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  m_TXWaitTask = NULL;
-  m_RXWaitTask = NULL;
+  assert(RTCMEM_PORT1_BUFFER_END < 0x800 && "Port 1 ending buffer overlap");
 
-  rtc_gpio_init(clkGPIO);
-  rtc_gpio_init(datGPIO);
+  m_TXWaitTask[0] = m_TXWaitTask[1] = NULL;
+  m_RXWaitTask[0] = m_RXWaitTask[1] = NULL;
+
+  rtc_gpio_init(port0_clkGPIO);
+  rtc_gpio_init(port0_datGPIO);
+
+  if (port1_clkGPIO != GPIO_NUM_39) {
+    rtc_gpio_init(port1_clkGPIO);
+    rtc_gpio_init(port1_datGPIO);
+  }
 
   // clear ULP memory (without this may fail to run ULP on softreset)
-  for (int i = RTC_MEM_PROG_START; i < RTC_MEM_BUFFER_TOP; ++i)
+  for (int i = RTCMEM_PROG_START; i < RTCMEM_PORT1_BUFFER_END; ++i)
     RTC_SLOW_MEM[i] = 0x0000;
 
+  // PS/2 port 1 enabled?
+  RTC_SLOW_MEM[RTCMEM_PORT1_ENABLED] = (port1_clkGPIO != GPIO_NUM_39 ? 1 : 0);
+
   // initialize the receiving word pointer at the bottom of the buffer
-  RTC_SLOW_MEM[RTC_MEM_WRITE_POS] = RTC_MEM_BUFFER_BTM;
+  RTC_SLOW_MEM[RTCMEM_PORT0_WRITE_POS] = RTCMEM_PORT0_BUFFER_START;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WRITE_POS] = RTCMEM_PORT1_BUFFER_START;
 
   // select receive mode
-  RTC_SLOW_MEM[RTC_MEM_MODE] = MODE_RECEIVE;
+  RTC_SLOW_MEM[RTCMEM_PORT0_MODE] = MODE_RECEIVE;
+  RTC_SLOW_MEM[RTCMEM_PORT1_MODE] = MODE_RECEIVE;
 
   // initialize flags
-  RTC_SLOW_MEM[RTC_MEM_WORD_SENT_FLAG]     = 0;
-  RTC_SLOW_MEM[RTC_MEM_WORD_RECEIVED_FLAG] = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_SENT_FLAG] = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_SENT_FLAG] = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_RX_READY]  = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_RX_READY]  = 0;
 
   // process, load and execute ULP program
-  size_t size = sizeof(ULPCode) / sizeof(ulp_insn_t);
-  ulp_process_macros_and_load(RTC_MEM_PROG_START, ULPCode, &size);            // convert macros to ULP code
-  replace_placeholders(RTC_MEM_PROG_START, size, clkGPIO, datGPIO);           // replace GPIO placeholders
-  REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTC_MEM_PROG_START);  // set entry point
+  size_t size = sizeof(ULP_code) / sizeof(ulp_insn_t);
+  ulp_process_macros_and_load_ex(RTCMEM_PROG_START, ULP_code, &size);         // convert macros to ULP code
+  replace_placeholders(RTCMEM_PROG_START, size, port0_clkGPIO, port0_datGPIO, port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
+  assert(size < RTCMEM_VARS_START && "OLP Program too long, increase RTCMEM_VARS_START");
+  REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTCMEM_PROG_START);   // set entry point
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
 
-  m_readPos = RTC_MEM_BUFFER_BTM;
+  m_readPos[0] = RTCMEM_PORT0_BUFFER_START;
+  m_readPos[1] = RTCMEM_PORT1_BUFFER_START;
 
   // install RTC interrupt handler (on ULP Wake() instruction)
   esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, NULL, NULL);
@@ -519,21 +845,32 @@ void PS2ControllerClass::begin(gpio_num_t clkGPIO, gpio_num_t datGPIO)
 }
 
 
-int PS2ControllerClass::dataAvailable()
+int PS2ControllerClass::dataAvailable(int PS2Port)
 {
-  int writePos = RTC_SLOW_MEM[RTC_MEM_WRITE_POS] & 0xFFFF;
-  return m_readPos < writePos ? (writePos - m_readPos) : (RTC_MEM_BUFFER_TOP - m_readPos) + (writePos - RTC_MEM_BUFFER_BTM);
+  uint32_t RTCMEM_PORTX_WRITE_POS    = (PS2Port == 0 ? RTCMEM_PORT0_WRITE_POS    : RTCMEM_PORT1_WRITE_POS);
+  uint32_t RTCMEM_PORTX_BUFFER_END   = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_END   : RTCMEM_PORT1_BUFFER_END);
+  uint32_t RTCMEM_PORTX_BUFFER_START = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_START : RTCMEM_PORT1_BUFFER_START);
+
+  int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+  if (m_readPos[PS2Port] < writePos)
+    return writePos - m_readPos[PS2Port];
+  else
+    return (RTCMEM_PORTX_BUFFER_END - m_readPos[PS2Port]) + (writePos - RTCMEM_PORTX_BUFFER_START);
 }
 
 
 // return -1 when no data is available
-int PS2ControllerClass::getData(int timeOutMS, bool isReply)
+int PS2ControllerClass::getData(int timeOutMS, bool isReply, int PS2Port)
 {
+  uint32_t RTCMEM_PORTX_WRITE_POS    = (PS2Port == 0 ? RTCMEM_PORT0_WRITE_POS    : RTCMEM_PORT1_WRITE_POS);
+  uint32_t RTCMEM_PORTX_BUFFER_END   = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_END   : RTCMEM_PORT1_BUFFER_END);
+  uint32_t RTCMEM_PORTX_BUFFER_START = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_START : RTCMEM_PORT1_BUFFER_START);
+
   // to avoid possible missings of RX interrupts a value of 200ms is used in place of portMAX_DELAY
   int aTimeOut = timeOutMS < 0 ? pdMS_TO_TICKS(200) : pdMS_TO_TICKS(timeOutMS);
   while (true) {
-    int writePos = RTC_SLOW_MEM[RTC_MEM_WRITE_POS] & 0xFFFF;
-    volatile int * readPos = isReply ? &m_replyReadPos : &m_readPos;
+    int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+    volatile int * readPos = isReply ? &m_replyReadPos[PS2Port] : &m_readPos[PS2Port];
     if (*readPos != writePos) {
       int data = (RTC_SLOW_MEM[*readPos] & 0xFFFF) >> 1 & 0xFF;
       if (isReply) {
@@ -541,13 +878,13 @@ int PS2ControllerClass::getData(int timeOutMS, bool isReply)
         RTC_SLOW_MEM[*readPos] = 0;
       }
       *readPos += 1;
-      if (*readPos == RTC_MEM_BUFFER_TOP)
-        *readPos = RTC_MEM_BUFFER_BTM;
+      if (*readPos == RTCMEM_PORTX_BUFFER_END)
+        *readPos = RTCMEM_PORTX_BUFFER_START;
       if (data == 0)
         continue; // not valid code (maybe a retry code)
       return data;
     } else {
-      m_RXWaitTask = xTaskGetCurrentTaskHandle();
+      m_RXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
       if (ulTaskNotifyTake(pdTRUE, aTimeOut) == 0 && timeOutMS > -1)
         return -1;  // real timeout
     }
@@ -555,36 +892,47 @@ int PS2ControllerClass::getData(int timeOutMS, bool isReply)
 }
 
 
-void PS2ControllerClass::sendData(uint8_t data)
+void PS2ControllerClass::sendData(uint8_t data, int PS2Port)
 {
-  RTC_SLOW_MEM[RTC_MEM_SEND_WORD] = 0x200 | ((~calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
-  RTC_SLOW_MEM[RTC_MEM_MODE]      = MODE_SEND;
-  m_TXWaitTask = xTaskGetCurrentTaskHandle();
+  uint32_t RTCMEM_PORTX_SEND_WORD = (PS2Port == 0 ? RTCMEM_PORT0_SEND_WORD : RTCMEM_PORT1_SEND_WORD);
+  uint32_t RTCMEM_PORTX_MODE      = (PS2Port == 0 ? RTCMEM_PORT0_MODE      : RTCMEM_PORT1_MODE);
+
+  RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((~calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
+  RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_SEND;
+  m_TXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
   ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10));
 }
 
 
 void IRAM_ATTR PS2ControllerClass::rtc_isr(void * arg)
 {
-  // Received end of send interrupt?
-  if (RTC_SLOW_MEM[RTC_MEM_WORD_SENT_FLAG]) {
-    // reset flag and awake waiting task
-    RTC_SLOW_MEM[RTC_MEM_WORD_SENT_FLAG] = 0;
-    PS2Controller.m_replyReadPos = RTC_SLOW_MEM[RTC_MEM_WRITE_POS] & 0xFFFF;
-    if (PS2Controller.m_TXWaitTask) {
-      vTaskNotifyGiveFromISR(PS2Controller.m_TXWaitTask, NULL);
-      PS2Controller.m_TXWaitTask = NULL;
-    }
-  }
+  for (int PS2Port = 0; PS2Port < 2; ++PS2Port) {
 
-  // Received new RX word interrupt?
-  if (RTC_SLOW_MEM[RTC_MEM_WORD_RECEIVED_FLAG]) {
-    // reset flag and awake waiting task
-    RTC_SLOW_MEM[RTC_MEM_WORD_RECEIVED_FLAG] = 0;
-    if (PS2Controller.m_RXWaitTask) {
-      vTaskNotifyGiveFromISR(PS2Controller.m_RXWaitTask, NULL);
-      PS2Controller.m_RXWaitTask = NULL;
+    uint32_t RTCMEM_PORTX_WORD_SENT_FLAG = (PS2Port == 0 ? RTCMEM_PORT0_WORD_SENT_FLAG : RTCMEM_PORT1_WORD_SENT_FLAG);
+    uint32_t RTCMEM_PORTX_WRITE_POS      = (PS2Port == 0 ? RTCMEM_PORT0_WRITE_POS      : RTCMEM_PORT1_WRITE_POS);
+    uint32_t RTCMEM_PORTX_WORD_RX_READY  = (PS2Port == 0 ? RTCMEM_PORT0_WORD_RX_READY  : RTCMEM_PORT1_WORD_RX_READY);
+
+    // Received end of send interrupt?
+    if (RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG]) {
+      // reset flag and awake waiting task
+      RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG] = 0;
+      PS2Controller.m_replyReadPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+      if (PS2Controller.m_TXWaitTask[PS2Port]) {
+        vTaskNotifyGiveFromISR(PS2Controller.m_TXWaitTask[PS2Port], NULL);
+        PS2Controller.m_TXWaitTask[PS2Port] = NULL;
+      }
     }
+
+    // Received new RX word interrupt?
+    if (RTC_SLOW_MEM[RTCMEM_PORTX_WORD_RX_READY]) {
+      // reset flag and awake waiting task
+      RTC_SLOW_MEM[RTCMEM_PORTX_WORD_RX_READY] = 0;
+      if (PS2Controller.m_RXWaitTask[PS2Port]) {
+        vTaskNotifyGiveFromISR(PS2Controller.m_RXWaitTask[PS2Port], NULL);
+        PS2Controller.m_RXWaitTask[PS2Port] = NULL;
+      }
+    }
+
   }
 }
 

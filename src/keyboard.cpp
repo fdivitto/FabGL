@@ -424,7 +424,7 @@ KeyboardClass::KeyboardClass()
 }
 
 
-void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys, bool createVKQueue)
+void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue)
 {
   m_CTRL     = false;
   m_ALT      = false;
@@ -439,8 +439,6 @@ void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generate
   m_SCodeToVKConverterTask = NULL;
   m_virtualKeyQueue        = NULL;
 
-  PS2Controller.begin(clkGPIO, dataGPIO);
-
   reset();
 
   if (generateVirtualKeys || createVKQueue) {
@@ -448,6 +446,13 @@ void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generate
       m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(uint16_t));
     xTaskCreate(&SCodeToVKConverterTask, "", FABGLIB_SCODETOVK_TASK_STACK_SIZE, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
   }
+}
+
+
+void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys, bool createVKQueue)
+{
+  PS2Controller.begin(clkGPIO, dataGPIO);
+  begin(generateVirtualKeys, createVKQueue);
 }
 
 

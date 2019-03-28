@@ -386,6 +386,26 @@ public:
   void begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys = true, bool createVKQueue = true);
 
   /**
+   * @brief Initialize KeyboardClass without initializing the PS/2 controller.
+   *
+   * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
+   * This method does not initialize the PS2ControllerClass.
+   *
+   * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
+   *                            so you can call KeyboardClass.isVKDown().
+   * @param createVKQueue If true creates a task which consunes scancodes and produces virtual keys
+   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.scancodeAvailable()
+   *                      and KeyboardClass.getNextScancode().
+   *
+   * Example:
+   *
+   *     // Setup pins GPIO33 for CLK and GPIO32 for DATA
+   *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32); // clk, dat
+   *     Keyboard.begin();
+   */
+  void begin(bool generateVirtualKeys = true, bool createVKQueue = true);
+
+  /**
    * @brief Send a Reset command to the keyboard.
    *
    * @return True if the keyboard is correctly initialized.
