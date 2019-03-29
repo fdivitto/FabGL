@@ -34,6 +34,7 @@
 #include "freertos/FreeRTOS.h"
 
 #include "fabglconf.h"
+#include "ps2device.h"
 
 
 namespace fabgl {
@@ -77,20 +78,6 @@ namespace fabgl {
 #define ASCII_SPC  0x20   // Space
 #define ASCII_DEL  0x7F   // Delete
 
-
-
-/**
- * @brief Represents the type of device attached to PS/2 port.
- */
-enum PS2Device {
-  UnknownPS2Device,             /**< Unknown device or unable to connect to the device */
-  OldATKeyboard,                /**< Old AT keyboard */
-  MouseStandard,                /**< Standard mouse */
-  MouseWithScrollWheel,         /**< Mouse with Scroll Wheel */
-  Mouse5Buttons,                /**< Mouse with 5 buttons */
-  MF2KeyboardWithTranslation,   /**< Standard MF2 keyboard with translation */
-  M2Keyboard,                   /**< Standard MF2 keyboard. This is the most common value returned by USB/PS2 modern keyboards */
-};
 
 
 /**
@@ -358,7 +345,7 @@ extern const KeyboardLayout ItalianLayout;
  *       Serial.printf("VirtualKey = %s\n", Keyboard.virtualKeyToString(Keyboard.getNextVirtualKey()));
  *
  */
-class KeyboardClass {
+class KeyboardClass : public PS2DeviceClass {
 
 public:
 
@@ -368,7 +355,7 @@ public:
    * @brief Initialize KeyboardClass specifying CLOCK and DATA GPIOs.
    *
    * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
-   * This method also initializes the PS2ControllerClass, calling its begin() method.
+   * This method also initializes the PS2ControllerClass to use port 0 only.
    *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
@@ -403,7 +390,7 @@ public:
    *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32); // clk, dat
    *     Keyboard.begin();
    */
-  void begin(bool generateVirtualKeys = true, bool createVKQueue = true);
+  void begin(bool generateVirtualKeys = true, bool createVKQueue = true, int PS2Port = 0);
 
   /**
    * @brief Send a Reset command to the keyboard.
@@ -578,24 +565,11 @@ public:
 
 private:
 
-  bool send(uint8_t cmd, uint8_t expectedReply);
   VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = NULL);
   VirtualKey VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const * layout = NULL);
   void updateLEDs();
   VirtualKey blockingGetVirtualKey(bool * keyDown);
   static void SCodeToVKConverterTask(void * pvParameters);
-  int getReplyCode(int timeOutMS);
-
-  bool send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock);
-  bool send_cmdEcho();
-  bool send_cmdGetScancodeSet(uint8_t * result);
-  bool send_cmdSetScancodeSet(uint8_t scancodeSet);
-  bool send_cmdIdentify(PS2Device * result);
-  bool send_cmdDisableScanning();
-  bool send_cmdEnableScanning();
-  bool send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS);
-  bool send_cmdSetDefaultParams();
-  bool send_cmdReset();
 
 
   bool                      m_keyboardAvailable;  // self test passed and support for scancode set 2

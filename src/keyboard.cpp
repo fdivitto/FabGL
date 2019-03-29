@@ -28,34 +28,11 @@
 #include "freertos/queue.h"
 
 #include "keyboard.h"
-#include "ps2controller.h"
 
 
 fabgl::KeyboardClass Keyboard;
 
 
-#define KBD_CMD_SETLEDS                      0xED
-#define KBD_CMD_ECHO                         0xEE
-#define KBD_CMD_GETSET_CURRENT_SCANCODE_SET  0xF0
-#define KBD_CMD_IDENTIFY                     0xF2
-#define KBD_CMD_SET_TYPEMATIC_RATE_AND_DELAY 0xF3
-#define KBD_CMD_ENABLE_SCANNING              0xF4
-#define KBD_CMD_DISABLE_SCANNING             0xF5
-#define KBD_CMD_SET_DEFAULT_PARAMS           0xF6
-#define KBD_CMD_RESEND_LAST_BYTE             0xFE
-#define KBD_CMD_RESET                        0xFF
-
-#define KBD_REPLY_ERROR1                     0x00
-#define KBD_REPLY_ERROR2                     0xFF
-#define KBD_REPLY_SELFTEST_OK                0xAA
-#define KBD_REPLY_ECHO                       0xEE
-#define KBD_REPLY_ACK                        0xFA
-#define KBD_REPLY_SELFTEST_FAILED1           0xFC
-#define KBD_REPLY_SELFTEST_FAILED2           0xFD
-#define KBD_REPLY_RESEND                     0xFE
-
-#define KBD_CMD_RETRY_COUNT                     3
-#define KBD_CMD_TIMEOUT                        10
 
 
 
@@ -424,8 +401,10 @@ KeyboardClass::KeyboardClass()
 }
 
 
-void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue)
+void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
 {
+  PS2DeviceClass::begin(PS2Port);
+
   m_CTRL     = false;
   m_ALT      = false;
   m_SHIFT    = false;
@@ -452,7 +431,7 @@ void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue)
 void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys, bool createVKQueue)
 {
   PS2Controller.begin(clkGPIO, dataGPIO);
-  begin(generateVirtualKeys, createVKQueue);
+  begin(generateVirtualKeys, createVKQueue, 0);
 }
 
 
@@ -484,16 +463,16 @@ void KeyboardClass::getLEDs(bool * numLock, bool * capsLock, bool * scrollLock)
 
 int KeyboardClass::scancodeAvailable()
 {
-  return PS2Controller.dataAvailable();
+  return dataAvailable();
 }
 
 
 int KeyboardClass::getNextScancode(int timeOutMS, bool requestResendOnTimeOut)
 {
   while (true) {
-    int r = PS2Controller.getData(timeOutMS);
+    int r = getData(timeOutMS);
     if (r == -1 && requestResendOnTimeOut) {
-      PS2Controller.sendData(KBD_CMD_RESEND_LAST_BYTE);
+      requestToResendLastByte();
       continue;
     }
     return r;
@@ -501,138 +480,12 @@ int KeyboardClass::getNextScancode(int timeOutMS, bool requestResendOnTimeOut)
 }
 
 
-int KeyboardClass::getReplyCode(int timeOutMS)
-{
-  return PS2Controller.getData(timeOutMS, true);
-}
-
-
-bool KeyboardClass::send(uint8_t cmd, uint8_t expectedReply)
-{
-  for (int i = 0; i < KBD_CMD_RETRY_COUNT; ++i) {
-    PS2Controller.sendData(cmd);
-    if (getReplyCode(KBD_CMD_TIMEOUT) != expectedReply)
-      continue;
-    return true;
-  }
-  return false;
-}
-
-
-bool KeyboardClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
-{
-  if (!send(KBD_CMD_SETLEDS, KBD_REPLY_ACK))
-    return false;
-  bool ret = send((scrollLock ? 1 : 0) | (numLock ? 2 : 0) | (capsLock ? 4 : 0), KBD_REPLY_ACK);
-  m_numLockLED    = numLock;
-  m_capsLockLED   = capsLock;
-  m_scrollLockLED = scrollLock;
-  return ret;
-}
-
-
-bool KeyboardClass::send_cmdEcho()
-{
-  return send(KBD_CMD_ECHO, KBD_REPLY_ECHO);
-}
-
-
-bool KeyboardClass::send_cmdGetScancodeSet(uint8_t * result)
-{
-  if (!send(KBD_CMD_GETSET_CURRENT_SCANCODE_SET, KBD_REPLY_ACK))
-    return false;
-  if (!send(0, KBD_REPLY_ACK))
-    return false;
-  *result = getReplyCode(KBD_CMD_TIMEOUT);
-  return (*result >= 1 || *result <= 3);
-}
-
-
-bool KeyboardClass::send_cmdSetScancodeSet(uint8_t scancodeSet)
-{
-  if (!send(KBD_CMD_GETSET_CURRENT_SCANCODE_SET, KBD_REPLY_ACK))
-    return false;
-  return send(scancodeSet, KBD_REPLY_ACK);
-}
-
-
-// return value is always valid
-bool KeyboardClass::send_cmdIdentify(PS2Device * result)
-{
-  *result = PS2Device::UnknownPS2Device;
-  if (!send_cmdDisableScanning())
-    return false;
-  if (!send(KBD_CMD_IDENTIFY, KBD_REPLY_ACK))
-    return false;
-  int b1 = getReplyCode(KBD_CMD_TIMEOUT);
-  int b2 = getReplyCode(KBD_CMD_TIMEOUT);
-  if (b1 == -1 && b2 == -1)
-    *result = PS2Device::OldATKeyboard;
-  else if (b1 == 0x00 && b2 == -1)
-    *result = PS2Device::MouseStandard;
-  else if (b1 == 0x03 && b2 == -1)
-    *result = PS2Device::MouseWithScrollWheel;
-  else if (b1 == 0x04 && b2 == -1)
-    *result = PS2Device::Mouse5Buttons;
-  else if ((b1 == 0xAB && b2 == 0x41) || (b1 == 0xAB && b2 == 0xC1))
-    *result = PS2Device::MF2KeyboardWithTranslation;
-  else if (b1 == 0xAB && b2 == 0x83)
-    *result = PS2Device::M2Keyboard;
-  return send_cmdEnableScanning();
-}
-
-
-bool KeyboardClass::send_cmdDisableScanning()
-{
-  return send(KBD_CMD_DISABLE_SCANNING, KBD_REPLY_ACK);
-}
-
-
-bool KeyboardClass::send_cmdEnableScanning()
-{
-  return send(KBD_CMD_ENABLE_SCANNING, KBD_REPLY_ACK);
-}
-
-
-const int16_t REPEATRATES[32] = { 33,  37,  41,  45,  50,  54,  58,  62,  66,  75,  83,  91,
-                                 100, 108, 125, 125, 133, 149, 166, 181, 200, 217, 232, 250,
-                                 270, 303, 333, 370, 400, 434, 476, 500};
-
-
-// repeatRateMS  :  33 ms ...  500 ms (in steps as above REPEATRATES table)
-// repeatDelayMS : 250 ms ... 1000 ms (in steps of 250 ms)
-bool KeyboardClass::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS)
-{
-  if (!send(KBD_CMD_SET_TYPEMATIC_RATE_AND_DELAY, KBD_REPLY_ACK))
-    return false;
-  uint8_t byteToSend = 0b01011; // default repeat rate 10.9 characters per seconds (91ms)
-  for (int i = 0; i < 32; ++i)
-    if (REPEATRATES[i] >= repeatRateMS) {
-      byteToSend = i;
-      break;
-    }
-  byteToSend |= (repeatDelayMS / 250 - 1) << 5;
-  return send(byteToSend, KBD_REPLY_ACK);
-}
-
-
-bool KeyboardClass::send_cmdSetDefaultParams()
-{
-  return send(KBD_CMD_SET_DEFAULT_PARAMS, KBD_REPLY_ACK);
-}
-
-
-bool KeyboardClass::send_cmdReset()
-{
-  if (!send(KBD_CMD_RESET, KBD_REPLY_ACK))
-    return false;
-  return getReplyCode(500) == KBD_REPLY_SELFTEST_OK; // timout 500ms should be enough for keyboard reset and selft test
-}
-
-
 void KeyboardClass::updateLEDs()
 {
   send_cmdLEDs(m_NUMLOCK, m_CAPSLOCK, m_SCROLLLOCK);
+  m_numLockLED    = m_NUMLOCK;
+  m_capsLockLED   = m_CAPSLOCK;
+  m_scrollLockLED = m_SCROLLLOCK;
 }
 
 

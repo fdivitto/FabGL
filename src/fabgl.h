@@ -217,6 +217,36 @@
  *         Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
  *
  *
+ *
+ * PS2 Mouse connection also uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
+ *
+ *                                             +5V
+ *                                              |
+ *                                              |
+ *                                              *-----+
+ *                                              |     |
+ *                                             ---   ---
+ *                                             | |   | |
+ *                                             |R|   |R|
+ *                                             |2|   |2|
+ *                                             |K|   |K|
+ *                                             | |   | |
+ *                                             ---   ---
+ *                            ------------      |     |
+ *        GPIO26 (CLK)    ----|R 120 Ohm |------*--------- PS/2 MOUSE CLK
+ *                            ------------            |
+ *                            ------------            |
+ *        GPIO27 (DAT)    ----|R 120 Ohm |------------*--- PS/2 MOUSE DAT
+ *                            ------------
+ *
+ *       Using above GPIOs the PS2 Mouse Controller may be initialized in this way:
+ *         Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);  // clk, dat
+ *
+ *
+ * When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
+ *   PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27); // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
+ *   Keyboard.begin(true, true, 0); // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
+ *   Mouse.begin(1);                // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
  */
 
 
@@ -238,6 +268,7 @@
 
 #include "terminal.h"
 #include "vgacontroller.h"
+#include "ps2controller.h"
 #include "keyboard.h"
 #include "scene.h"
 #include "collisiondetector.h"

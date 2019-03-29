@@ -72,7 +72,7 @@ public:
    *
    * @return The number of scancodes available to read.
    */
-  int dataAvailable(int PS2Port = 0);
+  int dataAvailable(int PS2Port);
 
   /**
    * @brief Get a scancode from the queue.
@@ -83,7 +83,7 @@ public:
    *
    * @return The first scancode of the queue (-1 if no data is available in the timeout period).
    */
-  int getData(int timeOutMS = -1, bool isReply = false, int PS2Port = 0);
+  int getData(int timeOutMS, bool isReply, int PS2Port);
 
   /**
    * @brief Send a command to the device.
@@ -91,7 +91,7 @@ public:
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    * @param data Byte to send to the PS2 device.
    */
-  void sendData(uint8_t data, int PS2Port = 0);
+  void sendData(uint8_t data, int PS2Port);
 
 
 private:
