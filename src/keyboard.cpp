@@ -819,19 +819,22 @@ VirtualKey KeyboardClass::blockingGetVirtualKey(bool * keyDown)
         m_SHIFT = kdown;
         break;
       case VK_CAPSLOCK:
-        if (!kdown) // state changed at keyup
+        if (!kdown) {
           m_CAPSLOCK = !m_CAPSLOCK;
-        updateLEDs();
+          updateLEDs();
+        }
         break;
       case VK_NUMLOCK:
-        if (!kdown) // state changed at keyup
+        if (!kdown) {
           m_NUMLOCK = !m_NUMLOCK;
-        updateLEDs();
+          updateLEDs();
+        }
         break;
       case VK_SCROLLLOCK:
-        if (!kdown) // state changed at keyup
+        if (!kdown) {
           m_SCROLLLOCK = !m_SCROLLLOCK;
-        updateLEDs();
+          updateLEDs();
+        }
         break;
       default:
         break;
@@ -851,13 +854,15 @@ void KeyboardClass::SCodeToVKConverterTask(void * pvParameters)
   while (true) {
     bool keyDown;
     VirtualKey vk = Keyboard.blockingGetVirtualKey(&keyDown);
-    if (keyDown)
-      Keyboard.m_VKMap[(int)vk >> 3] |= 1 << ((int)vk & 7);
-    else
-      Keyboard.m_VKMap[(int)vk >> 3] &= ~(1 << ((int)vk & 7));
-    if (Keyboard.m_virtualKeyQueue) {
-      uint16_t code = (uint16_t)vk | (keyDown ? 0x8000 : 0);
-      xQueueSendToBack(Keyboard.m_virtualKeyQueue, &code, portMAX_DELAY);
+    if (vk != VK_NONE) {
+      if (keyDown)
+        Keyboard.m_VKMap[(int)vk >> 3] |= 1 << ((int)vk & 7);
+      else
+        Keyboard.m_VKMap[(int)vk >> 3] &= ~(1 << ((int)vk & 7));
+      if (Keyboard.m_virtualKeyQueue) {
+        uint16_t code = (uint16_t)vk | (keyDown ? 0x8000 : 0);
+        xQueueSendToBack(Keyboard.m_virtualKeyQueue, &code, portMAX_DELAY);
+      }
     }
   }
 }
