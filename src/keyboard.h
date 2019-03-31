@@ -324,11 +324,11 @@ extern const KeyboardLayout ItalianLayout;
 /**
  * @brief The PS2 Keyboard controller class.
  *
- * KeyboardClass interfaces directly to PS2 Controller class (fabgl::PS2ControllerClass) and provides the logic
+ * KeyboardClass connects to one port of the PS2 Controller class (fabgl::PS2ControllerClass) and provides the logic
  * that converts scancodes to virtual keys or ASCII (and ANSI) codes.<br>
  * It optionally creates a task that waits for scan codes from the PS2 device and puts virtual keys in a queue.<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
- *
+ * <br>
  * It is possible to specify an international keyboard layout. The default is US-layout.<br>
  * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German) and IT (Italian). Other layout can be added
  * inheriting from US or from any other layout.
@@ -383,14 +383,15 @@ public:
    * @param createVKQueue If true creates a task which consunes scancodes and produces virtual keys
    *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.scancodeAvailable()
    *                      and KeyboardClass.getNextScancode().
+   * @param PS2Port The PS/2 port to use (0 or 1).
    *
    * Example:
    *
-   *     // Setup pins GPIO33 for CLK and GPIO32 for DATA
+   *     // Setup pins GPIO33 for CLK and GPIO32 for DATA on port 0
    *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32); // clk, dat
-   *     Keyboard.begin();
+   *     Keyboard.begin(true, true, 0); // port 0
    */
-  void begin(bool generateVirtualKeys = true, bool createVKQueue = true, int PS2Port = 0);
+  void begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port);
 
   /**
    * @brief Send a Reset command to the keyboard.
@@ -400,7 +401,7 @@ public:
   bool reset();
 
   /**
-   * @brief Return true if a keyboard has been detected and correctly initialized.
+   * @brief Check if keyboard has been detected and correctly initialized.
    *
    * isKeyboardAvailable() returns a valid value only after KeyboardClass.begin() or KeyboardClass.reset() has been called.
    *
@@ -539,13 +540,6 @@ public:
    * @param scrollLock When true the SCROLLLOCK LED is switched on.
    */
   void getLEDs(bool * numLock, bool * capsLock, bool * scrollLock);
-
-  /**
-   * @brief Identify the device attached to the PS2 port.
-   *
-   * @return The identification ID sent by keyboard.
-   */
-  PS2Device identify() { PS2Device result; send_cmdIdentify(&result); return result; };
 
   /**
    * @brief Set typematic rate and delay.
