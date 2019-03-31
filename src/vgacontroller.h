@@ -789,7 +789,7 @@ public:
    * Screen is automatically updated whenever a primitive is painted (look at CanvasClass).<br>
    * When a sprite updates its image or its position (or any other property) it is required
    * to force a refresh using this method.<br>
-   * VGAControllerClass.refreshSprites() is required also using double buffered mode, to paint sprites.
+   * VGAControllerClass.refreshSprites() is required also when using the double buffered mode, to paint sprites.
    */
   void refreshSprites();
 
@@ -896,14 +896,14 @@ private:
   int                    m_DMABuffersCount;
 
   gpio_num_t             m_VSyncGPIO;
-  int                    m_VSyncInterruptSuspended; // 0 = enabled, >0 suspended
+  int                    m_VSyncInterruptSuspended;             // 0 = enabled, >0 suspended
   bool                   m_backgroundPrimitiveExecutionEnabled; // when False primitives are execute immediately
 
-  void *                 m_sprites;
-  int                    m_spriteSize;
-  int                    m_spritesCount;
+  void *                 m_sprites;       // pointer to array of sprite structures
+  int                    m_spriteSize;    // size of sprite structure
+  int                    m_spritesCount;  // number of sprites in m_sprites array
 
-  bool                   m_spritesHidden;
+  bool                   m_spritesHidden; // true between hideSprites() and showSprites()
 
 };
 
