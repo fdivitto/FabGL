@@ -44,7 +44,7 @@
  *
  * - - -
  *
- * This is a VGA Controller, PS/2 Keyboard Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.<br>
+ * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.<br>
  * This library works well with ESP32 revision 1 or upper.
  *
  * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
@@ -68,6 +68,7 @@
  *    * fabgl::CanvasClass (instanced as \b Canvas), that provides a set of drawing primitives (lines, rectangles, text...).
  *    * fabgl::TerminalClass (instanced as \b Terminal), that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
  *    * fabgl::KeyboardClass (instanced as \b Keyboard), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
+ *    * fabgl::MouseClass (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
  *
  * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
@@ -259,7 +260,8 @@
  * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
- * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game.
+ * @example MouseStudio/MouseStudio.ino PS/2 mouse full example
+ * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
  * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
  */
@@ -270,6 +272,7 @@
 #include "vgacontroller.h"
 #include "ps2controller.h"
 #include "keyboard.h"
+#include "mouse.h"
 #include "scene.h"
 #include "collisiondetector.h"
 
@@ -284,6 +287,7 @@ using fabgl::Bitmap;
 using fabgl::Sprite;
 using fabgl::CollisionDetector;
 using fabgl::Point;
+using fabgl::MouseDelta;
 
 
 
