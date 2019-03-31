@@ -74,25 +74,34 @@ public:
    */
   int dataAvailable(int PS2Port);
 
+  bool waitData(int timeOutMS, int PS2Port);
+
   /**
    * @brief Get a scancode from the queue.
    *
-   * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
-   * @param isReply Set true when waiting for a reply from a command sent to the device.
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    *
-   * @return The first scancode of the queue (-1 if no data is available in the timeout period).
+   * @return The first scancode of the queue (-1 if no data is available).
    */
-  int getData(int timeOutMS, bool isReply, int PS2Port);
+  int getData(int PS2Port);
 
   /**
    * @brief Send a command to the device.
    *
-   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    * @param data Byte to send to the PS2 device.
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
   void sendData(uint8_t data, int PS2Port);
 
+  /**
+   * @brief Inject a byte into the RX buffer.
+   *
+   * Injects a byte as if it were actually sent by the device.
+   *
+   * @param value Byte to inject.
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   */
+  void injectInRXBuffer(int value, int PS2Port);
 
 private:
 
@@ -100,9 +109,6 @@ private:
 
   // address of next word to read in the circular buffer
   int                   m_readPos[2];
-
-  // address of next word to read in the circular buffer. Set by sendData() and used by getReplyData()
-  volatile int          m_replyReadPos[2];
 
   // task that is waiting for TX ends
   volatile TaskHandle_t m_TXWaitTask[2];

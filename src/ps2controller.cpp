@@ -852,7 +852,7 @@ int PS2ControllerClass::dataAvailable(int PS2Port)
   uint32_t RTCMEM_PORTX_BUFFER_START = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_START : RTCMEM_PORT1_BUFFER_START);
 
   int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
-  if (m_readPos[PS2Port] < writePos)
+  if (m_readPos[PS2Port] <= writePos)
     return writePos - m_readPos[PS2Port];
   else
     return (RTCMEM_PORTX_BUFFER_END - m_readPos[PS2Port]) + (writePos - RTCMEM_PORTX_BUFFER_START);
@@ -860,35 +860,45 @@ int PS2ControllerClass::dataAvailable(int PS2Port)
 
 
 // return -1 when no data is available
-int PS2ControllerClass::getData(int timeOutMS, bool isReply, int PS2Port)
+int PS2ControllerClass::getData(int PS2Port)
 {
   uint32_t RTCMEM_PORTX_WRITE_POS    = (PS2Port == 0 ? RTCMEM_PORT0_WRITE_POS    : RTCMEM_PORT1_WRITE_POS);
   uint32_t RTCMEM_PORTX_BUFFER_END   = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_END   : RTCMEM_PORT1_BUFFER_END);
   uint32_t RTCMEM_PORTX_BUFFER_START = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_START : RTCMEM_PORT1_BUFFER_START);
 
-  // to avoid possible missings of RX interrupts a value of 200ms is used in place of portMAX_DELAY
-  int aTimeOut = timeOutMS < 0 ? pdMS_TO_TICKS(200) : pdMS_TO_TICKS(timeOutMS);
-  while (true) {
-    int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
-    volatile int * readPos = isReply ? &m_replyReadPos[PS2Port] : &m_readPos[PS2Port];
-    if (*readPos != writePos) {
-      int data = (RTC_SLOW_MEM[*readPos] & 0xFFFF) >> 1 & 0xFF;
-      if (isReply) {
-        // reset reply code to avoid to be used as normal received word
-        RTC_SLOW_MEM[*readPos] = 0;
-      }
-      *readPos += 1;
-      if (*readPos == RTCMEM_PORTX_BUFFER_END)
-        *readPos = RTCMEM_PORTX_BUFFER_START;
-      if (data == 0)
-        continue; // not valid code (maybe a retry code)
-      return data;
-    } else {
-      m_RXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
-      if (ulTaskNotifyTake(pdTRUE, aTimeOut) == 0 && timeOutMS > -1)
-        return -1;  // real timeout
-    }
+  int data = -1;
+
+  int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+  if (m_readPos[PS2Port] != writePos) {
+    data = (RTC_SLOW_MEM[m_readPos[PS2Port]] & 0xFFFF) >> 1 & 0xFF;
+    ++m_readPos[PS2Port];
+    if (m_readPos[PS2Port] == RTCMEM_PORTX_BUFFER_END)
+      m_readPos[PS2Port] = RTCMEM_PORTX_BUFFER_START;
   }
+
+  return data;
+}
+
+
+void PS2ControllerClass::injectInRXBuffer(int value, int PS2Port)
+{
+  uint32_t RTCMEM_PORTX_WRITE_POS    = (PS2Port == 0 ? RTCMEM_PORT0_WRITE_POS    : RTCMEM_PORT1_WRITE_POS);
+  uint32_t RTCMEM_PORTX_BUFFER_END   = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_END   : RTCMEM_PORT1_BUFFER_END);
+  uint32_t RTCMEM_PORTX_BUFFER_START = (PS2Port == 0 ? RTCMEM_PORT0_BUFFER_START : RTCMEM_PORT1_BUFFER_START);
+
+  int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+  RTC_SLOW_MEM[writePos] = value << 1;
+  ++writePos;
+  if (writePos == RTCMEM_PORTX_BUFFER_END)
+    writePos = RTCMEM_PORTX_BUFFER_START;
+  RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] = writePos;
+}
+
+
+bool PS2ControllerClass::waitData(int timeOutMS, int PS2Port)
+{
+  m_RXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
+  return ulTaskNotifyTake(pdTRUE, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
 }
 
 
@@ -916,7 +926,7 @@ void IRAM_ATTR PS2ControllerClass::rtc_isr(void * arg)
     if (RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG]) {
       // reset flag and awake waiting task
       RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG] = 0;
-      PS2Controller.m_replyReadPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+      PS2Controller.m_readPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
       if (PS2Controller.m_TXWaitTask[PS2Port]) {
         vTaskNotifyGiveFromISR(PS2Controller.m_TXWaitTask[PS2Port], NULL);
         PS2Controller.m_TXWaitTask[PS2Port] = NULL;
