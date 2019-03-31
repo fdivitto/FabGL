@@ -52,14 +52,38 @@ enum PS2Device {
 
 class PS2DeviceClass {
 
+public:
+
+  /**
+   * @brief Identify the device attached to the PS2 port.
+   *
+   * @return The identification ID sent by keyboard.
+   */
+  PS2Device identify() { PS2Device result; send_cmdIdentify(&result); return result; };
+
+  /**
+   * @brief Get exclusive access to the device.
+   *
+   * @param timeOutMS Timeout in milliseconds to wait before fail.
+   *
+   * @return True if the device has been locked.
+   */
+  bool lock(int timeOutMS);
+
+  /**
+   * @brief Release device from exclusive access.
+   */
+  void unlock();
+
 protected:
+
+  PS2DeviceClass();
+  ~PS2DeviceClass();
 
   void begin(int PS2Port);
 
-  int dataAvailable()             { return PS2Controller.dataAvailable(m_PS2Port); }
-
-  int getData(int timeOutMS)      { return PS2Controller.getData(timeOutMS, false, m_PS2Port); }
-  int getReplyCode(int timeOutMS) { return PS2Controller.getData(timeOutMS, true, m_PS2Port); }
+  int dataAvailable();
+  int getData(int timeOutMS);
 
   void requestToResendLastByte();
 
@@ -81,8 +105,20 @@ protected:
 
 private:
 
-  int m_PS2Port;
+  int               m_PS2Port;
+  SemaphoreHandle_t m_deviceLock;
 };
+
+
+
+struct PS2DeviceLock {
+  PS2DeviceLock(PS2DeviceClass * PS2Device) : m_PS2Device(PS2Device) { m_PS2Device->lock(-1); }
+  ~PS2DeviceLock() { m_PS2Device->unlock(); }
+
+  PS2DeviceClass * m_PS2Device;
+};
+
+
 
 
 

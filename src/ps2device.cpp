@@ -28,6 +28,7 @@
 #include "freertos/queue.h"
 
 #include "ps2device.h"
+#include "fabutils.h"
 
 
 
@@ -61,9 +62,32 @@ namespace fabgl {
 #define PS2_REPLY_RESEND                     0xFE
 
 #define PS2_CMD_RETRY_COUNT                     3
-#define PS2_CMD_TIMEOUT                        10
+#define PS2_CMD_TIMEOUT                       400
+#define PS2_CMD_GETDATA_SUBTIMEOUT            (PS2_CMD_TIMEOUT / 2)
 
 
+PS2DeviceClass::PS2DeviceClass()
+{
+  m_deviceLock = xSemaphoreCreateRecursiveMutex();
+}
+
+
+PS2DeviceClass::~PS2DeviceClass()
+{
+  vSemaphoreDelete(m_deviceLock);
+}
+
+
+bool PS2DeviceClass::lock(int timeOutMS)
+{
+  return xSemaphoreTakeRecursive(m_deviceLock, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+}
+
+
+void PS2DeviceClass::unlock()
+{
+  xSemaphoreGiveRecursive(m_deviceLock);
+}
 
 
 void PS2DeviceClass::begin(int PS2Port)
@@ -72,11 +96,36 @@ void PS2DeviceClass::begin(int PS2Port)
 }
 
 
+int PS2DeviceClass::dataAvailable()
+{
+  return PS2Controller.dataAvailable(m_PS2Port);
+}
+
+
+int PS2DeviceClass::getData(int timeOutMS)
+{
+  TimeOut timeout;
+  int ret = -1;
+  while (!timeout.expired(timeOutMS)) {
+    lock(-1);
+    ret = PS2Controller.getData(m_PS2Port);
+    unlock();
+    if (ret > -1)
+      break;
+    lock(-1);
+    PS2Controller.waitData((timeOutMS > -1 ? timeOutMS : PS2_CMD_GETDATA_SUBTIMEOUT), m_PS2Port);
+    unlock();
+    delay(10);
+  }
+  return ret;
+}
+
+
 bool PS2DeviceClass::sendCommand(uint8_t cmd, uint8_t expectedReply)
 {
   for (int i = 0; i < PS2_CMD_RETRY_COUNT; ++i) {
     PS2Controller.sendData(cmd, m_PS2Port);
-    if (getReplyCode(PS2_CMD_TIMEOUT) != expectedReply)
+    if (getData(PS2_CMD_TIMEOUT) != expectedReply)
       continue;
     return true;
   }
@@ -92,6 +141,7 @@ void PS2DeviceClass::requestToResendLastByte()
 
 bool PS2DeviceClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SETLEDS, PS2_REPLY_ACK))
     return false;
   bool ret = sendCommand((scrollLock ? 1 : 0) | (numLock ? 2 : 0) | (capsLock ? 4 : 0), PS2_REPLY_ACK);
@@ -101,23 +151,26 @@ bool PS2DeviceClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
 
 bool PS2DeviceClass::send_cmdEcho()
 {
+  PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_ECHO, PS2_REPLY_ECHO);
 }
 
 
 bool PS2DeviceClass::send_cmdGetScancodeSet(uint8_t * result)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_GETSET_CURRENT_SCANCODE_SET, PS2_REPLY_ACK))
     return false;
   if (!sendCommand(0, PS2_REPLY_ACK))
     return false;
-  *result = getReplyCode(PS2_CMD_TIMEOUT);
+  *result = getData(PS2_CMD_TIMEOUT);
   return (*result >= 1 || *result <= 3);
 }
 
 
 bool PS2DeviceClass::send_cmdSetScancodeSet(uint8_t scancodeSet)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_GETSET_CURRENT_SCANCODE_SET, PS2_REPLY_ACK))
     return false;
   return sendCommand(scancodeSet, PS2_REPLY_ACK);
@@ -127,13 +180,14 @@ bool PS2DeviceClass::send_cmdSetScancodeSet(uint8_t scancodeSet)
 // return value is always valid
 bool PS2DeviceClass::send_cmdIdentify(PS2Device * result)
 {
+  PS2DeviceLock deviceLock(this);
   *result = PS2Device::UnknownPS2Device;
   if (!send_cmdDisableScanning())
     return false;
   if (!sendCommand(PS2_CMD_IDENTIFY, PS2_REPLY_ACK))
     return false;
-  int b1 = getReplyCode(PS2_CMD_TIMEOUT);
-  int b2 = getReplyCode(PS2_CMD_TIMEOUT);
+  int b1 = getData(PS2_CMD_TIMEOUT);
+  int b2 = getData(PS2_CMD_TIMEOUT);
   if (b1 == -1 && b2 == -1)
     *result = PS2Device::OldATKeyboard;
   else if (b1 == 0x00 && b2 == -1)
@@ -152,12 +206,14 @@ bool PS2DeviceClass::send_cmdIdentify(PS2Device * result)
 
 bool PS2DeviceClass::send_cmdDisableScanning()
 {
+  PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_DISABLE_SCANNING, PS2_REPLY_ACK);
 }
 
 
 bool PS2DeviceClass::send_cmdEnableScanning()
 {
+  PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_ENABLE_SCANNING, PS2_REPLY_ACK);
 }
 
@@ -171,6 +227,7 @@ const int16_t REPEATRATES[32] = { 33,  37,  41,  45,  50,  54,  58,  62,  66,  7
 // repeatDelayMS : 250 ms ... 1000 ms (in steps of 250 ms)
 bool PS2DeviceClass::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_TYPEMATIC_RATE_AND_DELAY, PS2_REPLY_ACK))
     return false;
   uint8_t byteToSend = 0b01011; // default repeat rate 10.9 characters per seconds (91ms)
@@ -184,9 +241,10 @@ bool PS2DeviceClass::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatD
 }
 
 
-// sampleRate: valid values are 10, 20, 40, 60, 80, 100, and 200
+// sampleRate: valid values are 10, 20, 40, 60, 80, 100, and 200 (samples/sec)
 bool PS2DeviceClass::send_cmdSetSampleRate(int sampleRate)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_SAMPLE_RATE, PS2_REPLY_ACK))
     return false;
   return sendCommand(sampleRate, PS2_REPLY_ACK);
@@ -200,6 +258,7 @@ bool PS2DeviceClass::send_cmdSetSampleRate(int sampleRate)
 //   3 = 8 count/mm
 bool PS2DeviceClass::send_cmdSetResolution(int resolution)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_RESOLUTION, PS2_REPLY_ACK))
     return false;
   return sendCommand(resolution, PS2_REPLY_ACK);
@@ -211,6 +270,7 @@ bool PS2DeviceClass::send_cmdSetResolution(int resolution)
 //   2 -> 1:2
 bool PS2DeviceClass::send_cmdSetScaling(int scaling)
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_SCALING, PS2_REPLY_ACK))
     return false;
   return sendCommand(scaling, PS2_REPLY_ACK);
@@ -219,15 +279,17 @@ bool PS2DeviceClass::send_cmdSetScaling(int scaling)
 
 bool PS2DeviceClass::send_cmdSetDefaultParams()
 {
+  PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_SET_DEFAULT_PARAMS, PS2_REPLY_ACK);
 }
 
 
 bool PS2DeviceClass::send_cmdReset()
 {
+  PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_RESET, PS2_REPLY_ACK))
     return false;
-  return getReplyCode(500) == PS2_REPLY_SELFTEST_OK; // timout 500ms should be enough for PS2 device reset and selft test
+  return getData(500) == PS2_REPLY_SELFTEST_OK; // timout 500ms should be enough for PS2 device reset and selft test
 }
 
 
