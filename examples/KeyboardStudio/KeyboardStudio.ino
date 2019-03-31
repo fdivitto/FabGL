@@ -31,8 +31,8 @@ void printHelp()
   printInfo();
 
   Serial.printf("Commands:\n");
-  Serial.printf("  1 = US Layout  2 = UK Layout     3 = DE Layout   4 = IT Layout\n");
-  Serial.printf("  r = Reset      s = Scancode Mode a = VirtualKey/ASCII Mode\n");
+  Serial.printf("  1 = US Layout  2 = UK Layout      3 = DE Layout   4 = IT Layout\n");
+  Serial.printf("  r = Reset      s = Scancode Mode  a = VirtualKey/ASCII Mode\n");
   Serial.printf("  l = Test LEDs\n");
   Serial.printf("Various:\n");
   Serial.printf("  h = Print This help\n\n");
