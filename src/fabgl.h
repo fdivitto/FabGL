@@ -244,10 +244,13 @@
  *         Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);  // clk, dat
  *
  *
- * When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
- *   PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27); // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
- *   Keyboard.begin(true, true, 0); // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
- *   Mouse.begin(1);                // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
+ *       When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
+ *         // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
+ *         PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
+ *         // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
+ *         Keyboard.begin(true, true, 0);
+ *         // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
+ *         Mouse.begin(1);
  */
 
 
