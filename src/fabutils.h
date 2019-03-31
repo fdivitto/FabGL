@@ -76,6 +76,18 @@ inline bool calcParity(uint8_t v)
 }
 
 
+struct TimeOut {
+  TimeOut() : m_start(esp_timer_get_time()) { }
+
+  // -1 means "infinite", never times out
+  bool expired(int valueMS) {
+    return valueMS > -1 && ((esp_timer_get_time() - m_start) / 1000) > valueMS;
+  }
+
+private:
+  int64_t m_start;
+};
+
 
 
 } // end of namespace
