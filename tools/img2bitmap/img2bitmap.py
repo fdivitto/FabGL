@@ -36,7 +36,7 @@ while i < len(sys.argv):
   if sys.argv[i] == "-t":
     transpColorPos = (int(sys.argv[i + 1]), int(sys.argv[i + 2]))
     i += 3
-  if sys.argv[i] == "-s":
+  elif sys.argv[i] == "-s":
     newSize = (int(sys.argv[i + 1]), int(sys.argv[i + 2]))
     i += 3
   else:
