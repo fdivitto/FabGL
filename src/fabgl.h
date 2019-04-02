@@ -271,6 +271,7 @@
 
 
 
+#include "fabutils.h"
 #include "terminal.h"
 #include "vgacontroller.h"
 #include "ps2controller.h"

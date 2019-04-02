@@ -31,6 +31,50 @@ namespace fabgl {
 
 
 
+/**
+ * @brief Represents the coordinate of a point.
+ *
+ * Coordinates start from 0.
+ */
+struct Point {
+  int16_t X;    /**< Horizontal coordinate */
+  int16_t Y;    /**< Vertical coordinate */
+
+  Point() : X(0), Y(0) { }
+  Point(int X_, int Y_) : X(X_), Y(Y_) { }
+};
+
+
+/**
+ * @brief Represents a bidimensional size.
+ */
+struct Size {
+  int16_t width;   /**< Horizontal size */
+  int16_t height;  /**< Vertical size */
+
+  Size() : width(0), height(0) { }
+  Size(int width_, int height_) : width(width_), height(height_) { }
+};
+
+
+
+/**
+ * @brief Represents a rectangle.
+ *
+ * Top and Left coordinates start from 0.
+ */
+struct Rect {
+  int16_t X1;   /**< Horizontal top-left coordinate */
+  int16_t Y1;   /**< Vertical top-left coordinate */
+  int16_t X2;   /**< Horizontal bottom-right coordinate */
+  int16_t Y2;   /**< Vertical bottom-right coordinate */
+
+  Rect() : X1(0), Y1(0), X2(0), Y2(0) { }
+  Rect(int X1_, int Y1_, int X2_, int Y2_) : X1(X1_), Y1(Y1_), X2(X2_), Y2(Y2_) { }
+};
+
+
+
 template <typename T>
 const T & tmax(const T & a, const T & b)
 {
