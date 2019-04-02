@@ -296,8 +296,8 @@ namespace fabgl {
 ////////////////////////////////////////////////////////////////////////////
 
 
-#define PORT0_RX_BUFFER_SIZE 128
-#define PORT1_RX_BUFFER_SIZE 512
+#define PORT0_RX_BUFFER_SIZE 888
+#define PORT1_RX_BUFFER_SIZE 888
 
 
 // Locations inside RTC low speed memory
@@ -327,6 +327,12 @@ namespace fabgl {
 
 #define RTCMEM_PORT1_BUFFER_START   RTCMEM_PORT0_BUFFER_END  // where the receive buffer begins
 #define RTCMEM_PORT1_BUFFER_END     (RTCMEM_PORT1_BUFFER_START + PORT1_RX_BUFFER_SIZE)  // where the receive buffer ends
+
+
+// check RTC memory occupation
+#if RTCMEM_PORT1_BUFFER_END >= 0x800
+#error "Port 1 ending buffer overflow"
+#endif
 
 
 // values for RTCMEM_PORT0_MODE
@@ -793,8 +799,6 @@ void replace_placeholders(uint32_t prg_start, int size, gpio_num_t port0_clkGPIO
 // Note: GPIO_NUM_39 is a placeholder used to disable PS/2 port 1.
 void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  assert(RTCMEM_PORT1_BUFFER_END < 0x800 && "Port 1 ending buffer overlap");
-
   m_TXWaitTask[0] = m_TXWaitTask[1] = NULL;
   m_RXWaitTask[0] = m_RXWaitTask[1] = NULL;
 
