@@ -23,12 +23,10 @@
 #include "Arduino.h"
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/timers.h"
-#include "freertos/queue.h"
 
 #include "mouse.h"
 #include "ps2controller.h"
+#include "vgacontroller.h"
 
 
 fabgl::MouseClass Mouse;
@@ -39,8 +37,19 @@ namespace fabgl {
 
 
 MouseClass::MouseClass()
-  : m_mouseAvailable(false), m_mouseType(LegacyMouse), m_prevDeltaTime(0), m_wheelDelta(0), m_movementAcceleration(180), m_wheelAcceleration(60000)
+  : m_mouseAvailable(false), m_mouseType(LegacyMouse), m_prevDeltaTime(0),
+    m_movementAcceleration(180), m_wheelAcceleration(60000), m_absoluteUpdateTimer(NULL),
+    m_absoluteQueue(NULL), m_updateVGAController(false)
 {
+}
+
+
+MouseClass::~MouseClass()
+{
+  if (m_absoluteUpdateTimer)
+    xTimerDelete(m_absoluteUpdateTimer, portMAX_DELAY);
+  if (m_absoluteQueue)
+    vQueueDelete(m_absoluteQueue);
 }
 
 
@@ -68,13 +77,15 @@ bool MouseClass::reset()
     delay(500);
   }
 
-  // negotiate compatibility
+  // negotiate compatibility and default parameters
   if (m_mouseAvailable) {
-    // try Intellimouse (three buttons + scrolling wheel, 4 bytes packet)
+    // try Intellimouse (three buttons + scroll wheel, 4 bytes packet)
     if (send_cmdSetSampleRate(200) && send_cmdSetSampleRate(100) && send_cmdSetSampleRate(80) && identify() == PS2Device::MouseWithScrollWheel) {
       // Intellimouse ok!
       m_mouseType = Intellimouse;
     }
+
+    setSampleRate(60);
   }
 
   return m_mouseAvailable;
@@ -126,29 +137,32 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
 }
 
 
-void MouseClass::setAbsolutePositionArea(int width, int height)
+void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController)
 {
-  m_area           = Size(width, height);
-  m_position       = Point(width >> 1, height >> 1);
-  m_buttons.left   = 0;
-  m_buttons.middle = 0;
-  m_buttons.right  = 0;
-  m_wheelDelta     = 0;
-}
+  m_area                  = Size(width, height);
+  m_status.X              = width >> 1;
+  m_status.Y              = height >> 1;
+  m_status.wheelDelta     = 0;
+  m_status.buttons.left   = 0;
+  m_status.buttons.middle = 0;
+  m_status.buttons.right  = 0;
 
+  m_updateVGAController = updateVGAController;
 
-// return if mouse position or buttons has been updated
-bool MouseClass::updateAbsolutePosition(int maxEventsConsumeTimeMS)
-{
-  // consume deltas queue (up to maxEventsConsumeTimeMS milliseconds)
-  bool r = false;
-  TimeOut timeout;
-  while (deltaAvailable() && !timeout.expired(maxEventsConsumeTimeMS)) {
-    MouseDelta delta;
-    r = getNextDelta(&delta, 0, false);
-    updateAbsolutePosition(&delta);
+  if (createAbsolutePositionsQueue) {
+    m_absoluteQueue = xQueueCreate(FABGLIB_MOUSE_EVENTS_QUEUE_SIZE, sizeof(MouseStatus));
   }
-  return r;
+
+  if (m_updateVGAController) {
+    // setup initial position
+    VGAController.setMouseCursorPos(m_status.X, m_status.Y);
+  }
+
+  if (m_updateVGAController || createAbsolutePositionsQueue) {
+    // create and start the timer
+    m_absoluteUpdateTimer = xTimerCreate("", pdMS_TO_TICKS(10), pdTRUE, this, absoluteUpdateTimerFunc);
+    xTimerStart(m_absoluteUpdateTimer, portMAX_DELAY);
+  }
 }
 
 
@@ -186,20 +200,46 @@ void MouseClass::updateAbsolutePosition(MouseDelta * delta)
 
   }
 
-  m_position.X    = tclamp((int)m_position.X + dx, 0, m_area.width  - 1);
-  m_position.Y    = tclamp((int)m_position.Y - dy, 0, m_area.height - 1);
-  m_wheelDelta   += dz;
-  m_buttons       = delta->buttons;
-  m_prevDeltaTime = now;
+  m_status.X           = tclamp((int)m_status.X + dx, 0, m_area.width  - 1);
+  m_status.Y           = tclamp((int)m_status.Y - dy, 0, m_area.height - 1);
+  m_status.wheelDelta += dz;
+  m_status.buttons     = delta->buttons;
+  m_prevDeltaTime      = now;
 }
 
 
-int MouseClass::wheelDelta()
+void MouseClass::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
 {
-  int ret = m_wheelDelta;
-  m_wheelDelta = 0;
-  return ret;
+  MouseClass * mouse = (MouseClass*) pvTimerGetTimerID(xTimer);
+  MouseDelta delta;
+  if (mouse->deltaAvailable() && mouse->getNextDelta(&delta, 0, false)) {
+    mouse->updateAbsolutePosition(&delta);
+
+    // VGA Controller
+    if (mouse->m_updateVGAController)
+      VGAController.setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
+
+    if (mouse->m_absoluteQueue) {
+      xQueueSend(mouse->m_absoluteQueue, &mouse->m_status, 0);
+    }
+  }
 }
+
+
+int MouseClass::availableStatus()
+{
+  return m_absoluteQueue ? uxQueueMessagesWaiting(m_absoluteQueue) : 0;
+}
+
+
+MouseStatus MouseClass::getNextStatus(int timeOutMS)
+{
+  MouseStatus status;
+  if (m_absoluteQueue)
+    xQueueReceive(m_absoluteQueue, &status, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+  return status;
+}
+
 
 
 } // end of namespace
