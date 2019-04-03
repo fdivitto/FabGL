@@ -23,9 +23,7 @@
 #include "fabgl.h"
 
 
-Sprite mouseSprite;
-
-const uint8_t mouse_data[] = {
+const uint8_t mouseBitmap_data[] = {
   0xff, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f,
   0xff, 0xff, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f,
   0xff, 0xc0, 0xff, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f,
@@ -46,23 +44,18 @@ const uint8_t mouse_data[] = {
   0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0xff, 0xc0, 0xc0, 0xff, 0x3f,
   0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0xff, 0xff, 0x3f, 0x3f,
 };
-const Bitmap mouse = Bitmap(11, 19, &mouse_data[0]);
+const Bitmap mouseBitmap = Bitmap(11, 19, &mouseBitmap_data[0]);
 
 
 int indicatorX = 300;
 int indicatorY = 170;
 
 
-void moveCursor()
+void showCursorPos(MouseStatus const & status)
 {
-  mouseSprite.moveTo(Mouse.position().X, Mouse.position().Y);
-
-  // refresh sprites is not required when there are subsequent Canvas drawing functions
-  //VGAController.refreshSprites();
-  
   Canvas.setPenColor(Color::Blue);
   Canvas.setBrushColor(Color::Yellow);
-  Canvas.drawTextFmt(indicatorX, indicatorY, " %d %d ", Mouse.position().X, Mouse.position().Y);
+  Canvas.drawTextFmt(indicatorX, indicatorY, " %d %d ", status.X, status.Y);
 }
 
 
@@ -81,51 +74,48 @@ void setup()
 
   // Setup pins GPIO26 for CLK and GPIO27 for DATA
   Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);
-  Mouse.setAbsolutePositionArea(Canvas.getWidth(), Canvas.getHeight());
+  Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true);
+  VGAController.setMouseCursorBitmap(&mouseBitmap);
 
   Canvas.setBrushColor(Color::Blue);
   Canvas.clear();
   Canvas.selectFont(Canvas.getPresetFontInfo(80, 25));
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
 
-  mouseSprite.addBitmap(&mouse);
-  VGAController.setSprites(&mouseSprite, 1);
-
-  moveCursor();
+  showCursorPos(Mouse.status());
 }
 
 
 void loop()
 {
-  if (Mouse.updateAbsolutePosition()) {
+  MouseStatus status = Mouse.getNextStatus(-1); // -1 = blocking operation
 
-    // left button writes pixels
-    if (Mouse.buttons().left) {
-      Canvas.setPenColor(Color::BrightRed);
-      Canvas.setPixel(Mouse.position().X, Mouse.position().Y);
-      Canvas.moveTo(Mouse.position().X, Mouse.position().Y);
-    }
-
-    // right button draw lines
-    if (Mouse.buttons().right) {
-      Canvas.setPenColor(Color::BrightGreen);
-      Canvas.lineTo(Mouse.position().X, Mouse.position().Y);
-    }
-
-    // middle button clear screen
-    if (Mouse.buttons().middle) {
-      Canvas.setBrushColor(Color::Blue);
-      Canvas.clear();
-    }
-
-    // mouse wheel moves cursor position indicator
-    int wheelDelta = Mouse.wheelDelta();
-    if (wheelDelta != 0) {
-      indicatorY += wheelDelta;
-      Canvas.setBrushColor(Color::Blue);
-      Canvas.clear();
-    }
-
-    moveCursor();
+  // left button writes pixels
+  if (status.buttons.left) {
+    Canvas.setPenColor(Color::BrightRed);
+    Canvas.setPixel(status.X, status.Y);
+    Canvas.moveTo(status.X, status.Y);
   }
+
+  // right button draw lines
+  if (status.buttons.right) {
+    Canvas.setPenColor(Color::BrightGreen);
+    Canvas.lineTo(status.X, status.Y);
+  }
+
+  // middle button clear screen
+  if (status.buttons.middle) {
+    Canvas.setBrushColor(Color::Blue);
+    Canvas.clear();
+  }
+
+  // mouse wheel moves cursor position indicator
+  if (status.wheelDelta != 0) {
+    indicatorY = fabgl::tclamp(indicatorY + status.wheelDelta, 0, Canvas.getHeight() - 16);
+    Mouse.status().wheelDelta = 0;
+    Canvas.setBrushColor(Color::Blue);
+    Canvas.clear();
+  }
+
+  showCursorPos(status);
 }
