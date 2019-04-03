@@ -26,6 +26,7 @@
 
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 #include "fabglconf.h"
 #include "ps2controller.h"

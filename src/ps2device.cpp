@@ -23,9 +23,6 @@
 #include "Arduino.h"
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/timers.h"
-#include "freertos/queue.h"
 
 #include "ps2device.h"
 #include "fabutils.h"
