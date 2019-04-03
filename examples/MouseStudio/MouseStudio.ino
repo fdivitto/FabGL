@@ -140,7 +140,7 @@ void loop()
 
     Serial.printf("deltaX = %d  deltaY = %d  deltaZ = %d  leftBtn = %d  midBtn = %d  rightBtn = %d\n",
                   mouseDelta.deltaX, mouseDelta.deltaY, mouseDelta.deltaZ,
-                  mouseDelta.leftButton, mouseDelta.middleButton, mouseDelta.rightButton);
+                  mouseDelta.buttons.left, mouseDelta.buttons.middle, mouseDelta.buttons.right);
   }
 
 }
