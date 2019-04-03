@@ -34,6 +34,7 @@
 #include "freertos/FreeRTOS.h"
 
 #include "fabglconf.h"
+#include "fabutils.h"
 #include "ps2device.h"
 
 
@@ -41,19 +42,25 @@ namespace fabgl {
 
 
 /**
+ * @brief Describes mouse buttons status.
+ */
+struct MouseButtons {
+  uint8_t left   : 1;   /**< Contains 1 when left button is pressed. */
+  uint8_t middle : 1;   /**< Contains 1 when middle button is pressed. */
+  uint8_t right  : 1;   /**< Contains 1 when right button is pressed. */
+};
+
+
+/**
  * @brief Describes mouse movement and buttons status.
  */
 struct MouseDelta {
-  int16_t deltaX;             /**< Horizontal movement since last report. Moving to the right generates positive values. */
-  int16_t deltaY;             /**< Vertical movement since last report. Upward movement generates positive values. */
-  int8_t  deltaZ;             /**< Scrolling wheel's movement since last report. Downward movement genrates positive values. */
-
-  uint8_t leftButton   : 1;   /**< Contains 1 when left button is pressed. */
-  uint8_t middleButton : 1;   /**< Contains 1 when middle button is pressed. */
-  uint8_t rightButton  : 1;   /**< Contains 1 when right button is pressed. */
-
-  uint8_t overflowX    : 1;   /**< Contains 1 when horizontal overflow has been detected. */
-  uint8_t overflowY    : 1;   /**< Contains 1 when vertical overflow has been detected. */
+  int16_t      deltaX;             /**< Horizontal movement since last report. Moving to the right generates positive values. */
+  int16_t      deltaY;             /**< Vertical movement since last report. Upward movement generates positive values. */
+  int8_t       deltaZ;             /**< Scrolling wheel's movement since last report. Downward movement genrates positive values. */
+  MouseButtons buttons;
+  uint8_t      overflowX    : 1;   /**< Contains 1 when horizontal overflow has been detected. */
+  uint8_t      overflowY    : 1;   /**< Contains 1 when vertical overflow has been detected. */
 };
 
 
@@ -190,7 +197,7 @@ public:
    * Resolution is the amount by which the movement counters are incremented/decremented measured as counts per millimeter.<br>
    * The default resolution is 4 counts/mm.
    *
-   * @param value Resolution encoded as follows: 0 = 1 count/mm, 1 = 2 counts/mm, 2 = 4 counts/mm, 3 = 8 counts/mm.
+   * @param value Resolution encoded as follows: 0 = 1 count/mm (25 dpi), 1 = 2 counts/mm (50 dpi), 2 = 4 counts/mm (100 dpi), 3 = 8 counts/mm (200 dpi).
    *
    * @return True if command has been successfully delivered to the mouse.
    */
@@ -205,16 +212,113 @@ public:
    *
    * @return True if command has been successfully delivered to the mouse.
    */
-  bool setScaling(int value)    { return send_cmdSetScaling(value); }
+  bool setScaling(int value) { return send_cmdSetScaling(value); }
+
+  /**
+   * @brief Set absolute positioning area size.
+   *
+   * Specify area size to limit absolute mouse area inside the rectangle (0, 0) to (width - 1, height - 1).<br>
+   * This method must be called one time to initialize absolute positioning.<br>
+   *
+   * @param width Absolute mouse area width. Mouse can travel from 0 up to width - 1.
+   * @param height Absolute mouse area height. Mouse can travel from 0 up to height - 1.
+   *
+   * Example:
+   *
+   *     Mouse.setAbsolutePositionArea(Canvas.getWidth(), Canvas.getHeight());
+   */
+  void setAbsolutePositionArea(int width, int height);
+
+  /**
+   * @brief Update absolute position consuming mouse events.
+   *
+   * This method reads all events from the mouse queue and updates absolute mouse position, mouse wheel and buttons status.<br>
+   * To improve quality of acceleration it is important to call updateAbsolutePosition() often and at constant frequency.<br>
+   *
+   * @param maxEventsConsumeTimeMS Maximum number of milliseconds to use while consuming mouse events. Passed this time no more events are consumed. Set -1 to consume all events in the queue.
+   *
+   * @return True when at least one event has been consumed.
+   *
+   * Example:
+   *
+   *     // move a sprite (previously defined) at mouse absolute position
+   *     void loop() {
+   *       if (Mouse.updateAbsolutePosition())
+   *         mouseSprite.moveTo(Mouse.position().X, Mouse.position().Y);
+   *     }
+   */
+  bool updateAbsolutePosition(int maxEventsConsumeTimeMS = -1);
+
+  /**
+   * @brief Update absolute position from the specified mouse delta event.
+   *
+   * This method updates absolute mouse position, mouse wheel and buttons status.<br>
+   * To improve quality of acceleration it is important to call updateAbsolutePosition() often and at constant frequency.
+   *
+   * @param delta Mouse event to process.
+   *
+   * Example:
+   *
+   *     // move a sprite (previously defined) at mouse absolute position
+   *     void loop() {
+   *       MouseDelta delta;
+   *       if (getNextDelta(&delta)) {
+   *         Mouse.updateAbsolutePosition(&delta);
+   *         mouseSprite.moveTo(Mouse.position().X, Mouse.position().Y);
+   *       }
+   *     }
+   */
+  void updateAbsolutePosition(MouseDelta * delta);
+
+  /**
+   * @brief Get or set current absolute mouse position.
+   */
+  Point & position()       { return m_position; }
+
+  /**
+   * @brief Get or set current buttons status.
+   */
+  MouseButtons & buttons() { return m_buttons; }
+
+  /**
+   * @brief Get current accelerated wheel delta.
+   */
+  int wheelDelta();
+
+  /**
+   * @brief Get or set mouse movement acceleration factor.
+   *
+   * Mouse movement acceleration is calculated in MouseClass.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
+   * Lower values generate little acceleration, high values generate a lot of acceleration.<br>
+   * Suggested range is 0 ... 2000. Default value is 180.
+   */
+  int & movementAcceleration() { return m_movementAcceleration; }
+
+  /**
+   * @brief Get or set wheel acceleration factor.
+   *
+   * Wheel acceleration is calculated in MouseClass.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
+   * Lower values generate little acceleration, high values generate a lot of acceleration.<br>
+   * Suggested range is 0 ... 100000. Default value is 60000.
+   */
+  int & wheelAcceleration()    { return m_wheelAcceleration; }
 
 private:
 
   int getPacketSize();
 
 
-  bool      m_mouseAvailable;
-  MouseType m_mouseType;
+  bool         m_mouseAvailable;
+  MouseType    m_mouseType;
 
+  // absolute position support
+  Size         m_area;
+  Point        m_position;
+  int64_t      m_prevDeltaTime;
+  int16_t      m_wheelDelta;
+  MouseButtons m_buttons;
+  int          m_movementAcceleration;  // reasonable values: 0...2000
+  int          m_wheelAcceleration;     // reasonable values: 0...100000
 };
 
 

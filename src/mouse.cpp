@@ -39,7 +39,7 @@ namespace fabgl {
 
 
 MouseClass::MouseClass()
-  : m_mouseAvailable(false), m_mouseType(LegacyMouse)
+  : m_mouseAvailable(false), m_mouseType(LegacyMouse), m_prevDeltaTime(0), m_wheelDelta(0), m_movementAcceleration(180), m_wheelAcceleration(60000)
 {
 }
 
@@ -113,18 +113,93 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
   }
 
   // decode packet
-  delta->deltaX       = (int16_t)(rcv[0] & 0x10 ? 0xFF00 | rcv[1] : rcv[1]);
-  delta->deltaY       = (int16_t)(rcv[0] & 0x20 ? 0xFF00 | rcv[2] : rcv[2]);
-  delta->deltaZ       = (int8_t)(packetSize > 3 ? rcv[3] : 0);
-  delta->leftButton   = (rcv[0] & 0x01 ? 1 : 0);
-  delta->middleButton = (rcv[0] & 0x04 ? 1 : 0);
-  delta->rightButton  = (rcv[0] & 0x02 ? 1 : 0);
-  delta->overflowX    = (rcv[0] & 0x40 ? 1 : 0);
-  delta->overflowY    = (rcv[0] & 0x80 ? 1 : 0);
+  delta->deltaX         = (int16_t)(rcv[0] & 0x10 ? 0xFF00 | rcv[1] : rcv[1]);
+  delta->deltaY         = (int16_t)(rcv[0] & 0x20 ? 0xFF00 | rcv[2] : rcv[2]);
+  delta->deltaZ         = (int8_t)(packetSize > 3 ? rcv[3] : 0);
+  delta->buttons.left   = (rcv[0] & 0x01 ? 1 : 0);
+  delta->buttons.middle = (rcv[0] & 0x04 ? 1 : 0);
+  delta->buttons.right  = (rcv[0] & 0x02 ? 1 : 0);
+  delta->overflowX      = (rcv[0] & 0x40 ? 1 : 0);
+  delta->overflowY      = (rcv[0] & 0x80 ? 1 : 0);
 
   return true;
 }
 
+
+void MouseClass::setAbsolutePositionArea(int width, int height)
+{
+  m_area           = Size(width, height);
+  m_position       = Point(width >> 1, height >> 1);
+  m_buttons.left   = 0;
+  m_buttons.middle = 0;
+  m_buttons.right  = 0;
+  m_wheelDelta     = 0;
+}
+
+
+// return if mouse position or buttons has been updated
+bool MouseClass::updateAbsolutePosition(int maxEventsConsumeTimeMS)
+{
+  // consume deltas queue (up to maxEventsConsumeTimeMS milliseconds)
+  bool r = false;
+  TimeOut timeout;
+  while (deltaAvailable() && !timeout.expired(maxEventsConsumeTimeMS)) {
+    MouseDelta delta;
+    r = getNextDelta(&delta, 0, false);
+    updateAbsolutePosition(&delta);
+  }
+  return r;
+}
+
+
+void MouseClass::updateAbsolutePosition(MouseDelta * delta)
+{
+  const int maxDeltaTimeUS = 500000; // after 0.5s doesn't consider acceleration
+
+  int dx = delta->deltaX;
+  int dy = delta->deltaY;
+  int dz = delta->deltaZ;
+
+  int64_t now   = esp_timer_get_time();
+  int deltaTime = now - m_prevDeltaTime; // time in microseconds
+
+  if (deltaTime < maxDeltaTimeUS) {
+
+    // calcualte movement acceleration
+    if (dx != 0 || dy != 0) {
+      int   deltaDist    = isqrt(dx * dx + dy * dy);                 // distance in mouse points
+      float vel          = (float)deltaDist / deltaTime;             // velocity in mousepoints/microsecond
+      float newVel       = vel + m_movementAcceleration * vel * vel; // new velocity
+      int   newDeltaDist = newVel * deltaTime;                       // new distance
+      dx = dx * newDeltaDist / deltaDist;
+      dy = dy * newDeltaDist / deltaDist;
+    }
+
+    // calculate wheel acceleration
+    if (dz != 0) {
+      int   deltaDist    = abs(dz);                                  // distance in wheel points
+      float vel          = (float)deltaDist / deltaTime;             // velocity in mousepoints/microsecond
+      float newVel       = vel + m_wheelAcceleration * vel * vel;    // new velocity
+      int   newDeltaDist = newVel * deltaTime;                       // new distance
+      dz = dz * newDeltaDist / deltaDist;
+    }
+
+  }
+
+  m_position.X    = tclamp((int)m_position.X + dx, 0, m_area.width  - 1);
+  m_position.Y    = tclamp((int)m_position.Y - dy, 0, m_area.height - 1);
+  m_wheelDelta   += dz;
+  m_buttons       = delta->buttons;
+  m_prevDeltaTime = now;
+}
+
+
+int MouseClass::wheelDelta()
+{
+  int ret = m_wheelDelta;
+  m_wheelDelta = 0;
+  return ret;
+}
 
 
 } // end of namespace

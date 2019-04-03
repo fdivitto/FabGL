@@ -25,6 +25,7 @@
 #define _FABUTILS_H_INCLUDED
 
 
+#include "freertos/FreeRTOS.h"
 
 
 namespace fabgl {
@@ -75,6 +76,25 @@ struct Rect {
 
 
 
+struct TimeOut {
+  TimeOut();
+
+  // -1 means "infinite", never times out
+  bool expired(int valueMS);
+
+private:
+  int64_t m_start;
+};
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+// Integer square root by Halleck's method, with Legalize's speedup
+int isqrt (int x);
+
+
 template <typename T>
 const T & tmax(const T & a, const T & b)
 {
@@ -112,25 +132,8 @@ void tswap(T & v1, T & v2)
 }
 
 
-inline bool calcParity(uint8_t v)
-{
-  v ^= v >> 4;
-  v &= 0xf;
-  return (0x6996 >> v) & 1;
-}
+bool calcParity(uint8_t v);
 
-
-struct TimeOut {
-  TimeOut() : m_start(esp_timer_get_time()) { }
-
-  // -1 means "infinite", never times out
-  bool expired(int valueMS) {
-    return valueMS > -1 && ((esp_timer_get_time() - m_start) / 1000) > valueMS;
-  }
-
-private:
-  int64_t m_start;
-};
 
 
 
