@@ -129,6 +129,7 @@ void VGAControllerClass::init(gpio_num_t VSyncGPIO)
   m_spritesCount = 0;
   m_spritesHidden = true;
   m_doubleBuffered = false;
+  m_mouseCursor.visible = false;
 
   SquareWaveGenerator.begin();
 }
@@ -1758,6 +1759,7 @@ void IRAM_ATTR VGAControllerClass::hideSprites()
   if (!m_spritesHidden) {
     m_spritesHidden = true;
 
+    // normal sprites
     if (m_sprites && !m_doubleBuffered) {
       // restore saved backgrounds
       uint8_t * spritePtr = (uint8_t*)m_sprites + (m_spritesCount - 1) * m_spriteSize;
@@ -1771,6 +1773,13 @@ void IRAM_ATTR VGAControllerClass::hideSprites()
       }
     }
 
+    // mouse cursor sprite
+    if (m_mouseCursor.savedBackgroundWidth > 0) {
+      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground);
+      execDrawBitmap((BitmapDrawingInfo) {m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap}, NULL, false);
+      m_mouseCursor.savedBackgroundWidth = m_mouseCursor.savedBackgroundHeight = 0;
+    }
+
   }
 }
 
@@ -1780,6 +1789,7 @@ void IRAM_ATTR VGAControllerClass::showSprites()
   if (m_spritesHidden) {
     m_spritesHidden = false;
 
+    // normal sprites
     // save backgrounds and draw sprites
     uint8_t * spritePtr = (uint8_t*)m_sprites;
     for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
@@ -1797,6 +1807,20 @@ void IRAM_ATTR VGAControllerClass::showSprites()
         if (sprite->isStatic)
           sprite->allowDraw = false;
       }
+    }
+
+    // mouse cursor sprite
+    // save backgrounds and draw mouse cursor
+    if (m_mouseCursor.visible && m_mouseCursor.getFrame()) {
+      // save sprite X and Y so other threads can change them without interferring
+      int16_t spriteX = m_mouseCursor.x;
+      int16_t spriteY = m_mouseCursor.y;
+      Bitmap const * bitmap = m_mouseCursor.getFrame();
+      execDrawBitmap((BitmapDrawingInfo) {spriteX, spriteY, bitmap}, m_mouseCursor.savedBackground, false);
+      m_mouseCursor.savedX = spriteX;
+      m_mouseCursor.savedY = spriteY;
+      m_mouseCursor.savedBackgroundWidth  = bitmap->width;
+      m_mouseCursor.savedBackgroundHeight = bitmap->height;
     }
 
   }
@@ -1881,6 +1905,26 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
 }
 
 
+// bitmap = NULL -> disable mouse
+void VGAControllerClass::setMouseCursorBitmap(Bitmap const * bitmap)
+{
+  m_mouseCursor.visible = false;
+  m_mouseCursor.clearBitmaps();
+  if (bitmap) {
+    m_mouseCursor.addBitmap(bitmap);
+    m_mouseCursor.visible = true;
+  }
+  refreshSprites();
+}
+
+
+void VGAControllerClass::setMouseCursorPos(int X, int Y)
+{
+  m_mouseCursor.moveTo(X, Y);
+  refreshSprites();
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Sprite implementation
@@ -1919,6 +1963,13 @@ void Sprite::allocRequiredBackgroundBuffer()
       reqBackBufferSize = tmax(reqBackBufferSize, frames[i]->width * frames[i]->height);
     savedBackground = (uint8_t*) realloc(savedBackground, reqBackBufferSize);
   }
+}
+
+
+void Sprite::clearBitmaps()
+{
+  free(frames);
+  framesCount = 0;
 }
 
 

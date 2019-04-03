@@ -443,6 +443,7 @@ struct Sprite {
   Sprite * setFrame(int frame) { currentFrame = frame; return this; }
   Sprite * addBitmap(Bitmap const * bitmap);
   Sprite * addBitmap(Bitmap const * bitmap[], int count);
+  void clearBitmaps();
   int getWidth()  { return frames[currentFrame]->width; }
   int getHeight() { return frames[currentFrame]->height; }
   void allocRequiredBackgroundBuffer();
@@ -760,6 +761,21 @@ public:
    */
   bool isDoubleBuffered() { return m_doubleBuffered; }
 
+  /**
+   * @brief Set mouse cursor bitmap and make it visible.
+   *
+   * @param bitmap Bitmap to use when mouse cursor need to be painted. NULL = disable mouse pointer.
+   */
+  void setMouseCursorBitmap(Bitmap const * bitmap);
+
+  /**
+   * @brief Set mouse cursor position.
+   *
+   * @param X Mouse cursor horizontal position.
+   * @param Y Mouse cursor vertical position.
+   */
+  void setMouseCursorPos(int X, int Y);
+
 private:
 
   void init(gpio_num_t VSyncGPIO);
@@ -864,6 +880,9 @@ private:
   int                    m_spritesCount;  // number of sprites in m_sprites array
 
   bool                   m_spritesHidden; // true between hideSprites() and showSprites()
+
+  // mouse cursor (mouse pointer) support
+  Sprite                 m_mouseCursor;
 
 };
 
