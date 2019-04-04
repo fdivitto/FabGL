@@ -198,6 +198,34 @@ enum PrimitiveCmd {
 
 
 /**
+ * @brief This enum defines a set of predefined mouse cursors.
+ */
+enum CursorName {
+  CursorPointerAmigaLike,     /**< 11x11 Amiga like colored mouse pointer */
+  CursorPointerSimpleReduced, /**< 10x15 mouse pointer */
+  CursorPointerSimple,        /**< 11x19 mouse pointer */
+  CursorPointerShadowed,      /**< 11x19 shadowed mouse pointer */
+  CursorPointer,              /**< 12x17 mouse pointer */
+  CursorPen,                  /**< 16x16 pen */
+  CursorViewfinder,           /**< 15x15 view finder */
+  CursorCross1,               /**< 10x10 cross */
+  CursorCross2,               /**< 15x16 cross */
+  CursorPoint,                /**< 5x5 point */
+  CursorLeftArrow,            /**< 14x11 left arrow */
+  CursorRightArrow,           /**< 14x11 right arrow */
+  CursorDownArrow,            /**< 11x14 down arrow */
+  CursorUpArrow,              /**< 11x14 up arrow */
+  CursorMove,                 /**< 19x19 move */
+  CursorResize1,              /**< 12x12 resize orientation 1 */
+  CursorResize2,              /**< 12x12 resize orientation 2 */
+  CursorResize3,              /**< 11x17 resize orientation 3 */
+  CursorResize4,              /**< 17x11 resize orientation 4 */
+  CursorTextInput,            /**< 7x17 text input */
+};
+
+
+
+/**
  * @brief This enum defines named colors.
  *
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
@@ -767,6 +795,17 @@ public:
    * @param bitmap Bitmap to use when mouse cursor need to be painted. NULL = disable mouse pointer.
    */
   void setMouseCursorBitmap(Bitmap const * bitmap);
+
+  /**
+   * @brief Set mouse cursor from a set of predefined bitmaps.
+   *
+   * @param cursorName Name (enum) of predefined cursor bitmap.
+   *
+   * Example:
+   *
+   *     VGAController.setMouseCursorBitmap(CursorName::CursorPointerShadowed);
+   */
+  void setMouseCursorBitmap(CursorName cursorName);
 
   /**
    * @brief Set mouse cursor position.

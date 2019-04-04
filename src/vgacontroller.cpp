@@ -40,6 +40,7 @@
 #include "fabutils.h"
 #include "vgacontroller.h"
 #include "swgenerator.h"
+#include "cursors.h"
 
 
 
@@ -1910,11 +1911,23 @@ void VGAControllerClass::setMouseCursorBitmap(Bitmap const * bitmap)
 {
   m_mouseCursor.visible = false;
   m_mouseCursor.clearBitmaps();
+
+  refreshSprites();
+  processPrimitives();
+  primitivesExecutionWait();
+
   if (bitmap) {
     m_mouseCursor.addBitmap(bitmap);
     m_mouseCursor.visible = true;
+    //refreshSprites();
   }
   refreshSprites();
+}
+
+
+void VGAControllerClass::setMouseCursorBitmap(CursorName cursorName)
+{
+  setMouseCursorBitmap(&CURSORS[(int)cursorName]);
 }
 
 
@@ -1969,6 +1982,7 @@ void Sprite::allocRequiredBackgroundBuffer()
 void Sprite::clearBitmaps()
 {
   free(frames);
+  frames = NULL;
   framesCount = 0;
 }
 
