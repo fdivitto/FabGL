@@ -256,19 +256,19 @@
 
 
 /**
- * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
- * @example NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
  * @example AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
- * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
- * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
- * @example MouseStudio/MouseStudio.ino PS/2 mouse full example
+ * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
+ * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
+ * @example MouseStudio/MouseStudio.ino PS/2 mouse events
+ * @example MouseOnScreen/MouseOnScreen.ino PS/2 mouse and mouse pointer on screen
+ * @example NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
- * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
  */
-
 
 
 #include "fabutils.h"
