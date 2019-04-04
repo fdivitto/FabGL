@@ -413,7 +413,6 @@ enum CursorName {
   CursorPointerShadowed,      /**< 11x19 shadowed mouse pointer */
   CursorPointer,              /**< 12x17 mouse pointer */
   CursorPen,                  /**< 16x16 pen */
-  CursorViewfinder,           /**< 15x15 view finder */
   CursorCross1,               /**< 9x9 cross */
   CursorCross2,               /**< 11x11 cross */
   CursorPoint,                /**< 5x5 point */
