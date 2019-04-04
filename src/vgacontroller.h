@@ -198,34 +198,6 @@ enum PrimitiveCmd {
 
 
 /**
- * @brief This enum defines a set of predefined mouse cursors.
- */
-enum CursorName {
-  CursorPointerAmigaLike,     /**< 11x11 Amiga like colored mouse pointer */
-  CursorPointerSimpleReduced, /**< 10x15 mouse pointer */
-  CursorPointerSimple,        /**< 11x19 mouse pointer */
-  CursorPointerShadowed,      /**< 11x19 shadowed mouse pointer */
-  CursorPointer,              /**< 12x17 mouse pointer */
-  CursorPen,                  /**< 16x16 pen */
-  CursorViewfinder,           /**< 15x15 view finder */
-  CursorCross1,               /**< 10x10 cross */
-  CursorCross2,               /**< 15x16 cross */
-  CursorPoint,                /**< 5x5 point */
-  CursorLeftArrow,            /**< 14x11 left arrow */
-  CursorRightArrow,           /**< 14x11 right arrow */
-  CursorDownArrow,            /**< 11x14 down arrow */
-  CursorUpArrow,              /**< 11x14 up arrow */
-  CursorMove,                 /**< 19x19 move */
-  CursorResize1,              /**< 12x12 resize orientation 1 */
-  CursorResize2,              /**< 12x12 resize orientation 2 */
-  CursorResize3,              /**< 11x17 resize orientation 3 */
-  CursorResize4,              /**< 17x11 resize orientation 4 */
-  CursorTextInput,            /**< 7x17 text input */
-};
-
-
-
-/**
  * @brief This enum defines named colors.
  *
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
@@ -429,6 +401,44 @@ struct BitmapDrawingInfo {
 
   BitmapDrawingInfo(int X_, int Y_, Bitmap const * bitmap_) : X(X_), Y(Y_), bitmap(bitmap_) { }
 };
+
+
+/**
+ * @brief This enum defines a set of predefined mouse cursors.
+ */
+enum CursorName {
+  CursorPointerAmigaLike,     /**< 11x11 Amiga like colored mouse pointer */
+  CursorPointerSimpleReduced, /**< 10x15 mouse pointer */
+  CursorPointerSimple,        /**< 11x19 mouse pointer */
+  CursorPointerShadowed,      /**< 11x19 shadowed mouse pointer */
+  CursorPointer,              /**< 12x17 mouse pointer */
+  CursorPen,                  /**< 16x16 pen */
+  CursorViewfinder,           /**< 15x15 view finder */
+  CursorCross1,               /**< 9x9 cross */
+  CursorCross2,               /**< 11x11 cross */
+  CursorPoint,                /**< 5x5 point */
+  CursorLeftArrow,            /**< 11x11 left arrow */
+  CursorRightArrow,           /**< 11x11 right arrow */
+  CursorDownArrow,            /**< 11x11 down arrow */
+  CursorUpArrow,              /**< 11x11 up arrow */
+  CursorMove,                 /**< 19x19 move */
+  CursorResize1,              /**< 12x12 resize orientation 1 */
+  CursorResize2,              /**< 12x12 resize orientation 2 */
+  CursorResize3,              /**< 11x17 resize orientation 3 */
+  CursorResize4,              /**< 17x11 resize orientation 4 */
+  CursorTextInput,            /**< 7x15 text input */
+};
+
+
+/**
+ * @brief Defines a cursor.
+ */
+struct Cursor {
+  int16_t hotspotX;           /**< Cursor horizontal hotspot (0 = left bitmap side) */
+  int16_t hotspotY;           /**< Cursor vertical hotspot (0 = upper bitmap side) */
+  Bitmap  bitmap;             /**< Cursor bitmap */
+};
+
 
 
 struct QuadTreeObject;
@@ -790,22 +800,22 @@ public:
   bool isDoubleBuffered() { return m_doubleBuffered; }
 
   /**
-   * @brief Set mouse cursor bitmap and make it visible.
+   * @brief Set mouse cursor and make it visible.
    *
-   * @param bitmap Bitmap to use when mouse cursor need to be painted. NULL = disable mouse pointer.
+   * @param cursor Cursor to use when mouse pointer need to be painted. NULL = disable mouse pointer.
    */
-  void setMouseCursorBitmap(Bitmap const * bitmap);
+  void setMouseCursor(Cursor const * cursor);
 
   /**
-   * @brief Set mouse cursor from a set of predefined bitmaps.
+   * @brief Set mouse cursor from a set of predefined cursors.
    *
-   * @param cursorName Name (enum) of predefined cursor bitmap.
+   * @param cursorName Name (enum) of predefined cursor.
    *
    * Example:
    *
-   *     VGAController.setMouseCursorBitmap(CursorName::CursorPointerShadowed);
+   *     VGAController.setMouseCursor(CursorName::CursorPointerShadowed);
    */
-  void setMouseCursorBitmap(CursorName cursorName);
+  void setMouseCursor(CursorName cursorName);
 
   /**
    * @brief Set mouse cursor position.
@@ -922,6 +932,8 @@ private:
 
   // mouse cursor (mouse pointer) support
   Sprite                 m_mouseCursor;
+  int16_t                m_mouseHotspotX;
+  int16_t                m_mouseHotspotY;
 
 };
 

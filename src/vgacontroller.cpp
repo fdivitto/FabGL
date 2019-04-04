@@ -1906,8 +1906,8 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
 }
 
 
-// bitmap = NULL -> disable mouse
-void VGAControllerClass::setMouseCursorBitmap(Bitmap const * bitmap)
+// cursor = NULL -> disable mouse
+void VGAControllerClass::setMouseCursor(Cursor const * cursor)
 {
   m_mouseCursor.visible = false;
   m_mouseCursor.clearBitmaps();
@@ -1916,24 +1916,25 @@ void VGAControllerClass::setMouseCursorBitmap(Bitmap const * bitmap)
   processPrimitives();
   primitivesExecutionWait();
 
-  if (bitmap) {
-    m_mouseCursor.addBitmap(bitmap);
+  if (cursor) {
+    m_mouseHotspotX = cursor->hotspotX;
+    m_mouseHotspotY = cursor->hotspotY;
+    m_mouseCursor.addBitmap(&cursor->bitmap);
     m_mouseCursor.visible = true;
-    //refreshSprites();
   }
   refreshSprites();
 }
 
 
-void VGAControllerClass::setMouseCursorBitmap(CursorName cursorName)
+void VGAControllerClass::setMouseCursor(CursorName cursorName)
 {
-  setMouseCursorBitmap(&CURSORS[(int)cursorName]);
+  setMouseCursor(&CURSORS[(int)cursorName]);
 }
 
 
 void VGAControllerClass::setMouseCursorPos(int X, int Y)
 {
-  m_mouseCursor.moveTo(X, Y);
+  m_mouseCursor.moveTo(X - m_mouseHotspotX, Y - m_mouseHotspotY);
   refreshSprites();
 }
 

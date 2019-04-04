@@ -46,13 +46,13 @@ void setup()
   // 64 colors
   VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
 
-  VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  VGAController.setResolution(VGA_640x350_70HzAlt1);
   //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
   // Setup pins GPIO26 for CLK and GPIO27 for DATA
   Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);
   Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true);
-  VGAController.setMouseCursorBitmap((CursorName)cursor);
+  VGAController.setMouseCursor((CursorName)cursor);
 
   Canvas.setBrushColor(Color::Blue);
   Canvas.clear();
@@ -77,7 +77,7 @@ void loop()
   // right button change mouse shape
   if (status.buttons.right) {
     cursor = ((CursorName)cursor == CursorName::CursorTextInput ? 0 : cursor + 1);
-    VGAController.setMouseCursorBitmap((CursorName)cursor);
+    VGAController.setMouseCursor((CursorName)cursor);
   }
 
   // middle button clear screen
