@@ -1917,10 +1917,12 @@ void VGAControllerClass::setMouseCursor(Cursor const * cursor)
   primitivesExecutionWait();
 
   if (cursor) {
+    m_mouseCursor.move(+m_mouseHotspotX, +m_mouseHotspotY, false);
     m_mouseHotspotX = cursor->hotspotX;
     m_mouseHotspotY = cursor->hotspotY;
     m_mouseCursor.addBitmap(&cursor->bitmap);
     m_mouseCursor.visible = true;
+    m_mouseCursor.move(-m_mouseHotspotX, -m_mouseHotspotY, false);
   }
   refreshSprites();
 }
