@@ -60,8 +60,8 @@ struct MouseDelta {
   int16_t      deltaY;             /**< Vertical movement since last report. Upward movement generates positive values. */
   int8_t       deltaZ;             /**< Scroll wheel movement since last report. Downward movement genrates positive values. */
   MouseButtons buttons;            /**< Mouse buttons status. */
-  uint8_t      overflowX    : 1;   /**< Contains 1 when horizontal overflow has been detected. */
-  uint8_t      overflowY    : 1;   /**< Contains 1 when vertical overflow has been detected. */
+  uint8_t      overflowX : 1;      /**< Contains 1 when horizontal overflow has been detected. */
+  uint8_t      overflowY : 1;      /**< Contains 1 when vertical overflow has been detected. */
 };
 
 
@@ -270,7 +270,7 @@ public:
   /**
    * @brief Get or set current mouse status.
    */
-  MouseStatus & status()       { return m_status; }
+  MouseStatus & status() { return m_status; }
 
   /**
    * @brief Get the number of available mouse status.
