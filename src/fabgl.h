@@ -293,6 +293,7 @@ using fabgl::CollisionDetector;
 using fabgl::Point;
 using fabgl::MouseDelta;
 using fabgl::MouseStatus;
+using fabgl::CursorName;
 
 
 
