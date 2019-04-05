@@ -77,6 +77,7 @@ struct Timings {
   char          HSyncLogic;      /**< Horizontal Sync polarity '+' or '-' */
   char          VSyncLogic;      /**< Vertical Sync polarity '+' or '-' */
   uint8_t       scanCount;       /**< Scan count. 1 = single scan, 2 = double scan (allowing low resolutions like 320x240...) */
+  uint8_t       multiScanBlack;  /**< 0 = Additional rows are the repetition of the first. 1 = Additional rows are blank. */
   ScreenBlock   HStartingBlock;  /**< Horizontal starting block. DetermineshHorizontal order of signals */
 };
 
@@ -604,9 +605,10 @@ public:
    *
    * Modeline must have following syntax (non case sensitive):
    *
-   *     "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins]
+   *     "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
    *
    * In fabglconf.h there are macros with some predefined modelines for common resolutions.
+   * When MultiScanBlank and DoubleScan is specified then additional rows are not repeated, but just filled with blank lines.
    *
    * @param modeline Linux-like modeline as specified above.
    * @param viewPortWidth Horizontal viewport size in pixels. If less than zero (-1) it is sized to modeline visible area width.
@@ -879,8 +881,8 @@ private:
   // DMA related methods
   bool setDMABuffersCount(int buffersCount);
   void setDMABufferBlank(int index, void volatile * address, int length);
-  void setDMABufferView(int index, int row, volatile uint8_t * * viewPort, bool onVisibleDMA);
-  void setDMABufferView(int index, int row);
+  void setDMABufferView(int index, int row, int scan, volatile uint8_t * * viewPort, bool onVisibleDMA);
+  void setDMABufferView(int index, int row, int scan);
   void volatile * getDMABuffer(int index, int * length);
 
   int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()

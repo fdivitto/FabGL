@@ -196,7 +196,7 @@ void VGAControllerClass::setSprites(Sprite * sprites, int count, int spriteSize)
 
 
 // modeline syntax:
-//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins]
+//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
 static bool convertModelineToTimings(char const * modeline, Timings * timings)
 {
   float freq;
@@ -220,6 +220,7 @@ static bool convertModelineToTimings(char const * modeline, Timings * timings)
     timings->HSyncLogic     = '-';
     timings->VSyncLogic     = '-';
     timings->scanCount      = 1;
+    timings->multiScanBlack = 0;
     timings->HStartingBlock = ScreenBlock::FrontPorch;
 
     // get (+HSync | -HSync) (+VSync | -VSync)
@@ -237,7 +238,7 @@ static bool convertModelineToTimings(char const * modeline, Timings * timings)
       }
     }
 
-    // get [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins]
+    // get [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
     // actually this gets only the first character
     while (*pc) {
       switch (*pc) {
@@ -260,6 +261,10 @@ static bool convertModelineToTimings(char const * modeline, Timings * timings)
         case 'V':
         case 'v':
           timings->HStartingBlock = ScreenBlock::VisibleArea;
+          break;
+        case 'M':
+        case 'm':
+          timings->multiScanBlack = 1;
           break;
         case ' ':
           ++pc;
@@ -494,27 +499,27 @@ void VGAControllerClass::fillVertBuffers(int offsetY)
             case ScreenBlock::FrontPorch:
               // FRONTPORCH -> SYNC -> BACKPORCH -> VISIBLEAREA
               setDMABufferBlank(DMABufIdx++, m_HBlankLine, HInvisibleAreaSize + m_viewPortCol);
-              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow);
+              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow, scan);
               if (rightPadSize > 0)
                 setDMABufferBlank(DMABufIdx++, m_HBlankLine + HInvisibleAreaSize, rightPadSize);
               break;
             case ScreenBlock::Sync:
               // SYNC -> BACKPORCH -> VISIBLEAREA -> FRONTPORCH
               setDMABufferBlank(DMABufIdx++, m_HBlankLine, m_timings.HSyncPulse + m_timings.HBackPorch + m_viewPortCol);
-              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow);
+              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow, scan);
               setDMABufferBlank(DMABufIdx++, m_HBlankLine + m_HLineSize - m_timings.HFrontPorch - rightPadSize, m_timings.HFrontPorch + rightPadSize);
               break;
             case ScreenBlock::BackPorch:
               // BACKPORCH -> VISIBLEAREA -> FRONTPORCH -> SYNC
               setDMABufferBlank(DMABufIdx++, m_HBlankLine, m_timings.HBackPorch + m_viewPortCol);
-              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow);
+              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow, scan);
               setDMABufferBlank(DMABufIdx++, m_HBlankLine + m_HLineSize - m_timings.HFrontPorch - m_timings.HSyncPulse - rightPadSize, m_timings.HFrontPorch + m_timings.HSyncPulse + rightPadSize);
               break;
             case ScreenBlock::VisibleArea:
               // VISIBLEAREA -> FRONTPORCH -> SYNC -> BACKPORCH
               if (m_viewPortCol > 0)
                 setDMABufferBlank(DMABufIdx++, m_HBlankLine, m_viewPortCol);
-              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow);
+              setDMABufferView(DMABufIdx++, visibleAreaLine - m_viewPortRow, scan);
               setDMABufferBlank(DMABufIdx++, m_HBlankLine + m_timings.HVisibleArea - rightPadSize, HInvisibleAreaSize + rightPadSize);
               break;
           }
@@ -670,23 +675,28 @@ void VGAControllerClass::setDMABufferBlank(int index, void volatile * address, i
 // address must be allocated with MALLOC_CAP_DMA or even an address of another already allocated buffer
 // allocated buffer length (in bytes) must be 32 bit aligned
 // Max length is 4092 bytes
-void VGAControllerClass::setDMABufferView(int index, int row, volatile uint8_t * * viewPort, bool onVisibleDMA)
+void VGAControllerClass::setDMABufferView(int index, int row, int scan, volatile uint8_t * * viewPort, bool onVisibleDMA)
 {
+  uint8_t * bufferPtr;
+  if (scan > 0 && m_timings.multiScanBlack == 1 && m_timings.HStartingBlock == FrontPorch)
+    bufferPtr = (uint8_t *) (m_HBlankLine + m_HLineSize - m_timings.HVisibleArea);  // this works only when HSYNC, FrontPorch and BackPorch are at the beginning of m_HBlankLine
+  else
+    bufferPtr = (uint8_t *) viewPort[row];
   lldesc_t volatile * DMABuffers = onVisibleDMA ? m_DMABuffersVisible : m_DMABuffers;
   DMABuffers[index].size   = (m_viewPortWidth + 3) & (~3);
   DMABuffers[index].length = m_viewPortWidth;
-  DMABuffers[index].buf    = (uint8_t*) viewPort[row];
+  DMABuffers[index].buf    = bufferPtr;
 }
 
 
 // address must be allocated with MALLOC_CAP_DMA or even an address of another already allocated buffer
 // allocated buffer length (in bytes) must be 32 bit aligned
 // Max length is 4092 bytes
-void VGAControllerClass::setDMABufferView(int index, int row)
+void VGAControllerClass::setDMABufferView(int index, int row, int scan)
 {
-  setDMABufferView(index, row, m_viewPort, false);
+  setDMABufferView(index, row, scan, m_viewPort, false);
   if (m_doubleBuffered)
-    setDMABufferView(index, row, m_viewPortVisible, true);
+    setDMABufferView(index, row, scan, m_viewPortVisible, true);
 }
 
 
@@ -1186,7 +1196,7 @@ void IRAM_ATTR VGAControllerClass::execVScroll(int scroll)
     }
     for (int i = Y1, idx = Y1 * m_timings.scanCount; i <= Y2; ++i)
       for (int scan = 0; scan < m_timings.scanCount; ++scan, ++idx)
-        setDMABufferView(m_viewPortRow * m_timings.scanCount + idx * viewPortBuffersPerLine + linePos, i, m_viewPort, false);
+        setDMABufferView(m_viewPortRow * m_timings.scanCount + idx * viewPortBuffersPerLine + linePos, i, scan, m_viewPort, false);
   }
 }
 
