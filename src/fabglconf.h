@@ -150,6 +150,9 @@
 /** Modeline for 320x200@75Hz resolution */
 #define VGA_320x200_75Hz "\"320x200@75Hz\" 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan"
 
+/** Modeline for 320x200@75Hz retro resolution */
+#define VGA_320x200_75HzRetro "\"320x200@75Hz\" 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan MultiScanBlank"
+
 /** Modeline for 320x240@60Hz resolution */
 #define QVGA_320x240_60Hz "\"320x240@60Hz\" 12.6 320 328 376 400 240 245 246 262 -HSync -VSync DoubleScan"
 
@@ -216,7 +219,7 @@
 /** Modeline for 768x576@60Hz resolution */
 #define VESA_768x576_60Hz "\"768x576@60Hz\" 34.96 768 792 872 976 576 577 580 597 -HSync -VSync"
 
-/** Modeline for 800x600@60Hz resolution */
+/** Modeline for 800x300@60Hz resolution */
 #define SVGA_800x300_60Hz "\"800x300@60Hz\" 40 800 840 968 1056 300 301 303 314 -HSync -VSync DoubleScan"
 
 /** Modeline for 800x600@56Hz resolution */
