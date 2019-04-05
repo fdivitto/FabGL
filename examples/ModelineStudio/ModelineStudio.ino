@@ -47,6 +47,7 @@ const char * PresetResolutions[] = {
   VESA_720x400_85Hz,
   PAL_720x576_50Hz,
   VESA_768x576_60Hz,
+  SVGA_800x300_60Hz,
   SVGA_800x600_56Hz,
   SVGA_800x600_60Hz,
 };

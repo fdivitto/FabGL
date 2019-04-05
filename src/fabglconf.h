@@ -216,6 +216,9 @@
 /** Modeline for 768x576@60Hz resolution */
 #define VESA_768x576_60Hz "\"768x576@60Hz\" 34.96 768 792 872 976 576 577 580 597 -HSync -VSync"
 
+/** Modeline for 800x600@60Hz resolution */
+#define SVGA_800x300_60Hz "\"800x300@60Hz\" 40 800 840 968 1056 300 301 303 314 -HSync -VSync DoubleScan"
+
 /** Modeline for 800x600@56Hz resolution */
 #define SVGA_800x600_56Hz "\"800x600@56Hz\" 36 800 824 896 1024 600 601 603 625 -HSync -VSync"
 
