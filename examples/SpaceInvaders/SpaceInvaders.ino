@@ -552,6 +552,7 @@ void setup()
 
   VGAController.setResolution(VGA_320x200_75Hz);
 
+  // adjust this to center screen in your monitor
   VGAController.moveScreen(20, -2);
 }
 
