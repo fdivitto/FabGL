@@ -1,0 +1,6 @@
+<map id="fabgl::Scene::updateSpriteAndDetectCollisions" name="fabgl::Scene::updateSpriteAndDetectCollisions">
+<area shape="rect" id="node2" href="$classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403" title="Update collision detector and detect collision with the specified sprite. " alt="" coords="232,37,414,76"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_collision_detector.html#a55d2fe2c8857aeb4f3c8cf86be6d409e" title="Update collision detector. " alt="" coords="462,5,620,44"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321" title="Detect first collision with the specified sprite. " alt="" coords="462,68,620,107"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_collision_detector.html#a4eb7cf8e9b5b3c9bede09bfc450bb53a" title="Remove the specified sprite from collision detector. " alt="" coords="668,68,827,107"/>
+</map>

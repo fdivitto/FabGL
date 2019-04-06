@@ -1,0 +1,4 @@
+<map id="ps2device.h" name="ps2device.h">
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="335,152,421,177"/>
+<area shape="rect" id="node5" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="232,79,340,104"/>
+</map>

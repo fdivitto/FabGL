@@ -1,0 +1,26 @@
+var classfabgl_1_1_v_g_a_controller_class =
+[
+    [ "begin", "classfabgl_1_1_v_g_a_controller_class.html#acdc8b95372c01a76deeb4abe360d0295", null ],
+    [ "begin", "classfabgl_1_1_v_g_a_controller_class.html#ab62e5ccbc44d03e43205403123f2bdd1", null ],
+    [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#a7e0814c52bfc5eecd93fbb5ebce8d423", null ],
+    [ "getBitsPerChannel", "classfabgl_1_1_v_g_a_controller_class.html#a643740e39822e9e74e80be55ab9d34c1", null ],
+    [ "getScreenHeight", "classfabgl_1_1_v_g_a_controller_class.html#af3406190a30fc46070da0a7353da4082", null ],
+    [ "getScreenWidth", "classfabgl_1_1_v_g_a_controller_class.html#ad7310c48604f37aec2ea3274fefd405c", null ],
+    [ "getViewPortCol", "classfabgl_1_1_v_g_a_controller_class.html#a725e8d47fe8e3cab8eafaa631b61fb69", null ],
+    [ "getViewPortHeight", "classfabgl_1_1_v_g_a_controller_class.html#aa929ec6c723ffc3fea0d2996224f972d", null ],
+    [ "getViewPortRow", "classfabgl_1_1_v_g_a_controller_class.html#a53fbba084a7f46d9356871ed1b16af83", null ],
+    [ "getViewPortWidth", "classfabgl_1_1_v_g_a_controller_class.html#a537026eab81ff0f128185b0049644be5", null ],
+    [ "isDoubleBuffered", "classfabgl_1_1_v_g_a_controller_class.html#ac769ed638e5add668706de38f5d6c55a", null ],
+    [ "moveScreen", "classfabgl_1_1_v_g_a_controller_class.html#a16843256aeff799ff96654cef6a231e7", null ],
+    [ "processPrimitives", "classfabgl_1_1_v_g_a_controller_class.html#a25f1f95c5ba5cfa97fdba9d7115f2286", null ],
+    [ "refreshSprites", "classfabgl_1_1_v_g_a_controller_class.html#a9ad964ad05d839dd99bd73897b5cab84", null ],
+    [ "removeSprites", "classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6", null ],
+    [ "resumeBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#afa57c12d24f1706685afa7d7e96c2cdc", null ],
+    [ "setMouseCursor", "classfabgl_1_1_v_g_a_controller_class.html#a192b049b972edc3eb8a817d641688f7d", null ],
+    [ "setMouseCursor", "classfabgl_1_1_v_g_a_controller_class.html#ae4b4775f4fc880932ae1abeeb0a1acc0", null ],
+    [ "setMouseCursorPos", "classfabgl_1_1_v_g_a_controller_class.html#a5351ed408f04a666b3969311f59956cb", null ],
+    [ "setResolution", "classfabgl_1_1_v_g_a_controller_class.html#ac190a844ead4bb68817c733fb0c9a5af", null ],
+    [ "setSprites", "classfabgl_1_1_v_g_a_controller_class.html#a7ba7a412c75f41a898929e18dae10353", null ],
+    [ "shrinkScreen", "classfabgl_1_1_v_g_a_controller_class.html#affb399316e3a45b6b3ae601544dbc3a9", null ],
+    [ "suspendBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#acc8e8edb6d677fed102ca33cb59badf2", null ]
+];

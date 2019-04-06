@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classfabgl_1_1_p_s2_device_class.html" title="Base class for PS2 devices (like mouse or keyboard). " alt="" coords="5,31,162,56"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. " alt="" coords="210,5,358,31"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. " alt="" coords="219,55,350,80"/>
+</map>

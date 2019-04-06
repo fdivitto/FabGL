@@ -1,0 +1,5 @@
+<map id="keyboard.h" name="keyboard.h">
+<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="304,225,391,251"/>
+<area shape="rect" id="node4" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="220,79,312,104"/>
+<area shape="rect" id="node6" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="167,152,275,177"/>
+</map>

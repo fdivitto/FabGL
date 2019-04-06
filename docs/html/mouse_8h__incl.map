@@ -1,0 +1,6 @@
+<map id="mouse.h" name="mouse.h">
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="309,225,395,251"/>
+<area shape="rect" id="node5" href="$fabutils_8h_source.html" title="fabutils.h" alt="" coords="33,152,108,177"/>
+<area shape="rect" id="node6" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="226,79,318,104"/>
+<area shape="rect" id="node8" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="183,152,291,177"/>
+</map>
