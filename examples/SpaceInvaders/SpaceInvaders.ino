@@ -26,6 +26,46 @@
 #include "sprites.h"
 
 
+
+/* * * *  C O N F I G U R A T I O N  * * * */
+
+// select one color configuration
+#define USE_8_COLORS  0
+#define USE_64_COLORS 1
+
+// indicate VGA GPIOs to use for selected color configuration
+#if USE_8_COLORS
+  #define VGA_RED    GPIO_NUM_22
+  #define VGA_GREEN  GPIO_NUM_21
+  #define VGA_BLUE   GPIO_NUM_19
+  #define VGA_HSYNC  GPIO_NUM_18
+  #define VGA_VSYNC  GPIO_NUM_5
+#elif USE_64_COLORS
+  #define VGA_RED1   GPIO_NUM_22
+  #define VGA_RED0   GPIO_NUM_21
+  #define VGA_GREEN1 GPIO_NUM_19
+  #define VGA_GREEN0 GPIO_NUM_18
+  #define VGA_BLUE1  GPIO_NUM_5
+  #define VGA_BLUE0  GPIO_NUM_4
+  #define VGA_HSYNC  GPIO_NUM_23
+  #define VGA_VSYNC  GPIO_NUM_15
+#endif
+
+// select one Keyboard and Mouse configuration
+#define KEYBOARD_ON_PORT0                0
+#define MOUSE_ON_PORT0                   0
+#define KEYBOARD_ON_PORT0_MOUSE_ON_PORT1 1
+
+// indicate PS/2 GPIOs for each port
+#define PS2_PORT0_CLK GPIO_NUM_33
+#define PS2_PORT0_DAT GPIO_NUM_32
+#define PS2_PORT1_CLK GPIO_NUM_26
+#define PS2_PORT1_DAT GPIO_NUM_27
+
+/* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
+
+
+
 using fabgl::tclamp;
 
 
@@ -39,6 +79,9 @@ struct IntroScene : public Scene {
   static const int TEXTROWS = 4;
   static const int TEXT_X   = 130;
   static const int TEXT_Y   = 122;
+
+  static int controller_; // 1 = keyboard, 2 = mouse
+
   int textRow_  = 0;
   int textCol_  = 0;
   int starting_ = 0;
@@ -71,6 +114,8 @@ struct IntroScene : public Scene {
     Canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 45, &bmpEnemyC[0]);
 
     Canvas.setBrushColor(Color::Black);
+
+    controller_ = 0;
   }
 
   void update(int updateCount)
@@ -100,12 +145,22 @@ struct IntroScene : public Scene {
 
       if (updateCount % 20 == 0) {
         Canvas.setPenColor(random(4), random(4), random(4));
-        Canvas.drawText(80, 75, "Press [SPACE] to Play");
+        if (Keyboard.isKeyboardAvailable() && Mouse.isMouseAvailable())
+          Canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
+        else if (Keyboard.isKeyboardAvailable())
+          Canvas.drawText(80, 75, "Press [SPACE] to Play");
+        else if (Mouse.isMouseAvailable())
+          Canvas.drawText(105, 75, "Click to Play");
       }
 
-      // handle keyboard (after two seconds)
-      if (updateCount > 50 && Keyboard.isVKDown(fabgl::VK_SPACE))
-        starting_ = 1;
+      // handle keyboard or mouse (after two seconds)
+      if (updateCount > 50) {
+        if (Keyboard.isKeyboardAvailable() && Keyboard.isVKDown(fabgl::VK_SPACE))
+          controller_ = 1;  // select keyboard as controller
+        else if (Mouse.isMouseAvailable() && Mouse.getNextDelta(NULL, 0) && Mouse.status().buttons.left)
+          controller_ = 2;  // select mouse as controller
+        starting_ = (controller_ > 0);  // start only when a controller has been selected
+      }
     }
   }
 
@@ -115,6 +170,8 @@ struct IntroScene : public Scene {
 
 };
 
+
+int IntroScene::controller_ = 0;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +225,8 @@ struct GameScene : public Scene {
   SISprite * enemiesFire_ = playerFire_ + PLAYERFIRECOUNT;
   SISprite * enemyMother_ = enemiesFire_ + ENEMIESFIRECOUNT;
 
-  int playerVelX_          = 0;
+  int playerVelX_          = 0;  // used when controller is keyboard (0 = no move)
+  int playerAbsX_          = -1; // used when controller is mouse (-1 = no move)
   int enemiesX_            = ENEMIES_START_X;
   int enemiesY_            = ENEMIES_START_Y;
   int enemiesDir_          = 1;
@@ -266,6 +324,12 @@ struct GameScene : public Scene {
     Canvas.setPenColor(3, 3, 3);
     Canvas.drawTextFmt(254, 181, "Level %02d", level_);
 
+    if (IntroScene::controller_ == 2) {
+      // setup mouse controller
+      Mouse.setSampleRate(40);  // reduce number of samples from mouse to reduce delays
+      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false); // take advantage of mouse acceleration
+    }
+
     showLives();
   }
 
@@ -307,7 +371,10 @@ struct GameScene : public Scene {
     Canvas.drawText(90, 80, "GAME OVER");
     Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
     Canvas.setPenColor(0, 3, 0);
-    Canvas.drawText(110, 100, "Press [SPACE]");
+    if (IntroScene::controller_ == 1)
+      Canvas.drawText(110, 100, "Press [SPACE]");
+    else if (IntroScene::controller_ == 2)
+      Canvas.drawText(93, 100, "Click to continue");
     // change state
     gameState_ = GAMESTATE_GAMEOVER;
     level_ = 1;
@@ -391,10 +458,15 @@ struct GameScene : public Scene {
             gameState_ = GAMESTATE_PLAYING;
           }
         }
-      } else if (playerVelX_) {
-        // move player
+      } else if (IntroScene::controller_ == 1 && playerVelX_ != 0) {
+        // move player using Keyboard
         player_->x += playerVelX_;
         player_->x = tclamp<int>(player_->x, 0, getWidth() - player_->getWidth());
+        updateSprite(player_);
+      } else if (IntroScene::controller_ == 2 && playerAbsX_ != -1) {
+        // move player using Mouse
+        player_->x = playerAbsX_;
+        playerAbsX_ = -1;
         updateSprite(player_);
       }
 
@@ -433,15 +505,28 @@ struct GameScene : public Scene {
         enemyMother_->visible = true;
       }
 
-      // handle keyboard
-      if (Keyboard.isVKDown(fabgl::VK_LEFT))
-        playerVelX_ = -1;
-      else if (Keyboard.isVKDown(fabgl::VK_RIGHT))
-        playerVelX_ = +1;
-      else
-        playerVelX_ = 0;
-      if (Keyboard.isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)
-        playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+      // handle fire and movement from controller
+      if (IntroScene::controller_ == 1) {
+        // KEYBOARD controller
+        if (Keyboard.isVKDown(fabgl::VK_LEFT))
+          playerVelX_ = -1;
+        else if (Keyboard.isVKDown(fabgl::VK_RIGHT))
+          playerVelX_ = +1;
+        else
+          playerVelX_ = 0;
+        if (Keyboard.isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)  // fire?
+          playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+      } else if (IntroScene::controller_ == 2) {
+        // MOUSE controller
+        if (Mouse.deltaAvailable()) {
+          MouseDelta delta;
+          Mouse.getNextDelta(&delta);
+          Mouse.updateAbsolutePosition(&delta);
+          playerAbsX_ = Mouse.status().X;
+          if (delta.buttons.left && !playerFire_->visible)    // fire?
+            playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+        }
+      }
     }
 
     if (gameState_ == GAMESTATE_ENDGAME)
@@ -459,8 +544,9 @@ struct GameScene : public Scene {
       if ((updateCount % 20) == 0)
         player_->setFrame( player_->getFrameIndex() == 1 ? 2 : 1);
 
-      // handle keyboard
-      if (Keyboard.isVKDown(fabgl::VK_SPACE))
+      // wait for SPACE or click from controller
+      if ((IntroScene::controller_ == 1 && Keyboard.isVKDown(fabgl::VK_SPACE)) ||
+          (IntroScene::controller_ == 2 && Mouse.getNextDelta(NULL, 0) && Mouse.status().buttons.left))
         stop();
 
     }
@@ -542,13 +628,24 @@ int GameScene::score_   = 0;
 
 void setup()
 {
-  // keyboard setup
-  Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32, true, false);  // clk, dat (generate virutal keys without VK queue)
+  #if KEYBOARD_ON_PORT0_MOUSE_ON_PORT1
+  // both keyboard (port 0) and mouse configured (port 1)
+  PS2Controller.begin(PS2_PORT0_CLK, PS2_PORT0_DAT, PS2_PORT1_CLK, PS2_PORT1_DAT);
+  Keyboard.begin(true, false, 0);
+  Mouse.begin(1);
+  #elif KEYBOARD_ON_PORT0
+  // only keyboard configured on port 0
+  Keyboard.begin(PS2_PORT0_CLK, PS2_PORT0_DAT, true, false);
+  #elif MOUSE_ON_PORT0
+  // only mouse configured on port 0
+  Mouse.begin(PS2_PORT0_CLK, PS2_PORT0_DAT);
+  #endif
 
-  // 8 colors
-  //VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);
-  // 64 colors
-  VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
+  #if USE_8_COLORS
+  VGAController.begin(VGA_RED, VGA_GREEN, VGA_BLUE, VGA_HSYNC, VGA_VSYNC);
+  #elif USE_64_COLORS
+  VGAController.begin(VGA_RED1, VGA_RED0, VGA_GREEN1, VGA_GREEN0, VGA_BLUE1, VGA_BLUE0, VGA_HSYNC, VGA_VSYNC);
+  #endif
 
   VGAController.setResolution(VGA_320x200_75Hz);
 
