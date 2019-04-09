@@ -30,7 +30,7 @@
 #include "terminal.h"
 
 
-fabgl::TerminalClass Terminal;
+
 
 
 namespace fabgl {
@@ -110,7 +110,7 @@ void TerminalClass::begin()
 
   // blink support
   m_blinkTimerMutex = xSemaphoreCreateMutex();
-  m_blinkTimer = xTimerCreate("", pdMS_TO_TICKS(FABGLIB_DEFAULT_BLINK_PERIOD_MS), pdTRUE, 0, blinkTimerFunc);
+  m_blinkTimer = xTimerCreate("", pdMS_TO_TICKS(FABGLIB_DEFAULT_BLINK_PERIOD_MS), pdTRUE, this, blinkTimerFunc);
   xTimerStart(m_blinkTimer, portMAX_DELAY);
 
   // queue and task to consume input characters
@@ -244,7 +244,7 @@ void TerminalClass::reset()
   log("reset()\n");
   #endif
 
-  xSemaphoreTake(Terminal.m_blinkTimerMutex, portMAX_DELAY);
+  xSemaphoreTake(m_blinkTimerMutex, portMAX_DELAY);
   m_resetRequested = false;
 
   m_emuState.originMode            = false;
@@ -305,7 +305,7 @@ void TerminalClass::reset()
 
   int_clear();
 
-  xSemaphoreGive(Terminal.m_blinkTimerMutex);
+  xSemaphoreGive(m_blinkTimerMutex);
 }
 
 
@@ -528,17 +528,19 @@ bool TerminalClass::enableBlinkingText(bool value)
 // callback for blink timer
 void TerminalClass::blinkTimerFunc(TimerHandle_t xTimer)
 {
-  if (xSemaphoreTake(Terminal.m_blinkTimerMutex, 0) == pdTRUE) {
+  TerminalClass * term = (TerminalClass*) pvTimerGetTimerID(xTimer);
+
+  if (xSemaphoreTake(term->m_blinkTimerMutex, 0) == pdTRUE) {
 
     // cursor blink
-    if (Terminal.m_emuState.cursorEnabled && Terminal.m_emuState.cursorBlinkingEnabled)
-      Terminal.blinkCursor();
+    if (term->m_emuState.cursorEnabled && term->m_emuState.cursorBlinkingEnabled)
+      term->blinkCursor();
 
     // text blink
-    if (Terminal.m_blinkingTextEnabled)
-      Terminal.blinkText();
+    if (term->m_blinkingTextEnabled)
+      term->blinkText();
 
-    xSemaphoreGive(Terminal.m_blinkTimerMutex);
+    xSemaphoreGive(term->m_blinkTimerMutex);
 
   }
 }
@@ -1236,7 +1238,7 @@ void TerminalClass::consumeInputQueue()
 {
   char c = getNextCode(false);  // blocking call. false: do not process ctrl chars
 
-  xSemaphoreTake(Terminal.m_blinkTimerMutex, portMAX_DELAY);
+  xSemaphoreTake(m_blinkTimerMutex, portMAX_DELAY);
 
   m_prevCursorEnabled = int_enableCursor(false);
   m_prevBlinkingTextEnabled = enableBlinkingText(false);
@@ -1258,7 +1260,7 @@ void TerminalClass::consumeInputQueue()
   enableBlinkingText(m_prevBlinkingTextEnabled);
   int_enableCursor(m_prevCursorEnabled);
 
-  xSemaphoreGive(Terminal.m_blinkTimerMutex);
+  xSemaphoreGive(m_blinkTimerMutex);
 
   if (m_resetRequested)
     reset();
@@ -2342,6 +2344,8 @@ void TerminalClass::consumeESCVT52()
 
 void TerminalClass::keyboardReaderTask(void * pvParameters)
 {
+  TerminalClass * term = (TerminalClass*) pvParameters;
+
   while (true) {
 
     bool keyDown;
@@ -2349,18 +2353,18 @@ void TerminalClass::keyboardReaderTask(void * pvParameters)
 
     if (keyDown) {
 
-      if (!Terminal.m_emuState.keyAutorepeat && Terminal.m_lastPressedKey == vk)
+      if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == vk)
         continue; // don't repeat
-      Terminal.m_lastPressedKey = vk;
+      term->m_lastPressedKey = vk;
 
-      if (Terminal.m_emuState.ANSIMode)
-        Terminal.ANSIDecodeVirtualKey(vk);
+      if (term->m_emuState.ANSIMode)
+        term->ANSIDecodeVirtualKey(vk);
       else
-        Terminal.VT52DecodeVirtualKey(vk);
+        term->VT52DecodeVirtualKey(vk);
 
     } else {
       // !keyDown
-      Terminal.m_lastPressedKey = VK_NONE;
+      term->m_lastPressedKey = VK_NONE;
     }
 
   }

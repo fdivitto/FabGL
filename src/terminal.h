@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::TerminalClass definition and the Terminal instance.
+ * @brief This file contains fabgl::TerminalClass definition.
  */
 
 
@@ -335,10 +335,11 @@ struct EmuState {
  *
  * TerminalClass passes 95/110 of VTTEST VT100/VT102 Compatibility Test Score Sheet.
  *
- * Applications do not need to create an instance of TerminalClass because an instance named Terminal is created automatically.
  *
  *
  * Example 1:
+ *
+ *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns loop-back terminal (send what you type on keyboard to the display)
  *     void setup() {
@@ -372,6 +373,8 @@ struct EmuState {
  *
  *
  * Example 2:
+ *
+ *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns terminal using UART2 to communicate with the server,
  *     // VGA to display output and PS2 device as keyboard input
@@ -835,7 +838,7 @@ private:
 
 
 
-extern fabgl::TerminalClass Terminal;
+
 
 
 
