@@ -124,15 +124,18 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
   }
 
   // decode packet
-  delta->deltaX         = (int16_t)(rcv[0] & 0x10 ? 0xFF00 | rcv[1] : rcv[1]);
-  delta->deltaY         = (int16_t)(rcv[0] & 0x20 ? 0xFF00 | rcv[2] : rcv[2]);
-  delta->deltaZ         = (int8_t)(packetSize > 3 ? rcv[3] : 0);
-  delta->buttons.left   = (rcv[0] & 0x01 ? 1 : 0);
-  delta->buttons.middle = (rcv[0] & 0x04 ? 1 : 0);
-  delta->buttons.right  = (rcv[0] & 0x02 ? 1 : 0);
-  delta->overflowX      = (rcv[0] & 0x40 ? 1 : 0);
-  delta->overflowY      = (rcv[0] & 0x80 ? 1 : 0);
-
+  m_status.buttons.left   = (rcv[0] & 0x01 ? 1 : 0);
+  m_status.buttons.middle = (rcv[0] & 0x04 ? 1 : 0);
+  m_status.buttons.right  = (rcv[0] & 0x02 ? 1 : 0);
+  if (delta) {
+    delta->deltaX    = (int16_t)(rcv[0] & 0x10 ? 0xFF00 | rcv[1] : rcv[1]);
+    delta->deltaY    = (int16_t)(rcv[0] & 0x20 ? 0xFF00 | rcv[2] : rcv[2]);
+    delta->deltaZ    = (int8_t)(packetSize > 3 ? rcv[3] : 0);
+    delta->overflowX = (rcv[0] & 0x40 ? 1 : 0);
+    delta->overflowY = (rcv[0] & 0x80 ? 1 : 0);
+    delta->buttons   = m_status.buttons;
+  }
+  
   return true;
 }
 
@@ -203,7 +206,6 @@ void MouseClass::updateAbsolutePosition(MouseDelta * delta)
   m_status.X           = tclamp((int)m_status.X + dx, 0, m_area.width  - 1);
   m_status.Y           = tclamp((int)m_status.Y - dy, 0, m_area.height - 1);
   m_status.wheelDelta += dz;
-  m_status.buttons     = delta->buttons;
   m_prevDeltaTime      = now;
 }
 

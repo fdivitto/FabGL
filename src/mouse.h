@@ -180,7 +180,7 @@ public:
   /**
    * @brief Get a mouse movement from the queue.
    *
-   * @param delta Pointer to MouseDelta structure to be filled with mouse movement.
+   * @param delta Pointer to MouseDelta structure to be filled with mouse movement. May be NULL if not required (in this case only Status().buttons is updated.
    * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
    * @param requestResendOnTimeOut If true and timeout has expired then asks the mouse to resend the mouse movement.
    *
