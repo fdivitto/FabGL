@@ -23,6 +23,36 @@
 #include "fabgl.h"
 
 
+/* * * *  C O N F I G U R A T I O N  * * * */
+
+// select one color configuration
+#define USE_8_COLORS  0
+#define USE_64_COLORS 1
+
+// indicate VGA GPIOs to use for selected color configuration
+#if USE_8_COLORS
+  #define VGA_RED    GPIO_NUM_22
+  #define VGA_GREEN  GPIO_NUM_21
+  #define VGA_BLUE   GPIO_NUM_19
+  #define VGA_HSYNC  GPIO_NUM_18
+  #define VGA_VSYNC  GPIO_NUM_5
+#elif USE_64_COLORS
+  #define VGA_RED1   GPIO_NUM_22
+  #define VGA_RED0   GPIO_NUM_21
+  #define VGA_GREEN1 GPIO_NUM_19
+  #define VGA_GREEN0 GPIO_NUM_18
+  #define VGA_BLUE1  GPIO_NUM_5
+  #define VGA_BLUE0  GPIO_NUM_4
+  #define VGA_HSYNC  GPIO_NUM_23
+  #define VGA_VSYNC  GPIO_NUM_15
+#endif
+
+#define DOUBLEBUFFERING 1
+
+/* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
+
+
+
 struct Test {
   virtual ~Test() { };
   virtual void update() = 0;
@@ -36,16 +66,15 @@ struct Test {
 #include "polygonstest.h"
 #include "spritestest.h"
 
-#define DOUBLEBUFFERING 1
-
 
 
 void setup()
 {
-  // 8 colors
-  //VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);
-  // 64 colors
-  VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
+  #if USE_8_COLORS
+  VGAController.begin(VGA_RED, VGA_GREEN, VGA_BLUE, VGA_HSYNC, VGA_VSYNC);
+  #elif USE_64_COLORS
+  VGAController.begin(VGA_RED1, VGA_RED0, VGA_GREEN1, VGA_GREEN0, VGA_BLUE1, VGA_BLUE0, VGA_HSYNC, VGA_VSYNC);
+  #endif
 
   VGAController.setResolution(VGA_320x200_75Hz, -1, -1, DOUBLEBUFFERING);
   //VGAController.moveScreen(20, 0);

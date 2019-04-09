@@ -23,6 +23,17 @@
 #include "fabgl.h"
 
 
+/* * * *  C O N F I G U R A T I O N  * * * */
+
+// indicate PS/2 GPIOs for each port
+#define PS2_PORT0_CLK GPIO_NUM_33
+#define PS2_PORT0_DAT GPIO_NUM_32
+
+/* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
+
+
+
+
 void printHelp()
 {
   Serial.printf("\n\nPS/2 Keyboard Studio\n");
@@ -79,7 +90,8 @@ void setup()
   delay(500);  // avoid garbage into the UART
   Serial.write("\n\nReset\n");
 
-  Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
+  // only keyboard configured on port 0
+  Keyboard.begin(PS2_PORT0_CLK, PS2_PORT0_DAT);
 
   printHelp();
 }
