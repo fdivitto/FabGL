@@ -61,6 +61,9 @@
 
 
 
+TerminalClass Terminal;
+
+
 void print_info()
 {
   Terminal.write("\e[37m* * FabGL - Loopback VT/ANSI Terminal\r\n");

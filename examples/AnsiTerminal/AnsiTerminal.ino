@@ -54,6 +54,8 @@
 /* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
 
 
+TerminalClass Terminal;
+
 
 void setup()
 {

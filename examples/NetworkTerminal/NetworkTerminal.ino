@@ -74,6 +74,8 @@ WiFiClient   client;
 char const * currentScript = NULL;
 bool         error = false;
 
+TerminalClass Terminal;
+
 
 void exe_info()
 {
