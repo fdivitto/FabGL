@@ -793,7 +793,7 @@ void IRAM_ATTR VGAControllerClass::processPrimitives()
 {
   suspendBackgroundPrimitiveExecution();
   Primitive prim;
-  while (xQueueReceive(VGAController.m_execQueue, &prim, 0) == pdTRUE)
+  while (xQueueReceive(m_execQueue, &prim, 0) == pdTRUE)
     execPrimitive(prim);
   showSprites();
   resumeBackgroundPrimitiveExecution();
