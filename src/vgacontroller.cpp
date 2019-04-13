@@ -402,7 +402,7 @@ void VGAControllerClass::setResolution(Timings const& timings, int viewPortWidth
   m_paintState.glyphOptions.value    = 0;  // all options: 0
   m_paintState.paintOptions.swapFGBG = 0;
   m_paintState.scrollingRegion       = Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1);
-  m_paintState.origins               = Point(0, 0);
+  m_paintState.origin                = Point(0, 0);
 
   // number of microseconds usable in VSynch ISR
   m_maxVSyncISRTime = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VSyncPulse + m_timings.VBackPorch + m_viewPortRow));
@@ -842,7 +842,7 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
       execSetPixel(prim.position);
       break;
     case PrimitiveCmd::MoveTo:
-      m_paintState.position = Point(prim.position.X + m_paintState.origins.X, prim.position.Y + m_paintState.origins.Y);
+      m_paintState.position = Point(prim.position.X + m_paintState.origin.X, prim.position.Y + m_paintState.origin.Y);
       break;
     case PrimitiveCmd::LineTo:
       execLineTo(prim.position);
@@ -915,8 +915,8 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
     case PrimitiveCmd::FillPath:
       execFillPath(prim.path);
       break;
-    case PrimitiveCmd::SetOrigins:
-      m_paintState.origins = prim.position;
+    case PrimitiveCmd::SetOrigin:
+      m_paintState.origin = prim.position;
       break;
   }
 }
@@ -927,8 +927,8 @@ void IRAM_ATTR VGAControllerClass::execSetPixel(Point const & position)
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.brushColor) : preparePixel(m_paintState.penColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   CHECKEDSETPIXEL(position.X + origX, position.Y + origY, pattern);
 }
@@ -939,8 +939,8 @@ void IRAM_ATTR VGAControllerClass::execLineTo(Point const & position)
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.brushColor) : preparePixel(m_paintState.penColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   drawLine(m_paintState.position.X, m_paintState.position.Y, position.X + origX, position.Y + origY, pattern);
 
@@ -1018,8 +1018,8 @@ void IRAM_ATTR VGAControllerClass::execFillRect(Rect const & rect)
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.penColor) : preparePixel(m_paintState.brushColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int x1 = tclamp<int>(rect.X1 + origX, 0, m_viewPortWidth - 1);
   int y1 = tclamp<int>(rect.Y1 + origY, 0, m_viewPortHeight - 1);
@@ -1404,8 +1404,8 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph(Glyph const & glyph, GlyphOptio
 
 void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor)
 {
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int glyphX = glyph.X + origX;
   int glyphY = glyph.Y + origY;
@@ -1542,8 +1542,8 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
 //   m_paintState.paintOptions.swapFGBG: 0 or 1
 void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor)
 {
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int glyphX = glyph.X + origX;
   int glyphY = glyph.Y + origY;
@@ -1610,8 +1610,8 @@ void IRAM_ATTR VGAControllerClass::execInvertRect(Rect const & rect)
 {
   hideSprites();
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int x1 = tclamp<int>(rect.X1 + origX, 0, m_viewPortWidth - 1);
   int y1 = tclamp<int>(rect.Y1 + origY, 0, m_viewPortHeight - 1);
@@ -1635,8 +1635,8 @@ void IRAM_ATTR VGAControllerClass::execSwapFGBG(Rect const & rect)
   uint8_t penPattern   = preparePixel(m_paintState.penColor);
   uint8_t brushPattern = preparePixel(m_paintState.brushColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int x1 = tclamp<int>(rect.X1 + origX, 0, m_viewPortWidth - 1);
   int y1 = tclamp<int>(rect.Y1 + origY, 0, m_viewPortHeight - 1);
@@ -1661,8 +1661,8 @@ void IRAM_ATTR VGAControllerClass::execCopyRect(Rect const & source)
 {
   hideSprites();
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int srcX = source.X1 + origX;
   int srcY = source.Y1 + origY;
@@ -1730,7 +1730,7 @@ void IRAM_ATTR VGAControllerClass::execWriteRawData(RawData const & rawData)
 void IRAM_ATTR VGAControllerClass::execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo)
 {
   hideSprites();
-  drawBitmap(bitmapDrawingInfo.X + m_paintState.origins.X, bitmapDrawingInfo.Y + m_paintState.origins.Y, bitmapDrawingInfo.bitmap, NULL);
+  drawBitmap(bitmapDrawingInfo.X + m_paintState.origin.X, bitmapDrawingInfo.Y + m_paintState.origin.Y, bitmapDrawingInfo.bitmap, NULL);
 }
 
 
@@ -1899,8 +1899,8 @@ void IRAM_ATTR VGAControllerClass::execDrawPath(Path const & path)
 
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.brushColor) : preparePixel(m_paintState.penColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int i = 0;
   for (; i < path.pointsCount - 1; ++i)
@@ -1915,8 +1915,8 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
 
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.penColor) : preparePixel(m_paintState.brushColor);
 
-  int origX = m_paintState.origins.X;
-  int origY = m_paintState.origins.Y;
+  int origX = m_paintState.origin.X;
+  int origY = m_paintState.origin.Y;
 
   int minX = 0;
   int maxX = m_viewPortWidth;

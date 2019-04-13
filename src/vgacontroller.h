@@ -195,9 +195,9 @@ enum PrimitiveCmd {
   // params: path
   DrawPath,
 
-  // Set axis origins
+  // Set axis origin
   // params: point
-  SetOrigins,
+  SetOrigin,
 };
 
 
@@ -522,11 +522,11 @@ struct Primitive {
 struct PaintState {
   RGB          penColor;
   RGB          brushColor;
-  Point        position;      // value already traslated to "origins"
+  Point        position;      // value already traslated to "origin"
   GlyphOptions glyphOptions;
   PaintOptions paintOptions;
   Rect         scrollingRegion;
-  Point        origins;
+  Point        origin;
 };
 
 
