@@ -194,6 +194,10 @@ enum PrimitiveCmd {
   // Draw a path, using current pen color
   // params: path
   DrawPath,
+
+  // Set axis origins
+  // params: point
+  SetOrigins,
 };
 
 
@@ -326,15 +330,6 @@ union GlyphOptions {
 
 
 
-/**
- * @brief Specifies general paint options.
- */
-struct PaintOptions {
-  uint8_t swapFGBG : 1;  /**< If enabled swaps foreground and background colors */
-};
-
-
-
 // GlyphsBuffer.map support functions
 //  0 ..  7 : index
 //  8 .. 11 : BG color (Color)
@@ -440,7 +435,6 @@ struct Cursor {
 };
 
 
-
 struct QuadTreeObject;
 
 
@@ -496,6 +490,14 @@ struct Path {
 };
 
 
+/**
+ * @brief Specifies general paint options.
+ */
+struct PaintOptions {
+  uint8_t swapFGBG : 1;  /**< If enabled swaps foreground and background colors */
+};
+
+
 struct Primitive {
   PrimitiveCmd cmd;
   union {
@@ -520,10 +522,11 @@ struct Primitive {
 struct PaintState {
   RGB          penColor;
   RGB          brushColor;
-  Point        position;
+  Point        position;      // value already traslated to "origins"
   GlyphOptions glyphOptions;
   PaintOptions paintOptions;
   Rect         scrollingRegion;
+  Point        origins;
 };
 
 
@@ -859,10 +862,12 @@ private:
   void execReadRawData(RawData const & rawData);
   void execWriteRawData(RawData const & rawData);
   void execRenderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
-  void execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo, uint8_t * saveBackground, bool callHideSprites);
+  void execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo);
   void execSwapBuffers();
   void execDrawPath(Path const & path);
   void execFillPath(Path const & path);
+
+  void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground);
 
   void fillRow(int y, int x1, int x2, uint8_t pattern);
   void swapRows(int yA, int yB, int x1, int x2);
