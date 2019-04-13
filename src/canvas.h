@@ -70,7 +70,7 @@ struct FontInfo {
 * This class interfaces directly to the VGA controller and provides
 * a set of primitives to paint lines, circles, etc. and to scroll regions, copy
 * rectangles and draw glyphs.<br>
-* Origins are at top left, starting from (0, 0) up to (Canvas Width - 1, Canvas Height - 1).
+* For default origin is at the top left, starting from (0, 0) up to (Canvas Width - 1, Canvas Height - 1).
 *
 * Example:
 *
@@ -108,6 +108,16 @@ public:
    * @return The canvas height in pixels.
    */
   int getHeight() { return VGAController.getViewPortHeight(); }
+
+  /**
+   * @brief Set the axes origin.
+   *
+   * Setting axes origin will translate every coordinate by the specified value (expect for sprites).
+   *
+   * @param X Horizontal translation (0 = no translation).
+   * @param Y Vertical translation (0 = no translation).
+   */
+  void setOrigin(int X, int Y);
 
   /**
    * @brief Fill the entire canvas with the brush color.

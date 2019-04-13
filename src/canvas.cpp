@@ -43,6 +43,15 @@ CanvasClass::CanvasClass()
 }
 
 
+void CanvasClass::setOrigin(int X, int Y)
+{
+  Primitive p;
+  p.cmd  = PrimitiveCmd::SetOrigin;
+  p.position = Point(X, Y);
+  VGAController.addPrimitive(p);
+}
+
+
 void CanvasClass::waitCompletion(bool waitVSync)
 {
   if (waitVSync)
