@@ -205,7 +205,7 @@ void MouseClass::updateAbsolutePosition(MouseDelta * delta)
 
   m_status.X           = tclamp((int)m_status.X + dx, 0, m_area.width  - 1);
   m_status.Y           = tclamp((int)m_status.Y - dy, 0, m_area.height - 1);
-  m_status.wheelDelta += dz;
+  m_status.wheelDelta  = dz;
   m_prevDeltaTime      = now;
 }
 
