@@ -3,7 +3,7 @@
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
-If you would like to **support FabGL's development**, please see the [**Donations page**][Donations]. page.
+If you would like to **support FabGL's development**, please see the [**Donations page**][Donations].
 
 
 This library works well with ESP32 revision 1 or upper.
@@ -51,3 +51,7 @@ If the queue of primitives to draw is not processed before the vertical retracin
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/q3OPSq4HhDE/hqdefault.jpg)](https://www.youtube.com/watch?v=q3OPSq4HhDE "")
 
+
+
+
+[Donations]: https://github.com/fdivitto/FabGL/wiki/Donations
