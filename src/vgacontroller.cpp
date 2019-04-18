@@ -950,24 +950,60 @@ void IRAM_ATTR VGAControllerClass::execLineTo(Point const & position)
 
 void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint8_t pattern)
 {
-  int dx = abs(X2 - X1), sx = X1 < X2 ? 1 : -1;
-  int dy = abs(Y2 - Y1), sy = Y1 < Y2 ? 1 : -1;
-  int err = (dx > dy ? dx : -dy) / 2, e2;
-  while (true) {
-    CHECKEDSETPIXEL(X1, Y1, pattern);
-    if (X1 == X2 && Y1 == Y2)
-      break;
-    e2 = err;
-    if (e2 > -dx) {
-      err -= dy;
-      X1 += sx;
-    }
-    if (e2 < dy) {
-      err += dx;
-      Y1 += sy;
+  const int dx = abs(X2 - X1);
+  const int dy = abs(Y2 - Y1);
+  const int sx = X1 < X2 ? 1 : -1;
+  const int sy = Y1 < Y2 ? 1 : -1;
+  const int minX = 0;
+  const int maxX = m_viewPortWidth - 1;
+  const int minY = 0;
+  const int maxY = m_viewPortHeight - 1;
+  if (dy == 0) {
+    // horizontal line
+    if (Y1 < minY || Y1 > maxY)
+      return;
+    if (X1 > X2)
+      tswap(X1, X2);
+    if (X1 < minX)
+      X1 = minX;
+    if (X2 > maxX)
+      X2 = maxX;
+    uint8_t volatile * row = m_viewPort[Y1];
+    for (int x = X1; x <= X2; ++x)
+      PIXELINROW(row, x) = pattern;
+  } else if (dx == 0) {
+    // vertical line
+    if (X1 < minX || X1 > maxX)
+      return;
+    if (Y1 > Y2)
+      tswap(Y1, Y2);
+    if (Y1 < minY)
+      Y1 = minY;
+    if (Y2 > maxY)
+      Y2 = maxY;
+    for (int y = Y1; y <= Y2; ++y)
+      PIXEL(X1, y) = pattern;
+  } else {
+    if (!clipLine(X1, Y1, X2, Y2, Rect(minX, minY, maxX, maxY)))
+      return;
+    int err = (dx > dy ? dx : -dy) / 2;
+    while (true) {
+      PIXEL(X1, Y1) = pattern;
+      if (X1 == X2 && Y1 == Y2)
+        break;
+      int e2 = err;
+      if (e2 > -dx) {
+        err -= dy;
+        X1 += sx;
+      }
+      if (e2 < dy) {
+        err += dx;
+        Y1 += sy;
+      }
     }
   }
 }
+
 
 
 // parameters not checked
