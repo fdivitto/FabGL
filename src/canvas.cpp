@@ -47,7 +47,7 @@ void CanvasClass::setOrigin(int X, int Y)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::SetOrigin;
-  p.position = Point(X, Y);
+  p.position = m_origin = Point(X, Y);
   VGAController.addPrimitive(p);
 }
 
@@ -180,6 +180,15 @@ void CanvasClass::fillRectangle(int X1, int Y1, int X2, int Y2)
   Primitive p;
   p.cmd  = PrimitiveCmd::FillRect;
   p.rect = Rect(X1, Y1, X2, Y2);
+  VGAController.addPrimitive(p);
+}
+
+
+void CanvasClass::fillRectangle(Rect const & rect)
+{
+  Primitive p;
+  p.cmd  = PrimitiveCmd::FillRect;
+  p.rect = rect;
   VGAController.addPrimitive(p);
 }
 

@@ -120,6 +120,13 @@ public:
   void setOrigin(int X, int Y);
 
   /**
+   * @brief Get last origin set using setOrigin().
+   *
+   * @return Returns the last origin set.
+   */
+  Point getOrigin() { return m_origin; }
+
+  /**
    * @brief Fill the entire canvas with the brush color.
    */
   void clear();
@@ -307,6 +314,19 @@ public:
    *     Canvas.drawRectangle(10, 10, 100, 100);
    */
   void fillRectangle(int X1, int Y1, int X2, int Y2);
+
+  /**
+   * @brief Fill a rectangle using the current brush color.
+   *
+   * @param rect Rectangle coordinates.
+   *
+   * Example:
+   *
+   *     // Paint a filled yellow rectangle
+   *     Canvas.setBrushColor(Color::BrightYellow);
+   *     Canvas.fillRectangle(Rect(10, 10, 100, 100));
+   */
+  void fillRectangle(Rect const & rect);
 
 #if FABGLIB_HAS_INVERTRECT
 
@@ -619,6 +639,8 @@ private:
 
   FontInfo const * m_fontInfo;
   uint8_t          m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
+
+  Point            m_origin;
 };
 
 
