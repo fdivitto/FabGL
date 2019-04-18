@@ -3,6 +3,9 @@
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
+If you would like to **support FabGL's development**, please see the [**Donations page**][Donations]. page.
+
+
 This library works well with ESP32 revision 1 or upper.
 
 VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
