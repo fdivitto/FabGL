@@ -135,6 +135,26 @@ void tswap(T & v1, T & v2)
 bool calcParity(uint8_t v);
 
 
+inline Rect translate(Rect const & rect, int offsetX, int offsetY)
+{
+  return Rect(rect.X1 + offsetX, rect.Y1 + offsetY, rect.X2 + offsetX, rect.Y2 + offsetY);
+}
+
+
+inline Rect intersection(Rect const & rect1, Rect const & rect2)
+{
+  return Rect(tmax(rect1.X1, rect2.X1), tmax(rect1.Y1, rect2.Y1), tmin(rect1.X2, rect2.X2), tmin(rect1.Y2, rect2.Y2));
+}
+
+
+inline bool intersect(Rect const & rect1, Rect const & rect2)
+{
+  return rect1.X1 <= rect2.X2 && rect1.X2 >= rect2.X1 && rect1.Y1 <= rect2.Y2 && rect1.Y2 >= rect2.Y1;
+}
+
+
+bool clipLine(int & x1, int & y1, int & x2, int & y2, Rect const & clipRect);
+
 
 
 } // end of namespace
