@@ -115,6 +115,8 @@ const T & tclamp(const T & v, const T & lo, const T & hi)
   return (v < lo ? lo : (v > hi ? hi : v));
 }
 
+constexpr auto iclamp = tclamp<int>;
+
 
 template <typename T>
 const T & twrap(const T & v, const T & lo, const T & hi)
