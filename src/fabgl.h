@@ -292,6 +292,7 @@ using fabgl::Sprite;
 using fabgl::CollisionDetector;
 using fabgl::Point;
 using fabgl::Size;
+using fabgl::Rect;
 using fabgl::MouseDelta;
 using fabgl::MouseStatus;
 using fabgl::CursorName;
