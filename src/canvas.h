@@ -122,9 +122,26 @@ public:
   /**
    * @brief Get last origin set using setOrigin().
    *
-   * @return Returns the last origin set.
+   * @return Last origin set.
    */
   Point getOrigin() { return m_origin; }
+
+  /**
+   * @brief Set clipping rectangle relative to the origin.
+   *
+   * The default clipping rectangle covers the entire canvas area.
+   *
+   * @param rect Clipping rectangle relative to the origin.
+   */
+  void setClippingRect(Rect const & rect);
+
+  /**
+   * @brief Get last clipping rectangle set using setClippingRect().
+   *
+   * @return Last clipping rectangle set.
+   */
+  Rect getClippingRect();
+
 
   /**
    * @brief Fill the entire canvas with the brush color.
@@ -292,6 +309,13 @@ public:
    *     Canvas.drawRectangle(10, 10, 100, 100);
    */
   void drawRectangle(int X1, int Y1, int X2, int Y2);
+
+  /**
+   * @brief Draw a rectangle using the current pen color.
+   *
+   * @param rect Rectangle coordinates.
+   */
+  void drawRectangle(Rect const & rect);
 
   /**
    * @brief Fill a rectangle using the current brush color.
@@ -611,7 +635,7 @@ public:
    *
    *     Point points[3] = { {10, 10}, {20, 10}, {15, 20} };
    *     Canvas.setPenColor(Color::Red);
-   *     Canvas.drawPath(&points, 3);
+   *     Canvas.drawPath(points, 3);
    *     Canvas.waitCompletion();
    */
   void drawPath(Point const * points, int pointsCount);
@@ -630,7 +654,7 @@ public:
    *
    *     Point points[3] = { {10, 10}, {20, 10}, {15, 20} };
    *     Canvas.setBrushColor(Color::Red);
-   *     Canvas.fillPath(&points, 3);
+   *     Canvas.fillPath(points, 3);
    *     Canvas.waitCompletion();
    */
   void fillPath(Point const * points, int pointsCount);
@@ -641,6 +665,7 @@ private:
   uint8_t          m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
 
   Point            m_origin;
+  Rect             m_clippingRect;
 };
 
 

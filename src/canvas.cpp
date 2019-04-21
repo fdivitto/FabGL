@@ -37,8 +37,11 @@ fabgl::CanvasClass Canvas;
 namespace fabgl {
 
 
+#define INVALIDRECT Rect(-32768, -32768, -32768, -32768)
+
+
 CanvasClass::CanvasClass()
-  : m_fontInfo(NULL), m_textHorizRate(1)
+  : m_fontInfo(NULL), m_textHorizRate(1), m_origin(Point(0, 0)), m_clippingRect(INVALIDRECT)
 {
 }
 
@@ -49,6 +52,23 @@ void CanvasClass::setOrigin(int X, int Y)
   p.cmd  = PrimitiveCmd::SetOrigin;
   p.position = m_origin = Point(X, Y);
   VGAController.addPrimitive(p);
+}
+
+
+void CanvasClass::setClippingRect(Rect const & rect)
+{
+  Primitive p;
+  p.cmd  = PrimitiveCmd::SetClippingRect;
+  p.rect = m_clippingRect = rect;
+  VGAController.addPrimitive(p);
+}
+
+
+Rect CanvasClass::getClippingRect()
+{
+  if (m_clippingRect == INVALIDRECT)
+    m_clippingRect = Rect(0, 0, getWidth() - 1, getHeight() - 1);
+  return m_clippingRect;
 }
 
 
@@ -175,6 +195,12 @@ void CanvasClass::drawRectangle(int X1, int Y1, int X2, int Y2)
 }
 
 
+void CanvasClass::drawRectangle(Rect const & rect)
+{
+  drawRectangle(rect.X1, rect.Y1, rect.X2, rect.Y2);
+}
+
+
 void CanvasClass::fillRectangle(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
@@ -284,6 +310,8 @@ void CanvasClass::drawChar(int X, int Y, char c)
 
 void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
 {
+  if (m_fontInfo == NULL)
+    selectFont(getPresetFontInfo(80, 25));
   drawText(m_fontInfo, X, Y, text, wrap);
 }
 
@@ -291,7 +319,7 @@ void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
 void CanvasClass::drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap)
 {
   for (; *text; ++text, X += fontInfo->width * m_textHorizRate) {
-    if (wrap && X >= getWidth()) {
+    if (wrap && X >= getWidth()) {    // TODO: clipX2 instead of getWidth()?
       X = 0;
       Y += fontInfo->height;
     }
