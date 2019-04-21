@@ -78,6 +78,29 @@ struct Rect {
 
 
 
+/**
+ * @brief Describes mouse buttons status.
+ */
+struct MouseButtons {
+  uint8_t left   : 1;   /**< Contains 1 when left button is pressed. */
+  uint8_t middle : 1;   /**< Contains 1 when middle button is pressed. */
+  uint8_t right  : 1;   /**< Contains 1 when right button is pressed. */
+};
+
+
+
+/**
+ * @brief Describes mouse absolute position, scroll wheel delta and buttons status.
+ */
+struct MouseStatus {
+  int16_t      X;           /**< Absolute horizontal mouse position. */
+  int16_t      Y;           /**< Absolute vertical mouse position. */
+  int8_t       wheelDelta;  /**< Scroll wheel delta. */
+  MouseButtons buttons;     /**< Mouse buttons status. */
+};
+
+
+
 struct TimeOut {
   TimeOut();
 
