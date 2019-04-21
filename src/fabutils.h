@@ -72,6 +72,8 @@ struct Rect {
 
   Rect() : X1(0), Y1(0), X2(0), Y2(0) { }
   Rect(int X1_, int Y1_, int X2_, int Y2_) : X1(X1_), Y1(Y1_), X2(X2_), Y2(Y2_) { }
+  Rect(Rect const & r) { X1 = r.X1; Y1 = r.Y1; X2 = r.X2; Y2 = r.Y2; }
+  bool operator==(Rect const & r) { return X1 == r.X1 && Y1 == r.Y1 && X2 == r.X2 && Y2 == r.Y2; }
 };
 
 
