@@ -198,6 +198,10 @@ enum PrimitiveCmd {
   // Set axis origin
   // params: point
   SetOrigin,
+
+  // Set clipping rectangle
+  // params: rect
+  SetClippingRect,
 };
 
 
@@ -522,11 +526,13 @@ struct Primitive {
 struct PaintState {
   RGB          penColor;
   RGB          brushColor;
-  Point        position;      // value already traslated to "origin"
+  Point        position;        // value already traslated to "origin"
   GlyphOptions glyphOptions;
   PaintOptions paintOptions;
   Rect         scrollingRegion;
   Point        origin;
+  Rect         clippingRect;    // relative clipping rectangle
+  Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
 };
 
 
@@ -867,7 +873,9 @@ private:
   void execDrawPath(Path const & path);
   void execFillPath(Path const & path);
 
-  void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground);
+  void updateAbsoluteClippingRect();
+
+  void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
 
   void fillRow(int y, int x1, int x2, uint8_t pattern);
   void swapRows(int yA, int yB, int x1, int x2);
