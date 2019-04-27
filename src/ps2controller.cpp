@@ -335,11 +335,11 @@ namespace fabgl {
 #endif
 
 
-// values for RTCMEM_PORT0_MODE
+// values for RTCMEM_PORTX_MODE
 #define MODE_RECEIVE                  0
 #define MODE_SEND                     1
 
-// values for RTCMEM_PORT0_STATE
+// values for RTCMEM_PORTX_STATE
 #define STATE_WAIT_CLK_HIGH           0
 #define STATE_WAIT_CLK_LOW            1
 
