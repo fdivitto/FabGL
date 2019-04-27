@@ -123,6 +123,8 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
       return false;  // timeout
   }
 
+  m_prevStatus = m_status;
+
   // decode packet
   m_status.buttons.left   = (rcv[0] & 0x01 ? 1 : 0);
   m_status.buttons.middle = (rcv[0] & 0x04 ? 1 : 0);
@@ -140,7 +142,7 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
 }
 
 
-void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController)
+void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app)
 {
   m_area                  = Size(width, height);
   m_status.X              = width >> 1;
@@ -149,8 +151,11 @@ void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsol
   m_status.buttons.left   = 0;
   m_status.buttons.middle = 0;
   m_status.buttons.right  = 0;
+  m_prevStatus            = m_status;
 
   m_updateVGAController = updateVGAController;
+
+  m_uiApp = app;
 
   if (createAbsolutePositionsQueue) {
     m_absoluteQueue = xQueueCreate(FABGLIB_MOUSE_EVENTS_QUEUE_SIZE, sizeof(MouseStatus));
@@ -161,7 +166,7 @@ void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsol
     VGAController.setMouseCursorPos(m_status.X, m_status.Y);
   }
 
-  if (m_updateVGAController || createAbsolutePositionsQueue) {
+  if (m_updateVGAController || createAbsolutePositionsQueue || m_uiApp) {
     // create and start the timer
     m_absoluteUpdateTimer = xTimerCreate("", pdMS_TO_TICKS(10), pdTRUE, this, absoluteUpdateTimerFunc);
     xTimerStart(m_absoluteUpdateTimer, portMAX_DELAY);
@@ -221,9 +226,50 @@ void MouseClass::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
     if (mouse->m_updateVGAController)
       VGAController.setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
 
+    // queue (if you need availableStatus() or getNextStatus())
     if (mouse->m_absoluteQueue) {
       xQueueSend(mouse->m_absoluteQueue, &mouse->m_status, 0);
     }
+
+    if (mouse->m_uiApp) {
+      // generate uiApp events
+      if (mouse->m_prevStatus.X != mouse->m_status.X || mouse->m_prevStatus.Y != mouse->m_status.Y) {
+        // X and Y movement: UIEVT_MOUSEMOVE
+        uiEvent evt = uiEvent(NULL, UIEVT_MOUSEMOVE);
+        evt.params.mouse.status = mouse->m_status;
+        evt.params.mouse.changedButton = 0;
+        mouse->m_uiApp->postEvent(&evt);
+      }
+      if (mouse->m_status.wheelDelta != 0) {
+        // wheel movement: UIEVT_MOUSEWHEEL
+        uiEvent evt = uiEvent(NULL, UIEVT_MOUSEWHEEL);
+        evt.params.mouse.status = mouse->m_status;
+        evt.params.mouse.changedButton = 0;
+        mouse->m_uiApp->postEvent(&evt);
+      }
+      if (mouse->m_prevStatus.buttons.left != mouse->m_status.buttons.left) {
+        // left button: UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP
+        uiEvent evt = uiEvent(NULL, mouse->m_status.buttons.left ? UIEVT_MOUSEBUTTONDOWN : UIEVT_MOUSEBUTTONUP);
+        evt.params.mouse.status = mouse->m_status;
+        evt.params.mouse.changedButton = 1;
+        mouse->m_uiApp->postEvent(&evt);
+      }
+      if (mouse->m_prevStatus.buttons.middle != mouse->m_status.buttons.middle) {
+        // middle button: UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP
+        uiEvent evt = uiEvent(NULL, mouse->m_status.buttons.middle ? UIEVT_MOUSEBUTTONDOWN : UIEVT_MOUSEBUTTONUP);
+        evt.params.mouse.status = mouse->m_status;
+        evt.params.mouse.changedButton = 2;
+        mouse->m_uiApp->postEvent(&evt);
+      }
+      if (mouse->m_prevStatus.buttons.right != mouse->m_status.buttons.right) {
+        // right button: UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP
+        uiEvent evt = uiEvent(NULL, mouse->m_status.buttons.right ? UIEVT_MOUSEBUTTONDOWN : UIEVT_MOUSEBUTTONUP);
+        evt.params.mouse.status = mouse->m_status;
+        evt.params.mouse.changedButton = 3;
+        mouse->m_uiApp->postEvent(&evt);
+      }
+    }
+
   }
 }
 
