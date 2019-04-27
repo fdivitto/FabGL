@@ -66,7 +66,7 @@
 
 
 
-using fabgl::tclamp;
+using fabgl::iclamp;
 
 
 
@@ -327,7 +327,7 @@ struct GameScene : public Scene {
     if (IntroScene::controller_ == 2) {
       // setup mouse controller
       Mouse.setSampleRate(40);  // reduce number of samples from mouse to reduce delays
-      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false); // take advantage of mouse acceleration
+      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, NULL); // take advantage of mouse acceleration
     }
 
     showLives();
@@ -461,7 +461,7 @@ struct GameScene : public Scene {
       } else if (IntroScene::controller_ == 1 && playerVelX_ != 0) {
         // move player using Keyboard
         player_->x += playerVelX_;
-        player_->x = tclamp<int>(player_->x, 0, getWidth() - player_->getWidth());
+        player_->x = iclamp(player_->x, 0, getWidth() - player_->getWidth());
         updateSprite(player_);
       } else if (IntroScene::controller_ == 2 && playerAbsX_ != -1) {
         // move player using Mouse
@@ -560,8 +560,8 @@ struct GameScene : public Scene {
     int x = collisionPoint.X - shield->x;
     int y = collisionPoint.Y - shield->y;
     for (int i = 0; i < 64; ++i) {
-      int px = tclamp<int>(x + random(-4, 5), 0, shield->getWidth() - 1);
-      int py = tclamp<int>(y + random(-4, 5), 0, shield->getHeight() - 1);
+      int px = iclamp(x + random(-4, 5), 0, shield->getWidth() - 1);
+      int py = iclamp(y + random(-4, 5), 0, shield->getHeight() - 1);
       *(data + px + shield->getWidth() * py) = 0;
     }
   }

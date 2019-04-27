@@ -84,7 +84,7 @@ void setup()
 
   // Setup mouse
   Mouse.begin(PS2_PORT0_CLK, PS2_PORT0_DAT);
-  Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true);
+  Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, NULL);
   VGAController.setMouseCursor((CursorName)cursor);
 
   Canvas.setBrushColor(Color::Blue);
