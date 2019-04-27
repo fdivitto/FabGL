@@ -216,6 +216,12 @@ inline Point sub(Point const & point1, Point const & point2)
 }
 
 
+inline Point neg(Point const & point)
+{
+  return Point(-point.X, -point.Y);
+}
+
+
 inline Rect intersection(Rect const & rect1, Rect const & rect2)
 {
   return Rect(tmax(rect1.X1, rect2.X1), tmax(rect1.Y1, rect2.Y1), tmin(rect1.X2, rect2.X2), tmin(rect1.Y2, rect2.Y2));
