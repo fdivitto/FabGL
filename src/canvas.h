@@ -120,6 +120,15 @@ public:
   void setOrigin(int X, int Y);
 
   /**
+   * @brief Set the axes origin.
+   *
+   * Setting axes origin will translate every coordinate by the specified value (expect for sprites).
+   *
+   * @param origin Origin coordinates.
+   */
+  void setOrigin(Point const & origin);
+
+  /**
    * @brief Get last origin set using setOrigin().
    *
    * @return Last origin set.

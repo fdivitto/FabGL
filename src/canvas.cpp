@@ -48,9 +48,15 @@ CanvasClass::CanvasClass()
 
 void CanvasClass::setOrigin(int X, int Y)
 {
+  setOrigin(Point(X, Y));
+}
+
+
+void CanvasClass::setOrigin(Point const & origin)
+{
   Primitive p;
-  p.cmd  = PrimitiveCmd::SetOrigin;
-  p.position = m_origin = Point(X, Y);
+  p.cmd      = PrimitiveCmd::SetOrigin;
+  p.position = m_origin = origin;
   VGAController.addPrimitive(p);
 }
 
