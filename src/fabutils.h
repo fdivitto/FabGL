@@ -113,6 +113,36 @@ private:
 
 
 
+template <typename T>
+struct StackItem {
+  StackItem * next;
+  T item;
+  StackItem(StackItem * next_, T const & item_) : next(next_), item(item_) { }
+};
+
+template <typename T>
+class Stack {
+public:
+  Stack() : m_items(NULL) { }
+  bool isEmpty() { return m_items == NULL; }
+  void push(T const & value) {
+    m_items = new StackItem<T>(m_items, value);
+  }
+  T pop() {
+    if (m_items) {
+      StackItem<T> * iptr = m_items;
+      m_items = iptr->next;
+      T r = iptr->item;
+      delete iptr;
+      return r;
+    } else
+      return T();
+  }
+private:
+  StackItem<T> * m_items;
+};
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 
@@ -168,6 +198,24 @@ inline Rect translate(Rect const & rect, int offsetX, int offsetY)
 }
 
 
+inline Rect translate(Rect const & rect, Point const & offset)
+{
+  return Rect(rect.X1 + offset.X, rect.Y1 + offset.Y, rect.X2 + offset.X, rect.Y2 + offset.Y);
+}
+
+
+inline Point add(Point const & point1, Point const & point2)
+{
+  return Point(point1.X + point2.X, point1.Y + point2.Y);
+}
+
+
+inline Point sub(Point const & point1, Point const & point2)
+{
+  return Point(point1.X - point2.X, point1.Y - point2.Y);
+}
+
+
 inline Rect intersection(Rect const & rect1, Rect const & rect2)
 {
   return Rect(tmax(rect1.X1, rect2.X1), tmax(rect1.Y1, rect2.Y1), tmin(rect1.X2, rect2.X2), tmin(rect1.Y2, rect2.Y2));
@@ -180,7 +228,29 @@ inline bool intersect(Rect const & rect1, Rect const & rect2)
 }
 
 
+inline bool pointInRect(Point const & point, Rect const & rect)
+{
+  return point.X >= rect.X1 && point.Y >= rect.Y1 && point.X <= rect.X2 && point.Y <= rect.Y2;
+}
+
+
+inline bool pointInRect(int x, int y, Rect const & rect)
+{
+  return x >= rect.X1 && y >= rect.Y1 && x <= rect.X2 && y <= rect.Y2;
+}
+
+
 bool clipLine(int & x1, int & y1, int & x2, int & y2, Rect const & clipRect);
+
+
+// Checks if the rect1 contains rect2
+inline bool contains(Rect const & rect1, Rect const & rect2)
+{
+  return (rect2.X1 >= rect1.X1) && (rect2.Y1 >= rect1.Y1) && (rect2.X2 <= rect1.X2) && (rect2.Y2 <= rect1.Y2);
+}
+
+
+void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & rectToRemove);
 
 
 

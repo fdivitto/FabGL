@@ -140,6 +140,33 @@ bool clipLine(int & x1, int & y1, int & x2, int & y2, Rect const & clipRect)
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// removeRectangle
+// remove "rectToRemove" from "mainRect", pushing remaining rectangles to "rects" stack
+
+void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & rectToRemove)
+{
+  if (!intersect(mainRect, rectToRemove) || contains(rectToRemove, mainRect))
+    return;
+
+  // top rectangle
+  if (mainRect.Y1 < rectToRemove.Y1)
+    rects.push(Rect(mainRect.X1, mainRect.Y1, mainRect.X2, rectToRemove.Y1 - 1));
+
+  // bottom rectangle
+  if (mainRect.Y2 > rectToRemove.Y2)
+    rects.push(Rect(mainRect.X1, rectToRemove.Y2 + 1, mainRect.X2, mainRect.Y2));
+
+  // left rectangle
+  if (mainRect.X1 < rectToRemove.X1)
+    rects.push(Rect(mainRect.X1, tmax(rectToRemove.Y1, mainRect.Y1), rectToRemove.X1 - 1, tmin(rectToRemove.Y2, mainRect.Y2)));
+
+  // right rectangle
+  if (mainRect.X2 > rectToRemove.X2)
+    rects.push(Rect(rectToRemove.X2 + 1, tmax(rectToRemove.Y1, mainRect.Y1), mainRect.X2, tmin(rectToRemove.Y2, mainRect.Y2)));
+}
+
+
 
 }
 
