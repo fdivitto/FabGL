@@ -441,8 +441,8 @@ bool KeyboardClass::reset()
   // sets default layout
   Keyboard.setLayout(&USLayout);
 
-  // tries up to six times for keyboard reset
-  for (int i = 0; i < 6; ++i) {
+  // tries up to three times to reset keyboard
+  for (int i = 0; i < 3; ++i) {
     m_keyboardAvailable = send_cmdReset() && send_cmdSetScancodeSet(2);
     if (m_keyboardAvailable)
       break;
