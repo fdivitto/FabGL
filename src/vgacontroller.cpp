@@ -974,6 +974,8 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
       return;
     if (X1 > X2)
       tswap(X1, X2);
+    if (X1 > m_paintState.absClippingRect.X2 || X2 < m_paintState.absClippingRect.X1)
+      return;
     X1 = iclamp(X1, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
     X2 = iclamp(X2, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
     uint8_t volatile * row = m_viewPort[Y1];
@@ -985,6 +987,8 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
       return;
     if (Y1 > Y2)
       tswap(Y1, Y2);
+    if (Y1 > m_paintState.absClippingRect.Y2 || Y2 < m_paintState.absClippingRect.Y1)
+      return;
     Y1 = iclamp(Y1, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
     Y2 = iclamp(Y2, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
     for (int y = Y1; y <= Y2; ++y)
@@ -1061,13 +1065,26 @@ void IRAM_ATTR VGAControllerClass::swapRows(int yA, int yB, int x1, int x2)
 
 void IRAM_ATTR VGAControllerClass::execFillRect(Rect const & rect)
 {
+  int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + m_paintState.origin.X;
+  int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + m_paintState.origin.Y;
+  int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + m_paintState.origin.X;
+  int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + m_paintState.origin.Y;
+
+  const int clipX1 = m_paintState.absClippingRect.X1;
+  const int clipY1 = m_paintState.absClippingRect.Y1;
+  const int clipX2 = m_paintState.absClippingRect.X2;
+  const int clipY2 = m_paintState.absClippingRect.Y2;
+
+  if (x1 > clipX2 || x2 < clipX1 || y1 > clipY2 || y2 < clipY1)
+    return;
+
+  x1 = iclamp(x1, clipX1, clipX2);
+  y1 = iclamp(y1, clipY1, clipY2);
+  x2 = iclamp(x2, clipX1, clipX2);
+  y2 = iclamp(y2, clipY1, clipY2);
+
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.penColor) : preparePixel(m_paintState.brushColor);
-
-  const int x1 = iclamp(rect.X1 + m_paintState.origin.X, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
-  const int y1 = iclamp(rect.Y1 + m_paintState.origin.Y, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
-  const int x2 = iclamp(rect.X2 + m_paintState.origin.X, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
-  const int y2 = iclamp(rect.Y2 + m_paintState.origin.Y, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
 
   for (int y = y1; y <= y2; ++y)
     fillRow(y, x1, x2, pattern);
@@ -1097,11 +1114,15 @@ void IRAM_ATTR VGAControllerClass::execFillEllipse(Size const & size)
   int centerY = m_paintState.position.Y;
 
   if (centerY >= clipY1 && centerY <= clipY2) {
-    int col1 = iclamp(centerX - halfWidth, clipX1, clipX2);
-    int col2 = iclamp(centerX + halfWidth, clipX1, clipX2);
-    uint8_t volatile * row = m_viewPort[centerY];
-    for (int x = col1; x <= col2; ++x)
-      PIXELINROW(row, x) = pattern;
+    int col1 = centerX - halfWidth;
+    int col2 = centerX + halfWidth;
+    if (col1 <= clipX2 && col2 >= clipX1) {
+      col1 = iclamp(col1, clipX1, clipX2);
+      col2 = iclamp(col2, clipX1, clipX2);
+      uint8_t volatile * row = m_viewPort[centerY];
+      for (int x = col1; x <= col2; ++x)
+        PIXELINROW(row, x) = pattern;
+    }
   }
 
   for (int y = 1; y <= halfHeight; ++y)
@@ -1113,16 +1134,23 @@ void IRAM_ATTR VGAControllerClass::execFillEllipse(Size const & size)
     dx = x0 - x1;
     x0 = x1;
 
-    int col1 = iclamp(centerX - x0, clipX1, clipX2);
-    int col2 = iclamp(centerX + x0, clipX1, clipX2);
+    int col1 = centerX - x0;
+    int col2 = centerX + x0;
 
-    int y1 = centerY - y;
-    if (y1 >= clipY1 && y1 <= clipY2)
-      fillRow(y1, col1, col2, pattern);
+    if (col1 <= clipX2 && col2 >= clipX1) {
 
-    int y2 = centerY + y;
-    if (y2 >= clipY1 && y2 <= clipY2)
-      fillRow(y2, col1, col2, pattern);
+      col1 = iclamp(col1, clipX1, clipX2);
+      col2 = iclamp(col2, clipX1, clipX2);
+
+      int y1 = centerY - y;
+      if (y1 >= clipY1 && y1 <= clipY2)
+        fillRow(y1, col1, col2, pattern);
+
+      int y2 = centerY + y;
+      if (y2 >= clipY1 && y2 <= clipY2)
+        fillRow(y2, col1, col2, pattern);
+
+    }
   }
 }
 
@@ -1490,6 +1518,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph(Glyph const & glyph, GlyphOptio
 }
 
 
+// TODO: Italic doesn't work well when clipping rect is specified
 void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor)
 {
   const int clipX1 = m_paintState.absClippingRect.X1;
@@ -1547,9 +1576,13 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
     X1 = (clipX1 - destX) / (doubleWidth ? 2 : 1);
     destX = clipX1;
   }
+  if (X1 >= glyphWidth)
+    return;
 
   if (destX + XCount + skewAdder > clipX2 + 1)
     XCount = clipX2 + 1 - destX - skewAdder;
+  if (X1 + XCount > glyphWidth)
+    XCount = glyphWidth - X1;
 
   int16_t Y1 = 0;
   int16_t YCount = glyphHeight;
@@ -1559,9 +1592,13 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
     Y1 = clipY1 - destY;
     destY = clipY1;
   }
+  if (Y1 >= glyphHeight)
+    return;
 
   if (destY + YCount > clipY2 + 1)
     YCount = clipY2 + 1 - destY;
+  if (Y1 + YCount > glyphHeight)
+    YCount = glyphHeight - Y1;
 
   if (glyphOptions.invert ^ m_paintState.paintOptions.swapFGBG)
     tswap(penColor, brushColor);
@@ -1576,7 +1613,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
   uint8_t penPattern   = preparePixel(penColor);
   uint8_t brushPattern = preparePixel(brushColor);
 
-  for (int y = Y1; y < YCount; ++y, ++destY) {
+  for (int y = Y1; y < Y1 + YCount; ++y, ++destY) {
 
     // true if previous pixel has been set
     bool prevSet = false;
@@ -1586,7 +1623,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
 
     if (underline && y == glyphHeight - FABGLIB_UNDERLINE_POSITION - 1) {
 
-      for (int x = X1, adestX = destX + skewAdder; x < XCount && adestX <= clipX2; ++x, ++adestX) {
+      for (int x = X1, adestX = destX + skewAdder; x < X1 + XCount && adestX <= clipX2; ++x, ++adestX) {
         PIXELINROW(dstrow, adestX) = blank ? brushPattern : penPattern;
         if (doubleWidth) {
           ++adestX;
@@ -1598,7 +1635,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
 
     } else {
 
-      for (int x = X1, adestX = destX + skewAdder; x < XCount && adestX <= clipX2; ++x, ++adestX) {
+      for (int x = X1, adestX = destX + skewAdder; x < X1 + XCount && adestX <= clipX2; ++x, ++adestX) {
         if ((srcrow[x >> 3] << (x & 7)) & 0x80 && !blank) {
           PIXELINROW(dstrow, adestX) = penPattern;
           prevSet = true;
@@ -1608,8 +1645,9 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
         } else if (fillBackground) {
           PIXELINROW(dstrow, adestX) = brushPattern;
           prevSet = false;
-        } else
+        } else {
           prevSet = false;
+        }
         if (doubleWidth) {
           ++adestX;
           if (adestX > clipX2)
@@ -1670,17 +1708,25 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
     X1 = clipX1 - destX;
     destX = clipX1;
   }
+  if (X1 >= glyphWidth)
+    return;
 
   if (destX + XCount > clipX2 + 1)
     XCount = clipX2 + 1 - destX;
+  if (X1 + XCount > glyphWidth)
+    XCount = glyphWidth - X1;
 
   if (destY < clipY1) {
     Y1 = clipY1 - destY;
     destY = clipY1;
   }
+  if (Y1 >= glyphHeight)
+    return;
 
   if (destY + YCount > clipY2 + 1)
     YCount = clipY2 + 1 - destY;
+  if (Y1 + YCount > glyphHeight)
+    YCount = glyphHeight - Y1;
 
   if (glyphOptions.invert ^ m_paintState.paintOptions.swapFGBG)
     tswap(penColor, brushColor);
@@ -1695,13 +1741,13 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
   uint8_t penPattern   = preparePixel(penColor);
   uint8_t brushPattern = preparePixel(brushColor);
 
-  for (int y = Y1; y < YCount; ++y, ++destY) {
+  for (int y = Y1; y < Y1 + YCount; ++y, ++destY) {
     uint8_t * dstrow = (uint8_t*) m_viewPort[destY];
     uint8_t const * srcrow = glyphData + y * glyphWidthByte;
 
     uint32_t src = (srcrow[0] << 24) | (srcrow[1] << 16) | (srcrow[2] << 8) | (srcrow[3]);
     src <<= X1;
-    for (int x = X1, adestX = destX; x < XCount; ++x, ++adestX, src <<= 1)
+    for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
       PIXELINROW(dstrow, adestX) = src & 0x80000000 ? penPattern : brushPattern;
   }
 }
