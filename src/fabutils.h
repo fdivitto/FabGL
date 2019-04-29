@@ -157,6 +157,9 @@ const T & tmax(const T & a, const T & b)
 }
 
 
+constexpr auto imax = tmax<int>;
+
+
 template <typename T>
 const T & tmin(const T & a, const T & b)
 {
@@ -164,11 +167,16 @@ const T & tmin(const T & a, const T & b)
 }
 
 
+constexpr auto imin = tmin<int>;
+
+
+
 template <typename T>
 const T & tclamp(const T & v, const T & lo, const T & hi)
 {
   return (v < lo ? lo : (v > hi ? hi : v));
 }
+
 
 constexpr auto iclamp = tclamp<int>;
 
