@@ -2146,22 +2146,24 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
 // cursor = NULL -> disable mouse
 void VGAControllerClass::setMouseCursor(Cursor const * cursor)
 {
-  m_mouseCursor.visible = false;
-  m_mouseCursor.clearBitmaps();
+  if (cursor == NULL || &cursor->bitmap != m_mouseCursor.getFrame()) {
+    m_mouseCursor.visible = false;
+    m_mouseCursor.clearBitmaps();
 
-  refreshSprites();
-  processPrimitives();
-  primitivesExecutionWait();
+    refreshSprites();
+    processPrimitives();
+    primitivesExecutionWait();
 
-  if (cursor) {
-    m_mouseCursor.move(+m_mouseHotspotX, +m_mouseHotspotY, false);
-    m_mouseHotspotX = cursor->hotspotX;
-    m_mouseHotspotY = cursor->hotspotY;
-    m_mouseCursor.addBitmap(&cursor->bitmap);
-    m_mouseCursor.visible = true;
-    m_mouseCursor.move(-m_mouseHotspotX, -m_mouseHotspotY, false);
+    if (cursor) {
+      m_mouseCursor.move(+m_mouseHotspotX, +m_mouseHotspotY, false);
+      m_mouseHotspotX = cursor->hotspotX;
+      m_mouseHotspotY = cursor->hotspotY;
+      m_mouseCursor.addBitmap(&cursor->bitmap);
+      m_mouseCursor.visible = true;
+      m_mouseCursor.move(-m_mouseHotspotX, -m_mouseHotspotY, false);
+    }
+    refreshSprites();
   }
-  refreshSprites();
 }
 
 
