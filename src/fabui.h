@@ -69,6 +69,9 @@ namespace fabgl {
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiEvent
+
 enum uiEventID {
   UIEVT_NULL,
   UIEVT_APPINIT,
@@ -110,6 +113,10 @@ struct uiEvent {
 };
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiObject
+
 class uiObject {
 
 public:
@@ -118,6 +125,11 @@ public:
 
   virtual ~uiObject();
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiEvtHandler
 
 
 struct uiEvtHandlerProps {
@@ -156,6 +168,19 @@ private:
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiWindow
+
+
+enum uiWindowRectType {
+  uiRect_ScreenBased,
+  uiRect_ParentBased,
+  uiRect_WindowBased,
+  uiRect_ClientAreaParentBased,
+  uiRect_ClientAreaWindowBased,
+};
+
+
 class uiWindow : public uiEvtHandler {
 
 friend class uiApp;
@@ -190,11 +215,7 @@ public:
 
   Size size() { return m_size; }
 
-  Rect rect() { return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1); }
-
-  Rect screenRect();
-
-  virtual Rect clientRect();
+  virtual Rect rect(uiWindowRectType rectType);
 
   bool isActive() { return m_isActive; }
 
@@ -209,8 +230,14 @@ public:
 
 protected:
 
-  // this doesn't repaint the window, use app()->move() instead
-  void setPos(int x, int y) { m_pos = Point(x, y); }
+  // these do not repaint the window, use app()->move() instead
+  void setPos(int x, int y)           { m_pos = Point(x, y); }
+  void setSize(int width, int height) { m_size = Size(width, height); }
+
+  Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
+  Point posAtMouseDown()              { return m_posAtMouseDown; }
+
+  virtual Size minWindowSize()        { return Size(0, 0); }
 
   void beginPaint(uiEvent * event);
 
@@ -224,7 +251,10 @@ private:
   bool       m_isActive;
   bool       m_isVisible;
 
-  Point      m_mouseDownPos;
+  Point      m_mouseDownPos;    // mouse position when mouse down event has been received
+
+  Point      m_posAtMouseDown;  // used to resize
+  Size       m_sizeAtMouseDown; // used to resize
 
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow * m_next;
@@ -234,7 +264,11 @@ private:
 };
 
 
-struct uiFrameProps {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiFrame
+
+struct uiFrameStyle {
   Color backgroundColor;
   Color normalBorderColor;
   Color activeBorderColor;
@@ -242,9 +276,10 @@ struct uiFrameProps {
   Color activeTitleBackgroundColor;
   Color titleFontColor;
   FontInfo const * titleFont;
-  bool hasBorder;
+  bool  hasBorder;
+  int   borderSize;
 
-  uiFrameProps() :
+  uiFrameStyle() :
     backgroundColor(Color::White),
     normalBorderColor(Color::BrightBlack),
     activeBorderColor(Color::BrightBlue),
@@ -252,8 +287,23 @@ struct uiFrameProps {
     activeTitleBackgroundColor(Color::BrightWhite),
     titleFontColor(Color::BrightBlack),
     titleFont(Canvas.getPresetFontInfo(80, 25)),
-    hasBorder(true)
+    hasBorder(true),
+    borderSize(1)
   { }
+};
+
+
+enum uiFrameSensiblePos {
+  uiSensPos_None,
+  uiSensPos_MoveArea,
+  uiSensPos_TopLeftResize,
+  uiSensPos_TopCenterResize,
+  uiSensPos_TopRightResize,
+  uiSensPos_CenterLeftResize,
+  uiSensPos_CenterRightResize,
+  uiSensPos_BottomLeftResize,
+  uiSensPos_BottomCenterResize,
+  uiSensPos_BottomRightResize,
 };
 
 
@@ -271,21 +321,43 @@ public:
 
   void setTitle(char const * value);
 
-  uiFrameProps & frameProps() { return m_props; }
+  uiFrameStyle & style() { return m_style; }
 
-  Rect clientRect();
+  Rect rect(uiWindowRectType rectType);
+
+  bool resizeable() { return m_isResizeable; }
+
+  void setResizeable(bool value) { m_isResizeable = value; }
+
+protected:
+
+  Size minWindowSize();
 
 private:
 
   void paintFrame();
-  bool isInsideTitleBar(Point const & point);
+  void movingCapturedMouse(int mouseX, int mouseY);
+  void movingFreeMouse(int mouseX, int mouseY);
+  uiFrameSensiblePos getSensiblePosAt(int x, int y);
 
-  uiFrameProps m_props;
+
+  static const int CORNERSENSE = 10;
+
+
+  uiFrameStyle m_style;
+
+  bool m_isResizeable;
 
   char const * m_title;
 
+  uiFrameSensiblePos m_mouseDownSensiblePos;
+
 };
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiApp
 
 
 class uiApp : public uiEvtHandler {
@@ -317,6 +389,8 @@ public:
   void repaintRect(Rect const & rect);
 
   void moveWindow(uiWindow * window, int x, int y);
+
+  void resizeWindow(uiWindow * window, int width, int height);
 
   uiWindow * screenToWindow(Point & point);
 
