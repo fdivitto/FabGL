@@ -142,7 +142,8 @@ void uiApp::run()
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), true);
   m_rootWindow->setApp(this);
-  m_rootWindow->style().hasBorder = false;
+  m_rootWindow->style().borderSize = 0;
+  m_rootWindow->setResizeable(false);
 
   m_activeWindow = m_rootWindow;
 
@@ -623,12 +624,10 @@ Rect uiFrame::rect(uiWindowRectType rectType)
     case uiRect_ClientAreaParentBased:
     case uiRect_ClientAreaWindowBased:
       // border
-      if (m_style.hasBorder) {
-        r.X1 += m_style.borderSize;
-        r.Y1 += m_style.borderSize;
-        r.X2 -= m_style.borderSize;
-        r.Y2 -= m_style.borderSize;
-      }
+      r.X1 += m_style.borderSize;
+      r.Y1 += m_style.borderSize;
+      r.X2 -= m_style.borderSize;
+      r.Y2 -= m_style.borderSize;
       // title bar
       if (strlen(m_title))
         r.Y1 += 1 + m_style.titleFont->height;
@@ -655,7 +654,7 @@ void uiFrame::paintFrame()
     bkgRect.Y1 += 1 + m_style.titleFont->height;
   }
   // border
-  if (m_style.hasBorder) {
+  if (m_style.borderSize > 0) {
     Canvas.setPenColor(isActive() ? m_style.activeBorderColor : m_style.normalBorderColor);
     for (int i = 0; i < m_style.borderSize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);

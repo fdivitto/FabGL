@@ -276,7 +276,6 @@ struct uiFrameStyle {
   Color activeTitleBackgroundColor;
   Color titleFontColor;
   FontInfo const * titleFont;
-  bool  hasBorder;
   int   borderSize;
 
   uiFrameStyle() :
@@ -287,7 +286,6 @@ struct uiFrameStyle {
     activeTitleBackgroundColor(Color::BrightWhite),
     titleFontColor(Color::BrightBlack),
     titleFont(Canvas.getPresetFontInfo(80, 25)),
-    hasBorder(true),
     borderSize(1)
   { }
 };
