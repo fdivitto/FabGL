@@ -21,8 +21,7 @@
 
 
 
-#ifndef _FABUTILS_H_INCLUDED
-#define _FABUTILS_H_INCLUDED
+#pragma once
 
 
 #include "freertos/FreeRTOS.h"
@@ -272,7 +271,3 @@ void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & re
 
 
 
-
-
-
-#endif  // _FABUTILS_H_INCLUDED

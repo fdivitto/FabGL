@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _KEYBOARD_H_INCLUDED
-#define _KEYBOARD_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -593,9 +593,6 @@ private:
 
 
 
-
-
-
 } // end of namespace
 
 
@@ -604,6 +601,6 @@ extern fabgl::KeyboardClass Keyboard;
 
 
 
-#endif
+
 
 

@@ -20,8 +20,7 @@
  */
 
 
-#ifndef _PS2DEVICE_H_INCLUDED
-#define _PS2DEVICE_H_INCLUDED
+#pragma once
 
 
 
@@ -142,12 +141,5 @@ struct PS2DeviceLock {
 
 } // end of namespace
 
-
-
-
-
-
-
-#endif
 
 

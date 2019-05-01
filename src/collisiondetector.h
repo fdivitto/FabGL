@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _COLLISIONDETECTOR_H_INCLUDED
-#define _COLLISIONDETECTOR_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -243,6 +243,4 @@ private:
 
 
 
-
-#endif
 

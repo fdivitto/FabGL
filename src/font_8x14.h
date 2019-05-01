@@ -1,5 +1,5 @@
-#ifndef FONT_8X14_H_INCLUDED
-#define FONT_8X14_H_INCLUDED
+#pragma once
+
 
 namespace fabgl {
 
@@ -280,4 +280,4 @@ static const FontInfo FONT_8x14 = {
 
 }
 
-#endif
+

@@ -1,6 +1,6 @@
 
-#ifndef cursors_h
-#define cursors_h
+#pragma once
+
 
 
 namespace fabgl {
@@ -352,4 +352,4 @@ static const Cursor CURSORS[] = {
 
 }
 
-#endif /* cursors_h */
+

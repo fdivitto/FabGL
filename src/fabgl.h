@@ -21,8 +21,8 @@
 
 
 
-#ifndef _FABGL_H_INCLUDED
-#define _FABGL_H_INCLUDED
+#pragma once
+
 
 /**
  * @file
@@ -299,7 +299,3 @@ using fabgl::CursorName;
 using fabgl::TerminalClass;
 
 
-
-
-
-#endif /* _FABGL_H_INCLUDED */

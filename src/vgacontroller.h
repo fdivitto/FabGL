@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _VGACONTROLLER_H_INCLUDED
-#define _VGACONTROLLER_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -960,4 +960,4 @@ extern fabgl::VGAControllerClass VGAController;
 
 
 
-#endif
+

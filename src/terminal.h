@@ -20,8 +20,8 @@
  */
 
  
-#ifndef _TERMINAL_H_INCLUDED
-#define _TERMINAL_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -836,10 +836,3 @@ private:
 
 } // end of namespace
 
-
-
-
-
-
-
-#endif

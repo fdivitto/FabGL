@@ -20,8 +20,8 @@
  */
  
 
-#ifndef _CANVAS_H_INCLUDED
-#define _CANVAS_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -686,4 +686,3 @@ extern fabgl::CanvasClass Canvas;
 
 
 
-#endif

@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _PS2CONTROLLER_H_INCLUDED
-#define _PS2CONTROLLER_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -126,7 +126,4 @@ private:
 
 extern fabgl::PS2ControllerClass PS2Controller;
 
-
-
-#endif
 

@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _FABUI_H_INCLUDED
-#define _FABUI_H_INCLUDED
+#pragma once
+
 
 
 #include <stdint.h>
@@ -422,8 +422,4 @@ private:
 } // end of namespace
 
 
-
-
-
-#endif
 

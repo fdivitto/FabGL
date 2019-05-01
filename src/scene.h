@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SCENE_H_INCLUDED
-#define _SCENE_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -183,7 +183,6 @@ private:
 
 
 
-#endif
 
 
 

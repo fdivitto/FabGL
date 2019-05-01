@@ -1,5 +1,5 @@
-#ifndef FONT_4x6_H_INCLUDED
-#define FONT_4x6_H_INCLUDED
+#pragma once
+
 
 namespace fabgl {
 
@@ -277,8 +277,6 @@ static const FontInfo FONT_4x6 = {
   .data      = FONT_4x6_DATA,
 };
 
-
-#endif
 
 
 }

@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _SWGENERATOR_H_INCLUDED
-#define _SWGENERATOR_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -134,5 +134,5 @@ private:
 extern fabgl::SquareWaveGeneratorClass SquareWaveGenerator;
 
 
-#endif
+
 

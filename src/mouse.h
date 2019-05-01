@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _MOUSE_H_INCLUDED
-#define _MOUSE_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -338,7 +338,6 @@ extern fabgl::MouseClass Mouse;
 
 
 
-#endif
 
 
 

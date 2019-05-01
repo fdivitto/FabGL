@@ -20,8 +20,8 @@
  */
 
 
-#ifndef _FABGLCONF_H_INCLUDED
-#define _FABGLCONF_H_INCLUDED
+#pragma once
+
 
 
 /**
@@ -230,4 +230,4 @@
 
 
 
-#endif
+

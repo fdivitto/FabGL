@@ -1,3 +1,7 @@
+#pragma once
+
+
+
 #include "esp_attr.h"
 #include "esp_err.h"
 #include "esp_log.h"
