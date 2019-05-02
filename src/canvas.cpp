@@ -25,10 +25,10 @@
 #include "canvas.h"
 
 // Embedded fonts
-#include "font_4x6.h"
-#include "font_8x8.h"
-#include "font_8x9.h"
-#include "font_8x14.h"
+#include "fonts/font_4x6.h"
+#include "fonts/font_8x8.h"
+#include "fonts/font_8x9.h"
+#include "fonts/font_8x14.h"
 
 
 fabgl::CanvasClass Canvas;
