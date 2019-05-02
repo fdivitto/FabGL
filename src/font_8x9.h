@@ -275,6 +275,7 @@ static const FontInfo FONT_8x9 = {
   .weight    = 400,
   .charset   = 255,
   .data      = FONT_8x9_DATA,
+  .chptr     = NULL,
 };
 
 
