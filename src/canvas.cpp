@@ -324,12 +324,21 @@ void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
 
 void CanvasClass::drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap)
 {
-  for (; *text; ++text, X += fontInfo->width * m_textHorizRate) {
+  int fontWidth = fontInfo->width;
+  for (; *text; ++text, X += fontWidth * m_textHorizRate) {
     if (wrap && X >= getWidth()) {    // TODO: clipX2 instead of getWidth()?
       X = 0;
       Y += fontInfo->height;
     }
-    drawGlyph(X, Y, fontInfo->width, fontInfo->height, fontInfo->data, *text);
+    if (fontInfo->chptr) {
+      // variable width
+      uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)(*text)];
+      fontWidth = *chptr++;
+      drawGlyph(X, Y, fontWidth, fontInfo->height, chptr, 0);
+    } else {
+      // fixed width
+      drawGlyph(X, Y, fontInfo->width, fontInfo->height, fontInfo->data, *text);
+    }
   }
 }
 
