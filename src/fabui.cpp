@@ -143,7 +143,8 @@ void uiApp::run()
   m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), true);
   m_rootWindow->setApp(this);
   m_rootWindow->style().borderSize = 0;
-  m_rootWindow->setResizeable(false);
+  m_rootWindow->props().resizeable = false;
+  m_rootWindow->props().moveable = false;
 
   m_activeWindow = m_rootWindow;
 
@@ -597,7 +598,6 @@ void uiWindow::processEvent(uiEvent * event)
 
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
-    m_isResizeable(true),
     m_title(title),
     m_mouseDownSensiblePos(uiSensPos_None)
 {
@@ -706,7 +706,7 @@ void uiFrame::processEvent(uiEvent * event)
 Size uiFrame::minWindowSize()
 {
   Size r = Size(0, 0);
-  if (m_isResizeable) {
+  if (m_props.resizeable) {
     r.width  += CORNERSENSE * 2 + m_style.borderSize * 2;
     r.height += CORNERSENSE * 2 + m_style.borderSize * 2;
   }
@@ -723,7 +723,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   int w = size().width;
   int h = size().height;
 
-  if (m_isResizeable) {
+  if (m_props.resizeable) {
 
     // on top center, resize
     if (pointInRect(p, Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize)))
@@ -759,9 +759,11 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
   }
 
-  // on title bar, moving area
-  if (pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
-    return uiSensPos_MoveArea;
+  if (m_props.moveable) {
+    // on title bar, moving area
+    if (pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
+      return uiSensPos_MoveArea;
+  }
 
   return uiSensPos_None;
 }

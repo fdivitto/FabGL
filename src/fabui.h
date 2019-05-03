@@ -269,14 +269,14 @@ private:
 // uiFrame
 
 struct uiFrameStyle {
-  Color backgroundColor;
-  Color normalBorderColor;
-  Color activeBorderColor;
-  Color normalTitleBackgroundColor;
-  Color activeTitleBackgroundColor;
-  Color titleFontColor;
+  Color            backgroundColor;
+  Color            normalBorderColor;
+  Color            activeBorderColor;
+  Color            normalTitleBackgroundColor;
+  Color            activeTitleBackgroundColor;
+  Color            titleFontColor;
   FontInfo const * titleFont;
-  int   borderSize;
+  int              borderSize;
 
   uiFrameStyle() :
     backgroundColor(Color::White),
@@ -287,6 +287,17 @@ struct uiFrameStyle {
     titleFontColor(Color::BrightBlack),
     titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
     borderSize(2)
+  { }
+};
+
+
+struct uiFrameProps {
+  bool resizeable;
+  bool moveable;
+
+  uiFrameProps() :
+    resizeable(true),
+    moveable(true)
   { }
 };
 
@@ -321,11 +332,9 @@ public:
 
   uiFrameStyle & style() { return m_style; }
 
+  uiFrameProps & props() { return m_props; }
+
   Rect rect(uiWindowRectType rectType);
-
-  bool resizeable() { return m_isResizeable; }
-
-  void setResizeable(bool value) { m_isResizeable = value; }
 
 protected:
 
@@ -344,7 +353,7 @@ private:
 
   uiFrameStyle m_style;
 
-  bool m_isResizeable;
+  uiFrameProps m_props;
 
   char const * m_title;
 
