@@ -285,8 +285,8 @@ struct uiFrameStyle {
     normalTitleBackgroundColor(Color::White),
     activeTitleBackgroundColor(Color::BrightWhite),
     titleFontColor(Color::BrightBlack),
-    titleFont(Canvas.getPresetFontInfo(80, 25)),
-    borderSize(1)
+    titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
+    borderSize(2)
   { }
 };
 
