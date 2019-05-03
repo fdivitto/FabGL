@@ -494,14 +494,26 @@ public:
   void setPaintOptions(PaintOptions options);
 
   /**
-  * @brief Get the font info that best fits the specified number of columns and rows.
-  *
-  * @param columns Minimum number of required columns.
-  * @param rows Minimum number of required rows.
-  *
-  * @return The font info of the preset font.
-  */
+   * @brief Get the font info that best fits the specified number of columns and rows.
+   *
+   * This method returns only fixed width fonts.
+   *
+   * @param columns Minimum number of required columns.
+   * @param rows Minimum number of required rows.
+   *
+   * @return The font info found.
+   */
   static FontInfo const * getPresetFontInfo(int columns, int rows);
+
+  /**
+   * @brief Get the font info that best fits the specified height.
+   *
+   * @param height Required font height in pixels.
+   * @param fixedWidth If True returns only fixed width fonts, if False returns only variable width fonts.
+   *
+   * @return The font info found.
+   */
+  static FontInfo const * getPresetFontInfoFromHeight(int height, bool fixedWidth);
 
   /**
    * @brief Get info about currently selected font.

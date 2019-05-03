@@ -29,6 +29,16 @@
 #include "fonts/font_8x8.h"
 #include "fonts/font_8x9.h"
 #include "fonts/font_8x14.h"
+#include "fonts/font_std_12.h"
+#include "fonts/font_std_14.h"
+#include "fonts/font_std_15.h"
+#include "fonts/font_std_16.h"
+#include "fonts/font_std_17.h"
+#if FABGLIB_EMBEDS_ADDITIONAL_FONTS
+#include "fonts/font_std_18.h"
+#include "fonts/font_std_22.h"
+#include "fonts/font_std_24.h"
+#endif
 
 
 fabgl::CanvasClass Canvas;
@@ -389,20 +399,50 @@ void CanvasClass::writeRawData(uint8_t * source, int destX, int destY, int width
 #endif
 
 
+
+static const FontInfo * FIXED_WIDTH_EMBEDDED_FONTS[] = {
+  // please, bigger fonts first!
+  &FONT_8x14,
+  &FONT_8x8,
+  &FONT_8x9,
+  &FONT_4x6,
+};
+
+
+static const FontInfo * VAR_WIDTH_EMBEDDED_FONTS[] = {
+  // please, bigger fonts first!
+#if FABGLIB_EMBEDS_ADDITIONAL_FONTS
+  &FONT_std_24,
+  &FONT_std_22,
+  &FONT_std_18,
+#endif
+  &FONT_std_17,
+  &FONT_std_16,
+  &FONT_std_15,
+  &FONT_std_14,
+  &FONT_std_12,
+};
+
+
 FontInfo const * CanvasClass::getPresetFontInfo(int columns, int rows)
 {
-  static const FontInfo * EMBEDDED_FONTS[] = {
-    // please, bigger fonts first!
-    &FONT_8x14,
-    &FONT_8x8,
-    &FONT_8x9,
-    &FONT_4x6,
-  };
+  FontInfo const * * fontInfo = &FIXED_WIDTH_EMBEDDED_FONTS[0];
 
-  FontInfo const * * fontInfo = &EMBEDDED_FONTS[0];
-
-  for (int i = 0; i < sizeof(EMBEDDED_FONTS) / sizeof(FontInfo*); ++i, ++fontInfo)
+  for (int i = 0; i < sizeof(FIXED_WIDTH_EMBEDDED_FONTS) / sizeof(FontInfo*); ++i, ++fontInfo)
     if (Canvas.getWidth() / (*fontInfo)->width >= columns && Canvas.getHeight() / (*fontInfo)->height >= rows)
+      break;
+
+  return *fontInfo;
+}
+
+
+FontInfo const * CanvasClass::getPresetFontInfoFromHeight(int height, bool fixedWidth)
+{
+  FontInfo const * * fontInfo = fixedWidth ? &FIXED_WIDTH_EMBEDDED_FONTS[0] : &VAR_WIDTH_EMBEDDED_FONTS[0];
+  int count = (fixedWidth ? sizeof(FIXED_WIDTH_EMBEDDED_FONTS) : sizeof(VAR_WIDTH_EMBEDDED_FONTS)) / sizeof(FontInfo*);
+
+  for (int i = 0; i < count; ++i, ++fontInfo)
+    if (height >= (*fontInfo)->height)
       break;
 
   return *fontInfo;
