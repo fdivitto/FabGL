@@ -43,14 +43,6 @@
 #define FABGLIB_DEFAULT_BLINK_PERIOD_MS 500
 
 
-/** Path to the default font for 132 columns mode. */
-#define FABGLIB_DEFAULT_132_COLUMNS_FONTPATH "EFont_Terminal_4x6.h"
-
-
-/** Name of the default font for 132 columns mode. */
-#define FABGLIB_DEFAULT_132_COLUMNS_FONTNAME EFont_Terminal_4x6
-
-
 /** Size of VGA controller primitives queue. */
 #define FABGLIB_EXEC_QUEUE_SIZE 1024
 
