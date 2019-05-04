@@ -38,15 +38,21 @@ namespace fabgl {
 // debug only!
 void dumpEvent(uiEvent * event)
 {
-  static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_APPINIT", "UIEVT_ABSPAINT", "UIEVT_PAINT", "UIEVT_ACTIVATE",
-                                  "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE",
-                                  "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN", "UIEVT_MOUSEBUTTONUP" };
+  static int idx = 0;
+  static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_DEBUGMSG", "UIEVT_APPINIT", "UIEVT_ABSPAINT", "UIEVT_PAINT", "UIEVT_ACTIVATE",
+                                  "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
+                                  "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
+                                };
+  Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
   if (event->dest && event->dest->evtHandlerProps().isFrame)
     Serial.printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
   else
     Serial.printf(" dst=%p ", event->dest);
   switch (event->id) {
+    case UIEVT_DEBUGMSG:
+      Serial.write(event->params.debugMsg);
+      break;
     case UIEVT_MOUSEMOVE:
       Serial.printf("X=%d Y=%d", event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
@@ -59,7 +65,14 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_PAINT:
     case UIEVT_ABSPAINT:
-      Serial.printf("rect=%d,%d,%d,%d", event->params.paintRect.X1, event->params.paintRect.Y1, event->params.paintRect.X2, event->params.paintRect.Y2);
+    case UIEVT_RESHAPEWINDOW:
+      Serial.printf("rect=%d,%d,%d,%d", event->params.rect.X1, event->params.rect.Y1, event->params.rect.X2, event->params.rect.Y2);
+      break;
+    case UIEVT_SETPOS:
+      Serial.printf("pos=%d,%d", event->params.pos.X, event->params.pos.Y);
+      break;
+    case UIEVT_SETSIZE:
+      Serial.printf("size=%d,%d", event->params.size.width, event->params.size.height);
       break;
     default:
       break;
@@ -159,10 +172,10 @@ void uiApp::run()
     uiEvent event;
     if (getEvent(&event, -1)) {
 
-      preprocessEvent(&event);
-
       // debug
       //dumpEvent(&event);
+
+      preprocessEvent(&event);
 
       if (event.dest)
         event.dest->processEvent(&event);
@@ -184,7 +197,7 @@ void uiApp::preprocessEvent(uiEvent * event)
         break;
       case UIEVT_ABSPAINT:
         // absolute paint
-        generatePaintEvents(m_rootWindow, event->params.paintRect);
+        generatePaintEvents(m_rootWindow, event->params.rect);
         break;
       default:
         break;
@@ -197,6 +210,9 @@ void uiApp::preprocessEvent(uiEvent * event)
         // activate window
         if (event->dest->evtHandlerProps().isWindow)
           setActiveWindow((uiWindow*) event->dest);
+        break;
+      case UIEVT_RESHAPEWINDOW:
+        generateReshapeEvents((uiWindow*) event->dest, event->params.rect);
         break;
       default:
         break;
@@ -251,6 +267,20 @@ void uiApp::OnInit()
 bool uiApp::postEvent(uiEvent const * event)
 {
   return xQueueSendToBack(m_eventsQueue, event, 0) == pdTRUE;
+}
+
+
+bool uiApp::insertEvent(uiEvent const * event)
+{
+  return xQueueSendToFront(m_eventsQueue, event, 0) == pdTRUE;
+}
+
+
+void uiApp::postDebugMsg(char const * msg)
+{
+  uiEvent evt = uiEvent(NULL, UIEVT_DEBUGMSG);
+  evt.params.debugMsg = msg;
+  postEvent(&evt);
 }
 
 
@@ -317,7 +347,7 @@ void uiApp::repaintWindow(uiWindow * window)
 void uiApp::repaintRect(Rect const & rect)
 {
   uiEvent evt = uiEvent(NULL, UIEVT_ABSPAINT);
-  evt.params.paintRect = rect;
+  evt.params.rect = rect;
   postEvent(&evt);
 }
 
@@ -325,76 +355,58 @@ void uiApp::repaintRect(Rect const & rect)
 // move to position (x, y) relative to the parent window
 void uiApp::moveWindow(uiWindow * window, int x, int y)
 {
-  Point prevPos = window->pos();
-  window->setPos(x, y);
-
-  //// repaint discovered areas
-
-  int dx = x - prevPos.X;
-  int dy = y - prevPos.Y;
-  Rect winRect = window->rect(uiRect_ScreenBased);
-  Rect BURect;  // bottom or upper rect
-  Rect LRRect;  // left or right rect
-
-  // moving to the right/left? repaint left/right side
-  if (dx > 0)
-    LRRect = Rect(winRect.X1 - dx, winRect.Y1, winRect.X1 - 1, winRect.Y2);
-  else if (dx < 0)
-    LRRect = Rect(winRect.X2 + 1, winRect.Y1, winRect.X2 - dx, winRect.Y2);
-
-  // moving up/down? repaint bottom/up side
-  if (dy < 0)
-    BURect = Rect(winRect.X1, winRect.Y2 + 1, winRect.X2, winRect.Y2 - dy);
-  else if (dy > 0)
-    BURect = Rect(winRect.X1, winRect.Y1 - dy, winRect.X2, winRect.Y1 - 1);
-
-  // moving diagonally, include corners in bottom or upper rectangle
-  if (dy) {
-    if (dx > 0)
-      BURect.X1 -= dx;
-    else if (dx < 0)
-      BURect.X2 -= dx;
-  }
-
-  if (dx)
-    repaintRect(LRRect);
-  if (dy)
-    repaintRect(BURect);
-
-  //// repaint the window
-  // TODO: what about just moving the screen buffer? - when is top and fully visible window
-  repaintRect(winRect);
+  reshapeWindow(window, Rect(x, y, x + window->size().width - 1, y + window->size().height - 1));
 }
 
 
 void uiApp::resizeWindow(uiWindow * window, int width, int height)
 {
-  Size prevSize = window->size();
-  window->setSize(width, height);
+  reshapeWindow(window, resize(window->rect(uiRect_ParentBased), width, height));
+}
 
-  //// repaint discovered areas
 
-  int dx = width - prevSize.width;
-  int dy = height - prevSize.height;
-  Rect winRect = window->rect(uiRect_ScreenBased);
-  Rect RRect;  // right rect
-  Rect BRect;  // bottom rect
+void uiApp::reshapeWindow(uiWindow * window, Rect const & rect)
+{
+  uiEvent evt = uiEvent(window, UIEVT_RESHAPEWINDOW);
+  evt.params.rect = rect;
+  postEvent(&evt);
+}
 
-  if (dx < 0)
-    RRect = Rect(winRect.X2, winRect.Y1, winRect.X2 - dx, winRect.Y2);
-  if (dy < 0)
-    BRect = Rect(winRect.X1, winRect.Y2, winRect.X2, winRect.Y2 - dy);
 
-  // resizing diagonally, include corners in bottom or upper rectangle
-  if (dy && dx < 0)
-      BRect.X2 -= dx;
+// rect: new window rectangle based on parent coordinates
+void uiApp::generateReshapeEvents(uiWindow * window, Rect const & rect)
+{
+  // new rect based on root window coordiantes
+  Rect newRect = window->parent()->transformRect(rect, m_rootWindow);
 
-  if (dx < 0)
-    repaintRect(RRect);
-  if (dy < 0)
-    repaintRect(BRect);
+  // old rect based on root window coordinates
+  Rect oldRect = window->rect(uiRect_ScreenBased);
 
-  repaintRect(winRect);
+  // set here because generatePaintEvents() requires updated window pos() and size()
+  window->m_pos  = Point(rect.X1, rect.Y1);
+  window->m_size = rectSize(rect);
+
+  if (!intersect(oldRect, newRect)) {
+    // old position and new position do not intersect, just repaint old rect
+    generatePaintEvents(m_rootWindow, oldRect);
+  } else {
+    Stack<Rect> rects;
+    removeRectangle(rects, oldRect, newRect); // remove newRect from oldRect
+    while (!rects.isEmpty())
+      generatePaintEvents(m_rootWindow, rects.pop());
+  }
+
+  generatePaintEvents(m_rootWindow, newRect);
+
+  // generate set position event
+  uiEvent evt = uiEvent(window, UIEVT_SETPOS);
+  evt.params.pos = window->m_pos;
+  insertEvent(&evt);
+
+  // generate set size event
+  evt = uiEvent(window, UIEVT_SETSIZE);
+  evt.params.size = window->m_size;
+  insertEvent(&evt);
 }
 
 
@@ -419,8 +431,8 @@ void uiApp::generatePaintEvents(uiWindow * baseWindow, Rect const & rect)
     if (noIntesections) {
       uiEvent evt = uiEvent(NULL, UIEVT_PAINT);
       evt.dest = baseWindow;
-      evt.params.paintRect = thisRect;
-      postEvent(&evt);
+      evt.params.rect = thisRect;
+      insertEvent(&evt);
     }
   }
 }
@@ -511,17 +523,21 @@ void uiWindow::moveChildOnTop(uiWindow * child)
 }
 
 
+// transform a rect relative to this window to a rect relative to the specified base window
+Rect uiWindow::transformRect(Rect const & rect, uiWindow * baseWindow)
+{
+  Rect r = rect;
+  for (uiWindow * win = this; win != baseWindow; win = win->m_parent)
+    r = translate(r, win->m_pos);
+  return r;
+}
+
+
 Rect uiWindow::rect(uiWindowRectType rectType)
 {
   switch (rectType) {
     case uiRect_ScreenBased:
-      {
-        // return window bounding rect relative to the root window
-        Rect r = rect(uiRect_ParentBased);
-        for (uiWindow * win = m_parent; win; win = win->m_parent)
-          r = translate(r, win->m_pos);
-        return r;
-      }
+      return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow());
     case uiRect_ParentBased:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
     case uiRect_WindowBased:
@@ -545,7 +561,7 @@ void uiWindow::beginPaint(uiEvent * event)
 {
   Rect srect = rect(uiRect_ScreenBased);
   Canvas.setOrigin(srect.X1, srect.Y1);
-  Rect clipRect = event->params.paintRect;
+  Rect clipRect = event->params.rect;
   if (m_parent)
     clipRect = intersection(clipRect, translate(m_parent->rect(uiRect_ClientAreaWindowBased), neg(m_pos)));
   Canvas.setClippingRect(clipRect);
@@ -599,7 +615,8 @@ void uiWindow::processEvent(uiEvent * event)
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
     m_title(title),
-    m_mouseDownSensiblePos(uiSensPos_None)
+    m_mouseDownSensiblePos(uiSensPos_None),
+    m_mouseMoveSensiblePos(uiSensPos_None)
 {
   evtHandlerProps().isFrame = true;
 }
@@ -687,14 +704,15 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // this sets the right mouse cursor in case of end of capturing
-      movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+      movingFreeMouse();
       break;
 
     case UIEVT_MOUSEMOVE:
+      m_mouseMoveSensiblePos = getSensiblePosAt(event->params.mouse.status.X, event->params.mouse.status.Y);
       if (app()->capturedMouseWindow() == this)
         movingCapturedMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
       else
-        movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+        movingFreeMouse();
       break;
 
     default:
@@ -779,84 +797,70 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
   switch (m_mouseDownSensiblePos) {
 
     case uiSensPos_MoveArea:
-      // this works because mouseX and mouseY are always relative to current window position, so dx and dy are actually relative movements
       app()->moveWindow(this, pos().X + dx, pos().Y + dy);
       break;
 
     case uiSensPos_CenterRightResize:
       {
         int newWidth = sizeAtMouseDown().width + dx;
-        if (newWidth >= minSize.width) {
+        if (newWidth >= minSize.width)
           app()->resizeWindow(this, newWidth, sizeAtMouseDown().height);
-        }
         break;
       }
 
     case uiSensPos_CenterLeftResize:
       {
-        int newPosX  = pos().X + dx;
-        int newWidth = sizeAtMouseDown().width + posAtMouseDown().X - newPosX;
-        if (newWidth >= minSize.width) {
-          app()->moveWindow(this, newPosX, pos().Y);
-          app()->resizeWindow(this, newWidth, size().height);
-        }
+        Rect r = rect(uiRect_ParentBased);
+        r.X1 = pos().X + dx;
+        if (rectSize(r).width >= minSize.width)
+          app()->reshapeWindow(this, r);
         break;
       }
 
     case uiSensPos_TopLeftResize:
       {
-        int newPosX  = pos().X + dx;
-        int newPosY  = pos().Y + dy;
-        int newWidth = sizeAtMouseDown().width + posAtMouseDown().X - newPosX;
-        int newHeight = sizeAtMouseDown().height + posAtMouseDown().Y - newPosY;
-        if (newWidth >= minSize.width && newHeight >= minSize.height) {
-          app()->moveWindow(this, newPosX, newPosY);
-          app()->resizeWindow(this, newWidth, newHeight);
-        }
+        Rect r = rect(uiRect_ParentBased);
+        r.X1 = pos().X + dx;
+        r.Y1 = pos().Y + dy;
+        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+          app()->reshapeWindow(this, r);
         break;
       }
 
     case uiSensPos_TopCenterResize:
       {
-        int newPosY  = pos().Y + dy;
-        int newHeight = sizeAtMouseDown().height + posAtMouseDown().Y - newPosY;
-        if (newHeight >= minSize.height) {
-          app()->moveWindow(this, pos().X, newPosY);
-          app()->resizeWindow(this, size().width, newHeight);
-        }
+        Rect r = rect(uiRect_ParentBased);
+        r.Y1 = pos().Y + dy;
+        if (rectSize(r).height >= minSize.height)
+          app()->reshapeWindow(this, r);
         break;
       }
 
     case uiSensPos_TopRightResize:
       {
-        int newPosY  = pos().Y + dy;
-        int newWidth = sizeAtMouseDown().width + dx;
-        int newHeight = sizeAtMouseDown().height + posAtMouseDown().Y - newPosY;
-        if (newWidth >= minSize.width && newHeight >= minSize.height) {
-          app()->moveWindow(this, pos().X, newPosY);
-          app()->resizeWindow(this, newWidth, newHeight);
-        }
+        Rect r = rect(uiRect_ParentBased);
+        r.Y1 = pos().Y + dy;
+        r.X2 = pos().X + sizeAtMouseDown().width + dx;
+        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+          app()->reshapeWindow(this, r);
         break;
       }
 
     case uiSensPos_BottomLeftResize:
       {
-        int newPosX  = pos().X + dx;
-        int newWidth = sizeAtMouseDown().width + posAtMouseDown().X - newPosX;
-        int newHeight = sizeAtMouseDown().height + dy;
-        if (newWidth >= minSize.width && newHeight >= minSize.height) {
-          app()->moveWindow(this, newPosX, pos().Y);
-          app()->resizeWindow(this, newWidth, newHeight);
-        }
+        Rect r = rect(uiRect_ParentBased);
+        r.X1 = pos().X + dx;
+        r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
+        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+          app()->reshapeWindow(this, r);
         break;
       }
 
     case uiSensPos_BottomCenterResize:
       {
         int newHeight = sizeAtMouseDown().height + dy;
-        if (newHeight >= minSize.height) {
+        if (newHeight >= minSize.height)
           app()->resizeWindow(this, sizeAtMouseDown().width, newHeight);
-        }
         break;
       }
 
@@ -864,9 +868,8 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
       {
         int newWidth = sizeAtMouseDown().width + dx;
         int newHeight = sizeAtMouseDown().height + dy;
-        if (newWidth >= minSize.width && newHeight >= minSize.height) {
+        if (newWidth >= minSize.width && newHeight >= minSize.height)
           app()->resizeWindow(this, newWidth, newHeight);
-        }
         break;
       }
 
@@ -876,13 +879,11 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 }
 
 
-void uiFrame::movingFreeMouse(int mouseX, int mouseY)
+void uiFrame::movingFreeMouse()
 {
   CursorName cur = CursorName::CursorPointerSimpleReduced;  // this is the default
 
-  uiFrameSensiblePos sensPos = getSensiblePosAt(mouseX, mouseY);
-
-  switch (sensPos) {
+  switch (m_mouseMoveSensiblePos) {
     case uiSensPos_TopLeftResize:
       cur = CursorName::CursorResize2;
       break;

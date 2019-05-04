@@ -65,7 +65,7 @@ namespace fabgl {
 
 
 
-#define FABGLIB_UI_EVENTS_QUEUE_SIZE 32
+#define FABGLIB_UI_EVENTS_QUEUE_SIZE 32 // increase in case of garbage between windows!
 
 
 
@@ -74,6 +74,7 @@ namespace fabgl {
 
 enum uiEventID {
   UIEVT_NULL,
+  UIEVT_DEBUGMSG,
   UIEVT_APPINIT,
   UIEVT_ABSPAINT,
   UIEVT_PAINT,
@@ -83,6 +84,9 @@ enum uiEventID {
   UIEVT_MOUSEWHEEL,
   UIEVT_MOUSEBUTTONDOWN,
   UIEVT_MOUSEBUTTONUP,
+  UIEVT_SETPOS,
+  UIEVT_SETSIZE,
+  UIEVT_RESHAPEWINDOW,
 };
 
 
@@ -101,8 +105,14 @@ struct uiEvent {
       MouseStatus status;
       uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
     } mouse;
-    // event: UIEVT_PAINT, UIEVT_ABSPAINT
-    Rect paintRect;
+    // event: UIEVT_PAINT, UIEVT_ABSPAINT, UIEVT_RESHAPEWINDOW
+    Rect rect;
+    // event: UIEVT_SETPOS
+    Point pos;
+    // event: UIEVT_SETSIZE
+    Size size;
+    // event: UIEVT_DEBUGMSG
+    char const * debugMsg;
 
     uiEventParams() { }
   } params;
@@ -227,12 +237,10 @@ public:
 
   Point mouseDownPos() { return m_mouseDownPos; }
 
+  Rect transformRect(Rect const & rect, uiWindow * baseWindow);
+
 
 protected:
-
-  // these do not repaint the window, use app()->move() instead
-  void setPos(int x, int y)           { m_pos = Point(x, y); }
-  void setSize(int width, int height) { m_size = Size(width, height); }
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
   Point posAtMouseDown()              { return m_posAtMouseDown; }
@@ -292,12 +300,18 @@ struct uiFrameStyle {
 
 
 struct uiFrameProps {
-  bool resizeable;
-  bool moveable;
+  uint8_t resizeable        : 1;
+  uint8_t moveable          : 1;
+  uint8_t hasCloseButton    : 1;
+  uint8_t hasMaximizeButton : 1;
+  uint8_t hasMinimizeButton : 1;
 
   uiFrameProps() :
     resizeable(true),
-    moveable(true)
+    moveable(true),
+    hasCloseButton(true),
+    hasMaximizeButton(true),
+    hasMinimizeButton(true)
   { }
 };
 
@@ -344,7 +358,7 @@ private:
 
   void paintFrame();
   void movingCapturedMouse(int mouseX, int mouseY);
-  void movingFreeMouse(int mouseX, int mouseY);
+  void movingFreeMouse();
   uiFrameSensiblePos getSensiblePosAt(int x, int y);
 
 
@@ -357,7 +371,8 @@ private:
 
   char const * m_title;
 
-  uiFrameSensiblePos m_mouseDownSensiblePos;
+  uiFrameSensiblePos m_mouseDownSensiblePos;  // sensible position on mouse down
+  uiFrameSensiblePos m_mouseMoveSensiblePos;  // sensible position on mouse move
 
 };
 
@@ -379,6 +394,10 @@ public:
 
   bool postEvent(uiEvent const * event);
 
+  bool insertEvent(uiEvent const * event);
+
+  void postDebugMsg(char const * msg);
+
   virtual void processEvent(uiEvent * event);
 
   uiFrame * rootWindow() { return m_rootWindow; }
@@ -399,6 +418,8 @@ public:
 
   void resizeWindow(uiWindow * window, int width, int height);
 
+  void reshapeWindow(uiWindow * window, Rect const & rect);
+
   uiWindow * screenToWindow(Point & point);
 
 
@@ -416,6 +437,7 @@ private:
   void preprocessEvent(uiEvent * event);
   void translateMouseEvent(uiEvent * event);
   void generatePaintEvents(uiWindow * baseWindow, Rect const & rect);
+  void generateReshapeEvents(uiWindow * window, Rect const & rect);
 
   QueueHandle_t m_eventsQueue;
 

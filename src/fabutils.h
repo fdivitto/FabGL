@@ -199,6 +199,12 @@ void tswap(T & v1, T & v2)
 bool calcParity(uint8_t v);
 
 
+inline Size rectSize(Rect const & rect)
+{
+  return Size(rect.X2 - rect.X1 + 1, rect.Y2 - rect.Y1 + 1);
+}
+
+
 inline Rect translate(Rect const & rect, int offsetX, int offsetY)
 {
   return Rect(rect.X1 + offsetX, rect.Y1 + offsetY, rect.X2 + offsetX, rect.Y2 + offsetY);
@@ -220,6 +226,18 @@ inline Point add(Point const & point1, Point const & point2)
 inline Point sub(Point const & point1, Point const & point2)
 {
   return Point(point1.X - point2.X, point1.Y - point2.Y);
+}
+
+
+inline Rect shrink(Rect const & rect, int value)
+{
+  return Rect(rect.X1 + value, rect.Y1 + value, rect.X2 - value, rect.Y2 - value);
+}
+
+
+inline Rect resize(Rect const & rect, int width, int height)
+{
+  return Rect(rect.X1, rect.Y1, rect.X1 + width - 1, rect.Y1 + height - 1);
 }
 
 
