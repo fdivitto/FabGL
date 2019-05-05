@@ -42,7 +42,7 @@ void dumpEvent(uiEvent * event)
   static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_DEBUGMSG", "UIEVT_APPINIT", "UIEVT_ABSPAINT", "UIEVT_PAINT", "UIEVT_ACTIVATE",
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
-                                  "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_CLOSE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE",
+                                  "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE",
                                 };
   Serial.printf("#%d ", idx++);
@@ -161,15 +161,13 @@ void uiApp::run()
   m_rootWindow->style().borderSize = 0;
   m_rootWindow->props().resizeable = false;
   m_rootWindow->props().moveable = false;
-  m_rootWindow->show(true);
+  showWindow(m_rootWindow, true);
 
   m_activeWindow = m_rootWindow;
 
   // generate UIEVT_APPINIT event
   uiEvent evt = uiEvent(this, UIEVT_APPINIT);
   postEvent(&evt);
-
-  repaintWindow(m_rootWindow);
 
   // dispatch events
   while (true) {
@@ -380,6 +378,7 @@ void uiApp::resizeWindow(uiWindow * window, int width, int height)
 }
 
 
+// coordinates relative to the parent window
 void uiApp::reshapeWindow(uiWindow * window, Rect const & rect)
 {
   uiEvent evt = uiEvent(window, UIEVT_RESHAPEWINDOW);
@@ -453,6 +452,27 @@ void uiApp::generatePaintEvents(uiWindow * baseWindow, Rect const & rect)
 }
 
 
+void uiApp::showWindow(uiWindow * window, bool value)
+{
+  uiEvent evt = uiEvent(window, value ? UIEVT_SHOW : UIEVT_HIDE);
+  postEvent(&evt);
+}
+
+
+void uiApp::maximizeWindow(uiWindow * window, bool value)
+{
+  uiEvent evt = uiEvent(window, value ? UIEVT_MAXIMIZE : UIEVT_RESTORE);
+  postEvent(&evt);
+}
+
+
+void uiApp::minimizeWindow(uiWindow * window, bool value)
+{
+  uiEvent evt = uiEvent(window, value ? UIEVT_MINIMIZE : UIEVT_RESTORE);
+  postEvent(&evt);
+}
+
+
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -483,7 +503,7 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     parent->addChild(this);
 
   if (visible)
-    show(true);
+    app()->showWindow(this, true);
 }
 
 
@@ -585,16 +605,6 @@ Rect uiWindow::rect(uiWindowRectType rectType)
 }
 
 
-void uiWindow::show(bool value)
-{
-  if (m_state.visible != value) {
-    m_state.visible = value;
-    uiEvent evt = uiEvent(this, value ? UIEVT_SHOW : UIEVT_HIDE);
-    app()->postEvent(&evt);
-  }
-}
-
-
 void uiWindow::beginPaint(uiEvent * event)
 {
   Rect srect = rect(uiRect_ScreenBased);
@@ -636,15 +646,29 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SHOW:
+      m_state.visible = true;
       repaint();
       break;
 
     case UIEVT_HIDE:
+      m_state.visible = false;
       repaint();
       break;
 
-    case UIEVT_CLOSE:
-      show(false);
+    case UIEVT_MAXIMIZE:
+      m_savedScreenRect = rect(uiRect_ParentBased);
+      m_state.maximized = true;
+      app()->reshapeWindow(this, m_parent->rect(uiRect_ClientAreaWindowBased));
+      break;
+
+    case UIEVT_MINIMIZE:
+      // TODO
+      break;
+
+    case UIEVT_RESTORE:
+      m_state.maximized = false;
+      m_state.minimized = false;
+      app()->reshapeWindow(this, m_savedScreenRect);
       break;
 
     default:
@@ -870,7 +894,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   int w = size().width;
   int h = size().height;
 
-  if (m_props.resizeable) {
+  if (m_props.resizeable && !state().maximized && !state().minimized) {
 
     // on top center, resize
     if (pointInRect(p, Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize)))
@@ -906,7 +930,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
   }
 
-  if (m_props.moveable && pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
+  if (m_props.moveable && !state().maximized && pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
     return uiSensPos_MoveArea;       // on title bar, moving area
 
   return uiSensPos_None;
@@ -1066,18 +1090,12 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y)
 {
-  uiEventID eid = UIEVT_NULL;
   if (m_props.hasCloseButton && pointInRect(x, y, getBtnRect(0)))
-    eid = UIEVT_CLOSE;
+    app()->showWindow(this, false);
   else if (m_props.hasMaximizeButton && pointInRect(x, y, getBtnRect(1)))
-    eid = UIEVT_MAXIMIZE;
+    app()->maximizeWindow(this, !state().maximized);
   else if (m_props.hasMinimizeButton && pointInRect(x, y, getBtnRect(2)))
-    eid = UIEVT_MINIMIZE;
-
-  if (eid != UIEVT_NULL) {
-    uiEvent evt(this, eid);
-    app()->postEvent(&evt);
-  }
+    app()->minimizeWindow(this, !state().minimized);
 }
 
 

@@ -89,9 +89,9 @@ enum uiEventID {
   UIEVT_RESHAPEWINDOW,
   UIEVT_MOUSEENTER,
   UIEVT_MOUSELEAVE,
-  UIEVT_CLOSE,
-  UIEVT_MAXIMIZE,
-  UIEVT_MINIMIZE,
+  UIEVT_MAXIMIZE,   // Request for maximize
+  UIEVT_MINIMIZE,   // Request for minimize
+  UIEVT_RESTORE,    // restore from UIEVT_MAXIMIZE or UIEVT_MINIMIZE
   UIEVT_SHOW,
   UIEVT_HIDE,
 };
@@ -242,8 +242,6 @@ public:
 
   virtual Rect rect(uiWindowRectType rectType);
 
-  void show(bool value);
-
   uiWindowState state() { return m_state; }
 
   uiWindow * parent() { return m_parent; }
@@ -275,6 +273,9 @@ private:
 
   Point         m_pos;
   Size          m_size;
+
+  // saved screen rect before Maximize or Minimize
+  Rect          m_savedScreenRect;
 
   uiWindowState m_state;
 
@@ -453,6 +454,12 @@ public:
   void reshapeWindow(uiWindow * window, Rect const & rect);
 
   uiWindow * screenToWindow(Point & point);
+
+  void showWindow(uiWindow * window, bool value);
+
+  void maximizeWindow(uiWindow * window, bool value);
+
+  void minimizeWindow(uiWindow * window, bool value);
 
 
   // events
