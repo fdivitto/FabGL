@@ -42,6 +42,7 @@ void dumpEvent(uiEvent * event)
   static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_DEBUGMSG", "UIEVT_APPINIT", "UIEVT_ABSPAINT", "UIEVT_PAINT", "UIEVT_ACTIVATE",
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
+                                  "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_CLOSE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -134,7 +135,8 @@ uiApp::uiApp()
   : uiEvtHandler(NULL),
     m_rootWindow(NULL),
     m_activeWindow(NULL),
-    m_capturedMouseWindow(NULL)
+    m_capturedMouseWindow(NULL),
+    m_freeMouseWindow(NULL)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 }
@@ -193,7 +195,7 @@ void uiApp::preprocessEvent(uiEvent * event)
       case UIEVT_MOUSEWHEEL:
       case UIEVT_MOUSEBUTTONDOWN:
       case UIEVT_MOUSEBUTTONUP:
-        translateMouseEvent(event);
+        preprocessMouseEvent(event);
         break;
       case UIEVT_ABSPAINT:
         // absolute paint
@@ -222,8 +224,10 @@ void uiApp::preprocessEvent(uiEvent * event)
 
 
 // look for destination window at event X, Y coordinates, then set "dest" field and modify mouse X, Y coordinates (convert to child coordinates)
-void uiApp::translateMouseEvent(uiEvent * event)
+// generate UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
+void uiApp::preprocessMouseEvent(uiEvent * event)
 {
+  uiWindow * oldFreeMouseWindow = m_freeMouseWindow;
   Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
   if (m_capturedMouseWindow) {
     // mouse captured, just go back up to m_rootWindow
@@ -231,10 +235,19 @@ void uiApp::translateMouseEvent(uiEvent * event)
       mousePos = sub(mousePos, cur->pos());
     event->dest = m_capturedMouseWindow;
   } else {
-    event->dest = screenToWindow(mousePos);
+    m_freeMouseWindow = screenToWindow(mousePos);
+    event->dest = m_freeMouseWindow;
   }
   event->params.mouse.status.X = mousePos.X;
   event->params.mouse.status.Y = mousePos.Y;
+
+  // insert UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
+  if (oldFreeMouseWindow != m_freeMouseWindow) {
+    uiEvent evt = uiEvent(m_freeMouseWindow, UIEVT_MOUSEENTER);
+    insertEvent(&evt);
+    evt = uiEvent(oldFreeMouseWindow, UIEVT_MOUSELEAVE);
+    insertEvent(&evt);
+  }
 }
 
 
@@ -533,6 +546,13 @@ Rect uiWindow::transformRect(Rect const & rect, uiWindow * baseWindow)
 }
 
 
+// rect is based on window coordinates
+void uiWindow::repaint(Rect const & rect)
+{
+  app()->repaintRect(transformRect(rect, app()->rootWindow()));
+}
+
+
 Rect uiWindow::rect(uiWindowRectType rectType)
 {
   switch (rectType) {
@@ -655,20 +675,78 @@ Rect uiFrame::rect(uiWindowRectType rectType)
 }
 
 
+// buttonIndex:
+//   0 = close button
+//   1 = maximize button
+//   2 = minimize button
+Rect uiFrame::getBtnRect(int buttonIndex)
+{
+  int btnSize = m_style.titleFont->height;  // horiz and vert size of each button
+  Rect btnRect = Rect(size().width - 1 - m_style.borderSize - btnSize - CORNERSENSE,
+                      m_style.borderSize,
+                      size().width - 1 - m_style.borderSize - CORNERSENSE,
+                      m_style.borderSize + btnSize);
+  while (buttonIndex--)
+    btnRect = translate(btnRect, -btnSize, 0);
+  return btnRect;
+}
+
+
 void uiFrame::paintFrame()
 {
   Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
   // title bar
   if (strlen(m_title)) {
+    int titleBarHeight = m_style.titleFont->height;
     // title bar background
-    Canvas.setBrushColor(isActive() ? m_style.activeTitleBackgroundColor : m_style.normalTitleBackgroundColor);
-    Canvas.fillRectangle(m_style.borderSize, m_style.borderSize, size().width - 1 - m_style.borderSize, 1 + m_style.titleFont->height + m_style.borderSize);
+    Color titleBarBrushColor = isActive() ? m_style.activeTitleBackgroundColor : m_style.normalTitleBackgroundColor;
+    Canvas.setBrushColor(titleBarBrushColor);
+    Canvas.fillRectangle(m_style.borderSize, m_style.borderSize, size().width - 1 - m_style.borderSize, 1 + titleBarHeight + m_style.borderSize);
     // title
     Canvas.setPenColor(m_style.titleFontColor);
     Canvas.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
     Canvas.drawText(m_style.titleFont, 1 + m_style.borderSize, 1 + m_style.borderSize, m_title);
+    // close, maximize and minimze buttons
+    if (m_props.hasCloseButton) {
+      // close button
+      Rect r = getBtnRect(0);
+      if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
+        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+        Canvas.fillRectangle(r);
+        Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      } else
+        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+      r = shrink(r, 4);
+      Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
+      Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
+    }
+    if (m_props.hasMaximizeButton) {
+      // maximize button
+      Rect r = getBtnRect(1);
+      if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
+        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+        Canvas.fillRectangle(r);
+        Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      } else
+        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+      r = shrink(r, 4);
+      Canvas.drawRectangle(r);
+    }
+    if (m_props.hasMinimizeButton) {
+      // minimize button
+      Rect r = getBtnRect(2);
+      if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
+        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+        Canvas.fillRectangle(r);
+        Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      } else
+        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+      r = shrink(r, 4);
+      int h = (r.Y2 - r.Y1 + 1) / 2;
+      Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
+    }
     // adjust background rect
-    bkgRect.Y1 += 1 + m_style.titleFont->height;
+    bkgRect.Y1 += 1 + titleBarHeight;
   }
   // border
   if (m_style.borderSize > 0) {
@@ -704,15 +782,27 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // this sets the right mouse cursor in case of end of capturing
-      movingFreeMouse();
+      movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+      // handle buttons clicks
+      if (event->params.mouse.changedButton == 1)
+        handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
 
     case UIEVT_MOUSEMOVE:
-      m_mouseMoveSensiblePos = getSensiblePosAt(event->params.mouse.status.X, event->params.mouse.status.Y);
       if (app()->capturedMouseWindow() == this)
         movingCapturedMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
       else
-        movingFreeMouse();
+        movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+      break;
+
+    case UIEVT_MOUSELEAVE:
+      if (m_mouseMoveSensiblePos == uiSensPos_CloseButton)
+        repaint(getBtnRect(0));
+      if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton)
+        repaint(getBtnRect(1));
+      if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton)
+        repaint(getBtnRect(2));
+      m_mouseMoveSensiblePos = uiSensPos_None;
       break;
 
     default:
@@ -737,6 +827,15 @@ Size uiFrame::minWindowSize()
 uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 {
   Point p = Point(x, y);
+
+  if (m_props.hasCloseButton && pointInRect(p, getBtnRect(0)))
+    return uiSensPos_CloseButton;    // on Close Button area
+
+  if (m_props.hasMaximizeButton && pointInRect(p, getBtnRect(1)))
+    return uiSensPos_MaximizeButton; // on maximize button area
+
+  if (m_props.hasMinimizeButton && pointInRect(p, getBtnRect(2)))
+    return uiSensPos_MinimizeButton; // on minimize button area
 
   int w = size().width;
   int h = size().height;
@@ -777,11 +876,8 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
   }
 
-  if (m_props.moveable) {
-    // on title bar, moving area
-    if (pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
-      return uiSensPos_MoveArea;
-  }
+  if (m_props.moveable && pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
+    return uiSensPos_MoveArea;       // on title bar, moving area
 
   return uiSensPos_None;
 }
@@ -879,40 +975,79 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 }
 
 
-void uiFrame::movingFreeMouse()
+void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 {
+  uiFrameSensiblePos prevSensPos = m_mouseMoveSensiblePos;
+
+  m_mouseMoveSensiblePos = getSensiblePosAt(mouseX, mouseY);
+
+  if ((m_mouseMoveSensiblePos == uiSensPos_CloseButton || prevSensPos == uiSensPos_CloseButton) && m_mouseMoveSensiblePos != prevSensPos)
+    repaint(getBtnRect(0));
+
+  if ((m_mouseMoveSensiblePos == uiSensPos_MaximizeButton || prevSensPos == uiSensPos_MaximizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+    repaint(getBtnRect(1));
+
+  if ((m_mouseMoveSensiblePos == uiSensPos_MinimizeButton || prevSensPos == uiSensPos_MinimizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+    repaint(getBtnRect(2));
+
   CursorName cur = CursorName::CursorPointerSimpleReduced;  // this is the default
 
   switch (m_mouseMoveSensiblePos) {
+
     case uiSensPos_TopLeftResize:
       cur = CursorName::CursorResize2;
       break;
+
     case uiSensPos_TopCenterResize:
       cur = CursorName::CursorResize3;
       break;
+
     case uiSensPos_TopRightResize:
       cur = CursorName::CursorResize1;
       break;
+
     case uiSensPos_CenterLeftResize:
       cur = CursorName::CursorResize4;
       break;
+
     case uiSensPos_CenterRightResize:
       cur = CursorName::CursorResize4;
       break;
+
     case uiSensPos_BottomLeftResize:
       cur = CursorName::CursorResize1;
       break;
+
     case uiSensPos_BottomCenterResize:
       cur = CursorName::CursorResize3;
       break;
+
     case uiSensPos_BottomRightResize:
       cur = CursorName::CursorResize2;
       break;
+
     default:
       break;
   }
 
   VGAController.setMouseCursor(cur);
+}
+
+
+void uiFrame::handleButtonsClick(int x, int y)
+{
+  uiEventID eid = UIEVT_NULL;
+  if (m_props.hasCloseButton && pointInRect(x, y, getBtnRect(0)))
+    eid = UIEVT_CLOSE;
+  else if (m_props.hasMaximizeButton && pointInRect(x, y, getBtnRect(1)))
+    eid = UIEVT_MAXIMIZE;
+  else if (m_props.hasMinimizeButton && pointInRect(x, y, getBtnRect(2)))
+    eid = UIEVT_MINIMIZE;
+
+  if (eid != UIEVT_NULL) {
+    uiEvent evt(this, eid);
+    app()->postEvent(&evt);
+  }
 }
 
 

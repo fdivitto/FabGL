@@ -87,6 +87,11 @@ enum uiEventID {
   UIEVT_SETPOS,
   UIEVT_SETSIZE,
   UIEVT_RESHAPEWINDOW,
+  UIEVT_MOUSEENTER,
+  UIEVT_MOUSELEAVE,
+  UIEVT_CLOSE,
+  UIEVT_MAXIMIZE,
+  UIEVT_MINIMIZE,
 };
 
 
@@ -239,6 +244,8 @@ public:
 
   Rect transformRect(Rect const & rect, uiWindow * baseWindow);
 
+  void repaint(Rect const & rect);
+
 
 protected:
 
@@ -285,6 +292,10 @@ struct uiFrameStyle {
   Color            titleFontColor;
   FontInfo const * titleFont;
   int              borderSize;
+  Color            activeButtonColor; // color used to draw Close, Maximize and Minimize buttons
+  Color            normalButtonColor; // color used to draw Close, Maximize and Minimize buttons
+  Color            mouseOverBackgroundButtonColor;  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
+  Color            mouseOverBruttonColor;           // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
 
   uiFrameStyle() :
     backgroundColor(Color::White),
@@ -294,7 +305,11 @@ struct uiFrameStyle {
     activeTitleBackgroundColor(Color::BrightWhite),
     titleFontColor(Color::BrightBlack),
     titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
-    borderSize(2)
+    borderSize(2),
+    activeButtonColor(Color::BrightBlue),
+    normalButtonColor(Color::BrightBlack),
+    mouseOverBackgroundButtonColor(Color::BrightBlue),
+    mouseOverBruttonColor(Color::BrightWhite)
   { }
 };
 
@@ -327,6 +342,9 @@ enum uiFrameSensiblePos {
   uiSensPos_BottomLeftResize,
   uiSensPos_BottomCenterResize,
   uiSensPos_BottomRightResize,
+  uiSensPos_CloseButton,
+  uiSensPos_MaximizeButton,
+  uiSensPos_MinimizeButton,
 };
 
 
@@ -358,8 +376,10 @@ private:
 
   void paintFrame();
   void movingCapturedMouse(int mouseX, int mouseY);
-  void movingFreeMouse();
+  void movingFreeMouse(int mouseX, int mouseY);
   uiFrameSensiblePos getSensiblePosAt(int x, int y);
+  Rect getBtnRect(int buttonIndex);
+  void handleButtonsClick(int x, int y);
 
 
   static const int CORNERSENSE = 10;
@@ -435,7 +455,7 @@ protected:
 private:
 
   void preprocessEvent(uiEvent * event);
-  void translateMouseEvent(uiEvent * event);
+  void preprocessMouseEvent(uiEvent * event);
   void generatePaintEvents(uiWindow * baseWindow, Rect const & rect);
   void generateReshapeEvents(uiWindow * window, Rect const & rect);
 
@@ -445,6 +465,8 @@ private:
   uiWindow * m_activeWindow;
 
   uiWindow * m_capturedMouseWindow; // window that has captured mouse
+
+  uiWindow * m_freeMouseWindow;     // window where mouse is over
 };
 
 
