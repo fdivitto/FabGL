@@ -43,6 +43,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_CLOSE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE",
+                                  "UIEVT_SHOW", "UIEVT_HIDE",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -155,11 +156,12 @@ void uiApp::run()
   VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
 
   // root window always stays at 0, 0 and cannot be moved
-  m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), true);
+  m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
   m_rootWindow->setApp(this);
   m_rootWindow->style().borderSize = 0;
   m_rootWindow->props().resizeable = false;
   m_rootWindow->props().moveable = false;
+  m_rootWindow->show(true);
 
   m_activeWindow = m_rootWindow;
 
@@ -259,7 +261,7 @@ uiWindow * uiApp::screenToWindow(Point & point)
   while (win->hasChildren()) {
     uiWindow * child = win->lastChild();
     for (; child; child = child->prev()) {
-      if (child->isShown() && pointInRect(point, win->rect(uiRect_ClientAreaWindowBased)) && pointInRect(point, child->rect(uiRect_ParentBased))) {
+      if (child->state().visible && pointInRect(point, win->rect(uiRect_ClientAreaWindowBased)) && pointInRect(point, child->rect(uiRect_ParentBased))) {
         win   = child;
         point = sub(point, child->pos());
         break;
@@ -396,8 +398,8 @@ void uiApp::generateReshapeEvents(uiWindow * window, Rect const & rect)
   Rect oldRect = window->rect(uiRect_ScreenBased);
 
   // set here because generatePaintEvents() requires updated window pos() and size()
-  window->m_pos  = Point(rect.X1, rect.Y1);
-  window->m_size = rectSize(rect);
+  window->setPos(Point(rect.X1, rect.Y1));
+  window->setSize(rectSize(rect));
 
   if (!intersect(oldRect, newRect)) {
     // old position and new position do not intersect, just repaint old rect
@@ -413,12 +415,12 @@ void uiApp::generateReshapeEvents(uiWindow * window, Rect const & rect)
 
   // generate set position event
   uiEvent evt = uiEvent(window, UIEVT_SETPOS);
-  evt.params.pos = window->m_pos;
+  evt.params.pos = window->pos();
   insertEvent(&evt);
 
   // generate set size event
   evt = uiEvent(window, UIEVT_SETSIZE);
-  evt.params.size = window->m_size;
+  evt.params.size = window->size();
   insertEvent(&evt);
 }
 
@@ -433,7 +435,7 @@ void uiApp::generatePaintEvents(uiWindow * baseWindow, Rect const & rect)
     bool noIntesections = true;
     for (uiWindow * win = baseWindow->lastChild(); win; win = win->prev()) {
       Rect winRect = intersection(baseWindow->rect(uiRect_ClientAreaWindowBased), win->rect(uiRect_ParentBased));
-      if (win->isShown() && intersect(thisRect, winRect)) {
+      if (win->state().visible && intersect(thisRect, winRect)) {
         noIntesections = false;
         removeRectangle(rects, thisRect, winRect);
         Rect newRect = translate(intersection(thisRect, winRect), -win->pos().X, -win->pos().Y);
@@ -465,17 +467,23 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_parent(parent),
     m_pos(pos),
     m_size(size),
-    m_isActive(false),
-    m_isVisible(visible),
     m_mouseDownPos(Point(-1, -1)),
     m_next(NULL),
     m_prev(NULL),
     m_firstChild(NULL),
     m_lastChild(NULL)
 {
+  m_state.visible   = false;
+  m_state.maximized = false;
+  m_state.minimized = false;
+  m_state.active    = false;
+
   evtHandlerProps().isWindow = true;
   if (parent)
     parent->addChild(this);
+
+  if (visible)
+    show(true);
 }
 
 
@@ -553,6 +561,12 @@ void uiWindow::repaint(Rect const & rect)
 }
 
 
+void uiWindow::repaint()
+{
+  app()->repaintRect(rect(uiRect_ScreenBased));
+}
+
+
 Rect uiWindow::rect(uiWindowRectType rectType)
 {
   switch (rectType) {
@@ -573,7 +587,11 @@ Rect uiWindow::rect(uiWindowRectType rectType)
 
 void uiWindow::show(bool value)
 {
-  m_isVisible = value;
+  if (m_state.visible != value) {
+    m_state.visible = value;
+    uiEvent evt = uiEvent(this, value ? UIEVT_SHOW : UIEVT_HIDE);
+    app()->postEvent(&evt);
+  }
 }
 
 
@@ -595,11 +613,11 @@ void uiWindow::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_ACTIVATE:
-      m_isActive = true;
+      m_state.active = true;
       break;
 
     case UIEVT_DEACTIVATE:
-      m_isActive = false;
+      m_state.active = false;
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
@@ -615,6 +633,18 @@ void uiWindow::processEvent(uiEvent * event)
       // end capture mouse if left button is up
       if (event->params.mouse.changedButton == 1)
         app()->captureMouse(NULL);
+      break;
+
+    case UIEVT_SHOW:
+      repaint();
+      break;
+
+    case UIEVT_HIDE:
+      repaint();
+      break;
+
+    case UIEVT_CLOSE:
+      show(false);
       break;
 
     default:
@@ -699,7 +729,7 @@ void uiFrame::paintFrame()
   if (strlen(m_title)) {
     int titleBarHeight = m_style.titleFont->height;
     // title bar background
-    Color titleBarBrushColor = isActive() ? m_style.activeTitleBackgroundColor : m_style.normalTitleBackgroundColor;
+    Color titleBarBrushColor = state().active ? m_style.activeTitleBackgroundColor : m_style.normalTitleBackgroundColor;
     Canvas.setBrushColor(titleBarBrushColor);
     Canvas.fillRectangle(m_style.borderSize, m_style.borderSize, size().width - 1 - m_style.borderSize, 1 + titleBarHeight + m_style.borderSize);
     // title
@@ -715,7 +745,7 @@ void uiFrame::paintFrame()
         Canvas.fillRectangle(r);
         Canvas.setPenColor(m_style.mouseOverBruttonColor);
       } else
-        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
       r = shrink(r, 4);
       Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
       Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
@@ -728,7 +758,7 @@ void uiFrame::paintFrame()
         Canvas.fillRectangle(r);
         Canvas.setPenColor(m_style.mouseOverBruttonColor);
       } else
-        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
       r = shrink(r, 4);
       Canvas.drawRectangle(r);
     }
@@ -740,7 +770,7 @@ void uiFrame::paintFrame()
         Canvas.fillRectangle(r);
         Canvas.setPenColor(m_style.mouseOverBruttonColor);
       } else
-        Canvas.setPenColor(isActive() ? m_style.activeButtonColor : m_style.normalButtonColor);
+        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
       r = shrink(r, 4);
       int h = (r.Y2 - r.Y1 + 1) / 2;
       Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
@@ -750,7 +780,7 @@ void uiFrame::paintFrame()
   }
   // border
   if (m_style.borderSize > 0) {
-    Canvas.setPenColor(isActive() ? m_style.activeBorderColor : m_style.normalBorderColor);
+    Canvas.setPenColor(state().active ? m_style.activeBorderColor : m_style.normalBorderColor);
     for (int i = 0; i < m_style.borderSize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
     // adjust background rect

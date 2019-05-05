@@ -65,7 +65,7 @@ namespace fabgl {
 
 
 
-#define FABGLIB_UI_EVENTS_QUEUE_SIZE 32 // increase in case of garbage between windows!
+#define FABGLIB_UI_EVENTS_QUEUE_SIZE 64 // increase in case of garbage between windows!
 
 
 
@@ -92,6 +92,8 @@ enum uiEventID {
   UIEVT_CLOSE,
   UIEVT_MAXIMIZE,
   UIEVT_MINIMIZE,
+  UIEVT_SHOW,
+  UIEVT_HIDE,
 };
 
 
@@ -196,6 +198,14 @@ enum uiWindowRectType {
 };
 
 
+struct uiWindowState {
+  uint8_t visible   : 1;  // 0 = hidden, 1 = visible
+  uint8_t maximized : 1;  // 0 = normal, 1 = maximized
+  uint8_t minimized : 1;  // 0 = normal, 1 = minimized
+  uint8_t active    : 1;  // 0 = inactive, 1= active
+};
+
+
 class uiWindow : public uiEvtHandler {
 
 friend class uiApp;
@@ -232,11 +242,9 @@ public:
 
   virtual Rect rect(uiWindowRectType rectType);
 
-  bool isActive() { return m_isActive; }
-
   void show(bool value);
 
-  bool isShown() { return m_isVisible; }
+  uiWindowState state() { return m_state; }
 
   uiWindow * parent() { return m_parent; }
 
@@ -245,6 +253,8 @@ public:
   Rect transformRect(Rect const & rect, uiWindow * baseWindow);
 
   void repaint(Rect const & rect);
+
+  void repaint();
 
 
 protected:
@@ -256,26 +266,28 @@ protected:
 
   void beginPaint(uiEvent * event);
 
+  void setPos(Point const & p)        { m_pos = p; }
+  void setSize(Size const & s)        { m_size = s; }
+
 private:
 
-  uiWindow * m_parent;
+  uiWindow *    m_parent;
 
-  Point      m_pos;
-  Size       m_size;
+  Point         m_pos;
+  Size          m_size;
 
-  bool       m_isActive;
-  bool       m_isVisible;
+  uiWindowState m_state;
 
-  Point      m_mouseDownPos;    // mouse position when mouse down event has been received
+  Point         m_mouseDownPos;    // mouse position when mouse down event has been received
 
-  Point      m_posAtMouseDown;  // used to resize
-  Size       m_sizeAtMouseDown; // used to resize
+  Point         m_posAtMouseDown;  // used to resize
+  Size          m_sizeAtMouseDown; // used to resize
 
   // double linked list, order is: bottom (first items) -> up (last items)
-  uiWindow * m_next;
-  uiWindow * m_prev;
-  uiWindow * m_firstChild;
-  uiWindow * m_lastChild;
+  uiWindow *    m_next;
+  uiWindow *    m_prev;
+  uiWindow *    m_firstChild;
+  uiWindow *    m_lastChild;
 };
 
 
