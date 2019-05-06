@@ -388,6 +388,7 @@ protected:
 private:
 
   void paintFrame();
+  void paintButtons();
   void movingCapturedMouse(int mouseX, int mouseY);
   void movingFreeMouse(int mouseX, int mouseY);
   uiFrameSensiblePos getSensiblePosAt(int x, int y);
@@ -450,6 +451,8 @@ public:
   void moveWindow(uiWindow * window, int x, int y);
 
   void resizeWindow(uiWindow * window, int width, int height);
+
+  void resizeWindow(uiWindow * window, Size size);
 
   void reshapeWindow(uiWindow * window, Rect const & rect);
 

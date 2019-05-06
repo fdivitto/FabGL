@@ -378,6 +378,12 @@ void uiApp::resizeWindow(uiWindow * window, int width, int height)
 }
 
 
+void uiApp::resizeWindow(uiWindow * window, Size size)
+{
+  reshapeWindow(window, resize(window->rect(uiRect_ParentBased), size));
+}
+
+
 // coordinates relative to the parent window
 void uiApp::reshapeWindow(uiWindow * window, Rect const & rect)
 {
@@ -662,7 +668,9 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MINIMIZE:
-      // TODO
+      m_savedScreenRect = rect(uiRect_ParentBased);
+      m_state.minimized = true;
+      app()->resizeWindow(this, minWindowSize());
       break;
 
     case UIEVT_RESTORE:
@@ -761,44 +769,7 @@ void uiFrame::paintFrame()
     Canvas.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
     Canvas.drawText(m_style.titleFont, 1 + m_style.borderSize, 1 + m_style.borderSize, m_title);
     // close, maximize and minimze buttons
-    if (m_props.hasCloseButton) {
-      // close button
-      Rect r = getBtnRect(0);
-      if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
-        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
-        Canvas.fillRectangle(r);
-        Canvas.setPenColor(m_style.mouseOverBruttonColor);
-      } else
-        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-      r = shrink(r, 4);
-      Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
-      Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
-    }
-    if (m_props.hasMaximizeButton) {
-      // maximize button
-      Rect r = getBtnRect(1);
-      if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
-        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
-        Canvas.fillRectangle(r);
-        Canvas.setPenColor(m_style.mouseOverBruttonColor);
-      } else
-        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-      r = shrink(r, 4);
-      Canvas.drawRectangle(r);
-    }
-    if (m_props.hasMinimizeButton) {
-      // minimize button
-      Rect r = getBtnRect(2);
-      if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
-        Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
-        Canvas.fillRectangle(r);
-        Canvas.setPenColor(m_style.mouseOverBruttonColor);
-      } else
-        Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-      r = shrink(r, 4);
-      int h = (r.Y2 - r.Y1 + 1) / 2;
-      Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
-    }
+    paintButtons();
     // adjust background rect
     bkgRect.Y1 += 1 + titleBarHeight;
   }
@@ -816,6 +787,49 @@ void uiFrame::paintFrame()
   // background
   Canvas.setBrushColor(m_style.backgroundColor);
   Canvas.fillRectangle(bkgRect);
+}
+
+
+void uiFrame::paintButtons()
+{
+  if (m_props.hasCloseButton) {
+    // close button
+    Rect r = getBtnRect(0);
+    if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
+      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.fillRectangle(r);
+      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+    } else
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+    r = shrink(r, 4);
+    Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
+    Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
+  }
+  if (m_props.hasMaximizeButton) {
+    // maximize/restore button
+    Rect r = getBtnRect(1);
+    if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
+      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.fillRectangle(r);
+      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+    } else
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+    r = shrink(r, 4);
+    Canvas.drawRectangle(r);
+  }
+  if (m_props.hasMinimizeButton && !state().minimized) {
+    // minimize button
+    Rect r = getBtnRect(2);
+    if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
+      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.fillRectangle(r);
+      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+    } else
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+    r = shrink(r, 4);
+    int h = (r.Y2 - r.Y1 + 1) / 2;
+    Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
+  }
 }
 
 
@@ -888,7 +902,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   if (m_props.hasMaximizeButton && pointInRect(p, getBtnRect(1)))
     return uiSensPos_MaximizeButton; // on maximize button area
 
-  if (m_props.hasMinimizeButton && pointInRect(p, getBtnRect(2)))
+  if (m_props.hasMinimizeButton && !state().minimized && pointInRect(p, getBtnRect(2)))
     return uiSensPos_MinimizeButton; // on minimize button area
 
   int w = size().width;
@@ -1094,7 +1108,7 @@ void uiFrame::handleButtonsClick(int x, int y)
     app()->showWindow(this, false);
   else if (m_props.hasMaximizeButton && pointInRect(x, y, getBtnRect(1)))
     app()->maximizeWindow(this, !state().maximized);
-  else if (m_props.hasMinimizeButton && pointInRect(x, y, getBtnRect(2)))
+  else if (m_props.hasMinimizeButton && !state().minimized && pointInRect(x, y, getBtnRect(2)))
     app()->minimizeWindow(this, !state().minimized);
 }
 
