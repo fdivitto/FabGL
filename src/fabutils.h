@@ -241,6 +241,12 @@ inline Rect resize(Rect const & rect, int width, int height)
 }
 
 
+inline Rect resize(Rect const & rect, Size size)
+{
+  return Rect(rect.X1, rect.Y1, rect.X1 + size.width - 1, rect.Y1 + size.height - 1);
+}
+
+
 inline Point neg(Point const & point)
 {
   return Point(-point.X, -point.Y);
