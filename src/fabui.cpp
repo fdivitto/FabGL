@@ -307,23 +307,14 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
     m_activeWindow = value;
 
     if (m_activeWindow) {
-
       if (prev) {
         // deactivate previous window
         uiEvent evt = uiEvent(prev, UIEVT_DEACTIVATE);
         postEvent(&evt);
-        repaintWindow(prev);
       }
-
       // activate window
       uiEvent evt = uiEvent(m_activeWindow, UIEVT_ACTIVATE);
       postEvent(&evt);
-
-      for (uiWindow * child = m_activeWindow; child->parent() != NULL; child = child->parent()) {
-        child->parent()->moveChildOnTop(child);
-        repaintWindow(child);
-      }
-
     }
   }
 
@@ -544,11 +535,23 @@ void uiWindow::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_ACTIVATE:
-      m_state.active = true;
-      break;
+      {
+        m_state.active = true;
+        uiWindow * winToRepaint = this;
+        // move this window and parent windows on top (last position), and select the window to actually repaint
+        for (uiWindow * child = this; child->parent() != NULL; child = child->parent()) {
+          if (child != child->parent()->lastChild()) {
+            child->parent()->moveChildOnTop(child);
+            winToRepaint = child;
+          }
+        }
+        winToRepaint->repaint();
+        break;
+      }
 
     case UIEVT_DEACTIVATE:
       m_state.active = false;
+      repaint();
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
