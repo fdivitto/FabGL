@@ -39,7 +39,7 @@ namespace fabgl {
 void dumpEvent(uiEvent * event)
 {
   static int idx = 0;
-  static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_DEBUGMSG", "UIEVT_APPINIT", "UIEVT_ABSPAINT", "UIEVT_PAINT", "UIEVT_ACTIVATE",
+  static const char * TOSTR[] = { "UIEVT_NULL", "UIEVT_DEBUGMSG", "UIEVT_APPINIT", "UIEVT_GENPAINTEVENTS", "UIEVT_PAINT", "UIEVT_ACTIVATE",
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
@@ -66,7 +66,7 @@ void dumpEvent(uiEvent * event)
       Serial.printf("btn=%d", event->params.mouse.changedButton);
       break;
     case UIEVT_PAINT:
-    case UIEVT_ABSPAINT:
+    case UIEVT_GENPAINTEVENTS:
     case UIEVT_RESHAPEWINDOW:
       Serial.printf("rect=%d,%d,%d,%d", event->params.rect.X1, event->params.rect.Y1, event->params.rect.X2, event->params.rect.Y2);
       break;
@@ -189,32 +189,12 @@ void uiApp::run()
 void uiApp::preprocessEvent(uiEvent * event)
 {
   if (event->dest == NULL) {
-    // need to select a destination object
     switch (event->id) {
       case UIEVT_MOUSEMOVE:
       case UIEVT_MOUSEWHEEL:
       case UIEVT_MOUSEBUTTONDOWN:
       case UIEVT_MOUSEBUTTONUP:
         preprocessMouseEvent(event);
-        break;
-      case UIEVT_ABSPAINT:
-        // absolute paint
-        generatePaintEvents(m_rootWindow, event->params.rect);
-        break;
-      default:
-        break;
-    }
-  }
-
-  if (event->dest) {
-    switch (event->id) {
-      case UIEVT_MOUSEBUTTONDOWN:
-        // activate window
-        if (event->dest->evtHandlerProps().isWindow)
-          setActiveWindow((uiWindow*) event->dest);
-        break;
-      case UIEVT_RESHAPEWINDOW:
-        generateReshapeEvents((uiWindow*) event->dest, event->params.rect);
         break;
       default:
         break;
@@ -359,7 +339,7 @@ void uiApp::repaintWindow(uiWindow * window)
 
 void uiApp::repaintRect(Rect const & rect)
 {
-  uiEvent evt = uiEvent(NULL, UIEVT_ABSPAINT);
+  uiEvent evt = uiEvent(m_rootWindow, UIEVT_GENPAINTEVENTS);
   evt.params.rect = rect;
   postEvent(&evt);
 }
@@ -390,71 +370,6 @@ void uiApp::reshapeWindow(uiWindow * window, Rect const & rect)
   uiEvent evt = uiEvent(window, UIEVT_RESHAPEWINDOW);
   evt.params.rect = rect;
   postEvent(&evt);
-}
-
-
-// rect: new window rectangle based on parent coordinates
-void uiApp::generateReshapeEvents(uiWindow * window, Rect const & rect)
-{
-  // new rect based on root window coordiantes
-  Rect newRect = window->parent()->transformRect(rect, m_rootWindow);
-
-  // old rect based on root window coordinates
-  Rect oldRect = window->rect(uiRect_ScreenBased);
-
-  // set here because generatePaintEvents() requires updated window pos() and size()
-  window->setPos(Point(rect.X1, rect.Y1));
-  window->setSize(rect.size());
-
-  if (!oldRect.intersects(newRect)) {
-    // old position and new position do not intersect, just repaint old rect
-    generatePaintEvents(m_rootWindow, oldRect);
-  } else {
-    Stack<Rect> rects;
-    removeRectangle(rects, oldRect, newRect); // remove newRect from oldRect
-    while (!rects.isEmpty())
-      generatePaintEvents(m_rootWindow, rects.pop());
-  }
-
-  generatePaintEvents(m_rootWindow, newRect);
-
-  // generate set position event
-  uiEvent evt = uiEvent(window, UIEVT_SETPOS);
-  evt.params.pos = window->pos();
-  insertEvent(&evt);
-
-  // generate set size event
-  evt = uiEvent(window, UIEVT_SETSIZE);
-  evt.params.size = window->size();
-  insertEvent(&evt);
-}
-
-
-// given a relative paint rect generate a set of UIEVT_PAINT events
-void uiApp::generatePaintEvents(uiWindow * baseWindow, Rect const & rect)
-{
-  Stack<Rect> rects;
-  rects.push(rect);
-  while (!rects.isEmpty()) {
-    Rect thisRect = rects.pop();
-    bool noIntesections = true;
-    for (uiWindow * win = baseWindow->lastChild(); win; win = win->prev()) {
-      Rect winRect = baseWindow->rect(uiRect_ClientAreaWindowBased).intersection(win->rect(uiRect_ParentBased));
-      if (win->state().visible && thisRect.intersects(winRect)) {
-        noIntesections = false;
-        removeRectangle(rects, thisRect, winRect);
-        Rect newRect = thisRect.intersection(winRect).translate(-win->pos().X, -win->pos().Y);
-        generatePaintEvents(win, newRect);
-        break;
-      }
-    }
-    if (noIntesections) {
-      uiEvent evt = uiEvent(NULL, UIEVT_PAINT);
-      evt.dest = baseWindow;
-      evt.params.rect = thisRect;
-      insertEvent(&evt);
-    }
-  }
 }
 
 
@@ -640,6 +555,9 @@ void uiWindow::processEvent(uiEvent * event)
       m_mouseDownPos    = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
       m_posAtMouseDown  = m_pos;
       m_sizeAtMouseDown = m_size;
+      // activate window?
+      if (!m_state.active)
+        app()->setActiveWindow(this);
       // capture mouse if left button is down
       if (event->params.mouse.changedButton == 1)
         app()->captureMouse(this);
@@ -679,10 +597,86 @@ void uiWindow::processEvent(uiEvent * event)
       app()->reshapeWindow(this, m_savedScreenRect);
       break;
 
+    case UIEVT_RESHAPEWINDOW:
+      generateReshapeEvents(event->params.rect);
+      break;
+
+    case UIEVT_GENPAINTEVENTS:
+      generatePaintEvents(event->params.rect);
+      break;
+
     default:
       break;
   }
 }
+
+
+// given a relative paint rect generate a set of UIEVT_PAINT events
+void uiWindow::generatePaintEvents(Rect const & paintRect)
+{
+  Stack<Rect> rects;
+  rects.push(paintRect);
+  while (!rects.isEmpty()) {
+    Rect thisRect = rects.pop();
+    bool noIntesections = true;
+    for (uiWindow * win = lastChild(); win; win = win->prev()) {
+      Rect winRect = rect(uiRect_ClientAreaWindowBased).intersection(win->rect(uiRect_ParentBased));
+      if (win->state().visible && thisRect.intersects(winRect)) {
+        noIntesections = false;
+        removeRectangle(rects, thisRect, winRect);
+        Rect newRect = thisRect.intersection(winRect).translate(-win->pos().X, -win->pos().Y);
+        win->generatePaintEvents(newRect);
+        break;
+      }
+    }
+    if (noIntesections) {
+      uiEvent evt = uiEvent(NULL, UIEVT_PAINT);
+      evt.dest = this;
+      evt.params.rect = thisRect;
+      app()->insertEvent(&evt);
+    }
+  }
+}
+
+
+// insert UIEVT_PAINT, UIEVT_SETPOS and UIEVT_SETSIZE events in order to modify window bounding rect
+// rect: new window rectangle based on parent coordinates
+void uiWindow::generateReshapeEvents(Rect const & r)
+{
+  // new rect based on root window coordiantes
+  Rect newRect = parent()->transformRect(r, app()->rootWindow());
+
+  // old rect based on root window coordinates
+  Rect oldRect = rect(uiRect_ScreenBased);
+
+  // set here because generatePaintEvents() requires updated window pos() and size()
+  m_pos  = Point(r.X1, r.Y1);
+  m_size = r.size();
+
+  if (!oldRect.intersects(newRect)) {
+    // old position and new position do not intersect, just repaint old rect
+    app()->rootWindow()->generatePaintEvents(oldRect);
+  } else {
+    Stack<Rect> rects;
+    removeRectangle(rects, oldRect, newRect); // remove newRect from oldRect
+    while (!rects.isEmpty())
+      app()->rootWindow()->generatePaintEvents(rects.pop());
+  }
+
+  app()->rootWindow()->generatePaintEvents(newRect);
+
+  // generate set position event
+  uiEvent evt = uiEvent(this, UIEVT_SETPOS);
+  evt.params.pos = pos();
+  app()->insertEvent(&evt);
+
+  // generate set size event
+  evt = uiEvent(this, UIEVT_SETSIZE);
+  evt.params.size = size();
+  app()->insertEvent(&evt);
+}
+
+
 
 
 // uiWindow

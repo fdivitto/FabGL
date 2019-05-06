@@ -76,7 +76,7 @@ enum uiEventID {
   UIEVT_NULL,
   UIEVT_DEBUGMSG,
   UIEVT_APPINIT,
-  UIEVT_ABSPAINT,
+  UIEVT_GENPAINTEVENTS,
   UIEVT_PAINT,
   UIEVT_ACTIVATE,
   UIEVT_DEACTIVATE,
@@ -112,7 +112,7 @@ struct uiEvent {
       MouseStatus status;
       uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
     } mouse;
-    // event: UIEVT_PAINT, UIEVT_ABSPAINT, UIEVT_RESHAPEWINDOW
+    // event: UIEVT_PAINT, UIEVT_GENPAINTEVENTS, UIEVT_RESHAPEWINDOW
     Rect rect;
     // event: UIEVT_SETPOS
     Point pos;
@@ -254,7 +254,6 @@ public:
 
   void repaint();
 
-
 protected:
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
@@ -264,8 +263,8 @@ protected:
 
   void beginPaint(uiEvent * event);
 
-  void setPos(Point const & p)        { m_pos = p; }
-  void setSize(Size const & s)        { m_size = s; }
+  void generatePaintEvents(Rect const & paintRect);
+  void generateReshapeEvents(Rect const & r);
 
 private:
 
@@ -464,7 +463,6 @@ public:
 
   void minimizeWindow(uiWindow * window, bool value);
 
-
   // events
 
   virtual void OnInit();
@@ -478,8 +476,7 @@ private:
 
   void preprocessEvent(uiEvent * event);
   void preprocessMouseEvent(uiEvent * event);
-  void generatePaintEvents(uiWindow * baseWindow, Rect const & rect);
-  void generateReshapeEvents(uiWindow * window, Rect const & rect);
+
 
   QueueHandle_t m_eventsQueue;
 
