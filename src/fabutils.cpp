@@ -146,7 +146,7 @@ bool clipLine(int & x1, int & y1, int & x2, int & y2, Rect const & clipRect)
 
 void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & rectToRemove)
 {
-  if (!intersect(mainRect, rectToRemove) || contains(rectToRemove, mainRect))
+  if (!mainRect.intersects(rectToRemove) || rectToRemove.contains(mainRect))
     return;
 
   // top rectangle

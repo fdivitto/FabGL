@@ -232,7 +232,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
   if (m_capturedMouseWindow) {
     // mouse captured, just go back up to m_rootWindow
     for (uiWindow * cur = m_capturedMouseWindow; cur != m_rootWindow; cur = cur->parent())
-      mousePos = sub(mousePos, cur->pos());
+      mousePos = mousePos.sub(cur->pos());
     event->dest = m_capturedMouseWindow;
   } else {
     m_freeMouseWindow = screenToWindow(mousePos);
@@ -259,9 +259,9 @@ uiWindow * uiApp::screenToWindow(Point & point)
   while (win->hasChildren()) {
     uiWindow * child = win->lastChild();
     for (; child; child = child->prev()) {
-      if (child->state().visible && pointInRect(point, win->rect(uiRect_ClientAreaWindowBased)) && pointInRect(point, child->rect(uiRect_ParentBased))) {
+      if (child->state().visible && win->rect(uiRect_ClientAreaWindowBased).contains(point) && child->rect(uiRect_ParentBased).contains(point)) {
         win   = child;
-        point = sub(point, child->pos());
+        point = point.sub(child->pos());
         break;
       }
     }
@@ -374,13 +374,13 @@ void uiApp::moveWindow(uiWindow * window, int x, int y)
 
 void uiApp::resizeWindow(uiWindow * window, int width, int height)
 {
-  reshapeWindow(window, resize(window->rect(uiRect_ParentBased), width, height));
+  reshapeWindow(window, window->rect(uiRect_ParentBased).resize(width, height));
 }
 
 
 void uiApp::resizeWindow(uiWindow * window, Size size)
 {
-  reshapeWindow(window, resize(window->rect(uiRect_ParentBased), size));
+  reshapeWindow(window, window->rect(uiRect_ParentBased).resize(size));
 }
 
 
@@ -404,9 +404,9 @@ void uiApp::generateReshapeEvents(uiWindow * window, Rect const & rect)
 
   // set here because generatePaintEvents() requires updated window pos() and size()
   window->setPos(Point(rect.X1, rect.Y1));
-  window->setSize(rectSize(rect));
+  window->setSize(rect.size());
 
-  if (!intersect(oldRect, newRect)) {
+  if (!oldRect.intersects(newRect)) {
     // old position and new position do not intersect, just repaint old rect
     generatePaintEvents(m_rootWindow, oldRect);
   } else {
@@ -439,11 +439,11 @@ void uiApp::generatePaintEvents(uiWindow * baseWindow, Rect const & rect)
     Rect thisRect = rects.pop();
     bool noIntesections = true;
     for (uiWindow * win = baseWindow->lastChild(); win; win = win->prev()) {
-      Rect winRect = intersection(baseWindow->rect(uiRect_ClientAreaWindowBased), win->rect(uiRect_ParentBased));
-      if (win->state().visible && intersect(thisRect, winRect)) {
+      Rect winRect = baseWindow->rect(uiRect_ClientAreaWindowBased).intersection(win->rect(uiRect_ParentBased));
+      if (win->state().visible && thisRect.intersects(winRect)) {
         noIntesections = false;
         removeRectangle(rects, thisRect, winRect);
-        Rect newRect = translate(intersection(thisRect, winRect), -win->pos().X, -win->pos().Y);
+        Rect newRect = thisRect.intersection(winRect).translate(-win->pos().X, -win->pos().Y);
         generatePaintEvents(win, newRect);
         break;
       }
@@ -575,7 +575,7 @@ Rect uiWindow::transformRect(Rect const & rect, uiWindow * baseWindow)
 {
   Rect r = rect;
   for (uiWindow * win = this; win != baseWindow; win = win->m_parent)
-    r = translate(r, win->m_pos);
+    r = r.translate(win->m_pos);
   return r;
 }
 
@@ -617,7 +617,7 @@ void uiWindow::beginPaint(uiEvent * event)
   Canvas.setOrigin(srect.X1, srect.Y1);
   Rect clipRect = event->params.rect;
   if (m_parent)
-    clipRect = intersection(clipRect, translate(m_parent->rect(uiRect_ClientAreaWindowBased), neg(m_pos)));
+    clipRect = clipRect.intersection(m_parent->rect(uiRect_ClientAreaWindowBased).translate(m_pos.neg()));
   Canvas.setClippingRect(clipRect);
 }
 
@@ -749,7 +749,7 @@ Rect uiFrame::getBtnRect(int buttonIndex)
                       size().width - 1 - m_style.borderSize - CORNERSENSE,
                       m_style.borderSize + btnSize);
   while (buttonIndex--)
-    btnRect = translate(btnRect, -btnSize, 0);
+    btnRect = btnRect.translate(-btnSize, 0);
   return btnRect;
 }
 
@@ -801,7 +801,7 @@ void uiFrame::paintButtons()
       Canvas.setPenColor(m_style.mouseOverBruttonColor);
     } else
       Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-    r = shrink(r, 4);
+    r = r.shrink(4);
     Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
     Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
   }
@@ -814,7 +814,7 @@ void uiFrame::paintButtons()
       Canvas.setPenColor(m_style.mouseOverBruttonColor);
     } else
       Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-    r = shrink(r, 4);
+    r = r.shrink(4);
     Canvas.drawRectangle(r);
   }
   if (m_props.hasMinimizeButton && !state().minimized) {
@@ -826,7 +826,7 @@ void uiFrame::paintButtons()
       Canvas.setPenColor(m_style.mouseOverBruttonColor);
     } else
       Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
-    r = shrink(r, 4);
+    r = r.shrink(4);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
   }
@@ -896,13 +896,13 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 {
   Point p = Point(x, y);
 
-  if (m_props.hasCloseButton && pointInRect(p, getBtnRect(0)))
+  if (m_props.hasCloseButton && getBtnRect(0).contains(p))
     return uiSensPos_CloseButton;    // on Close Button area
 
-  if (m_props.hasMaximizeButton && pointInRect(p, getBtnRect(1)))
+  if (m_props.hasMaximizeButton && getBtnRect(1).contains(p))
     return uiSensPos_MaximizeButton; // on maximize button area
 
-  if (m_props.hasMinimizeButton && !state().minimized && pointInRect(p, getBtnRect(2)))
+  if (m_props.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
     return uiSensPos_MinimizeButton; // on minimize button area
 
   int w = size().width;
@@ -911,40 +911,40 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   if (m_props.resizeable && !state().maximized && !state().minimized) {
 
     // on top center, resize
-    if (pointInRect(p, Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize)))
+    if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize).contains(p))
       return uiSensPos_TopCenterResize;
 
     // on left center side, resize
-    if (pointInRect(p, Rect(0, CORNERSENSE, m_style.borderSize, h - CORNERSENSE)))
+    if (Rect(0, CORNERSENSE, m_style.borderSize, h - CORNERSENSE).contains(p))
       return uiSensPos_CenterLeftResize;
 
     // on right center side, resize
-    if (pointInRect(p, Rect(w - m_style.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE)))
+    if (Rect(w - m_style.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
       return uiSensPos_CenterRightResize;
 
     // on bottom center, resize
-    if (pointInRect(p, Rect(CORNERSENSE, h - m_style.borderSize, w - CORNERSENSE, h - 1)))
+    if (Rect(CORNERSENSE, h - m_style.borderSize, w - CORNERSENSE, h - 1).contains(p))
       return uiSensPos_BottomCenterResize;
 
     // on top left side, resize
-    if (pointInRect(p, Rect(0, 0, CORNERSENSE, CORNERSENSE)))
+    if (Rect(0, 0, CORNERSENSE, CORNERSENSE).contains(p))
       return uiSensPos_TopLeftResize;
 
     // on top right side, resize
-    if (pointInRect(p, Rect(w - CORNERSENSE, 0, w - 1, CORNERSENSE)))
+    if (Rect(w - CORNERSENSE, 0, w - 1, CORNERSENSE).contains(p))
       return uiSensPos_TopRightResize;
 
     // on bottom left side, resize
-    if (pointInRect(p, Rect(0, h - CORNERSENSE, CORNERSENSE, h - 1)))
+    if (Rect(0, h - CORNERSENSE, CORNERSENSE, h - 1).contains(p))
       return uiSensPos_BottomLeftResize;
 
     // on bottom right side, resize
-    if (pointInRect(p, Rect(w - CORNERSENSE, h - CORNERSENSE, w - 1, h - 1)))
+    if (Rect(w - CORNERSENSE, h - CORNERSENSE, w - 1, h - 1).contains(p))
       return uiSensPos_BottomRightResize;
 
   }
 
-  if (m_props.moveable && !state().maximized && pointInRect(p, Rect(1, 1, w - 2, 1 + m_style.titleFont->height)))
+  if (m_props.moveable && !state().maximized && Rect(1, 1, w - 2, 1 + m_style.titleFont->height).contains(p))
     return uiSensPos_MoveArea;       // on title bar, moving area
 
   return uiSensPos_None;
@@ -976,7 +976,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
       {
         Rect r = rect(uiRect_ParentBased);
         r.X1 = pos().X + dx;
-        if (rectSize(r).width >= minSize.width)
+        if (r.size().width >= minSize.width)
           app()->reshapeWindow(this, r);
         break;
       }
@@ -986,7 +986,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         Rect r = rect(uiRect_ParentBased);
         r.X1 = pos().X + dx;
         r.Y1 = pos().Y + dy;
-        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
         break;
       }
@@ -995,7 +995,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
       {
         Rect r = rect(uiRect_ParentBased);
         r.Y1 = pos().Y + dy;
-        if (rectSize(r).height >= minSize.height)
+        if (r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
         break;
       }
@@ -1005,7 +1005,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         Rect r = rect(uiRect_ParentBased);
         r.Y1 = pos().Y + dy;
         r.X2 = pos().X + sizeAtMouseDown().width + dx;
-        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
         break;
       }
@@ -1015,7 +1015,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         Rect r = rect(uiRect_ParentBased);
         r.X1 = pos().X + dx;
         r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
-        if (rectSize(r).width >= minSize.width && rectSize(r).height >= minSize.height)
+        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
         break;
       }
@@ -1104,11 +1104,11 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y)
 {
-  if (m_props.hasCloseButton && pointInRect(x, y, getBtnRect(0)))
+  if (m_props.hasCloseButton && getBtnRect(0).contains(x, y))
     app()->showWindow(this, false);
-  else if (m_props.hasMaximizeButton && pointInRect(x, y, getBtnRect(1)))
+  else if (m_props.hasMaximizeButton && getBtnRect(1).contains(x, y))
     app()->maximizeWindow(this, !state().maximized);
-  else if (m_props.hasMinimizeButton && !state().minimized && pointInRect(x, y, getBtnRect(2)))
+  else if (m_props.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y))
     app()->minimizeWindow(this, !state().minimized);
 }
 
