@@ -383,16 +383,19 @@ public:
 protected:
 
   Size minWindowSize();
+  int titleBarHeight();
 
 private:
 
   void paintFrame();
-  void paintButtons();
+  int paintButtons();
+  void paintTitle(int maxX);
   void movingCapturedMouse(int mouseX, int mouseY);
   void movingFreeMouse(int mouseX, int mouseY);
   uiFrameSensiblePos getSensiblePosAt(int x, int y);
   Rect getBtnRect(int buttonIndex);
   void handleButtonsClick(int x, int y);
+  void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
 
 
   static const int CORNERSENSE = 10;
