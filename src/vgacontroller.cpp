@@ -1511,7 +1511,7 @@ void IRAM_ATTR VGAControllerClass::execRenderGlyphsBuffer(GlyphsBufferRenderInfo
 void IRAM_ATTR VGAControllerClass::execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor)
 {
   hideSprites();
-  if (glyphOptions.fillBackground && !glyphOptions.bold && !glyphOptions.italic && !glyphOptions.blank && !glyphOptions.underline && !glyphOptions.doubleWidth && glyph.width <= 32)
+  if (!glyphOptions.bold && !glyphOptions.italic && !glyphOptions.blank && !glyphOptions.underline && !glyphOptions.doubleWidth && glyph.width <= 32)
     execDrawGlyph_light(glyph, glyphOptions, penColor, brushColor);
   else
     execDrawGlyph_full(glyph, glyphOptions, penColor, brushColor);
@@ -1670,7 +1670,7 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
 
 // assume:
 //   glyph.width <= 32
-//   glyphOptions.fillBackground = 1
+//   glyphOptions.fillBackground = 0 or 1
 //   glyphOptions.invert : 0 or 1
 //   glyphOptions.reduceLuminosity: 0 or 1
 //   glyphOptions.... others = 0
@@ -1738,6 +1738,8 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
     if (penColor.B > 2) penColor.B -= 2;
   }
 
+  bool fillBackground = glyphOptions.fillBackground;
+
   uint8_t penPattern   = preparePixel(penColor);
   uint8_t brushPattern = preparePixel(brushColor);
 
@@ -1747,8 +1749,16 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
 
     uint32_t src = (srcrow[0] << 24) | (srcrow[1] << 16) | (srcrow[2] << 8) | (srcrow[3]);
     src <<= X1;
-    for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
-      PIXELINROW(dstrow, adestX) = src & 0x80000000 ? penPattern : brushPattern;
+    if (fillBackground) {
+      // filled background
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
+        PIXELINROW(dstrow, adestX) = src & 0x80000000 ? penPattern : brushPattern;
+    } else {
+      // transparent background
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
+        if (src & 0x80000000)
+          PIXELINROW(dstrow, adestX) = penPattern;
+    }
   }
 }
 
