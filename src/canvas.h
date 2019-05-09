@@ -232,6 +232,18 @@ public:
   void setPenColor(Color color);
 
   /**
+   * @brief Set pen (foreground) color specifying color components.
+   *
+   * @param color Color RGB components.
+   *
+   * Example:
+   *
+   *      // Set white pen
+   *      Canvas.setPenColor(RGB(2,2,2));
+   */
+  void setPenColor(RGB const & color);
+
+  /**
    * @brief Set brush (background) color specifying color components.
    *
    * @param red Red color component. Minimum value is 0, maximum value is 1 with 8 colors and 3 with 64 colors.
@@ -259,6 +271,18 @@ public:
    *      Canvas.setBrushColor(Color::BrightBlue);
    */
   void setBrushColor(Color color);
+
+  /**
+   * @brief Set brush (background) color specifying color components.
+   *
+   * @param color The color RGB components.
+   *
+   * Example:
+   *
+   *      // Set blue brush
+   *      Canvas.setBrushColor(RGB(0, 0, 2);
+   */
+  void setBrushColor(RGB const & color);
 
   /**
    * @brief Fill a single pixel with the pen color.
@@ -587,6 +611,17 @@ public:
    *     Canvas.drawText(&FONT_8x8, 100, 100, "Hellow World!");
    */
   void drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap = false);
+
+  /**
+   * @brief Draw a string at specified position. Add ellipses before truncation.
+   *
+   * @param fontInfo Pointer to font structure containing font info and glyphs data.
+   * @param X Horizontal position of first character left side.
+   * @param Y Vertical position of first character top side.
+   * @param text String to draw (indexes in the character font glyphs set).
+   * @param maxX Maximum horizontal coordinate allowed.
+   */
+  void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
 
   /**
    * @brief Draw formatted text at specified position.

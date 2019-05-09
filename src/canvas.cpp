@@ -151,36 +151,42 @@ void CanvasClass::moveTo(int X, int Y)
 
 void CanvasClass::setPenColor(Color color)
 {
-  Primitive p;
-  p.cmd = PrimitiveCmd::SetPenColor;
-  p.color = RGB(color);
-  VGAController.addPrimitive(p);
+  setPenColor(RGB(color));
 }
 
 
 void CanvasClass::setPenColor(uint8_t red, uint8_t green, uint8_t blue)
 {
+  setPenColor(RGB(red, green, blue));
+}
+
+
+void CanvasClass::setPenColor(RGB const & color)
+{
   Primitive p;
   p.cmd = PrimitiveCmd::SetPenColor;
-  p.color = (RGB) {red, green, blue};
+  p.color = color;
   VGAController.addPrimitive(p);
 }
 
 
 void CanvasClass::setBrushColor(Color color)
 {
-  Primitive p;
-  p.cmd = PrimitiveCmd::SetBrushColor;
-  p.color = RGB(color);
-  VGAController.addPrimitive(p);
+  setBrushColor(RGB(color));
 }
 
 
 void CanvasClass::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 {
+  setBrushColor(RGB(red, green, blue));
+}
+
+
+void CanvasClass::setBrushColor(RGB const & color)
+{
   Primitive p;
   p.cmd = PrimitiveCmd::SetBrushColor;
-  p.color = (RGB) {red, green, blue};
+  p.color = color;
   VGAController.addPrimitive(p);
 }
 
@@ -339,6 +345,29 @@ void CanvasClass::drawText(FontInfo const * fontInfo, int X, int Y, char const *
     if (wrap && X >= getWidth()) {    // TODO: clipX2 instead of getWidth()?
       X = 0;
       Y += fontInfo->height;
+    }
+    if (fontInfo->chptr) {
+      // variable width
+      uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)(*text)];
+      fontWidth = *chptr++;
+      drawGlyph(X, Y, fontWidth, fontInfo->height, chptr, 0);
+    } else {
+      // fixed width
+      drawGlyph(X, Y, fontInfo->width, fontInfo->height, fontInfo->data, *text);
+    }
+  }
+}
+
+
+void CanvasClass::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX)
+{
+  int fontWidth  = fontInfo->width;
+  int fontHeight = fontInfo->height;
+  for (; *text; ++text, X += fontWidth) {
+    if (X >= maxX - fontHeight) {
+      // draw ellipsis and exit
+      drawText(fontInfo, X, Y, "...");
+      break;
     }
     if (fontInfo->chptr) {
       // variable width
