@@ -239,7 +239,7 @@ public:
    * Example:
    *
    *      // Set white pen
-   *      Canvas.setPenColor(RGB(2,2,2));
+   *      Canvas.setPenColor(RGB(3, 3, 3));
    */
   void setPenColor(RGB const & color);
 
@@ -280,7 +280,7 @@ public:
    * Example:
    *
    *      // Set blue brush
-   *      Canvas.setBrushColor(RGB(0, 0, 2);
+   *      Canvas.setBrushColor(RGB(0, 0, 3);
    */
   void setBrushColor(RGB const & color);
 
