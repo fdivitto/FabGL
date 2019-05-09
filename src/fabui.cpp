@@ -158,9 +158,13 @@ void uiApp::run()
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
   m_rootWindow->setApp(this);
-  m_rootWindow->style().borderSize = 0;
-  m_rootWindow->props().resizeable = false;
-  m_rootWindow->props().moveable = false;
+
+  m_rootWindow->style().borderSize      = 0;
+  m_rootWindow->style().backgroundColor = RGB(3, 3, 3);
+
+  m_rootWindow->frameProps().resizeable = false;
+  m_rootWindow->frameProps().moveable   = false;
+
   showWindow(m_rootWindow, true);
 
   m_activeWindow = m_rootWindow;
@@ -304,6 +308,16 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
   uiWindow * prev = m_activeWindow;
 
   if (value != m_activeWindow) {
+
+    // is "value" window activable? If not turn "value" to the first activabe parent
+    while (!value->m_windowProps.activable) {
+      value = value->m_parent;
+      if (!value)
+        return prev; // no parent is activable
+    }
+    if (value == m_activeWindow)
+      return prev;  // already active, nothing to do
+
     m_activeWindow = value;
 
     if (m_activeWindow) {
@@ -748,7 +762,7 @@ Size uiFrame::minWindowSize()
 {
   bool hasTitle = strlen(m_title);
   Size r = Size(0, 0);
-  if (m_props.resizeable && !state().minimized && !hasTitle) {
+  if (m_frameProps.resizeable && !state().minimized && !hasTitle) {
     r.width  += CORNERSENSE * 2;
     r.height += CORNERSENSE * 2;
   }
@@ -757,7 +771,7 @@ Size uiFrame::minWindowSize()
   if (hasTitle) {
     int barHeight = titleBarHeight();  // titleBarHeight is also the button width
     r.height += 1 + barHeight;
-    if (m_props.hasCloseButton || m_props.hasMaximizeButton || m_props.hasMinimizeButton)
+    if (m_frameProps.hasCloseButton || m_frameProps.hasMaximizeButton || m_frameProps.hasMinimizeButton)
       r.width += barHeight * 3;
     r.width += barHeight * 4;  // additional space to let some characters visible
   }
@@ -789,7 +803,7 @@ void uiFrame::paintFrame()
   if (strlen(m_title)) {
     int barHeight = titleBarHeight();
     // title bar background
-    Color titleBarBrushColor = state().active ? m_style.activeTitleBackgroundColor : m_style.normalTitleBackgroundColor;
+    RGB titleBarBrushColor = state().active ? m_style.activeTitleBackgroundColor : m_style.titleBackgroundColor;
     Canvas.setBrushColor(titleBarBrushColor);
     Canvas.fillRectangle(m_style.borderSize, m_style.borderSize, size().width - 1 - m_style.borderSize, 1 + barHeight + m_style.borderSize);
     // close, maximize and minimze buttons
@@ -801,7 +815,7 @@ void uiFrame::paintFrame()
   }
   // border
   if (m_style.borderSize > 0) {
-    Canvas.setPenColor(state().active ? m_style.activeBorderColor : m_style.normalBorderColor);
+    Canvas.setPenColor(state().active ? m_style.activeBorderColor : m_style.borderColor);
     for (int i = 0; i < m_style.borderSize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
     // adjust background rect
@@ -818,35 +832,12 @@ void uiFrame::paintFrame()
 }
 
 
-void uiFrame::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX)
-{
-  int fontWidth  = fontInfo->width;
-  int fontHeight = fontInfo->height;
-  for (; *text; ++text, X += fontWidth) {
-    if (X >= maxX - fontHeight) {
-      // draw ellipsis and exit
-      Canvas.drawText(fontInfo, X, Y, "...");
-      break;
-    }
-    if (fontInfo->chptr) {
-      // variable width
-      uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)(*text)];
-      fontWidth = *chptr++;
-      Canvas.drawGlyph(X, Y, fontWidth, fontInfo->height, chptr, 0);
-    } else {
-      // fixed width
-      Canvas.drawGlyph(X, Y, fontInfo->width, fontInfo->height, fontInfo->data, *text);
-    }
-  }
-}
-
-
 // maxX maximum X coordinate allowed
 void uiFrame::paintTitle(int maxX)
 {
-  Canvas.setPenColor(m_style.titleFontColor);
+  Canvas.setPenColor(state().active ? m_style.activeTitleFontColor : m_style.titleFontColor);
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
-  drawTextWithEllipsis(m_style.titleFont, 1 + m_style.borderSize, 1 + m_style.borderSize, m_title, maxX);
+  Canvas.drawTextWithEllipsis(m_style.titleFont, 1 + m_style.borderSize, 1 + m_style.borderSize, m_title, maxX);
 }
 
 
@@ -854,30 +845,30 @@ void uiFrame::paintTitle(int maxX)
 int uiFrame::paintButtons()
 {
   int buttonsX = m_style.borderSize;
-  if (m_props.hasCloseButton) {
+  if (m_frameProps.hasCloseButton) {
     // close button
     Rect r = getBtnRect(0);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
       Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      Canvas.setPenColor(m_style.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
     r = r.shrink(4);
     Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
     Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
   }
-  if (m_props.hasMaximizeButton) {
+  if (m_frameProps.hasMaximizeButton) {
     // maximize/restore button
     Rect r = getBtnRect(1);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
       Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      Canvas.setPenColor(m_style.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
     r = r.shrink(4);
     if (state().maximized || state().minimized) {
       // draw restore (from maximize or minimize) button
@@ -892,16 +883,16 @@ int uiFrame::paintButtons()
     } else
       Canvas.drawRectangle(r);
   }
-  if (m_props.hasMinimizeButton && !state().minimized) {
+  if (m_frameProps.hasMinimizeButton && !state().minimized) {
     // minimize button
     Rect r = getBtnRect(2);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
       Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverBruttonColor);
+      Canvas.setPenColor(m_style.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.normalButtonColor);
+      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
     r = r.shrink(4);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
@@ -960,19 +951,19 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 {
   Point p = Point(x, y);
 
-  if (m_props.hasCloseButton && getBtnRect(0).contains(p))
+  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(p))
     return uiSensPos_CloseButton;    // on Close Button area
 
-  if (m_props.hasMaximizeButton && getBtnRect(1).contains(p))
+  if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
     return uiSensPos_MaximizeButton; // on maximize button area
 
-  if (m_props.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
+  if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
     return uiSensPos_MinimizeButton; // on minimize button area
 
   int w = size().width;
   int h = size().height;
 
-  if (m_props.resizeable && !state().maximized && !state().minimized) {
+  if (m_frameProps.resizeable && !state().maximized && !state().minimized) {
 
     // on top center, resize
     if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize).contains(p))
@@ -1008,7 +999,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
   }
 
-  if (m_props.moveable && !state().maximized && Rect(1, 1, w - 2, 1 + titleBarHeight()).contains(p))
+  if (m_frameProps.moveable && !state().maximized && Rect(1, 1, w - 2, 1 + titleBarHeight()).contains(p))
     return uiSensPos_MoveArea;       // on title bar, moving area
 
   return uiSensPos_None;
@@ -1168,11 +1159,11 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y)
 {
-  if (m_props.hasCloseButton && getBtnRect(0).contains(x, y))
+  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y))
     app()->showWindow(this, false);
-  else if (m_props.hasMaximizeButton && getBtnRect(1).contains(x, y))
+  else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y))
     app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-  else if (m_props.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y))
+  else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y))
     app()->minimizeWindow(this, !state().minimized);
   else
     return;
@@ -1184,6 +1175,103 @@ void uiFrame::handleButtonsClick(int x, int y)
 // uiFrame
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiControl
+
+
+uiControl::uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiWindow(parent, pos, size, visible)
+{
+  evtHandlerProps().isControl = true;
+  windowProps().activable = false;
+}
+
+
+uiControl::~uiControl()
+{
+}
+
+void uiControl::processEvent(uiEvent * event)
+{
+  uiWindow::processEvent(event);
+}
+
+
+
+// uiControl
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiButton
+
+
+uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
+  : uiControl(parent, pos, size, visible)
+{
+}
+
+
+uiButton::~uiButton()
+{
+}
+
+
+void uiButton::paintButton()
+{
+  Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
+  // border
+  if (m_style.borderSize > 0) {
+    Canvas.setPenColor(m_style.borderColor);
+    for (int i = 0; i < m_style.borderSize; ++i)
+      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
+    // adjust background rect
+    bkgRect.X1 += m_style.borderSize;
+    bkgRect.Y1 += m_style.borderSize;
+    bkgRect.X2 -= m_style.borderSize;
+    bkgRect.Y2 -= m_style.borderSize;
+  }
+  // background
+  Canvas.setBrushColor(m_style.backgroundColor);
+  Canvas.fillRectangle(bkgRect);
+}
+
+
+void uiButton::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event);
+      paintButton();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      break;
+
+    case UIEVT_MOUSEBUTTONUP:
+      break;
+
+    case UIEVT_MOUSEMOVE:
+      break;
+
+    case UIEVT_MOUSELEAVE:
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+
+// uiButton
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

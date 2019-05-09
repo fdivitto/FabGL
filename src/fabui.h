@@ -151,11 +151,13 @@ public:
 
 struct uiEvtHandlerProps {
   int isWindow         : 1; // is a uiWindow or inherited object
-  int isFrame          : 1; // is a uiFrame of inherited object
+  int isFrame          : 1; // is a uiFrame or inherited object
+  int isControl        : 1; // is a uiControl or inherited object
 
   uiEvtHandlerProps() :
     isWindow(false),
-    isFrame(false)
+    isFrame(false),
+    isControl(false)
   {
   }
 };
@@ -175,12 +177,12 @@ public:
 
   void setApp(uiApp * value) { m_app = value; }
 
-  uiEvtHandlerProps & evtHandlerProps() { return m_props; }
+  uiEvtHandlerProps & evtHandlerProps() { return m_evtHandlerProps; }
 
 private:
 
   uiApp *           m_app;
-  uiEvtHandlerProps m_props;
+  uiEvtHandlerProps m_evtHandlerProps;
 };
 
 
@@ -204,6 +206,16 @@ struct uiWindowState {
   uint8_t minimized : 1;  // 0 = normal, 1 = minimized
   uint8_t active    : 1;  // 0 = inactive, 1= active
 };
+
+
+struct uiWindowProps {
+  uint8_t activable : 1;
+
+  uiWindowProps() :
+    activable(true)
+  { }
+};
+
 
 
 class uiWindow : public uiEvtHandler {
@@ -244,6 +256,8 @@ public:
 
   uiWindowState state() { return m_state; }
 
+  uiWindowProps & windowProps() { return m_windowProps; }
+
   uiWindow * parent() { return m_parent; }
 
   Point mouseDownPos() { return m_mouseDownPos; }
@@ -278,6 +292,8 @@ private:
 
   uiWindowState m_state;
 
+  uiWindowProps m_windowProps;
+
   Point         m_mouseDownPos;    // mouse position when mouse down event has been received
 
   Point         m_posAtMouseDown;  // used to resize
@@ -296,32 +312,34 @@ private:
 // uiFrame
 
 struct uiFrameStyle {
-  Color            backgroundColor;
-  Color            normalBorderColor;
-  Color            activeBorderColor;
-  Color            normalTitleBackgroundColor;
-  Color            activeTitleBackgroundColor;
-  Color            titleFontColor;
+  RGB              backgroundColor;
+  RGB              borderColor;
+  RGB              activeBorderColor;
+  RGB              titleBackgroundColor;
+  RGB              activeTitleBackgroundColor;
+  RGB              titleFontColor;
+  RGB              activeTitleFontColor;
   FontInfo const * titleFont;
   int              borderSize;
-  Color            activeButtonColor; // color used to draw Close, Maximize and Minimize buttons
-  Color            normalButtonColor; // color used to draw Close, Maximize and Minimize buttons
-  Color            mouseOverBackgroundButtonColor;  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
-  Color            mouseOverBruttonColor;           // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
+  RGB              buttonColor;                     // color used to draw Close, Maximize and Minimize buttons
+  RGB              activeButtonColor;               // color used to draw Close, Maximize and Minimize buttons
+  RGB              mouseOverBackgroundButtonColor;  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
+  RGB              mouseOverButtonColor;            // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
 
   uiFrameStyle() :
-    backgroundColor(Color::White),
-    normalBorderColor(Color::BrightBlack),
-    activeBorderColor(Color::BrightBlue),
-    normalTitleBackgroundColor(Color::White),
-    activeTitleBackgroundColor(Color::BrightWhite),
-    titleFontColor(Color::BrightBlack),
+    backgroundColor(RGB(3, 3, 3)),
+    borderColor(RGB(2, 2, 2)),
+    activeBorderColor(RGB(0, 0, 2)),
+    titleBackgroundColor(RGB(2, 2, 2)),
+    activeTitleBackgroundColor(RGB(0, 0, 2)),
+    titleFontColor(RGB(0, 0, 0)),
+    activeTitleFontColor(RGB(3, 3, 3)),
     titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
     borderSize(2),
-    activeButtonColor(Color::BrightBlue),
-    normalButtonColor(Color::BrightBlack),
-    mouseOverBackgroundButtonColor(Color::BrightBlue),
-    mouseOverBruttonColor(Color::BrightWhite)
+    buttonColor(RGB(1, 1, 1)),
+    activeButtonColor(RGB(2, 2, 2)),
+    mouseOverBackgroundButtonColor(RGB(0, 0, 3)),
+    mouseOverButtonColor(RGB(3, 3, 3))
   { }
 };
 
@@ -376,7 +394,7 @@ public:
 
   uiFrameStyle & style() { return m_style; }
 
-  uiFrameProps & props() { return m_props; }
+  uiFrameProps & frameProps() { return m_frameProps; }
 
   Rect rect(uiWindowRectType rectType);
 
@@ -403,7 +421,7 @@ private:
 
   uiFrameStyle m_style;
 
-  uiFrameProps m_props;
+  uiFrameProps m_frameProps;
 
   char const * m_title;
 
@@ -411,6 +429,66 @@ private:
   uiFrameSensiblePos m_mouseMoveSensiblePos;  // sensible position on mouse move
 
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiControl
+
+
+class uiControl : public uiWindow {
+
+public:
+
+  uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible);
+
+  virtual ~uiControl();
+
+  virtual void processEvent(uiEvent * event);
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiButton
+
+
+
+struct uiButtonStyle {
+  RGB              backgroundColor;
+  RGB              borderColor;
+  RGB              titleFontColor;
+  FontInfo const * titleFont;
+  int              borderSize;
+
+  uiButtonStyle() :
+    backgroundColor(RGB(2, 2, 2)),
+    borderColor(RGB(1, 1, 1)),
+    titleFontColor(RGB(0, 0, 0)),
+    titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
+    borderSize(1)
+  { }
+};
+
+
+class uiButton : public uiControl {
+
+public:
+
+  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible);
+
+  virtual ~uiButton();
+
+  virtual void processEvent(uiEvent * event);
+
+private:
+
+  void paintButton();
+
+
+  uiButtonStyle m_style;
+};
+
 
 
 
