@@ -382,6 +382,21 @@ void CanvasClass::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, 
 }
 
 
+int CanvasClass::textExtent(FontInfo const * fontInfo, char const * text)
+{
+  int fontWidth  = fontInfo->width;
+  int extent = 0;
+  for (; *text; ++text, extent += fontWidth) {
+    if (fontInfo->chptr) {
+      // variable width
+      uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)(*text)];
+      fontWidth = *chptr;
+    }
+  }
+  return extent;
+}
+
+
 void CanvasClass::drawTextFmt(int X, int Y, const char *format, ...)
 {
   va_list ap;

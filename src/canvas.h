@@ -624,6 +624,14 @@ public:
   void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
 
   /**
+   * @brief Calculate text extension in pixels.
+   *
+   * @param fontInfo Pointer to font structure containing font info and glyphs data.
+   * @param text String to calculate length (indexes in the character font glyphs set).
+   */
+  int textExtent(FontInfo const * fontInfo, char const * text);
+
+  /**
    * @brief Draw formatted text at specified position.
    *
    * drawTextFmt() uses currently selected font (selectFont() method) and currently selected glyph options (setGlyphOptions() method).
