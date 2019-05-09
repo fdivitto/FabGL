@@ -820,11 +820,12 @@ void uiFrame::paintFrame()
 
 void uiFrame::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX)
 {
-  int fontWidth = fontInfo->width;
+  int fontWidth  = fontInfo->width;
+  int fontHeight = fontInfo->height;
   for (; *text; ++text, X += fontWidth) {
-    if (X >= maxX) {
+    if (X >= maxX - fontHeight) {
       // draw ellipsis and exit
-      // TODO
+      Canvas.drawText(fontInfo, X, Y, "...");
       break;
     }
     if (fontInfo->chptr) {
