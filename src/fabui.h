@@ -268,6 +268,8 @@ public:
 
   void repaint();
 
+  bool isMouseOver() { return m_isMouseOver; }
+
 protected:
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
@@ -298,6 +300,8 @@ private:
 
   Point         m_posAtMouseDown;  // used to resize
   Size          m_sizeAtMouseDown; // used to resize
+
+  bool          m_isMouseOver;     // true after mouse entered, false after mouse left
 
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow *    m_next;

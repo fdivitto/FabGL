@@ -421,6 +421,7 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_pos(pos),
     m_size(size),
     m_mouseDownPos(Point(-1, -1)),
+    m_isMouseOver(false),
     m_next(NULL),
     m_prev(NULL),
     m_firstChild(NULL),
@@ -631,6 +632,14 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_GENPAINTEVENTS:
       generatePaintEvents(event->params.rect);
+      break;
+
+    case UIEVT_MOUSEENTER:
+      m_isMouseOver = true;
+      break;
+
+    case UIEVT_MOUSELEAVE:
+      m_isMouseOver = false;
       break;
 
     default:
