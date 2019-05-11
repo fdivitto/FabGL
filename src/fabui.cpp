@@ -235,6 +235,13 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 }
 
 
+// allow a window to capture mouse. window = NULL to end mouse capture
+void uiApp::captureMouse(uiWindow * window)
+{
+  m_capturedMouseWindow = window;
+}
+
+
 // convert screen coordinates to window coordinates (the most visible window)
 // return the window under specified absolute coordinates
 uiWindow * uiApp::screenToWindow(Point & point)

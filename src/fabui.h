@@ -498,7 +498,7 @@ public:
 
   uiWindow * setActiveWindow(uiWindow * value);
 
-  void captureMouse(uiWindow * window) { m_capturedMouseWindow = window; }
+  void captureMouse(uiWindow * window);
 
   uiWindow * capturedMouseWindow() { return m_capturedMouseWindow; }
 
