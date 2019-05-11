@@ -218,6 +218,15 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
     for (uiWindow * cur = m_capturedMouseWindow; cur != m_rootWindow; cur = cur->parent())
       mousePos = mousePos.sub(cur->pos());
     event->dest = m_capturedMouseWindow;
+    if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
+      // mouse up will end mouse capture, check that mouse is still inside
+      if (!m_capturedMouseWindow->rect(uiRect_WindowBased).contains(mousePos)) {
+        // mouse is not inside, post mouse leave and enter events
+        uiEvent evt = uiEvent(m_capturedMouseWindow, UIEVT_MOUSELEAVE);
+        postEvent(&evt);
+        m_freeMouseWindow = oldFreeMouseWindow = NULL;
+      }
+    }
   } else {
     m_freeMouseWindow = screenToWindow(mousePos);
     event->dest = m_freeMouseWindow;
@@ -227,10 +236,14 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 
   // insert UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
   if (oldFreeMouseWindow != m_freeMouseWindow) {
-    uiEvent evt = uiEvent(m_freeMouseWindow, UIEVT_MOUSEENTER);
-    insertEvent(&evt);
-    evt = uiEvent(oldFreeMouseWindow, UIEVT_MOUSELEAVE);
-    insertEvent(&evt);
+    if (m_freeMouseWindow) {
+      uiEvent evt = uiEvent(m_freeMouseWindow, UIEVT_MOUSEENTER);
+      insertEvent(&evt);
+    }
+    if (oldFreeMouseWindow) {
+      uiEvent evt = uiEvent(oldFreeMouseWindow, UIEVT_MOUSELEAVE);
+      insertEvent(&evt);
+    }
   }
 }
 
