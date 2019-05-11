@@ -312,35 +312,19 @@ private:
 // uiFrame
 
 struct uiFrameStyle {
-  RGB              backgroundColor;
-  RGB              borderColor;
-  RGB              activeBorderColor;
-  RGB              titleBackgroundColor;
-  RGB              activeTitleBackgroundColor;
-  RGB              titleFontColor;
-  RGB              activeTitleFontColor;
-  FontInfo const * titleFont;
-  int              borderSize;
-  RGB              buttonColor;                     // color used to draw Close, Maximize and Minimize buttons
-  RGB              activeButtonColor;               // color used to draw Close, Maximize and Minimize buttons
-  RGB              mouseOverBackgroundButtonColor;  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
-  RGB              mouseOverButtonColor;            // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
-
-  uiFrameStyle() :
-    backgroundColor(RGB(3, 3, 3)),
-    borderColor(RGB(2, 2, 2)),
-    activeBorderColor(RGB(0, 0, 2)),
-    titleBackgroundColor(RGB(2, 2, 2)),
-    activeTitleBackgroundColor(RGB(0, 0, 2)),
-    titleFontColor(RGB(0, 0, 0)),
-    activeTitleFontColor(RGB(3, 3, 3)),
-    titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
-    borderSize(2),
-    buttonColor(RGB(1, 1, 1)),
-    activeButtonColor(RGB(2, 2, 2)),
-    mouseOverBackgroundButtonColor(RGB(0, 0, 3)),
-    mouseOverButtonColor(RGB(3, 3, 3))
-  { }
+  RGB              backgroundColor                = RGB(3, 3, 3);
+  RGB              borderColor                    = RGB(2, 2, 2);
+  RGB              activeBorderColor              = RGB(2, 2, 3);
+  RGB              titleBackgroundColor           = RGB(2, 2, 2);
+  RGB              activeTitleBackgroundColor     = RGB(2, 2, 3);
+  RGB              titleFontColor                 = RGB(0, 0, 0);
+  RGB              activeTitleFontColor           = RGB(0, 0, 0);
+  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(14, false);
+  int              borderSize                     = 2;
+  RGB              buttonColor                    = RGB(1, 1, 1);  // color used to draw Close, Maximize and Minimize buttons
+  RGB              activeButtonColor              = RGB(0, 0, 0);  // color used to draw Close, Maximize and Minimize buttons
+  RGB              mouseOverBackgroundButtonColor = RGB(0, 0, 3);  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
+  RGB              mouseOverButtonColor           = RGB(3, 3, 3);  // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
 };
 
 
@@ -455,19 +439,13 @@ public:
 
 
 struct uiButtonStyle {
-  RGB              backgroundColor;
-  RGB              borderColor;
-  RGB              titleFontColor;
-  FontInfo const * titleFont;
-  int              borderSize;
-
-  uiButtonStyle() :
-    backgroundColor(RGB(2, 2, 2)),
-    borderColor(RGB(1, 1, 1)),
-    titleFontColor(RGB(0, 0, 0)),
-    titleFont(Canvas.getPresetFontInfoFromHeight(14, false)),
-    borderSize(1)
-  { }
+  RGB              backgroundColor          = RGB(2, 2, 2);
+  RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
+  RGB              downBackgroundColor      = RGB(3, 3, 3);
+  RGB              borderColor              = RGB(1, 1, 1);
+  RGB              textFontColor            = RGB(0, 0, 0);
+  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
+  int              borderSize               = 1;
 };
 
 
