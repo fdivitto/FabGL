@@ -173,6 +173,10 @@ struct MouseStatus {
 
 
 
+///////////////////////////////////////////////////////////////////////////////////
+// TimeOut
+
+
 struct TimeOut {
   TimeOut();
 
@@ -183,6 +187,10 @@ private:
   int64_t m_start;
 };
 
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// Stack
 
 
 template <typename T>
@@ -215,7 +223,33 @@ private:
 };
 
 
+
 ///////////////////////////////////////////////////////////////////////////////////
+// Delegate
+
+template <typename ...Params>
+struct Delegate {
+
+  template <typename Func>
+  void operator=(Func f) {
+    static Func s_func = f; // static allow extend "f" lifetime. m_closure doesn't need that because it is like a static func
+    m_closure = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
+    m_func    = &s_func;
+  }
+
+  void operator()(const Params & ...params) {
+    if (m_func)
+      m_closure(m_func, params...);
+  }
+
+private:
+  void (*m_closure)(void * func, const Params & ...params);
+  void * m_func = NULL;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
 
 
 bool clipLine(int & x1, int & y1, int & x2, int & y2, Rect const & clipRect);
