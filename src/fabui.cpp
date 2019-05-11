@@ -137,7 +137,8 @@ uiApp::uiApp()
     m_rootWindow(NULL),
     m_activeWindow(NULL),
     m_capturedMouseWindow(NULL),
-    m_freeMouseWindow(NULL)
+    m_freeMouseWindow(NULL),
+    m_combineMouseMoveEvents(false)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 }
@@ -211,6 +212,12 @@ void uiApp::preprocessEvent(uiEvent * event)
 // generate UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
 void uiApp::preprocessMouseEvent(uiEvent * event)
 {
+  if (m_combineMouseMoveEvents && event->id == UIEVT_MOUSEMOVE) {
+    uiEvent nextEvent;
+    while (peekEvent(&nextEvent, 0) && nextEvent.id == UIEVT_MOUSEMOVE)
+      getEvent(event, -1);
+  }
+
   uiWindow * oldFreeMouseWindow = m_freeMouseWindow;
   Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
   if (m_capturedMouseWindow) {
@@ -304,6 +311,12 @@ void uiApp::postDebugMsg(char const * msg)
 bool uiApp::getEvent(uiEvent * event, int timeOutMS)
 {
   return xQueueReceive(m_eventsQueue, event,  timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS)) == pdTRUE;
+}
+
+
+bool uiApp::peekEvent(uiEvent * event, int timeOutMS)
+{
+  return xQueuePeek(m_eventsQueue, event,  timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS)) == pdTRUE;
 }
 
 
@@ -945,14 +958,18 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       m_mouseDownSensiblePos = getSensiblePosAt(event->params.mouse.status.X, event->params.mouse.status.Y);
+      app()->combineMouseMoveEvents(true);
       break;
 
     case UIEVT_MOUSEBUTTONUP:
       // this sets the right mouse cursor in case of end of capturing
       movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+
       // handle buttons clicks
       if (event->params.mouse.changedButton == 1)
         handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
+
+      app()->combineMouseMoveEvents(false);
       break;
 
     case UIEVT_MOUSEMOVE:

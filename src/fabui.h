@@ -540,6 +540,8 @@ public:
 
   void minimizeWindow(uiWindow * window, bool value);
 
+  void combineMouseMoveEvents(bool value) { m_combineMouseMoveEvents = value; }
+
   // events
 
   virtual void OnInit();
@@ -547,6 +549,7 @@ public:
 protected:
 
   bool getEvent(uiEvent * event, int timeOutMS);
+  bool peekEvent(uiEvent * event, int timeOutMS);
 
 
 private:
@@ -563,6 +566,8 @@ private:
   uiWindow * m_capturedMouseWindow; // window that has captured mouse
 
   uiWindow * m_freeMouseWindow;     // window where mouse is over
+
+  bool m_combineMouseMoveEvents;
 };
 
 
