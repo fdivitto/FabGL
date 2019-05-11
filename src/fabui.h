@@ -411,7 +411,7 @@ private:
 
   uiFrameProps m_frameProps;
 
-  char const * m_title;
+  char * m_title;
 
   uiFrameSensiblePos m_mouseDownSensiblePos;  // sensible position on mouse down
   uiFrameSensiblePos m_mouseMoveSensiblePos;  // sensible position on mouse move
@@ -463,12 +463,26 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
+  void setText(char const * value);
+
+  char const * text() { return m_text; }
+
+
+  // Delegates
+
+  Delegate<> onClick;
+
+
 private:
 
   void paintButton();
+  void paintText(Rect const & rect);
 
 
   uiButtonStyle m_style;
+
+  char * m_text;
+  int    m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
 };
 
 

@@ -740,11 +740,12 @@ void uiWindow::generateReshapeEvents(Rect const & r)
 
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
-    m_title(title),
+    m_title(NULL),
     m_mouseDownSensiblePos(uiSensPos_None),
     m_mouseMoveSensiblePos(uiSensPos_None)
 {
   evtHandlerProps().isFrame = true;
+  setTitle(title);
 }
 
 
@@ -753,10 +754,11 @@ uiFrame::~uiFrame()
 }
 
 
-// todo: make a copy of title
 void uiFrame::setTitle(char const * value)
 {
-  m_title = value;
+  int len = strlen(value);
+  m_title = (char*) realloc(m_title, len + 1);
+  strcpy(m_title, value);
 }
 
 
@@ -1239,13 +1241,26 @@ void uiControl::processEvent(uiEvent * event)
 
 
 uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible)
+  : uiControl(parent, pos, size, visible),
+    m_text(NULL),
+    m_textExtent(0)
 {
+  setText(text);
 }
 
 
 uiButton::~uiButton()
 {
+}
+
+
+void uiButton::setText(char const * value)
+{
+  int len = strlen(value);
+  m_text = (char*) realloc(m_text, len + 1);
+  strcpy(m_text, value);
+
+  m_textExtent = Canvas.textExtent(m_style.textFont, value);
 }
 
 
@@ -1264,8 +1279,24 @@ void uiButton::paintButton()
     bkgRect.Y2 -= m_style.borderSize;
   }
   // background
-  Canvas.setBrushColor(m_style.backgroundColor);
+  RGB bkColor = m_style.backgroundColor;
+  if (app()->capturedMouseWindow() == this)
+    bkColor = m_style.downBackgroundColor;
+  else if (isMouseOver())
+    bkColor = m_style.mouseOverBackgroundColor;
+  Canvas.setBrushColor(bkColor);
   Canvas.fillRectangle(bkgRect);
+  // text
+  paintText(bkgRect);
+}
+
+
+void uiButton::paintText(Rect const & rect)
+{
+  int x = rect.X1 + (rect.size().width - m_textExtent) / 2;
+  int y = rect.Y1 + (rect.size().height - m_style.textFont->height) / 2;
+  Canvas.setPenColor(m_style.textFontColor);
+  Canvas.drawText(m_style.textFont, x, y, m_text);
 }
 
 
@@ -1281,15 +1312,26 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
+      repaint();
       break;
 
     case UIEVT_MOUSEBUTTONUP:
+      // this check is required to avoid onclick event when mouse is captured and moved out of button area
+      if (rect(uiRect_WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+        onClick();
+      repaint();
       break;
 
     case UIEVT_MOUSEMOVE:
       break;
 
+    case UIEVT_MOUSEENTER:
+      VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
+      repaint();  // to update background color
+      break;
+
     case UIEVT_MOUSELEAVE:
+      repaint();  // to update background color
       break;
 
     default:
