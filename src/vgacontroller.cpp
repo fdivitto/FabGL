@@ -709,11 +709,17 @@ void volatile * VGAControllerClass::getDMABuffer(int index, int * length)
 }
 
 
-uint8_t IRAM_ATTR VGAControllerClass::preparePixel(RGB rgb, bool HSync, bool VSync)
+uint8_t IRAM_ATTR VGAControllerClass::packHVSync(bool HSync, bool VSync)
 {
   uint8_t hsync_value = (m_timings.HSyncLogic == '+' ? (HSync ? 1 : 0) : (HSync ? 0 : 1));
   uint8_t vsync_value = (m_timings.VSyncLogic == '+' ? (VSync ? 1 : 0) : (VSync ? 0 : 1));
-  return (vsync_value << VSYNC_BIT) | (hsync_value << HSYNC_BIT) | (rgb.B << BLUE_BIT) | (rgb.G << GREEN_BIT) | (rgb.R << RED_BIT);
+  return (vsync_value << VSYNC_BIT) | (hsync_value << HSYNC_BIT);
+}
+
+
+uint8_t IRAM_ATTR VGAControllerClass::preparePixel(RGB rgb, bool HSync, bool VSync)
+{
+  return packHVSync(HSync, VSync) | (rgb.B << BLUE_BIT) | (rgb.G << GREEN_BIT) | (rgb.R << RED_BIT);
 }
 
 
@@ -883,14 +889,6 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
     case PrimitiveCmd::SwapFGBG:
       execSwapFGBG(prim.rect);
       break;
-#if FABGLIB_HAS_READWRITE_RAW_DATA
-    case PrimitiveCmd::ReadRawData:
-      execReadRawData(prim.rawData);
-      break;
-    case PrimitiveCmd::WriteRawData:
-      execWriteRawData(prim.rawData);
-      break;
-#endif
     case PrimitiveCmd::RenderGlyphsBuffer:
       execRenderGlyphsBuffer(prim.glyphsBufferRenderInfo);
       break;
@@ -1855,42 +1853,27 @@ void IRAM_ATTR VGAControllerClass::execCopyRect(Rect const & source)
 }
 
 
-#if FABGLIB_HAS_READWRITE_RAW_DATA
-// no bounds checks is done!
-void IRAM_ATTR VGAControllerClass::execReadRawData(RawData const & rawData)
+// no bounds check is done!
+void VGAControllerClass::readScreen(Rect const & rect, uint8_t * destBuf)
 {
-  hideSprites();
-  int x1 = rawData.X;
-  int y1 = rawData.Y;
-  int x2 = rawData.X + rawData.width - 1;
-  int y2 = rawData.Y + rawData.height - 1;
-  uint8_t * dest = rawData.data;
-
-  for (int y = y1; y <= y2; ++y) {
+  for (int y = rect.Y1; y <= rect.Y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
-    for (int x = x1; x <= x2; ++x, ++dest)
-      *dest = PIXELINROW(row, x);
+    for (int x = rect.X1; x <= rect.X2; ++x, ++destBuf)
+      *destBuf = PIXELINROW(row, x) & ~SYNC_MASK;
   }
 }
 
 
-// no bounds checks is done!
-void IRAM_ATTR VGAControllerClass::execWriteRawData(RawData const & rawData)
+// no bounds check is done!
+void VGAControllerClass::writeScreen(Rect const & rect, uint8_t * srcBuf)
 {
-  hideSprites();
-  int x1 = rawData.X;
-  int y1 = rawData.Y;
-  int x2 = rawData.X + rawData.width - 1;
-  int y2 = rawData.Y + rawData.height - 1;
-  uint8_t * src = rawData.data;
-
-  for (int y = y1; y <= y2; ++y) {
+  const uint8_t HVSync = packHVSync();
+  for (int y = rect.Y1; y <= rect.Y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
-    for (int x = x1; x <= x2; ++x, ++src)
-      PIXELINROW(row, x) = *src;
+    for (int x = rect.X1; x <= rect.X2; ++x, ++srcBuf)
+      PIXELINROW(row, x) = *srcBuf | HVSync;
   }
 }
-#endif
 
 
 void IRAM_ATTR VGAControllerClass::execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo)

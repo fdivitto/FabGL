@@ -162,16 +162,6 @@ enum PrimitiveCmd {
   // params: rect
   SwapFGBG,
 
-#if FABGLIB_HAS_READWRITE_RAW_DATA
-  // Read raw viewport data
-  // params: rawData
-  ReadRawData,
-
-  // Write raw viewport data
-  // params: rawData
-  WriteRawData,
-#endif
-
   // Render glyphs buffer
   // params: glyphsBufferRenderInfo
   RenderGlyphsBuffer,
@@ -835,10 +825,67 @@ public:
    */
   void setMouseCursorPos(int X, int Y);
 
+  /**
+   * @brief Read pixels inside the specified rectangle.
+   *
+   * Screen reading may be performed while vertical is in progress, so the result may be not updated.
+   *
+   * @param rect Screen rectangle to read. To improve performance rectangle is not checked.
+   * @param destBuf Destination buffer. Each byte contains a single pixel. Buffer size must be at least rect.width() * rect.height.
+   *
+   * Example:
+   *
+   *     // paint a red rectangle
+   *     Canvas.setBrushColor(RGB(3, 0, 0));
+   *     Rect rect = Rect(10, 10, 100, 100);
+   *     Canvas.fillRectangle(rect);
+   *
+   *     // wait for vsync (hence actual drawing)
+   *     VGAController.processPrimitives();
+   *
+   *     // read rectangle pixels into "buf"
+   *     auto buf = new uint8_t[rect.width() * rect.height()];
+   *     VGAController.readScreen(rect, buf);
+   *
+   *     // write buf 110 pixels to the reight
+   *     VGAController.writeScreen(rect.translate(110, 0), buf);
+   *     delete buf;
+   */
+  void readScreen(Rect const & rect, uint8_t * destBuf);
+
+  /**
+   * @brief Write pixels inside the specified rectangle.
+   *
+   * Screen writing may be performed while vertical is in progress, so written pixels may be overlapped or mixed.
+   *
+   * @param rect Screen rectangle to write. To improve performance rectangle is not checked.
+   * @param srcBuf Source buffer. Each byte contains a single pixel. Buffer size must be at least rect.width() * rect.height.
+   *
+   * Example:
+   *
+   *     // paint a red rectangle
+   *     Canvas.setBrushColor(RGB(3, 0, 0));
+   *     Rect rect = Rect(10, 10, 100, 100);
+   *     Canvas.fillRectangle(rect);
+   *
+   *     // wait for vsync (hence actual drawing)
+   *     VGAController.processPrimitives();
+   *
+   *     // read rectangle pixels into "buf"
+   *     auto buf = new uint8_t[rect.width() * rect.height()];
+   *     VGAController.readScreen(rect, buf);
+   *
+   *     // write buf 110 pixels to the reight
+   *     VGAController.writeScreen(rect.translate(110, 0), buf);
+   *     delete buf;
+   */
+  void writeScreen(Rect const & rect, uint8_t * srcBuf);
+
 private:
 
   void init(gpio_num_t VSyncGPIO);
 
+  uint8_t packHVSync(bool HSync = false, bool VSync = false);
   uint8_t preparePixel(RGB rgb, bool HSync = false, bool VSync = false);
 
   void freeBuffers();
