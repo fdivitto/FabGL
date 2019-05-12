@@ -869,7 +869,7 @@ void uiFrame::paintFrame()
     bkgRect.Y2 -= m_style.borderSize;
   }
   // background
-  if (!state().minimized) {
+  if (!state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
     Canvas.setBrushColor(m_style.backgroundColor);
     Canvas.fillRectangle(bkgRect);
   }
