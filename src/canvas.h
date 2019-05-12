@@ -660,14 +660,6 @@ public:
    */
   void copyRect(int sourceX, int sourceY, int destX, int destY, int width, int height);
 
-#if FABGLIB_HAS_READWRITE_RAW_DATA
-
-  void readRawData(int sourceX, int sourceY, int width, int height, uint8_t * dest);
-
-  void writeRawData(uint8_t * source, int destX, int destY, int width, int height);
-
-#endif
-
   /**
    * @brief Draw a bitmap at specified position.
    *

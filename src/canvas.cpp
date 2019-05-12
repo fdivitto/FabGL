@@ -423,26 +423,6 @@ void CanvasClass::copyRect(int sourceX, int sourceY, int destX, int destY, int w
 }
 
 
-#if FABGLIB_HAS_READWRITE_RAW_DATA
-void CanvasClass::readRawData(int sourceX, int sourceY, int width, int height, uint8_t * dest)
-{
-  Primitive p;
-  p.cmd     = PrimitiveCmd::ReadRawData;
-  p.rawData = RawData(sourceX, sourceY, width, height, dest);
-  VGAController.addPrimitive(p);
-}
-
-
-void CanvasClass::writeRawData(uint8_t * source, int destX, int destY, int width, int height)
-{
-  Primitive p;
-  p.cmd     = PrimitiveCmd::WriteRawData;
-  p.rawData = RawData(destX, destY, width, height, source);
-  VGAController.addPrimitive(p);
-}
-#endif
-
-
 
 static const FontInfo * FIXED_WIDTH_EMBEDDED_FONTS[] = {
   // please, bigger fonts first!
