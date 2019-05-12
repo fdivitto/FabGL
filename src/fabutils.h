@@ -136,6 +136,8 @@ struct Rect {
 
   bool operator==(Rect const & r)                { return X1 == r.X1 && Y1 == r.Y1 && X2 == r.X2 && Y2 == r.Y2; }
   Size size() const                              { return Size(X2 - X1 + 1, Y2 - Y1 + 1); }
+  int width() const                              { return X2 - X1 + 1; }
+  int height() const                             { return Y2 - Y1 + 1; }
   Rect translate(int offsetX, int offsetY) const { return Rect(X1 + offsetX, Y1 + offsetY, X2 + offsetX, Y2 + offsetY); }
   Rect translate(Point const & offset) const     { return Rect(X1 + offset.X, Y1 + offset.Y, X2 + offset.X, Y2 + offset.Y); }
   Rect shrink(int value) const                   { return Rect(X1 + value, Y1 + value, X2 - value, Y2 - value); }
