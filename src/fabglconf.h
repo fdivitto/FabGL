@@ -87,10 +87,6 @@
 #define FABGLIB_UNDERLINE_POSITION 0
 
 
-/** Optional feature. Enables readRawData() and writeRawData() methods in VGA Canvas. */
-#define FABGLIB_HAS_READWRITE_RAW_DATA 0
-
-
 /** Optional feature. Enables invertRectangle() method in VGA Canvas. */
 #define FABGLIB_HAS_INVERTRECT 0
 
