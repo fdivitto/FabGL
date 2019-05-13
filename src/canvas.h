@@ -293,6 +293,23 @@ public:
   void setPixel(int X, int Y);
 
   /**
+   * @brief Fill a single pixel with the specified color.
+   *
+   * @param X Horizontal pixel position.
+   * @param Y Vertical pixel position.
+   * @param color Pixe color.
+   */
+  void setPixel(int X, int Y, RGB const & color);
+
+  /**
+   * @brief Fill a single pixel with the specified color.
+   *
+   * @param pos Pixel position.
+   * @param color Pixe color.
+   */
+  void setPixel(Point const & pos, RGB const & color);
+
+  /**
    * @brief Draw a line starting from current pen position.
    *
    * Starting pen position is specified using CanvasClass.moveTo() method or
@@ -718,6 +735,19 @@ public:
    *     Canvas.waitCompletion();
    */
   void fillPath(Point const * points, int pointsCount);
+
+  /**
+   * @brief Read the pixel at specified position.
+   *
+   * Screen reading may occur while other drawings are in progress, so the result may be not updated. To avoid it, call getPixel() after
+   * waitCompletion() or disable background drawings.
+   *
+   * @param X Horizontal coordinate.
+   * @param Y Vertical coordinate.
+   *
+   * @return Pixel color as RGB structure.
+   */
+  RGB getPixel(int X, int Y);
 
 private:
 

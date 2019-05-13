@@ -140,6 +140,21 @@ void CanvasClass::setPixel(int X, int Y)
 }
 
 
+void CanvasClass::setPixel(int X, int Y, RGB const & color)
+{
+  setPixel(Point(X, Y), color);
+}
+
+
+void CanvasClass::setPixel(Point const & pos, RGB const & color)
+{
+  Primitive p;
+  p.cmd       = PrimitiveCmd::SetPixelAt;
+  p.pixelDesc = { pos, color };
+  VGAController.addPrimitive(p);
+}
+
+
 void CanvasClass::moveTo(int X, int Y)
 {
   Primitive p;
@@ -501,7 +516,7 @@ void CanvasClass::drawPath(Point const * points, int pointsCount)
   VGAController.addPrimitive(p);
 }
 
-  // warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
+// warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
 void CanvasClass::fillPath(Point const * points, int pointsCount)
 {
   Primitive p;
@@ -511,6 +526,13 @@ void CanvasClass::fillPath(Point const * points, int pointsCount)
   VGAController.addPrimitive(p);
 }
 
+
+RGB CanvasClass::getPixel(int X, int Y)
+{
+  RGB rgb;
+  VGAController.readScreen(Rect(X, Y, X, Y), &rgb);
+  return rgb;
+}
 
 
 } // end of namespace
