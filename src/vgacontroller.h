@@ -812,10 +812,10 @@ public:
   /**
    * @brief Read pixels inside the specified rectangle.
    *
-   * Screen reading may be performed while vertical is in progress, so the result may be not updated.
+   * Screen reading may occur while other drawings are in progress, so the result may be not updated.
    *
    * @param rect Screen rectangle to read. To improve performance rectangle is not checked.
-   * @param destBuf Destination buffer. Each byte contains a single pixel. Buffer size must be at least rect.width() * rect.height.
+   * @param destBuf Destination buffer. Buffer size must be at least rect.width() * rect.height.
    *
    * Example:
    *
@@ -828,22 +828,22 @@ public:
    *     VGAController.processPrimitives();
    *
    *     // read rectangle pixels into "buf"
-   *     auto buf = new uint8_t[rect.width() * rect.height()];
+   *     auto buf = new RGB[rect.width() * rect.height()];
    *     VGAController.readScreen(rect, buf);
    *
    *     // write buf 110 pixels to the reight
    *     VGAController.writeScreen(rect.translate(110, 0), buf);
    *     delete buf;
    */
-  void readScreen(Rect const & rect, uint8_t * destBuf);
+  void readScreen(Rect const & rect, RGB * destBuf);
 
   /**
    * @brief Write pixels inside the specified rectangle.
    *
-   * Screen writing may be performed while vertical is in progress, so written pixels may be overlapped or mixed.
+   * Screen writing may occur while other drawings are in progress, so written pixels may be overlapped or mixed.
    *
    * @param rect Screen rectangle to write. To improve performance rectangle is not checked.
-   * @param srcBuf Source buffer. Each byte contains a single pixel. Buffer size must be at least rect.width() * rect.height.
+   * @param srcBuf Source buffer. Buffer size must be at least rect.width() * rect.height.
    *
    * Example:
    *
@@ -856,14 +856,14 @@ public:
    *     VGAController.processPrimitives();
    *
    *     // read rectangle pixels into "buf"
-   *     auto buf = new uint8_t[rect.width() * rect.height()];
+   *     auto buf = new RGB[rect.width() * rect.height()];
    *     VGAController.readScreen(rect, buf);
    *
    *     // write buf 110 pixels to the reight
    *     VGAController.writeScreen(rect.translate(110, 0), buf);
    *     delete buf;
    */
-  void writeScreen(Rect const & rect, uint8_t * srcBuf);
+  void writeScreen(Rect const & rect, RGB * srcBuf);
 
 private:
 

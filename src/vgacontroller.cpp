@@ -1854,24 +1854,26 @@ void IRAM_ATTR VGAControllerClass::execCopyRect(Rect const & source)
 
 
 // no bounds check is done!
-void VGAControllerClass::readScreen(Rect const & rect, uint8_t * destBuf)
+void VGAControllerClass::readScreen(Rect const & rect, RGB * destBuf)
 {
+  uint8_t * dbuf = (uint8_t*) destBuf;
   for (int y = rect.Y1; y <= rect.Y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
-    for (int x = rect.X1; x <= rect.X2; ++x, ++destBuf)
-      *destBuf = PIXELINROW(row, x) & ~SYNC_MASK;
+    for (int x = rect.X1; x <= rect.X2; ++x, ++dbuf)
+      *dbuf = PIXELINROW(row, x) & ~SYNC_MASK;
   }
 }
 
 
 // no bounds check is done!
-void VGAControllerClass::writeScreen(Rect const & rect, uint8_t * srcBuf)
+void VGAControllerClass::writeScreen(Rect const & rect, RGB * srcBuf)
 {
+  uint8_t * sbuf = (uint8_t*) srcBuf;
   const uint8_t HVSync = packHVSync();
   for (int y = rect.Y1; y <= rect.Y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
-    for (int x = rect.X1; x <= rect.X2; ++x, ++srcBuf)
-      PIXELINROW(row, x) = *srcBuf | HVSync;
+    for (int x = rect.X1; x <= rect.X2; ++x, ++sbuf)
+      PIXELINROW(row, x) = *sbuf | HVSync;
   }
 }
 
