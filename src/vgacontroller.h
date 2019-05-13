@@ -100,6 +100,10 @@ enum PrimitiveCmd {
   // params: color
   SetPixel,
 
+  // Paint a pixel at specified coordinates using the specified color
+  // params: pixelDesc
+  SetPixelAt,
+
   // Move current position to the specified one
   // params: point
   MoveTo,
@@ -477,6 +481,12 @@ struct PaintOptions {
 };
 
 
+struct PixelDesc {
+  Point pos;
+  RGB   color;
+};
+
+
 struct Primitive {
   PrimitiveCmd cmd;
   union {
@@ -491,6 +501,7 @@ struct Primitive {
     GlyphsBufferRenderInfo glyphsBufferRenderInfo;
     BitmapDrawingInfo      bitmapDrawingInfo;
     Path                   path;
+    PixelDesc              pixelDesc;
   };
 
   Primitive() { }
@@ -883,6 +894,7 @@ private:
   void execPrimitive(Primitive const & prim);
 
   void execSetPixel(Point const & position);
+  void execSetPixelAt(PixelDesc const & pixelDesc);
   void execLineTo(Point const & position);
   void execFillRect(Rect const & rect);
   void execFillEllipse(Size const & size);

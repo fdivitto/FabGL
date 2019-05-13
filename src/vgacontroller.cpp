@@ -842,6 +842,9 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
     case PrimitiveCmd::SetPixel:
       execSetPixel(prim.position);
       break;
+    case PrimitiveCmd::SetPixelAt:
+      execSetPixelAt(prim.pixelDesc);
+      break;
     case PrimitiveCmd::MoveTo:
       m_paintState.position = Point(prim.position.X + m_paintState.origin.X, prim.position.Y + m_paintState.origin.Y);
       break;
@@ -937,6 +940,24 @@ void IRAM_ATTR VGAControllerClass::execSetPixel(Point const & position)
 
   const int x = position.X + m_paintState.origin.X;
   const int y = position.Y + m_paintState.origin.Y;
+
+  const int clipX1 = m_paintState.absClippingRect.X1;
+  const int clipY1 = m_paintState.absClippingRect.Y1;
+  const int clipX2 = m_paintState.absClippingRect.X2;
+  const int clipY2 = m_paintState.absClippingRect.Y2;
+
+  if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+    PIXEL(x, y) = pattern;
+}
+
+
+void IRAM_ATTR VGAControllerClass::execSetPixelAt(PixelDesc const & pixelDesc)
+{
+  hideSprites();
+  uint8_t pattern = preparePixel(pixelDesc.color);
+
+  const int x = pixelDesc.pos.X + m_paintState.origin.X;
+  const int y = pixelDesc.pos.Y + m_paintState.origin.Y;
 
   const int clipX1 = m_paintState.absClippingRect.X1;
   const int clipY1 = m_paintState.absClippingRect.Y1;
