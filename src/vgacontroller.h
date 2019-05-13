@@ -271,21 +271,6 @@ struct Glyph {
 
 
 /**
- * @brief Represents a region of raw screen buffer.
- */
-struct RawData {
-  int16_t   X;      /**< Horizontal region coordinate */
-  int16_t   Y;      /**< Vertical region coordinate */
-  int16_t   width;   /**< Horizontal region size */
-  int16_t   height;  /**< Vertical region size */
-  uint8_t * data;   /**< Raw region data */
-
-  RawData(int X_, int Y_, int width_, int height_, uint8_t * data_) : X(X_), Y(Y_), width(width_), height(height_), data(data_) { }
-};
-
-
-
-/**
  * @brief Specifies various glyph painting options.
  */
 union GlyphOptions {
@@ -502,7 +487,6 @@ struct Primitive {
     Glyph                  glyph;
     Rect                   rect;
     GlyphOptions           glyphOptions;
-    RawData                rawData;
     PaintOptions           paintOptions;
     GlyphsBufferRenderInfo glyphsBufferRenderInfo;
     BitmapDrawingInfo      bitmapDrawingInfo;
@@ -912,8 +896,6 @@ private:
   void execInvertRect(Rect const & rect);
   void execCopyRect(Rect const & source);
   void execSwapFGBG(Rect const & rect);
-  void execReadRawData(RawData const & rawData);
-  void execWriteRawData(RawData const & rawData);
   void execRenderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
   void execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo);
   void execSwapBuffers();
