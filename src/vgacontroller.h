@@ -116,6 +116,10 @@ enum PrimitiveCmd {
   // params: rect
   FillRect,
 
+  // Draw a rectangle using current pen color
+  // params: rect
+  DrawRect,
+
   // Fill an ellipse, current position is the center, using current brush color
   // params: size
   FillEllipse,
@@ -897,6 +901,7 @@ private:
   void execSetPixelAt(PixelDesc const & pixelDesc);
   void execLineTo(Point const & position);
   void execFillRect(Rect const & rect);
+  void execDrawRect(Rect const & rect);
   void execFillEllipse(Size const & size);
   void execDrawEllipse(Size const & size);
   void execClear();

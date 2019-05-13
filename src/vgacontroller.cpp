@@ -854,6 +854,9 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
     case PrimitiveCmd::FillRect:
       execFillRect(prim.rect);
       break;
+    case PrimitiveCmd::DrawRect:
+      execDrawRect(prim.rect);
+      break;
     case PrimitiveCmd::FillEllipse:
       execFillEllipse(prim.size);
       break;
@@ -1079,6 +1082,23 @@ void IRAM_ATTR VGAControllerClass::swapRows(int yA, int yB, int x1, int x2)
   // swap last unaligned bytes
   for (x = (x2 & ~3); x <= x2; ++x)
     tswap(PIXELINROW(rowA, x), PIXELINROW(rowB, x));
+}
+
+
+void IRAM_ATTR VGAControllerClass::execDrawRect(Rect const & rect)
+{
+  int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + m_paintState.origin.X;
+  int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + m_paintState.origin.Y;
+  int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + m_paintState.origin.X;
+  int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + m_paintState.origin.Y;
+
+  hideSprites();
+  uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.brushColor) : preparePixel(m_paintState.penColor);
+
+  drawLine(x1, y1, x2, y1, pattern);
+  drawLine(x2, y1, x2, y2, pattern);
+  drawLine(x2, y2, x1, y2, pattern);
+  drawLine(x1, y2, x1, y1, pattern);
 }
 
 
