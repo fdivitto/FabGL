@@ -224,11 +224,10 @@ void CanvasClass::drawLine(int X1, int Y1, int X2, int Y2)
 
 void CanvasClass::drawRectangle(int X1, int Y1, int X2, int Y2)
 {
-  moveTo(X1, Y1);
-  lineTo(X2, Y1);
-  lineTo(X2, Y2);
-  lineTo(X1, Y2);
-  lineTo(X1, Y1);
+  Primitive p;
+  p.cmd  = PrimitiveCmd::DrawRect;
+  p.rect = Rect(X1, Y1, X2, Y2);
+  VGAController.addPrimitive(p);
 }
 
 
