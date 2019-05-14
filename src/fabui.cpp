@@ -399,19 +399,27 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 }
 
 
+// value = NULL                 -> kill focus on old focused window
+// value = focusable window     -> kill focus on old focused window, set focus on new window
+// value = non-focusable window -> no change (focusable window remains focused)
 uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 {
   uiWindow * prev = m_focusedWindow;
-  m_focusedWindow = value;
 
-  if (prev) {
-    uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
-    postEvent(&evt);
-  }
+  if (m_focusedWindow != value && (value == NULL || value->windowProps().focusable)) {
 
-  if (m_focusedWindow) {
-    uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
-    postEvent(&evt);
+    if (prev) {
+      uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
+      postEvent(&evt);
+    }
+
+    m_focusedWindow = value;
+
+    if (m_focusedWindow) {
+      uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
+      postEvent(&evt);
+    }
+
   }
 
   return prev;
@@ -659,8 +667,7 @@ void uiWindow::processEvent(uiEvent * event)
       if (!m_state.active)
         app()->setActiveWindow(this);
       // focus window?
-      if (windowProps().focusable)
-        app()->setFocusedWindow(this);
+      app()->setFocusedWindow(this);
       // capture mouse if left button is down
       if (event->params.mouse.changedButton == 1)
         app()->captureMouse(this);
