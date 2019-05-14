@@ -278,8 +278,15 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 
 void uiApp::preprocessKeyboardEvent(uiEvent * event)
 {
+  // keyboard events go to focused window
   if (m_focusedWindow) {
     event->dest = m_focusedWindow;
+  }
+  // keyboard events go also to active window (if not focused)
+  if (m_focusedWindow != m_activeWindow) {
+    uiEvent evt = *event;
+    evt.dest = m_activeWindow;
+    insertEvent(&evt);
   }
 }
 
@@ -379,6 +386,9 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
     }
     if (value == m_activeWindow)
       return prev;  // already active, nothing to do
+
+    // changed active window, disable focus
+    setFocusedWindow(NULL);
 
     m_activeWindow = value;
 
