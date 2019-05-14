@@ -28,6 +28,7 @@
 #include "fabui.h"
 #include "canvas.h"
 #include "mouse.h"
+#include "keyboard.h"
 
 
 
@@ -43,7 +44,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
-                                  "UIEVT_SHOW", "UIEVT_HIDE",
+                                  "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -75,6 +76,15 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_SETSIZE:
       Serial.printf("size=%d,%d", event->params.size.width, event->params.size.height);
+      break;
+    case UIEVT_KEYDOWN:
+    case UIEVT_KEYUP:
+      Serial.printf("%s ", Keyboard.virtualKeyToString(event->params.key.VK));
+      if (event->params.key.LALT) Serial.write(" +LALT");
+      if (event->params.key.RALT) Serial.write(" +RALT");
+      if (event->params.key.CTRL) Serial.write(" +CTRL");
+      if (event->params.key.SHIFT) Serial.write(" +SHIFT");
+      if (event->params.key.GUI) Serial.write(" +GUI");
       break;
     default:
       break;
@@ -136,6 +146,7 @@ uiApp::uiApp()
   : uiEvtHandler(NULL),
     m_rootWindow(NULL),
     m_activeWindow(NULL),
+    m_focusedWindow(NULL),
     m_capturedMouseWindow(NULL),
     m_freeMouseWindow(NULL),
     m_combineMouseMoveEvents(false)
@@ -153,8 +164,14 @@ uiApp::~uiApp()
 
 void uiApp::run()
 {
+  // setup absolute events from mouse
   Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
+
+  // setup mouse cursor
   VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
+
+  // setup keyboard
+  Keyboard.setUIApp(this);
 
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
@@ -200,6 +217,10 @@ void uiApp::preprocessEvent(uiEvent * event)
       case UIEVT_MOUSEBUTTONDOWN:
       case UIEVT_MOUSEBUTTONUP:
         preprocessMouseEvent(event);
+        break;
+      case UIEVT_KEYDOWN:
+      case UIEVT_KEYUP:
+        preprocessKeyboardEvent(event);
         break;
       default:
         break;
@@ -251,6 +272,14 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       uiEvent evt = uiEvent(oldFreeMouseWindow, UIEVT_MOUSELEAVE);
       insertEvent(&evt);
     }
+  }
+}
+
+
+void uiApp::preprocessKeyboardEvent(uiEvent * event)
+{
+  if (m_focusedWindow) {
+    event->dest = m_focusedWindow;
   }
 }
 
@@ -353,16 +382,36 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 
     m_activeWindow = value;
 
+    if (prev) {
+      // deactivate previous window
+      uiEvent evt = uiEvent(prev, UIEVT_DEACTIVATE);
+      postEvent(&evt);
+    }
+
     if (m_activeWindow) {
-      if (prev) {
-        // deactivate previous window
-        uiEvent evt = uiEvent(prev, UIEVT_DEACTIVATE);
-        postEvent(&evt);
-      }
       // activate window
       uiEvent evt = uiEvent(m_activeWindow, UIEVT_ACTIVATE);
       postEvent(&evt);
     }
+  }
+
+  return prev;
+}
+
+
+uiWindow * uiApp::setFocusedWindow(uiWindow * value)
+{
+  uiWindow * prev = m_focusedWindow;
+  m_focusedWindow = value;
+
+  if (prev) {
+    uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
+    postEvent(&evt);
+  }
+
+  if (m_focusedWindow) {
+    uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
+    postEvent(&evt);
   }
 
   return prev;
@@ -606,9 +655,12 @@ void uiWindow::processEvent(uiEvent * event)
       m_mouseDownPos    = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
       m_posAtMouseDown  = m_pos;
       m_sizeAtMouseDown = m_size;
-      // activate window?
+      // activate window? setActiveWindow() will activate the right window (maybe a parent)
       if (!m_state.active)
         app()->setActiveWindow(this);
+      // focus window?
+      if (windowProps().focusable)
+        app()->setFocusedWindow(this);
       // capture mouse if left button is down
       if (event->params.mouse.changedButton == 1)
         app()->captureMouse(this);
@@ -1262,6 +1314,7 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
     m_text(NULL),
     m_textExtent(0)
 {
+  windowProps().focusable = true;
   setText(text);
 }
 

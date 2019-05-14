@@ -64,8 +64,8 @@ namespace fabgl {
 
 
 
-
-#define FABGLIB_UI_EVENTS_QUEUE_SIZE 64 // increase in case of garbage between windows!
+// increase in case of garbage between windows!
+#define FABGLIB_UI_EVENTS_QUEUE_SIZE 64
 
 
 
@@ -94,6 +94,10 @@ enum uiEventID {
   UIEVT_RESTORE,    // restore from UIEVT_MAXIMIZE or UIEVT_MINIMIZE
   UIEVT_SHOW,
   UIEVT_HIDE,
+  UIEVT_SETFOCUS,
+  UIEVT_KILLFOCUS,
+  UIEVT_KEYDOWN,
+  UIEVT_KEYUP,
 };
 
 
@@ -120,6 +124,15 @@ struct uiEvent {
     Size size;
     // event: UIEVT_DEBUGMSG
     char const * debugMsg;
+    // event: UIEVT_KEYDOWN, UIEVT_KEYUP
+    struct {
+      VirtualKey VK;
+      uint8_t    LALT  : 1;  // status of left-ALT key
+      uint8_t    RALT  : 1;  // status of right-ALT key
+      uint8_t    CTRL  : 1;  // status of CTRL (left or right) key
+      uint8_t    SHIFT : 1;  // status of SHIFT (left or right) key
+      uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
+    } key;
 
     uiEventParams() { }
   } params;
@@ -210,9 +223,11 @@ struct uiWindowState {
 
 struct uiWindowProps {
   uint8_t activable : 1;
+  uint8_t focusable : 1;
 
   uiWindowProps() :
-    activable(true)
+    activable(true),
+    focusable(false)
   { }
 };
 
@@ -516,6 +531,10 @@ public:
 
   uiWindow * setActiveWindow(uiWindow * value);
 
+  uiWindow * focusedWindow() { return m_focusedWindow; }
+
+  uiWindow * setFocusedWindow(uiWindow * value);
+
   void captureMouse(uiWindow * window);
 
   uiWindow * capturedMouseWindow() { return m_capturedMouseWindow; }
@@ -556,18 +575,22 @@ private:
 
   void preprocessEvent(uiEvent * event);
   void preprocessMouseEvent(uiEvent * event);
+  void preprocessKeyboardEvent(uiEvent * event);
 
 
   QueueHandle_t m_eventsQueue;
 
-  uiFrame * m_rootWindow;
-  uiWindow * m_activeWindow;
+  uiFrame *     m_rootWindow;
 
-  uiWindow * m_capturedMouseWindow; // window that has captured mouse
+  uiWindow *    m_activeWindow;        // foreground window. Also gets keyboard events (other than focused window)
 
-  uiWindow * m_freeMouseWindow;     // window where mouse is over
+  uiWindow *    m_focusedWindow;       // window that captures keyboard events (other than active window)
 
-  bool m_combineMouseMoveEvents;
+  uiWindow *    m_capturedMouseWindow; // window that has captured mouse
+
+  uiWindow *    m_freeMouseWindow;     // window where mouse is over
+
+  bool          m_combineMouseMoveEvents;
 };
 
 
