@@ -35,7 +35,7 @@ namespace fabgl {
 
 
 Scene::Scene(int maxSpritesCount, int updateTimeMS, int width, int height)
- : m_width(width), m_height(height), m_collisionDetector(maxSpritesCount, width, height), m_suspendedTask(NULL)
+ : m_width(width), m_height(height), m_collisionDetector(maxSpritesCount, width, height), m_suspendedTask(nullptr)
 {
   m_updateTimer = xTimerCreate("", pdMS_TO_TICKS(updateTimeMS), pdTRUE, this, updateTimerFunc);
 }
@@ -56,7 +56,7 @@ void Scene::start(bool suspendTask)
     m_suspendedTask = xTaskGetCurrentTaskHandle();
     vTaskSuspend(m_suspendedTask);
   } else
-    m_suspendedTask = NULL;
+    m_suspendedTask = nullptr;
 }
 
 

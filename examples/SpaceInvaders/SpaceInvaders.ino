@@ -157,7 +157,7 @@ struct IntroScene : public Scene {
       if (updateCount > 50) {
         if (Keyboard.isKeyboardAvailable() && Keyboard.isVKDown(fabgl::VK_SPACE))
           controller_ = 1;  // select keyboard as controller
-        else if (Mouse.isMouseAvailable() && Mouse.getNextDelta(NULL, 0) && Mouse.status().buttons.left)
+        else if (Mouse.isMouseAvailable() && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left)
           controller_ = 2;  // select mouse as controller
         starting_ = (controller_ > 0);  // start only when a controller has been selected
       }
@@ -231,7 +231,7 @@ struct GameScene : public Scene {
   int enemiesY_            = ENEMIES_START_Y;
   int enemiesDir_          = 1;
   int enemiesAlive_        = ROWENEMIESCOUNT * 5;
-  SISprite * lastHitEnemy_ = NULL;
+  SISprite * lastHitEnemy_ = nullptr;
   GameState gameState_     = GAMESTATE_PLAYING;
 
   bool updateScore_        = true;
@@ -327,7 +327,7 @@ struct GameScene : public Scene {
     if (IntroScene::controller_ == 2) {
       // setup mouse controller
       Mouse.setSampleRate(40);  // reduce number of samples from mouse to reduce delays
-      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, NULL); // take advantage of mouse acceleration
+      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, nullptr); // take advantage of mouse acceleration
     }
 
     showLives();
@@ -410,7 +410,7 @@ struct GameScene : public Scene {
         // handle enemy explosion
         if (lastHitEnemy_) {
           lastHitEnemy_->visible = false;
-          lastHitEnemy_ = NULL;
+          lastHitEnemy_ = nullptr;
         }
         // handle enemies movement
         enemiesX_ += enemiesDir_ * ENEMIES_STEP_X;
@@ -546,7 +546,7 @@ struct GameScene : public Scene {
 
       // wait for SPACE or click from controller
       if ((IntroScene::controller_ == 1 && Keyboard.isVKDown(fabgl::VK_SPACE)) ||
-          (IntroScene::controller_ == 2 && Mouse.getNextDelta(NULL, 0) && Mouse.status().buttons.left))
+          (IntroScene::controller_ == 2 && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left))
         stop();
 
     }

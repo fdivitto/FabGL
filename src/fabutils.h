@@ -205,8 +205,8 @@ struct StackItem {
 template <typename T>
 class Stack {
 public:
-  Stack() : m_items(NULL) { }
-  bool isEmpty() { return m_items == NULL; }
+  Stack() : m_items(nullptr) { }
+  bool isEmpty() { return m_items == nullptr; }
   void push(T const & value) {
     m_items = new StackItem<T>(m_items, value);
   }
@@ -246,7 +246,7 @@ struct Delegate {
 
 private:
   void (*m_closure)(void * func, const Params & ...params);
-  void * m_func = NULL;
+  void * m_func = nullptr;
 };
 
 

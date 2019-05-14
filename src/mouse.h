@@ -162,7 +162,7 @@ public:
   /**
    * @brief Get a mouse movement from the queue.
    *
-   * @param delta Pointer to MouseDelta structure to be filled with mouse movement. May be NULL if not required (in this case only Status().buttons is updated.
+   * @param delta Pointer to MouseDelta structure to be filled with mouse movement. May be nullptr if not required (in this case only Status().buttons is updated.
    * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
    * @param requestResendOnTimeOut If true and timeout has expired then asks the mouse to resend the mouse movement.
    *
@@ -224,7 +224,7 @@ public:
    *
    * Example:
    *
-   *     Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, NULL);
+   *     Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, nullptr);
    */
   void setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app);
 

@@ -114,7 +114,7 @@ private:
 
   static const int MAXSPRITES = 40;
 
-  MySprite * sprites_ = NULL;
+  MySprite * sprites_ = nullptr;
 
   int spritesCount_ = 0;
 

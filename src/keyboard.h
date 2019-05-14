@@ -278,7 +278,7 @@ public:
    *
    * @return The first virtual key of the queue (VK_NONE if no data is available in the timeout period).
    */
-  VirtualKey getNextVirtualKey(bool * keyDown = NULL, int timeOutMS = -1);
+  VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
   /**
    * @brief Convert virtual key to ASCII.
@@ -372,8 +372,8 @@ public:
 
 private:
 
-  VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = NULL);
-  VirtualKey VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const * layout = NULL);
+  VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = nullptr);
+  VirtualKey VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const * layout = nullptr);
   void updateLEDs();
   VirtualKey blockingGetVirtualKey(bool * keyDown);
   static void SCodeToVKConverterTask(void * pvParameters);

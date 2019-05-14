@@ -272,7 +272,7 @@ struct Glyph {
   int16_t         height; /**< Glyph vertical size */
   uint8_t const * data;   /**< Byte aligned binary data of the glyph. A 0 represents background or a transparent pixel. A 1 represents foreground. */
 
-  Glyph() : X(0), Y(0), width(0), height(0), data(NULL) { }
+  Glyph() : X(0), Y(0), width(0), height(0), data(nullptr) { }
   Glyph(int X_, int Y_, int width_, int height_, uint8_t const * data_) : X(X_), Y(Y_), width(width_), height(height_), data(data_) { }
 };
 
@@ -370,7 +370,7 @@ struct Bitmap {
   uint8_t const * data;           /**< Bitmap binary data */
   bool            dataAllocated;  /**< If true data is released when bitmap is destroyed */
 
-  Bitmap() : width(0), height(0), data(NULL), dataAllocated(false) { }
+  Bitmap() : width(0), height(0), data(nullptr), dataAllocated(false) { }
   Bitmap(int width_, int height_, void const * data_, bool copy = false);
   Bitmap(int width_, int height_, void const * data_, int bitsPerPixel, RGB foregroundColor, bool copy = false);
   ~Bitmap();
@@ -456,7 +456,7 @@ struct Sprite {
 
   Sprite();
   ~Sprite();
-  Bitmap const * getFrame() { return frames ? frames[currentFrame] : NULL; }
+  Bitmap const * getFrame() { return frames ? frames[currentFrame] : nullptr; }
   int getFrameIndex() { return currentFrame; }
   void nextFrame() { ++currentFrame; if (currentFrame >= framesCount) currentFrame = 0; }
   Sprite * setFrame(int frame) { currentFrame = frame; return this; }
@@ -779,7 +779,7 @@ public:
    *
    * Call this method when you don't need active sprites anymore.
    */
-  void removeSprites() { setSprites(NULL, 0, 0); }
+  void removeSprites() { setSprites(nullptr, 0, 0); }
 
   /**
    * @brief Force the sprites to be updated.
@@ -801,7 +801,7 @@ public:
   /**
    * @brief Set mouse cursor and make it visible.
    *
-   * @param cursor Cursor to use when mouse pointer need to be painted. NULL = disable mouse pointer.
+   * @param cursor Cursor to use when mouse pointer need to be painted. nullptr = disable mouse pointer.
    */
   void setMouseCursor(Cursor const * cursor);
 
@@ -967,7 +967,7 @@ private:
   volatile uint8_t * *   m_viewPort;
   volatile uint8_t * *   m_viewPortVisible;
 
-  uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is NULL
+  uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
 
   volatile QueueHandle_t m_execQueue;
   PaintState             m_paintState;

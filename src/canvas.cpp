@@ -51,7 +51,7 @@ namespace fabgl {
 
 
 CanvasClass::CanvasClass()
-  : m_fontInfo(NULL), m_textHorizRate(1), m_origin(Point(0, 0)), m_clippingRect(INVALIDRECT)
+  : m_fontInfo(nullptr), m_textHorizRate(1), m_origin(Point(0, 0)), m_clippingRect(INVALIDRECT)
 {
 }
 
@@ -346,7 +346,7 @@ void CanvasClass::drawChar(int X, int Y, char c)
 
 void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
 {
-  if (m_fontInfo == NULL)
+  if (m_fontInfo == nullptr)
     selectFont(getPresetFontInfo(80, 25));
   drawText(m_fontInfo, X, Y, text, wrap);
 }
@@ -415,7 +415,7 @@ void CanvasClass::drawTextFmt(int X, int Y, const char *format, ...)
 {
   va_list ap;
   va_start(ap, format);
-  int size = vsnprintf(NULL, 0, format, ap) + 1;
+  int size = vsnprintf(nullptr, 0, format, ap) + 1;
   if (size > 0) {
     char buf[size + 1];
     vsnprintf(buf, size, format, ap);

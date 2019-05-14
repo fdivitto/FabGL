@@ -83,19 +83,19 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 void TerminalClass::begin()
 {
-  m_logStream = NULL;
+  m_logStream = nullptr;
 
-  m_glyphsBuffer = (GlyphsBuffer){0, 0, NULL, 0, 0, NULL};
+  m_glyphsBuffer = (GlyphsBuffer){0, 0, nullptr, 0, 0, nullptr};
 
-  m_emuState.tabStop = NULL;
-  m_font.data = NULL;
+  m_emuState.tabStop = nullptr;
+  m_font.data = nullptr;
 
   set132ColumnMode(false);
 
-  m_savedCursorStateList = NULL;
+  m_savedCursorStateList = nullptr;
 
   m_alternateScreenBuffer = false;
-  m_alternateMap = NULL;
+  m_alternateMap = nullptr;
 
   m_autoXONOFF = false;
   m_XOFF = false;
@@ -120,10 +120,10 @@ void TerminalClass::begin()
   m_defaultBackgroundColor = Color::Black;
   m_defaultForegroundColor = Color::White;
 
-  m_serialPort = NULL;
-  m_keyboardReaderTaskHandle = NULL;
+  m_serialPort = nullptr;
+  m_keyboardReaderTaskHandle = nullptr;
 
-  m_outputQueue = NULL;
+  m_outputQueue = nullptr;
 
   reset();
 }
@@ -160,7 +160,7 @@ void TerminalClass::logFmt(const char * format, ...)
   if (m_logStream) {
     va_list ap;
     va_start(ap, format);
-    int size = vsnprintf(NULL, 0, format, ap) + 1;
+    int size = vsnprintf(nullptr, 0, format, ap) + 1;
     if (size > 0) {
       char buf[size + 1];
       vsnprintf(buf, size, format, ap);
@@ -190,7 +190,7 @@ void TerminalClass::freeFont()
   #if FABGLIB_CACHE_FONT_IN_RAM
   if (m_font.data) {
     free((void*) m_font.data);
-    m_font.data = NULL;
+    m_font.data = nullptr;
   }
   #endif
 }
@@ -200,7 +200,7 @@ void TerminalClass::freeTabStops()
 {
   if (m_emuState.tabStop) {
     free(m_emuState.tabStop);
-    m_emuState.tabStop = NULL;
+    m_emuState.tabStop = nullptr;
   }
 }
 
@@ -209,11 +209,11 @@ void TerminalClass::freeGlyphsMap()
 {
   if (m_glyphsBuffer.map) {
     free((void*) m_glyphsBuffer.map);
-    m_glyphsBuffer.map = NULL;
+    m_glyphsBuffer.map = nullptr;
   }
   if (m_alternateMap) {
     free((void*) m_alternateMap);
-    m_alternateMap = NULL;
+    m_alternateMap = nullptr;
   }
 }
 
@@ -340,7 +340,7 @@ void TerminalClass::loadFont(FontInfo const * font)
   m_glyphsBuffer.columns      = m_columns;
   m_glyphsBuffer.rows         = m_rows;
   m_glyphsBuffer.map          = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_32BIT);
-  m_alternateMap = NULL;
+  m_alternateMap = nullptr;
   m_alternateScreenBuffer = false;
 }
 
@@ -838,7 +838,7 @@ void TerminalClass::clearSavedCursorStates()
     free(curItem->tabStop);
     free(curItem);
   }
-  m_savedCursorStateList = NULL;
+  m_savedCursorStateList = nullptr;
 }
 
 

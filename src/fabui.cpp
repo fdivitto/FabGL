@@ -143,12 +143,12 @@ void uiEvtHandler::processEvent(uiEvent * event)
 
 
 uiApp::uiApp()
-  : uiEvtHandler(NULL),
-    m_rootWindow(NULL),
-    m_activeWindow(NULL),
-    m_focusedWindow(NULL),
-    m_capturedMouseWindow(NULL),
-    m_freeMouseWindow(NULL),
+  : uiEvtHandler(nullptr),
+    m_rootWindow(nullptr),
+    m_activeWindow(nullptr),
+    m_focusedWindow(nullptr),
+    m_capturedMouseWindow(nullptr),
+    m_freeMouseWindow(nullptr),
     m_combineMouseMoveEvents(false)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
@@ -174,7 +174,7 @@ void uiApp::run()
   Keyboard.setUIApp(this);
 
   // root window always stays at 0, 0 and cannot be moved
-  m_rootWindow = new uiFrame(NULL, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
+  m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
   m_rootWindow->setApp(this);
 
   m_rootWindow->style().borderSize      = 0;
@@ -210,7 +210,7 @@ void uiApp::run()
 
 void uiApp::preprocessEvent(uiEvent * event)
 {
-  if (event->dest == NULL) {
+  if (event->dest == nullptr) {
     switch (event->id) {
       case UIEVT_MOUSEMOVE:
       case UIEVT_MOUSEWHEEL:
@@ -253,7 +253,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
         // mouse is not inside, post mouse leave and enter events
         uiEvent evt = uiEvent(m_capturedMouseWindow, UIEVT_MOUSELEAVE);
         postEvent(&evt);
-        m_freeMouseWindow = oldFreeMouseWindow = NULL;
+        m_freeMouseWindow = oldFreeMouseWindow = nullptr;
       }
     }
   } else {
@@ -292,7 +292,7 @@ void uiApp::preprocessKeyboardEvent(uiEvent * event)
 }
 
 
-// allow a window to capture mouse. window = NULL to end mouse capture
+// allow a window to capture mouse. window = nullptr to end mouse capture
 void uiApp::captureMouse(uiWindow * window)
 {
   m_capturedMouseWindow = window;
@@ -313,7 +313,7 @@ uiWindow * uiApp::screenToWindow(Point & point)
         break;
       }
     }
-    if (child == NULL)
+    if (child == nullptr)
       break;
   }
   return win;
@@ -339,7 +339,7 @@ bool uiApp::insertEvent(uiEvent const * event)
 
 void uiApp::postDebugMsg(char const * msg)
 {
-  uiEvent evt = uiEvent(NULL, UIEVT_DEBUGMSG);
+  uiEvent evt = uiEvent(nullptr, UIEVT_DEBUGMSG);
   evt.params.debugMsg = msg;
   postEvent(&evt);
 }
@@ -389,7 +389,7 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
       return prev;  // already active, nothing to do
 
     // changed active window, disable focus
-    setFocusedWindow(NULL);
+    setFocusedWindow(nullptr);
 
     m_activeWindow = value;
 
@@ -410,14 +410,14 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 }
 
 
-// value = NULL                 -> kill focus on old focused window
+// value = nullptr              -> kill focus on old focused window
 // value = focusable window     -> kill focus on old focused window, set focus on new window
 // value = non-focusable window -> no change (focusable window remains focused)
 uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 {
   uiWindow * prev = m_focusedWindow;
 
-  if (m_focusedWindow != value && (value == NULL || value->windowProps().focusable)) {
+  if (m_focusedWindow != value && (value == nullptr || value->windowProps().focusable)) {
 
     if (prev) {
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
@@ -445,7 +445,7 @@ uiWindow * uiApp::setFocusedWindowNext()
     uiWindow * proposed = old;
     do {
       if (!old && proposed)
-        old = proposed; // just a way to exit loop when old=NULL and no child is focusable
+        old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
       proposed = proposed && proposed->next() ? proposed->next() : parent->firstChild();
     } while (!proposed->windowProps().focusable && proposed != old);
     setFocusedWindow(proposed);
@@ -462,7 +462,7 @@ uiWindow * uiApp::setFocusedWindowPrev()
     uiWindow * proposed = old;
     do {
       if (!old && proposed)
-        old = proposed; // just a way to exit loop when old=NULL and no child is focusable
+        old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
       proposed = proposed && proposed->prev() ? proposed->prev() : parent->lastChild();
     } while (!proposed->windowProps().focusable && proposed != old);
     setFocusedWindow(proposed);
@@ -544,16 +544,16 @@ void uiApp::minimizeWindow(uiWindow * window, bool value)
 
 
 uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiEvtHandler(parent ? parent->app() : NULL),
+  : uiEvtHandler(parent ? parent->app() : nullptr),
     m_parent(parent),
     m_pos(pos),
     m_size(size),
     m_mouseDownPos(Point(-1, -1)),
     m_isMouseOver(false),
-    m_next(NULL),
-    m_prev(NULL),
-    m_firstChild(NULL),
-    m_lastChild(NULL)
+    m_next(nullptr),
+    m_prev(nullptr),
+    m_firstChild(nullptr),
+    m_lastChild(nullptr)
 {
   m_state.visible   = false;
   m_state.maximized = false;
@@ -581,7 +581,7 @@ void uiWindow::freeChildren()
     next = cur->m_next;
     delete cur;
   }
-  m_firstChild = m_lastChild = NULL;
+  m_firstChild = m_lastChild = nullptr;
 }
 
 
@@ -614,7 +614,7 @@ void uiWindow::removeChild(uiWindow * child, bool freeChild)
   if (freeChild)
     delete child;
   else
-    child->m_prev = child->m_next = NULL;
+    child->m_prev = child->m_next = nullptr;
 }
 
 
@@ -689,7 +689,7 @@ void uiWindow::processEvent(uiEvent * event)
         m_state.active = true;
         uiWindow * winToRepaint = this;
         // move this window and parent windows on top (last position), and select the window to actually repaint
-        for (uiWindow * child = this; child->parent() != NULL; child = child->parent()) {
+        for (uiWindow * child = this; child->parent() != nullptr; child = child->parent()) {
           if (child != child->parent()->lastChild()) {
             child->parent()->moveChildOnTop(child);
             winToRepaint = child;
@@ -721,7 +721,7 @@ void uiWindow::processEvent(uiEvent * event)
     case UIEVT_MOUSEBUTTONUP:
       // end capture mouse if left button is up
       if (event->params.mouse.changedButton == 1)
-        app()->captureMouse(NULL);
+        app()->captureMouse(nullptr);
       break;
 
     case UIEVT_SHOW:
@@ -810,7 +810,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
       }
     }
     if (noIntesections) {
-      uiEvent evt = uiEvent(NULL, UIEVT_PAINT);
+      uiEvent evt = uiEvent(nullptr, UIEVT_PAINT);
       evt.dest = this;
       evt.params.rect = thisRect;
       app()->insertEvent(&evt);
@@ -870,7 +870,7 @@ void uiWindow::generateReshapeEvents(Rect const & r)
 
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
-    m_title(NULL),
+    m_title(nullptr),
     m_mouseDownSensiblePos(uiSensPos_None),
     m_mouseMoveSensiblePos(uiSensPos_None)
 {
@@ -1376,7 +1376,7 @@ void uiControl::processEvent(uiEvent * event)
 
 uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
   : uiControl(parent, pos, size, visible),
-    m_text(NULL),
+    m_text(nullptr),
     m_textExtent(0)
 {
   windowProps().focusable = true;

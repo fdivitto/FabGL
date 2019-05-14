@@ -112,14 +112,14 @@ void VGAControllerClass::init(gpio_num_t VSyncGPIO)
 {
   m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
 
-  m_DMABuffersHead = NULL;
-  m_DMABuffers = NULL;
-  m_DMABuffersVisible = NULL;
+  m_DMABuffersHead = nullptr;
+  m_DMABuffers = nullptr;
+  m_DMABuffersVisible = nullptr;
   m_DMABuffersCount = 0;
   m_VSyncInterruptSuspended = 1; // >0 suspended
   m_backgroundPrimitiveExecutionEnabled = true;
   m_VSyncGPIO = VSyncGPIO;
-  m_sprites = NULL;
+  m_sprites = nullptr;
   m_spritesCount = 0;
   m_spritesHidden = true;
   m_doubleBuffered = false;
@@ -306,7 +306,7 @@ void VGAControllerClass::allocateViewPort()
     m_viewPortHeight += linesCount[poolsCount];
     ++poolsCount;
   }
-  m_viewPortMemoryPool[poolsCount] = NULL;
+  m_viewPortMemoryPool[poolsCount] = nullptr;
 
   // fill m_viewPort[] with line pointers
   if (m_doubleBuffered) {
@@ -332,7 +332,7 @@ void VGAControllerClass::freeViewPort()
 {
   for (uint8_t * * poolPtr = m_viewPortMemoryPool; *poolPtr; ++poolPtr) {
     heap_caps_free((void*) *poolPtr);
-    *poolPtr = NULL;
+    *poolPtr = nullptr;
   }
   heap_caps_free(m_viewPort);
   if (m_doubleBuffered)
@@ -610,8 +610,8 @@ bool VGAControllerClass::setDMABuffersCount(int buffersCount)
     heap_caps_free( (void*) m_DMABuffers );
     if (m_doubleBuffered)
       heap_caps_free( (void*) m_DMABuffersVisible );
-    m_DMABuffers = NULL;
-    m_DMABuffersVisible = NULL;
+    m_DMABuffers = nullptr;
+    m_DMABuffersVisible = nullptr;
     m_DMABuffersCount = 0;
     return true;
   }
@@ -619,14 +619,14 @@ bool VGAControllerClass::setDMABuffersCount(int buffersCount)
   if (buffersCount != m_DMABuffersCount) {
 
     // buffers head
-    if (m_DMABuffersHead == NULL) {
+    if (m_DMABuffersHead == nullptr) {
       m_DMABuffersHead = (lldesc_t*) heap_caps_malloc(sizeof(lldesc_t), MALLOC_CAP_DMA);
       m_DMABuffersHead->eof    = m_DMABuffersHead->sosf = m_DMABuffersHead->offset = 0;
       m_DMABuffersHead->owner  = 1;
       m_DMABuffersHead->size   = 0;
       m_DMABuffersHead->length = 0;
-      m_DMABuffersHead->buf    = m_HBlankLine;  // dummy valid address. Setting NULL crashes DMA!
-      m_DMABuffersHead->qe.stqe_next = NULL;  // this will be set before the first frame
+      m_DMABuffersHead->buf    = m_HBlankLine;  // dummy valid address. Setting nullptr crashes DMA!
+      m_DMABuffersHead->qe.stqe_next = nullptr;  // this will be set before the first frame
     }
 
     // (re)allocate and initialize DMA descs
@@ -813,12 +813,12 @@ void IRAM_ATTR VGAControllerClass::VSyncInterrupt()
   bool isFirst = true;
   do {
     Primitive prim;
-    if (xQueueReceiveFromISR(VGAController.m_execQueue, &prim, NULL) == pdFALSE)
+    if (xQueueReceiveFromISR(VGAController.m_execQueue, &prim, nullptr) == pdFALSE)
       break;
 
     if (prim.cmd == PrimitiveCmd::SwapBuffers && !isFirst) {
       // SwapBuffers must be the first primitive executed at VSync. If not reinsert it and interrupt execution to wait for next VSync.
-      xQueueSendToFrontFromISR(VGAController.m_execQueue, &prim, NULL);
+      xQueueSendToFrontFromISR(VGAController.m_execQueue, &prim, nullptr);
       break;
     }
 
@@ -1922,7 +1922,7 @@ void VGAControllerClass::writeScreen(Rect const & rect, RGB * srcBuf)
 void IRAM_ATTR VGAControllerClass::execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo)
 {
   hideSprites();
-  drawBitmap(bitmapDrawingInfo.X + m_paintState.origin.X, bitmapDrawingInfo.Y + m_paintState.origin.Y, bitmapDrawingInfo.bitmap, NULL, false);
+  drawBitmap(bitmapDrawingInfo.X + m_paintState.origin.X, bitmapDrawingInfo.Y + m_paintState.origin.Y, bitmapDrawingInfo.bitmap, nullptr, false);
 }
 
 
@@ -2022,7 +2022,7 @@ void IRAM_ATTR VGAControllerClass::hideSprites()
         Sprite * sprite = (Sprite*) spritePtr;
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
           Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground);
-          drawBitmap(sprite->savedX, sprite->savedY, &bitmap, NULL, true);
+          drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
         }
       }
@@ -2031,7 +2031,7 @@ void IRAM_ATTR VGAControllerClass::hideSprites()
     // mouse cursor sprite
     if (m_mouseCursor.savedBackgroundWidth > 0) {
       Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground);
-      drawBitmap(m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap, NULL, true);
+      drawBitmap(m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap, nullptr, true);
       m_mouseCursor.savedBackgroundWidth = m_mouseCursor.savedBackgroundHeight = 0;
     }
 
@@ -2179,10 +2179,10 @@ void IRAM_ATTR VGAControllerClass::execFillPath(Path const & path)
 }
 
 
-// cursor = NULL -> disable mouse
+// cursor = nullptr -> disable mouse
 void VGAControllerClass::setMouseCursor(Cursor const * cursor)
 {
-  if (cursor == NULL || &cursor->bitmap != m_mouseCursor.getFrame()) {
+  if (cursor == nullptr || &cursor->bitmap != m_mouseCursor.getFrame()) {
     m_mouseCursor.visible = false;
     m_mouseCursor.clearBitmaps();
 
@@ -2226,12 +2226,12 @@ Sprite::Sprite()
   x                       = 0;
   y                       = 0;
   currentFrame            = 0;
-  frames                  = NULL;
+  frames                  = nullptr;
   framesCount             = 0;
   savedBackgroundWidth    = 0;
   savedBackgroundHeight   = 0;
-  savedBackground         = NULL; // allocated or reallocated when bitmaps are added
-  collisionDetectorObject = NULL;
+  savedBackground         = nullptr; // allocated or reallocated when bitmaps are added
+  collisionDetectorObject = nullptr;
   visible                 = true;
   isStatic                = false;
   allowDraw               = true;
@@ -2260,7 +2260,7 @@ void Sprite::allocRequiredBackgroundBuffer()
 void Sprite::clearBitmaps()
 {
   free(frames);
-  frames = NULL;
+  frames = nullptr;
   framesCount = 0;
 }
 

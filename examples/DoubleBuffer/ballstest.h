@@ -87,7 +87,7 @@ private:
     double vel;
     int    size;
     Color  color;
-  } * balls_ = NULL;
+  } * balls_ = nullptr;
 
   int ballsCount_ = 0;
 

@@ -194,7 +194,7 @@ esp_err_t ulp_process_macros_and_load_ex(uint32_t load_addr, const ulp_insn_t* p
     }
     reloc_info_t* reloc_info =
             (reloc_info_t*) malloc(sizeof(reloc_info_t) * macro_count);
-    if (reloc_info == NULL) {
+    if (reloc_info == nullptr) {
         return ESP_ERR_NO_MEM;
     }
 

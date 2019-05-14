@@ -213,5 +213,5 @@ void loop()
 {
   MyScene scene;
   scene.start();
-  vTaskSuspend(NULL);
+  vTaskSuspend(nullptr);
 }

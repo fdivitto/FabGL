@@ -799,8 +799,8 @@ void replace_placeholders(uint32_t prg_start, int size, gpio_num_t port0_clkGPIO
 // Note: GPIO_NUM_39 is a placeholder used to disable PS/2 port 1.
 void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  m_TXWaitTask[0] = m_TXWaitTask[1] = NULL;
-  m_RXWaitTask[0] = m_RXWaitTask[1] = NULL;
+  m_TXWaitTask[0] = m_TXWaitTask[1] = nullptr;
+  m_RXWaitTask[0] = m_RXWaitTask[1] = nullptr;
 
   rtc_gpio_init(port0_clkGPIO);
   rtc_gpio_init(port0_datGPIO);
@@ -844,7 +844,7 @@ void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPI
   m_readPos[1] = RTCMEM_PORT1_BUFFER_START;
 
   // install RTC interrupt handler (on ULP Wake() instruction)
-  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, NULL, NULL);
+  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, nullptr, nullptr);
   SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
 }
 
@@ -932,8 +932,8 @@ void IRAM_ATTR PS2ControllerClass::rtc_isr(void * arg)
       RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG] = 0;
       PS2Controller.m_readPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
       if (PS2Controller.m_TXWaitTask[PS2Port]) {
-        vTaskNotifyGiveFromISR(PS2Controller.m_TXWaitTask[PS2Port], NULL);
-        PS2Controller.m_TXWaitTask[PS2Port] = NULL;
+        vTaskNotifyGiveFromISR(PS2Controller.m_TXWaitTask[PS2Port], nullptr);
+        PS2Controller.m_TXWaitTask[PS2Port] = nullptr;
       }
     }
 
@@ -942,8 +942,8 @@ void IRAM_ATTR PS2ControllerClass::rtc_isr(void * arg)
       // reset flag and awake waiting task
       RTC_SLOW_MEM[RTCMEM_PORTX_WORD_RX_READY] = 0;
       if (PS2Controller.m_RXWaitTask[PS2Port]) {
-        vTaskNotifyGiveFromISR(PS2Controller.m_RXWaitTask[PS2Port], NULL);
-        PS2Controller.m_RXWaitTask[PS2Port] = NULL;
+        vTaskNotifyGiveFromISR(PS2Controller.m_RXWaitTask[PS2Port], nullptr);
+        PS2Controller.m_RXWaitTask[PS2Port] = nullptr;
       }
     }
 

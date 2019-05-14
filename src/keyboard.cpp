@@ -48,7 +48,7 @@ const KeyboardLayout USLayout {
   "US",
 
   // inherited layout
-  NULL,
+  nullptr,
 
   // single byte scancodes
   {
@@ -415,10 +415,10 @@ void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue, int PS2P
   m_capsLockLED    = false;
   m_scrollLockLED  = false;
 
-  m_SCodeToVKConverterTask = NULL;
-  m_virtualKeyQueue        = NULL;
+  m_SCodeToVKConverterTask = nullptr;
+  m_virtualKeyQueue        = nullptr;
 
-  m_uiApp = NULL;
+  m_uiApp = nullptr;
 
   reset();
 
@@ -720,7 +720,7 @@ VirtualKey KeyboardClass::scancodeToVK(uint8_t scancode, bool isExtended, Keyboa
 {
   VirtualKey vk = VK_NONE;
 
-  if (layout == NULL)
+  if (layout == nullptr)
     layout = m_layout;
 
   VirtualKeyDef const * def = isExtended ? layout->exScancodeToVK : layout->scancodeToVK;
@@ -741,7 +741,7 @@ VirtualKey KeyboardClass::VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const
 {
   VirtualKey vk = VK_NONE;
 
-  if (layout == NULL)
+  if (layout == nullptr)
     layout = m_layout;
 
   for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
@@ -872,7 +872,7 @@ void KeyboardClass::SCodeToVKConverterTask(void * pvParameters)
 
       // need to send events to uiApp?
       if (Keyboard.m_uiApp) {
-        uiEvent evt = uiEvent(NULL, keyDown ? UIEVT_KEYDOWN : UIEVT_KEYUP);
+        uiEvent evt = uiEvent(nullptr, keyDown ? UIEVT_KEYDOWN : UIEVT_KEYUP);
         evt.params.key.VK    = vk;
         evt.params.key.LALT  = Keyboard.isVKDown(VK_LALT);
         evt.params.key.RALT  = Keyboard.isVKDown(VK_RALT);

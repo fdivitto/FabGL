@@ -275,7 +275,7 @@ static const FontInfo FONT_4x6 = {
   .weight    = 400,
   .charset   = 255,
   .data      = FONT_4x6_DATA,
-  .chptr     = NULL,
+  .chptr     = nullptr,
 };
 
 

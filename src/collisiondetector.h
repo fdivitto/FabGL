@@ -54,7 +54,7 @@ struct QuadTreeObject {
   Sprite *         sprite;
 
   QuadTreeObject(QuadTreeObject * next_, Sprite * sprite_)
-    : owner(NULL), next(next_), sprite(sprite_)
+    : owner(nullptr), next(next_), sprite(sprite_)
   {
   }
 };
@@ -87,7 +87,7 @@ public:
 
   //void dump(int level = 0);
 
-  QuadTreeObject * detectCollision(QuadTreeObject * object, CollisionDetectionCallback callbackFunc = NULL, void * callbackObj = NULL);
+  QuadTreeObject * detectCollision(QuadTreeObject * object, CollisionDetectionCallback callbackFunc = nullptr, void * callbackObj = nullptr);
 
   bool isEmpty();
 

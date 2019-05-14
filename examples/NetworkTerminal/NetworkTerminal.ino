@@ -71,7 +71,7 @@ const int    INPUTLINESIZE = 80;
 char         inputLine[INPUTLINESIZE + 1];
 int          inputPos = 0;
 WiFiClient   client;
-char const * currentScript = NULL;
+char const * currentScript = nullptr;
 bool         error = false;
 
 TerminalClass Terminal;
@@ -148,7 +148,7 @@ void exe_prompt()
     // process commands from script
     if (*currentScript == 0 || error) {
       // end of script, return to prompt
-      currentScript = NULL;
+      currentScript = nullptr;
       state = State::Prompt;
     } else {
       // execute current line and move to the next one

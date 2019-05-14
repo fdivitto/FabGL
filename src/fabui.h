@@ -137,7 +137,7 @@ struct uiEvent {
     uiEventParams() { }
   } params;
 
-  uiEvent() : dest(NULL), id(UIEVT_NULL) { }
+  uiEvent() : dest(nullptr), id(UIEVT_NULL) { }
   uiEvent(uiEvent const & e) { dest = e.dest; id = e.id; params = e.params; }
   uiEvent(uiEvtHandler * dest_, uiEventID id_) : dest(dest_), id(id_) { }
 };
@@ -255,7 +255,7 @@ public:
 
   uiWindow * lastChild() { return m_lastChild; }
 
-  bool hasChildren() { return m_firstChild != NULL; }
+  bool hasChildren() { return m_firstChild != nullptr; }
 
   void addChild(uiWindow * child);
 

@@ -50,8 +50,8 @@ namespace fabgl {
 void SquareWaveGeneratorClass::begin()
 {
   m_DMAStarted = false;
-  m_DMABuffer  = NULL;
-  m_DMAData    = NULL;
+  m_DMABuffer  = nullptr;
+  m_DMAData    = nullptr;
 }
 
 

@@ -48,30 +48,30 @@ QuadTree::QuadTree(CollisionDetector * collisionDetector, QuadTree * parent, Qua
   m_y                     = y;
   m_width                 = width;
   m_height                = height;
-  m_objects               = NULL;
+  m_objects               = nullptr;
   m_objectsCount          = 0;
-  m_children[TopLeft]     = NULL;
-  m_children[TopRight]    = NULL;
-  m_children[BottomLeft]  = NULL;
-  m_children[BottomRight] = NULL;
+  m_children[TopLeft]     = nullptr;
+  m_children[TopRight]    = nullptr;
+  m_children[BottomLeft]  = nullptr;
+  m_children[BottomRight] = nullptr;
 }
 
 
 bool QuadTree::isEmpty()
 {
   return m_objectsCount == 0 &&
-         m_children[TopLeft] == NULL &&
-         m_children[TopRight] == NULL &&
-         m_children[BottomLeft] == NULL &&
-         m_children[BottomRight] == NULL;
+         m_children[TopLeft] == nullptr &&
+         m_children[TopRight] == nullptr &&
+         m_children[BottomLeft] == nullptr &&
+         m_children[BottomRight] == nullptr;
 }
 
 
 void QuadTree::detachFromParent()
 {
   if (m_parent) {
-    m_parent->m_children[m_quadrant] = NULL;
-    m_parent = NULL;
+    m_parent->m_children[m_quadrant] = nullptr;
+    m_parent = nullptr;
   }
 }
 
@@ -95,7 +95,7 @@ void QuadTree::insert(QuadTreeObject * object)
   // split m_objects inside sub trees (4 quadrants)
 
   QuadTreeObject * obj = m_objects;
-  QuadTreeObject * prev = NULL;
+  QuadTreeObject * prev = nullptr;
   while (obj) {
     QuadTreeObject * next = obj->next;
     QuadTreeQuadrant quadrant = getQuadrant(obj);
@@ -103,7 +103,7 @@ void QuadTree::insert(QuadTreeObject * object)
       createQuadrant(quadrant);
       m_children[quadrant]->insert(obj);
       --m_objectsCount;
-      if (prev == NULL)
+      if (prev == nullptr)
         m_objects = next;
       else
         prev->next = next;
@@ -119,10 +119,10 @@ void QuadTree::remove(QuadTreeObject * object)
 {
   // rebuild the list removing this object
   QuadTreeObject * obj = object->owner->m_objects;
-  QuadTreeObject * prev = NULL;
+  QuadTreeObject * prev = nullptr;
   while (obj) {
     if (obj == object) {
-      if (prev == NULL)
+      if (prev == nullptr)
         object->owner->m_objects = object->next;
       else
         prev->next = object->next;
@@ -132,14 +132,14 @@ void QuadTree::remove(QuadTreeObject * object)
     obj = obj->next;
   }
   object->owner->m_objectsCount -= 1;
-  object->owner = NULL;
-  object->next  = NULL;
+  object->owner = nullptr;
+  object->next  = nullptr;
 }
 
 
 void QuadTree::createQuadrant(QuadTreeQuadrant quadrant)
 {
-  if (m_children[quadrant] == NULL) {
+  if (m_children[quadrant] == nullptr) {
     int halfWidth  = m_width >> 1;
     int halfHeight = m_height >> 1;
     switch (quadrant) {
@@ -192,10 +192,10 @@ void QuadTree::update(QuadTreeObject * object)
 {
   QuadTree * qtree = object->owner;
   while (true) {
-    if (qtree->m_parent == NULL || objectInRect(object, qtree->m_x, qtree->m_y, qtree->m_width, qtree->m_height)) {
+    if (qtree->m_parent == nullptr || objectInRect(object, qtree->m_x, qtree->m_y, qtree->m_width, qtree->m_height)) {
       // need to reinsert?
       QuadTreeQuadrant quadrant = qtree->getQuadrant(object);
-      if (qtree == object->owner && qtree->m_children[quadrant] == NULL)
+      if (qtree == object->owner && qtree->m_children[quadrant] == nullptr)
         return; // don't need to reinsert
 
       // need to be reinserted, remove from owner...
@@ -211,11 +211,11 @@ void QuadTree::update(QuadTreeObject * object)
 
 
 // get the first detected collision
-// ret NULL = no collision detected
+// ret nullptr = no collision detected
 QuadTreeObject * QuadTree::detectCollision(QuadTreeObject * object, CollisionDetectionCallback callbackFunc, void * callbackObj)
 {
   if (!object->sprite->visible)
-    return NULL;
+    return nullptr;
 
   // find rectangle level collision with objects of this level
   QuadTreeObject * obj = m_objects;
@@ -242,13 +242,13 @@ QuadTreeObject * QuadTree::detectCollision(QuadTreeObject * object, CollisionDet
   } else {
     // look in all quadrants
     for (int i = 0; i < 4; ++i) {
-      QuadTreeObject * obj = m_children[i] && objectIntersectsQuadTree(object, m_children[i]) ? m_children[i]->detectCollision(object, callbackFunc, callbackObj) : NULL;
+      QuadTreeObject * obj = m_children[i] && objectIntersectsQuadTree(object, m_children[i]) ? m_children[i]->detectCollision(object, callbackFunc, callbackObj) : nullptr;
       if (obj && !callbackFunc)
         return obj;
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 
@@ -322,7 +322,7 @@ void QuadTree::dump(int level)
 
 
 CollisionDetector::CollisionDetector(int maxObjectsCount, int width, int height)
-  : m_quadTreePool(NULL), m_objectPool(NULL)
+  : m_quadTreePool(nullptr), m_objectPool(nullptr)
 {
   m_objectPoolSize = maxObjectsCount;
   m_quadTreePoolSize = (5 * maxObjectsCount + 1) / 3;
@@ -333,17 +333,17 @@ CollisionDetector::CollisionDetector(int maxObjectsCount, int width, int height)
     m_quadTreePool = (QuadTree*) malloc(sizeof(QuadTree) * m_quadTreePoolSize);
 
     // initialize root quadtree
-    m_quadTreePool[0] = QuadTree(this, NULL, None, 0, 0, width, height);
+    m_quadTreePool[0] = QuadTree(this, nullptr, None, 0, 0, width, height);
     m_rootQuadTree = m_quadTreePool;
 
     // initialize other quadtrees
     for (int i = 1; i < m_quadTreePoolSize; ++i)
-      m_quadTreePool[i] = QuadTree(this, NULL, None, 0, 0, 0, 0);
+      m_quadTreePool[i] = QuadTree(this, nullptr, None, 0, 0, 0, 0);
 
     // preallocate and initialize objects
     m_objectPool = (QuadTreeObject*) malloc(sizeof(QuadTreeObject) * m_objectPoolSize);
     for (int i = 0; i < m_objectPoolSize; ++i)
-      m_objectPool[i] = QuadTreeObject(NULL, NULL);
+      m_objectPool[i] = QuadTreeObject(nullptr, nullptr);
 
   }
 }
@@ -374,7 +374,7 @@ void CollisionDetector::addSprite(Sprite * sprite)
 {
   // look for unused object inside the pool
   for (int i = 0; i < m_objectPoolSize; ++i)
-    if (m_objectPool[i].sprite == NULL) {
+    if (m_objectPool[i].sprite == nullptr) {
       QuadTreeObject * obj = &m_objectPool[i];
       obj->sprite = sprite;
       sprite->collisionDetectorObject = obj;
@@ -388,7 +388,7 @@ void CollisionDetector::addSprite(Sprite * sprite)
 void CollisionDetector::removeSprite(Sprite * sprite)
 {
   QuadTree::remove(sprite->collisionDetectorObject);
-  sprite->collisionDetectorObject->sprite = NULL;
+  sprite->collisionDetectorObject->sprite = nullptr;
 }
 
 
@@ -409,7 +409,7 @@ Sprite * CollisionDetector::detectCollision(Sprite * sprite, bool removeCollidin
     removeSprite(cSprite);
     return cSprite;
   } else
-    return NULL;
+    return nullptr;
 }
 
 

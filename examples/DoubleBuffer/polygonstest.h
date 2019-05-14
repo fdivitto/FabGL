@@ -114,7 +114,7 @@ public:
 private:
 
 
-  Polygon * polygons_ = NULL;
+  Polygon * polygons_ = nullptr;
 
   int polygonsCount_ = 0;
 

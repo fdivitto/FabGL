@@ -105,7 +105,7 @@ public:
    *     // Set 25MHz as main frequency
    *     SquareWaveGenerator.play(25000000);
    */
-  void play(int freq, lldesc_t volatile * dmaBuffers = NULL);
+  void play(int freq, lldesc_t volatile * dmaBuffers = nullptr);
 
   /**
    * @brief Disable all outputs.
