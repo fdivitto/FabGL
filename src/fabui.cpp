@@ -436,6 +436,40 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 }
 
 
+uiWindow * uiApp::setFocusedWindowNext()
+{
+  uiWindow * old = m_focusedWindow;
+  uiWindow * parent = old ? old->parent() : m_activeWindow;
+  if (parent && parent->firstChild()) {
+    uiWindow * proposed = old;
+    do {
+      if (!old && proposed)
+        old = proposed; // just a way to exit loop when old=NULL and no child is focusable
+      proposed = proposed && proposed->next() ? proposed->next() : parent->firstChild();
+    } while (!proposed->windowProps().focusable && proposed != old);
+    setFocusedWindow(proposed);
+  }
+  return old;
+}
+
+
+uiWindow * uiApp::setFocusedWindowPrev()
+{
+  uiWindow * old = m_focusedWindow;
+  uiWindow * parent = old ? old->parent() : m_activeWindow;
+  if (parent && parent->lastChild()) {
+    uiWindow * proposed = old;
+    do {
+      if (!old && proposed)
+        old = proposed; // just a way to exit loop when old=NULL and no child is focusable
+      proposed = proposed && proposed->prev() ? proposed->prev() : parent->lastChild();
+    } while (!proposed->windowProps().focusable && proposed != old);
+    setFocusedWindow(proposed);
+  }
+  return old;
+}
+
+
 void uiApp::repaintWindow(uiWindow * window)
 {
   repaintRect(window->rect(uiRect_ScreenBased));

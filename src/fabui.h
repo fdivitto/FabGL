@@ -537,6 +537,10 @@ public:
 
   uiWindow * setFocusedWindow(uiWindow * value);
 
+  uiWindow * setFocusedWindowNext();
+
+  uiWindow * setFocusedWindowPrev();
+
   void captureMouse(uiWindow * window);
 
   uiWindow * capturedMouseWindow() { return m_capturedMouseWindow; }
