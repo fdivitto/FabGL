@@ -1420,6 +1420,11 @@ void uiButton::processEvent(uiEvent * event)
       repaint();  // to update background color
       break;
 
+    case UIEVT_KEYUP:
+      if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE)
+        onClick();
+      break;
+
     default:
       break;
   }
