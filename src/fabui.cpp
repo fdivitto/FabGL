@@ -1448,10 +1448,6 @@ void uiButton::processEvent(uiEvent * event)
       paintButton();
       break;
 
-    case UIEVT_MOUSEBUTTONDOWN:
-      repaint();
-      break;
-
     case UIEVT_MOUSEBUTTONUP:
       // this check is required to avoid onclick event when mouse is captured and moved out of button area
       if (rect(uiRect_WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
@@ -1459,24 +1455,16 @@ void uiButton::processEvent(uiEvent * event)
       repaint();
       break;
 
-    case UIEVT_MOUSEMOVE:
-      break;
-
     case UIEVT_MOUSEENTER:
       VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
       repaint();  // to update background color
       break;
 
+    case UIEVT_MOUSEBUTTONDOWN:
     case UIEVT_MOUSELEAVE:
-      repaint();  // to update background color
-      break;
-
     case UIEVT_SETFOCUS:
-      repaint();  // to update border
-      break;
-
     case UIEVT_KILLFOCUS:
-      repaint();  // to update border
+      repaint();  // to update background and border
       break;
 
     case UIEVT_KEYUP:

@@ -422,11 +422,11 @@ private:
   static const int CORNERSENSE = 10;
 
 
-  uiFrameStyle m_style;
+  uiFrameStyle       m_style;
 
-  uiFrameProps m_frameProps;
+  uiFrameProps       m_frameProps;
 
-  char * m_title;
+  char *             m_title;
 
   uiFrameSensiblePos m_mouseDownSensiblePos;  // sensible position on mouse down
   uiFrameSensiblePos m_mouseMoveSensiblePos;  // sensible position on mouse move
@@ -498,8 +498,8 @@ private:
 
   uiButtonStyle m_style;
 
-  char * m_text;
-  int    m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
+  char *        m_text;
+  int           m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
 };
 
 
