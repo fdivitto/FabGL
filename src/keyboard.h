@@ -35,6 +35,7 @@
 
 #include "fabglconf.h"
 #include "ps2device.h"
+#include "fabui.h"
 
 
 namespace fabgl {
@@ -201,6 +202,9 @@ public:
    *     Keyboard.begin(true, true, 0); // port 0
    */
   void begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port);
+
+  // to use this generateVirtualKeys must be true in begin()
+  void setUIApp(uiApp * app) { m_uiApp = app; }
 
   /**
    * @brief Send a Reset command to the keyboard.
@@ -384,6 +388,8 @@ private:
   uint8_t                   m_VKMap[(int)(VK_LAST + 7) / 8];
 
   KeyboardLayout const *    m_layout;
+
+  uiApp *                   m_uiApp;
 
   bool                      m_CTRL;
   bool                      m_ALT;

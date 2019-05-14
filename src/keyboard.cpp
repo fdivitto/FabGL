@@ -418,6 +418,8 @@ void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue, int PS2P
   m_SCodeToVKConverterTask = NULL;
   m_virtualKeyQueue        = NULL;
 
+  m_uiApp = NULL;
+
   reset();
 
   if (generateVirtualKeys || createVKQueue) {
@@ -855,13 +857,29 @@ void KeyboardClass::SCodeToVKConverterTask(void * pvParameters)
     bool keyDown;
     VirtualKey vk = Keyboard.blockingGetVirtualKey(&keyDown);
     if (vk != VK_NONE) {
+
+      // update m_VKMap
       if (keyDown)
         Keyboard.m_VKMap[(int)vk >> 3] |= 1 << ((int)vk & 7);
       else
         Keyboard.m_VKMap[(int)vk >> 3] &= ~(1 << ((int)vk & 7));
+
+      // has VK queue? Insert VK into it.
       if (Keyboard.m_virtualKeyQueue) {
         uint16_t code = (uint16_t)vk | (keyDown ? 0x8000 : 0);
         xQueueSendToBack(Keyboard.m_virtualKeyQueue, &code, portMAX_DELAY);
+      }
+
+      // need to send events to uiApp?
+      if (Keyboard.m_uiApp) {
+        uiEvent evt = uiEvent(NULL, keyDown ? UIEVT_KEYDOWN : UIEVT_KEYUP);
+        evt.params.key.VK    = vk;
+        evt.params.key.LALT  = Keyboard.isVKDown(VK_LALT);
+        evt.params.key.RALT  = Keyboard.isVKDown(VK_RALT);
+        evt.params.key.CTRL  = Keyboard.isVKDown(VK_LCTRL) || Keyboard.isVKDown(VK_RCTRL);
+        evt.params.key.SHIFT = Keyboard.isVKDown(VK_LSHIFT) || Keyboard.isVKDown(VK_RSHIFT);
+        evt.params.key.GUI   = Keyboard.isVKDown(VK_LGUI) || Keyboard.isVKDown(VK_RGUI);
+        Keyboard.m_uiApp->postEvent(&evt);
       }
     }
   }
@@ -902,6 +920,7 @@ int KeyboardClass::virtualKeyAvailable()
 {
   return m_virtualKeyQueue ? uxQueueMessagesWaiting(m_virtualKeyQueue) : 0;
 }
+
 
 
 
