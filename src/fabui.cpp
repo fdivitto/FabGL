@@ -881,6 +881,7 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
 
 uiFrame::~uiFrame()
 {
+  free(m_title);
 }
 
 
@@ -1358,6 +1359,7 @@ uiControl::~uiControl()
 {
 }
 
+
 void uiControl::processEvent(uiEvent * event)
 {
   uiWindow::processEvent(event);
@@ -1386,6 +1388,7 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
 
 uiButton::~uiButton()
 {
+  free(m_text);
 }
 
 
