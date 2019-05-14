@@ -462,9 +462,11 @@ struct uiButtonStyle {
   RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
   RGB              downBackgroundColor      = RGB(3, 3, 3);
   RGB              borderColor              = RGB(1, 1, 1);
+  RGB              focusedBorderColor       = RGB(0, 0, 3);
   RGB              textFontColor            = RGB(0, 0, 0);
   FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
   int              borderSize               = 1;
+  int              focusedBorderSize        = 2;
 };
 
 

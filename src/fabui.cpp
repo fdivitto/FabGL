@@ -1336,17 +1336,16 @@ void uiButton::setText(char const * value)
 
 void uiButton::paintButton()
 {
+  bool hasFocus = (app()->focusedWindow() == this);
   Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
   // border
   if (m_style.borderSize > 0) {
-    Canvas.setPenColor(m_style.borderColor);
-    for (int i = 0; i < m_style.borderSize; ++i)
+    Canvas.setPenColor(hasFocus ? m_style.focusedBorderColor : m_style.borderColor);
+    int bsize = hasFocus? m_style.focusedBorderSize : m_style.borderSize;
+    for (int i = 0; i < bsize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
     // adjust background rect
-    bkgRect.X1 += m_style.borderSize;
-    bkgRect.Y1 += m_style.borderSize;
-    bkgRect.X2 -= m_style.borderSize;
-    bkgRect.Y2 -= m_style.borderSize;
+    bkgRect = bkgRect.shrink(bsize);
   }
   // background
   RGB bkColor = m_style.backgroundColor;
