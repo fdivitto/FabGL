@@ -246,6 +246,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
     for (uiWindow * cur = m_capturedMouseWindow; cur != m_rootWindow; cur = cur->parent())
       mousePos = mousePos.sub(cur->pos());
     event->dest = m_capturedMouseWindow;
+    // left mouse button UP?
     if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
       // mouse up will end mouse capture, check that mouse is still inside
       if (!m_capturedMouseWindow->rect(uiRect_WindowBased).contains(mousePos)) {
@@ -1082,7 +1083,7 @@ void uiFrame::processEvent(uiEvent * event)
       movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
 
       // handle buttons clicks
-      if (event->params.mouse.changedButton == 1)
+      if (event->params.mouse.changedButton == 1) // 1 = left button
         handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
 
       app()->combineMouseMoveEvents(false);
@@ -1323,11 +1324,11 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y)
 {
-  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y))
+  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos()))
     app()->showWindow(this, false);
-  else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y))
+  else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos()))
     app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-  else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y))
+  else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos()))
     app()->minimizeWindow(this, !state().minimized);
   else
     return;
