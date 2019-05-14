@@ -169,11 +169,11 @@ public:
    *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
-   * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
+   * @param generateVirtualKeys If true creates a task which consumes scancodes to produce virtual keys,
    *                            so you can call KeyboardClass.isVKDown().
    * @param createVKQueue If true creates a task which consunes scancodes and produces virtual keys
-   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.scancodeAvailable()
-   *                      and KeyboardClass.getNextScancode().
+   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable()
+   *                      and KeyboardClass.getNextVirtualKey().
    *
    * Example:
    *
@@ -190,9 +190,9 @@ public:
    *
    * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
    *                            so you can call KeyboardClass.isVKDown().
-   * @param createVKQueue If true creates a task which consunes scancodes and produces virtual keys
-   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.scancodeAvailable()
-   *                      and KeyboardClass.getNextScancode().
+   * @param createVKQueue If true creates a task which consunes scancodes to produce virtual keys
+   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable()
+   *                      and KeyboardClass.getNextVirtualKey().
    * @param PS2Port The PS/2 port to use (0 or 1).
    *
    * Example:
