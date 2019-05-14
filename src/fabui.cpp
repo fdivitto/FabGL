@@ -771,6 +771,19 @@ void uiWindow::processEvent(uiEvent * event)
       m_isMouseOver = false;
       break;
 
+    case UIEVT_KEYUP:
+      // only non-focusable windows can make focusable its children
+      if (!m_windowProps.focusable) {
+        // move focused child
+        if (event->params.key.VK == VK_TAB) {
+          if (event->params.key.SHIFT)
+            app()->setFocusedWindowPrev();
+          else
+            app()->setFocusedWindowNext();
+        }
+      }
+      break;
+
     default:
       break;
   }
