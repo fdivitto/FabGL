@@ -69,10 +69,10 @@ print "const uint8_t {}_data[] = {{".format(name)
 for y in range(0, im.height):
   print "\t",
   for x in range(0, im.width):
-    v = int(3-pix[x, y][0] / 255.0 * 3.0)       # R
-    v |= int(3-pix[x, y][1] / 255.0 * 3.0) << 2 # G
-    v |= int(3-pix[x, y][2] / 255.0 * 3.0) << 4 # B
-    v |= int(pix[x, y][3] / 255.0 * 3.0) << 6   # A
+    v  = int(pix[x, y][0] / 255.0 * 3.0)       # R
+    v |= int(pix[x, y][1] / 255.0 * 3.0) << 2  # G
+    v |= int(pix[x, y][2] / 255.0 * 3.0) << 4  # B
+    v |= int(pix[x, y][3] / 255.0 * 3.0) << 6  # A
     print "0x{:02x},".format(v),
   print
 
