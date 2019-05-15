@@ -484,6 +484,8 @@ public:
 
   char const * text() { return m_text; }
 
+  uiButtonStyle & buttonStyle() { return m_buttonStyle; }
+
 
   // Delegates
 
@@ -496,7 +498,7 @@ private:
   void paintText(Rect const & rect);
 
 
-  uiButtonStyle  m_style;
+  uiButtonStyle  m_buttonStyle;
 
   char *         m_text;
   int            m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!

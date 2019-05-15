@@ -1398,7 +1398,7 @@ void uiButton::setText(char const * value)
   m_text = (char*) realloc(m_text, len + 1);
   strcpy(m_text, value);
 
-  m_textExtent = Canvas.textExtent(m_style.textFont, value);
+  m_textExtent = Canvas.textExtent(m_buttonStyle.textFont, value);
 }
 
 
@@ -1407,20 +1407,20 @@ void uiButton::paintButton()
   bool hasFocus = (app()->focusedWindow() == this);
   Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
   // border
-  if (m_style.borderSize > 0) {
-    Canvas.setPenColor(hasFocus ? m_style.focusedBorderColor : m_style.borderColor);
-    int bsize = hasFocus? m_style.focusedBorderSize : m_style.borderSize;
+  if (m_buttonStyle.borderSize > 0) {
+    Canvas.setPenColor(hasFocus ? m_buttonStyle.focusedBorderColor : m_buttonStyle.borderColor);
+    int bsize = hasFocus? m_buttonStyle.focusedBorderSize : m_buttonStyle.borderSize;
     for (int i = 0; i < bsize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
     // adjust background rect
     bkgRect = bkgRect.shrink(bsize);
   }
   // background
-  RGB bkColor = m_style.backgroundColor;
+  RGB bkColor = m_buttonStyle.backgroundColor;
   if (app()->capturedMouseWindow() == this)
-    bkColor = m_style.downBackgroundColor;
+    bkColor = m_buttonStyle.downBackgroundColor;
   else if (isMouseOver())
-    bkColor = m_style.mouseOverBackgroundColor;
+    bkColor = m_buttonStyle.mouseOverBackgroundColor;
   Canvas.setBrushColor(bkColor);
   Canvas.fillRectangle(bkgRect);
   // text
@@ -1431,9 +1431,9 @@ void uiButton::paintButton()
 void uiButton::paintText(Rect const & rect)
 {
   int x = rect.X1 + (rect.size().width - m_textExtent) / 2;
-  int y = rect.Y1 + (rect.size().height - m_style.textFont->height) / 2;
-  Canvas.setPenColor(m_style.textFontColor);
-  Canvas.drawText(m_style.textFont, x, y, m_text);
+  int y = rect.Y1 + (rect.size().height - m_buttonStyle.textFont->height) / 2;
+  Canvas.setPenColor(m_buttonStyle.textFontColor);
+  Canvas.drawText(m_buttonStyle.textFont, x, y, m_text);
 }
 
 
