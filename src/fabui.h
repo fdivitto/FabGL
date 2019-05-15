@@ -395,7 +395,7 @@ public:
 
   void setTitle(char const * value);
 
-  uiFrameStyle & style() { return m_style; }
+  uiFrameStyle & frameStyle() { return m_frameStyle; }
 
   uiFrameProps & frameProps() { return m_frameProps; }
 
@@ -422,7 +422,7 @@ private:
   static const int CORNERSENSE = 10;
 
 
-  uiFrameStyle       m_style;
+  uiFrameStyle       m_frameStyle;
 
   uiFrameProps       m_frameProps;
 
@@ -496,10 +496,11 @@ private:
   void paintText(Rect const & rect);
 
 
-  uiButtonStyle m_style;
+  uiButtonStyle  m_style;
 
-  char *        m_text;
-  int           m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
+  char *         m_text;
+  int            m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
+
 };
 
 

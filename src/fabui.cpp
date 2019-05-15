@@ -177,8 +177,8 @@ void uiApp::run()
   m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
   m_rootWindow->setApp(this);
 
-  m_rootWindow->style().borderSize      = 0;
-  m_rootWindow->style().backgroundColor = RGB(3, 3, 3);
+  m_rootWindow->frameStyle().borderSize      = 0;
+  m_rootWindow->frameStyle().backgroundColor = RGB(3, 3, 3);
 
   m_rootWindow->frameProps().resizeable = false;
   m_rootWindow->frameProps().moveable   = false;
@@ -895,7 +895,7 @@ void uiFrame::setTitle(char const * value)
 
 int uiFrame::titleBarHeight()
 {
-  return m_style.titleFont->height;
+  return m_frameStyle.titleFont->height;
 }
 
 
@@ -906,10 +906,10 @@ Rect uiFrame::rect(uiWindowRectType rectType)
     case uiRect_ClientAreaParentBased:
     case uiRect_ClientAreaWindowBased:
       // border
-      r.X1 += m_style.borderSize;
-      r.Y1 += m_style.borderSize;
-      r.X2 -= m_style.borderSize;
-      r.Y2 -= m_style.borderSize;
+      r.X1 += m_frameStyle.borderSize;
+      r.Y1 += m_frameStyle.borderSize;
+      r.X2 -= m_frameStyle.borderSize;
+      r.Y2 -= m_frameStyle.borderSize;
       // title bar
       if (strlen(m_title))
         r.Y1 += 1 + titleBarHeight();
@@ -928,8 +928,8 @@ Size uiFrame::minWindowSize()
     r.width  += CORNERSENSE * 2;
     r.height += CORNERSENSE * 2;
   }
-  r.width  += m_style.borderSize * 2;
-  r.height += m_style.borderSize * 2;
+  r.width  += m_frameStyle.borderSize * 2;
+  r.height += m_frameStyle.borderSize * 2;
   if (hasTitle) {
     int barHeight = titleBarHeight();  // titleBarHeight is also the button width
     r.height += 1 + barHeight;
@@ -948,10 +948,10 @@ Size uiFrame::minWindowSize()
 Rect uiFrame::getBtnRect(int buttonIndex)
 {
   int btnSize = titleBarHeight();  // horiz and vert size of each button
-  Rect btnRect = Rect(size().width - 1 - m_style.borderSize - btnSize - CORNERSENSE,
-                      m_style.borderSize,
-                      size().width - 1 - m_style.borderSize - CORNERSENSE,
-                      m_style.borderSize + btnSize);
+  Rect btnRect = Rect(size().width - 1 - m_frameStyle.borderSize - btnSize - CORNERSENSE,
+                      m_frameStyle.borderSize,
+                      size().width - 1 - m_frameStyle.borderSize - CORNERSENSE,
+                      m_frameStyle.borderSize + btnSize);
   while (buttonIndex--)
     btnRect = btnRect.translate(-btnSize, 0);
   return btnRect;
@@ -965,9 +965,9 @@ void uiFrame::paintFrame()
   if (strlen(m_title)) {
     int barHeight = titleBarHeight();
     // title bar background
-    RGB titleBarBrushColor = state().active ? m_style.activeTitleBackgroundColor : m_style.titleBackgroundColor;
+    RGB titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
     Canvas.setBrushColor(titleBarBrushColor);
-    Canvas.fillRectangle(m_style.borderSize, m_style.borderSize, size().width - 1 - m_style.borderSize, 1 + barHeight + m_style.borderSize);
+    Canvas.fillRectangle(m_frameStyle.borderSize, m_frameStyle.borderSize, size().width - 1 - m_frameStyle.borderSize, 1 + barHeight + m_frameStyle.borderSize);
     // close, maximize and minimze buttons
     int btnX = paintButtons();
     // title
@@ -976,19 +976,19 @@ void uiFrame::paintFrame()
     bkgRect.Y1 = 2 + barHeight;
   }
   // border
-  if (m_style.borderSize > 0) {
-    Canvas.setPenColor(state().active ? m_style.activeBorderColor : m_style.borderColor);
-    for (int i = 0; i < m_style.borderSize; ++i)
+  if (m_frameStyle.borderSize > 0) {
+    Canvas.setPenColor(state().active ? m_frameStyle.activeBorderColor : m_frameStyle.borderColor);
+    for (int i = 0; i < m_frameStyle.borderSize; ++i)
       Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
     // adjust background rect
-    bkgRect.X1 += m_style.borderSize;
-    bkgRect.Y1 += m_style.borderSize;
-    bkgRect.X2 -= m_style.borderSize;
-    bkgRect.Y2 -= m_style.borderSize;
+    bkgRect.X1 += m_frameStyle.borderSize;
+    bkgRect.Y1 += m_frameStyle.borderSize;
+    bkgRect.X2 -= m_frameStyle.borderSize;
+    bkgRect.Y2 -= m_frameStyle.borderSize;
   }
   // background
   if (!state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
-    Canvas.setBrushColor(m_style.backgroundColor);
+    Canvas.setBrushColor(m_frameStyle.backgroundColor);
     Canvas.fillRectangle(bkgRect);
   }
 }
@@ -997,26 +997,26 @@ void uiFrame::paintFrame()
 // maxX maximum X coordinate allowed
 void uiFrame::paintTitle(int maxX)
 {
-  Canvas.setPenColor(state().active ? m_style.activeTitleFontColor : m_style.titleFontColor);
+  Canvas.setPenColor(state().active ? m_frameStyle.activeTitleFontColor : m_frameStyle.titleFontColor);
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
-  Canvas.drawTextWithEllipsis(m_style.titleFont, 1 + m_style.borderSize, 1 + m_style.borderSize, m_title, maxX);
+  Canvas.drawTextWithEllipsis(m_frameStyle.titleFont, 1 + m_frameStyle.borderSize, 1 + m_frameStyle.borderSize, m_title, maxX);
 }
 
 
 // return the X coordinate where button start
 int uiFrame::paintButtons()
 {
-  int buttonsX = m_style.borderSize;
+  int buttonsX = m_frameStyle.borderSize;
   if (m_frameProps.hasCloseButton) {
     // close button
     Rect r = getBtnRect(0);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
-      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverButtonColor);
+      Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
+      Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
     Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
@@ -1026,11 +1026,11 @@ int uiFrame::paintButtons()
     Rect r = getBtnRect(1);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
-      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverButtonColor);
+      Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
+      Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     if (state().maximized || state().minimized) {
       // draw restore (from maximize or minimize) button
@@ -1050,11 +1050,11 @@ int uiFrame::paintButtons()
     Rect r = getBtnRect(2);
     buttonsX = r.X1;
     if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
-      Canvas.setBrushColor(m_style.mouseOverBackgroundButtonColor);
+      Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
-      Canvas.setPenColor(m_style.mouseOverButtonColor);
+      Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      Canvas.setPenColor(state().active ? m_style.activeButtonColor : m_style.buttonColor);
+      Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
@@ -1132,19 +1132,19 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   if (m_frameProps.resizeable && !state().maximized && !state().minimized) {
 
     // on top center, resize
-    if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_style.borderSize).contains(p))
+    if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_frameStyle.borderSize).contains(p))
       return uiSensPos_TopCenterResize;
 
     // on left center side, resize
-    if (Rect(0, CORNERSENSE, m_style.borderSize, h - CORNERSENSE).contains(p))
+    if (Rect(0, CORNERSENSE, m_frameStyle.borderSize, h - CORNERSENSE).contains(p))
       return uiSensPos_CenterLeftResize;
 
     // on right center side, resize
-    if (Rect(w - m_style.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
+    if (Rect(w - m_frameStyle.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
       return uiSensPos_CenterRightResize;
 
     // on bottom center, resize
-    if (Rect(CORNERSENSE, h - m_style.borderSize, w - CORNERSENSE, h - 1).contains(p))
+    if (Rect(CORNERSENSE, h - m_frameStyle.borderSize, w - CORNERSENSE, h - 1).contains(p))
       return uiSensPos_BottomCenterResize;
 
     // on top left side, resize
