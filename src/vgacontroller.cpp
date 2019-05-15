@@ -1961,6 +1961,8 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
   if (destY + YCount > clipY2 + 1)
     YCount = clipY2 + 1 - destY;
 
+  const uint8_t HVSync = packHVSync();
+
   if (saveBackground) {
 
     // save background and draw the bitmap
@@ -1974,7 +1976,7 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
         if (alpha) {
           uint8_t * dstPx = &PIXELINROW(dstrow, adestX);
           *savePx = *dstPx;
-          *dstPx = SYNC_MASK | *src;
+          *dstPx = HVSync | *src;
         } else {
           *savePx = 0;
         }
@@ -1992,7 +1994,7 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
         for (int x = X1, adestX = destX; x < XCount; ++x, ++adestX, ++src) {
           int alpha = *src >> 6;  // TODO?, alpha blending
           if (alpha)
-            PIXELINROW(dstrow, adestX) = SYNC_MASK | *src;
+            PIXELINROW(dstrow, adestX) = HVSync | *src;
         }
       }
     }
