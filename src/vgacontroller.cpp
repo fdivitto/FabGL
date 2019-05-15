@@ -1946,9 +1946,13 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
     X1 = clipX1 - destX;
     destX = clipX1;
   }
+  if (X1 >= width)
+    return;
 
   if (destX + XCount > clipX2 + 1)
     XCount = clipX2 + 1 - destX;
+  if (X1 + XCount > width)
+    XCount = width - X1;
 
   int Y1 = 0;
   int YCount = height;
@@ -1957,9 +1961,13 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
     Y1 = clipY1 - destY;
     destY = clipY1;
   }
+  if (Y1 >= height)
+    return;
 
   if (destY + YCount > clipY2 + 1)
     YCount = clipY2 + 1 - destY;
+  if (Y1 + YCount > height)
+    YCount = height - Y1;
 
   const uint8_t HVSync = packHVSync();
 
@@ -1967,11 +1975,11 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
 
     // save background and draw the bitmap
     uint8_t const * data = bitmap->data;
-    for (int y = Y1, adestY = destY; y < YCount; ++y, ++adestY) {
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
       uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
       uint8_t * savePx = saveBackground + y * width + X1;
       uint8_t const * src = data + y * width + X1;
-      for (int x = X1, adestX = destX; x < XCount; ++x, ++adestX, ++savePx, ++src) {
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
         int alpha = *src >> 6;  // TODO?, alpha blending
         if (alpha) {
           uint8_t * dstPx = &PIXELINROW(dstrow, adestX);
@@ -1988,10 +1996,10 @@ void IRAM_ATTR VGAControllerClass::drawBitmap(int destX, int destY, Bitmap const
     // draw just the bitmap
     if (bitmap) {
       uint8_t const * data = bitmap->data;
-      for (int y = Y1, adestY = destY; y < YCount; ++y, ++adestY) {
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
         uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
         uint8_t const * src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < XCount; ++x, ++adestX, ++src) {
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
           int alpha = *src >> 6;  // TODO?, alpha blending
           if (alpha)
             PIXELINROW(dstrow, adestX) = HVSync | *src;
