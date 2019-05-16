@@ -459,14 +459,24 @@ public:
 
 struct uiButtonStyle {
   RGB              backgroundColor          = RGB(2, 2, 2);
+  RGB              downBackgroundColor      = RGB(2, 2, 3); // when m_down = true
   RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
-  RGB              downBackgroundColor      = RGB(3, 3, 3);
+  RGB              mouseDownBackgroundColor = RGB(3, 3, 3);
   RGB              borderColor              = RGB(1, 1, 1);
   RGB              focusedBorderColor       = RGB(0, 0, 3);
   RGB              textFontColor            = RGB(0, 0, 0);
   FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
-  int              borderSize               = 1;
-  int              focusedBorderSize        = 2;
+  uint8_t          borderSize               = 1;
+  uint8_t          focusedBorderSize        = 2;
+  uint8_t          bitmapTextSpace          = 4;
+  Bitmap const *   bitmap                   = nullptr;
+  Bitmap const *   downBitmap               = nullptr;
+};
+
+
+enum class uiButtonKind {
+  Button,
+  Switch,
 };
 
 
@@ -474,7 +484,7 @@ class uiButton : public uiControl {
 
 public:
 
-  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible);
+  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uiButtonKind kind = uiButtonKind::Button);
 
   virtual ~uiButton();
 
@@ -486,22 +496,31 @@ public:
 
   uiButtonStyle & buttonStyle() { return m_buttonStyle; }
 
+  bool down() { return m_down; }
+
+  void setDown(bool value);
+
 
   // Delegates
 
   Delegate<> onClick;
+  Delegate<> onChange;
 
 
 private:
 
   void paintButton();
-  void paintText(Rect const & rect);
+  void paintContent(Rect const & rect);
 
 
   uiButtonStyle  m_buttonStyle;
 
   char *         m_text;
   int            m_textExtent;  // calculated by setText(). TODO: changing font doesn't update m_textExtent!
+
+  bool           m_down;
+
+  uiButtonKind   m_kind;
 
 };
 

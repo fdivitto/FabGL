@@ -1376,10 +1376,12 @@ void uiControl::processEvent(uiEvent * event)
 // uiButton
 
 
-uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
+uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uiButtonKind kind)
   : uiControl(parent, pos, size, visible),
     m_text(nullptr),
-    m_textExtent(0)
+    m_textExtent(0),
+    m_down(false),
+    m_kind(kind)
 {
   windowProps().focusable = true;
   setText(text);
@@ -1416,22 +1418,34 @@ void uiButton::paintButton()
     bkgRect = bkgRect.shrink(bsize);
   }
   // background
-  RGB bkColor = m_buttonStyle.backgroundColor;
+  RGB bkColor = m_down ? m_buttonStyle.downBackgroundColor : m_buttonStyle.backgroundColor;
   if (app()->capturedMouseWindow() == this)
-    bkColor = m_buttonStyle.downBackgroundColor;
+    bkColor = m_buttonStyle.mouseDownBackgroundColor;
   else if (isMouseOver())
     bkColor = m_buttonStyle.mouseOverBackgroundColor;
   Canvas.setBrushColor(bkColor);
   Canvas.fillRectangle(bkgRect);
-  // text
-  paintText(bkgRect);
+  // content (text and bitmap)
+  paintContent(bkgRect);
 }
 
 
-void uiButton::paintText(Rect const & rect)
+void uiButton::paintContent(Rect const & rect)
 {
-  int x = rect.X1 + (rect.size().width - m_textExtent) / 2;
-  int y = rect.Y1 + (rect.size().height - m_buttonStyle.textFont->height) / 2;
+  Bitmap const * bitmap = m_down ? m_buttonStyle.downBitmap : m_buttonStyle.bitmap;
+  int textHeight        = m_buttonStyle.textFont->height;
+  int bitmapWidth       = bitmap ? bitmap->width : 0;
+  int bitmapHeight      = bitmap ? bitmap->height : 0;
+  int bitmapTextSpace   = bitmap ? m_buttonStyle.bitmapTextSpace : 0;
+
+  int x = rect.X1 + (rect.size().width - m_textExtent - bitmapTextSpace - bitmapWidth) / 2;
+  int y = rect.Y1 + (rect.size().height - imax(textHeight, bitmapHeight)) / 2;
+
+  if (bitmap) {
+    Canvas.drawBitmap(x, y, bitmap);
+    x += bitmapWidth + bitmapTextSpace;
+    y += (imax(textHeight, bitmapHeight) - textHeight) / 2;
+  }
   Canvas.setPenColor(m_buttonStyle.textFontColor);
   Canvas.drawText(m_buttonStyle.textFont, x, y, m_text);
 }
@@ -1450,8 +1464,13 @@ void uiButton::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // this check is required to avoid onclick event when mouse is captured and moved out of button area
-      if (rect(uiRect_WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+      if (rect(uiRect_WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
         onClick();
+        if (m_kind == uiButtonKind::Switch) {
+          m_down = !m_down;
+          onChange();
+        }
+      }
       repaint();
       break;
 
@@ -1474,6 +1493,15 @@ void uiButton::processEvent(uiEvent * event)
 
     default:
       break;
+  }
+}
+
+
+void uiButton::setDown(bool value)
+{
+  if (value != m_down) {
+    m_down = value;
+    repaint();
   }
 }
 

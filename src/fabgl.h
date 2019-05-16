@@ -297,5 +297,6 @@ using fabgl::MouseDelta;
 using fabgl::MouseStatus;
 using fabgl::CursorName;
 using fabgl::TerminalClass;
+using fabgl::uiButtonKind;
 
 
