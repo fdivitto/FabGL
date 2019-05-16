@@ -249,7 +249,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
     // left mouse button UP?
     if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
       // mouse up will end mouse capture, check that mouse is still inside
-      if (!m_capturedMouseWindow->rect(uiRect_WindowBased).contains(mousePos)) {
+      if (!m_capturedMouseWindow->rect(uiWindowRectType::WindowBased).contains(mousePos)) {
         // mouse is not inside, post mouse leave and enter events
         uiEvent evt = uiEvent(m_capturedMouseWindow, UIEVT_MOUSELEAVE);
         postEvent(&evt);
@@ -307,7 +307,7 @@ uiWindow * uiApp::screenToWindow(Point & point)
   while (win->hasChildren()) {
     uiWindow * child = win->lastChild();
     for (; child; child = child->prev()) {
-      if (child->state().visible && win->rect(uiRect_ClientAreaWindowBased).contains(point) && child->rect(uiRect_ParentBased).contains(point)) {
+      if (child->state().visible && win->rect(uiWindowRectType::ClientAreaWindowBased).contains(point) && child->rect(uiWindowRectType::ParentBased).contains(point)) {
         win   = child;
         point = point.sub(child->pos());
         break;
@@ -473,7 +473,7 @@ uiWindow * uiApp::setFocusedWindowPrev()
 
 void uiApp::repaintWindow(uiWindow * window)
 {
-  repaintRect(window->rect(uiRect_ScreenBased));
+  repaintRect(window->rect(uiWindowRectType::ScreenBased));
 }
 
 
@@ -494,13 +494,13 @@ void uiApp::moveWindow(uiWindow * window, int x, int y)
 
 void uiApp::resizeWindow(uiWindow * window, int width, int height)
 {
-  reshapeWindow(window, window->rect(uiRect_ParentBased).resize(width, height));
+  reshapeWindow(window, window->rect(uiWindowRectType::ParentBased).resize(width, height));
 }
 
 
 void uiApp::resizeWindow(uiWindow * window, Size size)
 {
-  reshapeWindow(window, window->rect(uiRect_ParentBased).resize(size));
+  reshapeWindow(window, window->rect(uiWindowRectType::ParentBased).resize(size));
 }
 
 
@@ -645,22 +645,22 @@ void uiWindow::repaint(Rect const & rect)
 
 void uiWindow::repaint()
 {
-  app()->repaintRect(rect(uiRect_ScreenBased));
+  app()->repaintRect(rect(uiWindowRectType::ScreenBased));
 }
 
 
 Rect uiWindow::rect(uiWindowRectType rectType)
 {
   switch (rectType) {
-    case uiRect_ScreenBased:
+    case uiWindowRectType::ScreenBased:
       return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow());
-    case uiRect_ParentBased:
+    case uiWindowRectType::ParentBased:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
-    case uiRect_WindowBased:
+    case uiWindowRectType::WindowBased:
       return Rect(0, 0, m_size.width - 1, m_size.height - 1);
-    case uiRect_ClientAreaParentBased:
+    case uiWindowRectType::ClientAreaParentBased:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
-    case uiRect_ClientAreaWindowBased:
+    case uiWindowRectType::ClientAreaWindowBased:
       return Rect(0, 0, m_size.width - 1, m_size.height - 1);
   }
   return Rect();
@@ -669,11 +669,11 @@ Rect uiWindow::rect(uiWindowRectType rectType)
 
 void uiWindow::beginPaint(uiEvent * event)
 {
-  Rect srect = rect(uiRect_ScreenBased);
+  Rect srect = rect(uiWindowRectType::ScreenBased);
   Canvas.setOrigin(srect.X1, srect.Y1);
   Rect clipRect = event->params.rect;
   if (m_parent)
-    clipRect = clipRect.intersection(m_parent->rect(uiRect_ClientAreaWindowBased).translate(m_pos.neg()));
+    clipRect = clipRect.intersection(m_parent->rect(uiWindowRectType::ClientAreaWindowBased).translate(m_pos.neg()));
   Canvas.setClippingRect(clipRect);
 }
 
@@ -736,15 +736,15 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MAXIMIZE:
       if (!m_state.minimized)
-        m_savedScreenRect = rect(uiRect_ParentBased);
+        m_savedScreenRect = rect(uiWindowRectType::ParentBased);
       m_state.maximized = true;
       m_state.minimized = false;
-      app()->reshapeWindow(this, m_parent->rect(uiRect_ClientAreaWindowBased));
+      app()->reshapeWindow(this, m_parent->rect(uiWindowRectType::ClientAreaWindowBased));
       break;
 
     case UIEVT_MINIMIZE:
       if (!m_state.maximized)
-        m_savedScreenRect = rect(uiRect_ParentBased);
+        m_savedScreenRect = rect(uiWindowRectType::ParentBased);
       m_state.maximized = false;
       m_state.minimized = true;
       app()->resizeWindow(this, minWindowSize());
@@ -800,7 +800,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
     Rect thisRect = rects.pop();
     bool noIntesections = true;
     for (uiWindow * win = lastChild(); win; win = win->prev()) {
-      Rect winRect = rect(uiRect_ClientAreaWindowBased).intersection(win->rect(uiRect_ParentBased));
+      Rect winRect = rect(uiWindowRectType::ClientAreaWindowBased).intersection(win->rect(uiWindowRectType::ParentBased));
       if (win->state().visible && thisRect.intersects(winRect)) {
         noIntesections = false;
         removeRectangle(rects, thisRect, winRect);
@@ -827,7 +827,7 @@ void uiWindow::generateReshapeEvents(Rect const & r)
   Rect newRect = parent()->transformRect(r, app()->rootWindow());
 
   // old rect based on root window coordinates
-  Rect oldRect = rect(uiRect_ScreenBased);
+  Rect oldRect = rect(uiWindowRectType::ScreenBased);
 
   // set here because generatePaintEvents() requires updated window pos() and size()
   m_pos  = Point(r.X1, r.Y1);
@@ -871,8 +871,8 @@ void uiWindow::generateReshapeEvents(Rect const & r)
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
     m_title(nullptr),
-    m_mouseDownSensiblePos(uiSensPos_None),
-    m_mouseMoveSensiblePos(uiSensPos_None)
+    m_mouseDownSensiblePos(uiFrameSensiblePos::None),
+    m_mouseMoveSensiblePos(uiFrameSensiblePos::None)
 {
   evtHandlerProps().isFrame = true;
   setTitle(title);
@@ -903,8 +903,8 @@ Rect uiFrame::rect(uiWindowRectType rectType)
 {
   Rect r = uiWindow::rect(rectType);
   switch (rectType) {
-    case uiRect_ClientAreaParentBased:
-    case uiRect_ClientAreaWindowBased:
+    case uiWindowRectType::ClientAreaParentBased:
+    case uiWindowRectType::ClientAreaWindowBased:
       // border
       r.X1 += m_frameStyle.borderSize;
       r.Y1 += m_frameStyle.borderSize;
@@ -1011,7 +1011,7 @@ int uiFrame::paintButtons()
     // close button
     Rect r = getBtnRect(0);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiSensPos_CloseButton) {
+    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1025,7 +1025,7 @@ int uiFrame::paintButtons()
     // maximize/restore button
     Rect r = getBtnRect(1);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton) {
+    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1049,7 +1049,7 @@ int uiFrame::paintButtons()
     // minimize button
     Rect r = getBtnRect(2);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton) {
+    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1098,13 +1098,13 @@ void uiFrame::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSELEAVE:
-      if (m_mouseMoveSensiblePos == uiSensPos_CloseButton)
+      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton)
         repaint(getBtnRect(0));
-      if (m_mouseMoveSensiblePos == uiSensPos_MaximizeButton)
+      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton)
         repaint(getBtnRect(1));
-      if (m_mouseMoveSensiblePos == uiSensPos_MinimizeButton)
+      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton)
         repaint(getBtnRect(2));
-      m_mouseMoveSensiblePos = uiSensPos_None;
+      m_mouseMoveSensiblePos = uiFrameSensiblePos::None;
       break;
 
     default:
@@ -1118,13 +1118,13 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   Point p = Point(x, y);
 
   if (m_frameProps.hasCloseButton && getBtnRect(0).contains(p))
-    return uiSensPos_CloseButton;    // on Close Button area
+    return uiFrameSensiblePos::CloseButton;    // on Close Button area
 
   if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
-    return uiSensPos_MaximizeButton; // on maximize button area
+    return uiFrameSensiblePos::MaximizeButton; // on maximize button area
 
   if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
-    return uiSensPos_MinimizeButton; // on minimize button area
+    return uiFrameSensiblePos::MinimizeButton; // on minimize button area
 
   int w = size().width;
   int h = size().height;
@@ -1133,42 +1133,42 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
     // on top center, resize
     if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_frameStyle.borderSize).contains(p))
-      return uiSensPos_TopCenterResize;
+      return uiFrameSensiblePos::TopCenterResize;
 
     // on left center side, resize
     if (Rect(0, CORNERSENSE, m_frameStyle.borderSize, h - CORNERSENSE).contains(p))
-      return uiSensPos_CenterLeftResize;
+      return uiFrameSensiblePos::CenterLeftResize;
 
     // on right center side, resize
     if (Rect(w - m_frameStyle.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
-      return uiSensPos_CenterRightResize;
+      return uiFrameSensiblePos::CenterRightResize;
 
     // on bottom center, resize
     if (Rect(CORNERSENSE, h - m_frameStyle.borderSize, w - CORNERSENSE, h - 1).contains(p))
-      return uiSensPos_BottomCenterResize;
+      return uiFrameSensiblePos::BottomCenterResize;
 
     // on top left side, resize
     if (Rect(0, 0, CORNERSENSE, CORNERSENSE).contains(p))
-      return uiSensPos_TopLeftResize;
+      return uiFrameSensiblePos::TopLeftResize;
 
     // on top right side, resize
     if (Rect(w - CORNERSENSE, 0, w - 1, CORNERSENSE).contains(p))
-      return uiSensPos_TopRightResize;
+      return uiFrameSensiblePos::TopRightResize;
 
     // on bottom left side, resize
     if (Rect(0, h - CORNERSENSE, CORNERSENSE, h - 1).contains(p))
-      return uiSensPos_BottomLeftResize;
+      return uiFrameSensiblePos::BottomLeftResize;
 
     // on bottom right side, resize
     if (Rect(w - CORNERSENSE, h - CORNERSENSE, w - 1, h - 1).contains(p))
-      return uiSensPos_BottomRightResize;
+      return uiFrameSensiblePos::BottomRightResize;
 
   }
 
   if (m_frameProps.moveable && !state().maximized && Rect(1, 1, w - 2, 1 + titleBarHeight()).contains(p))
-    return uiSensPos_MoveArea;       // on title bar, moving area
+    return uiFrameSensiblePos::MoveArea;       // on title bar, moving area
 
-  return uiSensPos_None;
+  return uiFrameSensiblePos::None;
 }
 
 
@@ -1181,11 +1181,11 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
   switch (m_mouseDownSensiblePos) {
 
-    case uiSensPos_MoveArea:
+    case uiFrameSensiblePos::MoveArea:
       app()->moveWindow(this, pos().X + dx, pos().Y + dy);
       break;
 
-    case uiSensPos_CenterRightResize:
+    case uiFrameSensiblePos::CenterRightResize:
       {
         int newWidth = sizeAtMouseDown().width + dx;
         if (newWidth >= minSize.width)
@@ -1193,18 +1193,18 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiSensPos_CenterLeftResize:
+    case uiFrameSensiblePos::CenterLeftResize:
       {
-        Rect r = rect(uiRect_ParentBased);
+        Rect r = rect(uiWindowRectType::ParentBased);
         r.X1 = pos().X + dx;
         if (r.size().width >= minSize.width)
           app()->reshapeWindow(this, r);
         break;
       }
 
-    case uiSensPos_TopLeftResize:
+    case uiFrameSensiblePos::TopLeftResize:
       {
-        Rect r = rect(uiRect_ParentBased);
+        Rect r = rect(uiWindowRectType::ParentBased);
         r.X1 = pos().X + dx;
         r.Y1 = pos().Y + dy;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1212,18 +1212,18 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiSensPos_TopCenterResize:
+    case uiFrameSensiblePos::TopCenterResize:
       {
-        Rect r = rect(uiRect_ParentBased);
+        Rect r = rect(uiWindowRectType::ParentBased);
         r.Y1 = pos().Y + dy;
         if (r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
         break;
       }
 
-    case uiSensPos_TopRightResize:
+    case uiFrameSensiblePos::TopRightResize:
       {
-        Rect r = rect(uiRect_ParentBased);
+        Rect r = rect(uiWindowRectType::ParentBased);
         r.Y1 = pos().Y + dy;
         r.X2 = pos().X + sizeAtMouseDown().width + dx;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1231,9 +1231,9 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiSensPos_BottomLeftResize:
+    case uiFrameSensiblePos::BottomLeftResize:
       {
-        Rect r = rect(uiRect_ParentBased);
+        Rect r = rect(uiWindowRectType::ParentBased);
         r.X1 = pos().X + dx;
         r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1241,7 +1241,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiSensPos_BottomCenterResize:
+    case uiFrameSensiblePos::BottomCenterResize:
       {
         int newHeight = sizeAtMouseDown().height + dy;
         if (newHeight >= minSize.height)
@@ -1249,7 +1249,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiSensPos_BottomRightResize:
+    case uiFrameSensiblePos::BottomRightResize:
       {
         int newWidth = sizeAtMouseDown().width + dx;
         int newHeight = sizeAtMouseDown().height + dy;
@@ -1270,48 +1270,48 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
   m_mouseMoveSensiblePos = getSensiblePosAt(mouseX, mouseY);
 
-  if ((m_mouseMoveSensiblePos == uiSensPos_CloseButton || prevSensPos == uiSensPos_CloseButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton || prevSensPos == uiFrameSensiblePos::CloseButton) && m_mouseMoveSensiblePos != prevSensPos)
     repaint(getBtnRect(0));
 
-  if ((m_mouseMoveSensiblePos == uiSensPos_MaximizeButton || prevSensPos == uiSensPos_MaximizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton || prevSensPos == uiFrameSensiblePos::MaximizeButton) && m_mouseMoveSensiblePos != prevSensPos)
     repaint(getBtnRect(1));
 
-  if ((m_mouseMoveSensiblePos == uiSensPos_MinimizeButton || prevSensPos == uiSensPos_MinimizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton || prevSensPos == uiFrameSensiblePos::MinimizeButton) && m_mouseMoveSensiblePos != prevSensPos)
     repaint(getBtnRect(2));
 
   CursorName cur = CursorName::CursorPointerSimpleReduced;  // this is the default
 
   switch (m_mouseMoveSensiblePos) {
 
-    case uiSensPos_TopLeftResize:
+    case uiFrameSensiblePos::TopLeftResize:
       cur = CursorName::CursorResize2;
       break;
 
-    case uiSensPos_TopCenterResize:
+    case uiFrameSensiblePos::TopCenterResize:
       cur = CursorName::CursorResize3;
       break;
 
-    case uiSensPos_TopRightResize:
+    case uiFrameSensiblePos::TopRightResize:
       cur = CursorName::CursorResize1;
       break;
 
-    case uiSensPos_CenterLeftResize:
+    case uiFrameSensiblePos::CenterLeftResize:
       cur = CursorName::CursorResize4;
       break;
 
-    case uiSensPos_CenterRightResize:
+    case uiFrameSensiblePos::CenterRightResize:
       cur = CursorName::CursorResize4;
       break;
 
-    case uiSensPos_BottomLeftResize:
+    case uiFrameSensiblePos::BottomLeftResize:
       cur = CursorName::CursorResize1;
       break;
 
-    case uiSensPos_BottomCenterResize:
+    case uiFrameSensiblePos::BottomCenterResize:
       cur = CursorName::CursorResize3;
       break;
 
-    case uiSensPos_BottomRightResize:
+    case uiFrameSensiblePos::BottomRightResize:
       cur = CursorName::CursorResize2;
       break;
 
@@ -1334,7 +1334,7 @@ void uiFrame::handleButtonsClick(int x, int y)
   else
     return;
   // this avoids the button remains selected (background colored) when window change size
-  m_mouseMoveSensiblePos = uiSensPos_None;
+  m_mouseMoveSensiblePos = uiFrameSensiblePos::None;
 }
 
 
@@ -1464,7 +1464,7 @@ void uiButton::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // this check is required to avoid onclick event when mouse is captured and moved out of button area
-      if (rect(uiRect_WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
+      if (rect(uiWindowRectType::WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
         onClick();
         if (m_kind == uiButtonKind::Switch) {
           m_down = !m_down;

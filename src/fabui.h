@@ -204,20 +204,20 @@ private:
 // uiWindow
 
 
-enum uiWindowRectType {
-  uiRect_ScreenBased,
-  uiRect_ParentBased,
-  uiRect_WindowBased,
-  uiRect_ClientAreaParentBased,
-  uiRect_ClientAreaWindowBased,
+enum class uiWindowRectType {
+  ScreenBased,
+  ParentBased,
+  WindowBased,
+  ClientAreaParentBased,
+  ClientAreaWindowBased,
 };
 
 
 struct uiWindowState {
-  uint8_t visible   : 1;  // 0 = hidden, 1 = visible
-  uint8_t maximized : 1;  // 0 = normal, 1 = maximized
-  uint8_t minimized : 1;  // 0 = normal, 1 = minimized
-  uint8_t active    : 1;  // 0 = inactive, 1= active
+  uint8_t visible   : 1;  // 0 = hidden,   1 = visible
+  uint8_t maximized : 1;  // 0 = normal,   1 = maximized
+  uint8_t minimized : 1;  // 0 = normal,   1 = minimized
+  uint8_t active    : 1;  // 0 = inactive, 1 = active
 };
 
 
@@ -364,20 +364,20 @@ struct uiFrameProps {
 };
 
 
-enum uiFrameSensiblePos {
-  uiSensPos_None,
-  uiSensPos_MoveArea,
-  uiSensPos_TopLeftResize,
-  uiSensPos_TopCenterResize,
-  uiSensPos_TopRightResize,
-  uiSensPos_CenterLeftResize,
-  uiSensPos_CenterRightResize,
-  uiSensPos_BottomLeftResize,
-  uiSensPos_BottomCenterResize,
-  uiSensPos_BottomRightResize,
-  uiSensPos_CloseButton,
-  uiSensPos_MaximizeButton,
-  uiSensPos_MinimizeButton,
+enum class uiFrameSensiblePos {
+  None,
+  MoveArea,
+  TopLeftResize,
+  TopCenterResize,
+  TopRightResize,
+  CenterLeftResize,
+  CenterRightResize,
+  BottomLeftResize,
+  BottomCenterResize,
+  BottomRightResize,
+  CloseButton,
+  MaximizeButton,
+  MinimizeButton,
 };
 
 
