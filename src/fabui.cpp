@@ -1491,14 +1491,8 @@ void uiButton::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // this check is required to avoid onclick event when mouse is captured and moved out of button area
-      if (rect(uiWindowRectType::WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
-        onClick();
-        if (m_kind == uiButtonKind::Switch) {
-          m_down = !m_down;
-          onChange();
-        }
-      }
-      repaint();
+      if (rect(uiWindowRectType::WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+        trigger();
       break;
 
     case UIEVT_MOUSEENTER:
@@ -1515,12 +1509,24 @@ void uiButton::processEvent(uiEvent * event)
 
     case UIEVT_KEYUP:
       if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE)
-        onClick();
+        trigger();
       break;
 
     default:
       break;
   }
+}
+
+
+// action to perfom on mouse up or keyboard space/enter
+void uiButton::trigger()
+{
+  onClick();
+  if (m_kind == uiButtonKind::Switch) {
+    m_down = !m_down;
+    onChange();
+  }
+  repaint();
 }
 
 

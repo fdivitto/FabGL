@@ -515,6 +515,8 @@ private:
   void paintButton();
   void paintContent(Rect const & rect);
 
+  void trigger();
+
 
   uiButtonStyle  m_buttonStyle;
 
