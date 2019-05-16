@@ -298,5 +298,6 @@ using fabgl::MouseStatus;
 using fabgl::CursorName;
 using fabgl::TerminalClass;
 using fabgl::uiButtonKind;
+using fabgl::uiTimerHandle;
 
 

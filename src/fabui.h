@@ -98,6 +98,7 @@ enum uiEventID {
   UIEVT_KILLFOCUS,
   UIEVT_KEYDOWN,
   UIEVT_KEYUP,
+  UIEVT_TIMER,
 };
 
 
@@ -133,6 +134,8 @@ struct uiEvent {
       uint8_t    SHIFT : 1;  // status of SHIFT (left or right) key
       uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
     } key;
+    // event: UIEVT_TIMER
+    void * timerHandler;
 
     uiEventParams() { }
   } params;
@@ -531,6 +534,9 @@ private:
 // uiApp
 
 
+typedef void * uiTimerHandle;
+
+
 class uiApp : public uiEvtHandler {
 
 public:
@@ -589,6 +595,11 @@ public:
 
   void combineMouseMoveEvents(bool value) { m_combineMouseMoveEvents = value; }
 
+  uiTimerHandle setTimer(uiWindow * window, int periodMS);
+
+  void killTimer(uiTimerHandle handle);
+
+
   // events
 
   virtual void OnInit();
@@ -604,6 +615,8 @@ private:
   void preprocessEvent(uiEvent * event);
   void preprocessMouseEvent(uiEvent * event);
   void preprocessKeyboardEvent(uiEvent * event);
+
+  static void timerFunc(TimerHandle_t xTimer);
 
 
   QueueHandle_t m_eventsQueue;

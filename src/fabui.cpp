@@ -45,6 +45,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
+                                  "UIEVT_TIMER",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -79,12 +80,15 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_KEYDOWN:
     case UIEVT_KEYUP:
-      Serial.printf("%s ", Keyboard.virtualKeyToString(event->params.key.VK));
+      Serial.printf("VK=%s ", Keyboard.virtualKeyToString(event->params.key.VK));
       if (event->params.key.LALT) Serial.write(" +LALT");
       if (event->params.key.RALT) Serial.write(" +RALT");
       if (event->params.key.CTRL) Serial.write(" +CTRL");
       if (event->params.key.SHIFT) Serial.write(" +SHIFT");
       if (event->params.key.GUI) Serial.write(" +GUI");
+      break;
+    case UIEVT_TIMER:
+      Serial.printf("handle=%p", event->params.timerHandler);
       break;
     default:
       break;
@@ -533,6 +537,29 @@ void uiApp::minimizeWindow(uiWindow * window, bool value)
   postEvent(&evt);
 }
 
+
+void uiApp::timerFunc(TimerHandle_t xTimer)
+{
+  uiWindow * window = (uiWindow*) pvTimerGetTimerID(xTimer);
+  uiEvent evt = uiEvent(window, UIEVT_TIMER);
+  evt.params.timerHandler = xTimer;
+  window->app()->postEvent(&evt);
+}
+
+
+// return handler to pass to deleteTimer()
+uiTimerHandle uiApp::setTimer(uiWindow * window, int periodMS)
+{
+  TimerHandle_t h = xTimerCreate("", pdMS_TO_TICKS(periodMS), pdTRUE, window, &uiApp::timerFunc);
+  xTimerStart(h, 0);
+  return h;
+}
+
+
+void uiApp::killTimer(uiTimerHandle handle)
+{
+  xTimerDelete(handle, portMAX_DELAY);
+}
 
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
