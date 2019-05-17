@@ -257,9 +257,15 @@ void CanvasClass::fillRectangle(Rect const & rect)
 
 void CanvasClass::invertRectangle(int X1, int Y1, int X2, int Y2)
 {
+  invertRectangle(Rect(X1, Y1, X2, Y2));
+}
+
+
+void CanvasClass::invertRectangle(Rect const & rect)
+{
   Primitive p;
   p.cmd  = PrimitiveCmd::InvertRect;
-  p.rect = Rect(X1, Y1, X2, Y2);
+  p.rect = rect;
   VGAController.addPrimitive(p);
 }
 

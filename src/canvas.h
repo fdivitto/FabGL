@@ -419,6 +419,15 @@ public:
   void invertRectangle(int X1, int Y1, int X2, int Y2);
 
   /**
+   * @brief Invert a rectangle.
+   *
+   * The Not logic operator is applied to pixels inside the rectangle.
+   *
+   * @param rect Rectangle coordinates.
+   */
+  void invertRectangle(Rect const & rect);
+
+  /**
    * @brief Swap pen and brush colors of the specified rectangle.
    *
    * @param X1 Top left horizontal coordinate.
