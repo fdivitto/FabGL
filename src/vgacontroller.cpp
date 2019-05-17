@@ -1806,13 +1806,19 @@ void IRAM_ATTR VGAControllerClass::execInvertRect(Rect const & rect)
 
   const uint8_t HVSync = packHVSync();
 
-  int origX = m_paintState.origin.X;
-  int origY = m_paintState.origin.Y;
+  const int origX = m_paintState.origin.X;
+  const int origY = m_paintState.origin.Y;
 
-  int x1 = iclamp(rect.X1 + origX, 0, m_viewPortWidth - 1);
-  int y1 = iclamp(rect.Y1 + origY, 0, m_viewPortHeight - 1);
-  int x2 = iclamp(rect.X2 + origX, 0, m_viewPortWidth - 1);
-  int y2 = iclamp(rect.Y2 + origY, 0, m_viewPortHeight - 1);
+  const int clipX1 = m_paintState.absClippingRect.X1;
+  const int clipY1 = m_paintState.absClippingRect.Y1;
+  const int clipX2 = m_paintState.absClippingRect.X2;
+  const int clipY2 = m_paintState.absClippingRect.Y2;
+
+  const int x1 = iclamp(rect.X1 + origX, clipX1, clipX2);
+  const int y1 = iclamp(rect.Y1 + origY, clipY1, clipY2);
+  const int x2 = iclamp(rect.X2 + origX, clipX1, clipX2);
+  const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
+
   for (int y = y1; y <= y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
     for (int x = x1; x <= x2; ++x) {
