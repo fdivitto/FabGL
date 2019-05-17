@@ -87,10 +87,6 @@
 #define FABGLIB_UNDERLINE_POSITION 0
 
 
-/** Optional feature. Enables invertRectangle() method in VGA Canvas. */
-#define FABGLIB_HAS_INVERTRECT 0
-
-
 /** Optional feature. If enabled terminal fonts are cached in RAM for better performance. */
 #define FABGLIB_CACHE_FONT_IN_RAM 0
 
