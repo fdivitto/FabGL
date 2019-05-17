@@ -152,11 +152,9 @@ enum PrimitiveCmd {
   // params: paintOptions
   SetPaintOptions,
 
-#if FABGLIB_HAS_INVERTRECT
   // Invert a rectangle
   // params: rect
   InvertRect,
-#endif
 
   // Copy (overlapping) rectangle to current position
   // params: rect (source rectangle)

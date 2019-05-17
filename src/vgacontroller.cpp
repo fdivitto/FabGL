@@ -881,11 +881,9 @@ void IRAM_ATTR VGAControllerClass::execPrimitive(Primitive const & prim)
     case PrimitiveCmd::SetPaintOptions:
       m_paintState.paintOptions = prim.paintOptions;
       break;
-#if FABGLIB_HAS_INVERTRECT
     case PrimitiveCmd::InvertRect:
       execInvertRect(prim.rect);
       break;
-#endif
     case PrimitiveCmd::CopyRect:
       execCopyRect(prim.rect);
       break;
@@ -1802,10 +1800,11 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
 }
 
 
-#if FABGLIB_HAS_INVERTRECT
 void IRAM_ATTR VGAControllerClass::execInvertRect(Rect const & rect)
 {
   hideSprites();
+
+  const uint8_t HVSync = packHVSync();
 
   int origX = m_paintState.origin.X;
   int origY = m_paintState.origin.Y;
@@ -1818,11 +1817,10 @@ void IRAM_ATTR VGAControllerClass::execInvertRect(Rect const & rect)
     uint8_t * row = (uint8_t*) m_viewPort[y];
     for (int x = x1; x <= x2; ++x) {
       uint8_t * px = (uint8_t*) &PIXELINROW(row, x);
-      *px = (1 << HSYNC_BIT) | (1 << VSYNC_BIT) | ~(*px);
+      *px = HVSync | ~(*px);
     }
   }
 }
-#endif
 
 
 void IRAM_ATTR VGAControllerClass::execSwapFGBG(Rect const & rect)
