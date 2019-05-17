@@ -406,8 +406,6 @@ public:
    */
   void fillRectangle(Rect const & rect);
 
-#if FABGLIB_HAS_INVERTRECT
-
   /**
    * @brief Invert a rectangle.
    *
@@ -419,8 +417,6 @@ public:
    * @param Y2 Bottom right vertical coordiante.
    */
   void invertRectangle(int X1, int Y1, int X2, int Y2);
-
-#endif
 
   /**
    * @brief Swap pen and brush colors of the specified rectangle.

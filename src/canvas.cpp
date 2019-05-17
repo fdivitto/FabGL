@@ -255,7 +255,6 @@ void CanvasClass::fillRectangle(Rect const & rect)
 }
 
 
-#if FABGLIB_HAS_INVERTRECT
 void CanvasClass::invertRectangle(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
@@ -263,7 +262,6 @@ void CanvasClass::invertRectangle(int X1, int Y1, int X2, int Y2)
   p.rect = Rect(X1, Y1, X2, Y2);
   VGAController.addPrimitive(p);
 }
-#endif
 
 
 void CanvasClass::swapRectangle(int X1, int Y1, int X2, int Y2)
