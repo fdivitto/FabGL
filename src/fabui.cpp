@@ -770,13 +770,12 @@ Rect uiWindow::rect(uiWindowRectType rectType)
 {
   switch (rectType) {
     case uiWindowRectType::ScreenBased:
+    case uiWindowRectType::ClientAreaScreenBased:
       return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow());
     case uiWindowRectType::ParentBased:
-      return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
-    case uiWindowRectType::WindowBased:
-      return Rect(0, 0, m_size.width - 1, m_size.height - 1);
     case uiWindowRectType::ClientAreaParentBased:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
+    case uiWindowRectType::WindowBased:
     case uiWindowRectType::ClientAreaWindowBased:
       return Rect(0, 0, m_size.width - 1, m_size.height - 1);
   }
@@ -1020,6 +1019,7 @@ Rect uiFrame::rect(uiWindowRectType rectType)
 {
   Rect r = uiWindow::rect(rectType);
   switch (rectType) {
+    case uiWindowRectType::ClientAreaScreenBased:
     case uiWindowRectType::ClientAreaParentBased:
     case uiWindowRectType::ClientAreaWindowBased:
       // border

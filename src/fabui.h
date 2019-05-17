@@ -214,6 +214,7 @@ enum class uiWindowRectType {
   ScreenBased,
   ParentBased,
   WindowBased,
+  ClientAreaScreenBased,
   ClientAreaParentBased,
   ClientAreaWindowBased,
 };
