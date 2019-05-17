@@ -107,6 +107,9 @@ class uiApp;
 class uiWindow;
 
 
+typedef void * uiTimerHandle;
+
+
 struct uiEvent {
   uiEvtHandler * dest;
   uiEventID      id;
@@ -135,7 +138,7 @@ struct uiEvent {
       uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
     } key;
     // event: UIEVT_TIMER
-    void * timerHandler;
+    uiTimerHandle timerHandler;
 
     uiEventParams() { }
   } params;
@@ -536,9 +539,6 @@ private:
 // uiApp
 
 
-typedef void * uiTimerHandle;
-
-
 class uiApp : public uiEvtHandler {
 
 public:
@@ -597,6 +597,12 @@ public:
 
   void combineMouseMoveEvents(bool value) { m_combineMouseMoveEvents = value; }
 
+  void showCaret(uiWindow * window);
+
+  void setCaret(Point const & pos);
+
+  void setCaret(Rect const & rect);
+
   uiTimerHandle setTimer(uiWindow * window, int periodMS);
 
   void killTimer(uiTimerHandle handle);
@@ -620,6 +626,9 @@ private:
 
   static void timerFunc(TimerHandle_t xTimer);
 
+  void blinkCaret(bool forceOff = false);
+  void suspendCaret(bool value);
+
 
   QueueHandle_t m_eventsQueue;
 
@@ -634,6 +643,11 @@ private:
   uiWindow *    m_freeMouseWindow;     // window where mouse is over
 
   bool          m_combineMouseMoveEvents;
+
+  uiWindow *    m_caretWindow;         // nullptr = caret is not visible
+  Rect          m_caretRect;           // caret rect relative to m_caretWindow
+  uiTimerHandle m_caretTimer;
+  bool          m_caretInvertState;    // true = rect reversed (cat visible), false = rect not reversed (caret invisible)
 };
 
 

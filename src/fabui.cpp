@@ -153,7 +153,10 @@ uiApp::uiApp()
     m_focusedWindow(nullptr),
     m_capturedMouseWindow(nullptr),
     m_freeMouseWindow(nullptr),
-    m_combineMouseMoveEvents(false)
+    m_combineMouseMoveEvents(false),
+    m_caretWindow(nullptr),
+    m_caretTimer(nullptr),
+    m_caretInvertState(false)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 }
@@ -161,6 +164,7 @@ uiApp::uiApp()
 
 uiApp::~uiApp()
 {
+  showCaret(nullptr);
   vQueueDelete(m_eventsQueue);
   delete m_rootWindow;
 }
@@ -215,6 +219,7 @@ void uiApp::run()
 void uiApp::preprocessEvent(uiEvent * event)
 {
   if (event->dest == nullptr) {
+    // events with no destination
     switch (event->id) {
       case UIEVT_MOUSEMOVE:
       case UIEVT_MOUSEWHEEL:
@@ -225,6 +230,18 @@ void uiApp::preprocessEvent(uiEvent * event)
       case UIEVT_KEYDOWN:
       case UIEVT_KEYUP:
         preprocessKeyboardEvent(event);
+        break;
+      default:
+        break;
+    }
+  } else {
+    // events with destination
+    switch (event->id) {
+      case UIEVT_TIMER:
+        if (event->params.timerHandler == m_caretTimer) {
+          blinkCaret();
+          event->dest = nullptr;  // do not send this event to the root window
+        }
         break;
       default:
         break;
@@ -300,6 +317,10 @@ void uiApp::preprocessKeyboardEvent(uiEvent * event)
 void uiApp::captureMouse(uiWindow * window)
 {
   m_capturedMouseWindow = window;
+  if (m_capturedMouseWindow)
+    suspendCaret(true);
+  else
+    suspendCaret(false);
 }
 
 
@@ -395,6 +416,9 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
     // changed active window, disable focus
     setFocusedWindow(nullptr);
 
+    // ...and caret (setFocusedWindow() may not disable caret)
+    showCaret(nullptr);
+
     m_activeWindow = value;
 
     if (prev) {
@@ -429,6 +453,9 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
     }
 
     m_focusedWindow = value;
+
+    // changed focus, disable caret
+    showCaret(nullptr);
 
     if (m_focusedWindow) {
       uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
@@ -560,6 +587,69 @@ void uiApp::killTimer(uiTimerHandle handle)
 {
   xTimerDelete(handle, portMAX_DELAY);
 }
+
+
+// window = nullptr -> disable caret
+// "window" must be focused window (and top-level window, otherwise caret is painted wrongly)
+void uiApp::showCaret(uiWindow * window)
+{
+  constexpr int blinkingTimeMS = 500;
+
+  if (m_caretWindow != window) {
+    if (window && window == m_focusedWindow) {
+      // enable caret
+      m_caretWindow = window;
+      m_caretRect   = Rect(0, 0, 0, 0);
+      m_caretTimer  = setTimer(m_rootWindow, blinkingTimeMS);
+      m_caretInvertState = false;
+    } else if (m_caretTimer) {
+      // disable caret
+      blinkCaret(true);
+      suspendCaret(true);
+      killTimer(m_caretTimer);
+      m_caretTimer  = nullptr;
+      m_caretWindow = NULL;
+    }
+  }
+}
+
+
+void uiApp::suspendCaret(bool value)
+{
+  if (m_caretTimer) {
+    if (value) {
+      xTimerStop(m_caretTimer, 0);
+      blinkCaret(true); // force off
+    } else {
+      xTimerStart(m_caretTimer, 0);
+    }
+  }
+}
+
+
+void uiApp::setCaret(Point const & pos)
+{
+  m_caretRect = m_caretRect.move(pos);
+}
+
+
+void uiApp::setCaret(Rect const & rect)
+{
+  m_caretRect = rect;
+}
+
+
+void uiApp::blinkCaret(bool forceOff)
+{
+  //Serial.write("BLINK CARET\n");
+  if (forceOff == false || m_caretInvertState) {
+    Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
+    Canvas.setOrigin(m_rootWindow->pos());
+    Canvas.invertRectangle(aRect);
+  }
+  m_caretInvertState = !m_caretInvertState;
+}
+
 
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
