@@ -604,7 +604,6 @@ void uiApp::showCaret(uiWindow * window)
       m_caretInvertState = false;
     } else if (m_caretTimer) {
       // disable caret
-      blinkCaret(true);
       suspendCaret(true);
       killTimer(m_caretTimer);
       m_caretTimer  = nullptr;
@@ -641,13 +640,13 @@ void uiApp::setCaret(Rect const & rect)
 
 void uiApp::blinkCaret(bool forceOff)
 {
-  //Serial.write("BLINK CARET\n");
-  if (forceOff == false || m_caretInvertState) {
-    Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
+  if (m_caretWindow && (forceOff == false || m_caretInvertState)) {
     Canvas.setOrigin(m_rootWindow->pos());
+    Canvas.setClippingRect(m_caretWindow->rect(uiWindowRectType::ClientAreaScreenBased));
+    Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
     Canvas.invertRectangle(aRect);
+    m_caretInvertState = !m_caretInvertState;
   }
-  m_caretInvertState = !m_caretInvertState;
 }
 
 
