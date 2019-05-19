@@ -156,7 +156,7 @@ uiApp::uiApp()
     m_combineMouseMoveEvents(false),
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
-    m_caretInvertState(false)
+    m_caretInvertState(-1)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 }
@@ -242,6 +242,9 @@ void uiApp::preprocessEvent(uiEvent * event)
           blinkCaret();
           event->dest = nullptr;  // do not send this event to the root window
         }
+        break;
+      case UIEVT_PAINT:
+        blinkCaret(true);
         break;
       default:
         break;
@@ -599,9 +602,9 @@ void uiApp::showCaret(uiWindow * window)
     if (window && window == m_focusedWindow) {
       // enable caret
       m_caretWindow = window;
-      m_caretRect   = Rect(0, 0, 0, 0);
       m_caretTimer  = setTimer(m_rootWindow, blinkingTimeMS);
-      m_caretInvertState = false;
+      m_caretInvertState = 0;
+      blinkCaret();
     } else if (m_caretTimer) {
       // disable caret
       suspendCaret(true);
@@ -617,35 +620,51 @@ void uiApp::suspendCaret(bool value)
 {
   if (m_caretTimer) {
     if (value) {
-      xTimerStop(m_caretTimer, 0);
-      blinkCaret(true); // force off
+      if (m_caretInvertState != -1) {
+        xTimerStop(m_caretTimer, 0);
+        blinkCaret(true); // force off
+        m_caretInvertState = -1;
+      }
     } else {
-      xTimerStart(m_caretTimer, 0);
+      if (m_caretInvertState == -1) {
+        xTimerStart(m_caretTimer, 0);
+        m_caretInvertState = 0;
+        blinkCaret();
+      }
     }
   }
 }
 
 
+// just to force blinking
+void uiApp::setCaret()
+{
+  blinkCaret();
+}
+
+
 void uiApp::setCaret(Point const & pos)
 {
-  m_caretRect = m_caretRect.move(pos);
+  setCaret(m_caretRect.move(pos));
 }
 
 
 void uiApp::setCaret(Rect const & rect)
 {
+  blinkCaret(true);
   m_caretRect = rect;
+  blinkCaret();
 }
 
 
-void uiApp::blinkCaret(bool forceOff)
+void uiApp::blinkCaret(bool forceOFF)
 {
-  if (m_caretWindow && (forceOff == false || m_caretInvertState)) {
+  if (m_caretWindow && m_caretInvertState != -1 && (forceOFF == false || m_caretInvertState == 1)) {
     Canvas.setOrigin(m_rootWindow->pos());
     Canvas.setClippingRect(m_caretWindow->rect(uiWindowRectType::ClientAreaScreenBased));
     Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
     Canvas.invertRectangle(aRect);
-    m_caretInvertState = !m_caretInvertState;
+    m_caretInvertState = m_caretInvertState ? 0 : 1;
   }
 }
 

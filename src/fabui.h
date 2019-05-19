@@ -600,6 +600,8 @@ public:
 
   void showCaret(uiWindow * window);
 
+  void setCaret();
+
   void setCaret(Point const & pos);
 
   void setCaret(Rect const & rect);
@@ -627,7 +629,7 @@ private:
 
   static void timerFunc(TimerHandle_t xTimer);
 
-  void blinkCaret(bool forceOff = false);
+  void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
 
 
@@ -648,7 +650,7 @@ private:
   uiWindow *    m_caretWindow;         // nullptr = caret is not visible
   Rect          m_caretRect;           // caret rect relative to m_caretWindow
   uiTimerHandle m_caretTimer;
-  bool          m_caretInvertState;    // true = rect reversed (cat visible), false = rect not reversed (caret invisible)
+  int           m_caretInvertState;    // -1 = suspended, 1 = rect reversed (cat visible), 0 = rect not reversed (caret invisible)
 };
 
 
