@@ -39,21 +39,21 @@
 
 /*
 
-  uiObject
-    uiEvtHandler
-      uiApp
-      uiWindow
-        uiFrame
-        uiControl
-          uiButton
-          uiCheckBox
+  *uiObject
+    *uiEvtHandler
+      *uiApp
+      *uiWindow
+        *uiFrame
+        *uiControl
+          *uiButton
+          *uiTextEdit
+          uiLabel
           uiListBox
+          uiCheckBox
           uiComboBox
           uiMenu
           uiGauge
           uiRadioButton
-          uiTextCtrl
-          uiRichTextCtrl
           uiScrollBar
           uiSlider
           uiSpinButton
@@ -533,6 +533,88 @@ private:
   uiButtonKind   m_kind;
 
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiTextEdit
+// single line text edit
+
+
+struct uiTextEditStyle {
+  RGB              backgroundColor            = RGB(2, 2, 2);
+  RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);
+  RGB              focusedBackgroundColor     = RGB(3, 3, 3);
+  RGB              borderColor                = RGB(1, 1, 1);
+  RGB              focusedBorderColor         = RGB(0, 0, 3);
+  RGB              textFontColor              = RGB(0, 0, 0);
+  FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);
+  uint8_t          borderSize                 = 1;
+};
+
+
+class uiTextEdit : public uiControl {
+
+public:
+
+  uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible);
+
+  virtual ~uiTextEdit();
+
+  virtual void processEvent(uiEvent * event);
+
+  uiTextEditStyle & textEditStyle() { return m_textEditStyle; }
+
+  void setText(char const * value);
+
+  char const * text() { return m_text; }
+
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onChange;
+
+
+private:
+
+  void paintTextEdit();
+  void paintContent();
+
+  uint8_t const * getCharInfo(char ch, int * width);
+  int charColumnToWindowX(int col);
+  void updateCaret();
+  void moveCursor(int col, int selCol);
+  int getColFromMouseX(int mouseX);
+  void handleKeyDown(uiEvent * event);
+  void checkSpace(int requiredLength);
+  void insert(char c);
+  void removeSel();
+  int getWordPosAtLeft();
+  int getWordPosAtRight();
+  void selectWordAt(int mouseX);
+
+
+  uiTextEditStyle m_textEditStyle;
+
+  char *          m_text;
+  int             m_textLength; // text length NOT including ending zero
+  int             m_textSpace;  // actual space allocated including ending zero
+
+  // rectangle where text will be painted (this is also the text clipping rect)
+  Rect            m_contentRect;  // updated on painting
+
+  // where text starts to be painted. Values less than m_contentRect.X1 are used to show characters which do not fit in m_contentRect
+  int             m_viewX;
+
+  // character index of cursor position (0 = at first char)
+  int             m_cursorCol;
+
+  // character index at start of selection (not included if < m_cursorCol, included if > m_cursorCol)
+  int             m_selCursorCol;
+
+};
+
 
 
 

@@ -1596,6 +1596,7 @@ void uiButton::paintContent(Rect const & rect)
     x += bitmapWidth + bitmapTextSpace;
     y += (imax(textHeight, bitmapHeight) - textHeight) / 2;
   }
+  Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
   Canvas.setPenColor(m_buttonStyle.textFontColor);
   Canvas.drawText(m_buttonStyle.textFont, x, y, m_text);
 }
@@ -1664,6 +1665,422 @@ void uiButton::setDown(bool value)
 
 
 // uiButton
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiTextEdit
+
+
+uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
+  : uiControl(parent, pos, size, visible),
+    m_text(nullptr),
+    m_textLength(0),
+    m_textSpace(0),
+    m_viewX(0),
+    m_cursorCol(0),
+    m_selCursorCol(0)
+{
+  windowProps().focusable = true;
+  setText(text);
+}
+
+
+uiTextEdit::~uiTextEdit()
+{
+  free(m_text);
+}
+
+
+void uiTextEdit::setText(char const * value)
+{
+  m_textLength = strlen(value);
+  checkSpace(m_textLength);
+  strcpy(m_text, value);
+}
+
+
+void uiTextEdit::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event);
+      paintTextEdit();
+      app()->setCaret(); // force blinking (previous painting may cover caret)
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1) {
+        int col = getColFromMouseX(event->params.mouse.status.X);
+        moveCursor(col, col);
+      }
+      repaint();
+      break;
+
+    case UIEVT_MOUSEBUTTONUP:
+      break;
+
+    case UIEVT_MOUSEENTER:
+      VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
+      repaint();  // to update background color
+      break;
+
+    case UIEVT_MOUSELEAVE:
+      repaint();  // to update background and border
+      break;
+
+    case UIEVT_MOUSEMOVE:
+      // dragging mouse? select
+      if (app()->capturedMouseWindow() == this)
+        moveCursor(getColFromMouseX(event->params.mouse.status.X), m_selCursorCol);
+      break;
+
+    case UIEVT_SETFOCUS:
+      updateCaret();
+      app()->showCaret(this);
+      repaint();
+      break;
+
+    case UIEVT_KILLFOCUS:
+      app()->showCaret(NULL);
+      repaint();
+      break;
+
+    case UIEVT_KEYDOWN:
+      handleKeyDown(event);
+      break;
+
+    case UIEVT_DBLCLICK:
+      selectWordAt(event->params.mouse.status.X);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiTextEdit::handleKeyDown(uiEvent * event)
+{
+  switch (event->params.key.VK) {
+
+    case VK_LEFT:
+    case VK_KP_LEFT:
+    {
+      // LEFT                : cancel selection and move cursor by one character
+      // SHIFT + LEFT        : move cursor and select
+      // CTRL + LEFT         : cancel selection and move cursor by one word
+      // SHIFT + CTRL + LEFT : move cursor by one word and select
+      int newCurCol = event->params.key.CTRL ? getWordPosAtLeft() : m_cursorCol - 1;
+      moveCursor(newCurCol, (event->params.key.SHIFT ? m_selCursorCol : newCurCol));
+      break;
+    }
+
+    case VK_RIGHT:
+    case VK_KP_RIGHT:
+    {
+      // RIGHT                : cancel selection and move cursor by one character
+      // SHIFT + RIGHT        : move cursor and select
+      // CTRL + RIGHT         : cancel selection and move cursor by one word
+      // SHIFT + CTRL + RIGHT : move cursor by one word and select
+      int newCurCol = event->params.key.CTRL ? getWordPosAtRight() : m_cursorCol + 1;
+      moveCursor(newCurCol, (event->params.key.SHIFT ? m_selCursorCol : newCurCol));
+      break;
+    }
+
+    case VK_BACKSPACE:
+      if (m_cursorCol != m_selCursorCol)
+        removeSel();  // there is a selection, same behavior of VK_DELETE
+      else if (m_cursorCol > 0) {
+        // remove character at left
+        moveCursor(m_cursorCol - 1, m_cursorCol - 1);
+        removeSel();
+      }
+      break;
+
+    case VK_DELETE:
+    case VK_KP_DELETE:
+      removeSel();
+      break;
+
+    case VK_HOME:
+    case VK_KP_HOME:
+      // SHIFT + HOME, select up to Home
+      // HOME, move cursor to home
+      moveCursor(0, (event->params.key.SHIFT ? m_selCursorCol : 0));
+      break;
+
+    case VK_END:
+    case VK_KP_END:
+      // SHIFT + END, select up to End
+      // END, move cursor to End
+      moveCursor(m_textLength, (event->params.key.SHIFT ? m_selCursorCol : m_textLength));
+      break;
+
+    default:
+    {
+      if (event->params.key.CTRL) {
+        // keys with CTRL
+        switch (event->params.key.VK) {
+          case VK_a:
+            // CTRL+A, select all
+            moveCursor(m_textLength, 0);
+            break;
+          default:
+            break;
+        }
+      } else {
+        // normal keys
+        int c = Keyboard.virtualKeyToASCII(event->params.key.VK);
+        if (c >= 0x20 && c != 0x7F) {
+          if (m_cursorCol != m_selCursorCol)
+            removeSel();  // there is a selection, same behavior of VK_DELETE
+          insert(c);
+        }
+      }
+      break;
+    }
+  }
+}
+
+
+void uiTextEdit::paintTextEdit()
+{
+  bool hasFocus = (app()->focusedWindow() == this);
+  m_contentRect = Rect(0, 0, size().width - 1, size().height - 1);
+  // border
+  if (m_textEditStyle.borderSize > 0) {
+    Canvas.setPenColor(hasFocus ? m_textEditStyle.focusedBorderColor : m_textEditStyle.borderColor);
+    int bsize = m_textEditStyle.borderSize;
+    for (int i = 0; i < bsize; ++i)
+      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
+    // adjust background rect
+    m_contentRect = m_contentRect.shrink(bsize);
+  }
+  // background
+  RGB bkColor = hasFocus ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
+  Canvas.setBrushColor(bkColor);
+  Canvas.fillRectangle(m_contentRect);
+  // content
+  paintContent();
+}
+
+
+// get width of specified characted
+// return glyph data of the specified character
+uint8_t const * uiTextEdit::getCharInfo(char ch, int * width)
+{
+  uint8_t const * chptr;
+  if (m_textEditStyle.textFont->chptr) {
+    // variable width
+    chptr = m_textEditStyle.textFont->data + m_textEditStyle.textFont->chptr[(int)(ch)];
+    *width = *chptr++;
+  } else {
+    // fixed width
+    chptr = m_textEditStyle.textFont->data + ch;
+    *width = m_textEditStyle.textFont->width;
+  }
+  return chptr;
+}
+
+
+void uiTextEdit::paintContent()
+{
+  m_contentRect = m_contentRect.shrink(2);
+  Canvas.setClippingRect(Canvas.getClippingRect().intersection(m_contentRect));
+  Canvas.setPenColor(m_textEditStyle.textFontColor);
+
+  GlyphOptions glyphOpt = GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0);
+  if (m_selCursorCol != m_cursorCol)
+    glyphOpt.FillBackground(true);
+  Canvas.setGlyphOptions(glyphOpt);
+
+  for (int x = m_contentRect.X1 + m_viewX, y = m_contentRect.Y1, col = 0, fontWidth; m_text[col]; ++col, x += fontWidth) {
+    uint8_t const * chptr = getCharInfo(m_text[col], &fontWidth);
+    if (m_selCursorCol != m_cursorCol && (col == m_selCursorCol || col == m_cursorCol)) {
+      glyphOpt.invert = !glyphOpt.invert;
+      Canvas.setGlyphOptions(glyphOpt);
+    }
+    Canvas.drawGlyph(x, y, fontWidth, m_textEditStyle.textFont->height, chptr, 0);
+  }
+}
+
+
+// returns the X coordinate where is character "col"
+// return value is < m_contentRect.X1 if "col" is at left of visible area
+// return value is > m_contentRect.X2 if "col" is at the right of visible area
+int uiTextEdit::charColumnToWindowX(int col)
+{
+  int x = m_contentRect.X1 + m_viewX;
+  for (int curcol = 0, fontWidth; m_text[curcol]; ++curcol, x += fontWidth) {
+    getCharInfo(m_text[curcol], &fontWidth);
+    if (curcol == col)
+      break;
+  }
+  return x;
+}
+
+
+// update caret coordinates from current pos (m_cursorCol)
+void uiTextEdit::updateCaret()
+{
+  int x = charColumnToWindowX(m_cursorCol);
+  app()->setCaret(Rect(x, m_contentRect.Y1, x, m_contentRect.Y1 + m_textEditStyle.textFont->height));
+}
+
+
+// col (cursor position):
+//     0 up to m_textLength. For example having a m_text="1234", min col is 0, max col is 4 (passing last char).
+// selCol (selection position):
+//     0 up to m_textLength
+void uiTextEdit::moveCursor(int col, int selCol)
+{
+  col    = iclamp(col, 0, m_textLength);
+  selCol = iclamp(selCol, 0, m_textLength);
+
+  if (col == m_cursorCol && selCol == m_selCursorCol)
+    return; // nothing to do
+
+  bool doRepaint = false;
+
+  // there was a selection, now there is no selection
+  if (m_cursorCol != m_selCursorCol && col == selCol)
+    doRepaint = true;
+
+  m_cursorCol    = col;
+  m_selCursorCol = selCol;
+
+  if (m_cursorCol != m_selCursorCol)
+    doRepaint = true;
+
+  // need to scroll?
+  int x = charColumnToWindowX(m_cursorCol);
+
+  int prevCharWidth = 0;
+  if (col > 0)
+    getCharInfo(m_text[col - 1], &prevCharWidth);
+
+  int charWidth;
+  getCharInfo(m_text[col < m_textLength ? col : col - 1], &charWidth);
+
+  if (x - prevCharWidth < m_contentRect.X1) {
+    // scroll right
+    m_viewX += m_contentRect.X1 - (x - prevCharWidth);
+    doRepaint = true;
+  } else if (x + charWidth > m_contentRect.X2) {
+    // scroll left
+    m_viewX -= (x + charWidth - m_contentRect.X2);
+    doRepaint = true;
+  }
+
+  updateCaret();
+
+  if (doRepaint)
+    repaint();
+}
+
+
+// return column (that is character index in m_text[]) from specified mouseX
+int uiTextEdit::getColFromMouseX(int mouseX)
+{
+  int col = 0;
+  for (int x = m_contentRect.X1 + m_viewX, fontWidth; m_text[col]; ++col, x += fontWidth) {
+    getCharInfo(m_text[col], &fontWidth);
+    if (mouseX < x || (mouseX >= x && mouseX < x + fontWidth))
+      break;
+  }
+  return col;
+}
+
+
+// requiredLength does NOT include ending zero
+void uiTextEdit::checkSpace(int requiredLength)
+{
+  ++requiredLength; // add ending zero
+  if (m_textSpace < requiredLength) {
+    if (m_textSpace == 0) {
+      // first time allocates exact space
+      m_textSpace = requiredLength;
+    } else {
+      // next times allocate double
+      while (m_textSpace < requiredLength)
+        m_textSpace *= 2;
+    }
+    m_text = (char*) realloc(m_text, m_textSpace);
+  }
+}
+
+
+// insert specified char at m_cursorCol
+void uiTextEdit::insert(char c)
+{
+  ++m_textLength;
+  checkSpace(m_textLength);
+  memmove(m_text + m_cursorCol + 1, m_text + m_cursorCol, m_textLength - m_cursorCol);
+  m_text[m_cursorCol] = c;
+  moveCursor(m_cursorCol + 1, m_cursorCol + 1);
+  repaint();
+}
+
+
+// remove from m_cursorCol to m_selCursorCol
+void uiTextEdit::removeSel()
+{
+  if (m_textLength > 0) {
+    if (m_cursorCol > m_selCursorCol)
+      iswap(m_cursorCol, m_selCursorCol);
+    int count = imax(1, m_selCursorCol - m_cursorCol);
+    if (m_cursorCol < m_textLength) {
+      memmove(m_text + m_cursorCol, m_text + m_cursorCol + count, m_textLength - m_cursorCol - count + 1);
+      m_textLength -= count;
+      moveCursor(m_cursorCol, m_cursorCol);
+      repaint();
+    }
+  }
+}
+
+
+// return starting position of next word at left of m_cursorCol
+int uiTextEdit::getWordPosAtLeft()
+{
+  int col = m_cursorCol - 1;
+  while (col > 0 && (!isspace(m_text[col - 1]) || isspace(m_text[col])))
+    --col;
+  return imax(0, col);
+}
+
+
+// return starting position of next word at right of m_cursorCol
+int uiTextEdit::getWordPosAtRight()
+{
+  int col = m_cursorCol + 1;
+  while (col < m_textLength && (!isspace(m_text[col - 1]) || isspace(m_text[col])))
+    ++col;
+  return imin(m_textLength, col);
+}
+
+
+// if mouseX is at space, select all space at left and right
+// if mouseX is at character, select all characters at left and right
+void uiTextEdit::selectWordAt(int mouseX)
+{
+  int col = getColFromMouseX(mouseX), left = col, right = col;
+  bool lspc = isspace(m_text[col]);  // look for spaces?
+  while (left > 0 && (bool)isspace(m_text[left - 1]) == lspc)
+    --left;
+  while (right < m_textLength && (bool)isspace(m_text[right]) == lspc)
+    ++right;
+  moveCursor(left, right);
+}
+
+
+
+// uiTextEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
