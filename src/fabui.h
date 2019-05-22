@@ -99,6 +99,7 @@ enum uiEventID {
   UIEVT_KEYDOWN,
   UIEVT_KEYUP,
   UIEVT_TIMER,
+  UIEVT_DBLCLICK,
 };
 
 
@@ -543,7 +544,7 @@ private:
 
 struct uiAppProps {
   uint16_t caretBlinkingTime = 500;   // caret blinking time (MS)
-  uint16_t doubleClickTime   = 400;   // maximum delay required for two consecutive clicks to become double click (MS)
+  uint16_t doubleClickTime   = 250;   // maximum delay required for two consecutive clicks to become double click (MS)
 };
 
 
@@ -663,6 +664,8 @@ private:
   Rect          m_caretRect;           // caret rect relative to m_caretWindow
   uiTimerHandle m_caretTimer;
   int           m_caretInvertState;    // -1 = suspended, 1 = rect reversed (cat visible), 0 = rect not reversed (caret invisible)
+
+  int           m_lastMouseDownTimeMS; // time (MS) at mouse Down. Used to measure double clicks
 };
 
 

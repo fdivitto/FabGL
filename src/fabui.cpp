@@ -45,7 +45,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
-                                  "UIEVT_TIMER",
+                                  "UIEVT_TIMER", "UIEVT_DBLCLICK",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -65,6 +65,7 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_MOUSEBUTTONDOWN:
     case UIEVT_MOUSEBUTTONUP:
+    case UIEVT_DBLCLICK:
       Serial.printf("btn=%d", event->params.mouse.changedButton);
       break;
     case UIEVT_PAINT:
@@ -156,7 +157,8 @@ uiApp::uiApp()
     m_combineMouseMoveEvents(false),
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
-    m_caretInvertState(-1)
+    m_caretInvertState(-1),
+    m_lastMouseDownTimeMS(0)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 }
@@ -257,12 +259,15 @@ void uiApp::preprocessEvent(uiEvent * event)
 // generate UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
 void uiApp::preprocessMouseEvent(uiEvent * event)
 {
+  // combine a sequence of UIEVT_MOUSEMOVE events?
   if (m_combineMouseMoveEvents && event->id == UIEVT_MOUSEMOVE) {
     uiEvent nextEvent;
     while (peekEvent(&nextEvent, 0) && nextEvent.id == UIEVT_MOUSEMOVE)
       getEvent(event, -1);
   }
 
+  // search for window under the mouse or mouse capturing window
+  // insert UIEVT_MOUSELEAVE when mouse capture is finished over a non-capturing window
   uiWindow * oldFreeMouseWindow = m_freeMouseWindow;
   Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
   if (m_capturedMouseWindow) {
@@ -297,6 +302,18 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       uiEvent evt = uiEvent(oldFreeMouseWindow, UIEVT_MOUSELEAVE);
       insertEvent(&evt);
     }
+  }
+
+  // double click?
+  if (event->id == UIEVT_MOUSEBUTTONDOWN) {
+    int curTime = esp_timer_get_time() / 1000;  // uS -> MS
+    if (curTime - m_lastMouseDownTimeMS <= m_appProps.doubleClickTime) {
+      // post double click message
+      uiEvent evt = *event;
+      evt.id = UIEVT_DBLCLICK;
+      postEvent(&evt);
+    }
+    m_lastMouseDownTimeMS = curTime;
   }
 }
 
