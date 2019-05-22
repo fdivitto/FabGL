@@ -540,6 +540,14 @@ private:
 // uiApp
 
 
+
+struct uiAppProps {
+  uint16_t caretBlinkingTime = 500;   // caret blinking time (MS)
+  uint16_t doubleClickTime   = 400;   // maximum delay required for two consecutive clicks to become double click (MS)
+};
+
+
+
 class uiApp : public uiEvtHandler {
 
 public:
@@ -610,6 +618,8 @@ public:
 
   void killTimer(uiTimerHandle handle);
 
+  uiAppProps & appProps() { return m_appProps; }
+
 
   // events
 
@@ -632,6 +642,8 @@ private:
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
 
+
+  uiAppProps    m_appProps;
 
   QueueHandle_t m_eventsQueue;
 

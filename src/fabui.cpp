@@ -596,13 +596,11 @@ void uiApp::killTimer(uiTimerHandle handle)
 // "window" must be focused window (and top-level window, otherwise caret is painted wrongly)
 void uiApp::showCaret(uiWindow * window)
 {
-  constexpr int blinkingTimeMS = 500;
-
   if (m_caretWindow != window) {
     if (window && window == m_focusedWindow) {
       // enable caret
       m_caretWindow = window;
-      m_caretTimer  = setTimer(m_rootWindow, blinkingTimeMS);
+      m_caretTimer  = setTimer(m_rootWindow, m_appProps.caretBlinkingTime);
       m_caretInvertState = 0;
       blinkCaret();
     } else if (m_caretTimer) {
