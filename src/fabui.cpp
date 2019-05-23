@@ -1755,6 +1755,7 @@ void uiTextEdit::processEvent(uiEvent * event)
 
     case UIEVT_KILLFOCUS:
       app()->showCaret(NULL);
+      moveCursor(0, 0);
       repaint();
       break;
 
