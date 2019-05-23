@@ -300,5 +300,8 @@ using fabgl::TerminalClass;
 using fabgl::uiButtonKind;
 using fabgl::uiTimerHandle;
 using fabgl::uiTextEdit;
+using fabgl::uiApp;
+using fabgl::uiFrame;
+using fabgl::uiButton;
 
 
