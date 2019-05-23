@@ -968,7 +968,8 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
       uiEvent evt = uiEvent(nullptr, UIEVT_PAINT);
       evt.dest = this;
       evt.params.rect = thisRect;
-      app()->insertEvent(&evt);
+      // process event now. insertEvent() may dry events queue. On the other side, this may use too much stack!
+      this->processEvent(&evt);
     }
   }
 }
