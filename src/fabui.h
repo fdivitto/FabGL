@@ -393,7 +393,7 @@ class uiFrame : public uiWindow {
 
 public:
 
-  uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible);
+  uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiFrame();
 
@@ -492,7 +492,7 @@ class uiButton : public uiControl {
 
 public:
 
-  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uiButtonKind kind = uiButtonKind::Button);
+  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind = uiButtonKind::Button, bool visible = true);
 
   virtual ~uiButton();
 
@@ -557,7 +557,7 @@ class uiTextEdit : public uiControl {
 
 public:
 
-  uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible);
+  uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiTextEdit();
 

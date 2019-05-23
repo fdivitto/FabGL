@@ -1533,7 +1533,7 @@ void uiControl::processEvent(uiEvent * event)
 // uiButton
 
 
-uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uiButtonKind kind)
+uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind, bool visible)
   : uiControl(parent, pos, size, visible),
     m_text(nullptr),
     m_textExtent(0),
