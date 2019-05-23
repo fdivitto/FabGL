@@ -1163,7 +1163,7 @@ void uiFrame::paintTitle(int maxX)
 // return the X coordinate where button start
 int uiFrame::paintButtons()
 {
-  int buttonsX = m_frameStyle.borderSize;
+  int buttonsX = size().width - m_frameStyle.borderSize;
   if (m_frameProps.hasCloseButton) {
     // close button
     Rect r = getBtnRect(0);
