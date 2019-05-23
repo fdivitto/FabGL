@@ -267,7 +267,7 @@ public:
 
   void addChild(uiWindow * child);
 
-  void removeChild(uiWindow * child, bool freeChild);
+  void removeChild(uiWindow * child, bool freeChild = true);
 
   void moveChildOnTop(uiWindow * child);
 
@@ -587,7 +587,7 @@ private:
   void moveCursor(int col, int selCol);
   int getColFromMouseX(int mouseX);
   void handleKeyDown(uiEvent * event);
-  void checkSpace(int requiredLength);
+  void checkAllocatedSpace(int requiredLength);
   void insert(char c);
   void removeSel();
   int getWordPosAtLeft();

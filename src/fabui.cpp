@@ -1704,7 +1704,7 @@ uiTextEdit::~uiTextEdit()
 void uiTextEdit::setText(char const * value)
 {
   m_textLength = strlen(value);
-  checkSpace(m_textLength);
+  checkAllocatedSpace(m_textLength);
   strcpy(m_text, value);
 }
 
@@ -2006,7 +2006,7 @@ int uiTextEdit::getColFromMouseX(int mouseX)
 
 
 // requiredLength does NOT include ending zero
-void uiTextEdit::checkSpace(int requiredLength)
+void uiTextEdit::checkAllocatedSpace(int requiredLength)
 {
   ++requiredLength; // add ending zero
   if (m_textSpace < requiredLength) {
@@ -2027,7 +2027,7 @@ void uiTextEdit::checkSpace(int requiredLength)
 void uiTextEdit::insert(char c)
 {
   ++m_textLength;
-  checkSpace(m_textLength);
+  checkAllocatedSpace(m_textLength);
   memmove(m_text + m_cursorCol + 1, m_text + m_cursorCol, m_textLength - m_cursorCol);
   m_text[m_cursorCol] = c;
   moveCursor(m_cursorCol + 1, m_cursorCol + 1);
