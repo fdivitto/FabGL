@@ -1915,7 +1915,8 @@ void uiTextEdit::paintContent()
       glyphOpt.invert = !glyphOpt.invert;
       Canvas.setGlyphOptions(glyphOpt);
     }
-    Canvas.drawGlyph(x, y, fontWidth, m_textEditStyle.textFont->height, chptr, 0);
+    if (x >= m_contentRect.X1 && x <= m_contentRect.X2)
+      Canvas.drawGlyph(x, y, fontWidth, m_textEditStyle.textFont->height, chptr, 0);
   }
 }
 
