@@ -202,7 +202,7 @@ private:
 template <typename T>
 struct StackItem {
   StackItem * next;
-  T item;
+  T           item;
   StackItem(StackItem * next_, T const & item_) : next(next_), item(item_) { }
 };
 
@@ -223,6 +223,12 @@ public:
       return r;
     } else
       return T();
+  }
+  int count() {
+    int r = 0;
+    for (auto i = m_items; i; i = i->next)
+      ++r;
+    return r;
   }
 private:
   StackItem<T> * m_items;
