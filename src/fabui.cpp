@@ -1723,6 +1723,7 @@ void uiTextEdit::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
+        onClick();
         int col = getColFromMouseX(event->params.mouse.status.X);
         moveCursor(col, col);
       }
@@ -2032,6 +2033,7 @@ void uiTextEdit::insert(char c)
   memmove(m_text + m_cursorCol + 1, m_text + m_cursorCol, m_textLength - m_cursorCol);
   m_text[m_cursorCol] = c;
   moveCursor(m_cursorCol + 1, m_cursorCol + 1);
+  onChange();
   repaint();
 }
 
@@ -2047,6 +2049,7 @@ void uiTextEdit::removeSel()
       memmove(m_text + m_cursorCol, m_text + m_cursorCol + count, m_textLength - m_cursorCol - count + 1);
       m_textLength -= count;
       moveCursor(m_cursorCol, m_cursorCol);
+      onChange();
       repaint();
     }
   }
