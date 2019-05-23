@@ -751,20 +751,26 @@ void uiWindow::addChild(uiWindow * child)
 
 void uiWindow::removeChild(uiWindow * child, bool freeChild)
 {
-  if (child == m_firstChild)
-    m_firstChild = child->m_next;
-  else
-    child->m_prev->m_next = child->m_next;
+  if (child) {
+    Rect childRect = child->rect(uiWindowRectType::ParentBased);
 
-  if (child == m_lastChild)
-    m_lastChild = child->m_prev;
-  else
-    child->m_next->m_prev = child->m_prev;
+    if (child == m_firstChild)
+      m_firstChild = child->m_next;
+    else
+      child->m_prev->m_next = child->m_next;
 
-  if (freeChild)
-    delete child;
-  else
-    child->m_prev = child->m_next = nullptr;
+    if (child == m_lastChild)
+      m_lastChild = child->m_prev;
+    else
+      child->m_next->m_prev = child->m_prev;
+
+    if (freeChild)
+      delete child;
+    else
+      child->m_prev = child->m_next = nullptr;
+
+    repaint(childRect);
+  }
 }
 
 
