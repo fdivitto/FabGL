@@ -303,5 +303,6 @@ using fabgl::uiTextEdit;
 using fabgl::uiApp;
 using fabgl::uiFrame;
 using fabgl::uiButton;
+using fabgl::uiLabel;
 
 

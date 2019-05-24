@@ -2097,5 +2097,82 @@ void uiTextEdit::selectWordAt(int mouseX)
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiLabel
+
+
+uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
+  : uiControl(parent, pos, size, visible),
+    m_text(nullptr),
+    m_textExtent(0)
+{
+  windowProps().focusable = false;
+  m_autoSize = (size.width == 0 && size.height == 0);
+  setText(text);
+}
+
+
+uiLabel::~uiLabel()
+{
+  free(m_text);
+}
+
+
+void uiLabel::setText(char const * value)
+{
+  int len = strlen(value);
+  m_text = (char*) realloc(m_text, len + 1);
+  strcpy(m_text, value);
+
+  m_textExtent = Canvas.textExtent(m_labelStyle.textFont, value);
+
+  if (m_autoSize)
+    app()->resizeWindow(this, m_textExtent, m_labelStyle.textFont->height);
+}
+
+
+void uiLabel::paintLabel()
+{
+  Rect r = Rect(0, 0, size().width - 1, size().height - 1);
+  Canvas.setBrushColor(m_labelStyle.backgroundColor);
+  Canvas.fillRectangle(r);
+  Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
+  Canvas.setPenColor(m_labelStyle.textFontColor);
+  int x = r.X1;
+  int y = r.Y1 + (size().height - m_labelStyle.textFont->height) / 2;
+  Canvas.drawText(m_labelStyle.textFont, x, y, m_text);
+}
+
+
+void uiLabel::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event);
+      paintLabel();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        onClick();
+      break;
+
+    default:
+      break;
+  }
+}
+
+// uiButton
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 } // end of namespace
 

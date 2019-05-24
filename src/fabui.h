@@ -47,7 +47,7 @@
         *uiControl
           *uiButton
           *uiTextEdit
-          uiLabel
+          *uiLabel
           uiListBox
           uiCheckBox
           uiComboBox
@@ -612,6 +612,54 @@ private:
 
   // character index at start of selection (not included if < m_cursorCol, included if > m_cursorCol)
   int             m_selCursorCol;
+
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiLabel
+
+
+struct uiLabelStyle {
+  RGB              backgroundColor          = RGB(3, 3, 3);
+  RGB              textFontColor            = RGB(0, 0, 0);
+  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
+};
+
+
+class uiLabel : public uiControl {
+
+public:
+
+  uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
+
+  virtual ~uiLabel();
+
+  virtual void processEvent(uiEvent * event);
+
+  void setText(char const * value);
+
+  char const * text() { return m_text; }
+
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onDblClick;
+
+
+private:
+
+  void paintLabel();
+
+
+  char *         m_text;
+  int            m_textExtent;  // calculated by setText()
+
+  uiLabelStyle   m_labelStyle;
+
+  bool           m_autoSize;
 
 };
 
