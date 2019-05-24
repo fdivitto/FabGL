@@ -103,6 +103,8 @@ public:
 
 private:
 
+  void warmInit();
+
   static void IRAM_ATTR rtc_isr(void * arg);
 
   // address of next word to read in the circular buffer

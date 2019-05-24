@@ -817,31 +817,16 @@ void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPI
   // PS/2 port 1 enabled?
   RTC_SLOW_MEM[RTCMEM_PORT1_ENABLED] = (port1_clkGPIO != GPIO_NUM_39 ? 1 : 0);
 
-  // initialize the receiving word pointer at the bottom of the buffer
-  RTC_SLOW_MEM[RTCMEM_PORT0_WRITE_POS] = RTCMEM_PORT0_BUFFER_START;
-  RTC_SLOW_MEM[RTCMEM_PORT1_WRITE_POS] = RTCMEM_PORT1_BUFFER_START;
-
-  // select receive mode
-  RTC_SLOW_MEM[RTCMEM_PORT0_MODE] = MODE_RECEIVE;
-  RTC_SLOW_MEM[RTCMEM_PORT1_MODE] = MODE_RECEIVE;
-
-  // initialize flags
-  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_SENT_FLAG] = 0;
-  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_SENT_FLAG] = 0;
-  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_RX_READY]  = 0;
-  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_RX_READY]  = 0;
+  warmInit();
 
   // process, load and execute ULP program
   size_t size = sizeof(ULP_code) / sizeof(ulp_insn_t);
   ulp_process_macros_and_load_ex(RTCMEM_PROG_START, ULP_code, &size);         // convert macros to ULP code
   replace_placeholders(RTCMEM_PROG_START, size, port0_clkGPIO, port0_datGPIO, port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
-  assert(size < RTCMEM_VARS_START && "OLP Program too long, increase RTCMEM_VARS_START");
+  assert(size < RTCMEM_VARS_START && "ULP Program too long, increase RTCMEM_VARS_START");
   REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTCMEM_PROG_START);   // set entry point
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
-
-  m_readPos[0] = RTCMEM_PORT0_BUFFER_START;
-  m_readPos[1] = RTCMEM_PORT1_BUFFER_START;
 
   // install RTC interrupt handler (on ULP Wake() instruction)
   esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, nullptr, nullptr);
@@ -874,13 +859,44 @@ int PS2ControllerClass::getData(int PS2Port)
 
   int writePos = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
   if (m_readPos[PS2Port] != writePos) {
-    data = (RTC_SLOW_MEM[m_readPos[PS2Port]] & 0xFFFF) >> 1 & 0xFF;
-    ++m_readPos[PS2Port];
-    if (m_readPos[PS2Port] == RTCMEM_PORTX_BUFFER_END)
-      m_readPos[PS2Port] = RTCMEM_PORTX_BUFFER_START;
+    uint16_t data16 = (RTC_SLOW_MEM[m_readPos[PS2Port]] & 0xFFFF);
+    data = data16 >> 1 & 0xFF;
+    // check parity
+    if ((data16 >> 9 & 1) != !calcParity(data)) {
+      // parity error
+      sendData(0xFE, PS2Port);  // request to resend last byte
+      warmInit();
+      data = -1;
+    } else {
+      // parity OK
+      ++m_readPos[PS2Port];
+      if (m_readPos[PS2Port] == RTCMEM_PORTX_BUFFER_END)
+        m_readPos[PS2Port] = RTCMEM_PORTX_BUFFER_START;
+    }
   }
 
   return data;
+}
+
+
+void PS2ControllerClass::warmInit()
+{
+  m_readPos[0] = RTCMEM_PORT0_BUFFER_START;
+  m_readPos[1] = RTCMEM_PORT1_BUFFER_START;
+
+  // initialize the receiving word pointer at the bottom of the buffer
+  RTC_SLOW_MEM[RTCMEM_PORT0_WRITE_POS] = RTCMEM_PORT0_BUFFER_START;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WRITE_POS] = RTCMEM_PORT1_BUFFER_START;
+
+  // select receive mode
+  RTC_SLOW_MEM[RTCMEM_PORT0_MODE] = MODE_RECEIVE;
+  RTC_SLOW_MEM[RTCMEM_PORT1_MODE] = MODE_RECEIVE;
+
+  // initialize flags
+  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_SENT_FLAG] = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_SENT_FLAG] = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT0_WORD_RX_READY]  = 0;
+  RTC_SLOW_MEM[RTCMEM_PORT1_WORD_RX_READY]  = 0;
 }
 
 
