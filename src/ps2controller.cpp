@@ -296,8 +296,8 @@ namespace fabgl {
 ////////////////////////////////////////////////////////////////////////////
 
 
-#define PORT0_RX_BUFFER_SIZE 888
-#define PORT1_RX_BUFFER_SIZE 888
+#define PORT0_RX_BUFFER_SIZE 128
+#define PORT1_RX_BUFFER_SIZE 1648
 
 
 // Locations inside RTC low speed memory
