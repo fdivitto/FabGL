@@ -240,6 +240,11 @@ struct uiWindowProps {
 };
 
 
+struct uiWindowStyle {
+  CursorName defaultCursor = CursorName::CursorPointerSimpleReduced;
+};
+
+
 
 class uiWindow : public uiEvtHandler {
 
@@ -281,6 +286,8 @@ public:
 
   uiWindowProps & windowProps() { return m_windowProps; }
 
+  uiWindowStyle & windowStyle() { return m_windowStyle; }
+
   uiWindow * parent() { return m_parent; }
 
   Point mouseDownPos() { return m_mouseDownPos; }
@@ -318,6 +325,8 @@ private:
   uiWindowState m_state;
 
   uiWindowProps m_windowProps;
+
+  uiWindowStyle m_windowStyle;
 
   Point         m_mouseDownPos;    // mouse position when mouse down event has been received
 

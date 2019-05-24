@@ -177,9 +177,6 @@ void uiApp::run()
   // setup absolute events from mouse
   Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
 
-  // setup mouse cursor
-  VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
-
   // setup keyboard
   Keyboard.setUIApp(this);
 
@@ -192,6 +189,9 @@ void uiApp::run()
 
   m_rootWindow->frameProps().resizeable = false;
   m_rootWindow->frameProps().moveable   = false;
+
+  // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
+  VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
   showWindow(m_rootWindow, true);
 
@@ -921,6 +921,7 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEENTER:
       m_isMouseOver = true;
+      VGAController.setMouseCursor(m_windowStyle.defaultCursor);
       break;
 
     case UIEVT_MOUSELEAVE:
@@ -1436,7 +1437,7 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
   if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton || prevSensPos == uiFrameSensiblePos::MinimizeButton) && m_mouseMoveSensiblePos != prevSensPos)
     repaint(getBtnRect(2));
 
-  CursorName cur = CursorName::CursorPointerSimpleReduced;  // this is the default
+  CursorName cur = windowStyle().defaultCursor;
 
   switch (m_mouseMoveSensiblePos) {
 
@@ -1627,7 +1628,6 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEENTER:
-      VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
       repaint();  // to update background color
       break;
 
@@ -1691,6 +1691,7 @@ uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, 
     m_selCursorCol(0)
 {
   windowProps().focusable = true;
+  windowStyle().defaultCursor = CursorName::CursorTextInput;
   setText(text);
 }
 
@@ -1734,7 +1735,6 @@ void uiTextEdit::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEENTER:
-      VGAController.setMouseCursor(CursorName::CursorPointerSimpleReduced);
       repaint();  // to update background color
       break;
 
