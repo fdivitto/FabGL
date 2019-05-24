@@ -308,7 +308,7 @@ namespace fabgl {
 #define RTCMEM_PORT0_MODE           (RTCMEM_VARS_START +  0)  // MODE_RECEIVE or MODE_SEND
 #define RTCMEM_PORT0_WRITE_POS      (RTCMEM_VARS_START +  1)  // position of the next word to receive
 #define RTCMEM_PORT0_WORD_RX_READY  (RTCMEM_VARS_START +  2)  // 1 when a word has been received (reset by ISR)
-#define RTCMEM_PORT0_BIT            (RTCMEM_VARS_START +  3)  // receive or send bit counter
+#define RTCMEM_PORT0_BIT            (RTCMEM_VARS_START +  3)  // send bit counter
 #define RTCMEM_PORT0_STATE          (RTCMEM_VARS_START +  4)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
 #define RTCMEM_PORT0_SEND_WORD      (RTCMEM_VARS_START +  5)  // contains the word to send
 #define RTCMEM_PORT0_WORD_SENT_FLAG (RTCMEM_VARS_START +  6)  // 1 when word has been sent (reset by ISR)
@@ -385,8 +385,9 @@ M_LABEL(READY_TO_RECEIVE),
   // reset the word that will contain the received data
   MEM_INDWRITEI(RTCMEM_PORT0_WRITE_POS, 0),                 // [[RTCMEM_PORT0_WRITE_POS]] = 0
 
-  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  // reset the bit counters (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
   MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                          // [RTCMEM_PORT0_BIT] = 0
+  I_MOVI(R2, 0),                                            // R2 = 0
 
   // port 1 enabled?
   MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
@@ -408,8 +409,9 @@ M_LABEL(READY_TO_RECEIVE),
   // reset the word that will contain the received data
   MEM_INDWRITEI(RTCMEM_PORT1_WRITE_POS, 0),                 // [[RTCMEM_PORT1_WRITE_POS]] = 0
 
-  // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
+  // reset the bit counters (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
   MEM_WRITEI(RTCMEM_PORT1_BIT, 0),                          // [RTCMEM_PORT1_BIT] = 0
+  I_MOVI(R3, 0),                                            // R3 = 0
 
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,10 +466,11 @@ M_LABEL(PORT0_CLK_IS_HIGH),
   MEM_WRITEI(RTCMEM_PORT0_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT0_STATE] = STATE_WAIT_CLK_LOW
 
   // increment bit count
-  MEM_INC(RTCMEM_PORT0_BIT),                                // [RTCMEM_PORT0_BIT] = [RTCMEM_PORT0_BIT] + 1
+  I_ADDI(R2, R2, 1),                                        // R2 = R2 + 1
 
   // end of word? if not get another bit
-  MEM_BL(PORT1_RECEIVE, RTCMEM_PORT0_BIT, 11),              // jump to PORT1_RECEIVE if [RTCMEM_PORT0_BIT] < 11
+  I_MOVR(R0, R2),                                           // R0 = R2
+  M_BL(PORT1_RECEIVE, 11),                                  // jump to PORT1_RECEIVE if R0 (=R2) < 11
 
   // End of word
 
@@ -490,10 +493,10 @@ M_LABEL(PORT0_RECEIVE_WORD_READY),
   MEM_INDWRITEI(RTCMEM_PORT0_WRITE_POS, 0),                 // [[RTCMEM_PORT0_WRITE_POS]] = 0
 
   // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
-  MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                          // [RTCMEM_PORT0_BIT] = 0
+  I_MOVI(R2, 0),                                            // R2 = 0
 
   // do the next job
-  M_BX(PORT1_RECEIVE),                                      // jump to PORT1_RECEIVE
+  //M_BX(PORT1_RECEIVE),                                      // jump to PORT1_RECEIVE
 
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -544,10 +547,11 @@ M_LABEL(PORT1_CLK_IS_HIGH),
   MEM_WRITEI(RTCMEM_PORT1_STATE, STATE_WAIT_CLK_LOW),       // [RTCMEM_PORT1_STATE] = STATE_WAIT_CLK_LOW
 
   // increment bit count
-  MEM_INC(RTCMEM_PORT1_BIT),                                // [RTCMEM_PORT1_BIT] = [RTCMEM_PORT1_BIT] + 1
+  I_ADDI(R3, R3, 1),                                        // R3 = R3 + 1
 
   // end of word? if not get another bit
-  MEM_BL(MAIN_LOOP, RTCMEM_PORT1_BIT, 11),                  // jump to MAIN_LOOP if [RTCMEM_PORT1_BIT] < 11
+  I_MOVR(R0, R3),                                           // R0 = R3
+  M_BL(MAIN_LOOP, 11),                                      // jump to MAIN_LOOP if R0 (=R3) < 11
 
   // End of word
 
@@ -570,7 +574,7 @@ M_LABEL(PORT1_RECEIVE_WORD_READY),
   MEM_INDWRITEI(RTCMEM_PORT1_WRITE_POS, 0),                 // [[RTCMEM_PORT1_WRITE_POS]] = 0
 
   // reset the bit counter (0 = start bit, 1 = data0 .... 9 = parity, 10 = stop bit)
-  MEM_WRITEI(RTCMEM_PORT1_BIT, 0),                          // [RTCMEM_PORT1_BIT] = 0
+  I_MOVI(R3, 0),                                            // R3 = 0
 
   // go to the main loop
   M_BX(MAIN_LOOP),
