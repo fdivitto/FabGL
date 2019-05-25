@@ -161,6 +161,7 @@ uiApp::uiApp()
     m_lastMouseDownTimeMS(0)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
+  setApp(this);
 }
 
 
