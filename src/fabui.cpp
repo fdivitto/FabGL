@@ -782,6 +782,16 @@ void uiWindow::moveChildOnTop(uiWindow * child)
 }
 
 
+// return true if "window" is a child (or descendant) of this window
+bool uiWindow::isChild(uiWindow * window)
+{
+  for (auto child = firstChild(); child; child = child->next())
+    if (child == window || (child->hasChildren() && child->isChild(window)))
+      return true;
+  return false;
+}
+
+
 // transform a rect relative to this window to a rect relative to the specified base window
 Rect uiWindow::transformRect(Rect const & rect, uiWindow * baseWindow)
 {

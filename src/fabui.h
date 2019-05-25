@@ -276,6 +276,8 @@ public:
 
   void moveChildOnTop(uiWindow * child);
 
+  bool isChild(uiWindow * window);
+
   Point pos() { return m_pos; }
 
   Size size() { return m_size; }
