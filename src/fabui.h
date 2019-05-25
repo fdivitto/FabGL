@@ -101,6 +101,7 @@ enum uiEventID {
   UIEVT_TIMER,
   UIEVT_DBLCLICK,
   UIEVT_DESTROY,
+  UIEVT_CLOSE,      // Request to close (frame Close button)
 };
 
 

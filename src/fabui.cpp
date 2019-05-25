@@ -879,6 +879,11 @@ void uiWindow::processEvent(uiEvent * event)
       m_parent->removeChild(this);
       break;
 
+    case UIEVT_CLOSE:
+      // for default a Close request just hides the window
+      app()->showWindow(this, false);
+      break;
+
     case UIEVT_ACTIVATE:
       {
         m_state.active = true;
@@ -1523,9 +1528,11 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y)
 {
-  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos()))
-    app()->showWindow(this, false);
-  else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos()))
+  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos())) {
+    // generate UIEVT_CLOSE event
+    uiEvent evt = uiEvent(this, UIEVT_CLOSE);
+    app()->postEvent(&evt);
+  } else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos()))
     app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
   else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos()))
     app()->minimizeWindow(this, !state().minimized);
