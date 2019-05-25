@@ -100,6 +100,7 @@ enum uiEventID {
   UIEVT_KEYUP,
   UIEVT_TIMER,
   UIEVT_DBLCLICK,
+  UIEVT_EXITMODAL,
   UIEVT_DESTROY,
   UIEVT_CLOSE,      // Request to close (frame Close button)
 };
@@ -142,6 +143,8 @@ struct uiEvent {
     } key;
     // event: UIEVT_TIMER
     uiTimerHandle timerHandler;
+    // event: UIEVT_EXITMODAL
+    int modalResult;
 
     uiEventParams() { }
   } params;
@@ -303,6 +306,8 @@ public:
   void repaint();
 
   bool isMouseOver() { return m_isMouseOver; }
+
+  void exitModal(int modalResult);
 
 protected:
 
@@ -744,6 +749,8 @@ public:
 
   void showWindow(uiWindow * window, bool value);
 
+  int showModalWindow(uiWindow * window);
+
   void maximizeWindow(uiWindow * window, bool value);
 
   void minimizeWindow(uiWindow * window, bool value);
@@ -782,6 +789,7 @@ private:
   void preprocessEvent(uiEvent * event);
   void preprocessMouseEvent(uiEvent * event);
   void preprocessKeyboardEvent(uiEvent * event);
+  void filterModalEvent(uiEvent * event);
 
   static void timerFunc(TimerHandle_t xTimer);
 
@@ -802,6 +810,8 @@ private:
   uiWindow *    m_capturedMouseWindow; // window that has captured mouse
 
   uiWindow *    m_freeMouseWindow;     // window where mouse is over
+
+  uiWindow *    m_modalWindow;         // current modal window
 
   bool          m_combineMouseMoveEvents;
 

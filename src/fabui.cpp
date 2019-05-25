@@ -45,7 +45,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
-                                  "UIEVT_TIMER", "UIEVT_DBLCLICK",
+                                  "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -154,6 +154,7 @@ uiApp::uiApp()
     m_focusedWindow(nullptr),
     m_capturedMouseWindow(nullptr),
     m_freeMouseWindow(nullptr),
+    m_modalWindow(nullptr),
     m_combineMouseMoveEvents(false),
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
@@ -249,6 +250,35 @@ void uiApp::preprocessEvent(uiEvent * event)
       case UIEVT_PAINT:
         blinkCaret(true);
         break;
+      default:
+        break;
+    }
+  }
+  if (m_modalWindow != nullptr)
+    filterModalEvent(event);
+}
+
+
+// decide if an event with destination to non-modal windows can pass when a modal window is active
+void uiApp::filterModalEvent(uiEvent * event)
+{
+  if (event->dest != nullptr && event->dest->evtHandlerProps().isWindow && event->dest != m_modalWindow && !m_modalWindow->isChild((uiWindow*)event->dest)) {
+    switch (event->id) {
+      case UIEVT_MOUSEMOVE:
+      case UIEVT_MOUSEWHEEL:
+      case UIEVT_MOUSEBUTTONDOWN:
+      case UIEVT_MOUSEBUTTONUP:
+      case UIEVT_MOUSEENTER:
+      case UIEVT_MOUSELEAVE:
+      case UIEVT_DBLCLICK:
+        // block these events
+        event->dest = nullptr;
+        if (event->id == UIEVT_MOUSEENTER) {
+          // a little hack to set the right mouse pointer exiting from modal window
+          VGAController.setMouseCursor(m_modalWindow->windowStyle().defaultCursor);
+        }
+        break;
+
       default:
         break;
     }
@@ -423,7 +453,7 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
   // move on top of the children
   uiWindow * prev = m_activeWindow;
 
-  if (value != m_activeWindow) {
+  if (m_modalWindow == nullptr && value != m_activeWindow) {
 
     // is "value" window activable? If not turn "value" to the first activabe parent
     while (!value->m_windowProps.activable) {
@@ -572,6 +602,43 @@ void uiApp::showWindow(uiWindow * window, bool value)
 }
 
 
+int uiApp::showModalWindow(uiWindow * window)
+{
+  int modalResult = -1;
+
+  showWindow(window, true);
+  uiWindow * prevActiveWindow = setActiveWindow(window);
+  m_modalWindow = window;
+
+  // a new inner event loop...
+  while (true) {
+    uiEvent event;
+    if (getEvent(&event, -1)) {
+
+      if (event.id == UIEVT_EXITMODAL) {
+        // clean exit using exitModal() method
+        modalResult = event.params.modalResult;
+        break;
+      } else if (event.id == UIEVT_CLOSE) {
+        // exit using Close button (default return value remains -1)
+        break;
+      }
+
+      preprocessEvent(&event);
+
+      if (event.dest)
+        event.dest->processEvent(&event);
+    }
+  }
+
+  m_modalWindow = nullptr;
+  showWindow(window, false);
+  setActiveWindow(prevActiveWindow);
+
+  return modalResult;
+}
+
+
 void uiApp::maximizeWindow(uiWindow * window, bool value)
 {
   uiEvent evt = uiEvent(window, value ? UIEVT_MAXIMIZE : UIEVT_RESTORE);
@@ -688,25 +755,27 @@ void uiApp::blinkCaret(bool forceOFF)
 // this is the unique way to manually destroy a window
 void uiApp::destroyWindow(uiWindow * window)
 {
-  // first destroy children
-  for (auto child = window->lastChild(); child; child = child->prev())
-    destroyWindow(child);
-  // is this window used for something?
-  if (m_caretWindow == window)
-    showCaret(nullptr);
-  if (m_focusedWindow == window)
-    setFocusedWindow(nullptr);
-  if (m_activeWindow == window)
-    setActiveWindow(nullptr);
-  if (m_capturedMouseWindow == window)
-    m_capturedMouseWindow = nullptr;
-  if (m_freeMouseWindow == window)
-    m_freeMouseWindow = nullptr;
-  // to send Hide event and repaint area
-  showWindow(window, false);
-  // to actualy detach from parent and destroy the object
-  uiEvent evt = uiEvent(window, UIEVT_DESTROY);
-  postEvent(&evt);
+  if (window) {
+    // first destroy children
+    for (auto child = window->lastChild(); child; child = child->prev())
+      destroyWindow(child);
+    // is this window used for something?
+    if (m_caretWindow == window)
+      showCaret(nullptr);
+    if (m_focusedWindow == window)
+      setFocusedWindow(nullptr);
+    if (m_activeWindow == window)
+      setActiveWindow(nullptr);
+    if (m_capturedMouseWindow == window)
+      m_capturedMouseWindow = nullptr;
+    if (m_freeMouseWindow == window)
+      m_freeMouseWindow = nullptr;
+    // to send Hide event and repaint area
+    showWindow(window, false);
+    // to actualy detach from parent and destroy the object
+    uiEvent evt = uiEvent(window, UIEVT_DESTROY);
+    postEvent(&evt);
+  }
 }
 
 
@@ -1059,6 +1128,12 @@ void uiWindow::generateReshapeEvents(Rect const & r)
 }
 
 
+void uiWindow::exitModal(int modalResult)
+{
+  uiEvent evt = uiEvent(this, UIEVT_EXITMODAL);
+  evt.params.modalResult = modalResult;
+  app()->postEvent(&evt);
+}
 
 
 // uiWindow
