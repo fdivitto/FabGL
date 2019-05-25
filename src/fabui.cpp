@@ -684,6 +684,31 @@ void uiApp::blinkCaret(bool forceOFF)
 }
 
 
+// this is the unique way to manually destroy a window
+void uiApp::destroyWindow(uiWindow * window)
+{
+  // first destroy children
+  for (auto child = window->lastChild(); child; child = child->prev())
+    destroyWindow(child);
+  // is this window used for something?
+  if (m_caretWindow == window)
+    showCaret(nullptr);
+  if (m_focusedWindow == window)
+    setFocusedWindow(nullptr);
+  if (m_activeWindow == window)
+    setActiveWindow(nullptr);
+  if (m_capturedMouseWindow == window)
+    m_capturedMouseWindow = nullptr;
+  if (m_freeMouseWindow == window)
+    m_freeMouseWindow = nullptr;
+  // to send Hide event and repaint area
+  showWindow(window, false);
+  // to actualy detach from parent and destroy the object
+  uiEvent evt = uiEvent(window, UIEVT_DESTROY);
+  postEvent(&evt);
+}
+
+
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -848,6 +873,10 @@ void uiWindow::processEvent(uiEvent * event)
   uiEvtHandler::processEvent(event);
 
   switch (event->id) {
+
+    case UIEVT_DESTROY:
+      m_parent->removeChild(this);
+      break;
 
     case UIEVT_ACTIVATE:
       {

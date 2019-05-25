@@ -100,6 +100,7 @@ enum uiEventID {
   UIEVT_KEYUP,
   UIEVT_TIMER,
   UIEVT_DBLCLICK,
+  UIEVT_DESTROY,
 };
 
 
@@ -761,6 +762,8 @@ public:
   void killTimer(uiTimerHandle handle);
 
   uiAppProps & appProps() { return m_appProps; }
+
+  void destroyWindow(uiWindow * window);
 
 
   // events
