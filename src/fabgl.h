@@ -305,5 +305,6 @@ using fabgl::uiFrame;
 using fabgl::uiButton;
 using fabgl::uiLabel;
 using fabgl::uiImage;
+using fabgl::uiPanel;
 
 

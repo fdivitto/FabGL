@@ -49,6 +49,7 @@
           *uiTextEdit
           *uiLabel
           *uiImage
+          *uiPanel
           uiListBox
           uiCheckBox
           uiComboBox
@@ -731,6 +732,45 @@ private:
 
 };
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiPanel
+
+
+struct uiPanelStyle {
+  RGB borderColor     = RGB(1, 1, 1);
+  RGB backgroundColor = RGB(2, 2, 2);
+  uint8_t borderSize  = 1;
+};
+
+
+class uiPanel : public uiControl {
+
+public:
+
+  uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  virtual ~uiPanel();
+
+  virtual void processEvent(uiEvent * event);
+
+  uiPanelStyle & panelStyle() { return m_panelStyle; }
+
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onDblClick;
+
+
+private:
+
+  void paintPanel();
+
+
+  uiPanelStyle   m_panelStyle;
+};
 
 
 

@@ -2388,6 +2388,72 @@ void uiImage::processEvent(uiEvent * event)
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiPanel
+
+
+uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiControl(parent, pos, size, visible)
+{
+  windowProps().focusable = false;
+}
+
+
+uiPanel::~uiPanel()
+{
+}
+
+
+void uiPanel::paintPanel()
+{
+  Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
+  // border
+  if (m_panelStyle.borderSize > 0) {
+    Canvas.setPenColor(m_panelStyle.borderColor);
+    for (int i = 0; i < m_panelStyle.borderSize; ++i)
+      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
+    // adjust background rect
+    bkgRect.X1 += m_panelStyle.borderSize;
+    bkgRect.Y1 += m_panelStyle.borderSize;
+    bkgRect.X2 -= m_panelStyle.borderSize;
+    bkgRect.Y2 -= m_panelStyle.borderSize;
+  }
+  // background
+  Canvas.setBrushColor(m_panelStyle.backgroundColor);
+  Canvas.fillRectangle(bkgRect);
+}
+
+
+void uiPanel::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event);
+      paintPanel();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        onClick();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// uiImage
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 } // end of namespace
