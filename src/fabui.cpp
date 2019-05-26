@@ -2292,8 +2292,86 @@ void uiLabel::processEvent(uiEvent * event)
   }
 }
 
-// uiButton
+
+// uiLabel
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiImage
+// TODO? bitmap is not copied, but just referenced
+
+
+uiImage::uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size, bool visible)
+  : uiControl(parent, pos, size, visible),
+    m_bitmap(nullptr)
+{
+  windowProps().focusable = false;
+  m_autoSize = (size.width == 0 && size.height == 0);
+  setBitmap(bitmap);
+}
+
+
+uiImage::~uiImage()
+{
+}
+
+
+void uiImage::setBitmap(Bitmap const * bitmap)
+{
+  m_bitmap = bitmap;
+
+  if (m_autoSize && bitmap)
+    app()->resizeWindow(this, bitmap->width, bitmap->height);
+}
+
+
+void uiImage::paintImage()
+{
+  Rect r = Rect(0, 0, size().width - 1, size().height - 1);
+  Canvas.setBrushColor(m_imageStyle.backgroundColor);
+  Canvas.fillRectangle(r);
+  if (m_bitmap) {
+    int x = r.X1 + (size().width - m_bitmap->width) / 2;
+    int y = r.Y1 + (size().height - m_bitmap->height) / 2;
+    Canvas.drawBitmap(x, y, m_bitmap);
+  }
+}
+
+
+void uiImage::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event);
+      paintImage();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        onClick();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// uiImage
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 } // end of namespace

@@ -48,6 +48,7 @@
           *uiButton
           *uiTextEdit
           *uiLabel
+          *uiImage
           uiListBox
           uiCheckBox
           uiComboBox
@@ -681,6 +682,50 @@ private:
 
 };
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiImage
+
+
+struct uiImageStyle {
+  RGB backgroundColor = RGB(3, 3, 3);
+};
+
+
+class uiImage : public uiControl {
+
+public:
+
+  uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
+
+  virtual ~uiImage();
+
+  virtual void processEvent(uiEvent * event);
+
+  void setBitmap(Bitmap const * bitmap);
+
+  Bitmap const * bitmap() { return m_bitmap; }
+
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onDblClick;
+
+
+private:
+
+  void paintImage();
+
+
+  Bitmap const * m_bitmap;
+
+  uiImageStyle   m_imageStyle;
+
+  bool           m_autoSize;
+
+};
 
 
 
