@@ -269,7 +269,6 @@ void uiApp::filterModalEvent(uiEvent * event)
       case UIEVT_MOUSEBUTTONDOWN:
       case UIEVT_MOUSEBUTTONUP:
       case UIEVT_MOUSEENTER:
-      case UIEVT_MOUSELEAVE:
       case UIEVT_DBLCLICK:
         // block these events
         event->dest = nullptr;
