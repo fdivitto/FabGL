@@ -661,6 +661,8 @@ public:
 
   char const * text() { return m_text; }
 
+  uiLabelStyle & labelStyle() { return m_labelStyle; }
+
 
   // Delegates
 
@@ -706,6 +708,8 @@ public:
   void setBitmap(Bitmap const * bitmap);
 
   Bitmap const * bitmap() { return m_bitmap; }
+
+  uiImageStyle & imageStyle() { return m_imageStyle; }
 
 
   // Delegates
