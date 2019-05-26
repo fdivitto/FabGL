@@ -244,9 +244,13 @@ struct Delegate {
 
   template <typename Func>
   void operator=(Func f) {
-    static Func s_func = f; // static allow extend "f" lifetime. m_closure doesn't need that because it is like a static func
     m_closure = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
-    m_func    = &s_func;
+    m_func    = malloc(sizeof(Func));
+    memcpy(m_func, &f, sizeof(Func));
+  }
+
+  ~Delegate() {
+    free(m_func);
   }
 
   void operator()(const Params & ...params) {
