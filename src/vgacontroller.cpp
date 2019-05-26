@@ -40,7 +40,7 @@
 #include "fabutils.h"
 #include "vgacontroller.h"
 #include "swgenerator.h"
-#include "cursors.h"
+#include "images/cursors.h"
 
 
 
