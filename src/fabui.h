@@ -818,6 +818,8 @@ public:
 
   void destroyWindow(uiWindow * window);
 
+  void cleanWindowReferences(uiWindow * window);
+
 
   // events
 

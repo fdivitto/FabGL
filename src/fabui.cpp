@@ -453,7 +453,7 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
   // move on top of the children
   uiWindow * prev = m_activeWindow;
 
-  if (m_modalWindow == nullptr && value != m_activeWindow) {
+  if (value != m_activeWindow) {
 
     // is "value" window activable? If not turn "value" to the first activabe parent
     while (!value->m_windowProps.activable) {
@@ -608,13 +608,17 @@ int uiApp::showModalWindow(uiWindow * window)
 
   showWindow(window, true);
   uiWindow * prevActiveWindow = setActiveWindow(window);
-  m_modalWindow = window;
+  uiWindow * prevModal = m_modalWindow;
 
   // a new inner event loop...
   while (true) {
     uiEvent event;
     if (getEvent(&event, -1)) {
 
+      if (m_modalWindow != window && event.dest == window) {
+        // becomes modal when first message arrives
+        m_modalWindow = window;
+      }
       if (event.id == UIEVT_EXITMODAL) {
         // clean exit using exitModal() method
         modalResult = event.params.modalResult;
@@ -628,12 +632,14 @@ int uiApp::showModalWindow(uiWindow * window)
 
       if (event.dest)
         event.dest->processEvent(&event);
+
     }
   }
 
-  m_modalWindow = nullptr;
-  showWindow(window, false);
+  m_modalWindow = prevModal;
   setActiveWindow(prevActiveWindow);
+  showWindow(window, false);
+
 
   return modalResult;
 }
@@ -766,10 +772,6 @@ void uiApp::destroyWindow(uiWindow * window)
       setFocusedWindow(nullptr);
     if (m_activeWindow == window)
       setActiveWindow(nullptr);
-    if (m_capturedMouseWindow == window)
-      m_capturedMouseWindow = nullptr;
-    if (m_freeMouseWindow == window)
-      m_freeMouseWindow = nullptr;
     // to send Hide event and repaint area
     showWindow(window, false);
     // to actualy detach from parent and destroy the object
@@ -778,6 +780,22 @@ void uiApp::destroyWindow(uiWindow * window)
   }
 }
 
+
+void uiApp::cleanWindowReferences(uiWindow * window)
+{
+  if (m_capturedMouseWindow == window)
+    m_capturedMouseWindow = nullptr;
+  if (m_freeMouseWindow == window)
+    m_freeMouseWindow = nullptr;
+  if (m_activeWindow == window)
+    m_activeWindow = nullptr;
+  if (m_focusedWindow == window)
+    m_focusedWindow = nullptr;
+  if (m_modalWindow == window)
+    m_modalWindow = nullptr;
+  if (m_caretWindow == window)
+    m_caretWindow = nullptr;
+}
 
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -847,8 +865,6 @@ void uiWindow::addChild(uiWindow * child)
 void uiWindow::removeChild(uiWindow * child, bool freeChild)
 {
   if (child) {
-    //Rect childRect = child->rect(uiWindowRectType::ParentBased);
-
     if (child == m_firstChild)
       m_firstChild = child->m_next;
     else
@@ -859,12 +875,12 @@ void uiWindow::removeChild(uiWindow * child, bool freeChild)
     else
       child->m_next->m_prev = child->m_prev;
 
-    if (freeChild)
+    if (freeChild) {
       delete child;
-    else
+      app()->cleanWindowReferences(child);
+    } else
       child->m_prev = child->m_next = nullptr;
 
-    //repaint(childRect);
   }
 }
 
