@@ -785,6 +785,22 @@ struct uiAppProps {
 };
 
 
+enum class uiMessageBoxResult {
+  Cancel,
+  Button1,
+  Button2,
+  Button3,
+};
+
+
+enum class uiMessageBoxIcon {
+  None,
+  Question,
+  Info,
+  Warning,
+  Error,
+};
+
 
 class uiApp : public uiEvtHandler {
 
@@ -863,6 +879,8 @@ public:
   void destroyWindow(uiWindow * window);
 
   void cleanWindowReferences(uiWindow * window);
+
+  uiMessageBoxResult messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text = nullptr, char const * button3Text = nullptr, uiMessageBoxIcon icon = uiMessageBoxIcon::Question);
 
 
   // events

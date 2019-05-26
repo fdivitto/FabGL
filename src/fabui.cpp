@@ -29,6 +29,7 @@
 #include "canvas.h"
 #include "mouse.h"
 #include "keyboard.h"
+#include "images/bitmaps.h"
 
 
 
@@ -795,6 +796,101 @@ void uiApp::cleanWindowReferences(uiWindow * window)
   if (m_caretWindow == window)
     m_caretWindow = nullptr;
 }
+
+
+uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text, char const * button3Text, uiMessageBoxIcon icon)
+{
+  auto font = Canvas.getPresetFontInfoFromHeight(14, false);
+  const int titleHeight = title && strlen(title) ? font->height : 0;
+  const int textExtent = Canvas.textExtent(font, text);
+  const int button1Extent = button1Text ? Canvas.textExtent(font, button1Text) + 10 : 0;
+  const int button2Extent = button2Text ? Canvas.textExtent(font, button2Text) + 10 : 0;
+  const int button3Extent = button3Text ? Canvas.textExtent(font, button3Text) + 10 : 0;
+  const int buttonsWidth  = imax(imax(imax(button1Extent, button2Extent), button3Extent), 40);
+  int totButtons = 0;
+  if (button1Extent)
+    ++totButtons;
+  if (button2Extent)
+    ++totButtons;
+  if (button3Extent)
+    ++totButtons;
+  const int buttonsHeight = font->height + 6;
+  auto bitmap = (icon == uiMessageBoxIcon::Question ? &questionBitmap :
+                (icon == uiMessageBoxIcon::Info ?     &infoBitmap :
+                (icon == uiMessageBoxIcon::Warning ?  &warnBitmap :
+                (icon == uiMessageBoxIcon::Error ?    &errorBitmap : nullptr))));
+  const int bitmapWidth  = bitmap ? bitmap->width : 0;
+  const int bitmapHeight = bitmap ? bitmap->height : 0;
+  constexpr int buttonsSpace = 10;
+  const int bitmapSpace = bitmap ? 8 : 0;
+  const int textHeight = imax(font->height, bitmapHeight);
+  const int requiredWidth  = imin(imax(bitmapWidth + bitmapSpace + textExtent + 10, buttonsWidth * totButtons + (2 + buttonsSpace) * totButtons), Canvas.getWidth());
+  const int requiredHeight = textHeight + buttonsHeight + titleHeight + font->height * 3;
+  const int frameX = (Canvas.getWidth() - requiredWidth) / 2;
+  const int frameY = (Canvas.getHeight() - requiredHeight) / 2;
+
+  auto mainFrame = new uiFrame(m_rootWindow, title, Point(frameX, frameY), Size(requiredWidth, requiredHeight), false);
+  mainFrame->frameProps().resizeable        = false;
+  mainFrame->frameProps().hasMaximizeButton = false;
+  mainFrame->frameProps().hasMinimizeButton = false;
+
+  int x = (requiredWidth - bitmapWidth - bitmapSpace - textExtent) / 2;
+  if (bitmap) {
+    int y = font->height + titleHeight + (textHeight - bitmapHeight) / 2;
+    new uiImage(mainFrame, bitmap, Point(x, y));
+    x += bitmapWidth + bitmapSpace;
+  }
+
+  int y = font->height + titleHeight + (textHeight - font->height) / 2;
+  new uiLabel(mainFrame, text, Point(x, y));
+
+  // setup panel (where buttons are positioned)
+
+  y += textHeight + titleHeight;
+  auto panel = new uiPanel(mainFrame, Point(0, y), Size(mainFrame->size().width, mainFrame->size().height - y));
+  panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
+  panel->panelStyle().borderColor = RGB(2, 2, 2);
+
+  // setup buttons
+
+  y = (panel->size().height - buttonsHeight) / 2;
+  x = mainFrame->frameStyle().borderSize + requiredWidth - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
+
+  auto button1 = button1Text ? new uiButton(panel, button1Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
+  if (button1) {
+    button1->onClick = [&]() { mainFrame->exitModal(1); };
+    x += buttonsWidth + buttonsSpace;
+  }
+
+  auto button2 = button2Text ? new uiButton(panel, button2Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
+  if (button2) {
+    button2->onClick = [&]() { mainFrame->exitModal(2); };
+    x += buttonsWidth + buttonsSpace;
+  }
+
+  auto button3 = button3Text ? new uiButton(panel, button3Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
+  if (button3) {
+    button3->onClick = [&]() { mainFrame->exitModal(3); };
+    x += buttonsWidth + buttonsSpace;
+  }
+
+  // run
+
+  int modalResult = showModalWindow(mainFrame);
+  destroyWindow(mainFrame);
+
+  switch (modalResult) {
+    case 1:
+      return uiMessageBoxResult::Button1;
+    case 2:
+      return uiMessageBoxResult::Button2;
+    case 3:
+      return uiMessageBoxResult::Button3;
+    default:
+      return uiMessageBoxResult::Cancel;
+  }
+}
+
 
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
