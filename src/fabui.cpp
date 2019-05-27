@@ -1301,7 +1301,7 @@ Rect uiFrame::rect(uiWindowRectType rectType)
       r.Y2 -= m_frameStyle.borderSize;
       // title bar
       if (strlen(m_title))
-        r.Y1 += 1 + titleBarHeight();
+        r.Y1 += 2 + titleBarHeight();
       return r;
     default:
       return r;
