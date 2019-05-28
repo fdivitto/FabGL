@@ -187,7 +187,7 @@ void uiApp::run()
   m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
   m_rootWindow->setApp(this);
 
-  m_rootWindow->frameStyle().borderSize      = 0;
+  m_rootWindow->windowStyle().borderSize     = 0;
   m_rootWindow->frameStyle().backgroundColor = RGB(3, 3, 3);
 
   m_rootWindow->frameProps().resizeable = false;
@@ -854,7 +854,7 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
   // setup buttons
 
   y = (panel->size().height - buttonsHeight) / 2;
-  x = mainFrame->frameStyle().borderSize + requiredWidth - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
+  x = mainFrame->windowStyle().borderSize + requiredWidth - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
 
   auto button1 = button1Text ? new uiButton(panel, button1Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
   if (button1) {
@@ -1023,29 +1023,36 @@ void uiWindow::repaint()
 
 Rect uiWindow::rect(uiWindowRectType rectType)
 {
+  int bSize = hasFocus() ? m_windowStyle.focusedBorderSize : m_windowStyle.borderSize;
+
   switch (rectType) {
     case uiWindowRectType::ScreenBased:
-    case uiWindowRectType::ClientAreaScreenBased:
       return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow());
+
+    case uiWindowRectType::ClientAreaScreenBased:
+      return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow()).shrink(bSize);
+
     case uiWindowRectType::ParentBased:
-    case uiWindowRectType::ClientAreaParentBased:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
+
+    case uiWindowRectType::ClientAreaParentBased:
+      return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1).shrink(bSize);
+
     case uiWindowRectType::WindowBased:
-    case uiWindowRectType::ClientAreaWindowBased:
       return Rect(0, 0, m_size.width - 1, m_size.height - 1);
+
+    case uiWindowRectType::ClientAreaWindowBased:
+      return Rect(0, 0, m_size.width - 1, m_size.height - 1).shrink(bSize);
   }
   return Rect();
 }
 
 
-void uiWindow::beginPaint(uiEvent * event)
+void uiWindow::beginPaint(uiEvent * paintEvent, Rect const & clippingRect)
 {
   Rect srect = rect(uiWindowRectType::ScreenBased);
   Canvas.setOrigin(srect.X1, srect.Y1);
-  Rect clipRect = event->params.rect;
-  if (m_parent)
-    clipRect = clipRect.intersection(m_parent->rect(uiWindowRectType::ClientAreaWindowBased).translate(m_pos.neg()));
-  Canvas.setClippingRect(clipRect);
+  Canvas.setClippingRect( clippingRect.intersection(paintEvent->params.rect) );
 }
 
 
@@ -1166,8 +1173,25 @@ void uiWindow::processEvent(uiEvent * event)
       }
       break;
 
+    case UIEVT_PAINT:
+      beginPaint(event, rect(uiWindowRectType::WindowBased));
+      paintWindow();
+      break;
+
     default:
       break;
+  }
+}
+
+
+void uiWindow::paintWindow()
+{
+  // border
+  int bSize = hasFocus() ? m_windowStyle.focusedBorderSize : m_windowStyle.borderSize;
+  if (bSize > 0) {
+    Canvas.setPenColor(hasFocus() ? m_windowStyle.focusedBorderColor : (state().active ? m_windowStyle.activeBorderColor : m_windowStyle.borderColor));
+    for (int i = 0; i < bSize; ++i)
+      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
   }
 }
 
@@ -1247,6 +1271,12 @@ void uiWindow::exitModal(int modalResult)
 }
 
 
+bool uiWindow::hasFocus()
+{
+  return app()->focusedWindow() == this;
+}
+
+
 // uiWindow
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1283,7 +1313,15 @@ void uiFrame::setTitle(char const * value)
 
 int uiFrame::titleBarHeight()
 {
-  return m_frameStyle.titleFont->height;
+  return m_frameStyle.titleFont->height + 3;
+}
+
+
+Rect uiFrame::titleBarRect()
+{
+  Rect r = uiWindow::rect(uiWindowRectType::ClientAreaWindowBased);
+  r.Y2 = r.Y1 + titleBarHeight() - 1;
+  return r;
 }
 
 
@@ -1294,14 +1332,9 @@ Rect uiFrame::rect(uiWindowRectType rectType)
     case uiWindowRectType::ClientAreaScreenBased:
     case uiWindowRectType::ClientAreaParentBased:
     case uiWindowRectType::ClientAreaWindowBased:
-      // border
-      r.X1 += m_frameStyle.borderSize;
-      r.Y1 += m_frameStyle.borderSize;
-      r.X2 -= m_frameStyle.borderSize;
-      r.Y2 -= m_frameStyle.borderSize;
       // title bar
       if (strlen(m_title))
-        r.Y1 += 2 + titleBarHeight();
+        r.Y1 += titleBarHeight();
       return r;
     default:
       return r;
@@ -1317,11 +1350,11 @@ Size uiFrame::minWindowSize()
     r.width  += CORNERSENSE * 2;
     r.height += CORNERSENSE * 2;
   }
-  r.width  += m_frameStyle.borderSize * 2;
-  r.height += m_frameStyle.borderSize * 2;
+  r.width  += windowStyle().borderSize * 2;
+  r.height += windowStyle().borderSize * 2;
   if (hasTitle) {
     int barHeight = titleBarHeight();  // titleBarHeight is also the button width
-    r.height += 1 + barHeight;
+    r.height += barHeight;
     if (m_frameProps.hasCloseButton || m_frameProps.hasMaximizeButton || m_frameProps.hasMinimizeButton)
       r.width += barHeight * 3;
     r.width += barHeight * 4;  // additional space to let some characters visible
@@ -1337,10 +1370,9 @@ Size uiFrame::minWindowSize()
 Rect uiFrame::getBtnRect(int buttonIndex)
 {
   int btnSize = titleBarHeight();  // horiz and vert size of each button
-  Rect btnRect = Rect(size().width - 1 - m_frameStyle.borderSize - btnSize - CORNERSENSE,
-                      m_frameStyle.borderSize,
-                      size().width - 1 - m_frameStyle.borderSize - CORNERSENSE,
-                      m_frameStyle.borderSize + btnSize);
+  Rect barRect = titleBarRect();
+  Rect btnRect = Rect(barRect.X2 - btnSize - CORNERSENSE / 2, barRect.Y1,
+                      barRect.X2 - CORNERSENSE / 2, barRect.Y2);
   while (buttonIndex--)
     btnRect = btnRect.translate(-btnSize, 0);
   return btnRect;
@@ -1349,31 +1381,22 @@ Rect uiFrame::getBtnRect(int buttonIndex)
 
 void uiFrame::paintFrame()
 {
-  Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
+  Rect bkgRect = uiWindow::rect(uiWindowRectType::ClientAreaWindowBased);
   // title bar
   if (strlen(m_title)) {
     int barHeight = titleBarHeight();
     // title bar background
     RGB titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
     Canvas.setBrushColor(titleBarBrushColor);
-    Canvas.fillRectangle(m_frameStyle.borderSize, m_frameStyle.borderSize, size().width - 1 - m_frameStyle.borderSize, 1 + barHeight + m_frameStyle.borderSize);
+    Canvas.fillRectangle(titleBarRect());
     // close, maximize and minimze buttons
-    int btnX = paintButtons();
+    int btnX = paintButtons(bkgRect);
     // title
-    paintTitle(btnX);
+    Canvas.setPenColor(state().active ? m_frameStyle.activeTitleFontColor : m_frameStyle.titleFontColor);
+    Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
+    Canvas.drawTextWithEllipsis(m_frameStyle.titleFont, 1 + bkgRect.X1, 1 + bkgRect.Y1, m_title, btnX);
     // adjust background rect
-    bkgRect.Y1 = 2 + barHeight;
-  }
-  // border
-  if (m_frameStyle.borderSize > 0) {
-    Canvas.setPenColor(state().active ? m_frameStyle.activeBorderColor : m_frameStyle.borderColor);
-    for (int i = 0; i < m_frameStyle.borderSize; ++i)
-      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
-    // adjust background rect
-    bkgRect.X1 += m_frameStyle.borderSize;
-    bkgRect.Y1 += m_frameStyle.borderSize;
-    bkgRect.X2 -= m_frameStyle.borderSize;
-    bkgRect.Y2 -= m_frameStyle.borderSize;
+    bkgRect.Y1 += barHeight;
   }
   // background
   if (!state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
@@ -1383,19 +1406,10 @@ void uiFrame::paintFrame()
 }
 
 
-// maxX maximum X coordinate allowed
-void uiFrame::paintTitle(int maxX)
-{
-  Canvas.setPenColor(state().active ? m_frameStyle.activeTitleFontColor : m_frameStyle.titleFontColor);
-  Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
-  Canvas.drawTextWithEllipsis(m_frameStyle.titleFont, 1 + m_frameStyle.borderSize, 1 + m_frameStyle.borderSize, m_title, maxX);
-}
-
-
 // return the X coordinate where button start
-int uiFrame::paintButtons()
+int uiFrame::paintButtons(Rect const & bkgRect)
 {
-  int buttonsX = size().width - m_frameStyle.borderSize;
+  int buttonsX = bkgRect.X2;
   if (m_frameProps.hasCloseButton) {
     // close button
     Rect r = getBtnRect(0);
@@ -1406,7 +1420,7 @@ int uiFrame::paintButtons()
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(4);
+    r = r.shrink(6);
     Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
     Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
   }
@@ -1420,7 +1434,7 @@ int uiFrame::paintButtons()
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(4);
+    r = r.shrink(6);
     if (state().maximized || state().minimized) {
       // draw restore (from maximize or minimize) button
       r = r.shrink(1).translate(-1, +1);
@@ -1444,7 +1458,7 @@ int uiFrame::paintButtons()
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(4);
+    r = r.shrink(6);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
   }
@@ -1459,7 +1473,7 @@ void uiFrame::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiWindow::rect(uiWindowRectType::ClientAreaWindowBased));
       paintFrame();
       break;
 
@@ -1521,19 +1535,19 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
   if (m_frameProps.resizeable && !state().maximized && !state().minimized) {
 
     // on top center, resize
-    if (Rect(CORNERSENSE, 0, w - CORNERSENSE, m_frameStyle.borderSize).contains(p))
+    if (Rect(CORNERSENSE, 0, w - CORNERSENSE, windowStyle().borderSize).contains(p))
       return uiFrameSensiblePos::TopCenterResize;
 
     // on left center side, resize
-    if (Rect(0, CORNERSENSE, m_frameStyle.borderSize, h - CORNERSENSE).contains(p))
+    if (Rect(0, CORNERSENSE, windowStyle().borderSize, h - CORNERSENSE).contains(p))
       return uiFrameSensiblePos::CenterLeftResize;
 
     // on right center side, resize
-    if (Rect(w - m_frameStyle.borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
+    if (Rect(w - windowStyle().borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
       return uiFrameSensiblePos::CenterRightResize;
 
     // on bottom center, resize
-    if (Rect(CORNERSENSE, h - m_frameStyle.borderSize, w - CORNERSENSE, h - 1).contains(p))
+    if (Rect(CORNERSENSE, h - windowStyle().borderSize, w - CORNERSENSE, h - 1).contains(p))
       return uiFrameSensiblePos::BottomCenterResize;
 
     // on top left side, resize
@@ -1554,7 +1568,7 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
   }
 
-  if (m_frameProps.moveable && !state().maximized && Rect(1, 1, w - 2, 1 + titleBarHeight()).contains(p))
+  if (m_frameProps.moveable && !state().maximized && titleBarRect().contains(p))
     return uiFrameSensiblePos::MoveArea;       // on title bar, moving area
 
   return uiFrameSensiblePos::None;
@@ -1775,6 +1789,12 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
     m_kind(kind)
 {
   windowProps().focusable = true;
+
+  windowStyle().borderSize         = 1;
+  windowStyle().focusedBorderSize  = 2;
+  windowStyle().borderColor        = RGB(1, 1, 1);
+  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+
   setText(text);
 }
 
@@ -1797,17 +1817,7 @@ void uiButton::setText(char const * value)
 
 void uiButton::paintButton()
 {
-  bool hasFocus = (app()->focusedWindow() == this);
-  Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
-  // border
-  if (m_buttonStyle.borderSize > 0) {
-    Canvas.setPenColor(hasFocus ? m_buttonStyle.focusedBorderColor : m_buttonStyle.borderColor);
-    int bsize = hasFocus? m_buttonStyle.focusedBorderSize : m_buttonStyle.borderSize;
-    for (int i = 0; i < bsize; ++i)
-      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
-    // adjust background rect
-    bkgRect = bkgRect.shrink(bsize);
-  }
+  Rect bkgRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
   // background
   RGB bkColor = m_down ? m_buttonStyle.downBackgroundColor : m_buttonStyle.backgroundColor;
   if (app()->capturedMouseWindow() == this)
@@ -1850,7 +1860,7 @@ void uiButton::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintButton();
       break;
 
@@ -1924,7 +1934,11 @@ uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, 
     m_selCursorCol(0)
 {
   windowProps().focusable = true;
+
   windowStyle().defaultCursor = CursorName::CursorTextInput;
+  windowStyle().borderColor   = RGB(1, 1, 1);
+  windowStyle().borderSize    = 1;
+
   setText(text);
 }
 
@@ -1950,7 +1964,7 @@ void uiTextEdit::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintTextEdit();
       app()->setCaret(); // force blinking (previous painting may cover caret)
       break;
@@ -2093,19 +2107,9 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
 
 void uiTextEdit::paintTextEdit()
 {
-  bool hasFocus = (app()->focusedWindow() == this);
-  m_contentRect = Rect(0, 0, size().width - 1, size().height - 1);
-  // border
-  if (m_textEditStyle.borderSize > 0) {
-    Canvas.setPenColor(hasFocus ? m_textEditStyle.focusedBorderColor : m_textEditStyle.borderColor);
-    int bsize = m_textEditStyle.borderSize;
-    for (int i = 0; i < bsize; ++i)
-      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
-    // adjust background rect
-    m_contentRect = m_contentRect.shrink(bsize);
-  }
+  m_contentRect = uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased);
   // background
-  RGB bkColor = hasFocus ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
+  RGB bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
   Canvas.setBrushColor(bkColor);
   Canvas.fillRectangle(m_contentRect);
   // content
@@ -2341,6 +2345,7 @@ uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const 
     m_textExtent(0)
 {
   windowProps().focusable = false;
+  windowStyle().borderSize = 0;
   m_autoSize = (size.width == 0 && size.height == 0);
   setText(text);
 }
@@ -2367,13 +2372,13 @@ void uiLabel::setText(char const * value)
 
 void uiLabel::paintLabel()
 {
-  Rect r = Rect(0, 0, size().width - 1, size().height - 1);
+  Rect r = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
   Canvas.setBrushColor(m_labelStyle.backgroundColor);
   Canvas.fillRectangle(r);
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
   Canvas.setPenColor(m_labelStyle.textFontColor);
   int x = r.X1;
-  int y = r.Y1 + (size().height - m_labelStyle.textFont->height) / 2;
+  int y = r.Y1 + (r.height() - m_labelStyle.textFont->height) / 2;
   Canvas.drawText(m_labelStyle.textFont, x, y, m_text);
 }
 
@@ -2385,7 +2390,7 @@ void uiLabel::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintLabel();
       break;
 
@@ -2420,6 +2425,7 @@ uiImage::uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, co
     m_bitmap(nullptr)
 {
   windowProps().focusable = false;
+  windowStyle().borderSize = 0;
   m_autoSize = (size.width == 0 && size.height == 0);
   setBitmap(bitmap);
 }
@@ -2441,12 +2447,12 @@ void uiImage::setBitmap(Bitmap const * bitmap)
 
 void uiImage::paintImage()
 {
-  Rect r = Rect(0, 0, size().width - 1, size().height - 1);
+  Rect r = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
   Canvas.setBrushColor(m_imageStyle.backgroundColor);
   Canvas.fillRectangle(r);
   if (m_bitmap) {
-    int x = r.X1 + (size().width - m_bitmap->width) / 2;
-    int y = r.Y1 + (size().height - m_bitmap->height) / 2;
+    int x = r.X1 + (r.X2 + 1 - m_bitmap->width) / 2;
+    int y = r.Y1 + (r.Y2 + 1 - m_bitmap->height) / 2;
     Canvas.drawBitmap(x, y, m_bitmap);
   }
 }
@@ -2459,7 +2465,7 @@ void uiImage::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintImage();
       break;
 
@@ -2491,6 +2497,7 @@ uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool v
   : uiControl(parent, pos, size, visible)
 {
   windowProps().focusable = false;
+  windowStyle().borderSize = 1;
 }
 
 
@@ -2501,18 +2508,7 @@ uiPanel::~uiPanel()
 
 void uiPanel::paintPanel()
 {
-  Rect bkgRect = Rect(0, 0, size().width - 1, size().height - 1);
-  // border
-  if (m_panelStyle.borderSize > 0) {
-    Canvas.setPenColor(m_panelStyle.borderColor);
-    for (int i = 0; i < m_panelStyle.borderSize; ++i)
-      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
-    // adjust background rect
-    bkgRect.X1 += m_panelStyle.borderSize;
-    bkgRect.Y1 += m_panelStyle.borderSize;
-    bkgRect.X2 -= m_panelStyle.borderSize;
-    bkgRect.Y2 -= m_panelStyle.borderSize;
-  }
+  Rect bkgRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
   // background
   Canvas.setBrushColor(m_panelStyle.backgroundColor);
   Canvas.fillRectangle(bkgRect);
@@ -2526,7 +2522,7 @@ void uiPanel::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event);
+      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintPanel();
       break;
 
@@ -2545,7 +2541,7 @@ void uiPanel::processEvent(uiEvent * event)
 }
 
 
-// uiImage
+// uiPanel
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

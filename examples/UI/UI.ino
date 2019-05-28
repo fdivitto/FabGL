@@ -155,7 +155,7 @@ class MyApp : public uiApp {
     // frame where to put test buttons
     testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(100, 330));
     testsFrame->frameStyle().backgroundColor = RGB(0, 0, 2);
-    testsFrame->frameStyle().borderSize      = 0;
+    testsFrame->windowStyle().borderSize     = 0;
 
     // create a destroy frame buttons
     createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 20), Size(90, 20));
