@@ -848,8 +848,8 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
 
   y += textHeight + titleHeight;
   auto panel = new uiPanel(mainFrame, Point(0, y), Size(mainFrame->size().width, mainFrame->size().height - y));
+  panel->windowStyle().borderColor = RGB(2, 2, 2);
   panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
-  panel->panelStyle().borderColor = RGB(2, 2, 2);
 
   // setup buttons
 
@@ -1191,7 +1191,7 @@ void uiWindow::paintWindow()
   if (bSize > 0) {
     Canvas.setPenColor(hasFocus() ? m_windowStyle.focusedBorderColor : (state().active ? m_windowStyle.activeBorderColor : m_windowStyle.borderColor));
     for (int i = 0; i < bSize; ++i)
-      Canvas.drawRectangle(0 + i, 0 + i, size().width - 1 - i, size().height - 1 - i);
+      Canvas.drawRectangle(i, i, m_size.width - 1 - i, m_size.height - 1 - i);
   }
 }
 
@@ -2498,6 +2498,7 @@ uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool v
 {
   windowProps().focusable = false;
   windowStyle().borderSize = 1;
+  windowStyle().borderColor = RGB(1, 1, 1);
 }
 
 

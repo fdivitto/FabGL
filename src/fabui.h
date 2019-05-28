@@ -569,7 +569,6 @@ struct uiTextEditStyle {
   RGB              focusedBackgroundColor     = RGB(3, 3, 3);
   RGB              textFontColor              = RGB(0, 0, 0);
   FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);
-  uint8_t          borderSize                 = 1;
 };
 
 
@@ -739,7 +738,6 @@ private:
 
 
 struct uiPanelStyle {
-  RGB borderColor     = RGB(1, 1, 1);
   RGB backgroundColor = RGB(2, 2, 2);
 };
 
