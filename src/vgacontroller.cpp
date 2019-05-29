@@ -1015,7 +1015,17 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
       PIXEL(X1, y) = pattern;
   } else {
     // other cases (Bresenham's algorithm)
-    if (!clipLine(X1, Y1, X2, Y2, m_paintState.absClippingRect))
+    // TODO: to optimize
+    //   Unfortunately here we cannot clip exactly using Sutherland-Cohen algorithm (as done before)
+    //   because the starting line (got from clipping algorithm) may not be the same of Bresenham's
+    //   line (think to continuing an existing line).
+    //   Possible solutions:
+    //      - "Yevgeny P. Kuzmin" algorithm:
+    //               https://stackoverflow.com/questions/40884680/how-to-use-bresenhams-line-drawing-algorithm-with-clipping
+    //               https://github.com/ktfh/ClippedLine/blob/master/clip.hpp
+    // For now Sutherland-Cohen algorithm is only used to check the line is actually visible,
+    // then test for every point inside the main Bresenham's loop.
+    if (!clipLine(X1, Y1, X2, Y2, m_paintState.absClippingRect, true))  // true = do not change line coordinates!
       return;
     const int dx = abs(X2 - X1);
     const int dy = abs(Y2 - Y1);
@@ -1023,7 +1033,8 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
     const int sy = Y1 < Y2 ? 1 : -1;
     int err = (dx > dy ? dx : -dy) / 2;
     while (true) {
-      PIXEL(X1, Y1) = pattern;
+      if (m_paintState.absClippingRect.contains(X1, Y1))
+        PIXEL(X1, Y1) = pattern;
       if (X1 == X2 && Y1 == Y2)
         break;
       int e2 = err;
