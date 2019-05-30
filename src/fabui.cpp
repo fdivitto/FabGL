@@ -1048,6 +1048,12 @@ Rect uiWindow::rect(uiWindowRectType rectType)
 }
 
 
+Size uiWindow::clientSize()
+{
+  return rect(uiWindowRectType::ClientAreaWindowBased).size();
+}
+
+
 void uiWindow::beginPaint(uiEvent * paintEvent, Rect const & clippingRect)
 {
   Rect srect = rect(uiWindowRectType::ScreenBased);

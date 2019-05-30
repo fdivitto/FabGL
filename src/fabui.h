@@ -293,6 +293,8 @@ public:
 
   Size size() { return m_size; }
 
+  Size clientSize();
+
   virtual Rect rect(uiWindowRectType rectType);
 
   uiWindowState state() { return m_state; }
