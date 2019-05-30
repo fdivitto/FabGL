@@ -885,6 +885,46 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiPaintBox
+
+
+struct uiPaintBoxStyle {
+  RGB backgroundColor = RGB(2, 2, 2);
+};
+
+
+class uiPaintBox : public uiScrollableControl {
+
+public:
+
+  uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  virtual ~uiPaintBox();
+
+  virtual void processEvent(uiEvent * event);
+
+  uiPaintBoxStyle & paintBoxStyle() { return m_paintBoxStyle; }
+
+  using uiScrollableControl::setScrollBar;
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onDblClick;
+  Delegate<Rect> onPaint;
+
+
+private:
+
+  void paintPaintBox();
+
+
+  uiPaintBoxStyle m_paintBoxStyle;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiApp
 
 

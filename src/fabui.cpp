@@ -2554,6 +2554,67 @@ void uiPanel::processEvent(uiEvent * event)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiPaintBox
+
+
+uiPaintBox::uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiScrollableControl(parent, pos, size, visible)
+{
+  windowProps().focusable = false;
+  windowStyle().borderSize  = 1;
+  windowStyle().borderColor = RGB(1, 1, 1);
+}
+
+
+uiPaintBox::~uiPaintBox()
+{
+}
+
+
+void uiPaintBox::paintPaintBox()
+{
+  Rect bkgRect = uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased);
+
+  // background
+  Canvas.setBrushColor(m_paintBoxStyle.backgroundColor);
+  Canvas.fillRectangle(bkgRect);
+
+  onPaint(bkgRect);
+}
+
+
+void uiPaintBox::processEvent(uiEvent * event)
+{
+  uiScrollableControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      paintPaintBox();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        onClick();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// uiPaintBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiScrollableControl
 
 
