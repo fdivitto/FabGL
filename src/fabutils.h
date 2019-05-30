@@ -139,6 +139,7 @@ struct Rect {
 
   bool operator==(Rect const & r)                { return X1 == r.X1 && Y1 == r.Y1 && X2 == r.X2 && Y2 == r.Y2; }
   bool operator!=(Rect const & r)                { return X1 != r.X1 || Y1 != r.Y1 || X2 != r.X2 || Y2 != r.Y2; }
+  Point pos() const                              { return Point(X1, Y1); }
   Size size() const                              { return Size(X2 - X1 + 1, Y2 - Y1 + 1); }
   int width() const                              { return X2 - X1 + 1; }
   int height() const                             { return Y2 - Y1 + 1; }
