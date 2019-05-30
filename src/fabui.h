@@ -579,7 +579,7 @@ public:
 
 protected:
 
-  void setScrollBar(uiScrollBar orientation, int position, int visible, int range);
+  void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaint = true);
 
 
 private:

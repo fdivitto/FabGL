@@ -1235,7 +1235,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
 }
 
 
-// insert UIEVT_PAINT, UIEVT_SETPOS and UIEVT_SETSIZE events in order to modify window bounding rect
+// insert/post UIEVT_PAINT, UIEVT_SETPOS and UIEVT_SETSIZE events in order to modify window bounding rect
 // rect: new window rectangle based on parent coordinates
 // handle anchors of its children
 void uiWindow::reshape(Rect const & r)
@@ -1245,6 +1245,9 @@ void uiWindow::reshape(Rect const & r)
 
   // old rect based on root window coordinates
   Rect oldRect = rect(uiWindowRectType::ScreenBased);
+
+  if (oldRect == newRect)
+    return;
 
   // set here because generatePaintEvents() requires updated window pos() and size()
   m_pos  = Point(r.X1, r.Y1);
@@ -1260,17 +1263,15 @@ void uiWindow::reshape(Rect const & r)
       app()->rootWindow()->generatePaintEvents(rects.pop());
   }
 
-  app()->rootWindow()->generatePaintEvents(newRect);
-
   // generate set position event
   uiEvent evt = uiEvent(this, UIEVT_SETPOS);
   evt.params.pos = pos();
-  app()->insertEvent(&evt);
+  app()->postEvent(&evt);
 
   // generate set size event
   evt = uiEvent(this, UIEVT_SETSIZE);
   evt.params.size = size();
-  app()->insertEvent(&evt);
+  app()->postEvent(&evt);
 
   // handle children's anchors
   int dx = newRect.width() - oldRect.width();
@@ -1301,10 +1302,25 @@ void uiWindow::reshape(Rect const & r)
         if (child->m_anchors.bottom)
           newChildRect.Y2 += dy;
       }
-      if (newChildRect != childRect)
-        app()->reshapeWindow(child, newChildRect);
+      if (newChildRect != childRect) {
+        //app()->reshapeWindow(child, newChildRect);
+        child->m_pos.X = newChildRect.X1;
+        child->m_pos.Y = newChildRect.Y1;
+        child->m_size.width  = newChildRect.width();
+        child->m_size.height = newChildRect.height();
+        // generate set position event
+        uiEvent evt = uiEvent(child, UIEVT_SETPOS);
+        evt.params.pos = child->pos();
+        app()->postEvent(&evt);
+        // generate set size event
+        evt = uiEvent(child, UIEVT_SETSIZE);
+        evt.params.size = child->size();
+        app()->postEvent(&evt);
+      }
     }
   }
+
+  app()->rootWindow()->generatePaintEvents(newRect);
 }
 
 
@@ -2681,28 +2697,38 @@ uiScrollableControl::~uiScrollableControl()
 // position: The position of the scrollbar in scroll units.
 // visible: The size of the visible portion of the scrollbar, in scroll units.
 // range: The maximum position of the scrollbar - 1
-void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, int visible, int range)
+void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaint)
 {
   position = iclamp(position, 0, range - visible - 1);
   switch (orientation) {
     case uiScrollBar::Vertical:
-      if (m_VScrollBarVisible != visible || m_VScrollBarRange != range || m_VScrollBarPosition != position) {
+    {
+      bool changedPos = (m_VScrollBarPosition != position);
+      if (m_VScrollBarVisible != visible || m_VScrollBarRange != range || changedPos) {
         m_VScrollBarVisible  = visible;
         m_VScrollBarRange    = range;
         m_VScrollBarPosition = position;
-        repaintScrollBar(orientation);
-        onChangeVScrollBar();
+        if (repaint)
+          repaintScrollBar(orientation);
+        if (changedPos)
+          onChangeVScrollBar();
       }
       break;
+    }
     case uiScrollBar::Horizontal:
-      if (m_HScrollBarVisible != visible || m_HScrollBarRange != range || m_HScrollBarPosition != position) {
+    {
+      bool changedPos = (m_HScrollBarPosition != position);
+      if (m_HScrollBarVisible != visible || m_HScrollBarRange != range || changedPos) {
         m_HScrollBarVisible  = visible;
         m_HScrollBarRange    = range;
         m_HScrollBarPosition = position;
-        repaintScrollBar(orientation);
-        onChangeHScrollBar();
+        if (repaint)
+          repaintScrollBar(orientation);
+        if (changedPos)
+          onChangeHScrollBar();
       }
       break;
+    }
   };
 }
 
