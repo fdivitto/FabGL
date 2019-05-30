@@ -480,6 +480,9 @@ struct Path {
  */
 struct PaintOptions {
   uint8_t swapFGBG : 1;  /**< If enabled swaps foreground and background colors */
+  uint8_t NOT      : 1;  /**< If enabled performs NOT logical operator on destination. Implemented only for straight lines and non-filled rectangles. */
+
+  PaintOptions() : swapFGBG(false), NOT(false) { }
 };
 
 

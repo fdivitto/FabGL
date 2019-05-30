@@ -393,7 +393,7 @@ void VGAControllerClass::setResolution(Timings const& timings, int viewPortWidth
   m_paintState.brushColor            = RGB(0, 0, 0);
   m_paintState.position              = Point(0, 0);
   m_paintState.glyphOptions.value    = 0;  // all options: 0
-  m_paintState.paintOptions.swapFGBG = 0;
+  m_paintState.paintOptions          = PaintOptions();
   m_paintState.scrollingRegion       = Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1);
   m_paintState.origin                = Point(0, 0);
   m_paintState.clippingRect          = Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1);
@@ -999,8 +999,16 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
     X1 = iclamp(X1, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
     X2 = iclamp(X2, m_paintState.absClippingRect.X1, m_paintState.absClippingRect.X2);
     uint8_t volatile * row = m_viewPort[Y1];
-    for (int x = X1; x <= X2; ++x)
-      PIXELINROW(row, x) = pattern;
+    if (m_paintState.paintOptions.NOT) {
+      const uint8_t HVSync = packHVSync();
+      for (int x = X1; x <= X2; ++x) {
+        uint8_t * px = (uint8_t*) &PIXELINROW(row, x);
+        *px = HVSync | ~(*px);
+      }
+    } else {
+      for (int x = X1; x <= X2; ++x)
+        PIXELINROW(row, x) = pattern;
+    }
   } else if (X1 == X2) {
     // vertical line
     if (X1 < m_paintState.absClippingRect.X1 || X1 > m_paintState.absClippingRect.X2)
@@ -1011,8 +1019,16 @@ void IRAM_ATTR VGAControllerClass::drawLine(int X1, int Y1, int X2, int Y2, uint
       return;
     Y1 = iclamp(Y1, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
     Y2 = iclamp(Y2, m_paintState.absClippingRect.Y1, m_paintState.absClippingRect.Y2);
-    for (int y = Y1; y <= Y2; ++y)
-      PIXEL(X1, y) = pattern;
+    if (m_paintState.paintOptions.NOT) {
+      const uint8_t HVSync = packHVSync();
+      for (int y = Y1; y <= Y2; ++y) {
+        uint8_t * px = (uint8_t*) &PIXEL(X1, y);
+        *px = HVSync | ~(*px);
+      }
+    } else {
+      for (int y = Y1; y <= Y2; ++y)
+        PIXEL(X1, y) = pattern;
+    }
   } else {
     // other cases (Bresenham's algorithm)
     // TODO: to optimize
@@ -1104,10 +1120,10 @@ void IRAM_ATTR VGAControllerClass::execDrawRect(Rect const & rect)
   hideSprites();
   uint8_t pattern = m_paintState.paintOptions.swapFGBG ? preparePixel(m_paintState.brushColor) : preparePixel(m_paintState.penColor);
 
-  drawLine(x1, y1, x2, y1, pattern);
-  drawLine(x2, y1, x2, y2, pattern);
-  drawLine(x2, y2, x1, y2, pattern);
-  drawLine(x1, y2, x1, y1, pattern);
+  drawLine(x1 + 1, y1,     x2, y1, pattern);
+  drawLine(x2,     y1 + 1, x2, y2, pattern);
+  drawLine(x2 - 1, y2,     x1, y2, pattern);
+  drawLine(x1,     y2 - 1, x1, y1, pattern);
 }
 
 

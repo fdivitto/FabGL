@@ -292,9 +292,7 @@ void TerminalClass::reset()
   }};
   Canvas.setGlyphOptions(m_glyphOptions);
 
-  m_paintOptions = (PaintOptions) {
-    .swapFGBG = 0,
-  };
+  m_paintOptions = PaintOptions();
 
   reverseVideo(false);
 
