@@ -1054,6 +1054,12 @@ Size uiWindow::clientSize()
 }
 
 
+Point uiWindow::clientPos()
+{
+  return rect(uiWindowRectType::ClientAreaWindowBased).pos();
+}
+
+
 void uiWindow::beginPaint(uiEvent * paintEvent, Rect const & clippingRect)
 {
   Rect srect = rect(uiWindowRectType::ScreenBased);

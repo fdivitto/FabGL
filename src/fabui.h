@@ -304,6 +304,8 @@ public:
 
   Point pos() { return m_pos; }
 
+  Point clientPos();
+
   Size size() { return m_size; }
 
   Size clientSize();
