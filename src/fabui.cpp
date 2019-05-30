@@ -1150,7 +1150,7 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_RESHAPEWINDOW:
-      generateReshapeEvents(event->params.rect);
+      reshape(event->params.rect);
       break;
 
     case UIEVT_GENPAINTEVENTS:
@@ -1225,7 +1225,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
       evt.dest = this;
       evt.params.rect = thisRect;
       // process event now. insertEvent() may dry events queue. On the other side, this may use too much stack!
-      this->processEvent(&evt);
+      processEvent(&evt);
     }
   }
 }
@@ -1233,7 +1233,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
 
 // insert UIEVT_PAINT, UIEVT_SETPOS and UIEVT_SETSIZE events in order to modify window bounding rect
 // rect: new window rectangle based on parent coordinates
-void uiWindow::generateReshapeEvents(Rect const & r)
+void uiWindow::reshape(Rect const & r)
 {
   // new rect based on root window coordiantes
   Rect newRect = parent()->transformRect(r, app()->rootWindow());

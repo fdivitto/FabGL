@@ -332,7 +332,7 @@ protected:
   void beginPaint(uiEvent * paintEvent, Rect const & clippingRect);
 
   void generatePaintEvents(Rect const & paintRect);
-  void generateReshapeEvents(Rect const & r);
+  void reshape(Rect const & r);
 
 private:
 
