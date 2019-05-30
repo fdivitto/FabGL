@@ -90,7 +90,7 @@ void dumpEvent(uiEvent * event)
       if (event->params.key.GUI) Serial.write(" +GUI");
       break;
     case UIEVT_TIMER:
-      Serial.printf("handle=%p", event->params.timerHandler);
+      Serial.printf("handle=%p", event->params.timerHandle);
       break;
     default:
       break;
@@ -243,7 +243,7 @@ void uiApp::preprocessEvent(uiEvent * event)
     // events with destination
     switch (event->id) {
       case UIEVT_TIMER:
-        if (event->params.timerHandler == m_caretTimer) {
+        if (event->params.timerHandle == m_caretTimer) {
           blinkCaret();
           event->dest = nullptr;  // do not send this event to the root window
         }
@@ -663,7 +663,7 @@ void uiApp::timerFunc(TimerHandle_t xTimer)
 {
   uiWindow * window = (uiWindow*) pvTimerGetTimerID(xTimer);
   uiEvent evt = uiEvent(window, UIEVT_TIMER);
-  evt.params.timerHandler = xTimer;
+  evt.params.timerHandle = xTimer;
   window->app()->postEvent(&evt);
 }
 
@@ -2786,7 +2786,7 @@ void uiScrollableControl::processEvent(uiEvent * event)
       break;
 
     case UIEVT_TIMER:
-      if (event->params.timerHandler == m_scrollTimer)
+      if (event->params.timerHandle == m_scrollTimer)
         handleButtonsScroll();
       break;
 

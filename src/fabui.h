@@ -147,7 +147,7 @@ struct uiEvent {
       uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
     } key;
     // event: UIEVT_TIMER
-    uiTimerHandle timerHandler;
+    uiTimerHandle timerHandle;
     // event: UIEVT_EXITMODAL
     int modalResult;
 
