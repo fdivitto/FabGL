@@ -260,6 +260,16 @@ struct uiWindowStyle {
 };
 
 
+struct uiAnchors {
+  uint8_t left   : 1;
+  uint8_t top    : 1;
+  uint8_t right  : 1;
+  uint8_t bottom : 1;
+
+  uiAnchors() : left(true), top(true), right(false), bottom(false) { }
+};
+
+
 class uiWindow : public uiEvtHandler {
 
 friend class uiApp;
@@ -322,6 +332,9 @@ public:
 
   bool hasFocus();
 
+  uiAnchors & anchors() { return m_anchors; }
+
+
 protected:
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
@@ -359,6 +372,8 @@ private:
   Size          m_sizeAtMouseDown; // used to resize
 
   bool          m_isMouseOver;     // true after mouse entered, false after mouse left
+
+  uiAnchors     m_anchors;
 
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow *    m_next;

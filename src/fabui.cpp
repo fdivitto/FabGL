@@ -1233,6 +1233,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
 
 // insert UIEVT_PAINT, UIEVT_SETPOS and UIEVT_SETSIZE events in order to modify window bounding rect
 // rect: new window rectangle based on parent coordinates
+// handle anchors of its children
 void uiWindow::reshape(Rect const & r)
 {
   // new rect based on root window coordiantes
@@ -1266,6 +1267,40 @@ void uiWindow::reshape(Rect const & r)
   evt = uiEvent(this, UIEVT_SETSIZE);
   evt.params.size = size();
   app()->insertEvent(&evt);
+
+  // handle children's anchors
+  int dx = newRect.width() - oldRect.width();
+  int dy = newRect.height() - oldRect.height();
+  if (dx != 0 || dy != 0) {
+    for (auto child = firstChild(); child; child = child->next()) {
+      Rect childRect = child->rect(uiWindowRectType::ParentBased);
+      Rect newChildRect = childRect;
+      if (dx) {
+        if (!child->m_anchors.left && !child->m_anchors.right) {
+          // TODO: due the integer division the window may not stay at center when resizing by odd values. "ofs" is just a bad workaround
+          int ofs = dx > 0 ? imax(1, dx / 2) : imin(-1, dx / 2);
+          newChildRect.X1 += ofs;
+          newChildRect.X2 += ofs;
+        } else if (!child->m_anchors.left)
+          newChildRect.X1 += dx;
+        if (child->m_anchors.right)
+          newChildRect.X2 += dx;
+      }
+      if (dy) {
+        if (!child->m_anchors.top && !child->m_anchors.bottom) {
+          // TODO: due the integer division the window may not stay at center when resizing by odd values. "ofs" is just a bad workaround
+          int ofs = dy > 0 ? imax(1, dy / 2) : imin(-1, dy / 2);
+          newChildRect.Y1 += ofs;
+          newChildRect.Y2 += ofs;
+        } else if (!child->m_anchors.top)
+          newChildRect.Y1 += dy;
+        if (child->m_anchors.bottom)
+          newChildRect.Y2 += dy;
+      }
+      if (newChildRect != childRect)
+        app()->reshapeWindow(child, newChildRect);
+    }
+  }
 }
 
 
