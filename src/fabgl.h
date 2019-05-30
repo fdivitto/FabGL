@@ -307,5 +307,6 @@ using fabgl::uiLabel;
 using fabgl::uiImage;
 using fabgl::uiPanel;
 using fabgl::uiMessageBoxIcon;
+using fabgl::uiScrollBar;
 
 

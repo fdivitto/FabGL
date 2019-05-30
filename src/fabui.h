@@ -46,19 +46,22 @@
         *uiFrame
         *uiControl
           *uiButton
-          *uiTextEdit
           *uiLabel
           *uiImage
           *uiPanel
-          uiListBox
+          *uiTextEdit
+          *uiScrollableControl
+            *uiPaintBox
+            uiListBox
+            uiMemoEdit
           uiCheckBox
           uiComboBox
           uiMenu
           uiGauge
           uiRadioButton
-          uiScrollBar
           uiSlider
           uiSpinButton
+
 */
 
 
@@ -484,6 +487,114 @@ public:
   virtual ~uiControl();
 
   virtual void processEvent(uiEvent * event);
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiScrollableControl
+
+
+struct uiScrollableControlStyle {
+  RGB scrollBarBackgroundColor          = RGB(1, 1, 1);
+  RGB scrollBarForegroundColor          = RGB(2, 2, 2);
+  RGB mouseOverScrollBarForegroundColor = RGB(3, 3, 3);
+  uint8_t scrollBarSize                 = 11;  // width of vertical scrollbar, height of vertical scroll bar
+};
+
+
+enum class uiScrollBar {
+  Vertical,
+  Horizontal,
+};
+
+
+enum class uiScrollBarItem {
+  None,
+  LeftButton,
+  RightButton,
+  TopButton,
+  BottomButton,
+  HBar,
+  VBar,
+  PageUp,
+  PageDown,
+  PageLeft,
+  PageRight,
+};
+
+
+class uiScrollableControl : public uiControl {
+
+public:
+
+  uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  virtual ~uiScrollableControl();
+
+  virtual void processEvent(uiEvent * event);
+
+  Rect rect(uiWindowRectType rectType);
+
+  uiScrollableControlStyle & scrollableControlStyle() { return m_scrollableControlStyle; }
+
+  int HScrollBarPos() { return m_HScrollBarPosition; }
+
+  int HScrollBarVisible() { return m_HScrollBarVisible; }
+
+  int HScrollBarRange() { return m_HScrollBarRange; }
+
+  int VScrollBarPos() { return m_VScrollBarPosition; }
+
+  int VScrollBarVisible() { return m_VScrollBarVisible; }
+
+  int VScrollBarRange() { return m_VScrollBarRange; }
+
+
+  // Delegates
+
+  Delegate<> onChangeHScrollBar;
+  Delegate<> onChangeVScrollBar;
+
+
+protected:
+
+  void setScrollBar(uiScrollBar orientation, int position, int visible, int range);
+
+
+private:
+
+  void paintScrollableControl();
+  void paintScrollBars();
+  Rect getVScrollBarRects(Rect * topButton = nullptr, Rect * bottonButton = nullptr, Rect * bar = nullptr);
+  Rect getHScrollBarRects(Rect * leftButton = nullptr, Rect * rightButton = nullptr, Rect * bar = nullptr);
+  uiScrollBarItem getItemAt(int x, int y);
+  void repaintScrollBar(uiScrollBar orientation);
+  void handleFreeMouseMove(int mouseX, int mouseY);
+  void handleCapturedMouseMove(int mouseX, int mouseY);
+  void handleButtonsScroll();
+  void handlePageScroll();
+
+  uiScrollableControlStyle m_scrollableControlStyle;
+
+  int16_t         m_HScrollBarPosition;
+  int16_t         m_HScrollBarVisible;
+  int16_t         m_HScrollBarRange;
+  int16_t         m_VScrollBarPosition;
+  int16_t         m_VScrollBarVisible;
+  int16_t         m_VScrollBarRange;
+
+  // values updated by getVScrollBarRects() and getHScrollBarRects()
+  int16_t         m_HBarArea;
+  int16_t         m_VBarArea;
+
+  int16_t         m_mouseDownHScrollBarPosition;
+  int16_t         m_mouseDownVScrollBarPosition;
+
+  uiScrollBarItem m_mouseOverItem;
+
+  // a timer is active while mouse is down and the mouse is over a button
+  uiTimerHandle   m_scrollTimer;
 };
 
 
