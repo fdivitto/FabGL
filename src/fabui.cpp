@@ -1970,7 +1970,7 @@ void uiTextEdit::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
       paintTextEdit();
       app()->setCaret(); // force blinking (previous painting may cover caret)
       break;
@@ -2113,7 +2113,7 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
 
 void uiTextEdit::paintTextEdit()
 {
-  m_contentRect = uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  m_contentRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
   // background
   RGB bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
   Canvas.setBrushColor(bkColor);
