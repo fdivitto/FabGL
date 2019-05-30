@@ -335,6 +335,11 @@ public:
   uiAnchors & anchors() { return m_anchors; }
 
 
+  // Delegates
+
+  Delegate<> onResize;
+
+
 protected:
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }

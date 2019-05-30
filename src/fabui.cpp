@@ -1184,6 +1184,10 @@ void uiWindow::processEvent(uiEvent * event)
       paintWindow();
       break;
 
+    case UIEVT_SETSIZE:
+      onResize();
+      break;
+
     default:
       break;
   }
