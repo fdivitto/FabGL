@@ -1125,11 +1125,13 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_SHOW:
       m_state.visible = true;
+      onShow();
       repaint();
       break;
 
     case UIEVT_HIDE:
       m_state.visible = false;
+      onHide();
       repaint();
       break;
 
@@ -1192,6 +1194,10 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_SETSIZE:
       onResize();
+      break;
+
+    case UIEVT_TIMER:
+      onTimer(event->params.timerHandle);
       break;
 
     default:

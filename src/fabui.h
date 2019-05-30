@@ -339,7 +339,10 @@ public:
 
   // Delegates
 
-  Delegate<> onResize;
+  Delegate<>              onResize;
+  Delegate<uiTimerHandle> onTimer;
+  Delegate<>              onShow;
+  Delegate<>              onHide;
 
 
 protected:
