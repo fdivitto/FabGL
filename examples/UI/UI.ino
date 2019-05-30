@@ -23,6 +23,7 @@
 #include "fabgl.h"
 #include "fabui.h"
 
+#include "App.h"
 
 
 
@@ -68,7 +69,7 @@
 
 void setup()
 {
-  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   #if KEYBOARD_ON_PORT0_MOUSE_ON_PORT1
   // both keyboard (port 0) and mouse configured (port 1)
@@ -97,116 +98,11 @@ void setup()
 }
 
 
-struct TestTextEditFrame : public uiFrame {
-  uiTextEdit * textEdit1, * textEdit2, * textEdit3, * textEdit4;
-  uiButton * button1, * button2;
-  uiPanel * panel;
-
-  TestTextEditFrame(uiFrame * parent)
-    : uiFrame(parent, "Test Text Edit", Point(120, 10), Size(300, 210)) {
-    frameProps().resizeable        = false;
-    frameProps().hasCloseButton    = false;
-    frameProps().hasMaximizeButton = false;
-    frameProps().hasMinimizeButton = false;
-
-    new uiLabel(this, "This is a Modal Window: click on Close to continue", Point(5, 30));
-
-    panel = new uiPanel(this, Point(5, 50), Size(290, 125));
-    panel->panelStyle().backgroundColor = RGB(3, 3, 3);
-
-    new uiLabel(panel, "First Name:",     Point(10,  5), Size( 80, 20));
-    textEdit1 = new uiTextEdit(panel, "", Point(80,  5), Size(200, 20));
-    new uiLabel(panel, "Last Name:",      Point(10, 35), Size( 80, 20));
-    textEdit2 = new uiTextEdit(panel, "", Point(80, 35), Size(200, 20));
-    new uiLabel(panel, "Address:",        Point(10, 65), Size( 80, 20));
-    textEdit3 = new uiTextEdit(panel, "", Point(80, 65), Size(200, 20));
-    new uiLabel(panel, "Phone:",          Point(10, 95), Size( 80, 20));
-    textEdit4 = new uiTextEdit(panel, "", Point(80, 95), Size(200, 20));
-
-    button1 = new uiButton(this, "Add Item", Point(5, 180), Size(80, 20));
-    button1->onClick = [&]() {
-      app()->messageBox("New Item", "Item added correctly", "OK", nullptr, nullptr, uiMessageBoxIcon::Info);
-      textEdit1->setText("");
-      textEdit2->setText("");
-      textEdit3->setText("");
-      textEdit4->setText("");
-    };
-
-    button2 = new uiButton(this, "Close", Point(90, 180), Size(80, 20));
-    button2->onClick = [&]() {
-      exitModal(0);
-    };
-  }
-};
-
-
-class MyApp : public uiApp {
-
-  uiFrame * testsFrame;
-  uiButton * createFrameButton, * destroyFrameButton, * textEditButton, * msgBoxButton;
-
-  fabgl::Stack<uiFrame*> dynamicFrames;
-
-  void OnInit() {
-
-    // set root window background color to dark green
-    rootWindow()->frameStyle().backgroundColor = RGB(0, 1, 0);
-
-    // frame where to put test buttons
-    testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(100, 330));
-    testsFrame->frameStyle().backgroundColor = RGB(0, 0, 2);
-    testsFrame->windowStyle().borderSize     = 0;
-
-    // create a destroy frame buttons
-    createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 20), Size(90, 20));
-    createFrameButton->onClick = [&]() { onCreateFrameButtonClick(); };
-    destroyFrameButton = new uiButton(testsFrame, "Destroy Frame", Point(5, 45), Size(90, 20));
-    destroyFrameButton->onClick = [&]() { destroyWindow(dynamicFrames.pop()); };
-
-    // test text edit button
-    textEditButton = new uiButton(testsFrame, "Test uiTextEdit", Point(5, 70), Size(90, 20));
-    textEditButton->onClick = [&]() { onTestTextEditButtonClick(); };
-
-    // test message box
-    msgBoxButton = new uiButton(testsFrame, "Test MessageBox", Point(5, 95), Size(90, 20));
-    msgBoxButton->onClick = [&]() {
-      app()->messageBox("This is the title", "This is the main text", "Button1", "Button2", "Button3", uiMessageBoxIcon::Info);
-      app()->messageBox("This is the title", "This is the main text", "Yes", "No", nullptr, uiMessageBoxIcon::Question);
-      app()->messageBox("This is the title", "This is the main text", "OK",  nullptr, nullptr, uiMessageBoxIcon::Info);
-      app()->messageBox("This is the title", "This is the main text", "OK",  nullptr, nullptr, uiMessageBoxIcon::Error);
-      app()->messageBox("This is the title", "Little text", "OK",  nullptr, nullptr, uiMessageBoxIcon::Warning);
-      app()->messageBox("This is the title", "No icon", "OK",  nullptr, nullptr, uiMessageBoxIcon::None);
-      app()->messageBox("", "No title", "OK",  nullptr, nullptr);
-    };
-
-  }
-
-  void onCreateFrameButtonClick() {
-    char title[16];
-    snprintf(title, sizeof(title), "Frame #%d", dynamicFrames.count());
-    uiFrame * newFrame = new uiFrame(rootWindow(), title, Point(110 + random(400), random(300)), Size(150, 100));
-    newFrame->frameStyle().backgroundColor = RGB(random(4), random(4), random(4));
-    auto label = new uiLabel(newFrame, "Hello World!", Point(5, 30), Size(100, 30));
-    label->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(24, false);
-    label->labelStyle().textFontColor = RGB(random(4), random(4), random(4));
-    label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
-    dynamicFrames.push(newFrame);
-  }
-
-  void onTestTextEditButtonClick() {
-    // show TestTextEditFrame as modal window
-    auto textEditTestFrame = new TestTextEditFrame(rootWindow());
-    showModalWindow(textEditTestFrame);
-    destroyWindow(textEditTestFrame);
-  }
-
-} app;
-
 
 
 void loop()
 {
-  app.run();
+  MyApp().run();
 }
 
 
