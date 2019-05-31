@@ -427,7 +427,7 @@ struct uiFrameProps {
 };
 
 
-enum class uiFrameSensiblePos {
+enum class uiFrameItem {
   None,
   MoveArea,
   TopLeftResize,
@@ -476,7 +476,7 @@ private:
   int paintButtons(Rect const & bkgRect);
   void movingCapturedMouse(int mouseX, int mouseY);
   void movingFreeMouse(int mouseX, int mouseY);
-  uiFrameSensiblePos getSensiblePosAt(int x, int y);
+  uiFrameItem getFrameItemAt(int x, int y);
   Rect getBtnRect(int buttonIndex);
   void handleButtonsClick(int x, int y);
   void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
@@ -491,8 +491,8 @@ private:
 
   char *             m_title;
 
-  uiFrameSensiblePos m_mouseDownSensiblePos;  // sensible position on mouse down
-  uiFrameSensiblePos m_mouseMoveSensiblePos;  // sensible position on mouse move
+  uiFrameItem m_mouseDownFrameItem;  // frame item on mouse down
+  uiFrameItem m_mouseMoveFrameItem;  // frame item on mouse move
 
 };
 

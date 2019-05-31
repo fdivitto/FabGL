@@ -1358,8 +1358,8 @@ bool uiWindow::hasFocus()
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
     m_title(nullptr),
-    m_mouseDownSensiblePos(uiFrameSensiblePos::None),
-    m_mouseMoveSensiblePos(uiFrameSensiblePos::None)
+    m_mouseDownFrameItem(uiFrameItem::None),
+    m_mouseMoveFrameItem(uiFrameItem::None)
 {
   evtHandlerProps().isFrame = true;
   setTitle(title);
@@ -1478,7 +1478,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
     // close button
     Rect r = getBtnRect(0);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton) {
+    if (m_mouseMoveFrameItem == uiFrameItem::CloseButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1492,7 +1492,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
     // maximize/restore button
     Rect r = getBtnRect(1);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton) {
+    if (m_mouseMoveFrameItem == uiFrameItem::MaximizeButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1516,7 +1516,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
     // minimize button
     Rect r = getBtnRect(2);
     buttonsX = r.X1;
-    if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton) {
+    if (m_mouseMoveFrameItem == uiFrameItem::MinimizeButton) {
       Canvas.setBrushColor(m_frameStyle.mouseOverBackgroundButtonColor);
       Canvas.fillRectangle(r);
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
@@ -1542,7 +1542,7 @@ void uiFrame::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
-      m_mouseDownSensiblePos = getSensiblePosAt(event->params.mouse.status.X, event->params.mouse.status.Y);
+      m_mouseDownFrameItem = getFrameItemAt(event->params.mouse.status.X, event->params.mouse.status.Y);
       app()->combineMouseMoveEvents(true);
       break;
 
@@ -1565,13 +1565,13 @@ void uiFrame::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSELEAVE:
-      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton)
+      if (m_mouseMoveFrameItem == uiFrameItem::CloseButton)
         repaint(getBtnRect(0));
-      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton)
+      if (m_mouseMoveFrameItem == uiFrameItem::MaximizeButton)
         repaint(getBtnRect(1));
-      if (m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton)
+      if (m_mouseMoveFrameItem == uiFrameItem::MinimizeButton)
         repaint(getBtnRect(2));
-      m_mouseMoveSensiblePos = uiFrameSensiblePos::None;
+      m_mouseMoveFrameItem = uiFrameItem::None;
       break;
 
     default:
@@ -1580,18 +1580,18 @@ void uiFrame::processEvent(uiEvent * event)
 }
 
 
-uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
+uiFrameItem uiFrame::getFrameItemAt(int x, int y)
 {
   Point p = Point(x, y);
 
   if (m_frameProps.hasCloseButton && getBtnRect(0).contains(p))
-    return uiFrameSensiblePos::CloseButton;    // on Close Button area
+    return uiFrameItem::CloseButton;    // on Close Button area
 
   if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
-    return uiFrameSensiblePos::MaximizeButton; // on maximize button area
+    return uiFrameItem::MaximizeButton; // on maximize button area
 
   if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
-    return uiFrameSensiblePos::MinimizeButton; // on minimize button area
+    return uiFrameItem::MinimizeButton; // on minimize button area
 
   int w = size().width;
   int h = size().height;
@@ -1600,42 +1600,42 @@ uiFrameSensiblePos uiFrame::getSensiblePosAt(int x, int y)
 
     // on top center, resize
     if (Rect(CORNERSENSE, 0, w - CORNERSENSE, windowStyle().borderSize).contains(p))
-      return uiFrameSensiblePos::TopCenterResize;
+      return uiFrameItem::TopCenterResize;
 
     // on left center side, resize
     if (Rect(0, CORNERSENSE, windowStyle().borderSize, h - CORNERSENSE).contains(p))
-      return uiFrameSensiblePos::CenterLeftResize;
+      return uiFrameItem::CenterLeftResize;
 
     // on right center side, resize
     if (Rect(w - windowStyle().borderSize, CORNERSENSE, w - 1, h - CORNERSENSE).contains(p))
-      return uiFrameSensiblePos::CenterRightResize;
+      return uiFrameItem::CenterRightResize;
 
     // on bottom center, resize
     if (Rect(CORNERSENSE, h - windowStyle().borderSize, w - CORNERSENSE, h - 1).contains(p))
-      return uiFrameSensiblePos::BottomCenterResize;
+      return uiFrameItem::BottomCenterResize;
 
     // on top left side, resize
     if (Rect(0, 0, CORNERSENSE, CORNERSENSE).contains(p))
-      return uiFrameSensiblePos::TopLeftResize;
+      return uiFrameItem::TopLeftResize;
 
     // on top right side, resize
     if (Rect(w - CORNERSENSE, 0, w - 1, CORNERSENSE).contains(p))
-      return uiFrameSensiblePos::TopRightResize;
+      return uiFrameItem::TopRightResize;
 
     // on bottom left side, resize
     if (Rect(0, h - CORNERSENSE, CORNERSENSE, h - 1).contains(p))
-      return uiFrameSensiblePos::BottomLeftResize;
+      return uiFrameItem::BottomLeftResize;
 
     // on bottom right side, resize
     if (Rect(w - CORNERSENSE, h - CORNERSENSE, w - 1, h - 1).contains(p))
-      return uiFrameSensiblePos::BottomRightResize;
+      return uiFrameItem::BottomRightResize;
 
   }
 
   if (m_frameProps.moveable && !state().maximized && titleBarRect().contains(p))
-    return uiFrameSensiblePos::MoveArea;       // on title bar, moving area
+    return uiFrameItem::MoveArea;       // on title bar, moving area
 
-  return uiFrameSensiblePos::None;
+  return uiFrameItem::None;
 }
 
 
@@ -1646,13 +1646,13 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
   Size minSize = minWindowSize();
 
-  switch (m_mouseDownSensiblePos) {
+  switch (m_mouseDownFrameItem) {
 
-    case uiFrameSensiblePos::MoveArea:
+    case uiFrameItem::MoveArea:
       app()->moveWindow(this, pos().X + dx, pos().Y + dy);
       break;
 
-    case uiFrameSensiblePos::CenterRightResize:
+    case uiFrameItem::CenterRightResize:
       {
         int newWidth = sizeAtMouseDown().width + dx;
         if (newWidth >= minSize.width)
@@ -1660,7 +1660,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::CenterLeftResize:
+    case uiFrameItem::CenterLeftResize:
       {
         Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
@@ -1669,7 +1669,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::TopLeftResize:
+    case uiFrameItem::TopLeftResize:
       {
         Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
@@ -1679,7 +1679,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::TopCenterResize:
+    case uiFrameItem::TopCenterResize:
       {
         Rect r = rect(uiOrigin::Parent);
         r.Y1 = pos().Y + dy;
@@ -1688,7 +1688,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::TopRightResize:
+    case uiFrameItem::TopRightResize:
       {
         Rect r = rect(uiOrigin::Parent);
         r.Y1 = pos().Y + dy;
@@ -1698,7 +1698,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::BottomLeftResize:
+    case uiFrameItem::BottomLeftResize:
       {
         Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
@@ -1708,7 +1708,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::BottomCenterResize:
+    case uiFrameItem::BottomCenterResize:
       {
         int newHeight = sizeAtMouseDown().height + dy;
         if (newHeight >= minSize.height)
@@ -1716,7 +1716,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
         break;
       }
 
-    case uiFrameSensiblePos::BottomRightResize:
+    case uiFrameItem::BottomRightResize:
       {
         int newWidth = sizeAtMouseDown().width + dx;
         int newHeight = sizeAtMouseDown().height + dy;
@@ -1733,52 +1733,52 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
 void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 {
-  uiFrameSensiblePos prevSensPos = m_mouseMoveSensiblePos;
+  uiFrameItem prevSensPos = m_mouseMoveFrameItem;
 
-  m_mouseMoveSensiblePos = getSensiblePosAt(mouseX, mouseY);
+  m_mouseMoveFrameItem = getFrameItemAt(mouseX, mouseY);
 
-  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::CloseButton || prevSensPos == uiFrameSensiblePos::CloseButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveFrameItem == uiFrameItem::CloseButton || prevSensPos == uiFrameItem::CloseButton) && m_mouseMoveFrameItem != prevSensPos)
     repaint(getBtnRect(0));
 
-  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::MaximizeButton || prevSensPos == uiFrameSensiblePos::MaximizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveFrameItem == uiFrameItem::MaximizeButton || prevSensPos == uiFrameItem::MaximizeButton) && m_mouseMoveFrameItem != prevSensPos)
     repaint(getBtnRect(1));
 
-  if ((m_mouseMoveSensiblePos == uiFrameSensiblePos::MinimizeButton || prevSensPos == uiFrameSensiblePos::MinimizeButton) && m_mouseMoveSensiblePos != prevSensPos)
+  if ((m_mouseMoveFrameItem == uiFrameItem::MinimizeButton || prevSensPos == uiFrameItem::MinimizeButton) && m_mouseMoveFrameItem != prevSensPos)
     repaint(getBtnRect(2));
 
   CursorName cur = windowStyle().defaultCursor;
 
-  switch (m_mouseMoveSensiblePos) {
+  switch (m_mouseMoveFrameItem) {
 
-    case uiFrameSensiblePos::TopLeftResize:
+    case uiFrameItem::TopLeftResize:
       cur = CursorName::CursorResize2;
       break;
 
-    case uiFrameSensiblePos::TopCenterResize:
+    case uiFrameItem::TopCenterResize:
       cur = CursorName::CursorResize3;
       break;
 
-    case uiFrameSensiblePos::TopRightResize:
+    case uiFrameItem::TopRightResize:
       cur = CursorName::CursorResize1;
       break;
 
-    case uiFrameSensiblePos::CenterLeftResize:
+    case uiFrameItem::CenterLeftResize:
       cur = CursorName::CursorResize4;
       break;
 
-    case uiFrameSensiblePos::CenterRightResize:
+    case uiFrameItem::CenterRightResize:
       cur = CursorName::CursorResize4;
       break;
 
-    case uiFrameSensiblePos::BottomLeftResize:
+    case uiFrameItem::BottomLeftResize:
       cur = CursorName::CursorResize1;
       break;
 
-    case uiFrameSensiblePos::BottomCenterResize:
+    case uiFrameItem::BottomCenterResize:
       cur = CursorName::CursorResize3;
       break;
 
-    case uiFrameSensiblePos::BottomRightResize:
+    case uiFrameItem::BottomRightResize:
       cur = CursorName::CursorResize2;
       break;
 
@@ -1803,7 +1803,7 @@ void uiFrame::handleButtonsClick(int x, int y)
   else
     return;
   // this avoids the button remains selected (background colored) when window change size
-  m_mouseMoveSensiblePos = uiFrameSensiblePos::None;
+  m_mouseMoveFrameItem = uiFrameItem::None;
 }
 
 
