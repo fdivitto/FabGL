@@ -336,7 +336,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
   }
 
   // double click?
-  if (event->id == UIEVT_MOUSEBUTTONDOWN) {
+  if (event->id == UIEVT_MOUSEBUTTONDOWN && event->params.mouse.changedButton == 1) {
     int curTime = esp_timer_get_time() / 1000;  // uS -> MS
     if (curTime - m_lastMouseDownTimeMS <= m_appProps.doubleClickTime) {
       // post double click message
@@ -1100,17 +1100,18 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
-      m_mouseDownPos    = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
-      m_posAtMouseDown  = m_pos;
-      m_sizeAtMouseDown = m_size;
-      // activate window? setActiveWindow() will activate the right window (maybe a parent)
-      if (!m_state.active)
-        app()->setActiveWindow(this);
-      // focus window?
-      app()->setFocusedWindow(this);
-      // capture mouse if left button is down
-      if (event->params.mouse.changedButton == 1)
+      if (event->params.mouse.changedButton == 1) {
+        m_mouseDownPos    = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
+        m_posAtMouseDown  = m_pos;
+        m_sizeAtMouseDown = m_size;
+        // activate window? setActiveWindow() will activate the right window (maybe a parent)
+        if (!m_state.active)
+          app()->setActiveWindow(this);
+        // focus window?
+        app()->setFocusedWindow(this);
+        // capture mouse
         app()->captureMouse(this);
+      }
       break;
 
     case UIEVT_MOUSEBUTTONUP:
@@ -1542,19 +1543,23 @@ void uiFrame::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
-      m_mouseDownFrameItem = getFrameItemAt(event->params.mouse.status.X, event->params.mouse.status.Y);
-      app()->combineMouseMoveEvents(true);
+      if (event->params.mouse.changedButton == 1) {
+        m_mouseDownFrameItem = getFrameItemAt(event->params.mouse.status.X, event->params.mouse.status.Y);
+        app()->combineMouseMoveEvents(true);
+      }
       break;
 
     case UIEVT_MOUSEBUTTONUP:
-      // this sets the right mouse cursor in case of end of capturing
-      movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+      if (event->params.mouse.changedButton == 1) {
+        // this sets the right mouse cursor in case of end of capturing
+        movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
 
-      // handle buttons clicks
-      if (event->params.mouse.changedButton == 1) // 1 = left button
-        handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
+        // handle buttons clicks
+        if (event->params.mouse.changedButton == 1) // 1 = left button
+          handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
 
-      app()->combineMouseMoveEvents(false);
+        app()->combineMouseMoveEvents(false);
+      }
       break;
 
     case UIEVT_MOUSEMOVE:
@@ -1929,9 +1934,11 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONUP:
-      // this check is required to avoid onclick event when mouse is captured and moved out of button area
-      if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
-        trigger();
+      if (event->params.mouse.changedButton == 1) {
+        // this check is required to avoid onclick event when mouse is captured and moved out of button area
+        if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+          trigger();
+      }
       break;
 
     case UIEVT_MOUSEENTER:
@@ -1939,6 +1946,10 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        repaint();
+      break;
+
     case UIEVT_MOUSELEAVE:
     case UIEVT_SETFOCUS:
     case UIEVT_KILLFOCUS:
@@ -2038,8 +2049,8 @@ void uiTextEdit::processEvent(uiEvent * event)
         onClick();
         int col = getColFromMouseX(event->params.mouse.status.X);
         moveCursor(col, col);
+        repaint();
       }
-      repaint();
       break;
 
     case UIEVT_MOUSEBUTTONUP:
@@ -2754,24 +2765,28 @@ void uiScrollableControl::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
-      m_mouseDownHScrollBarPosition = m_HScrollBarPosition;
-      m_mouseDownVScrollBarPosition = m_VScrollBarPosition;
-      if (m_mouseOverItem == uiScrollBarItem::LeftButton || m_mouseOverItem == uiScrollBarItem::RightButton ||
-          m_mouseOverItem == uiScrollBarItem::TopButton || m_mouseOverItem == uiScrollBarItem::BottomButton) {
-        // start the timer to repeat buttons
-        m_scrollTimer = app()->setTimer(this, 50);
-        handleButtonsScroll();
-      } else {
-        handlePageScroll();
+      if (event->params.mouse.changedButton == 1) {
+        m_mouseDownHScrollBarPosition = m_HScrollBarPosition;
+        m_mouseDownVScrollBarPosition = m_VScrollBarPosition;
+        if (m_mouseOverItem == uiScrollBarItem::LeftButton || m_mouseOverItem == uiScrollBarItem::RightButton ||
+            m_mouseOverItem == uiScrollBarItem::TopButton || m_mouseOverItem == uiScrollBarItem::BottomButton) {
+          // start the timer to repeat buttons
+          m_scrollTimer = app()->setTimer(this, 50);
+          handleButtonsScroll();
+        } else {
+          handlePageScroll();
+        }
+        app()->combineMouseMoveEvents(true);
       }
-      app()->combineMouseMoveEvents(true);
       break;
 
     case UIEVT_MOUSEBUTTONUP:
-      app()->combineMouseMoveEvents(false);
-      if (m_scrollTimer) {
-        app()->killTimer(m_scrollTimer);
-        m_scrollTimer = nullptr;
+      if (event->params.mouse.changedButton == 1) {
+        app()->combineMouseMoveEvents(false);
+        if (m_scrollTimer) {
+          app()->killTimer(m_scrollTimer);
+          m_scrollTimer = nullptr;
+        }
       }
       break;
 
