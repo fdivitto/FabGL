@@ -309,7 +309,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
     // left mouse button UP?
     if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
       // mouse up will end mouse capture, check that mouse is still inside
-      if (!m_capturedMouseWindow->rect(uiWindowRectType::WindowBased).contains(mousePos)) {
+      if (!m_capturedMouseWindow->rect(uiOrigin::Window).contains(mousePos)) {
         // mouse is not inside, post mouse leave and enter events
         uiEvent evt = uiEvent(m_capturedMouseWindow, UIEVT_MOUSELEAVE);
         postEvent(&evt);
@@ -383,7 +383,7 @@ uiWindow * uiApp::screenToWindow(Point & point)
   while (win->hasChildren()) {
     uiWindow * child = win->lastChild();
     for (; child; child = child->prev()) {
-      if (child->state().visible && win->rect(uiWindowRectType::ClientAreaWindowBased).contains(point) && child->rect(uiWindowRectType::ParentBased).contains(point)) {
+      if (child->state().visible && win->clientRect(uiOrigin::Window).contains(point) && child->rect(uiOrigin::Parent).contains(point)) {
         win   = child;
         point = point.sub(child->pos());
         break;
@@ -555,7 +555,7 @@ uiWindow * uiApp::setFocusedWindowPrev()
 
 void uiApp::repaintWindow(uiWindow * window)
 {
-  repaintRect(window->rect(uiWindowRectType::ScreenBased));
+  repaintRect(window->rect(uiOrigin::Screen));
 }
 
 
@@ -576,13 +576,13 @@ void uiApp::moveWindow(uiWindow * window, int x, int y)
 
 void uiApp::resizeWindow(uiWindow * window, int width, int height)
 {
-  reshapeWindow(window, window->rect(uiWindowRectType::ParentBased).resize(width, height));
+  reshapeWindow(window, window->rect(uiOrigin::Parent).resize(width, height));
 }
 
 
 void uiApp::resizeWindow(uiWindow * window, Size size)
 {
-  reshapeWindow(window, window->rect(uiWindowRectType::ParentBased).resize(size));
+  reshapeWindow(window, window->rect(uiOrigin::Parent).resize(size));
 }
 
 
@@ -750,7 +750,7 @@ void uiApp::blinkCaret(bool forceOFF)
 {
   if (m_caretWindow && m_caretInvertState != -1 && (forceOFF == false || m_caretInvertState == 1)) {
     Canvas.setOrigin(m_rootWindow->pos());
-    Canvas.setClippingRect(m_caretWindow->rect(uiWindowRectType::ClientAreaScreenBased));
+    Canvas.setClippingRect(m_caretWindow->clientRect(uiOrigin::Screen));
     Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
     Canvas.invertRectangle(aRect);
     m_caretInvertState = m_caretInvertState ? 0 : 1;
@@ -1017,52 +1017,48 @@ void uiWindow::repaint(Rect const & rect)
 
 void uiWindow::repaint()
 {
-  app()->repaintRect(rect(uiWindowRectType::ScreenBased));
+  app()->repaintRect(rect(uiOrigin::Screen));
 }
 
 
-Rect uiWindow::rect(uiWindowRectType rectType)
+Rect uiWindow::rect(uiOrigin origin)
 {
-  int bSize = hasFocus() ? m_windowStyle.focusedBorderSize : m_windowStyle.borderSize;
-
-  switch (rectType) {
-    case uiWindowRectType::ScreenBased:
+  switch (origin) {
+    case uiOrigin::Screen:
       return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow());
 
-    case uiWindowRectType::ClientAreaScreenBased:
-      return transformRect(Rect(0, 0, m_size.width - 1, m_size.height - 1), app()->rootWindow()).shrink(bSize);
-
-    case uiWindowRectType::ParentBased:
+    case uiOrigin::Parent:
       return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1);
 
-    case uiWindowRectType::ClientAreaParentBased:
-      return Rect(m_pos.X, m_pos.Y, m_pos.X + m_size.width - 1, m_pos.Y + m_size.height - 1).shrink(bSize);
-
-    case uiWindowRectType::WindowBased:
+    case uiOrigin::Window:
       return Rect(0, 0, m_size.width - 1, m_size.height - 1);
-
-    case uiWindowRectType::ClientAreaWindowBased:
-      return Rect(0, 0, m_size.width - 1, m_size.height - 1).shrink(bSize);
   }
   return Rect();
 }
 
 
+Rect uiWindow::clientRect(uiOrigin origin)
+{
+  int bSize = hasFocus() ? m_windowStyle.focusedBorderSize : m_windowStyle.borderSize;
+  return rect(origin).shrink(bSize);
+}
+
+
 Size uiWindow::clientSize()
 {
-  return rect(uiWindowRectType::ClientAreaWindowBased).size();
+  return clientRect(uiOrigin::Window).size();
 }
 
 
 Point uiWindow::clientPos()
 {
-  return rect(uiWindowRectType::ClientAreaWindowBased).pos();
+  return clientRect(uiOrigin::Window).pos();
 }
 
 
 void uiWindow::beginPaint(uiEvent * paintEvent, Rect const & clippingRect)
 {
-  Rect srect = rect(uiWindowRectType::ScreenBased);
+  Rect srect = rect(uiOrigin::Screen);
   Canvas.setOrigin(srect.X1, srect.Y1);
   Canvas.setClippingRect( clippingRect.intersection(paintEvent->params.rect) );
 }
@@ -1137,15 +1133,15 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MAXIMIZE:
       if (!m_state.minimized)
-        m_savedScreenRect = rect(uiWindowRectType::ParentBased);
+        m_savedScreenRect = rect(uiOrigin::Parent);
       m_state.maximized = true;
       m_state.minimized = false;
-      app()->reshapeWindow(this, m_parent->rect(uiWindowRectType::ClientAreaWindowBased));
+      app()->reshapeWindow(this, m_parent->clientRect(uiOrigin::Window));
       break;
 
     case UIEVT_MINIMIZE:
       if (!m_state.maximized)
-        m_savedScreenRect = rect(uiWindowRectType::ParentBased);
+        m_savedScreenRect = rect(uiOrigin::Parent);
       m_state.maximized = false;
       m_state.minimized = true;
       app()->resizeWindow(this, minWindowSize());
@@ -1188,7 +1184,7 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_PAINT:
-      beginPaint(event, rect(uiWindowRectType::WindowBased));
+      beginPaint(event, rect(uiOrigin::Window));
       paintWindow();
       break;
 
@@ -1227,7 +1223,7 @@ void uiWindow::generatePaintEvents(Rect const & paintRect)
     Rect thisRect = rects.pop();
     bool noIntesections = true;
     for (uiWindow * win = lastChild(); win; win = win->prev()) {
-      Rect winRect = rect(uiWindowRectType::ClientAreaWindowBased).intersection(win->rect(uiWindowRectType::ParentBased));
+      Rect winRect = clientRect(uiOrigin::Window).intersection(win->rect(uiOrigin::Parent));
       if (win->state().visible && thisRect.intersects(winRect)) {
         noIntesections = false;
         removeRectangle(rects, thisRect, winRect);
@@ -1256,7 +1252,7 @@ void uiWindow::reshape(Rect const & r)
   Rect newRect = parent()->transformRect(r, app()->rootWindow());
 
   // old rect based on root window coordinates
-  Rect oldRect = rect(uiWindowRectType::ScreenBased);
+  Rect oldRect = rect(uiOrigin::Screen);
 
   if (oldRect == newRect)
     return;
@@ -1290,7 +1286,7 @@ void uiWindow::reshape(Rect const & r)
   int dy = newRect.height() - oldRect.height();
   if (dx != 0 || dy != 0) {
     for (auto child = firstChild(); child; child = child->next()) {
-      Rect childRect = child->rect(uiWindowRectType::ParentBased);
+      Rect childRect = child->rect(uiOrigin::Parent);
       Rect newChildRect = childRect;
       if (dx) {
         if (!child->m_anchors.left && !child->m_anchors.right) {
@@ -1392,26 +1388,21 @@ int uiFrame::titleBarHeight()
 
 Rect uiFrame::titleBarRect()
 {
-  Rect r = uiWindow::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect r = uiWindow::clientRect(uiOrigin::Window);
   r.Y2 = r.Y1 + titleBarHeight() - 1;
   return r;
 }
 
 
-Rect uiFrame::rect(uiWindowRectType rectType)
+Rect uiFrame::clientRect(uiOrigin origin)
 {
-  Rect r = uiWindow::rect(rectType);
-  switch (rectType) {
-    case uiWindowRectType::ClientAreaScreenBased:
-    case uiWindowRectType::ClientAreaParentBased:
-    case uiWindowRectType::ClientAreaWindowBased:
-      // title bar
-      if (strlen(m_title))
-        r.Y1 += titleBarHeight();
-      return r;
-    default:
-      return r;
-  }
+  Rect r = uiWindow::clientRect(origin);
+
+  // title bar
+  if (strlen(m_title))
+    r.Y1 += titleBarHeight();
+
+  return r;
 }
 
 
@@ -1454,7 +1445,7 @@ Rect uiFrame::getBtnRect(int buttonIndex)
 
 void uiFrame::paintFrame()
 {
-  Rect bkgRect = uiWindow::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect bkgRect = uiWindow::clientRect(uiOrigin::Window);
   // title bar
   if (strlen(m_title)) {
     int barHeight = titleBarHeight();
@@ -1546,7 +1537,7 @@ void uiFrame::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiWindow::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiWindow::clientRect(uiOrigin::Window));
       paintFrame();
       break;
 
@@ -1671,7 +1662,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
     case uiFrameSensiblePos::CenterLeftResize:
       {
-        Rect r = rect(uiWindowRectType::ParentBased);
+        Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
         if (r.size().width >= minSize.width)
           app()->reshapeWindow(this, r);
@@ -1680,7 +1671,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
     case uiFrameSensiblePos::TopLeftResize:
       {
-        Rect r = rect(uiWindowRectType::ParentBased);
+        Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
         r.Y1 = pos().Y + dy;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1690,7 +1681,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
     case uiFrameSensiblePos::TopCenterResize:
       {
-        Rect r = rect(uiWindowRectType::ParentBased);
+        Rect r = rect(uiOrigin::Parent);
         r.Y1 = pos().Y + dy;
         if (r.size().height >= minSize.height)
           app()->reshapeWindow(this, r);
@@ -1699,7 +1690,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
     case uiFrameSensiblePos::TopRightResize:
       {
-        Rect r = rect(uiWindowRectType::ParentBased);
+        Rect r = rect(uiOrigin::Parent);
         r.Y1 = pos().Y + dy;
         r.X2 = pos().X + sizeAtMouseDown().width + dx;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1709,7 +1700,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
 
     case uiFrameSensiblePos::BottomLeftResize:
       {
-        Rect r = rect(uiWindowRectType::ParentBased);
+        Rect r = rect(uiOrigin::Parent);
         r.X1 = pos().X + dx;
         r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
         if (r.size().width >= minSize.width && r.size().height >= minSize.height)
@@ -1890,7 +1881,7 @@ void uiButton::setText(char const * value)
 
 void uiButton::paintButton()
 {
-  Rect bkgRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
   // background
   RGB bkColor = m_down ? m_buttonStyle.downBackgroundColor : m_buttonStyle.backgroundColor;
   if (app()->capturedMouseWindow() == this)
@@ -1933,13 +1924,13 @@ void uiButton::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintButton();
       break;
 
     case UIEVT_MOUSEBUTTONUP:
       // this check is required to avoid onclick event when mouse is captured and moved out of button area
-      if (rect(uiWindowRectType::WindowBased).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+      if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
         trigger();
       break;
 
@@ -2037,7 +2028,7 @@ void uiTextEdit::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintTextEdit();
       app()->setCaret(); // force blinking (previous painting may cover caret)
       break;
@@ -2180,7 +2171,7 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
 
 void uiTextEdit::paintTextEdit()
 {
-  m_contentRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  m_contentRect = uiControl::clientRect(uiOrigin::Window);
   // background
   RGB bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
   Canvas.setBrushColor(bkColor);
@@ -2445,7 +2436,7 @@ void uiLabel::setText(char const * value)
 
 void uiLabel::paintLabel()
 {
-  Rect r = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect r = uiControl::clientRect(uiOrigin::Window);
   Canvas.setBrushColor(m_labelStyle.backgroundColor);
   Canvas.fillRectangle(r);
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
@@ -2463,7 +2454,7 @@ void uiLabel::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintLabel();
       break;
 
@@ -2520,7 +2511,7 @@ void uiImage::setBitmap(Bitmap const * bitmap)
 
 void uiImage::paintImage()
 {
-  Rect r = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect r = uiControl::clientRect(uiOrigin::Window);
   Canvas.setBrushColor(m_imageStyle.backgroundColor);
   Canvas.fillRectangle(r);
   if (m_bitmap) {
@@ -2538,7 +2529,7 @@ void uiImage::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintImage();
       break;
 
@@ -2582,7 +2573,7 @@ uiPanel::~uiPanel()
 
 void uiPanel::paintPanel()
 {
-  Rect bkgRect = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
   // background
   Canvas.setBrushColor(m_panelStyle.backgroundColor);
   Canvas.fillRectangle(bkgRect);
@@ -2596,7 +2587,7 @@ void uiPanel::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintPanel();
       break;
 
@@ -2640,7 +2631,7 @@ uiPaintBox::~uiPaintBox()
 
 void uiPaintBox::paintPaintBox()
 {
-  Rect bkgRect = uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect bkgRect = uiScrollableControl::clientRect(uiOrigin::Window);
 
   // background
   Canvas.setBrushColor(m_paintBoxStyle.backgroundColor);
@@ -2657,7 +2648,7 @@ void uiPaintBox::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiScrollableControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiScrollableControl::clientRect(uiOrigin::Window));
       paintPaintBox();
       break;
 
@@ -2758,7 +2749,7 @@ void uiScrollableControl::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_PAINT:
-      beginPaint(event, uiControl::rect(uiWindowRectType::ClientAreaWindowBased));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintScrollableControl();
       break;
 
@@ -2905,7 +2896,7 @@ uiScrollBarItem uiScrollableControl::getItemAt(int x, int y)
 
 Rect uiScrollableControl::getVScrollBarRects(Rect * topButton, Rect * bottomButton, Rect * bar)
 {
-  Rect cArea = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect cArea = uiControl::clientRect(uiOrigin::Window);
   const int sbSize = m_scrollableControlStyle.scrollBarSize;
   Rect box = Rect(cArea.X2 + 1 - sbSize, cArea.Y1, cArea.X2, cArea.Y2 - (m_HScrollBarRange ? sbSize : 0));
   if (topButton && bottomButton && bar) {
@@ -2926,7 +2917,7 @@ Rect uiScrollableControl::getVScrollBarRects(Rect * topButton, Rect * bottomButt
 
 Rect uiScrollableControl::getHScrollBarRects(Rect * leftButton, Rect * rightButton, Rect * bar)
 {
-  Rect cArea = uiControl::rect(uiWindowRectType::ClientAreaWindowBased);
+  Rect cArea = uiControl::clientRect(uiOrigin::Window);
   const int sbSize = m_scrollableControlStyle.scrollBarSize;
   Rect box = Rect(cArea.X1, cArea.Y2 + 1 - sbSize, cArea.X2 - (m_VScrollBarRange ? sbSize : 0), cArea.Y2);
   if (leftButton && rightButton && bar) {
@@ -2999,21 +2990,12 @@ void uiScrollableControl::paintScrollableControl()
 }
 
 
-Rect uiScrollableControl::rect(uiWindowRectType rectType)
+Rect uiScrollableControl::clientRect(uiOrigin origin)
 {
-  Rect r = uiControl::rect(rectType);
-  const int VScrollBarWidth  = (m_VScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
-  const int HScrollBarHeight = (m_HScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
-  switch (rectType) {
-    case uiWindowRectType::ClientAreaScreenBased:
-    case uiWindowRectType::ClientAreaParentBased:
-    case uiWindowRectType::ClientAreaWindowBased:
-      r.X2 -= VScrollBarWidth;
-      r.Y2 -= HScrollBarHeight;
-      return r;
-    default:
-      return r;
-  }
+  Rect r = uiControl::rect(origin);
+  r.X2 -= (m_VScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
+  r.Y2 -= (m_HScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
+  return r;
 }
 
 

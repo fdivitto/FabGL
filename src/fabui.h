@@ -221,13 +221,10 @@ private:
 // uiWindow
 
 
-enum class uiWindowRectType {
-  ScreenBased,
-  ParentBased,
-  WindowBased,
-  ClientAreaScreenBased,
-  ClientAreaParentBased,
-  ClientAreaWindowBased,
+enum class uiOrigin {
+  Screen,
+  Parent,
+  Window,
 };
 
 
@@ -310,7 +307,9 @@ public:
 
   Size clientSize();
 
-  virtual Rect rect(uiWindowRectType rectType);
+  Rect rect(uiOrigin origin);
+
+  virtual Rect clientRect(uiOrigin origin);
 
   uiWindowState state() { return m_state; }
 
@@ -463,7 +462,7 @@ public:
 
   uiFrameProps & frameProps() { return m_frameProps; }
 
-  Rect rect(uiWindowRectType rectType);
+  Rect clientRect(uiOrigin origin);
 
 protected:
 
@@ -559,7 +558,7 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
-  Rect rect(uiWindowRectType rectType);
+  Rect clientRect(uiOrigin origin);
 
   uiScrollableControlStyle & scrollableControlStyle() { return m_scrollableControlStyle; }
 
