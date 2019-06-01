@@ -1360,7 +1360,8 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
   : uiWindow(parent, pos, size, visible),
     m_title(nullptr),
     m_mouseDownFrameItem(uiFrameItem::None),
-    m_mouseMoveFrameItem(uiFrameItem::None)
+    m_mouseMoveFrameItem(uiFrameItem::None),
+    m_lastReshapingBox(Rect(0, 0, 0, 0))
 {
   evtHandlerProps().isFrame = true;
   setTitle(title);
@@ -1551,12 +1552,17 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       if (event->params.mouse.changedButton == 1) {
+        int mouseX = event->params.mouse.status.X;
+        int mouseY = event->params.mouse.status.Y;
+
+        // this actually moves or resizes the window in case of non-realtime mode
+        movingCapturedMouse(mouseX, mouseY, false);
+
         // this sets the right mouse cursor in case of end of capturing
-        movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+        movingFreeMouse(mouseX, mouseY);
 
         // handle buttons clicks
-        if (event->params.mouse.changedButton == 1) // 1 = left button
-          handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y);
+        handleButtonsClick(mouseX, mouseY);
 
         app()->combineMouseMoveEvents(false);
       }
@@ -1564,7 +1570,7 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEMOVE:
       if (app()->capturedMouseWindow() == this)
-        movingCapturedMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
+        movingCapturedMouse(event->params.mouse.status.X, event->params.mouse.status.Y, true);
       else
         movingFreeMouse(event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
@@ -1644,95 +1650,113 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
 }
 
 
-void uiFrame::movingCapturedMouse(int mouseX, int mouseY)
+void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
 {
   int dx = mouseX - mouseDownPos().X;
   int dy = mouseY - mouseDownPos().Y;
 
   Size minSize = minWindowSize();
 
+  Rect newRect = rect(uiOrigin::Parent);
+
   switch (m_mouseDownFrameItem) {
 
     case uiFrameItem::MoveArea:
-      app()->moveWindow(this, pos().X + dx, pos().Y + dy);
+      newRect = newRect.move(pos().X + dx, pos().Y + dy);
       break;
 
     case uiFrameItem::CenterRightResize:
-      {
-        int newWidth = sizeAtMouseDown().width + dx;
-        if (newWidth >= minSize.width)
-          app()->resizeWindow(this, newWidth, sizeAtMouseDown().height);
-        break;
-      }
+      newRect = newRect.resize(imax(sizeAtMouseDown().width + dx, minSize.width), newRect.height());
+      break;
 
     case uiFrameItem::CenterLeftResize:
       {
-        Rect r = rect(uiOrigin::Parent);
+        Rect r = newRect;
         r.X1 = pos().X + dx;
-        if (r.size().width >= minSize.width)
-          app()->reshapeWindow(this, r);
+        newRect.X1 = r.X1 - imax(0, minSize.width - r.size().width);
         break;
       }
 
     case uiFrameItem::TopLeftResize:
       {
-        Rect r = rect(uiOrigin::Parent);
+        Rect r = newRect;
         r.X1 = pos().X + dx;
+        newRect.X1 = r.X1 - imax(0, minSize.width - r.size().width);
         r.Y1 = pos().Y + dy;
-        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
-          app()->reshapeWindow(this, r);
+        newRect.Y1 = r.Y1 - imax(0, minSize.height - r.size().height);
         break;
       }
 
     case uiFrameItem::TopCenterResize:
       {
-        Rect r = rect(uiOrigin::Parent);
+        Rect r = newRect;
         r.Y1 = pos().Y + dy;
-        if (r.size().height >= minSize.height)
-          app()->reshapeWindow(this, r);
+        newRect.Y1 = r.Y1 - imax(0, minSize.height - r.size().height);
         break;
       }
 
     case uiFrameItem::TopRightResize:
       {
-        Rect r = rect(uiOrigin::Parent);
-        r.Y1 = pos().Y + dy;
+        Rect r = newRect;
         r.X2 = pos().X + sizeAtMouseDown().width + dx;
-        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
-          app()->reshapeWindow(this, r);
+        newRect.X2 = r.X2 + imax(0, minSize.width - r.size().width);
+        r.Y1 = pos().Y + dy;
+        newRect.Y1 = r.Y1 - imax(0, minSize.height - r.size().height);
         break;
       }
 
     case uiFrameItem::BottomLeftResize:
       {
-        Rect r = rect(uiOrigin::Parent);
+        Rect r = newRect;
         r.X1 = pos().X + dx;
+        newRect.X1 = r.X1 - imax(0, minSize.width - r.size().width);
         r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
-        if (r.size().width >= minSize.width && r.size().height >= minSize.height)
-          app()->reshapeWindow(this, r);
+        newRect.Y2 = r.Y2 + imax(0, minSize.height - r.size().height);
         break;
       }
 
     case uiFrameItem::BottomCenterResize:
-      {
-        int newHeight = sizeAtMouseDown().height + dy;
-        if (newHeight >= minSize.height)
-          app()->resizeWindow(this, sizeAtMouseDown().width, newHeight);
-        break;
-      }
+      newRect = newRect.resize(newRect.width(), imax(sizeAtMouseDown().height + dy, minSize.height));
+      break;
 
     case uiFrameItem::BottomRightResize:
-      {
-        int newWidth = sizeAtMouseDown().width + dx;
-        int newHeight = sizeAtMouseDown().height + dy;
-        if (newWidth >= minSize.width && newHeight >= minSize.height)
-          app()->resizeWindow(this, newWidth, newHeight);
-        break;
-      }
+      newRect = newRect.resize(imax(sizeAtMouseDown().width + dx, minSize.width), imax(sizeAtMouseDown().height + dy, minSize.height));
+      break;
 
     default:
-      break;
+      return; // no action
   }
+
+  // reshape to newRect or draw the reshaping box)
+  if (mouseIsDown == false || app()->appProps().realtimeReshaping) {
+    m_lastReshapingBox = Rect();//drawReshapingBox(Rect());//
+    app()->reshapeWindow(this, newRect);
+  } else
+    drawReshapingBox(newRect);
+}
+
+
+void uiFrame::drawReshapingBox(Rect rect)
+{
+  bool hasTitle = strlen(m_title);
+  int clientOffsetY = clientRect(uiOrigin::Window).Y1;
+  Canvas.setOrigin(0, 0);
+  Canvas.setClippingRect(app()->rootWindow()->rect(uiOrigin::Parent));
+  PaintOptions popt;
+  popt.NOT = true;
+  Canvas.setPaintOptions(popt);
+  if (m_lastReshapingBox != Rect()) {
+    Canvas.drawRectangle(m_lastReshapingBox);
+    if (hasTitle)
+      Canvas.drawLine(m_lastReshapingBox.X1, m_lastReshapingBox.Y1 + clientOffsetY, m_lastReshapingBox.X2, m_lastReshapingBox.Y1 + clientOffsetY);
+  }
+  if (rect != Rect()) {
+    Canvas.drawRectangle(rect);
+    if (hasTitle)
+      Canvas.drawLine(rect.X1, rect.Y1 + clientOffsetY, rect.X2, rect.Y1 + clientOffsetY);
+  }
+  Canvas.setPaintOptions(PaintOptions());
+  m_lastReshapingBox = rect;
 }
 
 

@@ -474,12 +474,13 @@ private:
 
   void paintFrame();
   int paintButtons(Rect const & bkgRect);
-  void movingCapturedMouse(int mouseX, int mouseY);
+  void movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown);
   void movingFreeMouse(int mouseX, int mouseY);
   uiFrameItem getFrameItemAt(int x, int y);
   Rect getBtnRect(int buttonIndex);
   void handleButtonsClick(int x, int y);
   void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
+  void drawReshapingBox(Rect rect);
 
 
   static const int CORNERSENSE = 10;
@@ -493,6 +494,8 @@ private:
 
   uiFrameItem m_mouseDownFrameItem;  // frame item on mouse down
   uiFrameItem m_mouseMoveFrameItem;  // frame item on mouse move
+
+  Rect        m_lastReshapingBox;    // last reshaping box painted by drawReshapingBox(), (0,0,0,0) if there isn't any
 
 };
 
@@ -956,6 +959,7 @@ private:
 struct uiAppProps {
   uint16_t caretBlinkingTime = 500;   // caret blinking time (MS)
   uint16_t doubleClickTime   = 250;   // maximum delay required for two consecutive clicks to become double click (MS)
+  bool     realtimeReshaping = false; // if true moving/resizing a window always repaints it, otherwise the moved/resized window is represented by an inverted rectangle
 };
 
 
