@@ -252,8 +252,8 @@ struct uiWindowStyle {
   RGB              borderColor        = RGB(2, 2, 2);
   RGB              activeBorderColor  = RGB(2, 2, 3);
   RGB              focusedBorderColor = RGB(0, 0, 3);
-  uint8_t          borderSize         = 2;
-  uint8_t          focusedBorderSize  = 2;
+  uint8_t          borderSize         = 3;
+  uint8_t          focusedBorderSize  = 1;
 };
 
 
