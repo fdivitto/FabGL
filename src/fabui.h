@@ -209,6 +209,11 @@ public:
 
   uiEvtHandlerProps & evtHandlerProps() { return m_evtHandlerProps; }
 
+  // Delegates
+
+  Delegate<uiTimerHandle> onTimer;
+
+
 private:
 
   uiApp *           m_app;
@@ -338,10 +343,9 @@ public:
 
   // Delegates
 
-  Delegate<>              onResize;
-  Delegate<uiTimerHandle> onTimer;
-  Delegate<>              onShow;
-  Delegate<>              onHide;
+  Delegate<> onResize;
+  Delegate<> onShow;
+  Delegate<> onHide;
 
 
 protected:
@@ -1049,7 +1053,7 @@ public:
 
   void setCaret(Rect const & rect);
 
-  uiTimerHandle setTimer(uiWindow * window, int periodMS);
+  uiTimerHandle setTimer(uiEvtHandler * dest, int periodMS);
 
   void killTimer(uiTimerHandle handle);
 

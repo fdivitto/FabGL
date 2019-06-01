@@ -136,6 +136,16 @@ uiEvtHandler::~uiEvtHandler()
 
 void uiEvtHandler::processEvent(uiEvent * event)
 {
+  switch (event->id) {
+
+    case UIEVT_TIMER:
+      onTimer(event->params.timerHandle);
+      break;
+
+    default:
+      break;
+
+  }
 }
 
 
@@ -435,6 +445,8 @@ bool uiApp::peekEvent(uiEvent * event, int timeOutMS)
 
 void uiApp::processEvent(uiEvent * event)
 {
+  uiEvtHandler::processEvent(event);
+
   switch (event->id) {
 
     case UIEVT_APPINIT:
@@ -661,17 +673,17 @@ void uiApp::minimizeWindow(uiWindow * window, bool value)
 
 void uiApp::timerFunc(TimerHandle_t xTimer)
 {
-  uiWindow * window = (uiWindow*) pvTimerGetTimerID(xTimer);
-  uiEvent evt = uiEvent(window, UIEVT_TIMER);
+  uiEvtHandler * dest = (uiEvtHandler*) pvTimerGetTimerID(xTimer);
+  uiEvent evt = uiEvent(dest, UIEVT_TIMER);
   evt.params.timerHandle = xTimer;
-  window->app()->postEvent(&evt);
+  dest->app()->postEvent(&evt);
 }
 
 
 // return handler to pass to deleteTimer()
-uiTimerHandle uiApp::setTimer(uiWindow * window, int periodMS)
+uiTimerHandle uiApp::setTimer(uiEvtHandler * dest, int periodMS)
 {
-  TimerHandle_t h = xTimerCreate("", pdMS_TO_TICKS(periodMS), pdTRUE, window, &uiApp::timerFunc);
+  TimerHandle_t h = xTimerCreate("", pdMS_TO_TICKS(periodMS), pdTRUE, dest, &uiApp::timerFunc);
   xTimerStart(h, 0);
   return h;
 }
@@ -1191,10 +1203,6 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_SETSIZE:
       onResize();
-      break;
-
-    case UIEVT_TIMER:
-      onTimer(event->params.timerHandle);
       break;
 
     default:
