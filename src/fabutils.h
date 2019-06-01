@@ -106,6 +106,8 @@ struct Point {
   Point add(Point const & p) const { return Point(X + p.X, Y + p.Y); }
   Point sub(Point const & p) const { return Point(X - p.X, Y - p.Y); }
   Point neg() const                { return Point(-X, -Y); }
+  bool operator==(Point const & r) { return X == r.X && Y == r.Y; }
+  bool operator!=(Point const & r) { return X != r.X || Y != r.Y; }
 };
 
 
