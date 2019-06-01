@@ -431,7 +431,7 @@ struct uiFrameProps {
 };
 
 
-enum class uiFrameItem {
+enum class uiFrameItem : uint8_t {
   None,
   MoveArea,
   TopLeftResize,
@@ -487,7 +487,7 @@ private:
   void drawReshapingBox(Rect rect);
 
 
-  static const int CORNERSENSE = 10;
+  static constexpr int CORNERSENSE = 10;
 
 
   uiFrameStyle       m_frameStyle;
@@ -786,9 +786,9 @@ private:
 
 
 struct uiLabelStyle {
+  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
   RGB              backgroundColor          = RGB(3, 3, 3);
   RGB              textFontColor            = RGB(0, 0, 0);
-  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
 };
 
 
@@ -821,11 +821,12 @@ private:
 
 
   char *         m_text;
-  int            m_textExtent;  // calculated by setText()
 
   uiLabelStyle   m_labelStyle;
 
-  bool           m_autoSize;
+  uint16_t       m_textExtent;  // calculated by setText()
+
+  uint8_t        m_autoSize;
 
 };
 

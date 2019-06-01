@@ -387,7 +387,7 @@ struct BitmapDrawingInfo {
 /**
  * @brief This enum defines a set of predefined mouse cursors.
  */
-enum CursorName {
+enum CursorName : uint8_t {
   CursorPointerAmigaLike,     /**< 11x11 Amiga like colored mouse pointer */
   CursorPointerSimpleReduced, /**< 10x15 mouse pointer */
   CursorPointerSimple,        /**< 11x19 mouse pointer */
