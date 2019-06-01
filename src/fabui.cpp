@@ -1573,7 +1573,7 @@ void uiFrame::processEvent(uiEvent * event)
         movingFreeMouse(mouseX, mouseY);
 
         // handle buttons clicks
-        handleButtonsClick(mouseX, mouseY);
+        handleButtonsClick(mouseX, mouseY, false);
 
         app()->combineMouseMoveEvents(false);
       }
@@ -1594,6 +1594,10 @@ void uiFrame::processEvent(uiEvent * event)
       if (m_mouseMoveFrameItem == uiFrameItem::MinimizeButton)
         repaint(getBtnRect(2));
       m_mouseMoveFrameItem = uiFrameItem::None;
+      break;
+
+    case UIEVT_DBLCLICK:
+      handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y, true);
       break;
 
     default:
@@ -1740,7 +1744,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
 
   // reshape to newRect or draw the reshaping box)
   if (mouseIsDown == false || app()->appProps().realtimeReshaping) {
-    m_lastReshapingBox = Rect();//drawReshapingBox(Rect());//
+    m_lastReshapingBox = Rect();
     app()->reshapeWindow(this, newRect);
   } else
     drawReshapingBox(newRect);
@@ -1829,17 +1833,21 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 }
 
 
-void uiFrame::handleButtonsClick(int x, int y)
+void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
 {
   if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos())) {
     // generate UIEVT_CLOSE event
     uiEvent evt = uiEvent(this, UIEVT_CLOSE);
     app()->postEvent(&evt);
-  } else if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos()))
+  } else if (m_frameProps.hasMaximizeButton && ((getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos())) ||
+                                                (doubleClick && titleBarRect().contains(x, y)))) {
+    // maximimize or restore on:
+    //   - click on maximize/restore button
+    //   - double click on the title bar
     app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-  else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos()))
+  } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos())) {
     app()->minimizeWindow(this, !state().minimized);
-  else
+  } else
     return;
   // this avoids the button remains selected (background colored) when window change size
   m_mouseMoveFrameItem = uiFrameItem::None;

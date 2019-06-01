@@ -482,7 +482,7 @@ private:
   void movingFreeMouse(int mouseX, int mouseY);
   uiFrameItem getFrameItemAt(int x, int y);
   Rect getBtnRect(int buttonIndex);
-  void handleButtonsClick(int x, int y);
+  void handleButtonsClick(int x, int y, bool doubleClick);
   void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
   void drawReshapingBox(Rect rect);
 
