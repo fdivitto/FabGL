@@ -170,7 +170,7 @@ uiApp::uiApp()
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
     m_caretInvertState(-1),
-    m_lastMouseDownTimeMS(0)
+    m_lastMouseUpTimeMS(0)
 {
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
   setApp(this);
@@ -296,7 +296,7 @@ void uiApp::filterModalEvent(uiEvent * event)
 }
 
 
-// look for destination window at event X, Y coordinates, then set "dest" field and modify mouse X, Y coordinates (convert to child coordinates)
+// look for destination window at event X, Y coordinates, then set "dest" field and modify mouse X, Y coordinates (convert to window coordinates)
 // generate UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
 void uiApp::preprocessMouseEvent(uiEvent * event)
 {
@@ -307,19 +307,21 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       getEvent(event, -1);
   }
 
+  Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
+
   // search for window under the mouse or mouse capturing window
   // insert UIEVT_MOUSELEAVE when mouse capture is finished over a non-capturing window
   uiWindow * oldFreeMouseWindow = m_freeMouseWindow;
-  Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
+  Point winMousePos = mousePos;
   if (m_capturedMouseWindow) {
     // mouse captured, just go back up to m_rootWindow
     for (uiWindow * cur = m_capturedMouseWindow; cur != m_rootWindow; cur = cur->parent())
-      mousePos = mousePos.sub(cur->pos());
+      winMousePos = winMousePos.sub(cur->pos());
     event->dest = m_capturedMouseWindow;
     // left mouse button UP?
     if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
       // mouse up will end mouse capture, check that mouse is still inside
-      if (!m_capturedMouseWindow->rect(uiOrigin::Window).contains(mousePos)) {
+      if (!m_capturedMouseWindow->rect(uiOrigin::Window).contains(winMousePos)) {
         // mouse is not inside, post mouse leave and enter events
         uiEvent evt = uiEvent(m_capturedMouseWindow, UIEVT_MOUSELEAVE);
         postEvent(&evt);
@@ -327,11 +329,11 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       }
     }
   } else {
-    m_freeMouseWindow = screenToWindow(mousePos);
+    m_freeMouseWindow = screenToWindow(winMousePos);  // translates winMousePos
     event->dest = m_freeMouseWindow;
   }
-  event->params.mouse.status.X = mousePos.X;
-  event->params.mouse.status.Y = mousePos.Y;
+  event->params.mouse.status.X = winMousePos.X;
+  event->params.mouse.status.Y = winMousePos.Y;
 
   // insert UIEVT_MOUSEENTER and UIEVT_MOUSELEAVE events
   if (oldFreeMouseWindow != m_freeMouseWindow) {
@@ -346,15 +348,16 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
   }
 
   // double click?
-  if (event->id == UIEVT_MOUSEBUTTONDOWN && event->params.mouse.changedButton == 1) {
+  if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
     int curTime = esp_timer_get_time() / 1000;  // uS -> MS
-    if (curTime - m_lastMouseDownTimeMS <= m_appProps.doubleClickTime) {
+    if (m_lastMouseUpPos == mousePos && curTime - m_lastMouseUpTimeMS <= m_appProps.doubleClickTime) {
       // post double click message
       uiEvent evt = *event;
       evt.id = UIEVT_DBLCLICK;
       postEvent(&evt);
     }
-    m_lastMouseDownTimeMS = curTime;
+    m_lastMouseUpTimeMS = curTime;
+    m_lastMouseUpPos    = mousePos;
   }
 }
 

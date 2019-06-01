@@ -1113,7 +1113,8 @@ private:
   uiTimerHandle m_caretTimer;
   int           m_caretInvertState;    // -1 = suspended, 1 = rect reversed (cat visible), 0 = rect not reversed (caret invisible)
 
-  int           m_lastMouseDownTimeMS; // time (MS) at mouse Down. Used to measure double clicks
+  int           m_lastMouseUpTimeMS;   // time (MS) at mouse up. Used to measure double clicks
+  Point         m_lastMouseUpPos;      // screen position of last mouse up
 };
 
 
