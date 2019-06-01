@@ -12,6 +12,7 @@ class MyApp : public uiApp {
   uiButton * testPaintBoxButton, * testTimerButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
+  uiLabel * freeMemLabel;
 
   fabgl::Stack<uiFrame*> dynamicFrames;
 
@@ -20,23 +21,31 @@ class MyApp : public uiApp {
     // set root window background color to dark green
     rootWindow()->frameStyle().backgroundColor = RGB(0, 1, 0);
 
+    // setup a timer to show updated free memory every 2s
+    setTimer(this, 2000);
+    onTimer = [&](uiTimerHandle tHandle) { showFreeMemory(); };
+
     // frame where to put test buttons
-    testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(100, 330));
+    testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(115, 330));
     testsFrame->frameStyle().backgroundColor = RGB(0, 0, 2);
     testsFrame->windowStyle().borderSize     = 0;
 
+    // label where to show free memory
+    freeMemLabel = new uiLabel(testsFrame, "", Point(2, 312));
+    freeMemLabel->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
+
     // create a destroy frame buttons
-    createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 20), Size(90, 20));
+    createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 20), Size(105, 20));
     createFrameButton->onClick = [&]() { onCreateFrameButtonClick(); };
-    destroyFrameButton = new uiButton(testsFrame, "Destroy Frame", Point(5, 45), Size(90, 20));
+    destroyFrameButton = new uiButton(testsFrame, "Destroy Frame", Point(5, 45), Size(105, 20));
     destroyFrameButton->onClick = [&]() { destroyWindow(dynamicFrames.pop()); };
 
     // test text edit button
-    textEditButton = new uiButton(testsFrame, "Test uiTextEdit", Point(5, 70), Size(90, 20));
+    textEditButton = new uiButton(testsFrame, "Test uiTextEdit", Point(5, 70), Size(105, 20));
     textEditButton->onClick = [&]() { onTestTextEditButtonClick(); };
 
     // test message box
-    msgBoxButton = new uiButton(testsFrame, "Test MessageBox", Point(5, 95), Size(90, 20));
+    msgBoxButton = new uiButton(testsFrame, "Test MessageBox", Point(5, 95), Size(105, 20));
     msgBoxButton->onClick = [&]() {
       app()->messageBox("This is the title", "This is the main text", "Button1", "Button2", "Button3", uiMessageBoxIcon::Info);
       app()->messageBox("This is the title", "This is the main text", "Yes", "No", nullptr, uiMessageBoxIcon::Question);
@@ -49,13 +58,20 @@ class MyApp : public uiApp {
 
     // button to show TestPaintBoxFrame
     paintBoxFrame = new TestPaintBoxFrame(rootWindow());
-    testPaintBoxButton = new uiButton(testsFrame, "Test PaintBox", Point(5, 120), Size(90, 20));
+    testPaintBoxButton = new uiButton(testsFrame, "Test PaintBox", Point(5, 120), Size(105, 20));
     testPaintBoxButton->onClick = [&]() { showWindow(paintBoxFrame, true); };
 
     // button to show TestTimerFrame
     testTimerFrame = new TestTimerFrame(rootWindow());
-    testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 145), Size(90, 20));
+    testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 145), Size(105, 20));
     testTimerButton->onClick = [&]() { showWindow(testTimerFrame, true); };
+  }
+
+  void showFreeMemory() {
+    char txt[36];
+    snprintf(txt, sizeof(txt), "Std: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
+    freeMemLabel->setText(txt);
+    freeMemLabel->repaint();
   }
 
   void onCreateFrameButtonClick() {
