@@ -1359,6 +1359,7 @@ bool uiWindow::hasFocus()
 uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible),
     m_title(nullptr),
+    m_titleLength(0),
     m_mouseDownFrameItem(uiFrameItem::None),
     m_mouseMoveFrameItem(uiFrameItem::None),
     m_lastReshapingBox(Rect(0, 0, 0, 0))
@@ -1376,8 +1377,8 @@ uiFrame::~uiFrame()
 
 void uiFrame::setTitle(char const * value)
 {
-  int len = strlen(value);
-  m_title = (char*) realloc(m_title, len + 1);
+  m_titleLength = strlen(value);
+  m_title = (char*) realloc(m_title, m_titleLength + 1);
   strcpy(m_title, value);
 }
 
@@ -1401,7 +1402,7 @@ Rect uiFrame::clientRect(uiOrigin origin)
   Rect r = uiWindow::clientRect(origin);
 
   // title bar
-  if (strlen(m_title))
+  if (m_titleLength > 0)
     r.Y1 += titleBarHeight();
 
   return r;
@@ -1410,15 +1411,14 @@ Rect uiFrame::clientRect(uiOrigin origin)
 
 Size uiFrame::minWindowSize()
 {
-  bool hasTitle = strlen(m_title);
   Size r = Size(0, 0);
-  if (m_frameProps.resizeable && !state().minimized && !hasTitle) {
+  if (m_frameProps.resizeable && !state().minimized && m_titleLength == 0) {
     r.width  += CORNERSENSE * 2;
     r.height += CORNERSENSE * 2;
   }
   r.width  += windowStyle().borderSize * 2;
   r.height += windowStyle().borderSize * 2;
-  if (hasTitle) {
+  if (m_titleLength > 0) {
     int barHeight = titleBarHeight();  // titleBarHeight is also the button width
     r.height += barHeight;
     if (m_frameProps.hasCloseButton || m_frameProps.hasMaximizeButton || m_frameProps.hasMinimizeButton)
@@ -1449,7 +1449,7 @@ void uiFrame::paintFrame()
 {
   Rect bkgRect = uiWindow::clientRect(uiOrigin::Window);
   // title bar
-  if (strlen(m_title)) {
+  if (m_titleLength > 0) {
     int barHeight = titleBarHeight();
     // title bar background
     RGB titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
@@ -1738,7 +1738,6 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
 
 void uiFrame::drawReshapingBox(Rect rect)
 {
-  bool hasTitle = strlen(m_title);
   int clientOffsetY = clientRect(uiOrigin::Window).Y1;
   Canvas.setOrigin(0, 0);
   Canvas.setClippingRect(app()->rootWindow()->rect(uiOrigin::Parent));
@@ -1747,12 +1746,12 @@ void uiFrame::drawReshapingBox(Rect rect)
   Canvas.setPaintOptions(popt);
   if (m_lastReshapingBox != Rect()) {
     Canvas.drawRectangle(m_lastReshapingBox);
-    if (hasTitle)
+    if (m_titleLength > 0)
       Canvas.drawLine(m_lastReshapingBox.X1, m_lastReshapingBox.Y1 + clientOffsetY, m_lastReshapingBox.X2, m_lastReshapingBox.Y1 + clientOffsetY);
   }
   if (rect != Rect()) {
     Canvas.drawRectangle(rect);
-    if (hasTitle)
+    if (m_titleLength > 0)
       Canvas.drawLine(rect.X1, rect.Y1 + clientOffsetY, rect.X2, rect.Y1 + clientOffsetY);
   }
   Canvas.setPaintOptions(PaintOptions());

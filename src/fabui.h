@@ -491,6 +491,7 @@ private:
   uiFrameProps       m_frameProps;
 
   char *             m_title;
+  int                m_titleLength;
 
   uiFrameItem m_mouseDownFrameItem;  // frame item on mouse down
   uiFrameItem m_mouseMoveFrameItem;  // frame item on mouse move
