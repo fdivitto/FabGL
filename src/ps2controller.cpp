@@ -292,6 +292,11 @@ namespace fabgl {
     I_BL(2, value), \
     M_BX(label)
 
+// long jump version of M_BL
+#define M_LONG_BL(label, value) \
+    I_BGE(2, value), \
+    M_BX(label)
+
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -612,6 +617,10 @@ M_LABEL(PORT0_SEND_NEXT_BIT),
 
   // wait for CLK = LOW
 
+  // are still we in sending mode?
+  MEM_READR(R0, RTCMEM_PORT0_MODE),                    // R0 = [RTCMEM_PORT0_MODE]
+  M_LONG_BL(READY_TO_RECEIVE, MODE_SEND),              // jump to READY_TO_RECEIVE if R0 != MODE_SEND
+
   // read CLK
   READ_CLK(PS2_PORT0),                                 // R0 = CLK
 
@@ -628,6 +637,10 @@ M_LABEL(PORT0_SEND_NEXT_BIT),
 M_LABEL(PORT0_SEND_WAIT_FOR_CLK_HIGH),
 
   // Wait for CLK = HIGH
+
+  // are still we in sending mode?
+  MEM_READR(R0, RTCMEM_PORT0_MODE),                    // R0 = [RTCMEM_PORT0_MODE]
+  M_LONG_BL(READY_TO_RECEIVE, MODE_SEND),              // jump to READY_TO_RECEIVE if R0 != MODE_SEND
 
   // read CLK
   READ_CLK(PS2_PORT0),                                 // R0 = CLK
@@ -690,6 +703,10 @@ M_LABEL(PORT1_SEND_NEXT_BIT),
 
   // wait for CLK = LOW
 
+  // are still we in sending mode?
+  MEM_READR(R0, RTCMEM_PORT1_MODE),                    // R0 = [RTCMEM_PORT1_MODE]
+  M_LONG_BL(READY_TO_RECEIVE, MODE_SEND),              // jump to READY_TO_RECEIVE if R0 != MODE_SEND
+
   // read CLK
   READ_CLK(PS2_PORT1),                                 // R0 = CLK
 
@@ -706,6 +723,10 @@ M_LABEL(PORT1_SEND_NEXT_BIT),
 M_LABEL(PORT1_SEND_WAIT_FOR_CLK_HIGH),
 
   // Wait for CLK = HIGH
+
+  // are still we in sending mode?
+  MEM_READR(R0, RTCMEM_PORT1_MODE),                    // R0 = [RTCMEM_PORT1_MODE]
+  M_LONG_BL(READY_TO_RECEIVE, MODE_SEND),              // jump to READY_TO_RECEIVE if R0 != MODE_SEND
 
   // read CLK
   READ_CLK(PS2_PORT1),                                 // R0 = CLK
@@ -934,7 +955,9 @@ void PS2ControllerClass::sendData(uint8_t data, int PS2Port)
   RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((~calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
   RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_SEND;
   m_TXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
-  ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10));
+  if (ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10)) == pdFALSE) {
+    warmInit();
+  }
 }
 
 
