@@ -70,7 +70,7 @@ void MouseClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
 bool MouseClass::reset()
 {
   // tries up to six times for mouse reset
-  for (int i = 0; i < 6; ++i) {
+  for (int i = 0; i < 3; ++i) {
     m_mouseAvailable = send_cmdReset();
     if (m_mouseAvailable)
       break;
