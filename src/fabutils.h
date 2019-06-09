@@ -299,6 +299,11 @@ void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & re
 
 bool calcParity(uint8_t v);
 
+// why these? this is like heap_caps_malloc with MALLOC_CAP_32BIT. Unfortunately
+// heap_caps_malloc crashes, so we need this workaround.
+void * realloc32(void * ptr, size_t size);
+void free32(void * ptr);
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
