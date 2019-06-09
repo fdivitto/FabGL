@@ -88,6 +88,24 @@ void tswap(T & v1, T & v2)
 constexpr auto iswap = tswap<int>;
 
 
+template <typename T>
+T moveItems(T dest, T src, size_t n)
+{
+  T pd = dest;
+  T ps = src;
+  if (pd != ps) {
+    if (ps < pd)
+      for (pd += n, ps += n; n--;)
+        *--pd = *--ps;
+    else
+      while (n--)
+        *pd++ = *ps++;
+  }
+  return dest;
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
