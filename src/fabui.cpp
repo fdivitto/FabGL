@@ -3049,7 +3049,7 @@ void uiScrollableControl::paintScrollableControl()
 
 Rect uiScrollableControl::clientRect(uiOrigin origin)
 {
-  Rect r = uiControl::rect(origin);
+  Rect r = uiControl::clientRect(origin);
   r.X2 -= (m_VScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
   r.Y2 -= (m_HScrollBarRange ? m_scrollableControlStyle.scrollBarSize : 0);
   return r;
