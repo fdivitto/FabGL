@@ -610,10 +610,10 @@ private:
   uiScrollableControlStyle m_scrollableControlStyle;
 
   int16_t         m_HScrollBarPosition;
-  int16_t         m_HScrollBarVisible;
+  int16_t         m_HScrollBarVisible;    // it means the "visible" area (how big is the bar)
   int16_t         m_HScrollBarRange;
   int16_t         m_VScrollBarPosition;
-  int16_t         m_VScrollBarVisible;
+  int16_t         m_VScrollBarVisible;    // it means the "visible" area (how big is the bar)
   int16_t         m_VScrollBarRange;
 
   // values updated by getVScrollBarRects() and getHScrollBarRects()
