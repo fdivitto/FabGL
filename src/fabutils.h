@@ -268,12 +268,12 @@ struct Delegate {
   template <typename Func>
   void operator=(Func f) {
     m_closure = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
-    m_func    = malloc(sizeof(Func));
-    memcpy(m_func, &f, sizeof(Func));
+    m_func = heap_caps_malloc(sizeof(Func), MALLOC_CAP_32BIT);
+    moveItems<uint32_t*>((uint32_t*)m_func, (uint32_t*)&f, sizeof(Func) / sizeof(uint32_t));
   }
 
   ~Delegate() {
-    free(m_func);
+    heap_caps_free(m_func);
   }
 
   void operator()(const Params & ...params) {
