@@ -1,18 +1,20 @@
 #pragma once
 
-#include "TestEditFrame.h"
+#include "TestModalDialog.h"
 #include "TestPaintBoxFrame.h"
 #include "TestTimerFrame.h"
+#include "TestControlsFrame.h"
 
 
 class MyApp : public uiApp {
 
   uiFrame * testsFrame;
-  uiButton * createFrameButton, * destroyFrameButton, * textEditButton, * msgBoxButton;
-  uiButton * testPaintBoxButton, * testTimerButton;
+  uiButton * createFrameButton, * destroyFrameButton, * testModalDialogButton, * msgBoxButton;
+  uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
   uiLabel * freeMemLabel;
+  TestControlsFrame * testControlsFrame;
 
   fabgl::Stack<uiFrame*> dynamicFrames;
 
@@ -34,18 +36,23 @@ class MyApp : public uiApp {
     freeMemLabel = new uiLabel(testsFrame, "", Point(2, 312));
     freeMemLabel->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
 
+    // button to show TestControlsFrame
+    testControlsFrame = new TestControlsFrame(rootWindow());
+    testControlsButton = new uiButton(testsFrame, "Test Controls", Point(5, 20), Size(105, 20));
+    testControlsButton->onClick = [&]() { showWindow(testControlsFrame, true); };
+
     // create a destroy frame buttons
-    createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 20), Size(105, 20));
+    createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 45), Size(105, 20));
     createFrameButton->onClick = [&]() { onCreateFrameButtonClick(); };
-    destroyFrameButton = new uiButton(testsFrame, "Destroy Frame", Point(5, 45), Size(105, 20));
+    destroyFrameButton = new uiButton(testsFrame, "Destroy Frame", Point(5, 70), Size(105, 20));
     destroyFrameButton->onClick = [&]() { destroyWindow(dynamicFrames.pop()); };
 
-    // test text edit button
-    textEditButton = new uiButton(testsFrame, "Test uiTextEdit", Point(5, 70), Size(105, 20));
-    textEditButton->onClick = [&]() { onTestTextEditButtonClick(); };
+    // test modal dialog button
+    testModalDialogButton = new uiButton(testsFrame, "Test Modal Dialog", Point(5, 95), Size(105, 20));
+    testModalDialogButton->onClick = [&]() { onTestModalDialogButtonClick(); };
 
     // test message box
-    msgBoxButton = new uiButton(testsFrame, "Test MessageBox", Point(5, 95), Size(105, 20));
+    msgBoxButton = new uiButton(testsFrame, "Test MessageBox", Point(5, 120), Size(105, 20));
     msgBoxButton->onClick = [&]() {
       app()->messageBox("This is the title", "This is the main text", "Button1", "Button2", "Button3", uiMessageBoxIcon::Info);
       app()->messageBox("This is the title", "This is the main text", "Yes", "No", nullptr, uiMessageBoxIcon::Question);
@@ -58,13 +65,14 @@ class MyApp : public uiApp {
 
     // button to show TestPaintBoxFrame
     paintBoxFrame = new TestPaintBoxFrame(rootWindow());
-    testPaintBoxButton = new uiButton(testsFrame, "Test PaintBox", Point(5, 120), Size(105, 20));
+    testPaintBoxButton = new uiButton(testsFrame, "Test PaintBox", Point(5, 145), Size(105, 20));
     testPaintBoxButton->onClick = [&]() { showWindow(paintBoxFrame, true); };
 
     // button to show TestTimerFrame
     testTimerFrame = new TestTimerFrame(rootWindow());
-    testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 145), Size(105, 20));
+    testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 170), Size(105, 20));
     testTimerButton->onClick = [&]() { showWindow(testTimerFrame, true); };
+
   }
 
   void showFreeMemory() {
@@ -86,11 +94,11 @@ class MyApp : public uiApp {
     dynamicFrames.push(newFrame);
   }
 
-  void onTestTextEditButtonClick() {
-    // show TestTextEditFrame as modal window
-    auto textEditTestFrame = new TestTextEditFrame(rootWindow());
-    showModalWindow(textEditTestFrame);
-    destroyWindow(textEditTestFrame);
+  void onTestModalDialogButtonClick() {
+    // show TestModalDialog as modal window
+    auto testModalDialog = new TestModalDialog(rootWindow());
+    showModalWindow(testModalDialog);
+    destroyWindow(testModalDialog);
   }
 
 };

@@ -18,7 +18,7 @@ struct TestPaintBoxFrame : public uiFrame {
   int8_t * values = nullptr;
 
   TestPaintBoxFrame(uiFrame * parent)
-    : uiFrame(parent, "Test Paint Box", Point(120, 10), Size(300, 210), false) {
+    : uiFrame(parent, "Test Paint Box", Point(130, 10), Size(300, 210), false) {
 
     values = new int8_t[count];
     for (int i = 0; i < count; ++i)

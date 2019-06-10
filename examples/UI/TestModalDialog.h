@@ -1,13 +1,13 @@
 #pragma once
 
 
-struct TestTextEditFrame : public uiFrame {
+struct TestModalDialog : public uiFrame {
   uiTextEdit * textEdit1, * textEdit2, * textEdit3, * textEdit4;
   uiButton * button1, * button2;
   uiPanel * panel;
 
-  TestTextEditFrame(uiFrame * parent)
-    : uiFrame(parent, "Test Text Edit", Point(120, 10), Size(300, 210)) {
+  TestModalDialog(uiFrame * parent)
+    : uiFrame(parent, "Test Modal Dialog", Point(150, 10), Size(300, 210)) {
     frameProps().resizeable        = false;
     frameProps().hasCloseButton    = false;
     frameProps().hasMaximizeButton = false;
