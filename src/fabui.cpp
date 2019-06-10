@@ -2842,6 +2842,11 @@ void uiScrollableControl::processEvent(uiEvent * event)
         handleFreeMouseMove(event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
 
+    case UIEVT_MOUSEWHEEL:
+      if (m_VScrollBarRange)
+        setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition + event->params.mouse.status.wheelDelta, m_VScrollBarVisible, m_VScrollBarRange);
+      break;
+
     case UIEVT_TIMER:
       if (event->params.timerHandle == m_scrollTimer)
         handleButtonsScroll();
