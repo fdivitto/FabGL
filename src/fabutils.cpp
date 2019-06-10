@@ -20,6 +20,8 @@
  */
 
 
+#include <string.h>
+
 #include "fabutils.h"
 
 
@@ -198,6 +200,140 @@ void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & re
   if (mainRect.X2 > rectToRemove.X2)
     rects.push(Rect(rectToRemove.X2 + 1, tmax(rectToRemove.Y1, mainRect.Y1), mainRect.X2, tmin(rectToRemove.Y2, mainRect.Y2)));
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// StringList
+
+
+StringList::StringList()
+  : m_items(nullptr),
+    m_selMap(nullptr),
+    m_ownStrings(false),
+    m_count(0),
+    m_allocated(0)
+{
+}
+
+
+StringList::~StringList()
+{
+  clear();
+}
+
+
+void StringList::clear()
+{
+  if (m_ownStrings) {
+    for (int i = 0; i < m_count; ++i)
+      free((void*) m_items[i]);
+  }
+  free32(m_items);
+  free32(m_selMap);
+  m_items  = nullptr;
+  m_selMap = nullptr;
+  m_count  = m_allocated = 0;
+}
+
+
+void StringList::checkAllocatedSpace(int requiredItems)
+{
+  if (m_allocated < requiredItems) {
+    if (m_allocated == 0) {
+      // first time allocates exact space
+      m_allocated = requiredItems;
+    } else {
+      // next times allocate double
+      while (m_allocated < requiredItems)
+        m_allocated *= 2;
+    }
+    m_items  = (char const**) realloc32(m_items, m_allocated * sizeof(char const *));
+    m_selMap = (uint32_t*) realloc32(m_selMap, (31 + m_allocated) / 32 * sizeof(uint32_t));
+  }
+}
+
+
+void StringList::insert(int index, char const * str)
+{
+  ++m_count;
+  checkAllocatedSpace(m_count);
+  moveItems(m_items + index + 1, m_items + index, m_count - index - 1);
+  m_items[index] = nullptr;
+  set(index, str);
+  deselectAll();
+}
+
+
+int StringList::append(char const * str)
+{
+  insert(m_count, str);
+  return m_count - 1;
+}
+
+
+void StringList::set(int index, char const * str)
+{
+  if (m_ownStrings) {
+    free((void*)m_items[index]);
+    m_items[index] = (char const*) malloc(strlen(str) + 1);
+    strcpy((char*)m_items[index], str);
+  } else {
+    m_items[index] = str;
+  }
+}
+
+
+void StringList::remove(int index)
+{
+  if (m_ownStrings)
+    free((void*)m_items[index]);
+  moveItems(m_items + index, m_items + index + 1, m_count - index - 1);
+  --m_count;
+  deselectAll();
+}
+
+
+void StringList::takeStrings()
+{
+  if (!m_ownStrings) {
+    m_ownStrings = true;
+    // take existing strings
+    for (int i = 0; i < m_count; ++i) {
+      char const * str = m_items[i];
+      m_items[i] = nullptr;
+      set(i, str);
+    }
+  }
+}
+
+
+void StringList::deselectAll()
+{
+  for (int i = 0; i < (31 + m_count) / 32; ++i)
+    m_selMap[i] = 0;
+}
+
+
+bool StringList::selected(int index)
+{
+  return m_selMap[index / 32] & (1 << (index % 32));
+}
+
+
+void StringList::select(int index, bool value)
+{
+  if (value)
+    m_selMap[index / 32] |= 1 << (index % 32);
+  else
+    m_selMap[index / 32] &= ~(1 << (index % 32));
+}
+
+
+
+// StringList
+///////////////////////////////////////////////////////////////////////////////////
+
 
 
 

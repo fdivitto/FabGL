@@ -288,6 +288,47 @@ private:
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+// StringList
+
+class StringList {
+
+public:
+  StringList();
+  ~StringList();
+  int append(char const * str);
+  void insert(int index, char const * str);
+  void set(int index, char const * str);
+  void remove(int index);
+  int count()                 { return m_count; }
+  char const * get(int index) { return m_items[index]; }
+  void clear();
+  void takeStrings();
+  void select(int index, bool value);
+  void deselectAll();
+  bool selected(int index);
+
+private:
+  void checkAllocatedSpace(int requiredItems);
+
+  char const * * m_items;
+
+  // each 32 bit word can select up to 32 items, one bit per item
+  uint32_t *     m_selMap;
+
+  // If true (default is false) all strings added (append/insert/set) are copied.
+  // Strings will be freed when no more used (destructor, clear(), etc...).
+  // This flag is permanently switched to True by takeStrings() call.
+  bool           m_ownStrings;
+
+  uint16_t       m_count;     // actual items
+  uint16_t       m_allocated; // allocated items
+
+};
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
 
 
 
