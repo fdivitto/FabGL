@@ -591,7 +591,7 @@ public:
 
 protected:
 
-  void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaint = true);
+  virtual void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar = true);
 
 
 private:

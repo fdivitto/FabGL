@@ -2752,10 +2752,10 @@ uiScrollableControl::~uiScrollableControl()
 
 // position: The position of the scrollbar in scroll units.
 // visible: The size of the visible portion of the scrollbar, in scroll units.
-// range: The maximum position of the scrollbar - 1
-void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaint)
+// range: The maximum position of the scrollbar
+void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar)
 {
-  position = iclamp(position, 0, range - visible - 1);
+  position = iclamp(position, 0, range - visible);
   switch (orientation) {
     case uiScrollBar::Vertical:
     {
@@ -2764,7 +2764,7 @@ void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, in
         m_VScrollBarVisible  = visible;
         m_VScrollBarRange    = range;
         m_VScrollBarPosition = position;
-        if (repaint)
+        if (repaintScrollbar)
           repaintScrollBar(orientation);
         if (changedPos)
           onChangeVScrollBar();
@@ -2778,7 +2778,7 @@ void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, in
         m_HScrollBarVisible  = visible;
         m_HScrollBarRange    = range;
         m_HScrollBarPosition = position;
-        if (repaint)
+        if (repaintScrollbar)
           repaintScrollBar(orientation);
         if (changedPos)
           onChangeHScrollBar();
