@@ -2813,7 +2813,7 @@ void uiScrollableControl::processEvent(uiEvent * event)
         if (m_mouseOverItem == uiScrollBarItem::LeftButton || m_mouseOverItem == uiScrollBarItem::RightButton ||
             m_mouseOverItem == uiScrollBarItem::TopButton || m_mouseOverItem == uiScrollBarItem::BottomButton) {
           // start the timer to repeat buttons
-          m_scrollTimer = app()->setTimer(this, 50);
+          m_scrollTimer = app()->setTimer(this, 250);
           handleButtonsScroll();
         } else {
           handlePageScroll();
