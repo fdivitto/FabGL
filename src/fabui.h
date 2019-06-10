@@ -484,7 +484,7 @@ private:
   Rect getBtnRect(int buttonIndex);
   void handleButtonsClick(int x, int y, bool doubleClick);
   void drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX);
-  void drawReshapingBox(Rect rect);
+  void drawReshapingBox(Rect boxRect);
 
 
   static constexpr int CORNERSENSE = 10;
