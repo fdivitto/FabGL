@@ -52,7 +52,7 @@
           *uiTextEdit
           *uiScrollableControl
             *uiPaintBox
-            uiListBox
+            *uiListBox
             uiMemoEdit
           uiCheckBox
           uiComboBox
@@ -953,6 +953,66 @@ private:
 
 
   uiPaintBoxStyle m_paintBoxStyle;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiListBox
+
+
+struct uiListBoxStyle {
+  RGB              backgroundColor                = RGB(2, 2, 2);
+  RGB              focusedBackgroundColor         = RGB(3, 3, 3);
+  RGB              selectedBackgroundColor        = RGB(0, 0, 2);
+  RGB              focusedSelectedBackgroundColor = RGB(0, 0, 3);
+  int              itemHeight                     = 16;
+  FontInfo const * textFont                       = Canvas.getPresetFontInfoFromHeight(14, false);
+  RGB              textFontColor                  = RGB(0, 0, 0);
+  RGB              selectedTextFontColor          = RGB(3, 3, 3);
+};
+
+
+class uiListBox : public uiScrollableControl {
+
+public:
+
+  uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  virtual ~uiListBox();
+
+  virtual void processEvent(uiEvent * event);
+
+  uiListBoxStyle & listBoxStyle() { return m_listBoxStyle; }
+
+  StringList & items() { return m_items; }
+
+  int firstSelectedItem();
+  int lastSelectedItem();
+
+  void selectItem(int index, bool add = false, bool range = false);
+
+
+  // Delegates
+
+  Delegate<> onClick;
+  Delegate<> onDblClick;
+
+protected:
+
+  void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar);
+
+private:
+
+  void paintListBox();
+  int getItemAtMousePos(int mouseX, int mouseY);
+  void handleMouseDown(int mouseX, int mouseY);
+  void handleKeyDown(uiEvent * event);
+
+
+  uiListBoxStyle m_listBoxStyle;
+  StringList     m_items;
+  int            m_firstVisibleItem;     // the item on the top
 };
 
 

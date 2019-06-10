@@ -3069,5 +3069,238 @@ Rect uiScrollableControl::clientRect(uiOrigin origin)
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiListBox
+
+
+uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiScrollableControl(parent, pos, size, visible),
+    m_firstVisibleItem(0)
+{
+  windowProps().focusable = true;
+
+  windowStyle().borderSize  = 1;
+  windowStyle().borderColor = RGB(1, 1, 1);
+}
+
+
+uiListBox::~uiListBox()
+{
+}
+
+
+void uiListBox::processEvent(uiEvent * event)
+{
+  uiScrollableControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiScrollableControl::clientRect(uiOrigin::Window));
+      paintListBox();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        handleMouseDown(event->params.mouse.status.X, event->params.mouse.status.Y);
+      break;
+
+    case UIEVT_KEYDOWN:
+      handleKeyDown(event);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiListBox::handleKeyDown(uiEvent * event)
+{
+  bool add = event->params.key.SHIFT;
+  switch (event->params.key.VK) {
+    case VK_UP:
+    case VK_KP_UP:
+      selectItem(firstSelectedItem() - 1, add, false);
+      break;
+
+    case VK_DOWN:
+    case VK_KP_DOWN:
+      selectItem(lastSelectedItem() + 1, add, false);
+      break;
+
+    case VK_PAGEUP:
+    case VK_KP_PAGEUP:
+      selectItem(firstSelectedItem() - VScrollBarVisible(), add, false);
+      break;
+
+    case VK_PAGEDOWN:
+    case VK_KP_PAGEDOWN:
+      selectItem(lastSelectedItem() + VScrollBarVisible(), add, false);
+      break;
+
+    case VK_HOME:
+    case VK_KP_HOME:
+      selectItem(0, add, true);
+      break;
+
+    case VK_END:
+    case VK_KP_END:
+      selectItem(m_items.count() - 1, add, true);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiListBox::selectItem(int index, bool add, bool range)
+{
+  index = iclamp(index, 0, m_items.count() - 1);
+  int first = firstSelectedItem();
+  if (!add)
+    m_items.deselectAll();
+  if (range) {
+    if (index <= first)
+      for (int i = index; i <= first; ++i)
+        m_items.select(i, true);
+    else
+      for (int i = index; i >= first; --i)
+        m_items.select(i, true);
+  } else {
+    m_items.select(index, true);
+  }
+
+  // make sure the selected item is visible
+  if (VScrollBarVisible()) {
+    if (index < m_firstVisibleItem)
+      m_firstVisibleItem = index;
+    else if (index >= m_firstVisibleItem + VScrollBarVisible())
+      m_firstVisibleItem = index - VScrollBarVisible() + 1;
+  }
+
+  repaint();
+}
+
+
+void uiListBox::paintListBox()
+{
+  Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
+  Rect itmRect = Rect(cliRect.X1, cliRect.Y1, cliRect.X2, cliRect.Y1 + m_listBoxStyle.itemHeight - 1);
+
+  // do we need a vert scrollbar?
+  if (itmRect.height() * m_items.count() > cliRect.height()) {
+    int visible = cliRect.height() / itmRect.height();
+    int range = m_items.count();
+    if (!VScrollBarVisible() || visible != VScrollBarVisible() || range != VScrollBarRange() || m_firstVisibleItem != VScrollBarPos()) {
+      // show vertical scrollbar
+      setScrollBar(uiScrollBar::Vertical, m_firstVisibleItem, visible, range, false);
+      repaint();
+      return;
+    }
+  } else if (VScrollBarVisible()) {
+    // hide vertical scrollbar
+    m_firstVisibleItem = 0;
+    setScrollBar(uiScrollBar::Vertical, 0, 0, 0, false);
+    repaint();
+    return;
+  }
+
+  int index = m_firstVisibleItem;
+  while (true) {
+    if (!itmRect.intersects(cliRect))
+      break;
+
+    // background
+    RGB bkColor = hasFocus() ? m_listBoxStyle.focusedBackgroundColor : m_listBoxStyle.backgroundColor;
+    if (index < m_items.count() && m_items.selected(index))
+      bkColor = (hasFocus() ? m_listBoxStyle.focusedSelectedBackgroundColor : m_listBoxStyle.selectedBackgroundColor);
+    Canvas.setBrushColor(bkColor);
+    Canvas.fillRectangle(itmRect);
+
+    if (index < m_items.count()) {
+      // text
+      Canvas.setPenColor(m_items.selected(index) ? m_listBoxStyle.selectedTextFontColor : m_listBoxStyle.textFontColor);
+      int x = itmRect.X1 + 1;
+      int y = itmRect.Y1 + (itmRect.height() - m_listBoxStyle.textFont->height) / 2;
+      Canvas.drawText(m_listBoxStyle.textFont, x, y, m_items.get(index));
+    }
+
+    // move to next item
+    itmRect = itmRect.translate(0, m_listBoxStyle.itemHeight);
+    ++index;
+  }
+
+}
+
+
+// get first selected item (-1 = no selected item)
+int uiListBox::firstSelectedItem()
+{
+  for (int i = 0; i < m_items.count(); ++i)
+    if (m_items.selected(i))
+      return i;
+  return -1;
+}
+
+
+// get last selected item (-1 = no selected item)
+int uiListBox::lastSelectedItem()
+{
+  for (int i = m_items.count() - 1; i >= 0; --i)
+    if (m_items.selected(i))
+      return i;
+  return -1;
+}
+
+
+void uiListBox::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar)
+{
+  uiScrollableControl::setScrollBar(orientation, position, visible, range, false);
+  if (VScrollBarVisible() && m_firstVisibleItem != VScrollBarPos()) {
+    m_firstVisibleItem = VScrollBarPos();
+    repaint();
+  }
+}
+
+
+int uiListBox::getItemAtMousePos(int mouseX, int mouseY)
+{
+  Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
+  if (cliRect.contains(mouseX, mouseY))
+    return m_firstVisibleItem + (mouseY - cliRect.Y1) / m_listBoxStyle.itemHeight;
+  return -1;
+}
+
+
+void uiListBox::handleMouseDown(int mouseX, int mouseY)
+{
+  int idx = getItemAtMousePos(mouseX, mouseY);
+  if (idx > -1) {
+    if (Keyboard.isVKDown(VK_LCTRL) || Keyboard.isVKDown(VK_RCTRL)) {
+      // CTRL is down
+      m_items.select(idx, !m_items.selected(idx));
+    } else {
+      // CTRL is up
+      m_items.deselectAll();
+      m_items.select(idx, true);
+    }
+    repaint();
+  }
+
+  onClick();
+}
+
+// uiListBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 } // end of namespace
 
