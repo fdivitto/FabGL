@@ -85,9 +85,11 @@ class MyApp : public uiApp {
   void onCreateFrameButtonClick() {
     char title[16];
     snprintf(title, sizeof(title), "Frame #%d", dynamicFrames.count());
-    uiFrame * newFrame = new uiFrame(rootWindow(), title, Point(110 + random(400), random(300)), Size(150, 100));
+    uiFrame * newFrame = new uiFrame(rootWindow(), title, Point(110 + random(400), random(300)), Size(175, 80));
     newFrame->frameStyle().backgroundColor = RGB(random(4), random(4), random(4));
-    auto label = new uiLabel(newFrame, "Hello World!", Point(5, 30), Size(100, 30));
+    auto label = new uiLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30), Size(160, 35));
+    label->anchors().left = false;
+    label->anchors().top = false;
     label->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(24, false);
     label->labelStyle().textFontColor = RGB(random(4), random(4), random(4));
     label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
