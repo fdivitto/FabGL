@@ -1208,6 +1208,11 @@ void uiWindow::processEvent(uiEvent * event)
       onResize();
       break;
 
+    case UIEVT_SETFOCUS:
+    case UIEVT_KILLFOCUS:
+      repaint();  // to update border
+      break;
+
     default:
       break;
   }
@@ -1993,9 +1998,7 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_MOUSELEAVE:
-    case UIEVT_SETFOCUS:
-    case UIEVT_KILLFOCUS:
-      repaint();  // to update background and border
+      repaint();  // to update background
       break;
 
     case UIEVT_KEYUP:
