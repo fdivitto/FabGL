@@ -1751,11 +1751,11 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
 }
 
 
-void uiFrame::drawReshapingBox(Rect rect)
+void uiFrame::drawReshapingBox(Rect boxRect)
 {
   int clientOffsetY = clientRect(uiOrigin::Window).Y1;
-  Canvas.setOrigin(0, 0);
-  Canvas.setClippingRect(app()->rootWindow()->rect(uiOrigin::Parent));
+  Canvas.setOrigin(parent()->rect(uiOrigin::Screen).pos());
+  Canvas.setClippingRect(parent()->clientRect(uiOrigin::Window));
   PaintOptions popt;
   popt.NOT = true;
   Canvas.setPaintOptions(popt);
@@ -1764,13 +1764,13 @@ void uiFrame::drawReshapingBox(Rect rect)
     if (m_titleLength > 0)
       Canvas.drawLine(m_lastReshapingBox.X1, m_lastReshapingBox.Y1 + clientOffsetY, m_lastReshapingBox.X2, m_lastReshapingBox.Y1 + clientOffsetY);
   }
-  if (rect != Rect()) {
-    Canvas.drawRectangle(rect);
+  if (boxRect != Rect()) {
+    Canvas.drawRectangle(boxRect);
     if (m_titleLength > 0)
-      Canvas.drawLine(rect.X1, rect.Y1 + clientOffsetY, rect.X2, rect.Y1 + clientOffsetY);
+      Canvas.drawLine(boxRect.X1, boxRect.Y1 + clientOffsetY, boxRect.X2, boxRect.Y1 + clientOffsetY);
   }
   Canvas.setPaintOptions(PaintOptions());
-  m_lastReshapingBox = rect;
+  m_lastReshapingBox = boxRect;
 }
 
 
