@@ -3185,6 +3185,8 @@ void uiListBox::selectItem(int index, bool add, bool range)
       m_firstVisibleItem = index - VScrollBarVisible() + 1;
   }
 
+  onChange();
+
   repaint();
 }
 
@@ -3291,6 +3293,7 @@ void uiListBox::handleMouseDown(int mouseX, int mouseY)
       m_items.deselectAll();
       m_items.select(idx, true);
     }
+    onChange();
     repaint();
   }
 

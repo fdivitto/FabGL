@@ -997,6 +997,7 @@ public:
 
   Delegate<> onClick;
   Delegate<> onDblClick;
+  Delegate<> onChange;
 
 protected:
 
