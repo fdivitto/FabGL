@@ -3122,36 +3122,36 @@ void uiListBox::processEvent(uiEvent * event)
 
 void uiListBox::handleKeyDown(uiEvent * event)
 {
-  bool add = event->params.key.SHIFT;
+  bool shift = event->params.key.SHIFT;
   switch (event->params.key.VK) {
     case VK_UP:
     case VK_KP_UP:
-      selectItem(firstSelectedItem() - 1, add, false);
+      selectItem(firstSelectedItem() - 1, shift, false);
       break;
 
     case VK_DOWN:
     case VK_KP_DOWN:
-      selectItem(lastSelectedItem() + 1, add, false);
+      selectItem(lastSelectedItem() + 1, shift, false);
       break;
 
     case VK_PAGEUP:
     case VK_KP_PAGEUP:
-      selectItem(firstSelectedItem() - VScrollBarVisible(), add, false);
+      selectItem(firstSelectedItem() - VScrollBarVisible(), shift, false);
       break;
 
     case VK_PAGEDOWN:
     case VK_KP_PAGEDOWN:
-      selectItem(lastSelectedItem() + VScrollBarVisible(), add, false);
+      selectItem(lastSelectedItem() + VScrollBarVisible(), shift, false);
       break;
 
     case VK_HOME:
     case VK_KP_HOME:
-      selectItem(0, add, true);
+      selectItem(0, shift, shift);
       break;
 
     case VK_END:
     case VK_KP_END:
-      selectItem(m_items.count() - 1, add, true);
+      selectItem(m_items.count() - 1, shift, shift);
       break;
 
     default:
