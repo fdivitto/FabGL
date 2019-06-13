@@ -741,9 +741,9 @@ void uiApp::suspendCaret(bool value)
 
 
 // just to force blinking
-void uiApp::setCaret()
+void uiApp::setCaret(bool value)
 {
-  blinkCaret();
+  blinkCaret(!value);
 }
 
 
@@ -1237,6 +1237,7 @@ void uiWindow::paintWindow()
 // given a relative paint rect generate a set of UIEVT_PAINT events
 void uiWindow::generatePaintEvents(Rect const & paintRect)
 {
+  app()->setCaret(false);
   Stack<Rect> rects;
   rects.push(paintRect);
   while (!rects.isEmpty()) {
@@ -2089,7 +2090,7 @@ void uiTextEdit::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintTextEdit();
-      app()->setCaret(); // force blinking (previous painting may cover caret)
+      app()->setCaret(true); // force blinking (previous painting may cover caret)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
