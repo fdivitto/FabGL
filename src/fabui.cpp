@@ -2090,7 +2090,8 @@ void uiTextEdit::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintTextEdit();
-      app()->setCaret(true); // force blinking (previous painting may cover caret)
+      if (m_textEditProps.hasCaret)
+        app()->setCaret(true); // force blinking (previous painting may cover caret)
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
@@ -2120,13 +2121,16 @@ void uiTextEdit::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SETFOCUS:
-      updateCaret();
-      app()->showCaret(this);
+      if (m_textEditProps.hasCaret) {
+        updateCaret();
+        app()->showCaret(this);
+      }
       repaint();
       break;
 
     case UIEVT_KILLFOCUS:
-      app()->showCaret(NULL);
+      if (m_textEditProps.hasCaret)
+        app()->showCaret(NULL);
       moveCursor(0, 0);
       repaint();
       break;
@@ -2147,6 +2151,38 @@ void uiTextEdit::processEvent(uiEvent * event)
 
 void uiTextEdit::handleKeyDown(uiEvent * event)
 {
+  if (m_textEditProps.allowEdit) {
+    switch (event->params.key.VK) {
+
+      case VK_BACKSPACE:
+        if (m_cursorCol != m_selCursorCol)
+          removeSel();  // there is a selection, same behavior of VK_DELETE
+        else if (m_cursorCol > 0) {
+          // remove character at left
+          moveCursor(m_cursorCol - 1, m_cursorCol - 1);
+          removeSel();
+        }
+        break;
+
+      case VK_DELETE:
+      case VK_KP_DELETE:
+        removeSel();
+        break;
+
+      default:
+      {
+        // normal keys
+        int c = Keyboard.virtualKeyToASCII(event->params.key.VK);
+        if (c >= 0x20 && c != 0x7F) {
+          if (m_cursorCol != m_selCursorCol)
+            removeSel();  // there is a selection, same behavior of VK_DELETE
+          insert(c);
+        }
+        break;
+      }
+    }
+  }
+
   switch (event->params.key.VK) {
 
     case VK_LEFT:
@@ -2173,21 +2209,6 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
       break;
     }
 
-    case VK_BACKSPACE:
-      if (m_cursorCol != m_selCursorCol)
-        removeSel();  // there is a selection, same behavior of VK_DELETE
-      else if (m_cursorCol > 0) {
-        // remove character at left
-        moveCursor(m_cursorCol - 1, m_cursorCol - 1);
-        removeSel();
-      }
-      break;
-
-    case VK_DELETE:
-    case VK_KP_DELETE:
-      removeSel();
-      break;
-
     case VK_HOME:
     case VK_KP_HOME:
       // SHIFT + HOME, select up to Home
@@ -2213,14 +2234,6 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
             break;
           default:
             break;
-        }
-      } else {
-        // normal keys
-        int c = Keyboard.virtualKeyToASCII(event->params.key.VK);
-        if (c >= 0x20 && c != 0x7F) {
-          if (m_cursorCol != m_selCursorCol)
-            removeSel();  // there is a selection, same behavior of VK_DELETE
-          insert(c);
         }
       }
       break;
@@ -2306,8 +2319,10 @@ int uiTextEdit::charColumnToWindowX(int col)
 // update caret coordinates from current pos (m_cursorCol)
 void uiTextEdit::updateCaret()
 {
-  int x = charColumnToWindowX(m_cursorCol);
-  app()->setCaret(Rect(x, m_contentRect.Y1, x, m_contentRect.Y1 + m_textEditStyle.textFont->height));
+  if (m_textEditProps.hasCaret) {
+    int x = charColumnToWindowX(m_cursorCol);
+    app()->setCaret(Rect(x, m_contentRect.Y1, x, m_contentRect.Y1 + m_textEditStyle.textFont->height));
+  }
 }
 
 

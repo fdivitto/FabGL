@@ -717,6 +717,18 @@ struct uiTextEditStyle {
 };
 
 
+struct uiTextEditProps {
+  uint8_t hasCaret  : 1;
+  uint8_t allowEdit : 1;
+
+  uiTextEditProps()
+    : hasCaret(true),
+      allowEdit(true)
+    {
+    }
+};
+
+
 class uiTextEdit : public uiControl {
 
 public:
@@ -728,6 +740,8 @@ public:
   virtual void processEvent(uiEvent * event);
 
   uiTextEditStyle & textEditStyle() { return m_textEditStyle; }
+
+  uiTextEditProps & textEditProps() { return m_textEditProps; }
 
   void setText(char const * value);
 
@@ -764,6 +778,7 @@ private:
 
 
   uiTextEditStyle m_textEditStyle;
+  uiTextEditProps m_textEditProps;
 
   char *          m_text;
   int             m_textLength; // text length NOT including ending zero
