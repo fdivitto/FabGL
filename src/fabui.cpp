@@ -764,6 +764,7 @@ void uiApp::setCaret(Rect const & rect)
 void uiApp::blinkCaret(bool forceOFF)
 {
   if (m_caretWindow && m_caretInvertState != -1 && (forceOFF == false || m_caretInvertState == 1)) {
+    Canvas.resetPaintOptions();
     Canvas.setOrigin(m_rootWindow->pos());
     Canvas.setClippingRect(m_caretWindow->clientRect(uiOrigin::Screen));
     Rect aRect = m_caretWindow->transformRect(m_caretRect, m_rootWindow);
@@ -1076,6 +1077,8 @@ void uiWindow::beginPaint(uiEvent * paintEvent, Rect const & clippingRect)
   Rect srect = rect(uiOrigin::Screen);
   Canvas.setOrigin(srect.X1, srect.Y1);
   Canvas.setClippingRect( clippingRect.intersection(paintEvent->params.rect) );
+  Canvas.resetGlyphOptions();
+  Canvas.resetPaintOptions();
 }
 
 
