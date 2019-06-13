@@ -3176,31 +3176,41 @@ void uiListBox::handleKeyDown(uiEvent * event)
 
 void uiListBox::selectItem(int index, bool add, bool range)
 {
-  index = iclamp(index, 0, m_items.count() - 1);
-  int first = firstSelectedItem();
-  if (!add)
-    m_items.deselectAll();
-  if (range) {
-    if (index <= first)
-      for (int i = index; i <= first; ++i)
-        m_items.select(i, true);
-    else
-      for (int i = index; i >= first; --i)
-        m_items.select(i, true);
-  } else {
-    m_items.select(index, true);
-  }
+  if (m_items.count() > 0) {
+    index = iclamp(index, 0, m_items.count() - 1);
+    int first = firstSelectedItem();
+    if (!add)
+      m_items.deselectAll();
+    if (range) {
+      if (index <= first)
+        for (int i = index; i <= first; ++i)
+          m_items.select(i, true);
+      else
+        for (int i = index; i >= first; --i)
+          m_items.select(i, true);
+    } else {
+      m_items.select(index, true);
+    }
 
-  // make sure the selected item is visible
-  if (VScrollBarVisible()) {
-    if (index < m_firstVisibleItem)
-      m_firstVisibleItem = index;
-    else if (index >= m_firstVisibleItem + VScrollBarVisible())
-      m_firstVisibleItem = index - VScrollBarVisible() + 1;
-  }
+    // make sure the selected item is visible
+    if (VScrollBarVisible()) {
+      if (index < m_firstVisibleItem)
+        m_firstVisibleItem = index;
+      else if (index >= m_firstVisibleItem + VScrollBarVisible())
+        m_firstVisibleItem = index - VScrollBarVisible() + 1;
+    }
 
+    onChange();
+
+    repaint();
+  }
+}
+
+
+void uiListBox::deselectAll()
+{
+  m_items.deselectAll();
   onChange();
-
   repaint();
 }
 

@@ -996,6 +996,8 @@ public:
 
   void selectItem(int index, bool add = false, bool range = false);
 
+  void deselectAll();
+
 
   // Delegates
 
