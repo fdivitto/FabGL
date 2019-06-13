@@ -168,6 +168,8 @@ struct Rect {
   Rect move(Point const & position) const        { return Rect(position.X, position.Y, position.X + width() - 1, position.Y + height() - 1); }
   Rect move(int x, int y) const                  { return Rect(x, y, x + width() - 1, y + height() - 1); }
   Rect shrink(int value) const                   { return Rect(X1 + value, Y1 + value, X2 - value, Y2 - value); }
+  Rect hShrink(int value) const                  { return Rect(X1 + value, Y1, X2 - value, Y2); }
+  Rect vShrink(int value) const                  { return Rect(X1, Y1 + value, X2, Y2 - value); }
   Rect resize(int width, int height) const       { return Rect(X1, Y1, X1 + width - 1, Y1 + height - 1); }
   Rect resize(Size size) const                   { return Rect(X1, Y1, X1 + size.width - 1, Y1 + size.height - 1); }
   Rect intersection(Rect const & rect) const     { return Rect(tmax(X1, rect.X1), tmax(Y1, rect.Y1), tmin(X2, rect.X2), tmin(Y2, rect.Y2)); }
@@ -285,6 +287,7 @@ private:
   void (*m_closure)(void * func, const Params & ...params);
   void * m_func = nullptr;
 };
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
