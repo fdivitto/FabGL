@@ -327,12 +327,24 @@ void CanvasClass::setGlyphOptions(GlyphOptions options)
 }
 
 
+void CanvasClass::resetGlyphOptions()
+{
+  setGlyphOptions(GlyphOptions());
+}
+
+
 void CanvasClass::setPaintOptions(PaintOptions options)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetPaintOptions;
   p.paintOptions = options;
   VGAController.addPrimitive(p);
+}
+
+
+void CanvasClass::resetPaintOptions()
+{
+  setPaintOptions(PaintOptions());
 }
 
 

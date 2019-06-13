@@ -532,12 +532,22 @@ public:
    */
   void setGlyphOptions(GlyphOptions options);
 
+  /**
+   * @brief Reset glyph options.
+   */
+  void resetGlyphOptions();
+
   void renderGlyphsBuffer(int itemX, int itemY, GlyphsBuffer const * glyphsBuffer);
 
   /**
    * @brief Set paint options.
    */
   void setPaintOptions(PaintOptions options);
+
+  /**
+   * @brief Reset paint options.
+   */
+  void resetPaintOptions();
 
   /**
    * @brief Get the font info that best fits the specified number of columns and rows.
