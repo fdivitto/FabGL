@@ -1116,7 +1116,7 @@ public:
 
   void showCaret(uiWindow * window);
 
-  void setCaret();
+  void setCaret(bool value);
 
   void setCaret(Point const & pos);
 
