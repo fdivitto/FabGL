@@ -3124,6 +3124,10 @@ void uiListBox::processEvent(uiEvent * event)
       handleKeyDown(event);
       break;
 
+    case UIEVT_KILLFOCUS:
+      onKillFocus();
+      break;
+
     default:
       break;
   }

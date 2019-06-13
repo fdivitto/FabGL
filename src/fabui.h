@@ -1002,6 +1002,7 @@ public:
   Delegate<> onClick;
   Delegate<> onDblClick;
   Delegate<> onChange;
+  Delegate<> onKillFocus;
 
 protected:
 
