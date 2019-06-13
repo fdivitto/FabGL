@@ -740,6 +740,10 @@ public:
   Delegate<> onChange;
 
 
+protected:
+
+  virtual Rect getEditRect();
+
 private:
 
   void paintTextEdit();

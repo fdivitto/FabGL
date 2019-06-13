@@ -2229,9 +2229,15 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
 }
 
 
+Rect uiTextEdit::getEditRect()
+{
+  return uiControl::clientRect(uiOrigin::Window);
+}
+
+
 void uiTextEdit::paintTextEdit()
 {
-  m_contentRect = uiControl::clientRect(uiOrigin::Window);
+  m_contentRect = getEditRect();
   // background
   RGB bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
   Canvas.setBrushColor(bkColor);
