@@ -237,6 +237,19 @@ void StringList::clear()
 }
 
 
+void StringList::copyFrom(StringList const & src)
+{
+  clear();
+  m_count = src.m_count;
+  checkAllocatedSpace(m_count);
+  for (int i = 0; i < m_count; ++i) {
+    m_items[i] = nullptr;
+    set(i, src.m_items[i]);
+  }
+  deselectAll();
+}
+
+
 void StringList::checkAllocatedSpace(int requiredItems)
 {
   if (m_allocated < requiredItems) {

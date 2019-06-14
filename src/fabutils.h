@@ -309,6 +309,7 @@ public:
   void select(int index, bool value);
   void deselectAll();
   bool selected(int index);
+  void copyFrom(StringList const & src);
 
 private:
   void checkAllocatedSpace(int requiredItems);
