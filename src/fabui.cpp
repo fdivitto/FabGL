@@ -620,6 +620,7 @@ void uiApp::reshapeWindow(uiWindow * window, Rect const & rect)
 
 void uiApp::showWindow(uiWindow * window, bool value)
 {
+  window->m_state.visible = value;  // set now so setFocusedWindow can focus a just made visible window
   uiEvent evt = uiEvent(window, value ? UIEVT_SHOW : UIEVT_HIDE);
   postEvent(&evt);
 }
@@ -1162,13 +1163,11 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SHOW:
-      m_state.visible = true;
       onShow();
       repaint();
       break;
 
     case UIEVT_HIDE:
-      m_state.visible = false;
       onHide();
       repaint();
       break;
