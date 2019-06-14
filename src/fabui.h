@@ -151,6 +151,10 @@ struct uiEvent {
     uiTimerHandle timerHandle;
     // event: UIEVT_EXITMODAL
     int modalResult;
+    // event: UIEVT_SETFOCUS
+    uiWindow * oldFocused;
+    // event: UIEVT_KILLFOCUS
+    uiWindow * newFocused;
 
     uiEventParams() { }
   } params;

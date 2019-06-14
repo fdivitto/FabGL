@@ -521,6 +521,7 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 
     if (prev) {
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
+      evt.params.newFocused = value;
       postEvent(&evt);
     }
 
@@ -531,6 +532,7 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 
     if (m_focusedWindow) {
       uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
+      evt.params.oldFocused = prev;
       postEvent(&evt);
     }
 
