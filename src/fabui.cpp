@@ -504,6 +504,12 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 }
 
 
+bool uiApp::isFocusable(uiWindow * window)
+{
+  return window->windowProps().focusable && window->state().visible;
+}
+
+
 // value = nullptr              -> kill focus on old focused window
 // value = focusable window     -> kill focus on old focused window, set focus on new window
 // value = non-focusable window -> no change (focusable window remains focused)
@@ -511,7 +517,7 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 {
   uiWindow * prev = m_focusedWindow;
 
-  if (m_focusedWindow != value && (value == nullptr || value->windowProps().focusable)) {
+  if (m_focusedWindow != value && (value == nullptr || isFocusable(value))) {
 
     if (prev) {
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
@@ -544,7 +550,7 @@ uiWindow * uiApp::setFocusedWindowNext()
       if (!old && proposed)
         old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
       proposed = proposed && proposed->next() ? proposed->next() : parent->firstChild();
-    } while (!proposed->windowProps().focusable && proposed != old);
+    } while (!isFocusable(proposed) && proposed != old);
     setFocusedWindow(proposed);
   }
   return old;
@@ -561,7 +567,7 @@ uiWindow * uiApp::setFocusedWindowPrev()
       if (!old && proposed)
         old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
       proposed = proposed && proposed->prev() ? proposed->prev() : parent->lastChild();
-    } while (!proposed->windowProps().focusable && proposed != old);
+    } while (!isFocusable(proposed) && proposed != old);
     setFocusedWindow(proposed);
   }
   return old;

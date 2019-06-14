@@ -1163,6 +1163,8 @@ private:
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
 
+  bool isFocusable(uiWindow * window);
+
 
   uiAppProps    m_appProps;
 
