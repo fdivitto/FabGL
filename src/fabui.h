@@ -104,6 +104,7 @@ enum uiEventID {
   UIEVT_KEYDOWN,
   UIEVT_KEYUP,
   UIEVT_TIMER,
+  UIEVT_CLICK,
   UIEVT_DBLCLICK,
   UIEVT_EXITMODAL,
   UIEVT_DESTROY,
@@ -124,7 +125,7 @@ struct uiEvent {
   uiEventID      id;
 
   union uiEventParams {
-    // event: UIEVT_MOUSEMOVE, UIEVT_MOUSEWHEEL, UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP
+    // event: UIEVT_MOUSEMOVE, UIEVT_MOUSEWHEEL, UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP, UIEVT_CLICK, UIEVT_DBLCLICK
     struct {
       MouseStatus status;
       uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
@@ -346,6 +347,8 @@ public:
   Delegate<> onResize;
   Delegate<> onShow;
   Delegate<> onHide;
+  Delegate<> onClick;
+  Delegate<> onDblClick;
 
 
 protected:
@@ -678,7 +681,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
   Delegate<> onChange;
 
 
@@ -750,7 +752,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
   Delegate<> onChange;
 
 
@@ -830,8 +831,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
-  Delegate<> onDblClick;
 
 
 private:
@@ -879,8 +878,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
-  Delegate<> onDblClick;
 
 
 private:
@@ -922,8 +919,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
-  Delegate<> onDblClick;
 
 
 private:
@@ -961,8 +956,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
-  Delegate<> onDblClick;
   Delegate<Rect> onPaint;
 
 
@@ -1016,8 +1009,6 @@ public:
 
   // Delegates
 
-  Delegate<> onClick;
-  Delegate<> onDblClick;
   Delegate<> onChange;
   Delegate<> onKillFocus;
 

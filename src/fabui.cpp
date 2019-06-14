@@ -46,7 +46,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
-                                  "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
+                                  "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -1134,8 +1134,23 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONUP:
       // end capture mouse if left button is up
-      if (event->params.mouse.changedButton == 1)
+      if (event->params.mouse.changedButton == 1) {
         app()->captureMouse(nullptr);
+        // generate UIEVT_CLICK. The check is required to avoid onclick event when mouse is captured and moved out of button area
+        if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
+          uiEvent evt = *event;
+          evt.id = UIEVT_CLICK;
+          app()->postEvent(&evt);
+        }
+      }
+      break;
+
+    case UIEVT_CLICK:
+      onClick();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
       break;
 
     case UIEVT_SHOW:
@@ -1984,12 +1999,8 @@ void uiButton::processEvent(uiEvent * event)
       paintButton();
       break;
 
-    case UIEVT_MOUSEBUTTONUP:
-      if (event->params.mouse.changedButton == 1) {
-        // this check is required to avoid onclick event when mouse is captured and moved out of button area
-        if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y))
-          trigger();
-      }
+    case UIEVT_CLICK:
+      trigger();
       break;
 
     case UIEVT_MOUSEENTER:
@@ -2019,7 +2030,6 @@ void uiButton::processEvent(uiEvent * event)
 // action to perfom on mouse up or keyboard space/enter
 void uiButton::trigger()
 {
-  onClick();
   if (m_kind == uiButtonKind::Switch) {
     m_down = !m_down;
     onChange();
@@ -2096,7 +2106,6 @@ void uiTextEdit::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
-        onClick();
         int col = getColFromMouseX(event->params.mouse.status.X);
         moveCursor(col, col);
         repaint();
@@ -2539,15 +2548,6 @@ void uiLabel::processEvent(uiEvent * event)
       paintLabel();
       break;
 
-    case UIEVT_DBLCLICK:
-      onDblClick();
-      break;
-
-    case UIEVT_MOUSEBUTTONDOWN:
-      if (event->params.mouse.changedButton == 1)
-        onClick();
-      break;
-
     default:
       break;
   }
@@ -2614,15 +2614,6 @@ void uiImage::processEvent(uiEvent * event)
       paintImage();
       break;
 
-    case UIEVT_DBLCLICK:
-      onDblClick();
-      break;
-
-    case UIEVT_MOUSEBUTTONDOWN:
-      if (event->params.mouse.changedButton == 1)
-        onClick();
-      break;
-
     default:
       break;
   }
@@ -2670,15 +2661,6 @@ void uiPanel::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintPanel();
-      break;
-
-    case UIEVT_DBLCLICK:
-      onDblClick();
-      break;
-
-    case UIEVT_MOUSEBUTTONDOWN:
-      if (event->params.mouse.changedButton == 1)
-        onClick();
       break;
 
     default:
@@ -2731,15 +2713,6 @@ void uiPaintBox::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiScrollableControl::clientRect(uiOrigin::Window));
       paintPaintBox();
-      break;
-
-    case UIEVT_DBLCLICK:
-      onDblClick();
-      break;
-
-    case UIEVT_MOUSEBUTTONDOWN:
-      if (event->params.mouse.changedButton == 1)
-        onClick();
       break;
 
     default:
@@ -3126,10 +3099,6 @@ void uiListBox::processEvent(uiEvent * event)
       paintListBox();
       break;
 
-    case UIEVT_DBLCLICK:
-      onDblClick();
-      break;
-
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1)
         handleMouseDown(event->params.mouse.status.X, event->params.mouse.status.Y);
@@ -3335,8 +3304,6 @@ void uiListBox::handleMouseDown(int mouseX, int mouseY)
     onChange();
     repaint();
   }
-
-  onClick();
 }
 
 // uiListBox
