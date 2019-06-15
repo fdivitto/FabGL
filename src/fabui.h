@@ -120,16 +120,29 @@ class uiWindow;
 typedef void * uiTimerHandle;
 
 
+struct uiKeyEventInfo {
+  VirtualKey VK;
+  uint8_t    LALT  : 1;  // status of left-ALT key
+  uint8_t    RALT  : 1;  // status of right-ALT key
+  uint8_t    CTRL  : 1;  // status of CTRL (left or right) key
+  uint8_t    SHIFT : 1;  // status of SHIFT (left or right) key
+  uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
+};
+
+
+struct uiMouseEventInfo {
+  MouseStatus status;
+  uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
+};
+
+
 struct uiEvent {
   uiEvtHandler * dest;
   uiEventID      id;
 
   union uiEventParams {
     // event: UIEVT_MOUSEMOVE, UIEVT_MOUSEWHEEL, UIEVT_MOUSEBUTTONDOWN, UIEVT_MOUSEBUTTONUP, UIEVT_CLICK, UIEVT_DBLCLICK
-    struct {
-      MouseStatus status;
-      uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
-    } mouse;
+    uiMouseEventInfo mouse;
     // event: UIEVT_PAINT, UIEVT_GENPAINTEVENTS, UIEVT_RESHAPEWINDOW
     Rect rect;
     // event: UIEVT_SETPOS
@@ -139,14 +152,7 @@ struct uiEvent {
     // event: UIEVT_DEBUGMSG
     char const * debugMsg;
     // event: UIEVT_KEYDOWN, UIEVT_KEYUP
-    struct {
-      VirtualKey VK;
-      uint8_t    LALT  : 1;  // status of left-ALT key
-      uint8_t    RALT  : 1;  // status of right-ALT key
-      uint8_t    CTRL  : 1;  // status of CTRL (left or right) key
-      uint8_t    SHIFT : 1;  // status of SHIFT (left or right) key
-      uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
-    } key;
+    uiKeyEventInfo key;
     // event: UIEVT_TIMER
     uiTimerHandle timerHandle;
     // event: UIEVT_EXITMODAL
