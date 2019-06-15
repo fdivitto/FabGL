@@ -1711,19 +1711,21 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
 {
   Point p = Point(x, y);
 
-  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(p))
-    return uiFrameItem::CloseButton;    // on Close Button area
+  if (m_titleLength > 0) {
+    if (m_frameProps.hasCloseButton && getBtnRect(0).contains(p))
+      return uiFrameItem::CloseButton;    // on Close Button area
 
-  if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
-    return uiFrameItem::MaximizeButton; // on maximize button area
+    if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
+      return uiFrameItem::MaximizeButton; // on maximize button area
 
-  if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
-    return uiFrameItem::MinimizeButton; // on minimize button area
-
-  int w = size().width;
-  int h = size().height;
+    if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
+      return uiFrameItem::MinimizeButton; // on minimize button area
+  }
 
   if (m_frameProps.resizeable && !state().maximized && !state().minimized) {
+
+    int w = size().width;
+    int h = size().height;
 
     // on top center, resize
     if (Rect(CORNERSENSE, 0, w - CORNERSENSE, windowStyle().borderSize).contains(p))
@@ -1759,8 +1761,9 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
 
   }
 
-  if (m_frameProps.moveable && !state().maximized && titleBarRect().contains(p))
-    return uiFrameItem::MoveArea;       // on title bar, moving area
+  // on title bar, moving area
+  if (m_titleLength > 0 && m_frameProps.moveable && !state().maximized && titleBarRect().contains(p))
+    return uiFrameItem::MoveArea;
 
   return uiFrameItem::None;
 }
@@ -1936,22 +1939,24 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 
 void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
 {
-  if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos())) {
-    // generate UIEVT_CLOSE event
-    uiEvent evt = uiEvent(this, UIEVT_CLOSE);
-    app()->postEvent(&evt);
-  } else if (m_frameProps.hasMaximizeButton && ((getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos())) ||
-                                                (doubleClick && titleBarRect().contains(x, y)))) {
-    // maximimize or restore on:
-    //   - click on maximize/restore button
-    //   - double click on the title bar
-    app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-  } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos())) {
-    app()->minimizeWindow(this, !state().minimized);
-  } else
-    return;
-  // this avoids the button remains selected (background colored) when window change size
-  m_mouseMoveFrameItem = uiFrameItem::None;
+  if (m_titleLength > 0) {
+    if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos())) {
+      // generate UIEVT_CLOSE event
+      uiEvent evt = uiEvent(this, UIEVT_CLOSE);
+      app()->postEvent(&evt);
+    } else if (m_frameProps.hasMaximizeButton && ((getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos())) ||
+                                                  (doubleClick && titleBarRect().contains(x, y)))) {
+      // maximimize or restore on:
+      //   - click on maximize/restore button
+      //   - double click on the title bar
+      app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
+    } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos())) {
+      app()->minimizeWindow(this, !state().minimized);
+    } else
+      return;
+    // this avoids the button remains selected (background colored) when window change size
+    m_mouseMoveFrameItem = uiFrameItem::None;
+  }
 }
 
 
