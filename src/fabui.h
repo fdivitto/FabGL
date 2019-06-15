@@ -1021,6 +1021,8 @@ public:
 
   Delegate<> onChange;
   Delegate<> onKillFocus;
+  Delegate<uiKeyEventInfo> onKeyUp;
+
 
 protected:
 
