@@ -982,6 +982,33 @@ void uiWindow::addChild(uiWindow * child)
 }
 
 
+// insert child over (one position after) underlyingChild
+// underlyingChild = nullptr, first position
+void uiWindow::insertAfter(uiWindow * child, uiWindow * underlyingChild)
+{
+  if (!hasChildren()) {
+    // this is the first child, just add
+    addChild(child);
+    return;
+  }
+  child->m_prev = underlyingChild;
+  if (underlyingChild) {
+    // insert before underlyingChild
+    child->m_next = underlyingChild->m_next;
+    if (child->m_next)
+      child->m_next->m_prev = child;
+    underlyingChild->m_next = child;
+    if (m_lastChild == underlyingChild)
+      m_lastChild = child;
+  } else {
+    // insert at first position (before m_firstChild)
+    m_firstChild->m_prev = child;
+    child->m_next = m_firstChild;
+    m_firstChild = child;
+  }
+}
+
+
 void uiWindow::removeChild(uiWindow * child, bool freeChild)
 {
   if (child) {
@@ -1010,6 +1037,27 @@ void uiWindow::moveChildOnTop(uiWindow * child)
 {
   removeChild(child, false);
   addChild(child);
+}
+
+
+// move child over (one position after) underlyingChild
+// underlyingChild = nullptr, first position
+void uiWindow::moveAfter(uiWindow * child, uiWindow * underlyingChild)
+{
+  removeChild(child, false);
+  insertAfter(child, underlyingChild);
+}
+
+
+void uiWindow::bringOnTop()
+{
+  parent()->moveChildOnTop(this);
+}
+
+
+void uiWindow::bringAfter(uiWindow * insertionPoint)
+{
+  parent()->moveAfter(this, insertionPoint);
 }
 
 

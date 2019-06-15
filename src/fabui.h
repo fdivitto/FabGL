@@ -295,25 +295,9 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
-  void freeChildren();
+  void bringOnTop();
 
-  uiWindow * next()  { return m_next; }
-
-  uiWindow * prev()  { return m_prev; }
-
-  uiWindow * firstChild() { return m_firstChild; }
-
-  uiWindow * lastChild() { return m_lastChild; }
-
-  bool hasChildren() { return m_firstChild != nullptr; }
-
-  void addChild(uiWindow * child);
-
-  void removeChild(uiWindow * child, bool freeChild = true);
-
-  void moveChildOnTop(uiWindow * child);
-
-  bool isChild(uiWindow * window);
+  void bringAfter(uiWindow * insertionPoint);
 
   Point pos() { return m_pos; }
 
@@ -362,6 +346,20 @@ public:
 
 
 protected:
+
+  void addChild(uiWindow * child);
+  void insertAfter(uiWindow * child, uiWindow * underlyingChild);
+  void freeChildren();
+  void removeChild(uiWindow * child, bool freeChild = true);
+  void moveChildOnTop(uiWindow * child);
+  void moveAfter(uiWindow * child, uiWindow * underlyingChild);
+
+  uiWindow * next()  { return m_next; }
+  uiWindow * prev()  { return m_prev; }
+  uiWindow * firstChild() { return m_firstChild; }
+  uiWindow * lastChild() { return m_lastChild; }
+  bool hasChildren() { return m_firstChild != nullptr; }
+  bool isChild(uiWindow * window);
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
   Point posAtMouseDown()              { return m_posAtMouseDown; }
