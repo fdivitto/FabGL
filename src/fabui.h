@@ -335,6 +335,10 @@ public:
 
   uiAnchors & anchors() { return m_anchors; }
 
+  void setFocusIndex(int value) { m_focusIndex = value; }
+
+  int focusIndex() { return m_focusIndex; }
+
 
   // Delegates
 
@@ -374,6 +378,7 @@ protected:
 private:
 
   void paintWindow();
+  uiWindow * getChildWithFocusIndex(int focusIndex, int * maxIndex);
 
 
   uiWindow *    m_parent;
@@ -398,6 +403,8 @@ private:
   bool          m_isMouseOver;     // true after mouse entered, false after mouse left
 
   uiAnchors     m_anchors;
+
+  int16_t       m_focusIndex;      // -1 = doesn't partecipate to focus trip
 
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow *    m_next;

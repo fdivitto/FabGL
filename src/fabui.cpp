@@ -542,37 +542,43 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 }
 
 
-uiWindow * uiApp::setFocusedWindowNext()
+// delta = 1, go next focused index
+// delta = -1, go previous focused index
+uiWindow * uiApp::setFocusedWindowDelta(int delta)
 {
   uiWindow * old = m_focusedWindow;
   uiWindow * parent = old ? old->parent() : m_activeWindow;
-  if (parent && parent->firstChild()) {
+  if (parent && parent->hasChildren()) {
     uiWindow * proposed = old;
+    int startingIndex = old ? old->focusIndex() + delta : 0;
+    int newIndex = startingIndex;
     do {
-      if (!old && proposed)
-        old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
-      proposed = proposed && proposed->next() ? proposed->next() : parent->firstChild();
-    } while (!isFocusable(proposed) && proposed != old);
+      int maxIndex;
+      uiWindow * child = parent->getChildWithFocusIndex(newIndex, &maxIndex);
+      if (child) {
+        proposed = child;
+        break;
+      }
+      if (delta > 0)
+        newIndex = (newIndex >= maxIndex ? 0 : newIndex + delta);
+      else
+        newIndex = (newIndex <= 0 ? maxIndex : newIndex + delta);
+    } while (newIndex != startingIndex);
     setFocusedWindow(proposed);
   }
   return old;
 }
 
 
+uiWindow * uiApp::setFocusedWindowNext()
+{
+  return setFocusedWindowDelta(1);
+}
+
+
 uiWindow * uiApp::setFocusedWindowPrev()
 {
-  uiWindow * old = m_focusedWindow;
-  uiWindow * parent = old ? old->parent() : m_activeWindow;
-  if (parent && parent->lastChild()) {
-    uiWindow * proposed = old;
-    do {
-      if (!old && proposed)
-        old = proposed; // just a way to exit loop when old=nullptr and no child is focusable
-      proposed = proposed && proposed->prev() ? proposed->prev() : parent->lastChild();
-    } while (!isFocusable(proposed) && proposed != old);
-    setFocusedWindow(proposed);
-  }
-  return old;
+  return setFocusedWindowDelta(-1);
 }
 
 
@@ -949,6 +955,8 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
 
   if (visible)
     app()->showWindow(this, true);
+
+  m_focusIndex = prev() ? prev()->m_focusIndex + 1 : 0;
 }
 
 
@@ -1434,6 +1442,20 @@ void uiWindow::exitModal(int modalResult)
 bool uiWindow::hasFocus()
 {
   return app()->focusedWindow() == this;
+}
+
+
+uiWindow * uiWindow::getChildWithFocusIndex(int focusIndex, int * maxIndex)
+{
+  *maxIndex = -1;
+  for (auto child = m_firstChild; child; child = child->m_next) {
+    if (child->windowProps().focusable && child->state().visible) {
+      *maxIndex = imax(*maxIndex, child->m_focusIndex);
+      if (child->m_focusIndex == focusIndex)
+        return child;
+    }
+  }
+  return nullptr;
 }
 
 
