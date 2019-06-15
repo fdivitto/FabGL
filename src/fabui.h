@@ -375,6 +375,8 @@ protected:
   void generatePaintEvents(Rect const & paintRect);
   void reshape(Rect const & r);
 
+  bool isFocusable();
+
 private:
 
   void paintWindow();
@@ -1180,7 +1182,7 @@ private:
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
 
-  bool isFocusable(uiWindow * window);
+  uiWindow * setFocusedWindowDelta(int delta);
 
 
   uiAppProps    m_appProps;

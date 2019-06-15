@@ -504,12 +504,6 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 }
 
 
-bool uiApp::isFocusable(uiWindow * window)
-{
-  return window->windowProps().focusable && window->state().visible;
-}
-
-
 // value = nullptr              -> kill focus on old focused window
 // value = focusable window     -> kill focus on old focused window, set focus on new window
 // value = non-focusable window -> no change (focusable window remains focused)
@@ -517,7 +511,7 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 {
   uiWindow * prev = m_focusedWindow;
 
-  if (m_focusedWindow != value && (value == nullptr || isFocusable(value))) {
+  if (m_focusedWindow != value && (value == nullptr || value->isFocusable())) {
 
     if (prev) {
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
@@ -1445,11 +1439,17 @@ bool uiWindow::hasFocus()
 }
 
 
+bool uiWindow::isFocusable()
+{
+  return windowProps().focusable && state().visible;
+}
+
+
 uiWindow * uiWindow::getChildWithFocusIndex(int focusIndex, int * maxIndex)
 {
   *maxIndex = -1;
   for (auto child = m_firstChild; child; child = child->m_next) {
-    if (child->windowProps().focusable && child->state().visible) {
+    if (child->isFocusable()) {
       *maxIndex = imax(*maxIndex, child->m_focusIndex);
       if (child->m_focusIndex == focusIndex)
         return child;
