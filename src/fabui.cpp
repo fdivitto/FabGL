@@ -1259,7 +1259,7 @@ void uiWindow::processEvent(uiEvent * event)
       m_isMouseOver = false;
       break;
 
-    case UIEVT_KEYUP:
+    case UIEVT_KEYDOWN:
       // only non-focusable windows can make focusable its children
       if (!m_windowProps.focusable) {
         // move focused child
