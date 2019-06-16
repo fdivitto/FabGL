@@ -2099,8 +2099,10 @@ void uiButton::processEvent(uiEvent * event)
       break;
 
     case UIEVT_KEYUP:
-      if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE)
+      if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE) {
         trigger();
+        onClick();
+      }
       break;
 
     default:
