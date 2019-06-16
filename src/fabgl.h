@@ -310,5 +310,6 @@ using fabgl::uiMessageBoxIcon;
 using fabgl::uiPaintBox;
 using fabgl::uiScrollBar;
 using fabgl::uiListBox;
+using fabgl::uiComboBox;
 
 

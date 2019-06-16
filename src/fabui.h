@@ -55,7 +55,7 @@
             *uiListBox
             uiMemoEdit
           uiCheckBox
-          uiComboBox
+          *uiComboBox
           uiMenu
           uiGauge
           uiRadioButton
@@ -1047,6 +1047,83 @@ private:
   StringList     m_items;
   int            m_firstVisibleItem;     // the item on the top
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiComboBox
+
+
+struct uiComboBoxStyle {
+  RGB buttonBackgroundColor = RGB(1, 1, 1);
+  RGB buttonColor           = RGB(2, 2, 2);
+};
+
+
+struct uiComboBoxProps {
+  uint8_t openOnFocus  : 1;
+
+  uiComboBoxProps()
+    : openOnFocus(true)
+  {
+  }
+};
+
+
+class uiComboBox : public uiTextEdit
+{
+
+public:
+
+  uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true);
+  ~uiComboBox();
+
+  virtual void processEvent(uiEvent * event);
+
+  StringList & items() { return m_listBox.items(); }
+
+  uiComboBoxStyle & comboBoxStyle() { return m_comboBoxStyle; }
+
+  uiComboBoxProps & comboBoxProps() { return m_comboBoxProps; }
+
+  int selectedItem() { return m_listBox.firstSelectedItem(); }
+  void selectItem(int index);
+
+
+  // Delegates
+
+  Delegate<> onChange;
+
+
+protected:
+
+  virtual Rect getEditRect();
+
+
+private:
+
+  void paintComboBox();
+  Rect getButtonRect();
+  int buttonWidth();
+  void openListBox();
+  void closeListBox();
+  void switchListBox();
+  void updateTextEdit();
+
+
+  uiListBox       m_listBox;
+  int             m_listHeight;
+  uiComboBoxStyle m_comboBoxStyle;
+  uiComboBoxProps m_comboBoxProps;
+
+
+};
+
+
+
+// uiComboBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 

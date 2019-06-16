@@ -3397,5 +3397,178 @@ void uiListBox::handleMouseDown(int mouseX, int mouseY)
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiComboBox
+
+
+uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible)
+  : uiTextEdit(parent, "", pos, size, visible),
+    m_listBox(parent, Point(0, 0), Size(0, 0), false),
+    m_listHeight(listHeight)
+{
+  textEditProps().hasCaret  = false;
+  textEditProps().allowEdit = false;
+
+  m_listBox.onKillFocus = [&]() {
+    closeListBox();
+  };
+
+  m_listBox.onChange = [&]() {
+    updateTextEdit();
+    onChange();
+  };
+
+  m_listBox.onKeyUp = [&](uiKeyEventInfo key) {
+    if (key.VK == VK_RETURN) {
+      closeListBox();
+      app()->setFocusedWindow(this);
+    }
+  };
+}
+
+
+uiComboBox::~uiComboBox()
+{
+}
+
+
+// index = -1 -> deselect all
+void uiComboBox::selectItem(int index)
+{
+  if (index < 0)
+    m_listBox.deselectAll();
+  else
+    m_listBox.selectItem(index, true);
+  updateTextEdit();
+}
+
+
+// refresh text edit with the selected listbox item
+void uiComboBox::updateTextEdit()
+{
+  int idx = selectedItem();
+  setText(idx > -1 ? items().get(idx) : "");
+  repaint();
+}
+
+
+void uiComboBox::processEvent(uiEvent * event)
+{
+  uiTextEdit::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiTextEdit::clientRect(uiOrigin::Window));
+      paintComboBox();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1 && getButtonRect().contains(event->params.mouse.status.X, event->params.mouse.status.Y))
+        switchListBox();
+      break;
+
+    case UIEVT_SETFOCUS:
+      if (m_comboBoxProps.openOnFocus && event->params.oldFocused != &m_listBox)
+        openListBox();
+      break;
+
+    case UIEVT_KILLFOCUS:
+      if (event->params.newFocused != &m_listBox)
+        closeListBox();
+      break;
+
+    case UIEVT_KEYDOWN:
+      m_listBox.processEvent(event);
+      break;
+
+    case UIEVT_KEYUP:
+      // ALT-DOWN or ALT-UP or ENTER opens listbox
+      if (((event->params.key.RALT || event->params.key.LALT) && (event->params.key.VK == VK_DOWN || event->params.key.VK == VK_UP)) || (event->params.key.VK == VK_RETURN))
+        openListBox();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiComboBox::openListBox()
+{
+  Rect r = rect(uiOrigin::Parent);
+  r.Y1 = r.Y2 + 1;
+  r.Y2 = r.Y1 + m_listHeight;
+  m_listBox.bringOnTop();
+  app()->reshapeWindow(&m_listBox, r);
+  app()->showWindow(&m_listBox, true);
+  app()->setFocusedWindow(&m_listBox);
+}
+
+
+void uiComboBox::closeListBox()
+{
+  app()->showWindow(&m_listBox, false);
+}
+
+
+void uiComboBox::switchListBox()
+{
+  if (m_listBox.state().visible)
+    closeListBox();
+  else
+    openListBox();
+}
+
+
+int uiComboBox::buttonWidth()
+{
+  return size().height / 2;
+}
+
+
+Rect uiComboBox::getEditRect()
+{
+  Rect r = uiTextEdit::getEditRect();
+  r.X2 -= buttonWidth();
+  return r;
+}
+
+
+Rect uiComboBox::getButtonRect()
+{
+  Rect btnRect = uiTextEdit::getEditRect();
+  btnRect.X1 = btnRect.X2 - buttonWidth() + 1;
+  return btnRect;
+}
+
+
+void uiComboBox::paintComboBox()
+{
+  Rect btnRect = getButtonRect();
+
+  // button background
+  Canvas.setBrushColor(m_comboBoxStyle.buttonBackgroundColor);
+  Canvas.fillRectangle(btnRect);
+
+  // button glyph
+  Canvas.setPenColor(m_comboBoxStyle.buttonColor);
+  Rect arrowRect = btnRect.hShrink(1).vShrink(2);
+  int hHeight = arrowRect.height() / 2;
+  int hWidth  = arrowRect.width() / 2;
+  constexpr int vDist = 2;
+  Canvas.drawLine(arrowRect.X1, arrowRect.Y1 + hHeight - vDist, arrowRect.X1 + hWidth, arrowRect.Y1);
+  Canvas.drawLine(arrowRect.X1 + hWidth, arrowRect.Y1, arrowRect.X2, arrowRect.Y1 + hHeight - vDist);
+  Canvas.drawLine(arrowRect.X1, arrowRect.Y1 + hHeight + vDist, arrowRect.X1 + hWidth, arrowRect.Y2);
+  Canvas.drawLine(arrowRect.X1 + hWidth, arrowRect.Y2, arrowRect.X2, arrowRect.Y1 + hHeight + vDist);
+}
+
+
+// uiComboBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 } // end of namespace
 
