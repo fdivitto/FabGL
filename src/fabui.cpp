@@ -2227,7 +2227,7 @@ void uiTextEdit::processEvent(uiEvent * event)
       break;
 
     case UIEVT_KEYDOWN:
-      handleKeyDown(event);
+      handleKeyDown(event->params.key);
       break;
 
     case UIEVT_DBLCLICK:
@@ -2240,10 +2240,10 @@ void uiTextEdit::processEvent(uiEvent * event)
 }
 
 
-void uiTextEdit::handleKeyDown(uiEvent * event)
+void uiTextEdit::handleKeyDown(uiKeyEventInfo key)
 {
   if (m_textEditProps.allowEdit) {
-    switch (event->params.key.VK) {
+    switch (key.VK) {
 
       case VK_BACKSPACE:
         if (m_cursorCol != m_selCursorCol)
@@ -2263,7 +2263,7 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
       default:
       {
         // normal keys
-        int c = Keyboard.virtualKeyToASCII(event->params.key.VK);
+        int c = Keyboard.virtualKeyToASCII(key.VK);
         if (c >= 0x20 && c != 0x7F) {
           if (m_cursorCol != m_selCursorCol)
             removeSel();  // there is a selection, same behavior of VK_DELETE
@@ -2274,7 +2274,7 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
     }
   }
 
-  switch (event->params.key.VK) {
+  switch (key.VK) {
 
     case VK_LEFT:
     case VK_KP_LEFT:
@@ -2283,8 +2283,8 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
       // SHIFT + LEFT        : move cursor and select
       // CTRL + LEFT         : cancel selection and move cursor by one word
       // SHIFT + CTRL + LEFT : move cursor by one word and select
-      int newCurCol = event->params.key.CTRL ? getWordPosAtLeft() : m_cursorCol - 1;
-      moveCursor(newCurCol, (event->params.key.SHIFT ? m_selCursorCol : newCurCol));
+      int newCurCol = key.CTRL ? getWordPosAtLeft() : m_cursorCol - 1;
+      moveCursor(newCurCol, (key.SHIFT ? m_selCursorCol : newCurCol));
       break;
     }
 
@@ -2295,8 +2295,8 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
       // SHIFT + RIGHT        : move cursor and select
       // CTRL + RIGHT         : cancel selection and move cursor by one word
       // SHIFT + CTRL + RIGHT : move cursor by one word and select
-      int newCurCol = event->params.key.CTRL ? getWordPosAtRight() : m_cursorCol + 1;
-      moveCursor(newCurCol, (event->params.key.SHIFT ? m_selCursorCol : newCurCol));
+      int newCurCol = key.CTRL ? getWordPosAtRight() : m_cursorCol + 1;
+      moveCursor(newCurCol, (key.SHIFT ? m_selCursorCol : newCurCol));
       break;
     }
 
@@ -2304,21 +2304,21 @@ void uiTextEdit::handleKeyDown(uiEvent * event)
     case VK_KP_HOME:
       // SHIFT + HOME, select up to Home
       // HOME, move cursor to home
-      moveCursor(0, (event->params.key.SHIFT ? m_selCursorCol : 0));
+      moveCursor(0, (key.SHIFT ? m_selCursorCol : 0));
       break;
 
     case VK_END:
     case VK_KP_END:
       // SHIFT + END, select up to End
       // END, move cursor to End
-      moveCursor(m_textLength, (event->params.key.SHIFT ? m_selCursorCol : m_textLength));
+      moveCursor(m_textLength, (key.SHIFT ? m_selCursorCol : m_textLength));
       break;
 
     default:
     {
-      if (event->params.key.CTRL) {
+      if (key.CTRL) {
         // keys with CTRL
-        switch (event->params.key.VK) {
+        switch (key.VK) {
           case VK_a:
             // CTRL+A, select all
             moveCursor(m_textLength, 0);
@@ -3187,7 +3187,7 @@ void uiListBox::processEvent(uiEvent * event)
       break;
 
     case UIEVT_KEYDOWN:
-      handleKeyDown(event);
+      handleKeyDown(event->params.key);
       break;
 
     case UIEVT_KEYUP:
@@ -3204,10 +3204,10 @@ void uiListBox::processEvent(uiEvent * event)
 }
 
 
-void uiListBox::handleKeyDown(uiEvent * event)
+void uiListBox::handleKeyDown(uiKeyEventInfo key)
 {
-  bool shift = event->params.key.SHIFT;
-  switch (event->params.key.VK) {
+  bool shift = key.SHIFT;
+  switch (key.VK) {
     case VK_UP:
     case VK_KP_UP:
       selectItem(firstSelectedItem() - 1, shift, false);
