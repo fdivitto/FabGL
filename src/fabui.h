@@ -786,7 +786,7 @@ private:
   void updateCaret();
   void moveCursor(int col, int selCol);
   int getColFromMouseX(int mouseX);
-  void handleKeyDown(uiEvent * event);
+  void handleKeyDown(uiKeyEventInfo key);
   void checkAllocatedSpace(int requiredLength);
   void insert(char c);
   void removeSel();
@@ -1040,7 +1040,7 @@ private:
   void paintListBox();
   int getItemAtMousePos(int mouseX, int mouseY);
   void handleMouseDown(int mouseX, int mouseY);
-  void handleKeyDown(uiEvent * event);
+  void handleKeyDown(uiKeyEventInfo key);
 
 
   uiListBoxStyle m_listBoxStyle;
