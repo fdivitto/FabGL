@@ -54,11 +54,10 @@
             *uiPaintBox
             *uiListBox
             uiMemoEdit
-          uiCheckBox
+          *uiCheckBox
           *uiComboBox
           uiMenu
           uiGauge
-          uiRadioButton
           uiSlider
           uiSpinButton
 
@@ -1138,8 +1137,63 @@ private:
 
 
 
-// uiComboBox
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiCheckBox
+
+
+struct uiCheckBoxStyle {
+  RGB              backgroundColor          = RGB(2, 2, 2);
+  RGB              checkedBackgroundColor   = RGB(2, 2, 3);
+  RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
+  RGB              foregroundColor          = RGB(0, 0, 0);
+};
+
+
+enum class uiCheckBoxKind : int8_t {
+  CheckBox,
+  RadioButton,
+};
+
+
+class uiCheckBox : public uiControl {
+
+public:
+
+  uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind = uiCheckBoxKind::CheckBox, bool visible = true);
+
+  virtual ~uiCheckBox();
+
+  virtual void processEvent(uiEvent * event);
+
+  uiCheckBoxStyle & checkBoxStyle() { return m_checkBoxStyle; }
+
+  bool checked()                    { return m_checked; }
+
+  void setChecked(bool value);
+
+  int groupIndex()                  { return m_groupIndex; }
+
+  void setGroupIndex(int value)     { m_groupIndex = value; }
+
+
+  // Delegates
+
+  Delegate<> onChange;
+
+
+private:
+
+  void paintCheckBox();
+  void trigger();
+  void unCheckGroup();
+
+
+  uiCheckBoxStyle m_checkBoxStyle;
+  bool            m_checked;
+  uiCheckBoxKind  m_kind;
+  int16_t         m_groupIndex; // -1 = no group
+
+};
 
 
 

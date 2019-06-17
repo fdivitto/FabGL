@@ -3592,5 +3592,149 @@ void uiComboBox::paintComboBox()
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiCheckBox
+
+
+uiCheckBox::uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind, bool visible)
+  : uiControl(parent, pos, size, visible),
+    m_checked(false),
+    m_kind(kind),
+    m_groupIndex(-1)
+{
+  objectType().uiCheckBox = true;
+
+  windowProps().focusable = true;
+
+  windowStyle().borderSize         = 1;
+  windowStyle().focusedBorderSize  = 2;
+  windowStyle().borderColor        = RGB(1, 1, 1);
+  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+}
+
+
+uiCheckBox::~uiCheckBox()
+{
+}
+
+
+void uiCheckBox::paintCheckBox()
+{
+  Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
+  // background
+  RGB bkColor = m_checked ? m_checkBoxStyle.checkedBackgroundColor : m_checkBoxStyle.backgroundColor;
+  if (isMouseOver())
+    bkColor = m_checkBoxStyle.mouseOverBackgroundColor;
+  Canvas.setBrushColor(bkColor);
+  Canvas.fillRectangle(bkgRect);
+  // content
+  if (m_checked) {
+    Rect r = rect(uiOrigin::Window).shrink(5);
+    switch (m_kind) {
+      case uiCheckBoxKind::CheckBox:
+        Canvas.setPenColor(m_checkBoxStyle.foregroundColor);
+        Canvas.drawLine(r.X1, r.Y2 - r.height() / 3, r.X1 + r.width() / 3, r.Y2);
+        Canvas.drawLine(r.X1 + r.width() / 3, r.Y2, r.X2, r.Y1);
+        break;
+      case uiCheckBoxKind::RadioButton:
+        Canvas.setBrushColor(m_checkBoxStyle.foregroundColor);
+        Canvas.fillEllipse(r.X1 + r.width() / 2 - 1, r.Y1 + r.height() / 2 - 1, r.width(), r.height());
+        break;
+    }
+  }
+}
+
+
+void uiCheckBox::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
+      paintCheckBox();
+      break;
+
+    case UIEVT_CLICK:
+      trigger();
+      break;
+
+    case UIEVT_MOUSEENTER:
+      repaint();  // to update background color
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      if (event->params.mouse.changedButton == 1)
+        repaint();
+      break;
+
+    case UIEVT_MOUSELEAVE:
+      repaint();  // to update background
+      break;
+
+    case UIEVT_KEYUP:
+      if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE) {
+        trigger();
+        onClick();
+      }
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// action to perfom on mouse up or keyboard space/enter
+void uiCheckBox::trigger()
+{
+  switch (m_kind) {
+    case uiCheckBoxKind::CheckBox:
+      m_checked = !m_checked;
+      break;
+    case uiCheckBoxKind::RadioButton:
+      m_checked = true;
+      unCheckGroup();
+      break;
+  }
+  onChange();
+  repaint();
+}
+
+
+void uiCheckBox::setChecked(bool value)
+{
+  if (value != m_checked) {
+    m_checked = value;
+    if (m_kind == uiCheckBoxKind::RadioButton && value == true)
+      unCheckGroup();
+    repaint();
+  }
+}
+
+
+// unchecks all other items of the same group
+void uiCheckBox::unCheckGroup()
+{
+  if (m_groupIndex == -1)
+    return;
+  for (auto sibling = parent()->firstChild(); sibling; sibling = sibling->next()) {
+    if (sibling != this && objectType().uiCheckBox) {
+      uiCheckBox * chk = (uiCheckBox*) sibling;
+      if (chk->m_groupIndex == m_groupIndex)
+        chk->setChecked(false);
+    }
+  }
+}
+
+
+
+// uiCheckBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 } // end of namespace
 

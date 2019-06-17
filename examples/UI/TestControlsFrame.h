@@ -6,9 +6,11 @@ struct TestControlsFrame : public uiFrame {
   uiButton * normalButton, * switchButton;
   uiListBox * listBox;
   uiComboBox * comboBox1, * comboBox2;
+  uiCheckBox * checkBox;
+  uiCheckBox * radio1, * radio2, * radio3;
 
   TestControlsFrame(uiFrame * parent)
-    : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 240), false) {
+    : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 250), false) {
 
     new uiLabel(this, "Text Label:", Point(10,  33));
     textEdit = new uiTextEdit(this, "Text Edit", Point(70,  30), Size(340, 20));
@@ -57,6 +59,24 @@ struct TestControlsFrame : public uiFrame {
     comboBox2->anchors().left  = false;
     comboBox2->anchors().right = true;
     comboBox2->items().copyFrom(comboBox1->items());
+
+    label = new uiLabel(this, "CheckBox: ", Point(200, 150));
+    label->anchors().left  = false;
+    label->anchors().right = true;
+    checkBox = new uiCheckBox(this, Point(270, 150), Size(16, 16));
+    checkBox->anchors().left  = false;
+    checkBox->anchors().right = true;
+
+    new uiLabel(this, "Radio1", Point(10, 180));
+    new uiLabel(this, "Radio2", Point(80, 180));
+    new uiLabel(this, "Radio3", Point(150, 180));
+    radio1 = new uiCheckBox(this, Point(45, 180), Size(16, 16), uiCheckBoxKind::RadioButton);
+    radio2 = new uiCheckBox(this, Point(115, 180), Size(16, 16), uiCheckBoxKind::RadioButton);
+    radio3 = new uiCheckBox(this, Point(185, 180), Size(16, 16), uiCheckBoxKind::RadioButton);
+    radio1->setGroupIndex(1);
+    radio2->setGroupIndex(1);
+    radio3->setGroupIndex(1);
+
 
   }
 };
