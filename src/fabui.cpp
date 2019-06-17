@@ -905,6 +905,11 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
     x += buttonsWidth + buttonsSpace;
   }
 
+  // focus on fist button
+  mainFrame->onShow = [&]() {
+    setFocusedWindow(button1);
+  };
+
   // run
 
   int modalResult = showModalWindow(mainFrame);
