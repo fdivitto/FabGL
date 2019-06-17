@@ -366,9 +366,6 @@ public:
 
   // Delegates
 
-  Delegate<> onResize;
-  Delegate<> onShow;
-  Delegate<> onHide;
   Delegate<> onClick;
   Delegate<> onDblClick;
 
@@ -504,6 +501,14 @@ public:
   uiFrameProps & frameProps() { return m_frameProps; }
 
   Rect clientRect(uiOrigin origin);
+
+
+  // Delegates
+
+  Delegate<> onShow;
+  Delegate<> onHide;
+  Delegate<> onResize;
+
 
 protected:
 
