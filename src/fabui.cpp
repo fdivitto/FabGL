@@ -508,12 +508,15 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
 
 // value = nullptr              -> kill focus on old focused window
 // value = focusable window     -> kill focus on old focused window, set focus on new window
-// value = non-focusable window -> no change (focusable window remains focused)
+// value = non-focusable window -> kill focus on old focused window (same of nullptr)
 uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 {
   uiWindow * prev = m_focusedWindow;
 
-  if (m_focusedWindow != value && (value == nullptr || value->isFocusable())) {
+  if (value && !value->isFocusable())
+    value = nullptr;
+
+  if (m_focusedWindow != value) {
 
     if (prev) {
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
