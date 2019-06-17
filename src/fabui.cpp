@@ -50,7 +50,7 @@ void dumpEvent(uiEvent * event)
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
-  if (event->dest && event->dest->evtHandlerProps().isFrame)
+  if (event->dest && event->dest->objectType().uiFrame)
     Serial.printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
   else
     Serial.printf(" dst=%p ", event->dest);
@@ -126,6 +126,7 @@ uiObject::~uiObject()
 uiEvtHandler::uiEvtHandler(uiApp * app)
   : m_app(app)
 {
+  objectType().uiEvtHandler = true;
 }
 
 
@@ -172,6 +173,7 @@ uiApp::uiApp()
     m_caretInvertState(-1),
     m_lastMouseUpTimeMS(0)
 {
+  objectType().uiApp = true;
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
   setApp(this);
 }
@@ -273,7 +275,7 @@ void uiApp::preprocessEvent(uiEvent * event)
 // decide if an event with destination to non-modal windows can pass when a modal window is active
 void uiApp::filterModalEvent(uiEvent * event)
 {
-  if (event->dest != nullptr && event->dest->evtHandlerProps().isWindow && event->dest != m_modalWindow && !m_modalWindow->isChild((uiWindow*)event->dest)) {
+  if (event->dest != nullptr && event->dest->objectType().uiWindow && event->dest != m_modalWindow && !m_modalWindow->isChild((uiWindow*)event->dest)) {
     switch (event->id) {
       case UIEVT_MOUSEMOVE:
       case UIEVT_MOUSEWHEEL:
@@ -938,12 +940,13 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_firstChild(nullptr),
     m_lastChild(nullptr)
 {
+  objectType().uiWindow = true;
+
   m_state.visible   = false;
   m_state.maximized = false;
   m_state.minimized = false;
   m_state.active    = false;
 
-  evtHandlerProps().isWindow = true;
   if (parent)
     parent->addChild(this);
 
@@ -1476,7 +1479,7 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
     m_mouseMoveFrameItem(uiFrameItem::None),
     m_lastReshapingBox(Rect(0, 0, 0, 0))
 {
-  evtHandlerProps().isFrame = true;
+  objectType().uiFrame = true;
   setTitle(title);
 }
 
@@ -1972,7 +1975,7 @@ void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
 uiControl::uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible)
   : uiWindow(parent, pos, size, visible)
 {
-  evtHandlerProps().isControl = true;
+  objectType().uiControl = true;
   windowProps().activable = false;
 }
 
@@ -2005,6 +2008,8 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
     m_down(false),
     m_kind(kind)
 {
+  objectType().uiButton = true;
+
   windowProps().focusable = true;
 
   windowStyle().borderSize         = 1;
@@ -2151,6 +2156,8 @@ uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, 
     m_cursorCol(0),
     m_selCursorCol(0)
 {
+  objectType().uiTextEdit = true;
+
   windowProps().focusable = true;
 
   windowStyle().defaultCursor = CursorName::CursorTextInput;
@@ -2582,6 +2589,8 @@ uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const 
     m_text(nullptr),
     m_textExtent(0)
 {
+  objectType().uiLabel = true;
+
   windowProps().focusable = false;
   windowStyle().borderSize = 0;
   m_autoSize = (size.width == 0 && size.height == 0);
@@ -2653,6 +2662,8 @@ uiImage::uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, co
   : uiControl(parent, pos, size, visible),
     m_bitmap(nullptr)
 {
+  objectType().uiImage = true;
+
   windowProps().focusable = false;
   windowStyle().borderSize = 0;
   m_autoSize = (size.width == 0 && size.height == 0);
@@ -2716,6 +2727,8 @@ void uiImage::processEvent(uiEvent * event)
 uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible)
   : uiControl(parent, pos, size, visible)
 {
+  objectType().uiPanel = true;
+
   windowProps().focusable = false;
   windowStyle().borderSize = 1;
   windowStyle().borderColor = RGB(1, 1, 1);
@@ -2765,6 +2778,8 @@ void uiPanel::processEvent(uiEvent * event)
 uiPaintBox::uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
   : uiScrollableControl(parent, pos, size, visible)
 {
+  objectType().uiPaintBox = true;
+
   windowProps().focusable = false;
   windowStyle().borderSize  = 1;
   windowStyle().borderColor = RGB(1, 1, 1);
@@ -2825,6 +2840,7 @@ uiScrollableControl::uiScrollableControl(uiWindow * parent, const Point & pos, c
     m_mouseOverItem(uiScrollBarItem::None),
     m_scrollTimer(nullptr)
 {
+  objectType().uiScrollableControl = true;
 }
 
 
@@ -3160,6 +3176,8 @@ uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bo
   : uiScrollableControl(parent, pos, size, visible),
     m_firstVisibleItem(0)
 {
+  objectType().uiListBox = true;
+
   windowProps().focusable = true;
 
   windowStyle().borderSize  = 1;
@@ -3408,6 +3426,8 @@ uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, 
     m_listBox(parent, Point(0, 0), Size(0, 0), false),
     m_listHeight(listHeight)
 {
+  objectType().uiComboBox = true;
+
   textEditProps().hasCaret  = false;
   textEditProps().allowEdit = false;
 

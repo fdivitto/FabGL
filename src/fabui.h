@@ -175,6 +175,30 @@ struct uiEvent {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiObject
 
+
+struct uiObjectType {
+  uint32_t uiApp               : 1;
+  uint32_t uiEvtHandler        : 1;
+  uint32_t uiWindow            : 1;
+  uint32_t uiFrame             : 1;
+  uint32_t uiControl           : 1;
+  uint32_t uiScrollableControl : 1;
+  uint32_t uiButton            : 1;
+  uint32_t uiTextEdit          : 1;
+  uint32_t uiLabel             : 1;
+  uint32_t uiImage             : 1;
+  uint32_t uiPanel             : 1;
+  uint32_t uiPaintBox          : 1;
+  uint32_t uiListBox           : 1;
+  uint32_t uiComboBox          : 1;
+  uint32_t uiCheckBox          : 1;
+
+  uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
+                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0)
+    { }
+};
+
+
 class uiObject {
 
 public:
@@ -182,26 +206,17 @@ public:
   uiObject();
 
   virtual ~uiObject();
+
+  uiObjectType & objectType() { return m_objectType; }
+
+private:
+  uiObjectType m_objectType;
 };
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiEvtHandler
-
-
-struct uiEvtHandlerProps {
-  int isWindow         : 1; // is a uiWindow or inherited object
-  int isFrame          : 1; // is a uiFrame or inherited object
-  int isControl        : 1; // is a uiControl or inherited object
-
-  uiEvtHandlerProps() :
-    isWindow(false),
-    isFrame(false),
-    isControl(false)
-  {
-  }
-};
 
 
 class uiEvtHandler : public uiObject {
@@ -218,7 +233,6 @@ public:
 
   void setApp(uiApp * value) { m_app = value; }
 
-  uiEvtHandlerProps & evtHandlerProps() { return m_evtHandlerProps; }
 
   // Delegates
 
@@ -227,8 +241,7 @@ public:
 
 private:
 
-  uiApp *           m_app;
-  uiEvtHandlerProps m_evtHandlerProps;
+  uiApp * m_app;
 };
 
 
