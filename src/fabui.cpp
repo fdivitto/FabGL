@@ -636,6 +636,7 @@ int uiApp::showModalWindow(uiWindow * window)
   int modalResult = -1;
 
   showWindow(window, true);
+  uiWindow * prevFocusedWindow = setFocusedWindow(nullptr);
   uiWindow * prevActiveWindow = setActiveWindow(window);
   uiWindow * prevModal = m_modalWindow;
 
@@ -668,7 +669,7 @@ int uiApp::showModalWindow(uiWindow * window)
   m_modalWindow = prevModal;
   setActiveWindow(prevActiveWindow);
   showWindow(window, false);
-
+  setFocusedWindow(prevFocusedWindow);
 
   return modalResult;
 }
