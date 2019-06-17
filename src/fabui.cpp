@@ -1220,12 +1220,10 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SHOW:
-      onShow();
       repaint();
       break;
 
     case UIEVT_HIDE:
-      onHide();
       repaint();
       break;
 
@@ -1284,10 +1282,6 @@ void uiWindow::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, rect(uiOrigin::Window));
       paintWindow();
-      break;
-
-    case UIEVT_SETSIZE:
-      onResize();
       break;
 
     case UIEVT_SETFOCUS:
@@ -1706,6 +1700,18 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_DBLCLICK:
       handleButtonsClick(event->params.mouse.status.X, event->params.mouse.status.Y, true);
+      break;
+
+    case UIEVT_SHOW:
+      onShow();
+      break;
+
+    case UIEVT_HIDE:
+      onHide();
+      break;
+
+    case UIEVT_SETSIZE:
+      onResize();
       break;
 
     default:
