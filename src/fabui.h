@@ -119,19 +119,21 @@ class uiWindow;
 typedef void * uiTimerHandle;
 
 
+/** @brief Contains details about the key event */
 struct uiKeyEventInfo {
-  VirtualKey VK;
-  uint8_t    LALT  : 1;  // status of left-ALT key
-  uint8_t    RALT  : 1;  // status of right-ALT key
-  uint8_t    CTRL  : 1;  // status of CTRL (left or right) key
-  uint8_t    SHIFT : 1;  // status of SHIFT (left or right) key
-  uint8_t    GUI   : 1;  // status of GUI (Windows logo) key
+  VirtualKey VK;         /**< Virtual key */
+  uint8_t    LALT  : 1;  /**< Status of left-ALT key */
+  uint8_t    RALT  : 1;  /**< Status of right-ALT key */
+  uint8_t    CTRL  : 1;  /**< Status of CTRL (left or right) key */
+  uint8_t    SHIFT : 1;  /**< Status of SHIFT (left or right) key */
+  uint8_t    GUI   : 1;  /**< Status of GUI (Windows logo) key */
 };
 
 
+/** @brief Contains details about the mouse event */
 struct uiMouseEventInfo {
-  MouseStatus status;
-  uint8_t     changedButton;  // 0 = none, 1 = left, 2 = middle, 3 = right
+  MouseStatus status;         /**< Mouse position, wheel delta and buttons status */
+  uint8_t     changedButton;  /**< Specifies which mouse button has changed 0 = none, 1 = left, 2 = middle, 3 = right */
 };
 
 
@@ -175,6 +177,7 @@ struct uiEvent {
 // uiObject
 
 
+/** @brief Specifies the object type */
 struct uiObjectType {
   uint32_t uiApp               : 1;
   uint32_t uiEvtHandler        : 1;
@@ -198,6 +201,7 @@ struct uiObjectType {
 };
 
 
+/** @brief Base class of all UI elements like windows and controls */
 class uiObject {
 
 public:
@@ -206,6 +210,11 @@ public:
 
   virtual ~uiObject();
 
+  /**
+   * @brief Return the object type.
+   *
+   * @return Object type.
+   */
   uiObjectType & objectType() { return m_objectType; }
 
 private:
@@ -218,6 +227,7 @@ private:
 // uiEvtHandler
 
 
+/** @brief Base class of all UI elements that can receive events. */
 class uiEvtHandler : public uiObject {
 
 public:
@@ -228,6 +238,11 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Return the app that owns this object.
+   *
+   * @return An uiApp object.
+   */
   uiApp * app() { return m_app; }
 
 
