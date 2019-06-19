@@ -230,12 +230,15 @@ public:
 
   uiApp * app() { return m_app; }
 
-  void setApp(uiApp * value) { m_app = value; }
-
 
   // Delegates
 
   Delegate<uiTimerHandle> onTimer;
+  
+
+protected:
+
+  void setApp(uiApp * value) { m_app = value; }
 
 
 private:
