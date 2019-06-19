@@ -246,11 +246,6 @@ public:
   uiApp * app() { return m_app; }
 
 
-  // Delegates
-
-  Delegate<uiTimerHandle> onTimer;
-  
-
 protected:
 
   void setApp(uiApp * value) { m_app = value; }
@@ -526,6 +521,7 @@ public:
   Delegate<> onShow;
   Delegate<> onHide;
   Delegate<> onResize;
+  Delegate<uiTimerHandle> onTimer;
 
 
 protected:
@@ -1335,6 +1331,9 @@ public:
   // events
 
   virtual void OnInit();
+
+  // delegates
+  Delegate<uiTimerHandle> onTimer;
 
 protected:
 

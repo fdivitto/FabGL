@@ -139,10 +139,6 @@ void uiEvtHandler::processEvent(uiEvent * event)
 {
   switch (event->id) {
 
-    case UIEVT_TIMER:
-      onTimer(event->params.timerHandle);
-      break;
-
     default:
       break;
 
@@ -456,6 +452,10 @@ void uiApp::processEvent(uiEvent * event)
 
     case UIEVT_APPINIT:
       OnInit();
+      break;
+
+    case UIEVT_TIMER:
+      onTimer(event->params.timerHandle);
       break;
 
     default:
@@ -1717,6 +1717,10 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_SETSIZE:
       onResize();
+      break;
+
+    case UIEVT_TIMER:
+      onTimer(event->params.timerHandle);
       break;
 
     default:
