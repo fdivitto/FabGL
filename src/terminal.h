@@ -401,21 +401,21 @@ class TerminalClass : public Stream {
 public:
 
   /**
-   * @brief Initialize the terminal.
+   * @brief Initializes the terminal.
    *
    * Applications should call this method before any other method call or after resolution has been set.
    */
   void begin();
 
   /**
-   * @brief Finalize the terminal.
+   * @brief Finalizes the terminal.
    *
    * Applications should call this method before screen resolution changes.
    */
   void end();
 
   /**
-   * @brief Connect a remove host using the specified serial port.
+   * @brief Connects a remove host using the specified serial port.
    *
    * When serial port is set, the typed keys on PS/2 keyboard are encoded
    * as ANSI/VT100 codes and then sent to the specified serial port.<br>
@@ -434,7 +434,7 @@ public:
   void connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF = true);
 
   /**
-   * @brief Pool the serial port for incoming data.
+   * @brief Pools the serial port for incoming data.
    *
    * Tnis method needs to be called in the application main loop to check if new data
    * is coming from the current serial port (specified using TerminalClass.connectSerialPort).
@@ -464,7 +464,7 @@ public:
   void connectLocally();
 
   /**
-   * @brief Inject keys into the keyboard queue.
+   * @brief Injects keys into the keyboard queue.
    *
    * Characters added with localWrite() will be received with read(), available() and peek() methods.
    *
@@ -473,7 +473,7 @@ public:
   void localWrite(uint8_t c);
 
   /**
-   * @brief Inject a string of keys into the keyboard queue.
+   * @brief Injects a string of keys into the keyboard queue.
    *
    * Characters added with localWrite() will be received with read(), available() and peek() methods.
    *
@@ -482,7 +482,7 @@ public:
   void localWrite(char const * str);
 
   /**
-   * @brief Set the stream where to output debugging logs.
+   * @brief Sets the stream where to output debugging logs.
    *
    * Logging info sents to the logging stream are detailed by FABGLIB_TERMINAL_DEBUG_REPORT_.... macros in fabglconf.h configuration file.
    *
@@ -501,7 +501,7 @@ public:
   void log(char c);
 
   /**
-   * @brief Set the font to use.
+   * @brief Sets the font to use.
    *
    * Terminal automatically choises the best font considering screen resolution and required
    * number of columns and rows.<br>
@@ -512,7 +512,7 @@ public:
   void loadFont(FontInfo const * font);
 
   /**
-   * @brief Set the background color.
+   * @brief Sets the background color.
    *
    * Sets the background color sending an SGR ANSI code and optionally the
    * default background color (used resetting the terminal).
@@ -527,7 +527,7 @@ public:
   void setBackgroundColor(Color color, bool setAsDefault = true);
 
   /**
-   * @brief Set the foreground color.
+   * @brief Sets the foreground color.
    *
    * Sets the foreground color sending an SGR ANSI code and optionally the
    * default foreground color (used resetting the terminal).
@@ -542,7 +542,7 @@ public:
   void setForegroundColor(Color color, bool setAsDefault = true);
 
   /**
-   * @brief Clear the screen.
+   * @brief Clears the screen.
    *
    * Clears the screen sending "CSI 2 J" command to the screen.
    *
@@ -555,7 +555,7 @@ public:
   void clear();
 
   /**
-   * @brief Wait for all codes sent to the display has been processed.
+   * @brief Waits for all codes sent to the display has been processed.
    *
    * @param waitVSync If true codes are processed during screen retrace time (starting from VSync up to about first top visible row).
    *                  When false all messages are processed immediately.
@@ -563,28 +563,28 @@ public:
   void flush(bool waitVSync);
 
   /**
-   * @brief Return the number of columns.
+   * @brief Returns the number of columns.
    *
    * @return The number of columns (in characters).
    */
   int getColumns() { return m_columns; }
 
   /**
-   * @brief Return the number of lines.
+   * @brief Returns the number of lines.
    *
    * @return The number of lines (in characters).
    */
   int getRows()    { return m_rows; }
 
   /**
-   * @brief Enable or disable cursor.
+   * @brief Enables or disables cursor.
    *
    * @param value If true the cursor becomes visible.
    */
   void enableCursor(bool value);
 
   /**
-   * @brief Return number of codes that the display input queue can still accept.
+   * @brief Determines number of codes that the display input queue can still accept.
    *
    * @return The size (in characters) of remaining space in the display queue.
    */
@@ -595,7 +595,7 @@ public:
   //// Stream abstract class implementation ////
 
   /**
-   * @brief Get the number of codes available in the keyboard queue.
+   * @brief Gets the number of codes available in the keyboard queue.
    *
    * Keyboard queue is available only after TerminalClass.connectLocally() call.
    *
@@ -604,7 +604,7 @@ public:
   int available();
 
   /**
-   * @brief Read codes from keyboard.
+   * @brief Reads codes from keyboard.
    *
    * Keyboard queue is available only after TerminalClass.connectLocally() call.
    *
@@ -613,7 +613,7 @@ public:
   int read();
 
   /**
-   * @brief Read a code from the keyboard without advancing to the next one.
+   * @brief Reads a code from the keyboard without advancing to the next one.
    *
    * Keyboard queue is available only after TerminalClass.connectLocally() call.
    *
@@ -622,14 +622,14 @@ public:
   int peek();
 
   /**
-   * @brief Wait for all codes sent to the display has been processed.
+   * @brief Waits for all codes sent to the display has been processed.
    *
    * Codes are processed during screen retrace time (starting from VSync up to about first top visible row).
    */
   void flush();
 
   /**
-   * @brief Send specified number of codes to the display.
+   * @brief Sends specified number of codes to the display.
    *
    * Codes can be ANSI/VT codes or ASCII characters.
    *
@@ -651,7 +651,7 @@ public:
   int write(const uint8_t * buffer, int size);
 
   /**
-   * @brief Send a single code to the display.
+   * @brief Sends a single code to the display.
    *
    * Code can be only of the ANSI/VT codes or ASCII characters.
    *

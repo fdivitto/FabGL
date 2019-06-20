@@ -70,14 +70,14 @@ class PS2DeviceClass {
 public:
 
   /**
-   * @brief Identify the device attached to the PS2 port.
+   * @brief Identifies the device attached to the PS2 port.
    *
    * @return The identification ID sent by keyboard.
    */
   PS2Device identify() { PS2Device result; send_cmdIdentify(&result); return result; };
 
   /**
-   * @brief Get exclusive access to the device.
+   * @brief Gets exclusive access to the device.
    *
    * @param timeOutMS Timeout in milliseconds to wait before fail.
    *
@@ -86,7 +86,7 @@ public:
   bool lock(int timeOutMS);
 
   /**
-   * @brief Release device from exclusive access.
+   * @brief Releases device from exclusive access.
    */
   void unlock();
 

@@ -63,21 +63,21 @@ public:
   virtual ~Scene();
 
   /**
-   * @brief Return scene width.
+   * @brief Determines scene width.
    *
    * @return Scene width in pixels.
    */
   int getWidth()  { return m_width; }
 
   /**
-   * @brief Return scene height.
+   * @brief Determines scene height.
    *
    * @return Scene height in pixels.
    */
   int getHeight() { return m_height; }
 
   /**
-   * @brief Start scene updates and suspends current task.
+   * @brief Starts scene updates and suspends current task.
    *
    * @param suspendTask If true (default) current calling task is suspended immeditaly.
    *
@@ -92,7 +92,7 @@ public:
   void start(bool suspendTask = true);
 
   /**
-   * @brief Stop scene updates and resumes suspended task.
+   * @brief Stops scene updates and resumes suspended task.
    */
   void stop();
 
@@ -121,7 +121,7 @@ public:
   virtual void collisionDetected(Sprite * spriteA, Sprite * spriteB, Point collisionPoint) = 0;
 
   /**
-   * @brief Add the specified sprite to collision detector.
+   * @brief Adds the specified sprite to collision detector.
    *
    * The collision detector is updated calling Scene.updateSprite() or updateSpriteAndDetectCollisions().<br>
    * The number of sprites cannot exceed the value specified in Scene constructor.
@@ -131,14 +131,14 @@ public:
   void addSprite(Sprite * sprite)    { m_collisionDetector.addSprite(sprite); }
 
   /**
-   * @brief Remove the specified sprite from collision detector.
+   * @brief Removes the specified sprite from collision detector.
    *
    * @param sprite The sprite to remove.
    */
   void removeSprite(Sprite * sprite) { m_collisionDetector.removeSprite(sprite); }
 
   /**
-   * @brief Update collision detector.
+   * @brief Updates collision detector.
    *
    * When a sprite changes its position or size it is necessary to update the collision detector.<br>
    * This method just updates the detector without generate collision events.<br>
@@ -149,7 +149,7 @@ public:
   void updateSprite(Sprite * sprite) { m_collisionDetector.update(sprite); }
 
   /**
-   * @brief Update collision detector and generate collision events.
+   * @brief Updates collision detector and generate collision events.
    *
    * When a sprite changes its position or size it is necessary to update the collision detector.<br>
    * This method updates the detector and generates collision events accordly.

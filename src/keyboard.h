@@ -162,7 +162,7 @@ public:
   KeyboardClass();
 
   /**
-   * @brief Initialize KeyboardClass specifying CLOCK and DATA GPIOs.
+   * @brief Initializes KeyboardClass specifying CLOCK and DATA GPIOs.
    *
    * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
    * This method also initializes the PS2ControllerClass to use port 0 only.
@@ -183,7 +183,7 @@ public:
   void begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys = true, bool createVKQueue = true);
 
   /**
-   * @brief Initialize KeyboardClass without initializing the PS/2 controller.
+   * @brief Initializes KeyboardClass without initializing the PS/2 controller.
    *
    * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
    * This method does not initialize the PS2ControllerClass.
@@ -207,14 +207,14 @@ public:
   void setUIApp(uiApp * app) { m_uiApp = app; }
 
   /**
-   * @brief Send a Reset command to the keyboard.
+   * @brief Sends a Reset command to the keyboard.
    *
    * @return True if the keyboard is correctly initialized.
    */
   bool reset();
 
   /**
-   * @brief Check if keyboard has been detected and correctly initialized.
+   * @brief Checks if keyboard has been detected and correctly initialized.
    *
    * isKeyboardAvailable() returns a valid value only after KeyboardClass.begin() or KeyboardClass.reset() has been called.
    *
@@ -223,7 +223,7 @@ public:
   bool isKeyboardAvailable() { return m_keyboardAvailable; }
 
   /**
-   * @brief Set keyboard layout.
+   * @brief Sets keyboard layout.
    *
    * It is possible to specify an international keyboard layout. The default is US-layout.<br>
    * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German) and IT (Italian). Other layout can be added
@@ -239,14 +239,14 @@ public:
   void setLayout(KeyboardLayout const * layout);
 
   /**
-   * @brief Get current keyboard layout.
+   * @brief Gets current keyboard layout.
    *
    * @return The default or last set keyboard layout.
    */
   KeyboardLayout const * getLayout() { return m_layout; }
 
   /**
-   * @brief Get the virtual keys status.
+   * @brief Gets the virtual keys status.
    *
    * This method allows to know the status of each virtual key (Down or Up).<br>
    * Virtual keys are generated from scancodes only if generateVirtualKeys parameter of KeyboardClass.begin() method is true (default).
@@ -258,7 +258,7 @@ public:
   bool isVKDown(VirtualKey virtualKey);
 
   /**
-   * @brief Get the number of virtual keys available in the queue.
+   * @brief Gets the number of virtual keys available in the queue.
    *
    * Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default)
    * and createVKQueue parameter is true (default) of KeyboardClass.begin() method.
@@ -268,7 +268,7 @@ public:
   int virtualKeyAvailable();
 
   /**
-   * @brief Get a virtual key from the queue.
+   * @brief Gets a virtual key from the queue.
    *
    * Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default)
    * and createVKQueue parameter is true (default) of KeyboardClass.begin() method.
@@ -281,7 +281,7 @@ public:
   VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
   /**
-   * @brief Convert virtual key to ASCII.
+   * @brief Converts virtual key to ASCII.
    *
    * This method converts the specified virtual key to ASCII, if possible.<br>
    * For example VK_A is converted to 'A' (ASCII 0x41), CTRL  + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces
@@ -296,7 +296,7 @@ public:
   int virtualKeyToASCII(VirtualKey virtualKey);
 
   /**
-   * @brief Get the number of scancodes available in the queue.
+   * @brief Gets the number of scancodes available in the queue.
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
    * method KeyboardClass.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
@@ -307,7 +307,7 @@ public:
   int scancodeAvailable();
 
   /**
-   * @brief Get a scancode from the queue.
+   * @brief Gets a scancode from the queue.
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
    * method KeyboardClass.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
@@ -321,7 +321,7 @@ public:
   int getNextScancode(int timeOutMS = -1, bool requestResendOnTimeOut = false);
 
   /**
-   * @brief Suspend or resume the virtual key generation task.
+   * @brief Suspends or resume the virtual key generation task.
    *
    * Use this method to temporarily suspend the scancode to virtual key conversion task. This is useful when
    * scancode are necessary for a limited time.
@@ -331,7 +331,7 @@ public:
   void suspendVirtualKeyGeneration(bool value);
 
   /**
-   * @brief Set keyboard LEDs status.
+   * @brief Sets keyboard LEDs status.
    *
    * Use this method to switch-on or off the NUMLOCK, CAPSLOCK and SCROLLLOCK LEDs.
    *
@@ -344,7 +344,7 @@ public:
   bool setLEDs(bool numLock, bool capsLock, bool scrollLock) { return send_cmdLEDs(numLock, capsLock, scrollLock); }
 
   /**
-   * @brief Get keyboard LEDs status.
+   * @brief Gets keyboard LEDs status.
    *
    * Use this method to know the current status of NUMLOCK, CAPSLOCK and SCROLLLOCK LEDs.
    *
@@ -355,7 +355,7 @@ public:
   void getLEDs(bool * numLock, bool * capsLock, bool * scrollLock);
 
   /**
-   * @brief Set typematic rate and delay.
+   * @brief Sets typematic rate and delay.
    *
    * If the key is kept pressed down, after repeatDelayMS keyboard starts periodically sending codes with frequency repeatRateMS.
    *

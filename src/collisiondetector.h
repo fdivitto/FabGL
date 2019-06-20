@@ -133,7 +133,7 @@ friend class QuadTree;
 public:
 
   /**
-   * @brief Create an instance of CollisionDetector.
+   * @brief Creates an instance of CollisionDetector.
    *
    * CollisionDetector is embedded in Scene class, so usually you don't need to instantiate it.
    *
@@ -146,7 +146,7 @@ public:
   ~CollisionDetector();
 
   /**
-   * @brief Add the specified sprite to collision detector.
+   * @brief Adds the specified sprite to collision detector.
    *
    * The collision detector is updated calling CollisionDetector.update() or CollisionDetector.updateAndDetectCollision().<br>
    * The number of sprites cannot exceed the value specified in CollisionDetector constructor.
@@ -156,14 +156,14 @@ public:
   void addSprite(Sprite * sprite);
 
   /**
-   * @brief Remove the specified sprite from collision detector.
+   * @brief Removes the specified sprite from collision detector.
    *
    * @param sprite The sprite to remove.
    */
   void removeSprite(Sprite * sprite);
 
   /**
-   * @brief Detect first collision with the specified sprite.
+   * @brief Detects first collision with the specified sprite.
    *
    * It is necessary to call CollisionDetector.update() before detectCollision() so sprites position and size are correctly updated.
    *
@@ -175,7 +175,7 @@ public:
   Sprite * detectCollision(Sprite * sprite, bool removeCollidingSprites = true);
 
   /**
-   * @brief Detect multiple collisions with the specified sprite.
+   * @brief Detects multiple collisions with the specified sprite.
    *
    * It is necessary to call CollisionDetector.update() before detectCollision() so sprites position and size are correctly updated.
    *
@@ -186,7 +186,7 @@ public:
   void detectCollision(Sprite * sprite, CollisionDetectionCallback callbackFunc, void * callbackObj);
 
   /**
-   * @brief Update collision detector.
+   * @brief Updates collision detector.
    *
    * When a sprite changes its position or size it is necessary to update the collision detector.<br>
    * This method just updates the detector without generate collision events.
@@ -196,7 +196,7 @@ public:
   void update(Sprite * sprite);
 
   /**
-   * @brief Update collision detector and detect collision with the specified sprite.
+   * @brief Updates collision detector and detect collision with the specified sprite.
    *
    * When a sprite changes its position or size it is necessary to update the collision detector.<br>
    * This method updates the detector and detects collisions.
@@ -209,7 +209,7 @@ public:
   Sprite * updateAndDetectCollision(Sprite * sprite, bool removeCollidingSprites = true);
 
   /**
-   * @brief Update collision detector and detect multiple collisions with the specified sprite.
+   * @brief Updates collision detector and detect multiple collisions with the specified sprite.
    *
    * When a sprite changes its position or size it is necessary to update the collision detector.<br>
    * This method updates the detector and detects multiple collisions.

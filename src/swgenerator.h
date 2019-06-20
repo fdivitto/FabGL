@@ -64,7 +64,7 @@ public:
   void begin();
 
   /**
-   * @brief Initialize SquareWaveGeneratorClass and associate GPIOs to the outputs.
+   * @brief Initializes SquareWaveGeneratorClass and associate GPIOs to the outputs.
    *
    * @param div1_onGPIO0 If true the undivided frequency is delivered on GPIO0.
    * @param div2 Specifies the GPIO where to send frequency / 2 (set GPIO_NUM_39 to disable output).
@@ -90,12 +90,12 @@ public:
   void begin(bool div1_onGPIO0, gpio_num_t div2 = GPIO_NUM_39, gpio_num_t div4 = GPIO_NUM_39, gpio_num_t div8 = GPIO_NUM_39, gpio_num_t div16 = GPIO_NUM_39, gpio_num_t div32 = GPIO_NUM_39, gpio_num_t div64 = GPIO_NUM_39, gpio_num_t div128 = GPIO_NUM_39, gpio_num_t div256 = GPIO_NUM_39);
 
   /**
-   * @brief Disable all outputs.
+   * @brief Disables all outputs.
    */
   void end();
 
   /**
-   * @brief Set the main frequency.
+   * @brief Sets the main frequency.
    *
    * @param freq Frequency in Hertz.
    * @param dmaBuffers Use only to provide custom DMA buffers.
@@ -108,7 +108,7 @@ public:
   void play(int freq, lldesc_t volatile * dmaBuffers = nullptr);
 
   /**
-   * @brief Disable all outputs.
+   * @brief Disables all outputs.
    */
   void stop();
 

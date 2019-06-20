@@ -52,7 +52,7 @@ class PS2ControllerClass {
 public:
 
   /**
-  * @brief Initialize PS2 device controller.
+  * @brief Initializes PS2 device controller.
   *
   * Initializes the PS2 controller assigning GPIOs to DAT and CLK lines.
   *
@@ -64,7 +64,7 @@ public:
   void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_NUM_39, gpio_num_t port1_datGPIO = GPIO_NUM_39);
 
   /**
-   * @brief Get the number of scancodes available in the controller buffer.
+   * @brief Gets the number of scancodes available in the controller buffer.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    *
@@ -75,7 +75,7 @@ public:
   bool waitData(int timeOutMS, int PS2Port);
 
   /**
-   * @brief Get a scancode from the queue.
+   * @brief Gets a scancode from the queue.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    *
@@ -84,7 +84,7 @@ public:
   int getData(int PS2Port);
 
   /**
-   * @brief Send a command to the device.
+   * @brief Sends a command to the device.
    *
    * @param data Byte to send to the PS2 device.
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
@@ -92,7 +92,7 @@ public:
   void sendData(uint8_t data, int PS2Port);
 
   /**
-   * @brief Inject a byte into the RX buffer.
+   * @brief Injects a byte into the RX buffer.
    *
    * Injects a byte as if it were actually sent by the device.
    *

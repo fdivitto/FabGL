@@ -591,7 +591,7 @@ public:
   void begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t green1GPIO, gpio_num_t green0GPIO, gpio_num_t blue1GPIO, gpio_num_t blue0GPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO);
 
   /**
-   * @brief Get number of bits allocated for each channel.
+   * @brief Gets number of bits allocated for each channel.
    *
    * Number of bits depends by which begin() initializer has been called.
    *
@@ -600,7 +600,7 @@ public:
   uint8_t getBitsPerChannel() { return m_bitsPerChannel; }
 
   /**
-   * @brief Set current resolution using linux-like modeline.
+   * @brief Sets current resolution using linux-like modeline.
    *
    * Modeline must have following syntax (non case sensitive):
    *
@@ -633,42 +633,42 @@ public:
   Timings * getResolutionTimings() { return &m_timings; }
 
   /**
-   * @brief Return the screen width in pixels.
+   * @brief Determines the screen width in pixels.
    *
    * @return Screen width in pixels.
    */
   int getScreenWidth()    { return m_timings.HVisibleArea; }
 
   /**
-   * @brief Return the screen height in pixels.
+   * @brief Determines the screen height in pixels.
    *
    * @return Screen height in pixels.
    */
   int getScreenHeight()   { return m_timings.VVisibleArea; }
 
   /**
-   * @brief Return horizontal position of the viewport.
+   * @brief Determines horizontal position of the viewport.
    *
    * @return Horizontal position of the viewport (in case viewport width is less than screen width).
    */
   int getViewPortCol()    { return m_viewPortCol; }
 
   /**
-   * @brief Return vertical position of the viewport.
+   * @brief Determines vertical position of the viewport.
    *
    * @return Vertical position of the viewport (in case viewport height is less than screen height).
    */
   int getViewPortRow()    { return m_viewPortRow; }
 
   /**
-   * @brief Return horizontal size of the viewport.
+   * @brief Determines horizontal size of the viewport.
    *
    * @return Horizontal size of the viewport.
    */
   int getViewPortWidth()  { return m_viewPortWidth; }
 
   /**
-   * @brief Return vertical size of the viewport.
+   * @brief Determines vertical size of the viewport.
    *
    * @return Vertical size of the viewport.
    */
@@ -679,7 +679,7 @@ public:
   void primitivesExecutionWait();
 
   /**
-   * @brief Enable or disable drawings inside vertical retracing time.
+   * @brief Enables or disables drawings inside vertical retracing time.
    *
    * When vertical retracing occurs (on Vertical Sync) an interrupt is trigged. Inside this interrupt primitives
    * like line, circles, glyphs, etc.. are painted.<br>
@@ -692,7 +692,7 @@ public:
   void enableBackgroundPrimitiveExecution(bool value);
 
   /**
-   * @brief Suspend drawings.
+   * @brief Suspends drawings.
    *
    * Suspends drawings disabling vertical sync interrupt.<br>
    * After call to suspendBackgroundPrimitiveExecution() adding new primitives may cause a deadlock.<br>
@@ -702,14 +702,14 @@ public:
   void suspendBackgroundPrimitiveExecution();
 
   /**
-   * @brief Resume drawings after suspendBackgroundPrimitiveExecution().
+   * @brief Resumes drawings after suspendBackgroundPrimitiveExecution().
    *
    * Resumes drawings enabling vertical sync interrupt.
    */
   void resumeBackgroundPrimitiveExecution();
 
   /**
-   * @brief Draw immediately all primitives in the queue.
+   * @brief Draws immediately all primitives in the queue.
    *
    * Draws all primitives before they are processed in the vertical sync interrupt.<br>
    * May generate flickering because don't care of vertical sync.
@@ -717,7 +717,7 @@ public:
   void processPrimitives();
 
   /**
-   * @brief Move screen by specified horizontal and vertical offset.
+   * @brief Moves screen by specified horizontal and vertical offset.
    *
    * Screen moving is performed moving horizontal and vertical Front and Back porchs.
    *
@@ -732,7 +732,7 @@ public:
   void moveScreen(int offsetX, int offsetY);
 
   /**
-   * @brief Reduce or expands screen size by the specified horizontal and vertical offset.
+   * @brief Reduces or expands screen size by the specified horizontal and vertical offset.
    *
    * Screen shrinking is performed changing horizontal and vertical Front and Back porchs.
    *
@@ -748,7 +748,7 @@ public:
   void shrinkScreen(int shrinkX, int shrinkY);
 
   /**
-   * @brief Set the list of active sprites.
+   * @brief Sets the list of active sprites.
    *
    * A sprite is an image that keeps background unchanged.<br>
    * There is no limit to the number of active sprites, but flickering and slow
@@ -776,14 +776,14 @@ public:
   }
 
   /**
-   * @brief Empty the list of active sprites.
+   * @brief Empties the list of active sprites.
    *
    * Call this method when you don't need active sprites anymore.
    */
   void removeSprites() { setSprites(nullptr, 0, 0); }
 
   /**
-   * @brief Force the sprites to be updated.
+   * @brief Forces the sprites to be updated.
    *
    * Screen is automatically updated whenever a primitive is painted (look at CanvasClass).<br>
    * When a sprite updates its image or its position (or any other property) it is required
@@ -793,21 +793,21 @@ public:
   void refreshSprites();
 
   /**
-   * @brief Return true if VGAControllerClass is on double buffered mode.
+   * @brief Determines whether VGAControllerClass is on double buffered mode.
    *
    * @return True if VGAControllerClass is on double buffered mode.
    */
   bool isDoubleBuffered() { return m_doubleBuffered; }
 
   /**
-   * @brief Set mouse cursor and make it visible.
+   * @brief Sets mouse cursor and make it visible.
    *
    * @param cursor Cursor to use when mouse pointer need to be painted. nullptr = disable mouse pointer.
    */
   void setMouseCursor(Cursor const * cursor);
 
   /**
-   * @brief Set mouse cursor from a set of predefined cursors.
+   * @brief Sets mouse cursor from a set of predefined cursors.
    *
    * @param cursorName Name (enum) of predefined cursor.
    *
@@ -818,7 +818,7 @@ public:
   void setMouseCursor(CursorName cursorName);
 
   /**
-   * @brief Set mouse cursor position.
+   * @brief Sets mouse cursor position.
    *
    * @param X Mouse cursor horizontal position.
    * @param Y Mouse cursor vertical position.
@@ -826,7 +826,7 @@ public:
   void setMouseCursorPos(int X, int Y);
 
   /**
-   * @brief Read pixels inside the specified rectangle.
+   * @brief Reads pixels inside the specified rectangle.
    *
    * Screen reading may occur while other drawings are in progress, so the result may be not updated.
    *
@@ -854,7 +854,7 @@ public:
   void readScreen(Rect const & rect, RGB * destBuf);
 
   /**
-   * @brief Write pixels inside the specified rectangle.
+   * @brief Writes pixels inside the specified rectangle.
    *
    * Screen writing may occur while other drawings are in progress, so written pixels may be overlapped or mixed.
    *
