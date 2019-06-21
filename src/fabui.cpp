@@ -1576,7 +1576,7 @@ void uiFrame::paintFrame()
     // close, maximize and minimze buttons
     int btnX = paintButtons(bkgRect);
     // title
-    Canvas.setPenColor(state().active ? m_frameStyle.activeTitleFontColor : m_frameStyle.titleFontColor);
+    Canvas.setPenColor(state().active ? m_frameStyle.activeTitleColor : m_frameStyle.titleColor);
     Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
     Canvas.drawTextWithEllipsis(m_frameStyle.titleFont, 1 + bkgRect.X1, 1 + bkgRect.Y1, m_title, btnX);
     // adjust background rect
@@ -2089,7 +2089,7 @@ void uiButton::paintContent(Rect const & rect)
     y += (imax(textHeight, bitmapHeight) - textHeight) / 2;
   }
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
-  Canvas.setPenColor(m_buttonStyle.textFontColor);
+  Canvas.setPenColor(m_buttonStyle.textColor);
   Canvas.drawText(m_buttonStyle.textFont, x, y, m_text);
 }
 
@@ -2401,7 +2401,7 @@ void uiTextEdit::paintContent()
 {
   m_contentRect = m_contentRect.shrink(2);
   Canvas.setClippingRect(Canvas.getClippingRect().intersection(m_contentRect));
-  Canvas.setPenColor(m_textEditStyle.textFontColor);
+  Canvas.setPenColor(m_textEditStyle.textColor);
 
   GlyphOptions glyphOpt = GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0);
   if (m_selCursorCol != m_cursorCol)
@@ -2642,7 +2642,7 @@ void uiLabel::paintLabel()
   Canvas.setBrushColor(m_labelStyle.backgroundColor);
   Canvas.fillRectangle(r);
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
-  Canvas.setPenColor(m_labelStyle.textFontColor);
+  Canvas.setPenColor(m_labelStyle.textColor);
   int x = r.X1;
   int y = r.Y1 + (r.height() - m_labelStyle.textFont->height) / 2;
   Canvas.drawText(m_labelStyle.textFont, x, y, m_text);
@@ -3361,7 +3361,7 @@ void uiListBox::paintListBox()
 
     if (index < m_items.count()) {
       // text
-      Canvas.setPenColor(m_items.selected(index) ? m_listBoxStyle.selectedTextFontColor : m_listBoxStyle.textFontColor);
+      Canvas.setPenColor(m_items.selected(index) ? m_listBoxStyle.selectedTextColor : m_listBoxStyle.textColor);
       int x = itmRect.X1 + 1;
       int y = itmRect.Y1 + (itmRect.height() - m_listBoxStyle.textFont->height) / 2;
       Canvas.drawText(m_listBoxStyle.textFont, x, y, m_items.get(index));

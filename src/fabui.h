@@ -211,7 +211,7 @@ public:
   virtual ~uiObject();
 
   /**
-   * @brief Return the object type.
+   * @brief Determines the object type.
    *
    * @return Object type.
    */
@@ -239,7 +239,7 @@ public:
   virtual void processEvent(uiEvent * event);
 
   /**
-   * @brief Return the app that owns this object.
+   * @brief Determines the app that owns this object.
    *
    * @return An uiApp object.
    */
@@ -261,25 +261,27 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiWindow
 
-
+/** @brief Specifies window rectangle origin */
 enum class uiOrigin {
-  Screen,
-  Parent,
-  Window,
+  Screen,   /**< Rectangle coordinates relative to the screen (that is the root window) */
+  Parent,   /**< Rectangle coordiantes relative to parent window */
+  Window,   /**< Rectangle coordinates relative to the window itself */
 };
 
 
+/** @brief Specifies current window state */
 struct uiWindowState {
-  uint8_t visible   : 1;  // 0 = hidden,   1 = visible
-  uint8_t maximized : 1;  // 0 = normal,   1 = maximized
-  uint8_t minimized : 1;  // 0 = normal,   1 = minimized
-  uint8_t active    : 1;  // 0 = inactive, 1 = active
+  uint8_t visible   : 1;  /**< 0 = hidden,   1 = visible   */
+  uint8_t maximized : 1;  /**< 0 = normal,   1 = maximized */
+  uint8_t minimized : 1;  /**< 0 = normal,   1 = minimized */
+  uint8_t active    : 1;  /**< 0 = inactive, 1 = active    */
 };
 
 
+/** @brief Contains some window options */
 struct uiWindowProps {
-  uint8_t activable : 1;
-  uint8_t focusable : 1;
+  uint8_t activable : 1;  /**< The window is activable (default for windows)  */
+  uint8_t focusable : 1;  /**< The window is focusable (default for controls) */
 
   uiWindowProps() :
     activable(true),
@@ -288,98 +290,275 @@ struct uiWindowProps {
 };
 
 
+/** @brief Contains the window style */
 struct uiWindowStyle {
-  CursorName       defaultCursor      = CursorName::CursorPointerSimpleReduced;
-  RGB              borderColor        = RGB(2, 2, 2);
-  RGB              activeBorderColor  = RGB(2, 2, 3);
-  RGB              focusedBorderColor = RGB(0, 0, 3);
-  uint8_t          borderSize         = 3;
-  uint8_t          focusedBorderSize  = 1;
+  CursorName       defaultCursor      = CursorName::CursorPointerSimpleReduced;  /**< Default window mouse cursor */
+  RGB              borderColor        = RGB(2, 2, 2);                            /**< Border color */
+  RGB              activeBorderColor  = RGB(2, 2, 3);                            /**< Border color when active */
+  RGB              focusedBorderColor = RGB(0, 0, 3);                            /**< Border color when focused */
+  uint8_t          borderSize         = 3;                                       /**< Border size in pixels. This determines also the resize grips area. */
+  uint8_t          focusedBorderSize  = 1;                                       /**< Border size when focused */
 };
 
 
+/** @brief Contains anchors enable/disable switches */
 struct uiAnchors {
-  uint8_t left   : 1;
-  uint8_t top    : 1;
-  uint8_t right  : 1;
-  uint8_t bottom : 1;
+  uint8_t left   : 1;     /**< Left anchor enable/disable switch */
+  uint8_t top    : 1;     /**< Top anchor enable/disable switch */
+  uint8_t right  : 1;     /**< Right anchor enable/disable switch */
+  uint8_t bottom : 1;     /**< Bottom anchor enable/disable switch */
 
   uiAnchors() : left(true), top(true), right(false), bottom(false) { }
 };
 
 
+/** @brief Base class for all visible UI elements (Frames and Controls) */
 class uiWindow : public uiEvtHandler {
 
 friend class uiApp;
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A window must always have a parent window
+   * @param pos Top-left coordinates of the window relative to the parent
+   * @param size The window size
+   * @param visible If true the window is immediately visible
+   */
   uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible);
 
   virtual ~uiWindow();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Gets next sibling
+   *
+   * Next sibling is more visible than calling object.
+   *
+   * @return Next uiWindow object
+   */
   uiWindow * next()  { return m_next; }
 
+  /**
+   * @brief Gets previous sibling
+   *
+   * Previous sibling is less visible than calling object.
+   *
+   * @return Previous uiWindow object
+   */
   uiWindow * prev()  { return m_prev; }
 
+  /**
+   * @brief Gets first child
+   *
+   * @return First uiWindow object
+   */
   uiWindow * firstChild() { return m_firstChild; }
 
+  /**
+   * @brief Gets last child
+   *
+   * @return Last uiWindow object
+   */
   uiWindow * lastChild() { return m_lastChild; }
 
+  /**
+   * @brief Determines whether this window has children
+   *
+   * @return True if window has one o more children
+   */
   bool hasChildren() { return m_firstChild != nullptr; }
 
-  bool isChild(uiWindow * window);
-
+  /**
+   * @brief Brings this window on top
+   */
   void bringOnTop();
 
+  /**
+   * @brief Brings this window after another one
+   *
+   * @param insertionPoint This window will be placed after insertionPoint window. If insertionPoint is nullptr this window will be placed at the first position (location of less visibility.).
+   */
   void bringAfter(uiWindow * insertionPoint);
 
+  /**
+   * @brief Determines the window position relative to parent window
+   *
+   * To change window position use uiApp.moveWindow().
+   *
+   * @return The top left point where this window is located
+   */
   Point pos() { return m_pos; }
 
+  /**
+   * @brief Determines position of the client area
+   *
+   * @return The top left point where the client area starts
+   */
   Point clientPos();
 
+  /**
+   * @brief Determines the window size
+   *
+   * To set window size use uiApp.resizeWindow().
+   *
+   * @return The window size
+   */
   Size size() { return m_size; }
 
+  /**
+   * @brief Determines the client area size
+   *
+   * @return The client area size
+   */
   Size clientSize();
 
+  /**
+   * @brief Determines the window bounding box
+   *
+   * To set window position use uiApp.moveWindow(), to set window size use uiApp.resizeWindow() or uiApp.reshapeWindow().
+   *
+   * @param origin Decides the origin of returned rectangle
+   *
+   * @return The window bounding box
+   */
   Rect rect(uiOrigin origin);
 
+  /**
+   * @brief Determines the client area bounding box
+   *
+   * @param origin Decides the origin of returned rectangle
+   *
+   * @return The window client area bounding box
+   */
   virtual Rect clientRect(uiOrigin origin);
 
+  /**
+   * @brief Determines the window state
+   *
+   * To set window state (hidden, visible, maximized, minimized) use uiApp.showWindow(), uiApp.maximizeWindow(), uiApp.minimizeWindow().
+   *
+   * @return Current window state
+   */
   uiWindowState state() { return m_state; }
 
+  /**
+   * @brief Sets or gets window properties
+   *
+   * @return L-value representing some window properties
+   */
   uiWindowProps & windowProps() { return m_windowProps; }
 
+  /**
+   * @brief Sets or gets window style
+   *
+   * @return L-value representing window style (colors, border size, etc...)
+   */
   uiWindowStyle & windowStyle() { return m_windowStyle; }
 
+  /**
+   * @brief Determines the parent window
+   *
+   * @return Parent window
+   */
   uiWindow * parent() { return m_parent; }
 
+  /**
+   * @brief Determines mouse position when left button was down
+   *
+   * @return Mouse position
+   */
   Point mouseDownPos() { return m_mouseDownPos; }
 
+  /**
+   * @brief Transforms rectangle origins from current window to another one
+   *
+   * @param rect Rectangle to transform
+   * @param baseWindow Window where the output rectangle will be relative to
+   *
+   * @return The translated rectangle
+   */
   Rect transformRect(Rect const & rect, uiWindow * baseWindow);
 
+  /**
+   * @brief Repaints a rectangle of this window
+   *
+   * @param rect Rectangle to repaint
+   */
   void repaint(Rect const & rect);
 
+  /**
+   * @brief Repaints this window
+   */
   void repaint();
 
+  /**
+   * @brief Determines whether the mouse is over this window
+   *
+   * This methods returns True also when the mouse is captured.
+   *
+   * @return True if the mouse is over the window
+   */
   bool isMouseOver() { return m_isMouseOver; }
 
+  /**
+   * @brief Exits from a modal window
+   *
+   * To open a modal window use uiApp.showModalWindow().
+   *
+   * @param modalResult An integer value to return to uiApp.showModalWindow().
+   */
   void exitModal(int modalResult);
 
+  /**
+   * @brief Determines whether this window or control has focus
+   *
+   * To set currently focused window use uiApp.setFocusedWindow().
+   *
+   * @return True if this window has focus
+   */
   bool hasFocus();
 
+  /**
+   * @brief Allows to switch on or off anchors
+   *
+   * @return An L-value used to switch on or off anchors
+   */
   uiAnchors & anchors() { return m_anchors; }
 
+  /**
+   * @brief Sets the focus index (aka tab-index)
+   *
+   * @param value The focus index. -1 = control isn't included into the focusable controls. 0 = first focusable control.
+   */
   void setFocusIndex(int value) { m_focusIndex = value; }
 
+  /**
+   * @brief Determines the focus index (aka tab-index)
+   *
+   * @return The focus index
+   */
   int focusIndex() { return m_focusIndex; }
 
 
   // Delegates
 
+  /**
+   * @brief Mouse click event delegate
+   *
+   * This delegate is called when the mouse button is pressed and released on the same position.
+   */
   Delegate<> onClick;
+
+  /**
+   * @brief Mouse double click event delegate4
+   *
+   * This delegate is called when the mouse button is double pressed and released on the same position.
+   * To change double click time use uiAppProps.doubleClickTime of uiApp.appProps().
+   */
   Delegate<> onDblClick;
 
 
@@ -391,6 +570,7 @@ protected:
   void removeChild(uiWindow * child, bool freeChild = true);
   void moveChildOnTop(uiWindow * child);
   void moveAfter(uiWindow * child, uiWindow * underlyingChild);
+  bool isChild(uiWindow * window);
 
   Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
   Point posAtMouseDown()              { return m_posAtMouseDown; }
@@ -447,26 +627,33 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiFrame
 
+
+/**
+ * Specifies frame style (colors, title font, etc...)
+ */
 struct uiFrameStyle {
-  RGB              backgroundColor                = RGB(3, 3, 3);
-  RGB              titleBackgroundColor           = RGB(2, 2, 2);
-  RGB              activeTitleBackgroundColor     = RGB(2, 2, 3);
-  RGB              titleFontColor                 = RGB(0, 0, 0);
-  RGB              activeTitleFontColor           = RGB(0, 0, 0);
-  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(14, false);
-  RGB              buttonColor                    = RGB(1, 1, 1);  // color used to draw Close, Maximize and Minimize buttons
-  RGB              activeButtonColor              = RGB(0, 0, 0);  // color used to draw Close, Maximize and Minimize buttons
-  RGB              mouseOverBackgroundButtonColor = RGB(0, 0, 3);  // color used for background of Close, Maximize and Minimize buttons when mouse is over them
-  RGB              mouseOverButtonColor           = RGB(3, 3, 3);  // color used for pen of Close, Maximize and Minimize buttons when mouse is over them
+  RGB              backgroundColor                = RGB(3, 3, 3);  /**< Frame background color */
+  RGB              titleBackgroundColor           = RGB(2, 2, 2);  /**< Title background color */
+  RGB              activeTitleBackgroundColor     = RGB(2, 2, 3);  /**< Title background color when active */
+  RGB              titleColor                     = RGB(0, 0, 0);  /**< Title color */
+  RGB              activeTitleColor               = RGB(0, 0, 0);  /**< Title color when active */
+  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Title font */
+  RGB              buttonColor                    = RGB(1, 1, 1);  /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB              activeButtonColor              = RGB(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB              mouseOverBackgroundButtonColor = RGB(0, 0, 3);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
+  RGB              mouseOverButtonColor           = RGB(3, 3, 3);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
 };
 
 
+/**
+ * @brief Properties of the frame
+ */
 struct uiFrameProps {
-  uint8_t resizeable        : 1;
-  uint8_t moveable          : 1;
-  uint8_t hasCloseButton    : 1;
-  uint8_t hasMaximizeButton : 1;
-  uint8_t hasMinimizeButton : 1;
+  uint8_t resizeable        : 1; /**< Frame is resizeable. Make sure the window border has enough thickness setting also uiWindowStyle.borderSize */
+  uint8_t moveable          : 1; /**< Frame is moveable. Make sure the window has a title bar setting window title */
+  uint8_t hasCloseButton    : 1; /**< Frame has close button. Make sure the window has a title bar setting window title */
+  uint8_t hasMaximizeButton : 1; /**< Frame has maximize button. Make sure the window has a title bar setting window title */
+  uint8_t hasMinimizeButton : 1; /**< Frame has minimize button. Make sure the window has a title bar setting window title */
 
   uiFrameProps() :
     resizeable(true),
@@ -495,22 +682,56 @@ enum class uiFrameItem : uint8_t {
 };
 
 
+/**
+ * @brief A frame is a window with a title bar, maximize/minimize/close buttons and that is resizeable or moveable
+ */
 class uiFrame : public uiWindow {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent Parent window
+   * @param title Title of the frame. An empty string hides the title bar
+   * @param pos Top-left coordinates of the frame relative to the parent
+   * @param size The frame size
+   * @param visible If true the frame is immediately visible
+   */
   uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiFrame();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Determines the window title
+   *
+   * @return The window title
+   */
   char const * title() { return m_title; }
 
+  /**
+   * @brief Sets window title
+   *
+   * Window needs to be repainted in order to display changed title.
+   *
+   * @param value The window title. nullptr hides the title bar.
+   */
   void setTitle(char const * value);
 
+  /**
+   * @brief Sets or gets frame style
+   *
+   * @return L-value representing frame style (colors, border size, etc...)
+   */
   uiFrameStyle & frameStyle() { return m_frameStyle; }
 
+  /**
+   * @brief Sets or gets frame properties
+   *
+   * @return L-value representing some frame properties
+   */
   uiFrameProps & frameProps() { return m_frameProps; }
 
   Rect clientRect(uiOrigin origin);
@@ -518,9 +739,32 @@ public:
 
   // Delegates
 
+  /**
+   * @brief Show window event delegate
+   *
+   * This delegate is called when the window is about to be shown.
+   */
   Delegate<> onShow;
+
+  /**
+   * @brief Hide window event delegate
+   *
+   * This delegate is called when the window is about to be hidden.
+   */
   Delegate<> onHide;
+
+  /**
+   * @brief Resize window event delegate
+   *
+   * This delegate is called after its size has changed.
+   */
   Delegate<> onResize;
+
+  /**
+   * @brief Timer event delegate
+   *
+   * This delegate is called when the timer expires.
+   */
   Delegate<uiTimerHandle> onTimer;
 
 
@@ -566,10 +810,21 @@ private:
 // uiControl
 
 
+/**
+ * @brief This is the base class for all controls. A control can have focus and is not activable.
+ */
 class uiControl : public uiWindow {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent Parent window
+   * @param pos Top-left coordinates of the control relative to the parent
+   * @param size The control size
+   * @param visible If true the control is immediately visible
+   */
   uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible);
 
   virtual ~uiControl();
@@ -583,17 +838,19 @@ public:
 // uiScrollableControl
 
 
+/** @brief Contains the scrollable control style */
 struct uiScrollableControlStyle {
-  RGB scrollBarBackgroundColor          = RGB(1, 1, 1);
-  RGB scrollBarForegroundColor          = RGB(2, 2, 2);
-  RGB mouseOverScrollBarForegroundColor = RGB(3, 3, 3);
-  uint8_t scrollBarSize                 = 11;  // width of vertical scrollbar, height of vertical scroll bar
+  RGB scrollBarBackgroundColor          = RGB(1, 1, 1);  /**< Background color of the scrollbar */
+  RGB scrollBarForegroundColor          = RGB(2, 2, 2);  /**< Foreground color of the scrollbar */
+  RGB mouseOverScrollBarForegroundColor = RGB(3, 3, 3);  /**< Foreground color of the scrollbar when mouse is over it */
+  uint8_t scrollBarSize                 = 11;            /**< Width of vertical scrollbar, height of vertical scroll bar */
 };
 
 
+/** @brief Scrollbar direction */
 enum class uiScrollBar {
-  Vertical,
-  Horizontal,
+  Vertical,          /**< Vertical scrollbar */
+  Horizontal,        /**< Horizontal scrollbar */
 };
 
 
@@ -612,10 +869,21 @@ enum class uiScrollBarItem {
 };
 
 
+/**
+ * @brief A scrollable control is a control with optionally vertical and/or horizontal scrollbars
+ */
 class uiScrollableControl : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A control must always have a parent window
+   * @param pos Top-left coordinates of the control relative to the parent
+   * @param size The control size
+   * @param visible If true the control is immediately visible
+   */
   uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiScrollableControl();
@@ -624,29 +892,96 @@ public:
 
   Rect clientRect(uiOrigin origin);
 
+  /**
+   * @brief Sets or gets control style
+   *
+   * @return L-value representing control style (colors, scrollbars width, etc...)
+   */
   uiScrollableControlStyle & scrollableControlStyle() { return m_scrollableControlStyle; }
 
+  /**
+   * @brief Determines position of the horizontal scrollbar thumb
+   *
+   * Minimum value is 0, maximum value is HScrollBarRange() - HScrollBarVisible().
+   * Position is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar position in scroll units
+   */
   int HScrollBarPos() { return m_HScrollBarPosition; }
 
+  /**
+   * @brief Determines horizontal scrollbar visible portion (aka thumb size) of the scrollable content
+   *
+   * Visible portion is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar visible portion in scroll units
+   */
   int HScrollBarVisible() { return m_HScrollBarVisible; }
 
+  /**
+   * @brief Determines horizontal scrollbar range
+   *
+   * Range is the maximum position of the scrollbar. Maximum value of scrollbar position will HScrollBarRange() - HScrollBarVisible().
+   * Range is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar range in scroll units.
+   */
   int HScrollBarRange() { return m_HScrollBarRange; }
 
+  /**
+   * @brief Determines position of the vertical scrollbar thumb
+   *
+   * Minimum value is 0, maximum value is VScrollBarRange() - VScrollBarVisible().
+   * Position is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar position in scroll units
+   */
   int VScrollBarPos() { return m_VScrollBarPosition; }
 
+  /**
+   * @brief Determines vertical scrollbar visible portion (aka thumb size) of the scrollable content
+   *
+   * Visible portion is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar visible portion in scroll units
+   */
   int VScrollBarVisible() { return m_VScrollBarVisible; }
 
+  /**
+   * @brief Determines vertical scrollbar range
+   *
+   * Range is the maximum position of the scrollbar. Maximum value of scrollbar position will VScrollBarRange() - VScrollBarVisible().
+   * Range is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   *
+   * @return Scrollbar range in scroll units.
+   */
   int VScrollBarRange() { return m_VScrollBarRange; }
 
 
   // Delegates
 
+  /**
+   * @brief Horizontal scrollbar change event delegate
+   */
   Delegate<> onChangeHScrollBar;
+
+  /**
+   * @brief Vertical scrollbar change event delegate
+   */
   Delegate<> onChangeVScrollBar;
 
 
 protected:
 
+  /**
+   * @brief Sets scrollbar position, visible portion and range
+   *
+   * @param orientation Specifies which scrollbar to update
+   * @param position Sets position of the scrollbar thumb. Minimum value is 0, maximum value is range - visible. Position is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   * @param visible Sets scrollbar visible portion (aka thumb size) of the scrollable content. Visible portion is measured in "scroll units". A scroll unit is determined by scrollbar size.
+   * @param range Sets vertical scrollbar range. Range is the maximum position of the scrollbar. Maximum value of scrollbar position will range - visible.
+   * @param repaintScrollbar If True the scrollbar is repainted immediately.
+   */
   virtual void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar = true);
 
 
@@ -691,49 +1026,97 @@ private:
 // uiButton
 
 
-
+/** @brief Contains the button style */
 struct uiButtonStyle {
-  RGB              backgroundColor          = RGB(2, 2, 2);
-  RGB              downBackgroundColor      = RGB(2, 2, 3); // when m_down = true
-  RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
-  RGB              mouseDownBackgroundColor = RGB(3, 3, 3);
-  RGB              textFontColor            = RGB(0, 0, 0);
-  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
-  uint8_t          bitmapTextSpace          = 4;
-  Bitmap const *   bitmap                   = nullptr;
-  Bitmap const *   downBitmap               = nullptr;
+  RGB              backgroundColor          = RGB(2, 2, 2); /**< Background color */
+  RGB              downBackgroundColor      = RGB(2, 2, 3); /**< Background color when button is down */
+  RGB              mouseOverBackgroundColor = RGB(2, 2, 3); /**< Background color when mouse is over */
+  RGB              mouseDownBackgroundColor = RGB(3, 3, 3); /**< Background color when mouse is down */
+  RGB              textColor                = RGB(0, 0, 0); /**< Text color */
+  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false); /**< Text font */
+  uint8_t          bitmapTextSpace          = 4;            /**< Spaces between image and text */
+  Bitmap const *   bitmap                   = nullptr;      /**< Bitmap to display */
+  Bitmap const *   downBitmap               = nullptr;      /**< Bitmap to display when button is down */
 };
 
 
+/** @brief Specifies the button kind */
 enum class uiButtonKind {
-  Button,
-  Switch,
+  Button,   /**< Normal button - can have a single state. Generates only click events */
+  Switch,   /**< Switch - can have two states. Generates onChange events */
 };
 
 
+/** @brief Represents a button control. A button can have text and optionally a bitmap */
 class uiButton : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A button must always have a parent window
+   * @param text The text of the button
+   * @param pos Top-left coordinates of the button relative to the parent
+   * @param size The button size
+   * @param kind The button kind (button or switch)
+   * @param visible If true the button is immediately visible
+   */
   uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind = uiButtonKind::Button, bool visible = true);
 
   virtual ~uiButton();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets button text
+   *
+   * Button needs to be repainted in order to display changed text.
+   *
+   * @param value Button text
+   */
   void setText(char const * value);
 
+  /**
+   * @brief Determines button text
+   *
+   * @return Button text
+   */
   char const * text() { return m_text; }
 
+  /**
+   * @brief Sets or gets button style
+   *
+   * @return L-value representing button style (colors, bitmaps, etc...)
+   */
   uiButtonStyle & buttonStyle() { return m_buttonStyle; }
 
+  /**
+   * @brief Determines whether the switch button is down or up
+   *
+   * Only a switch button can be down.
+   *
+   * @return True if the button is down
+   */
   bool down() { return m_down; }
 
+  /**
+   * @brief Sets button state of a switch button
+   *
+   * Only a switch button can be down.
+   *
+   * @param value Button state (true = down, false = up)
+   */
   void setDown(bool value);
 
 
   // Delegates
 
+  /**
+   * @brief Button changed event delegate
+   *
+   * This delegate is called whenever a switch button change its state
+   */
   Delegate<> onChange;
 
 
@@ -763,11 +1146,16 @@ private:
 // single line text edit
 
 
+/**
+ * @brief Sets or gets text edit style
+ *
+ * @return L-value representing frame style (colors, font, etc...)
+ */
 struct uiTextEditStyle {
-  RGB              backgroundColor            = RGB(2, 2, 2);
-  RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);
-  RGB              focusedBackgroundColor     = RGB(3, 3, 3);
-  RGB              textFontColor              = RGB(0, 0, 0);
+  RGB              backgroundColor            = RGB(2, 2, 2);    /**< Background color */
+  RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);    /**< Background color when mouse is over */
+  RGB              focusedBackgroundColor     = RGB(3, 3, 3);    /**< Background color when focused */
+  RGB              textColor                  = RGB(0, 0, 0);    /**< Text color */
   FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);
 };
 
@@ -861,7 +1249,7 @@ private:
 struct uiLabelStyle {
   FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
   RGB              backgroundColor          = RGB(3, 3, 3);
-  RGB              textFontColor            = RGB(0, 0, 0);
+  RGB              textColor                = RGB(0, 0, 0);
 };
 
 
@@ -1033,8 +1421,8 @@ struct uiListBoxStyle {
   RGB              focusedSelectedBackgroundColor = RGB(0, 0, 3);
   int              itemHeight                     = 16;
   FontInfo const * textFont                       = Canvas.getPresetFontInfoFromHeight(14, false);
-  RGB              textFontColor                  = RGB(0, 0, 0);
-  RGB              selectedTextFontColor          = RGB(3, 3, 3);
+  RGB              textColor                      = RGB(0, 0, 0);
+  RGB              selectedTextColor              = RGB(3, 3, 3);
 };
 
 

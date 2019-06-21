@@ -90,8 +90,8 @@ class MyApp : public uiApp {
     auto label = new uiLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30), Size(160, 35));
     label->anchors().left = false;
     label->anchors().top = false;
-    label->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(24, false);
-    label->labelStyle().textFontColor = RGB(random(4), random(4), random(4));
+    label->labelStyle().textFont  = Canvas.getPresetFontInfoFromHeight(24, false);
+    label->labelStyle().textColor = RGB(random(4), random(4), random(4));
     label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
     dynamicFrames.push(newFrame);
   }
