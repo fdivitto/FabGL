@@ -2119,10 +2119,32 @@ public:
    */
   void showWindow(uiWindow * window, bool value);
 
+  /**
+   * @brief Makes a window visible and handles it has a modal window
+   *
+   * A modal window disables the main window but keeps it visible. Users must interact with the modal window before they can return to the parent window.
+   * A modal window exits from modal state using uiWindow.exitModal().
+   *
+   * @param window Window to be made visible and modal
+   *
+   * @return The same value specified calling uiWindow.exitModal()
+   */
   int showModalWindow(uiWindow * window);
 
+  /**
+   * @brief Maximizes or restores a window
+   *
+   * @param window Window to be maximized or restored
+   * @param value True maximizes the window, False restores it from maximized state
+   */
   void maximizeWindow(uiWindow * window, bool value);
 
+  /**
+   * @brief Minimizes or restores a window
+   *
+   * @param window Window to be minimized or restored
+   * @param value True minimizes the window, False restores it from minimized state
+   */
   void minimizeWindow(uiWindow * window, bool value);
 
   void combineMouseMoveEvents(bool value) { m_combineMouseMoveEvents = value; }
@@ -2135,16 +2157,56 @@ public:
 
   void setCaret(Rect const & rect);
 
+  /**
+   * @brief Setups a timer
+   *
+   * A timer fires uiApp.onTimer or uiFrame.onTimer delegate.
+   * To destroy a timer use uiApp.killTimer().
+   *
+   * @param dest Destination window or app
+   * @param periodMS Timer period in milliseconds
+   *
+   * @return Handle identifying the new timer
+   */
   uiTimerHandle setTimer(uiEvtHandler * dest, int periodMS);
 
+  /**
+   * @brief Kills a timer
+   *
+   * To create a timer use uiApp.setTimer().
+   *
+   * @param handle Handle identifying the timer to destroy
+   */
   void killTimer(uiTimerHandle handle);
 
+  /**
+   * @brief Sets or gets application properties
+   *
+   * @return L-value representing some application properties
+   */
   uiAppProps & appProps() { return m_appProps; }
 
+  /**
+   * @brief Destroys a window
+   *
+   * @param window Window to destroy
+   */
   void destroyWindow(uiWindow * window);
 
   void cleanWindowReferences(uiWindow * window);
 
+  /**
+   * @brief Displays a modal dialog box with an icon, text and some buttons
+   *
+   * @param title The dialog box title. If nullptr the messaebox has no title bar
+   * @param text The message to be displayed
+   * @param button1Text Left button text
+   * @param button2Text Middle button text (may be nullptr, if not present)
+   * @param button3Text Right button text (may be nullptr, if not present)
+   * @param icon Icon to be displayed
+   *
+   * @return Message box result
+   */
   uiMessageBoxResult messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text = nullptr, char const * button3Text = nullptr, uiMessageBoxIcon icon = uiMessageBoxIcon::Question);
 
 
