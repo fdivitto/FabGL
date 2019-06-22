@@ -1934,7 +1934,7 @@ enum class uiMessageBoxIcon {
 /**
  * @brief Represents the whole application base class.
  *
- * FabGL UI apps must inherit from uiApp, create UI elements in uiApp.OnInit() method, and finally call uiApp.run() to start the application.
+ * FabGL UI apps must inherit from uiApp, create UI elements in uiApp.init() method, and finally call uiApp.run() to start the application.
  * uiApp is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management.
  */
 class uiApp : public uiEvtHandler {
@@ -2212,7 +2212,7 @@ public:
 
   // events
 
-  virtual void OnInit();
+  virtual void init();
 
   // delegates
   Delegate<uiTimerHandle> onTimer;

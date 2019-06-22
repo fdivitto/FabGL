@@ -18,7 +18,7 @@ class MyApp : public uiApp {
 
   fabgl::Stack<uiFrame*> dynamicFrames;
 
-  void OnInit() {
+  void init() {
 
     // set root window background color to dark green
     rootWindow()->frameStyle().backgroundColor = RGB(0, 1, 0);

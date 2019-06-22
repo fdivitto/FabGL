@@ -407,7 +407,7 @@ uiWindow * uiApp::screenToWindow(Point & point)
 }
 
 
-void uiApp::OnInit()
+void uiApp::init()
 {
 }
 
@@ -451,7 +451,7 @@ void uiApp::processEvent(uiEvent * event)
   switch (event->id) {
 
     case UIEVT_APPINIT:
-      OnInit();
+      init();
       break;
 
     case UIEVT_TIMER:
