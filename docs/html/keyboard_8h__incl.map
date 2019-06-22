@@ -1,5 +1,9 @@
 <map id="keyboard.h" name="keyboard.h">
-<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="304,225,391,251"/>
-<area shape="rect" id="node4" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="220,79,312,104"/>
-<area shape="rect" id="node6" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="167,152,275,177"/>
+<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="273,299,360,324"/>
+<area shape="rect" id="node4" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="178,152,271,177"/>
+<area shape="rect" id="node8" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="703,79,764,104"/>
+<area shape="rect" id="node6" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="170,225,278,251"/>
+<area shape="rect" id="node12" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="434,299,508,324"/>
+<area shape="rect" id="node13" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="680,225,788,251"/>
+<area shape="rect" id="node17" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="780,152,855,177"/>
 </map>

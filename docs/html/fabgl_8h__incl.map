@@ -1,13 +1,14 @@
 <map id="fabgl.h" name="fabgl.h">
-<area shape="rect" id="node2" href="$fabutils_8h_source.html" title="fabutils.h" alt="" coords="728,299,802,324"/>
-<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition and the Terminal instance. " alt="" coords="368,79,448,104"/>
-<area shape="rect" id="node13" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="1240,225,1348,251"/>
-<area shape="rect" id="node18" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="405,152,493,177"/>
-<area shape="rect" id="node20" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="52,299,160,324"/>
-<area shape="rect" id="node22" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="617,152,689,177"/>
-<area shape="rect" id="node23" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="995,79,1063,104"/>
-<area shape="rect" id="node24" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="1165,152,1293,177"/>
-<area shape="rect" id="node9" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="746,372,832,397"/>
-<area shape="rect" id="node10" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="1066,152,1141,177"/>
-<area shape="rect" id="node19" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="403,225,495,251"/>
+<area shape="rect" id="node2" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="953,445,1028,471"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="1053,79,1133,104"/>
+<area shape="rect" id="node13" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="247,372,355,397"/>
+<area shape="rect" id="node18" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="724,152,812,177"/>
+<area shape="rect" id="node20" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="1391,299,1499,324"/>
+<area shape="rect" id="node23" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="956,152,1028,177"/>
+<area shape="rect" id="node24" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="285,225,353,251"/>
+<area shape="rect" id="node25" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="279,299,406,324"/>
+<area shape="rect" id="node9" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="806,445,892,471"/>
+<area shape="rect" id="node10" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="180,299,255,324"/>
+<area shape="rect" id="node19" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="946,225,1038,251"/>
+<area shape="rect" id="node21" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="591,225,652,251"/>
 </map>

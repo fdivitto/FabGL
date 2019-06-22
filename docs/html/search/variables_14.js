@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['weight',['weight',['../structfabgl_1_1_font_info.html#a41c435376633036611f8b6338b30e570',1,'fabgl::FontInfo']]],
-  ['width',['width',['../structfabgl_1_1_font_info.html#aa62d8bf2d22a024c1adbde550525f675',1,'fabgl::FontInfo::width()'],['../structfabgl_1_1_size.html#a225b9125956d1283ba37ca9feeb4cc0e',1,'fabgl::Size::width()'],['../structfabgl_1_1_glyph.html#a97439c5450c06c95fdaa3c1794d40012',1,'fabgl::Glyph::width()'],['../structfabgl_1_1_raw_data.html#a0ee8ffeaa94d9078e853caddb916d107',1,'fabgl::RawData::width()'],['../structfabgl_1_1_bitmap.html#a80670a11199056962db988c4b2e5dde1',1,'fabgl::Bitmap::width()']]],
-  ['wraparound',['wraparound',['../structfabgl_1_1_emu_state.html#a780ffd61ae76f32ebb14a4ec41006471',1,'fabgl::EmuState']]]
+  ['y',['Y',['../structfabgl_1_1_point.html#a780fa0a00fdc53a1296b9bdb40c16df6',1,'fabgl::Point::Y()'],['../structfabgl_1_1_mouse_status.html#aeade7176389c6087af452e9f2243c838',1,'fabgl::MouseStatus::Y()'],['../structfabgl_1_1_glyph.html#a6519cffa60083bab2b022967a34f8431',1,'fabgl::Glyph::Y()']]],
+  ['y1',['Y1',['../structfabgl_1_1_rect.html#a1f2d4dbdceb8f136f0fc5e06efa94857',1,'fabgl::Rect']]],
+  ['y2',['Y2',['../structfabgl_1_1_rect.html#aecf6273ce79a0f1d0fcddfc7e5cad0a2',1,'fabgl::Rect']]]
 ];

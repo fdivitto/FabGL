@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['oldatkeyboard',['OldATKeyboard',['../ps2device_8h.html#a209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa',1,'fabgl']]]
+  ['legacymouse',['LegacyMouse',['../group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5',1,'fabgl']]]
 ];

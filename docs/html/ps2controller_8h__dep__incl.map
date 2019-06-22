@@ -3,5 +3,5 @@
 <area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="128,299,189,324"/>
 <area shape="rect" id="node3" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="71,152,158,177"/>
 <area shape="rect" id="node6" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="160,225,232,251"/>
-<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition and the Terminal instance. " alt="" coords="5,225,85,251"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,225,85,251"/>
 </map>

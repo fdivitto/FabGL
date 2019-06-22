@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['_7ebitmap',['~Bitmap',['../structfabgl_1_1_bitmap.html#a736928e3f1b02440f005a14383254437',1,'fabgl::Bitmap']]],
-  ['_7ecollisiondetector',['~CollisionDetector',['../classfabgl_1_1_collision_detector.html#a715f1a8484b770efdb0ed18986b357a9',1,'fabgl::CollisionDetector']]],
-  ['_7escene',['~Scene',['../classfabgl_1_1_scene.html#a2d48d1aece3c8b745dc566df57a07f21',1,'fabgl::Scene']]],
-  ['_7esprite',['~Sprite',['../structfabgl_1_1_sprite.html#a178bae8eba566938204c809506ccb781',1,'fabgl::Sprite']]]
+  ['waitcompletion',['waitCompletion',['../classfabgl_1_1_canvas_class.html#ad2f55393ab2f38be5779fd8651979cca',1,'fabgl::CanvasClass']]],
+  ['wheelacceleration',['wheelAcceleration',['../classfabgl_1_1_mouse_class.html#a5001a4b84fbc6c1ae7f2c909882649cb',1,'fabgl::MouseClass']]],
+  ['windowprops',['windowProps',['../classfabgl_1_1ui_window.html#a8723fdee4c289c10af882284d4f6c191',1,'fabgl::uiWindow']]],
+  ['windowstyle',['windowStyle',['../classfabgl_1_1ui_window.html#afe4a4306d8c4225e04a933701df99000',1,'fabgl::uiWindow']]],
+  ['write',['write',['../classfabgl_1_1_terminal_class.html#a809cabdb06dd2127c99ce68822a6d0a2',1,'fabgl::TerminalClass::write(const uint8_t *buffer, int size)'],['../classfabgl_1_1_terminal_class.html#a537e46d55954ed54ea2da188fe14a4f1',1,'fabgl::TerminalClass::write(uint8_t c)']]],
+  ['writescreen',['writeScreen',['../classfabgl_1_1_v_g_a_controller_class.html#aeb7c2b7881a541405690fe44f4c94be6',1,'fabgl::VGAControllerClass']]]
 ];

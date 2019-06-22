@@ -2,6 +2,7 @@ var searchData=
 [
   ['g',['G',['../structfabgl_1_1_r_g_b.html#a12b47610fd99278b774f68a57bef4607',1,'fabgl::RGB']]],
   ['getbitsperchannel',['getBitsPerChannel',['../classfabgl_1_1_v_g_a_controller_class.html#a643740e39822e9e74e80be55ab9d34c1',1,'fabgl::VGAControllerClass']]],
+  ['getclippingrect',['getClippingRect',['../classfabgl_1_1_canvas_class.html#a65ffe98c469f88123c8c638f88e4d4dc',1,'fabgl::CanvasClass']]],
   ['getcolumns',['getColumns',['../classfabgl_1_1_terminal_class.html#a1f2fcec7df17ecb5843c10cc8154ea57',1,'fabgl::TerminalClass']]],
   ['getdata',['getData',['../classfabgl_1_1_p_s2_controller_class.html#a467e44c8df301318688f2287d77a5790',1,'fabgl::PS2ControllerClass']]],
   ['getfontinfo',['getFontInfo',['../classfabgl_1_1_canvas_class.html#a9dd698668591341812e031b93ddff380',1,'fabgl::CanvasClass']]],
@@ -11,8 +12,11 @@ var searchData=
   ['getnextdelta',['getNextDelta',['../classfabgl_1_1_mouse_class.html#a42d3fcce8c74d47e3e40c5552c4c2af4',1,'fabgl::MouseClass']]],
   ['getnextscancode',['getNextScancode',['../classfabgl_1_1_keyboard_class.html#a56e01f2289d9bb02d19e08fece4c731c',1,'fabgl::KeyboardClass']]],
   ['getnextstatus',['getNextStatus',['../classfabgl_1_1_mouse_class.html#af770cea972dce81506216a8556f086cd',1,'fabgl::MouseClass']]],
-  ['getnextvirtualkey',['getNextVirtualKey',['../classfabgl_1_1_keyboard_class.html#a889c16be066922bdb5fa6fec1e008b88',1,'fabgl::KeyboardClass']]],
+  ['getnextvirtualkey',['getNextVirtualKey',['../classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6',1,'fabgl::KeyboardClass']]],
+  ['getorigin',['getOrigin',['../classfabgl_1_1_canvas_class.html#a8f47771e01e4c6f787df6ae222c86aa9',1,'fabgl::CanvasClass']]],
+  ['getpixel',['getPixel',['../classfabgl_1_1_canvas_class.html#a649e2ac335c509045503b764f2eb08c7',1,'fabgl::CanvasClass']]],
   ['getpresetfontinfo',['getPresetFontInfo',['../classfabgl_1_1_canvas_class.html#aae47e5f03e69ed21dd07f4b73e43e4f0',1,'fabgl::CanvasClass']]],
+  ['getpresetfontinfofromheight',['getPresetFontInfoFromHeight',['../classfabgl_1_1_canvas_class.html#a4ad927fd74aea835b15425fc4312361d',1,'fabgl::CanvasClass']]],
   ['getrows',['getRows',['../classfabgl_1_1_terminal_class.html#a935de073dd76476a3df4c8cec530ed47',1,'fabgl::TerminalClass']]],
   ['getscreenheight',['getScreenHeight',['../classfabgl_1_1_v_g_a_controller_class.html#af3406190a30fc46070da0a7353da4082',1,'fabgl::VGAControllerClass']]],
   ['getscreenwidth',['getScreenWidth',['../classfabgl_1_1_v_g_a_controller_class.html#ad7310c48604f37aec2ea3274fefd405c',1,'fabgl::VGAControllerClass']]],
@@ -23,5 +27,7 @@ var searchData=
   ['getwidth',['getWidth',['../classfabgl_1_1_canvas_class.html#aea413b9edfd1ba4d74289a7200bd2fe6',1,'fabgl::CanvasClass::getWidth()'],['../classfabgl_1_1_scene.html#a36775e223edbeabb4d4ff76643f7d403',1,'fabgl::Scene::getWidth()']]],
   ['glyph',['Glyph',['../structfabgl_1_1_glyph.html',1,'fabgl']]],
   ['glyphoptions',['GlyphOptions',['../unionfabgl_1_1_glyph_options.html',1,'fabgl']]],
-  ['green',['Green',['../vgacontroller_8h.html#a843f6f6094fb6666d0e726d7b0e06f3ba7edd15d591a436caaec5785a75b1cd80',1,'fabgl']]]
+  ['green',['Green',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba7edd15d591a436caaec5785a75b1cd80',1,'fabgl']]],
+  ['groupindex',['groupIndex',['../classfabgl_1_1ui_check_box.html#ab8c4606b0f5cfd7182da12f7897b6b02',1,'fabgl::uiCheckBox']]],
+  ['gui',['GUI',['../structfabgl_1_1ui_key_event_info.html#aba4328c7fa7c6aa9d2a66d57b4104748',1,'fabgl::uiKeyEventInfo']]]
 ];

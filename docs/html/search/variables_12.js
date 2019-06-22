@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['x',['X',['../structfabgl_1_1_point.html#a7939e82af819211f33529b704f28642e',1,'fabgl::Point::X()'],['../structfabgl_1_1_mouse_status.html#a5ec5e7febf054e05c2f1e5f0e62b9bad',1,'fabgl::MouseStatus::X()'],['../structfabgl_1_1_glyph.html#a308a7abab39d158169005530159b50de',1,'fabgl::Glyph::X()'],['../structfabgl_1_1_raw_data.html#ae14e8d663b0201d7b052bdba54b9c5a1',1,'fabgl::RawData::X()']]],
-  ['x1',['X1',['../structfabgl_1_1_rect.html#aba0b255bcab670456472e1841e175306',1,'fabgl::Rect']]],
-  ['x2',['X2',['../structfabgl_1_1_rect.html#af27cb175620ac5a3846fd8037c776a07',1,'fabgl::Rect']]]
+  ['wheeldelta',['wheelDelta',['../structfabgl_1_1_mouse_status.html#a60e078de3e3bd4bbea7cb9c51774d1f6',1,'fabgl::MouseStatus']]],
+  ['width',['width',['../structfabgl_1_1_size.html#a225b9125956d1283ba37ca9feeb4cc0e',1,'fabgl::Size::width()'],['../structfabgl_1_1_glyph.html#a97439c5450c06c95fdaa3c1794d40012',1,'fabgl::Glyph::width()'],['../structfabgl_1_1_bitmap.html#a80670a11199056962db988c4b2e5dde1',1,'fabgl::Bitmap::width()']]]
 ];

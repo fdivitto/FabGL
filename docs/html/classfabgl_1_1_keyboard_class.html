@@ -118,61 +118,61 @@ Collaboration diagram for fabgl::KeyboardClass:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae9d8a142c516c27a1760944b07a87f93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93">begin</a> (gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys=true, bool createVKQueue=true)</td></tr>
-<tr class="memdesc:ae9d8a142c516c27a1760944b07a87f93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> specifying CLOCK and DATA GPIOs.  <a href="#ae9d8a142c516c27a1760944b07a87f93">More...</a><br /></td></tr>
+<tr class="memdesc:ae9d8a142c516c27a1760944b07a87f93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> specifying CLOCK and DATA GPIOs.  <a href="#ae9d8a142c516c27a1760944b07a87f93">More...</a><br /></td></tr>
 <tr class="separator:ae9d8a142c516c27a1760944b07a87f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4b9610e8c76fcb88c41113c9537b396"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#af4b9610e8c76fcb88c41113c9537b396">begin</a> (bool generateVirtualKeys, bool createVKQueue, int PS2Port)</td></tr>
-<tr class="memdesc:af4b9610e8c76fcb88c41113c9537b396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> without initializing the PS/2 controller.  <a href="#af4b9610e8c76fcb88c41113c9537b396">More...</a><br /></td></tr>
+<tr class="memdesc:af4b9610e8c76fcb88c41113c9537b396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> without initializing the PS/2 controller.  <a href="#af4b9610e8c76fcb88c41113c9537b396">More...</a><br /></td></tr>
 <tr class="separator:af4b9610e8c76fcb88c41113c9537b396"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7919c90b9cc0af1800b18aba04d0218"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_keyboard_layout.html">KeyboardLayout</a> const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae7919c90b9cc0af1800b18aba04d0218">getLayout</a> ()</td></tr>
-<tr class="memdesc:ae7919c90b9cc0af1800b18aba04d0218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current keyboard layout.  <a href="#ae7919c90b9cc0af1800b18aba04d0218">More...</a><br /></td></tr>
+<tr class="memdesc:ae7919c90b9cc0af1800b18aba04d0218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current keyboard layout.  <a href="#ae7919c90b9cc0af1800b18aba04d0218">More...</a><br /></td></tr>
 <tr class="separator:ae7919c90b9cc0af1800b18aba04d0218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe546ebdba6772d110341389d9d102d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#abe546ebdba6772d110341389d9d102d7">getLEDs</a> (bool *numLock, bool *capsLock, bool *scrollLock)</td></tr>
-<tr class="memdesc:abe546ebdba6772d110341389d9d102d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get keyboard LEDs status.  <a href="#abe546ebdba6772d110341389d9d102d7">More...</a><br /></td></tr>
+<tr class="memdesc:abe546ebdba6772d110341389d9d102d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets keyboard LEDs status.  <a href="#abe546ebdba6772d110341389d9d102d7">More...</a><br /></td></tr>
 <tr class="separator:abe546ebdba6772d110341389d9d102d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56e01f2289d9bb02d19e08fece4c731c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a56e01f2289d9bb02d19e08fece4c731c">getNextScancode</a> (int timeOutMS=-1, bool requestResendOnTimeOut=false)</td></tr>
-<tr class="memdesc:a56e01f2289d9bb02d19e08fece4c731c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a scancode from the queue.  <a href="#a56e01f2289d9bb02d19e08fece4c731c">More...</a><br /></td></tr>
+<tr class="memdesc:a56e01f2289d9bb02d19e08fece4c731c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a scancode from the queue.  <a href="#a56e01f2289d9bb02d19e08fece4c731c">More...</a><br /></td></tr>
 <tr class="separator:a56e01f2289d9bb02d19e08fece4c731c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a889c16be066922bdb5fa6fec1e008b88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a889c16be066922bdb5fa6fec1e008b88">getNextVirtualKey</a> (bool *keyDown=NULL, int timeOutMS=-1)</td></tr>
-<tr class="memdesc:a889c16be066922bdb5fa6fec1e008b88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a virtual key from the queue.  <a href="#a889c16be066922bdb5fa6fec1e008b88">More...</a><br /></td></tr>
-<tr class="separator:a889c16be066922bdb5fa6fec1e008b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ps2device_8h.html#a209a520f6108c21bd313cb2c98fde74a">PS2Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a6a3cfd9086abb1d0dda31e5f9c22f40e">identify</a> ()</td></tr>
-<tr class="memdesc:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identify the device attached to the PS2 port.  <a href="#a6a3cfd9086abb1d0dda31e5f9c22f40e">More...</a><br /></td></tr>
+<tr class="memitem:ae5bcb0c200a35ece54ecdf4cd47e49d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6">getNextVirtualKey</a> (bool *keyDown=nullptr, int timeOutMS=-1)</td></tr>
+<tr class="memdesc:ae5bcb0c200a35ece54ecdf4cd47e49d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a virtual key from the queue.  <a href="#ae5bcb0c200a35ece54ecdf4cd47e49d6">More...</a><br /></td></tr>
+<tr class="separator:ae5bcb0c200a35ece54ecdf4cd47e49d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">PS2Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a6a3cfd9086abb1d0dda31e5f9c22f40e">identify</a> ()</td></tr>
+<tr class="memdesc:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the device attached to the PS2 port.  <a href="#a6a3cfd9086abb1d0dda31e5f9c22f40e">More...</a><br /></td></tr>
 <tr class="separator:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c07c13d95a52b5c8d91a7328fe17930"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a5c07c13d95a52b5c8d91a7328fe17930">isKeyboardAvailable</a> ()</td></tr>
-<tr class="memdesc:a5c07c13d95a52b5c8d91a7328fe17930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if keyboard has been detected and correctly initialized.  <a href="#a5c07c13d95a52b5c8d91a7328fe17930">More...</a><br /></td></tr>
+<tr class="memdesc:a5c07c13d95a52b5c8d91a7328fe17930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if keyboard has been detected and correctly initialized.  <a href="#a5c07c13d95a52b5c8d91a7328fe17930">More...</a><br /></td></tr>
 <tr class="separator:a5c07c13d95a52b5c8d91a7328fe17930"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abff01a859f8069a8ecb12c519c9df008"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008">isVKDown</a> (<a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a> virtualKey)</td></tr>
-<tr class="memdesc:abff01a859f8069a8ecb12c519c9df008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the virtual keys status.  <a href="#abff01a859f8069a8ecb12c519c9df008">More...</a><br /></td></tr>
+<tr class="memitem:abff01a859f8069a8ecb12c519c9df008"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008">isVKDown</a> (<a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a> virtualKey)</td></tr>
+<tr class="memdesc:abff01a859f8069a8ecb12c519c9df008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the virtual keys status.  <a href="#abff01a859f8069a8ecb12c519c9df008">More...</a><br /></td></tr>
 <tr class="separator:abff01a859f8069a8ecb12c519c9df008"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a0c5e9c28380d81e8ca53875e7bf30e5c">lock</a> (int timeOutMS)</td></tr>
-<tr class="memdesc:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get exclusive access to the device.  <a href="#a0c5e9c28380d81e8ca53875e7bf30e5c">More...</a><br /></td></tr>
+<tr class="memdesc:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets exclusive access to the device.  <a href="#a0c5e9c28380d81e8ca53875e7bf30e5c">More...</a><br /></td></tr>
 <tr class="separator:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09ac1cafc7c2b1f2b16fece0f969bfd3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3">reset</a> ()</td></tr>
-<tr class="memdesc:a09ac1cafc7c2b1f2b16fece0f969bfd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a Reset command to the keyboard.  <a href="#a09ac1cafc7c2b1f2b16fece0f969bfd3">More...</a><br /></td></tr>
+<tr class="memdesc:a09ac1cafc7c2b1f2b16fece0f969bfd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a Reset command to the keyboard.  <a href="#a09ac1cafc7c2b1f2b16fece0f969bfd3">More...</a><br /></td></tr>
 <tr class="separator:a09ac1cafc7c2b1f2b16fece0f969bfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc84336586414c7b19cd879f96a06583"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#afc84336586414c7b19cd879f96a06583">scancodeAvailable</a> ()</td></tr>
-<tr class="memdesc:afc84336586414c7b19cd879f96a06583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of scancodes available in the queue.  <a href="#afc84336586414c7b19cd879f96a06583">More...</a><br /></td></tr>
+<tr class="memdesc:afc84336586414c7b19cd879f96a06583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of scancodes available in the queue.  <a href="#afc84336586414c7b19cd879f96a06583">More...</a><br /></td></tr>
 <tr class="separator:afc84336586414c7b19cd879f96a06583"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08b281a865847dfc514b2f0c7d77e095"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a08b281a865847dfc514b2f0c7d77e095">setLayout</a> (<a class="el" href="structfabgl_1_1_keyboard_layout.html">KeyboardLayout</a> const *layout)</td></tr>
-<tr class="memdesc:a08b281a865847dfc514b2f0c7d77e095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set keyboard layout.  <a href="#a08b281a865847dfc514b2f0c7d77e095">More...</a><br /></td></tr>
+<tr class="memdesc:a08b281a865847dfc514b2f0c7d77e095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets keyboard layout.  <a href="#a08b281a865847dfc514b2f0c7d77e095">More...</a><br /></td></tr>
 <tr class="separator:a08b281a865847dfc514b2f0c7d77e095"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7c233605976b3a37c679f0203210fa4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae7c233605976b3a37c679f0203210fa4">setLEDs</a> (bool numLock, bool capsLock, bool scrollLock)</td></tr>
-<tr class="memdesc:ae7c233605976b3a37c679f0203210fa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set keyboard LEDs status.  <a href="#ae7c233605976b3a37c679f0203210fa4">More...</a><br /></td></tr>
+<tr class="memdesc:ae7c233605976b3a37c679f0203210fa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets keyboard LEDs status.  <a href="#ae7c233605976b3a37c679f0203210fa4">More...</a><br /></td></tr>
 <tr class="separator:ae7c233605976b3a37c679f0203210fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae98950d23410af6fb820787c54b43198"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae98950d23410af6fb820787c54b43198">setTypematicRateAndDelay</a> (int repeatRateMS, int repeatDelayMS)</td></tr>
-<tr class="memdesc:ae98950d23410af6fb820787c54b43198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set typematic rate and delay.  <a href="#ae98950d23410af6fb820787c54b43198">More...</a><br /></td></tr>
+<tr class="memdesc:ae98950d23410af6fb820787c54b43198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets typematic rate and delay.  <a href="#ae98950d23410af6fb820787c54b43198">More...</a><br /></td></tr>
 <tr class="separator:ae98950d23410af6fb820787c54b43198"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d79d73d9a71bbe889a89cb6358d64db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db">suspendVirtualKeyGeneration</a> (bool value)</td></tr>
-<tr class="memdesc:a7d79d73d9a71bbe889a89cb6358d64db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspend or resume the virtual key generation task.  <a href="#a7d79d73d9a71bbe889a89cb6358d64db">More...</a><br /></td></tr>
+<tr class="memdesc:a7d79d73d9a71bbe889a89cb6358d64db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends or resume the virtual key generation task.  <a href="#a7d79d73d9a71bbe889a89cb6358d64db">More...</a><br /></td></tr>
 <tr class="separator:a7d79d73d9a71bbe889a89cb6358d64db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed4e98813779c2d51bd304aef5aed7e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#aed4e98813779c2d51bd304aef5aed7e9">unlock</a> ()</td></tr>
-<tr class="memdesc:aed4e98813779c2d51bd304aef5aed7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release device from exclusive access.  <a href="#aed4e98813779c2d51bd304aef5aed7e9">More...</a><br /></td></tr>
+<tr class="memdesc:aed4e98813779c2d51bd304aef5aed7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases device from exclusive access.  <a href="#aed4e98813779c2d51bd304aef5aed7e9">More...</a><br /></td></tr>
 <tr class="separator:aed4e98813779c2d51bd304aef5aed7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa93820f1c8f447a37c01376a8d6dbba0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#aa93820f1c8f447a37c01376a8d6dbba0">virtualKeyAvailable</a> ()</td></tr>
-<tr class="memdesc:aa93820f1c8f447a37c01376a8d6dbba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of virtual keys available in the queue.  <a href="#aa93820f1c8f447a37c01376a8d6dbba0">More...</a><br /></td></tr>
+<tr class="memdesc:aa93820f1c8f447a37c01376a8d6dbba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of virtual keys available in the queue.  <a href="#aa93820f1c8f447a37c01376a8d6dbba0">More...</a><br /></td></tr>
 <tr class="separator:aa93820f1c8f447a37c01376a8d6dbba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fba5778b3518e9aa2d397e0da71520e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a7fba5778b3518e9aa2d397e0da71520e">virtualKeyToASCII</a> (<a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a> virtualKey)</td></tr>
-<tr class="memdesc:a7fba5778b3518e9aa2d397e0da71520e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert virtual key to ASCII.  <a href="#a7fba5778b3518e9aa2d397e0da71520e">More...</a><br /></td></tr>
+<tr class="memitem:a7fba5778b3518e9aa2d397e0da71520e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a7fba5778b3518e9aa2d397e0da71520e">virtualKeyToASCII</a> (<a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a> virtualKey)</td></tr>
+<tr class="memdesc:a7fba5778b3518e9aa2d397e0da71520e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts virtual key to ASCII.  <a href="#a7fba5778b3518e9aa2d397e0da71520e">More...</a><br /></td></tr>
 <tr class="separator:a7fba5778b3518e9aa2d397e0da71520e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -228,20 +228,20 @@ while (true)
       </table>
 </div><div class="memdoc">
 
-<p>Initialize <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> specifying CLOCK and DATA GPIOs. </p>
-<p>A reset command (<a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Send a Reset command to the keyboard. ">KeyboardClass.reset()</a> method) is automatically sent to the keyboard.<br />
+<p>Initializes <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> specifying CLOCK and DATA GPIOs. </p>
+<p>A reset command (<a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Sends a Reset command to the keyboard. ">KeyboardClass.reset()</a> method) is automatically sent to the keyboard.<br />
  This method also initializes the <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">PS2ControllerClass</a> to use port 0 only.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">clkGPIO</td><td>The GPIO number of Clock line </td></tr>
     <tr><td class="paramname">dataGPIO</td><td>The GPIO number of Data line </td></tr>
-    <tr><td class="paramname">generateVirtualKeys</td><td>If true creates a task which consumes scancodes and produces virtual keys, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Get the virtual keys status. ">KeyboardClass.isVKDown()</a>. </td></tr>
-    <tr><td class="paramname">createVKQueue</td><td>If true creates a task which consunes scancodes and produces virtual keys and put them in a queue, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Get the virtual keys status. ">KeyboardClass.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard_class.html#afc84336586414c7b19cd879f96a06583" title="Get the number of scancodes available in the queue. ">KeyboardClass.scancodeAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard_class.html#a56e01f2289d9bb02d19e08fece4c731c" title="Get a scancode from the queue. ">KeyboardClass.getNextScancode()</a>.</td></tr>
+    <tr><td class="paramname">generateVirtualKeys</td><td>If true creates a task which consumes scancodes to produce virtual keys, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a>. </td></tr>
+    <tr><td class="paramname">createVKQueue</td><td>If true creates a task which consunes scancodes and produces virtual keys and put them in a queue, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard_class.html#aa93820f1c8f447a37c01376a8d6dbba0" title="Gets the number of virtual keys available in the queue. ">KeyboardClass.virtualKeyAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6" title="Gets a virtual key from the queue. ">KeyboardClass.getNextVirtualKey()</a>.</td></tr>
   </table>
   </dd>
 </dl>
 <p>Example: </p><pre class="fragment">// Setup pins GPIO33 for CLK and GPIO32 for DATA
-Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a0">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a10">KeyboardStudio/KeyboardStudio.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a6">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a8">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a26">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a0">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a1">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a10">KeyboardStudio/KeyboardStudio.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a3">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a3">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a38">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -277,13 +277,13 @@ Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat</pre> <dl><dt><b>Examples
       </table>
 </div><div class="memdoc">
 
-<p>Initialize <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> without initializing the PS/2 controller. </p>
-<p>A reset command (<a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Send a Reset command to the keyboard. ">KeyboardClass.reset()</a> method) is automatically sent to the keyboard.<br />
+<p>Initializes <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> without initializing the PS/2 controller. </p>
+<p>A reset command (<a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Sends a Reset command to the keyboard. ">KeyboardClass.reset()</a> method) is automatically sent to the keyboard.<br />
  This method does not initialize the <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">PS2ControllerClass</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">generateVirtualKeys</td><td>If true creates a task which consumes scancodes and produces virtual keys, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Get the virtual keys status. ">KeyboardClass.isVKDown()</a>. </td></tr>
-    <tr><td class="paramname">createVKQueue</td><td>If true creates a task which consunes scancodes and produces virtual keys and put them in a queue, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Get the virtual keys status. ">KeyboardClass.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard_class.html#afc84336586414c7b19cd879f96a06583" title="Get the number of scancodes available in the queue. ">KeyboardClass.scancodeAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard_class.html#a56e01f2289d9bb02d19e08fece4c731c" title="Get a scancode from the queue. ">KeyboardClass.getNextScancode()</a>. </td></tr>
+    <tr><td class="paramname">generateVirtualKeys</td><td>If true creates a task which consumes scancodes and produces virtual keys, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a>. </td></tr>
+    <tr><td class="paramname">createVKQueue</td><td>If true creates a task which consunes scancodes to produce virtual keys and put them in a queue, so you can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard_class.html#aa93820f1c8f447a37c01376a8d6dbba0" title="Gets the number of virtual keys available in the queue. ">KeyboardClass.virtualKeyAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6" title="Gets a virtual key from the queue. ">KeyboardClass.getNextVirtualKey()</a>. </td></tr>
     <tr><td class="paramname">PS2Port</td><td>The PS/2 port to use (0 or 1).</td></tr>
   </table>
   </dd>
@@ -316,7 +316,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
 </table>
 </div><div class="memdoc">
 
-<p>Get current keyboard layout. </p>
+<p>Gets current keyboard layout. </p>
 <dl class="section return"><dt>Returns</dt><dd>The default or last set keyboard layout. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a8">KeyboardStudio/KeyboardStudio.ino</a>.</dd>
 </dl>
@@ -354,7 +354,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get keyboard LEDs status. </p>
+<p>Gets keyboard LEDs status. </p>
 <p>Use this method to know the current status of NUMLOCK, CAPSLOCK and SCROLLLOCK LEDs.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -393,9 +393,9 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get a scancode from the queue. </p>
-<p>Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this method <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method should be called with generateVirtualKeys = false and createVKQueue = false.<br />
- Alternatively it is also possible to suspend the conversion task calling <a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db" title="Suspend or resume the virtual key generation task. ">KeyboardClass.suspendVirtualKeyGeneration()</a> method.</p>
+<p>Gets a scancode from the queue. </p>
+<p>Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this method <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method should be called with generateVirtualKeys = false and createVKQueue = false.<br />
+ Alternatively it is also possible to suspend the conversion task calling <a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db" title="Suspends or resume the virtual key generation task. ">KeyboardClass.suspendVirtualKeyGeneration()</a> method.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeOutMS</td><td>Timeout in milliseconds. -1 means no timeout (infinite time). </td></tr>
@@ -408,17 +408,17 @@ Keyboard.begin(true, true, 0); // port 0</pre>
 </dl>
 </div>
 </div>
-<a id="a889c16be066922bdb5fa6fec1e008b88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a889c16be066922bdb5fa6fec1e008b88">&#9670;&nbsp;</a></span>getNextVirtualKey()</h2>
+<a id="ae5bcb0c200a35ece54ecdf4cd47e49d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5bcb0c200a35ece54ecdf4cd47e49d6">&#9670;&nbsp;</a></span>getNextVirtualKey()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a> fabgl::KeyboardClass::getNextVirtualKey </td>
+          <td class="memname"><a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a> fabgl::KeyboardClass::getNextVirtualKey </td>
           <td>(</td>
           <td class="paramtype">bool *&#160;</td>
-          <td class="paramname"><em>keyDown</em> = <code>NULL</code>, </td>
+          <td class="paramname"><em>keyDown</em> = <code>nullptr</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -434,8 +434,8 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get a virtual key from the queue. </p>
-<p>Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default) and createVKQueue parameter is true (default) of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method.</p>
+<p>Gets a virtual key from the queue. </p>
+<p>Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default) and createVKQueue parameter is true (default) of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">keyDown</td><td>A pointer to boolean variable which will contain if the virtual key is depressed (true) or released (false). </td></tr>
@@ -458,7 +458,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="ps2device_8h.html#a209a520f6108c21bd313cb2c98fde74a">PS2Device</a> fabgl::PS2DeviceClass::identify </td>
+          <td class="memname"><a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">PS2Device</a> fabgl::PS2DeviceClass::identify </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -471,7 +471,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
 </table>
 </div><div class="memdoc">
 
-<p>Identify the device attached to the PS2 port. </p>
+<p>Identifies the device attached to the PS2 port. </p>
 <dl class="section return"><dt>Returns</dt><dd>The identification ID sent by keyboard. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a1">KeyboardStudio/KeyboardStudio.ino</a>, and <a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a1">MouseStudio/MouseStudio.ino</a>.</dd>
 </dl>
@@ -500,10 +500,10 @@ Keyboard.begin(true, true, 0); // port 0</pre>
 </table>
 </div><div class="memdoc">
 
-<p>Check if keyboard has been detected and correctly initialized. </p>
-<p><a class="el" href="classfabgl_1_1_keyboard_class.html#a5c07c13d95a52b5c8d91a7328fe17930" title="Check if keyboard has been detected and correctly initialized. ">isKeyboardAvailable()</a> returns a valid value only after <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> or <a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Send a Reset command to the keyboard. ">KeyboardClass.reset()</a> has been called.</p>
+<p>Checks if keyboard has been detected and correctly initialized. </p>
+<p><a class="el" href="classfabgl_1_1_keyboard_class.html#a5c07c13d95a52b5c8d91a7328fe17930" title="Checks if keyboard has been detected and correctly initialized. ">isKeyboardAvailable()</a> returns a valid value only after <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> or <a class="el" href="classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3" title="Sends a Reset command to the keyboard. ">KeyboardClass.reset()</a> has been called.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the keyboard is correctly initialized. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a20">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a0">KeyboardStudio/KeyboardStudio.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a5">LoopbackTerminal/LoopbackTerminal.ino</a>, and <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a5">NetworkTerminal/NetworkTerminal.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a11">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a0">KeyboardStudio/KeyboardStudio.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a2">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a2">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a16">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -516,16 +516,16 @@ Keyboard.begin(true, true, 0); // port 0</pre>
         <tr>
           <td class="memname">bool fabgl::KeyboardClass::isVKDown </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td>
           <td class="paramname"><em>virtualKey</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the virtual keys status. </p>
+<p>Gets the virtual keys status. </p>
 <p>This method allows to know the status of each virtual key (Down or Up).<br />
- Virtual keys are generated from scancodes only if generateVirtualKeys parameter of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method is true (default).</p>
+ Virtual keys are generated from scancodes only if generateVirtualKeys parameter of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method is true (default).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">virtualKey</td><td>The Virtual Key to test.</td></tr>
@@ -533,7 +533,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the specified virtual key is down. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a16">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a18">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -561,7 +561,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
 </table>
 </div><div class="memdoc">
 
-<p>Get exclusive access to the device. </p>
+<p>Gets exclusive access to the device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeOutMS</td><td>Timeout in milliseconds to wait before fail.</td></tr>
@@ -587,7 +587,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Send a Reset command to the keyboard. </p>
+<p>Sends a Reset command to the keyboard. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if the keyboard is correctly initialized. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a12">KeyboardStudio/KeyboardStudio.ino</a>.</dd>
 </dl>
@@ -608,9 +608,9 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of scancodes available in the queue. </p>
-<p>Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this method <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method should be called with generateVirtualKeys = false and createVKQueue = false.<br />
- Alternatively it is also possible to suspend the conversion task calling <a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db" title="Suspend or resume the virtual key generation task. ">KeyboardClass.suspendVirtualKeyGeneration()</a> method.</p>
+<p>Gets the number of scancodes available in the queue. </p>
+<p>Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this method <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method should be called with generateVirtualKeys = false and createVKQueue = false.<br />
+ Alternatively it is also possible to suspend the conversion task calling <a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db" title="Suspends or resume the virtual key generation task. ">KeyboardClass.suspendVirtualKeyGeneration()</a> method.</p>
 <dl class="section return"><dt>Returns</dt><dd>The number of scancodes available to read. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a15">KeyboardStudio/KeyboardStudio.ino</a>.</dd>
 </dl>
@@ -632,7 +632,7 @@ Keyboard.begin(true, true, 0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Set keyboard layout. </p>
+<p>Sets keyboard layout. </p>
 <p>It is possible to specify an international keyboard layout. The default is US-layout.<br />
  There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German) and IT (Italian). Other layout can be added inheriting from US or from any other layout.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -686,7 +686,7 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
 </table>
 </div><div class="memdoc">
 
-<p>Set keyboard LEDs status. </p>
+<p>Sets keyboard LEDs status. </p>
 <p>Use this method to switch-on or off the NUMLOCK, CAPSLOCK and SCROLLLOCK LEDs.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -735,7 +735,7 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
 </table>
 </div><div class="memdoc">
 
-<p>Set typematic rate and delay. </p>
+<p>Sets typematic rate and delay. </p>
 <p>If the key is kept pressed down, after repeatDelayMS keyboard starts periodically sending codes with frequency repeatRateMS.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -764,7 +764,7 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
       </table>
 </div><div class="memdoc">
 
-<p>Suspend or resume the virtual key generation task. </p>
+<p>Suspends or resume the virtual key generation task. </p>
 <p>Use this method to temporarily suspend the scancode to virtual key conversion task. This is useful when scancode are necessary for a limited time.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -799,7 +799,7 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
 </table>
 </div><div class="memdoc">
 
-<p>Release device from exclusive access. </p>
+<p>Releases device from exclusive access. </p>
 
 </div>
 </div>
@@ -818,8 +818,8 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of virtual keys available in the queue. </p>
-<p>Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default) and createVKQueue parameter is true (default) of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initialize KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method.</p>
+<p>Gets the number of virtual keys available in the queue. </p>
+<p>Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default) and createVKQueue parameter is true (default) of <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">KeyboardClass.begin()</a> method.</p>
 <dl class="section return"><dt>Returns</dt><dd>The number of virtual keys available to read. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a17">KeyboardStudio/KeyboardStudio.ino</a>.</dd>
 </dl>
@@ -834,14 +834,14 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
         <tr>
           <td class="memname">int fabgl::KeyboardClass::virtualKeyToASCII </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">VirtualKey</a>&#160;</td>
           <td class="paramname"><em>virtualKey</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Convert virtual key to ASCII. </p>
+<p>Converts virtual key to ASCII. </p>
 <p>This method converts the specified virtual key to ASCII, if possible.<br />
  For example VK_A is converted to 'A' (ASCII 0x41), CTRL + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D), CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.</p>
 <dl class="params"><dt>Parameters</dt><dd>

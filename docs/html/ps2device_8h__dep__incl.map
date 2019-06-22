@@ -1,6 +1,6 @@
 <map id="ps2device.h" name="ps2device.h">
 <area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="71,79,158,104"/>
 <area shape="rect" id="node5" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="160,152,232,177"/>
-<area shape="rect" id="node3" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition and the Terminal instance. " alt="" coords="5,152,85,177"/>
+<area shape="rect" id="node3" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,152,85,177"/>
 <area shape="rect" id="node4" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="92,225,153,251"/>
 </map>

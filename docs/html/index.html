@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 </p>
 <p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
 <hr/>
-<p>This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.<br />
+<p>This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br />
  This library works well with ESP32 revision 1 or upper.</p>
 <p>VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.</p>
 <p>Three fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts and resolutions can be used.</p>
@@ -110,15 +110,17 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>The main classes of FabGL library are:</p><ul>
 <li><a class="el" href="classfabgl_1_1_v_g_a_controller_class.html" title="Represents the VGA controller. ">fabgl::VGAControllerClass</a> (instanced as <b>VGAController</b>), that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.</li>
 <li><a class="el" href="classfabgl_1_1_canvas_class.html" title="A class with a set of drawing methods. ">fabgl::CanvasClass</a> (instanced as <b>Canvas</b>), that provides a set of drawing primitives (lines, rectangles, text...).</li>
-<li><a class="el" href="classfabgl_1_1_terminal_class.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::TerminalClass</a> (instanced as <b>Terminal</b>), that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
+<li><a class="el" href="classfabgl_1_1_terminal_class.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::TerminalClass</a>, that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
 <li><a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">fabgl::KeyboardClass</a> (instanced as <b>Keyboard</b>), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
 <li><a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">fabgl::MouseClass</a> (instanced as <b>Mouse</b>), that controls a PS2 mouse.</li>
 <li><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">fabgl::Scene</a> abstract class that handles sprites, timings and collision detection.</li>
+<li><a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">fabgl::uiApp</a> base class to build Graphical User Interface applications</li>
 </ul>
 <p>See <a class="el" href="conf_v_g_a.html">Configuring VGA outputs</a> for VGA connection sample schema.</p>
 <p>See <a class="el" href="conf_p_s2.html">Configuring PS/2 port</a> for PS/2 connection sample schema.</p>
 <hr/>
  <center> <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html">Space Invaders Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html">Graphical User Interface - GUI Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html">Simple Terminal Out Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html">Network Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html">Modeline Studio Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>

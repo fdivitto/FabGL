@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['legacymouse',['LegacyMouse',['../mouse_8h.html#aa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5',1,'fabgl']]]
+  ['horizontal',['Horizontal',['../group___enumerations.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7ac1b5fa03ecdb95d4a45dd1c40b02527f',1,'fabgl']]]
 ];

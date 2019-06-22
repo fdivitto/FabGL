@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['virtualkey',['VirtualKey',['../keyboard_8h.html#ae12c31a33f64281cba424d993a8a4381',1,'fabgl']]]
+  ['uibuttonkind',['uiButtonKind',['../group___enumerations.html#ga4c87d379aaa2df71e97a84275fceeec3',1,'fabgl']]],
+  ['uicheckboxkind',['uiCheckBoxKind',['../group___enumerations.html#ga107cf534808867ce4023d92c15ef699e',1,'fabgl']]],
+  ['uimessageboxicon',['uiMessageBoxIcon',['../group___enumerations.html#gaf2f79b5a07ca9d7f44f264b12d986c65',1,'fabgl']]],
+  ['uimessageboxresult',['uiMessageBoxResult',['../group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996',1,'fabgl']]],
+  ['uiorigin',['uiOrigin',['../group___enumerations.html#gaddf4af7208ffb7af1f5674e9bfb58fdc',1,'fabgl']]],
+  ['uiscrollbar',['uiScrollBar',['../group___enumerations.html#ga7ef4f27f0fe142e1727a4692d4bdf5f7',1,'fabgl']]]
 ];

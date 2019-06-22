@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['y',['Y',['../structfabgl_1_1_point.html#a780fa0a00fdc53a1296b9bdb40c16df6',1,'fabgl::Point::Y()'],['../structfabgl_1_1_mouse_status.html#aeade7176389c6087af452e9f2243c838',1,'fabgl::MouseStatus::Y()'],['../structfabgl_1_1_glyph.html#a6519cffa60083bab2b022967a34f8431',1,'fabgl::Glyph::Y()'],['../structfabgl_1_1_raw_data.html#abc511f378c9b5db899e4292f2ceb2682',1,'fabgl::RawData::Y()']]],
-  ['y1',['Y1',['../structfabgl_1_1_rect.html#a1f2d4dbdceb8f136f0fc5e06efa94857',1,'fabgl::Rect']]],
-  ['y2',['Y2',['../structfabgl_1_1_rect.html#aecf6273ce79a0f1d0fcddfc7e5cad0a2',1,'fabgl::Rect']]]
+  ['x',['X',['../structfabgl_1_1_point.html#a7939e82af819211f33529b704f28642e',1,'fabgl::Point::X()'],['../structfabgl_1_1_mouse_status.html#a5ec5e7febf054e05c2f1e5f0e62b9bad',1,'fabgl::MouseStatus::X()'],['../structfabgl_1_1_glyph.html#a308a7abab39d158169005530159b50de',1,'fabgl::Glyph::X()']]],
+  ['x1',['X1',['../structfabgl_1_1_rect.html#aba0b255bcab670456472e1841e175306',1,'fabgl::Rect']]],
+  ['x2',['X2',['../structfabgl_1_1_rect.html#af27cb175620ac5a3846fd8037c776a07',1,'fabgl::Rect']]]
 ];

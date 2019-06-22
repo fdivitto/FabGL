@@ -1,5 +1,8 @@
 <map id="canvas.h" name="canvas.h">
-<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition and the Terminal instance. " alt="" coords="5,79,85,104"/>
-<area shape="rect" id="node4" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="109,79,177,104"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="63,152,124,177"/>
+<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,225,85,251"/>
+<area shape="rect" id="node4" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="107,79,168,104"/>
+<area shape="rect" id="node7" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="235,152,303,177"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="128,299,189,324"/>
+<area shape="rect" id="node5" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="72,152,160,177"/>
+<area shape="rect" id="node6" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="160,225,232,251"/>
 </map>

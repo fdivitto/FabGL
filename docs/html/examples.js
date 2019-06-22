@@ -3,6 +3,7 @@ var examples =
     [ "AnsiTerminal/AnsiTerminal.ino", "_ansi_terminal_2_ansi_terminal_8ino-example.html", null ],
     [ "CollisionDetection/CollisionDetection.ino", "_collision_detection_2_collision_detection_8ino-example.html", null ],
     [ "DoubleBuffer/DoubleBuffer.ino", "_double_buffer_2_double_buffer_8ino-example.html", null ],
+    [ "GraphicalUserInterface/GraphicalUserInterface.ino", "_graphical_user_interface_2_graphical_user_interface_8ino-example.html", null ],
     [ "KeyboardStudio/KeyboardStudio.ino", "_keyboard_studio_2_keyboard_studio_8ino-example.html", null ],
     [ "LoopbackTerminal/LoopbackTerminal.ino", "_loopback_terminal_2_loopback_terminal_8ino-example.html", null ],
     [ "ModelineStudio/ModelineStudio.ino", "_modeline_studio_2_modeline_studio_8ino-example.html", null ],

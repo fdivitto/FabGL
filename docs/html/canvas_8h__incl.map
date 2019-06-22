@@ -1,5 +1,5 @@
 <map id="canvas.h" name="canvas.h">
 <area shape="rect" id="node4" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="323,79,432,104"/>
 <area shape="rect" id="node10" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="186,152,273,177"/>
-<area shape="rect" id="node11" href="$fabutils_8h_source.html" title="fabutils.h" alt="" coords="617,152,692,177"/>
+<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="617,152,692,177"/>
 </map>

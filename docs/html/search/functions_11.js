@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['underline',['Underline',['../unionfabgl_1_1_glyph_options.html#a4f1724b11c19a26631ed12f302f61db7',1,'fabgl::GlyphOptions']]],
-  ['update',['update',['../classfabgl_1_1_quad_tree.html#a956a3b7b9e0efe5b28e79bb9a64e7b84',1,'fabgl::QuadTree::update()'],['../classfabgl_1_1_collision_detector.html#a55d2fe2c8857aeb4f3c8cf86be6d409e',1,'fabgl::CollisionDetector::update()'],['../classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e',1,'fabgl::Scene::update()']]],
-  ['updateanddetectcollision',['updateAndDetectCollision',['../classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#accd92470e9aefba528dd72213475b995',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
-  ['updatesprite',['updateSprite',['../classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7',1,'fabgl::Scene']]],
-  ['updatespriteanddetectcollisions',['updateSpriteAndDetectCollisions',['../classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae',1,'fabgl::Scene']]]
+  ['text',['text',['../classfabgl_1_1ui_button.html#a7dda3febd65ff81f639eb07fa45c10be',1,'fabgl::uiButton::text()'],['../classfabgl_1_1ui_text_edit.html#ad450ee092d4c00b44ec793bf4a1afbe4',1,'fabgl::uiTextEdit::text()'],['../classfabgl_1_1ui_label.html#abe3e7f0c28557bdafd219f8d8ce27079',1,'fabgl::uiLabel::text()']]],
+  ['texteditprops',['textEditProps',['../classfabgl_1_1ui_text_edit.html#a2dec323059e7a194576374241936f18e',1,'fabgl::uiTextEdit']]],
+  ['texteditstyle',['textEditStyle',['../classfabgl_1_1ui_text_edit.html#a9f95aa7b9ee347f092c67870a31d2341',1,'fabgl::uiTextEdit']]],
+  ['textextent',['textExtent',['../classfabgl_1_1_canvas_class.html#a86e33b9fedf29a2d06a74377088ed645',1,'fabgl::CanvasClass']]],
+  ['title',['title',['../classfabgl_1_1ui_frame.html#add07566cca01a56f6fc5b292c4a34d40',1,'fabgl::uiFrame']]],
+  ['transformrect',['transformRect',['../classfabgl_1_1ui_window.html#ae16282f1881ec8ded65ad239f3d17735',1,'fabgl::uiWindow']]]
 ];

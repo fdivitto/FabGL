@@ -102,19 +102,19 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_p_s2_controller_class.h
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7082e498e95fd5f5a4edfbe73923f397"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a7082e498e95fd5f5a4edfbe73923f397">begin</a> (gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_NUM_39, gpio_num_t port1_datGPIO=GPIO_NUM_39)</td></tr>
-<tr class="memdesc:a7082e498e95fd5f5a4edfbe73923f397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize PS2 device controller.  <a href="#a7082e498e95fd5f5a4edfbe73923f397">More...</a><br /></td></tr>
+<tr class="memdesc:a7082e498e95fd5f5a4edfbe73923f397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes PS2 device controller.  <a href="#a7082e498e95fd5f5a4edfbe73923f397">More...</a><br /></td></tr>
 <tr class="separator:a7082e498e95fd5f5a4edfbe73923f397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6062b2ca4cd3b357065787abffa186af"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a6062b2ca4cd3b357065787abffa186af">dataAvailable</a> (int PS2Port)</td></tr>
-<tr class="memdesc:a6062b2ca4cd3b357065787abffa186af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of scancodes available in the controller buffer.  <a href="#a6062b2ca4cd3b357065787abffa186af">More...</a><br /></td></tr>
+<tr class="memdesc:a6062b2ca4cd3b357065787abffa186af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of scancodes available in the controller buffer.  <a href="#a6062b2ca4cd3b357065787abffa186af">More...</a><br /></td></tr>
 <tr class="separator:a6062b2ca4cd3b357065787abffa186af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a467e44c8df301318688f2287d77a5790"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a467e44c8df301318688f2287d77a5790">getData</a> (int PS2Port)</td></tr>
-<tr class="memdesc:a467e44c8df301318688f2287d77a5790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a scancode from the queue.  <a href="#a467e44c8df301318688f2287d77a5790">More...</a><br /></td></tr>
+<tr class="memdesc:a467e44c8df301318688f2287d77a5790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a scancode from the queue.  <a href="#a467e44c8df301318688f2287d77a5790">More...</a><br /></td></tr>
 <tr class="separator:a467e44c8df301318688f2287d77a5790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9af043671e84f1dc1828aaf1f649fcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#ad9af043671e84f1dc1828aaf1f649fcc">injectInRXBuffer</a> (int value, int PS2Port)</td></tr>
-<tr class="memdesc:ad9af043671e84f1dc1828aaf1f649fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inject a byte into the RX buffer.  <a href="#ad9af043671e84f1dc1828aaf1f649fcc">More...</a><br /></td></tr>
+<tr class="memdesc:ad9af043671e84f1dc1828aaf1f649fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Injects a byte into the RX buffer.  <a href="#ad9af043671e84f1dc1828aaf1f649fcc">More...</a><br /></td></tr>
 <tr class="separator:ad9af043671e84f1dc1828aaf1f649fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ec318ddf10936017940c63665a91b41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a0ec318ddf10936017940c63665a91b41">sendData</a> (uint8_t data, int PS2Port)</td></tr>
-<tr class="memdesc:a0ec318ddf10936017940c63665a91b41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a command to the device.  <a href="#a0ec318ddf10936017940c63665a91b41">More...</a><br /></td></tr>
+<tr class="memdesc:a0ec318ddf10936017940c63665a91b41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a command to the device.  <a href="#a0ec318ddf10936017940c63665a91b41">More...</a><br /></td></tr>
 <tr class="separator:a0ec318ddf10936017940c63665a91b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -160,7 +160,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initialize PS2 device controller. </p>
+<p>Initializes PS2 device controller. </p>
 <p>Initializes the PS2 controller assigning GPIOs to DAT and CLK lines.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -171,7 +171,8 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a0">GraphicalUserInterface/GraphicalUserInterface.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a37">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="a6062b2ca4cd3b357065787abffa186af"></a>
@@ -190,7 +191,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of scancodes available in the controller buffer. </p>
+<p>Gets the number of scancodes available in the controller buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">PS2Port</td><td>PS2 port number (0 = port 0, 1 = port1).</td></tr>
@@ -217,7 +218,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get a scancode from the queue. </p>
+<p>Gets a scancode from the queue. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">PS2Port</td><td>PS2 port number (0 = port 0, 1 = port1).</td></tr>
@@ -254,7 +255,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Inject a byte into the RX buffer. </p>
+<p>Injects a byte into the RX buffer. </p>
 <p>Injects a byte as if it were actually sent by the device.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -292,7 +293,7 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Send a command to the device. </p>
+<p>Sends a command to the device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>Byte to send to the PS2 device. </td></tr>

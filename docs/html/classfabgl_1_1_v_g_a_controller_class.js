@@ -13,6 +13,7 @@ var classfabgl_1_1_v_g_a_controller_class =
     [ "isDoubleBuffered", "classfabgl_1_1_v_g_a_controller_class.html#ac769ed638e5add668706de38f5d6c55a", null ],
     [ "moveScreen", "classfabgl_1_1_v_g_a_controller_class.html#a16843256aeff799ff96654cef6a231e7", null ],
     [ "processPrimitives", "classfabgl_1_1_v_g_a_controller_class.html#a25f1f95c5ba5cfa97fdba9d7115f2286", null ],
+    [ "readScreen", "classfabgl_1_1_v_g_a_controller_class.html#abcbaf2c8b9afb44376da7096c1e4438e", null ],
     [ "refreshSprites", "classfabgl_1_1_v_g_a_controller_class.html#a9ad964ad05d839dd99bd73897b5cab84", null ],
     [ "removeSprites", "classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6", null ],
     [ "resumeBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#afa57c12d24f1706685afa7d7e96c2cdc", null ],
@@ -22,5 +23,6 @@ var classfabgl_1_1_v_g_a_controller_class =
     [ "setResolution", "classfabgl_1_1_v_g_a_controller_class.html#ac190a844ead4bb68817c733fb0c9a5af", null ],
     [ "setSprites", "classfabgl_1_1_v_g_a_controller_class.html#a7ba7a412c75f41a898929e18dae10353", null ],
     [ "shrinkScreen", "classfabgl_1_1_v_g_a_controller_class.html#affb399316e3a45b6b3ae601544dbc3a9", null ],
-    [ "suspendBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#acc8e8edb6d677fed102ca33cb59badf2", null ]
+    [ "suspendBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#acc8e8edb6d677fed102ca33cb59badf2", null ],
+    [ "writeScreen", "classfabgl_1_1_v_g_a_controller_class.html#aeb7c2b7881a541405690fe44f4c94be6", null ]
 ];

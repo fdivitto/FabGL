@@ -1,0 +1,6 @@
+<map id="fabgl::uiScrollableControl" name="fabgl::uiScrollableControl">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="35,225,146,251"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="32,152,148,177"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="23,79,157,104"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="37,5,143,31"/>
+</map>

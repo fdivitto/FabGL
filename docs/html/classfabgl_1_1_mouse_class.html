@@ -118,61 +118,61 @@ Collaboration diagram for fabgl::MouseClass:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a878bf60d657dac3cd8be49da5b3671fc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a878bf60d657dac3cd8be49da5b3671fc">availableStatus</a> ()</td></tr>
-<tr class="memdesc:a878bf60d657dac3cd8be49da5b3671fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of available mouse status.  <a href="#a878bf60d657dac3cd8be49da5b3671fc">More...</a><br /></td></tr>
+<tr class="memdesc:a878bf60d657dac3cd8be49da5b3671fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of available mouse status.  <a href="#a878bf60d657dac3cd8be49da5b3671fc">More...</a><br /></td></tr>
 <tr class="separator:a878bf60d657dac3cd8be49da5b3671fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28c8955ed672180519e6f6e74ea676d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a28c8955ed672180519e6f6e74ea676d2">begin</a> (gpio_num_t clkGPIO, gpio_num_t dataGPIO)</td></tr>
-<tr class="memdesc:a28c8955ed672180519e6f6e74ea676d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> specifying CLOCK and DATA GPIOs.  <a href="#a28c8955ed672180519e6f6e74ea676d2">More...</a><br /></td></tr>
+<tr class="memdesc:a28c8955ed672180519e6f6e74ea676d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> specifying CLOCK and DATA GPIOs.  <a href="#a28c8955ed672180519e6f6e74ea676d2">More...</a><br /></td></tr>
 <tr class="separator:a28c8955ed672180519e6f6e74ea676d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a004a4383e2fd553ee521b76eff4bf8f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a004a4383e2fd553ee521b76eff4bf8f7">begin</a> (int PS2Port)</td></tr>
-<tr class="memdesc:a004a4383e2fd553ee521b76eff4bf8f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> without initializing the PS/2 controller.  <a href="#a004a4383e2fd553ee521b76eff4bf8f7">More...</a><br /></td></tr>
+<tr class="memdesc:a004a4383e2fd553ee521b76eff4bf8f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> without initializing the PS/2 controller.  <a href="#a004a4383e2fd553ee521b76eff4bf8f7">More...</a><br /></td></tr>
 <tr class="separator:a004a4383e2fd553ee521b76eff4bf8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0118a17387e775436fc27dc8380259f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a0118a17387e775436fc27dc8380259f6">deltaAvailable</a> ()</td></tr>
-<tr class="memdesc:a0118a17387e775436fc27dc8380259f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of mouse movements available in the queue.  <a href="#a0118a17387e775436fc27dc8380259f6">More...</a><br /></td></tr>
+<tr class="memdesc:a0118a17387e775436fc27dc8380259f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the number of mouse movements available in the queue.  <a href="#a0118a17387e775436fc27dc8380259f6">More...</a><br /></td></tr>
 <tr class="separator:a0118a17387e775436fc27dc8380259f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42d3fcce8c74d47e3e40c5552c4c2af4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a42d3fcce8c74d47e3e40c5552c4c2af4">getNextDelta</a> (<a class="el" href="structfabgl_1_1_mouse_delta.html">MouseDelta</a> *delta, int timeOutMS=-1, bool requestResendOnTimeOut=false)</td></tr>
-<tr class="memdesc:a42d3fcce8c74d47e3e40c5552c4c2af4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a mouse movement from the queue.  <a href="#a42d3fcce8c74d47e3e40c5552c4c2af4">More...</a><br /></td></tr>
+<tr class="memdesc:a42d3fcce8c74d47e3e40c5552c4c2af4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mouse movement from the queue.  <a href="#a42d3fcce8c74d47e3e40c5552c4c2af4">More...</a><br /></td></tr>
 <tr class="separator:a42d3fcce8c74d47e3e40c5552c4c2af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af770cea972dce81506216a8556f086cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#af770cea972dce81506216a8556f086cd">getNextStatus</a> (int timeOutMS=-1)</td></tr>
-<tr class="memdesc:af770cea972dce81506216a8556f086cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the next status from the status queue.  <a href="#af770cea972dce81506216a8556f086cd">More...</a><br /></td></tr>
+<tr class="memdesc:af770cea972dce81506216a8556f086cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next status from the status queue.  <a href="#af770cea972dce81506216a8556f086cd">More...</a><br /></td></tr>
 <tr class="separator:af770cea972dce81506216a8556f086cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ps2device_8h.html#a209a520f6108c21bd313cb2c98fde74a">PS2Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a6a3cfd9086abb1d0dda31e5f9c22f40e">identify</a> ()</td></tr>
-<tr class="memdesc:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identify the device attached to the PS2 port.  <a href="#a6a3cfd9086abb1d0dda31e5f9c22f40e">More...</a><br /></td></tr>
+<tr class="memitem:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">PS2Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a6a3cfd9086abb1d0dda31e5f9c22f40e">identify</a> ()</td></tr>
+<tr class="memdesc:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the device attached to the PS2 port.  <a href="#a6a3cfd9086abb1d0dda31e5f9c22f40e">More...</a><br /></td></tr>
 <tr class="separator:a6a3cfd9086abb1d0dda31e5f9c22f40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a998451f10299799fc5e9d486ede6c87f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a998451f10299799fc5e9d486ede6c87f">isMouseAvailable</a> ()</td></tr>
-<tr class="memdesc:a998451f10299799fc5e9d486ede6c87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if mouse has been detected and correctly initialized.  <a href="#a998451f10299799fc5e9d486ede6c87f">More...</a><br /></td></tr>
+<tr class="memdesc:a998451f10299799fc5e9d486ede6c87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if mouse has been detected and correctly initialized.  <a href="#a998451f10299799fc5e9d486ede6c87f">More...</a><br /></td></tr>
 <tr class="separator:a998451f10299799fc5e9d486ede6c87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#a0c5e9c28380d81e8ca53875e7bf30e5c">lock</a> (int timeOutMS)</td></tr>
-<tr class="memdesc:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get exclusive access to the device.  <a href="#a0c5e9c28380d81e8ca53875e7bf30e5c">More...</a><br /></td></tr>
+<tr class="memdesc:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets exclusive access to the device.  <a href="#a0c5e9c28380d81e8ca53875e7bf30e5c">More...</a><br /></td></tr>
 <tr class="separator:a0c5e9c28380d81e8ca53875e7bf30e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cc375e93093a149fb6133d206a6f390"><td class="memItemLeft" align="right" valign="top">int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a7cc375e93093a149fb6133d206a6f390">movementAcceleration</a> ()</td></tr>
-<tr class="memdesc:a7cc375e93093a149fb6133d206a6f390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get or set mouse movement acceleration factor.  <a href="#a7cc375e93093a149fb6133d206a6f390">More...</a><br /></td></tr>
+<tr class="memdesc:a7cc375e93093a149fb6133d206a6f390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or set mouse movement acceleration factor.  <a href="#a7cc375e93093a149fb6133d206a6f390">More...</a><br /></td></tr>
 <tr class="separator:a7cc375e93093a149fb6133d206a6f390"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4ce42d726a0eb5afa812df27a391f51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51">reset</a> ()</td></tr>
-<tr class="memdesc:ae4ce42d726a0eb5afa812df27a391f51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a Reset command to the mouse.  <a href="#ae4ce42d726a0eb5afa812df27a391f51">More...</a><br /></td></tr>
+<tr class="memdesc:ae4ce42d726a0eb5afa812df27a391f51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a Reset command to the mouse.  <a href="#ae4ce42d726a0eb5afa812df27a391f51">More...</a><br /></td></tr>
 <tr class="separator:ae4ce42d726a0eb5afa812df27a391f51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e894357caf95e95cb1d40fc709a0240"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a1e894357caf95e95cb1d40fc709a0240">setResolution</a> (int value)</td></tr>
-<tr class="memdesc:a1e894357caf95e95cb1d40fc709a0240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the resolution.  <a href="#a1e894357caf95e95cb1d40fc709a0240">More...</a><br /></td></tr>
+<tr class="memdesc:a1e894357caf95e95cb1d40fc709a0240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the resolution.  <a href="#a1e894357caf95e95cb1d40fc709a0240">More...</a><br /></td></tr>
 <tr class="separator:a1e894357caf95e95cb1d40fc709a0240"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5703729d19c021a763c5ac819a72576"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#ad5703729d19c021a763c5ac819a72576">setSampleRate</a> (int value)</td></tr>
-<tr class="memdesc:ad5703729d19c021a763c5ac819a72576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum rate of mouse movements reporting.  <a href="#ad5703729d19c021a763c5ac819a72576">More...</a><br /></td></tr>
+<tr class="memdesc:ad5703729d19c021a763c5ac819a72576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum rate of mouse movements reporting.  <a href="#ad5703729d19c021a763c5ac819a72576">More...</a><br /></td></tr>
 <tr class="separator:ad5703729d19c021a763c5ac819a72576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#adf4c50d2b747ef1e2cc73ead1b0108bc">setScaling</a> (int value)</td></tr>
-<tr class="memdesc:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the scaling.  <a href="#adf4c50d2b747ef1e2cc73ead1b0108bc">More...</a><br /></td></tr>
+<tr class="memdesc:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the scaling.  <a href="#adf4c50d2b747ef1e2cc73ead1b0108bc">More...</a><br /></td></tr>
 <tr class="separator:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a435e124708da271bd739a2041febf331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a435e124708da271bd739a2041febf331">setupAbsolutePositioner</a> (int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController)</td></tr>
-<tr class="memdesc:a435e124708da271bd739a2041febf331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize absolute position handler.  <a href="#a435e124708da271bd739a2041febf331">More...</a><br /></td></tr>
-<tr class="separator:a435e124708da271bd739a2041febf331"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27d4c98be698b46eabc8faea1d1cf48d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d">setupAbsolutePositioner</a> (int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, <a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app)</td></tr>
+<tr class="memdesc:a27d4c98be698b46eabc8faea1d1cf48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes absolute position handler.  <a href="#a27d4c98be698b46eabc8faea1d1cf48d">More...</a><br /></td></tr>
+<tr class="separator:a27d4c98be698b46eabc8faea1d1cf48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd37dd534acd79983406a7327f040123"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#abd37dd534acd79983406a7327f040123">status</a> ()</td></tr>
-<tr class="memdesc:abd37dd534acd79983406a7327f040123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get or set current mouse status.  <a href="#abd37dd534acd79983406a7327f040123">More...</a><br /></td></tr>
+<tr class="memdesc:abd37dd534acd79983406a7327f040123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets current mouse status.  <a href="#abd37dd534acd79983406a7327f040123">More...</a><br /></td></tr>
 <tr class="separator:abd37dd534acd79983406a7327f040123"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed4e98813779c2d51bd304aef5aed7e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#aed4e98813779c2d51bd304aef5aed7e9">unlock</a> ()</td></tr>
-<tr class="memdesc:aed4e98813779c2d51bd304aef5aed7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release device from exclusive access.  <a href="#aed4e98813779c2d51bd304aef5aed7e9">More...</a><br /></td></tr>
+<tr class="memdesc:aed4e98813779c2d51bd304aef5aed7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases device from exclusive access.  <a href="#aed4e98813779c2d51bd304aef5aed7e9">More...</a><br /></td></tr>
 <tr class="separator:aed4e98813779c2d51bd304aef5aed7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf10d5722e7ac0eb3962bde2ba458bc5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5">updateAbsolutePosition</a> (<a class="el" href="structfabgl_1_1_mouse_delta.html">MouseDelta</a> *delta)</td></tr>
-<tr class="memdesc:adf10d5722e7ac0eb3962bde2ba458bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update absolute position from the specified mouse delta event.  <a href="#adf10d5722e7ac0eb3962bde2ba458bc5">More...</a><br /></td></tr>
+<tr class="memdesc:adf10d5722e7ac0eb3962bde2ba458bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates absolute position from the specified mouse delta event.  <a href="#adf10d5722e7ac0eb3962bde2ba458bc5">More...</a><br /></td></tr>
 <tr class="separator:adf10d5722e7ac0eb3962bde2ba458bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5001a4b84fbc6c1ae7f2c909882649cb"><td class="memItemLeft" align="right" valign="top">int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a5001a4b84fbc6c1ae7f2c909882649cb">wheelAcceleration</a> ()</td></tr>
-<tr class="memdesc:a5001a4b84fbc6c1ae7f2c909882649cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get or set wheel acceleration factor.  <a href="#a5001a4b84fbc6c1ae7f2c909882649cb">More...</a><br /></td></tr>
+<tr class="memdesc:a5001a4b84fbc6c1ae7f2c909882649cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets wheel acceleration factor.  <a href="#a5001a4b84fbc6c1ae7f2c909882649cb">More...</a><br /></td></tr>
 <tr class="separator:a5001a4b84fbc6c1ae7f2c909882649cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -211,9 +211,9 @@ if (Mouse.deltaAvailable()) {
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of available mouse status. </p>
+<p>Gets the number of available mouse status. </p>
 <p>Mouse status contains absolute mouse position, scroll wheel delta and buttons status.<br />
- Mouse status queue is populated only when createAbsolutePositionsQueue parameter of <a class="el" href="classfabgl_1_1_mouse_class.html#a435e124708da271bd739a2041febf331" title="Initialize absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.</p>
+ Mouse status queue is populated only when createAbsolutePositionsQueue parameter of <a class="el" href="classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d" title="Initializes absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.</p>
 <dl class="section return"><dt>Returns</dt><dd>Number of available mouse status. </dd></dl>
 
 </div>
@@ -244,8 +244,8 @@ if (Mouse.deltaAvailable()) {
       </table>
 </div><div class="memdoc">
 
-<p>Initialize <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> specifying CLOCK and DATA GPIOs. </p>
-<p>A reset command (<a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Send a Reset command to the mouse. ">MouseClass.reset()</a> method) is automatically sent to the mouse.<br />
+<p>Initializes <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> specifying CLOCK and DATA GPIOs. </p>
+<p>A reset command (<a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Sends a Reset command to the mouse. ">MouseClass.reset()</a> method) is automatically sent to the mouse.<br />
  This method also initializes the <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">PS2ControllerClass</a> to use port 0 only.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -255,7 +255,7 @@ if (Mouse.deltaAvailable()) {
   </dd>
 </dl>
 <p>Example: </p><pre class="fragment">// Setup pins GPIO26 for CLK and GPIO27 for DATA
-Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a8">MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a8">MouseStudio/MouseStudio.ino</a>.</dd>
+Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a2">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a8">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a8">MouseStudio/MouseStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a39">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -275,8 +275,8 @@ Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);</pre> <dl><dt><b>Examples: </b></dt><dd><
       </table>
 </div><div class="memdoc">
 
-<p>Initialize <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> without initializing the PS/2 controller. </p>
-<p>A reset command (<a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Send a Reset command to the mouse. ">MouseClass.reset()</a> method) is automatically sent to the mouse.<br />
+<p>Initializes <a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">MouseClass</a> without initializing the PS/2 controller. </p>
+<p>A reset command (<a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Sends a Reset command to the mouse. ">MouseClass.reset()</a> method) is automatically sent to the mouse.<br />
  This method does not initialize the <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">PS2ControllerClass</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -304,9 +304,9 @@ Mouse.begin(0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of mouse movements available in the queue. </p>
+<p>Determines the number of mouse movements available in the queue. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of mouse movements (deltas) available to read. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a13">MouseStudio/MouseStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a13">MouseStudio/MouseStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a33">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -342,10 +342,10 @@ Mouse.begin(0); // port 0</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Get a mouse movement from the queue. </p>
+<p>Gets a mouse movement from the queue. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">delta</td><td>Pointer to <a class="el" href="structfabgl_1_1_mouse_delta.html" title="Describes mouse movement and buttons status. ">MouseDelta</a> structure to be filled with mouse movement. </td></tr>
+    <tr><td class="paramname">delta</td><td>Pointer to <a class="el" href="structfabgl_1_1_mouse_delta.html" title="Describes mouse movement and buttons status. ">MouseDelta</a> structure to be filled with mouse movement. May be nullptr if not required (in this case only Status().buttons is updated. </td></tr>
     <tr><td class="paramname">timeOutMS</td><td>Timeout in milliseconds. -1 means no timeout (infinite time). </td></tr>
     <tr><td class="paramname">requestResendOnTimeOut</td><td>If true and timeout has expired then asks the mouse to resend the mouse movement.</td></tr>
   </table>
@@ -353,7 +353,7 @@ Mouse.begin(0); // port 0</pre>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the mouse movement structure has been filled. False when there is no data in the queue.</dd></dl>
 <p>Example: </p><pre class="fragment">MouseDelta mouseDelta;
-Mouse.getNextDelta(&amp;mouseDelta);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a14">MouseStudio/MouseStudio.ino</a>.</dd>
+Mouse.getNextDelta(&amp;mouseDelta);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a14">MouseStudio/MouseStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a20">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -373,9 +373,9 @@ Mouse.getNextDelta(&amp;mouseDelta);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
       </table>
 </div><div class="memdoc">
 
-<p>Get the next status from the status queue. </p>
+<p>Gets the next status from the status queue. </p>
 <p>Mouse status contains absolute mouse position, scroll wheel delta and buttons status.<br />
- Mouse status queue is populated only when createAbsolutePositionsQueue parameter of <a class="el" href="classfabgl_1_1_mouse_class.html#a435e124708da271bd739a2041febf331" title="Initialize absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.</p>
+ Mouse status queue is populated only when createAbsolutePositionsQueue parameter of <a class="el" href="classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d" title="Initializes absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeOutMS</td><td>Timeout in milliseconds to wait for a new status. -1 = wait forever.</td></tr>
@@ -402,7 +402,7 @@ if (status.buttons.left) {
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="ps2device_8h.html#a209a520f6108c21bd313cb2c98fde74a">PS2Device</a> fabgl::PS2DeviceClass::identify </td>
+          <td class="memname"><a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">PS2Device</a> fabgl::PS2DeviceClass::identify </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -415,7 +415,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Identify the device attached to the PS2 port. </p>
+<p>Identifies the device attached to the PS2 port. </p>
 <dl class="section return"><dt>Returns</dt><dd>The identification ID sent by keyboard. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a1">KeyboardStudio/KeyboardStudio.ino</a>, and <a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a1">MouseStudio/MouseStudio.ino</a>.</dd>
 </dl>
@@ -444,10 +444,10 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Check if mouse has been detected and correctly initialized. </p>
-<p><a class="el" href="classfabgl_1_1_mouse_class.html#a998451f10299799fc5e9d486ede6c87f" title="Check if mouse has been detected and correctly initialized. ">isMouseAvailable()</a> returns a valid value only after <a class="el" href="classfabgl_1_1_mouse_class.html#a28c8955ed672180519e6f6e74ea676d2" title="Initialize MouseClass specifying CLOCK and DATA GPIOs. ">MouseClass.begin()</a> or <a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Send a Reset command to the mouse. ">MouseClass.reset()</a> has been called.</p>
+<p>Checks if mouse has been detected and correctly initialized. </p>
+<p><a class="el" href="classfabgl_1_1_mouse_class.html#a998451f10299799fc5e9d486ede6c87f" title="Checks if mouse has been detected and correctly initialized. ">isMouseAvailable()</a> returns a valid value only after <a class="el" href="classfabgl_1_1_mouse_class.html#a28c8955ed672180519e6f6e74ea676d2" title="Initializes MouseClass specifying CLOCK and DATA GPIOs. ">MouseClass.begin()</a> or <a class="el" href="classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51" title="Sends a Reset command to the mouse. ">MouseClass.reset()</a> has been called.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the mouse is correctly initialized. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a0">MouseStudio/MouseStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a0">MouseStudio/MouseStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a17">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -475,7 +475,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Get exclusive access to the device. </p>
+<p>Gets exclusive access to the device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeOutMS</td><td>Timeout in milliseconds to wait before fail.</td></tr>
@@ -509,8 +509,8 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Get or set mouse movement acceleration factor. </p>
-<p>Mouse movement acceleration is calculated in <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Update absolute position from the specified mouse delta event. ">MouseClass.updateAbsolutePosition()</a> and depends by the acceleration factor and time of call.<br />
+<p>Gets or set mouse movement acceleration factor. </p>
+<p>Mouse movement acceleration is calculated in <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Updates absolute position from the specified mouse delta event. ">MouseClass.updateAbsolutePosition()</a> and depends by the acceleration factor and time of call.<br />
  Lower values generate little acceleration, high values generate a lot of acceleration.<br />
  Suggested range is 0 ... 2000. Default value is 180. </p>
 
@@ -531,7 +531,7 @@ if (status.buttons.left) {
       </table>
 </div><div class="memdoc">
 
-<p>Send a Reset command to the mouse. </p>
+<p>Sends a Reset command to the mouse. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if the mouse is correctly initialized. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a9">MouseStudio/MouseStudio.ino</a>.</dd>
 </dl>
@@ -561,7 +561,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Set the resolution. </p>
+<p>Sets the resolution. </p>
 <p>Resolution is the amount by which the movement counters are incremented/decremented measured as counts per millimeter.<br />
  The default resolution is 4 counts/mm.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -599,7 +599,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Set the maximum rate of mouse movements reporting. </p>
+<p>Sets the maximum rate of mouse movements reporting. </p>
 <p>The default sample rate is 60 samples/sec.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -608,7 +608,7 @@ if (status.buttons.left) {
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if command has been successfully delivered to the mouse. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a10">MouseStudio/MouseStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a10">MouseStudio/MouseStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a27">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -636,7 +636,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Set the scaling. </p>
+<p>Sets the scaling. </p>
 <p>The default scaling is 1:1.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -649,8 +649,8 @@ if (status.buttons.left) {
 </dl>
 </div>
 </div>
-<a id="a435e124708da271bd739a2041febf331"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a435e124708da271bd739a2041febf331">&#9670;&nbsp;</a></span>setupAbsolutePositioner()</h2>
+<a id="a27d4c98be698b46eabc8faea1d1cf48d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27d4c98be698b46eabc8faea1d1cf48d">&#9670;&nbsp;</a></span>setupAbsolutePositioner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -677,7 +677,13 @@ if (status.buttons.left) {
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>updateVGAController</em>&#160;</td>
+          <td class="paramname"><em>updateVGAController</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *&#160;</td>
+          <td class="paramname"><em>app</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -687,9 +693,9 @@ if (status.buttons.left) {
       </table>
 </div><div class="memdoc">
 
-<p>Initialize absolute position handler. </p>
+<p>Initializes absolute position handler. </p>
 <p>Use this method to specify the absolute mouse area inside the rectangle (0, 0) to (width - 1, height - 1).<br />
- Optinally this method creates a queue that stores absolute positions generated by <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Update absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a>.<br />
+ Optinally this method creates a queue that stores absolute positions generated by <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Updates absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a>.<br />
  This method must be called one time to initialize absolute positioning.<br />
 </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -697,11 +703,12 @@ if (status.buttons.left) {
     <tr><td class="paramname">width</td><td>Absolute mouse area width. Mouse can travel from 0 up to width - 1. </td></tr>
     <tr><td class="paramname">height</td><td>Absolute mouse area height. Mouse can travel from 0 up to height - 1. </td></tr>
     <tr><td class="paramname">createAbsolutePositionsQueue</td><td>If true a queue of absolute positions is created. </td></tr>
-    <tr><td class="paramname">updateVGAController</td><td>If true VGA controller mouse pointer is automatically updated.</td></tr>
+    <tr><td class="paramname">updateVGAController</td><td>If true VGA controller mouse pointer is automatically updated. </td></tr>
+    <tr><td class="paramname">app</td><td>Optional <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">fabgl::uiApp</a> where to send mouse events.</td></tr>
   </table>
   </dd>
 </dl>
-<p>Example: </p><pre class="fragment">Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a9">MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<p>Example: </p><pre class="fragment">Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, nullptr);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a9">MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a28">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -728,8 +735,8 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Get or set current mouse status. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a18">MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<p>Gets or sets current mouse status. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a18">MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a21">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -756,7 +763,7 @@ if (status.buttons.left) {
 </table>
 </div><div class="memdoc">
 
-<p>Release device from exclusive access. </p>
+<p>Releases device from exclusive access. </p>
 
 </div>
 </div>
@@ -776,10 +783,10 @@ if (status.buttons.left) {
       </table>
 </div><div class="memdoc">
 
-<p>Update absolute position from the specified mouse delta event. </p>
+<p>Updates absolute position from the specified mouse delta event. </p>
 <p>This method updates absolute mouse position, mouse wheel and buttons status.<br />
- In order to improve quality of acceleration it is important to call <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Update absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a> often and at constant frequency.<br />
- <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Update absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a> is automatically executed when updateVGAController or createAbsolutePositionsQueue parameters of <a class="el" href="classfabgl_1_1_mouse_class.html#a435e124708da271bd739a2041febf331" title="Initialize absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.<br />
+ In order to improve quality of acceleration it is important to call <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Updates absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a> often and at constant frequency.<br />
+ <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Updates absolute position from the specified mouse delta event. ">updateAbsolutePosition()</a> is automatically executed when updateVGAController or createAbsolutePositionsQueue parameters of <a class="el" href="classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d" title="Initializes absolute position handler. ">MouseClass.setupAbsolutePositioner()</a> is true.<br />
 </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -794,7 +801,8 @@ void loop() {
     Mouse.updateAbsolutePosition(&amp;delta);
     mouseSprite.moveTo(Mouse.position().X, Mouse.position().Y);
   }
-}</pre> 
+}</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a34">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="a5001a4b84fbc6c1ae7f2c909882649cb"></a>
@@ -820,8 +828,8 @@ void loop() {
 </table>
 </div><div class="memdoc">
 
-<p>Get or set wheel acceleration factor. </p>
-<p>Wheel acceleration is calculated in <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Update absolute position from the specified mouse delta event. ">MouseClass.updateAbsolutePosition()</a> and depends by the acceleration factor and time of call.<br />
+<p>Gets or sets wheel acceleration factor. </p>
+<p>Wheel acceleration is calculated in <a class="el" href="classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5" title="Updates absolute position from the specified mouse delta event. ">MouseClass.updateAbsolutePosition()</a> and depends by the acceleration factor and time of call.<br />
  Lower values generate little acceleration, high values generate a lot of acceleration.<br />
  Suggested range is 0 ... 100000. Default value is 60000. </p>
 

@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['read',['read',['../classfabgl_1_1_terminal_class.html#a0923ba2130e8074038603f57e646cd28',1,'fabgl::TerminalClass']]],
-  ['refreshsprites',['refreshSprites',['../classfabgl_1_1_v_g_a_controller_class.html#a9ad964ad05d839dd99bd73897b5cab84',1,'fabgl::VGAControllerClass']]],
-  ['removesprite',['removeSprite',['../classfabgl_1_1_collision_detector.html#a4eb7cf8e9b5b3c9bede09bfc450bb53a',1,'fabgl::CollisionDetector::removeSprite()'],['../classfabgl_1_1_scene.html#ac12a6954552cd33a4bba2d941f80c5ef',1,'fabgl::Scene::removeSprite()']]],
-  ['removesprites',['removeSprites',['../classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6',1,'fabgl::VGAControllerClass']]],
-  ['reset',['reset',['../classfabgl_1_1_keyboard_class.html#a09ac1cafc7c2b1f2b16fece0f969bfd3',1,'fabgl::KeyboardClass::reset()'],['../classfabgl_1_1_mouse_class.html#ae4ce42d726a0eb5afa812df27a391f51',1,'fabgl::MouseClass::reset()']]],
-  ['resumebackgroundprimitiveexecution',['resumeBackgroundPrimitiveExecution',['../classfabgl_1_1_v_g_a_controller_class.html#afa57c12d24f1706685afa7d7e96c2cdc',1,'fabgl::VGAControllerClass']]]
+  ['maximizewindow',['maximizeWindow',['../classfabgl_1_1ui_app.html#ae5d4a0245850056343938ef814726407',1,'fabgl::uiApp']]],
+  ['messagebox',['messageBox',['../classfabgl_1_1ui_app.html#add1a241eb65b95232d28a469c025e46c',1,'fabgl::uiApp']]],
+  ['minimizewindow',['minimizeWindow',['../classfabgl_1_1ui_app.html#ad7e36716653703be98d54d3ec55d1aaa',1,'fabgl::uiApp']]],
+  ['mousedownpos',['mouseDownPos',['../classfabgl_1_1ui_window.html#a98f5b2828f58c2dcf9832ed7a52669b1',1,'fabgl::uiWindow']]],
+  ['movefocus',['moveFocus',['../classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d',1,'fabgl::uiApp']]],
+  ['movementacceleration',['movementAcceleration',['../classfabgl_1_1_mouse_class.html#a7cc375e93093a149fb6133d206a6f390',1,'fabgl::MouseClass']]],
+  ['movescreen',['moveScreen',['../classfabgl_1_1_v_g_a_controller_class.html#a16843256aeff799ff96654cef6a231e7',1,'fabgl::VGAControllerClass']]],
+  ['moveto',['moveTo',['../classfabgl_1_1_canvas_class.html#a90e9335db302e55fa8ad402338398b76',1,'fabgl::CanvasClass']]],
+  ['movewindow',['moveWindow',['../classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0',1,'fabgl::uiApp']]]
 ];

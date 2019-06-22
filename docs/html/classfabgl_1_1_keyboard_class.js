@@ -5,7 +5,7 @@ var classfabgl_1_1_keyboard_class =
     [ "getLayout", "classfabgl_1_1_keyboard_class.html#ae7919c90b9cc0af1800b18aba04d0218", null ],
     [ "getLEDs", "classfabgl_1_1_keyboard_class.html#abe546ebdba6772d110341389d9d102d7", null ],
     [ "getNextScancode", "classfabgl_1_1_keyboard_class.html#a56e01f2289d9bb02d19e08fece4c731c", null ],
-    [ "getNextVirtualKey", "classfabgl_1_1_keyboard_class.html#a889c16be066922bdb5fa6fec1e008b88", null ],
+    [ "getNextVirtualKey", "classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6", null ],
     [ "identify", "classfabgl_1_1_keyboard_class.html#a6a3cfd9086abb1d0dda31e5f9c22f40e", null ],
     [ "isKeyboardAvailable", "classfabgl_1_1_keyboard_class.html#a5c07c13d95a52b5c8d91a7328fe17930", null ],
     [ "isVKDown", "classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008", null ],
