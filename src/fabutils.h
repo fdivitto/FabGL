@@ -24,6 +24,14 @@
 #pragma once
 
 
+/**
+ * @file
+ *
+ * @brief This file contains some utility classes and functions
+ *
+ */
+
+
 #include "freertos/FreeRTOS.h"
 
 
@@ -352,7 +360,7 @@ void free32(void * ptr);
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-/**
+/** \ingroup Enumerations
  * @brief Represents each possible real or derived (SHIFT + real) key.
  */
 enum VirtualKey {

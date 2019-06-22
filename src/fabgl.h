@@ -271,6 +271,12 @@
  */
 
 
+/*!
+    \defgroup Enumerations
+        Enumeration types
+*/
+
+
 #include "fabutils.h"
 #include "terminal.h"
 #include "vgacontroller.h"

@@ -58,7 +58,7 @@ struct MouseDelta {
 };
 
 
-/**
+/** \ingroup Enumerations
  * @brief Describes mouse type.
  */
 enum MouseType {

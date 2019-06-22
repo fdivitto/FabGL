@@ -42,7 +42,7 @@ namespace fabgl {
 
 
 
-/**
+/** \ingroup Enumerations
  * @brief Represents the type of device attached to PS/2 port.
  */
 enum PS2Device {

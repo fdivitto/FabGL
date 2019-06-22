@@ -53,7 +53,9 @@ namespace fabgl {
 
 
 
-/** @brief Represents one of the four blocks of horizontal or vertical line */
+/** \ingroup Enumerations
+ * @brief Represents one of the four blocks of horizontal or vertical line
+ */
 enum ScreenBlock {
   FrontPorch,   /**< Horizontal line sequence is: FRONTPORCH -> SYNC -> BACKPORCH -> VISIBLEAREA */
   Sync,         /**< Horizontal line sequence is: SYNC -> BACKPORCH -> VISIBLEAREA -> FRONTPORCH */
@@ -202,7 +204,7 @@ enum PrimitiveCmd {
 
 
 
-/**
+/** \ingroup Enumerations
  * @brief This enum defines named colors.
  *
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
@@ -384,7 +386,7 @@ struct BitmapDrawingInfo {
 };
 
 
-/**
+/** \ingroup Enumerations
  * @brief This enum defines a set of predefined mouse cursors.
  */
 enum CursorName : uint8_t {

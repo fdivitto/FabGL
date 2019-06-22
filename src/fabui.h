@@ -23,6 +23,13 @@
 #pragma once
 
 
+/**
+ * @file
+ *
+ * @brief This file contains all classes related to FabGL Graphical User Interface
+ */
+
+
 
 #include <stdint.h>
 #include <stddef.h>
@@ -261,7 +268,9 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiWindow
 
-/** @brief Specifies window rectangle origin */
+/** \ingroup Enumerations
+ * @brief Specifies window rectangle origin
+ */
 enum class uiOrigin {
   Screen,   /**< Rectangle coordinates relative to the screen (that is the root window) */
   Parent,   /**< Rectangle coordiantes relative to parent window */
@@ -849,7 +858,9 @@ struct uiScrollableControlStyle {
 };
 
 
-/** @brief Scrollbar direction */
+/** \ingroup Enumerations
+ * @brief Scrollbar direction
+ */
 enum class uiScrollBar {
   Vertical,          /**< Vertical scrollbar */
   Horizontal,        /**< Horizontal scrollbar */
@@ -1042,7 +1053,9 @@ struct uiButtonStyle {
 };
 
 
-/** @brief Specifies the button kind */
+/** \ingroup Enumerations
+ * @brief Specifies the button kind
+ */
 enum class uiButtonKind {
   Button,   /**< Normal button - can have a single state. Generates only click events */
   Switch,   /**< Switch - can have two states. Generates onChange events */
@@ -1394,7 +1407,7 @@ public:
    *
    * Image needs to be repainted in order to display changed bitmap.
    *
-   * @param value Image bitmap
+   * @param bitmap Image bitmap
    */
   void setBitmap(Bitmap const * bitmap);
 
@@ -1783,7 +1796,9 @@ struct uiCheckBoxStyle {
 };
 
 
-/** @brief Specifies the combobox behaviour */
+/** \ingroup Enumerations
+ * @brief Specifies the combobox behaviour
+ */
 enum class uiCheckBoxKind : int8_t {
   CheckBox,          /**< Normal checkbox */
   RadioButton,       /**< Radio-button */
@@ -1893,7 +1908,9 @@ struct uiAppProps {
 };
 
 
-/** @brief Return values from uiApp.messageBox() method */
+/** \ingroup Enumerations
+ * @brief Return values from uiApp.messageBox() method
+ */
 enum class uiMessageBoxResult {
   Cancel,    /**< Messagebox has been canceled */
   Button1,   /**< Button1 has been pressed */
@@ -1902,7 +1919,9 @@ enum class uiMessageBoxResult {
 };
 
 
-/** @brief Icon displayed by the uiApp.messageBox() method */
+/** \ingroup Enumerations
+ * @brief Icon displayed by the uiApp.messageBox() method
+ */
 enum class uiMessageBoxIcon {
   None,      /**< No icon is displayed */
   Question,  /**< Question icon */
@@ -1996,7 +2015,7 @@ public:
    *
    * To set the focoused window use uiApp.setFocusedWindow().
    *
-   * @return Focused window pointer or nullptr if there isn't one
+   * @return Focused window or nullptr if there isn't one
    */
   uiWindow * focusedWindow() { return m_focusedWindow; }
 
@@ -2008,30 +2027,96 @@ public:
    * Focused window can have a blinking caret.
    * Finally, a focused window partecipates to the TAB "trip", respecting the tab-order (see uiWindow.focusIndex()).
    *
-   * @return Previous focused window pointer
+   * @return Previous focused window
    */
   uiWindow * setFocusedWindow(uiWindow * value);
 
+  /**
+   * @brief Move focus to a control with current focus index plus a delta
+   *
+   * A focused window partecipates to the TAB "trip", respecting the tab-order (see uiWindow.focusIndex()).
+   * Calling moveFocus(1) is the same of pressing TAB. Calling moveFocus(-1) is the same of pressing SHIFT-TAB.
+   *
+   * @param delta Specifies how many controls pass (1 = next control, -1 = previous control)
+   *
+   * @return Previous focused window
+   */
   uiWindow * moveFocus(int delta);
 
   void captureMouse(uiWindow * window);
 
+  /**
+   * @brief Determines which window is capturing mouse
+   *
+   * Mouse is captured by a window when mouse is dragged (left button down while moving mouse) starting from window area.
+   *
+   * @return Window that captured mouse
+   */
   uiWindow * capturedMouseWindow() { return m_capturedMouseWindow; }
 
+  /**
+   * @brief Repaints a window
+   *
+   * @param window The window to be repainted
+   */
   void repaintWindow(uiWindow * window);
 
+  /**
+   * @brief Repaints a screen area
+   *
+   * @param rect Rectangle to be repainted (in screen coordiantes)
+   */
   void repaintRect(Rect const & rect);
 
+  /**
+   * @brief Moves a window
+   *
+   * @param window Window to be moved
+   * @param x New horizontal coordinate, relative to parent window
+   * @param y New vertical coordinate, relative to parent window
+   */
   void moveWindow(uiWindow * window, int x, int y);
 
+  /**
+   * @brief Resizes a window
+   *
+   * @param window Window to be resized
+   * @param width New horizontal size
+   * @param height New vertical size
+   */
   void resizeWindow(uiWindow * window, int width, int height);
 
+  /**
+   * @brief Resizes a window
+   *
+   * @param window Window to be resized
+   * @param size New window size
+   */
   void resizeWindow(uiWindow * window, Size size);
 
+  /**
+   * @brief Reshapes a window
+   *
+   * @param window Window to be reshaped
+   * @param rect New window bounding box, relative to the parent window
+   */
   void reshapeWindow(uiWindow * window, Rect const & rect);
 
+  /**
+   * @brief Determines which window a point belongs to
+   *
+   * @param point A point relative to the screen
+   *
+   * @return A window
+   */
   uiWindow * screenToWindow(Point & point);
 
+  /**
+   * @brief Makes a window visible or invisible
+   *
+   * @param window Window to be made visible
+   * @param value If true the window will be shown, if false the window will be hidden
+   */
   void showWindow(uiWindow * window, bool value);
 
   int showModalWindow(uiWindow * window);
