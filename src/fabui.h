@@ -539,6 +539,8 @@ public:
   /**
    * @brief Determines the focus index (aka tab-index)
    *
+   * To set focus index use uiWindow.setFocusIndex().
+   *
    * @return The focus index
    */
   int focusIndex() { return m_focusIndex; }
@@ -1152,17 +1154,20 @@ private:
  * @return L-value representing frame style (colors, font, etc...)
  */
 struct uiTextEditStyle {
-  RGB              backgroundColor            = RGB(2, 2, 2);    /**< Background color */
-  RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);    /**< Background color when mouse is over */
-  RGB              focusedBackgroundColor     = RGB(3, 3, 3);    /**< Background color when focused */
-  RGB              textColor                  = RGB(0, 0, 0);    /**< Text color */
-  FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);
+  RGB              backgroundColor            = RGB(2, 2, 2);                                   /**< Background color */
+  RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);                                   /**< Background color when mouse is over */
+  RGB              focusedBackgroundColor     = RGB(3, 3, 3);                                   /**< Background color when focused */
+  RGB              textColor                  = RGB(0, 0, 0);                                   /**< Text color */
+  FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
 };
 
 
+/**
+ * @brief Properties of the text edit
+ */
 struct uiTextEditProps {
-  uint8_t hasCaret  : 1;
-  uint8_t allowEdit : 1;
+  uint8_t hasCaret  : 1;   /**< If True the edit box has a blinking caret */
+  uint8_t allowEdit : 1;   /**< If True the edit box allows edit */
 
   uiTextEditProps()
     : hasCaret(true),
@@ -1172,27 +1177,66 @@ struct uiTextEditProps {
 };
 
 
+/**
+ * @brief Represents a text edit control.
+ *
+ * A text edit is a single line editor, horizontally scrollable, text selection and replacement.
+ */
 class uiTextEdit : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A text edit must always have a parent window
+   * @param text Optional initial text
+   * @param pos Top-left coordinates of the text edit relative to the parent
+   * @param size The text edit size
+   * @param visible If true the button is immediately visible
+   */
   uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiTextEdit();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets or gets text edit style
+   *
+   * @return L-value representing text edit style (colors, font, etc...)
+   */
   uiTextEditStyle & textEditStyle() { return m_textEditStyle; }
 
+  /**
+   * @brief Sets or gets text edit properties
+   *
+   * @return L-value representing some text edit properties
+   */
   uiTextEditProps & textEditProps() { return m_textEditProps; }
 
+  /**
+   * @brief Replaces current text
+   *
+   * Text edit needs to be repainted in order to display changed text.
+   *
+   * @param value Text to set
+   */
   void setText(char const * value);
 
+  /**
+   * @brief Gets current content of the text edit
+   *
+   * @return Text edit content
+   */
   char const * text() { return m_text; }
 
 
   // Delegates
 
+  /**
+   * @brief Text edit event delegate
+   */
   Delegate<> onChange;
 
 
@@ -1246,32 +1290,56 @@ private:
 // uiLabel
 
 
+/** @brief Contains the label style */
 struct uiLabelStyle {
-  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);
-  RGB              backgroundColor          = RGB(3, 3, 3);
-  RGB              textColor                = RGB(0, 0, 0);
+  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
+  RGB              backgroundColor          = RGB(3, 3, 3);                                   /**< Background color */
+  RGB              textColor                = RGB(0, 0, 0);                                   /**< Text color */
 };
 
 
+/** @brief A label is a static text UI element */
 class uiLabel : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A label must always have a parent window
+   * @param text Text of the label
+   * @param pos Top-left coordinates of the label relative to the parent
+   * @param size The label size. If Size(0, 0) then size is automatically calculated
+   * @param visible If true the label is immediately visible
+   */
   uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
 
   virtual ~uiLabel();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets label text
+   *
+   * Label needs to be repainted in order to display changed text.
+   *
+   * @param value Label text
+   */
   void setText(char const * value);
 
+  /**
+   * @brief Determines label text
+   *
+   * @return Label text
+   */
   char const * text() { return m_text; }
 
+  /**
+   * @brief Sets or gets label style
+   *
+   * @return L-value representing label style (colors, font, etc...)
+   */
   uiLabelStyle & labelStyle() { return m_labelStyle; }
-
-
-  // Delegates
-
 
 
 private:
@@ -1295,30 +1363,54 @@ private:
 // uiImage
 
 
+/** @brief Contains the image style */
 struct uiImageStyle {
-  RGB backgroundColor = RGB(3, 3, 3);
+  RGB backgroundColor = RGB(3, 3, 3);   /**< Background color */
 };
 
 
+/** @brief Image control to display a static bitmap */
 class uiImage : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. An image must always have a parent window
+   * @param bitmap Bitmap to display
+   * @param pos Top-left coordinates of the image relative to the parent
+   * @param size The image size. If Size(0, 0) then size is automatically calculated
+   * @param visible If true the image is immediately visible
+   */
   uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
 
   virtual ~uiImage();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets image bitmap
+   *
+   * Image needs to be repainted in order to display changed bitmap.
+   *
+   * @param value Image bitmap
+   */
   void setBitmap(Bitmap const * bitmap);
 
+  /**
+   * @brief Gets image bitmap
+   *
+   * @return Image bitmap
+   */
   Bitmap const * bitmap() { return m_bitmap; }
 
+  /**
+   * @brief Sets or gets image style
+   *
+   * @return L-value representing image style
+   */
   uiImageStyle & imageStyle() { return m_imageStyle; }
-
-
-  // Delegates
-
 
 
 private:
@@ -1340,26 +1432,37 @@ private:
 // uiPanel
 
 
+/** @brief Contains the panel style */
 struct uiPanelStyle {
-  RGB backgroundColor = RGB(2, 2, 2);
+  RGB backgroundColor = RGB(2, 2, 2);    /**< Panel background color */
 };
 
 
+/** @brief A panel is used to contain and to group some controls */
 class uiPanel : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A panel must always have a parent window
+   * @param pos Top-left coordinates of the panel relative to the parent
+   * @param size The panel size
+   * @param visible If true the panel is immediately visible
+   */
   uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiPanel();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets or gets panel style
+   *
+   * @return L-value representing panel style
+   */
   uiPanelStyle & panelStyle() { return m_panelStyle; }
-
-
-  // Delegates
-
 
 
 private:
@@ -1376,27 +1479,47 @@ private:
 // uiPaintBox
 
 
+/** @brief Contains the paintbox style */
 struct uiPaintBoxStyle {
-  RGB backgroundColor = RGB(2, 2, 2);
+  RGB backgroundColor = RGB(2, 2, 2);   /**< Paintbox background color */
 };
 
 
+/** @brief A paintbox control allows applications to perform custom drawings providing uiPaintBox.onPaint delegate. A paintbox can have horizontal and vertical scrollbars. */
 class uiPaintBox : public uiScrollableControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A paintbox must always have a parent window
+   * @param pos Top-left coordinates of the paintbox relative to the parent
+   * @param size The paintbox size
+   * @param visible If true the paintbox is immediately visible
+   */
   uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiPaintBox();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets or gets paintbox style
+   *
+   * @return L-value representing paintbox style
+   */
   uiPaintBoxStyle & paintBoxStyle() { return m_paintBoxStyle; }
 
   using uiScrollableControl::setScrollBar;
 
   // Delegates
 
+  /**
+   * @brief Paint event delegate
+   *
+   * Applications use this delegate to perform custom drawings.
+   */
   Delegate<Rect> onPaint;
 
 
@@ -1414,44 +1537,101 @@ private:
 // uiListBox
 
 
+/** @brief Contains the listbox style */
 struct uiListBoxStyle {
-  RGB              backgroundColor                = RGB(2, 2, 2);
-  RGB              focusedBackgroundColor         = RGB(3, 3, 3);
-  RGB              selectedBackgroundColor        = RGB(0, 0, 2);
-  RGB              focusedSelectedBackgroundColor = RGB(0, 0, 3);
-  int              itemHeight                     = 16;
-  FontInfo const * textFont                       = Canvas.getPresetFontInfoFromHeight(14, false);
-  RGB              textColor                      = RGB(0, 0, 0);
-  RGB              selectedTextColor              = RGB(3, 3, 3);
+  RGB              backgroundColor                = RGB(2, 2, 2);                                   /**< Background color */
+  RGB              focusedBackgroundColor         = RGB(3, 3, 3);                                   /**< Background color when focused */
+  RGB              selectedBackgroundColor        = RGB(0, 0, 2);                                   /**< Background color when selected */
+  RGB              focusedSelectedBackgroundColor = RGB(0, 0, 3);                                   /**< Background color when selected and focused */
+  int              itemHeight                     = 16;                                             /**< Item height in pixels */
+  FontInfo const * textFont                       = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
+  RGB              textColor                      = RGB(0, 0, 0);                                   /**< Text foreground color */
+  RGB              selectedTextColor              = RGB(3, 3, 3);                                   /**< Text foreground color when selected */
 };
 
 
+/** @brief Contains a list of selectable items */
 class uiListBox : public uiScrollableControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A listbox must always have a parent window
+   * @param pos Top-left coordinates of the listbox relative to the parent
+   * @param size The listbox size
+   * @param visible If true the listbox is immediately visible
+   */
   uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
 
   virtual ~uiListBox();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets or gets listbox style
+   *
+   * @return L-value representing listbox style
+   */
   uiListBoxStyle & listBoxStyle() { return m_listBoxStyle; }
 
+  /**
+   * @brief A list of strings representing the listbox content
+   *
+   * Other than actual strings, StringList indicates which items are selected.
+   * Repainting is required when the string list changes.
+   *
+   * @return L-value representing listbox items
+   */
   StringList & items() { return m_items; }
 
+  /**
+   * @brief Gets the first selected item
+   *
+   * @return Index of selected item or -1 if no item is selected
+   */
   int firstSelectedItem();
+
+  /**
+   * @brief Gets the last selected item
+   *
+   * @return Index of selected item or -1 if no item is selected
+   */
   int lastSelectedItem();
 
+  /**
+   * @brief Selects a listbox item
+   *
+   * @param index Index of item to select
+   * @param add If true this item is added to the selected items, otherwise all other items are deselected
+   * @param range If true selects a range of items
+   */
   void selectItem(int index, bool add = false, bool range = false);
 
+  /**
+   * @brief Deselects all selected items
+   */
   void deselectAll();
 
 
   // Delegates
 
+  /**
+   * @brief Change event delegate
+   *
+   * This delegate is called whenever an item is selected or deselected.
+   */
   Delegate<> onChange;
+
+  /**
+   * @brief Kill focus event delegate
+   */
   Delegate<> onKillFocus;
+
+  /**
+   * @brief Key-up event delegate
+   */
   Delegate<uiKeyEventInfo> onKeyUp;
 
 
@@ -1477,14 +1657,16 @@ private:
 // uiComboBox
 
 
+/** @brief Contains the listbox style */
 struct uiComboBoxStyle {
-  RGB buttonBackgroundColor = RGB(1, 1, 1);
-  RGB buttonColor           = RGB(2, 2, 2);
+  RGB buttonBackgroundColor = RGB(1, 1, 1);  /**< Background color of open/close button */
+  RGB buttonColor           = RGB(2, 2, 2);  /**< Foreground color of open/close button */
 };
 
 
+/** @brief Properties of the combobox */
 struct uiComboBoxProps {
-  uint8_t openOnFocus  : 1;
+  uint8_t openOnFocus  : 1;  /**< Open the combobox when it acquires focus */
 
   uiComboBoxProps()
     : openOnFocus(true)
@@ -1493,28 +1675,72 @@ struct uiComboBoxProps {
 };
 
 
+/** @brief This is a combination of a listbox and a single-line editable textbox */
 class uiComboBox : public uiTextEdit
 {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A combobox must always have a parent window
+   * @param pos Top-left coordinates of the combobox relative to the parent
+   * @param size The combobox size
+   * @param listHeight Height in pixels of the open listbox
+   * @param visible If true the combobox is immediately visible
+   */
   uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true);
+
   ~uiComboBox();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief A list of strings representing items of the combobox
+   *
+   * Repainting is required when the string list changes.
+   *
+   * @return L-value representing combobox items
+   */
   StringList & items() { return m_listBox.items(); }
 
+  /**
+   * @brief Sets or gets combobox style
+   *
+   * @return L-value representing combobox style
+   */
   uiComboBoxStyle & comboBoxStyle() { return m_comboBoxStyle; }
 
+  /**
+   * @brief Sets or gets combobox properties
+   *
+   * @return L-value representing some combobox properties
+   */
   uiComboBoxProps & comboBoxProps() { return m_comboBoxProps; }
 
+  /**
+   * @brief Represents currently selected item
+   *
+   * @return Index of the selected item or -1 if no item is selected
+   */
   int selectedItem() { return m_listBox.firstSelectedItem(); }
+
+  /**
+   * @brief Selects an item
+   *
+   * @param index Index of the item to select
+   */
   void selectItem(int index);
 
 
   // Delegates
 
+  /**
+   * @brief Change event delegate
+   *
+   * This delegate is called whenever an item is selected.
+   */
   Delegate<> onChange;
 
 
@@ -1548,43 +1774,92 @@ private:
 // uiCheckBox
 
 
+/** @brief Contains the checkbox style */
 struct uiCheckBoxStyle {
-  RGB              backgroundColor          = RGB(2, 2, 2);
-  RGB              checkedBackgroundColor   = RGB(2, 2, 3);
-  RGB              mouseOverBackgroundColor = RGB(2, 2, 3);
-  RGB              foregroundColor          = RGB(0, 0, 0);
+  RGB              backgroundColor          = RGB(2, 2, 2);  /**< Background color */
+  RGB              checkedBackgroundColor   = RGB(2, 2, 3);  /**< Background color when checked */
+  RGB              mouseOverBackgroundColor = RGB(2, 2, 3);  /**< Background color when mouse is over */
+  RGB              foregroundColor          = RGB(0, 0, 0);  /**< Foreground color */
 };
 
 
+/** @brief Specifies the combobox behaviour */
 enum class uiCheckBoxKind : int8_t {
-  CheckBox,
-  RadioButton,
+  CheckBox,          /**< Normal checkbox */
+  RadioButton,       /**< Radio-button */
 };
 
 
+/**
+ * @brief Represents a checkbox or a radiobutton.
+ *
+ * A checkbox permits the user to make a binary choice.
+ * A radio button allows the user to choose only one of a predefined set of mutually exclusive options.
+ */
 class uiCheckBox : public uiControl {
 
 public:
 
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A checkbox must always have a parent window
+   * @param pos Top-left coordinates of the checkbox relative to the parent
+   * @param size The checkbox size
+   * @param kind Defines the checkbox behaviour: checkbox or radiobutton
+   * @param visible If true the checkbox is immediately visible
+   */
   uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind = uiCheckBoxKind::CheckBox, bool visible = true);
 
   virtual ~uiCheckBox();
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Sets or gets checkbox style
+   *
+   * @return L-value representing checkbox style
+   */
   uiCheckBoxStyle & checkBoxStyle() { return m_checkBoxStyle; }
 
+  /**
+   * @brief Determines whether the checkbox or radiobutton is checked
+   *
+   * @return True when checked
+   */
   bool checked()                    { return m_checked; }
 
+  /**
+   * @brief Sets current checkbox or radiobutton checked status
+   *
+   * When in radiobutton mode, setting True all other items with the same uiCheckBox.groupIndex() are deselected.
+   *
+   * @param value Checkbox or radiobutton checked status
+   */
   void setChecked(bool value);
 
+  /**
+   * @brief Determines radiobutton group index
+   *
+   * @return The radiobutton group index (-1 = no group)
+   */
   int groupIndex()                  { return m_groupIndex; }
 
+  /**
+   * @brief Sets radiobutton group index
+   *
+   * @param value Radiobutton group index (-1 = no group)
+   */
   void setGroupIndex(int value)     { m_groupIndex = value; }
 
 
   // Delegates
 
+  /**
+   * @brief Change event delegate
+   *
+   * This delegate is called whenever checkbox or radiobutton is checked or unchecked.
+   */
   Delegate<> onChange;
 
 
@@ -1610,31 +1885,39 @@ private:
 // uiApp
 
 
-
+/** @brief Properties of the application */
 struct uiAppProps {
-  uint16_t caretBlinkingTime = 500;   // caret blinking time (MS)
-  uint16_t doubleClickTime   = 250;   // maximum delay required for two consecutive clicks to become double click (MS)
-  bool     realtimeReshaping = false; // if true moving/resizing a window always repaints it, otherwise the moved/resized window is represented by an inverted rectangle
+  uint16_t caretBlinkingTime = 500;   /**< Caret blinking time (MS) */
+  uint16_t doubleClickTime   = 250;   /**< Maximum delay required for two consecutive clicks to become double click (MS) */
+  bool     realtimeReshaping = false; /**< If true moving/resizing a window always repaints it, otherwise the moved/resized window is represented by an inverted rectangle */
 };
 
 
+/** @brief Return values from uiApp.messageBox() method */
 enum class uiMessageBoxResult {
-  Cancel,
-  Button1,
-  Button2,
-  Button3,
+  Cancel,    /**< Messagebox has been canceled */
+  Button1,   /**< Button1 has been pressed */
+  Button2,   /**< Button2 has been pressed */
+  Button3,   /**< Button3 has been pressed */
 };
 
 
+/** @brief Icon displayed by the uiApp.messageBox() method */
 enum class uiMessageBoxIcon {
-  None,
-  Question,
-  Info,
-  Warning,
-  Error,
+  None,      /**< No icon is displayed */
+  Question,  /**< Question icon */
+  Info,      /**< Info icon */
+  Warning,   /**< Warning icon */
+  Error,     /**< Error icon */
 };
 
 
+/**
+ * @brief Represents the whole application base class.
+ *
+ * FabGL UI apps must inherit from uiApp, create UI elements in uiApp.OnInit() method, and finally call uiApp.run() to start the application.
+ * uiApp is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management.
+ */
 class uiApp : public uiEvtHandler {
 
 public:
@@ -1643,24 +1926,90 @@ public:
 
   virtual ~uiApp();
 
+  /**
+   * @brief Initialize application and executes the main event loop
+   *
+   * This is the last method that should be called: it never returns.
+   */
   void run();
 
+  /**
+   * @brief Places an event in the event queue and returns without waiting for the receiver to process the event
+   *
+   * @param event Event to send. A copy of the event is sent.
+   *
+   * @return True if the event is correctly placed. False if there is no available space in the event queue
+   */
   bool postEvent(uiEvent const * event);
 
+  /**
+   * @brief Inserts (first position) an event in the event queue and returns without waiting for the receiver to process the event
+   *
+   * @param event Event to insert. A copy of the event is sent.
+   *
+   * @return True if the event is correctly placed. False if there is no available space in the event queue
+   */
   bool insertEvent(uiEvent const * event);
 
   void postDebugMsg(char const * msg);
 
   virtual void processEvent(uiEvent * event);
 
+  /**
+   * @brief Gets a pointer to the root window
+   *
+   * The root window is the first window created and covers the whole screen.
+   * All windows and controls must have the root window as parent, or as ancestor.
+   *
+   * @return The root window pointer
+   */
   uiFrame * rootWindow() { return m_rootWindow; }
 
+  /**
+   * @brief Gets a pointer to the currently active window
+   *
+   * There is only one active window at the time. Active window is the foreground window and receives (along with focused control) all keyboard events.
+   * To set the active window call uiApp.setActiveWindow().
+   *
+   * @return The active window, or nullptr if there isn't one
+   */
   uiWindow * activeWindow() { return m_activeWindow; }
 
+  /**
+   * @brief Sets the active window
+   *
+   * There is only one active window at the time. Active window is the foreground window and receives (along with focused control) all keyboard events.
+   *
+   * @param value Pointer of the active window. nullptr to set no active window
+   *
+   * @return Previous active window
+   */
   uiWindow * setActiveWindow(uiWindow * value);
 
+  /**
+   * @brief Gets the focused window (control)
+   *
+   * There is only one focused window or control at the time. Focused window is also the active window (or its parent is the active window).
+   * Focused window receives (along with active window) all keyboard events.
+   * Focused window can have a blinking caret.
+   * Finally, a focused window partecipates to the TAB "trip", respecting the tab-order (see uiWindow.focusIndex()).
+   *
+   * To set the focoused window use uiApp.setFocusedWindow().
+   *
+   * @return Focused window pointer or nullptr if there isn't one
+   */
   uiWindow * focusedWindow() { return m_focusedWindow; }
 
+  /**
+   * @brief Sets the focused window (control)
+   *
+   * There is only one focused window or control at the time. Focused window is also the active window (or its parent is the active window).
+   * Focused window receives (along with active window) all keyboard events.
+   * Focused window can have a blinking caret.
+   * Finally, a focused window partecipates to the TAB "trip", respecting the tab-order (see uiWindow.focusIndex()).
+   *
+   * @return Previous focused window pointer
+   */
   uiWindow * setFocusedWindow(uiWindow * value);
 
   uiWindow * setFocusedWindowNext();
