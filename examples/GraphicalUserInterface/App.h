@@ -13,7 +13,7 @@ class MyApp : public uiApp {
   uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
-  uiLabel * freeMemLabel;
+  uiLabel * freeMemLabel, * authorLabel;
   TestControlsFrame * testControlsFrame;
 
   fabgl::Stack<uiFrame*> dynamicFrames;
@@ -27,9 +27,15 @@ class MyApp : public uiApp {
     setTimer(this, 2000);
     onTimer = [&](uiTimerHandle tHandle) { showFreeMemory(); };
 
+    // author label
+    authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(376, 324));
+    authorLabel->labelStyle().backgroundColor = RGB(3, 3, 0);
+    authorLabel->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(22, false);
+    authorLabel->update();
+
     // frame where to put test buttons
     testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(115, 330));
-    testsFrame->frameStyle().backgroundColor = RGB(0, 0, 2);
+    testsFrame->frameStyle().backgroundColor = RGB(3, 3, 0);
     testsFrame->windowStyle().borderSize     = 0;
 
     // label where to show free memory
