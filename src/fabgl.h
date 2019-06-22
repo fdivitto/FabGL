@@ -44,7 +44,7 @@
  *
  * - - -
  *
- * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Game Engine and ANSI/VT Terminal for the ESP32.<br>
+ * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br>
  * This library works well with ESP32 revision 1 or upper.
  *
  * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
@@ -70,6 +70,7 @@
  *    * fabgl::KeyboardClass (instanced as \b Keyboard), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
  *    * fabgl::MouseClass (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
+ *    * fabgl::uiApp base class to build Graphical User Interface applications
  *
  * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
  *
@@ -78,6 +79,9 @@
  * - - -
  * <CENTER> @link SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
@@ -268,6 +272,7 @@
  * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
+ * @example GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
  */
 
 
