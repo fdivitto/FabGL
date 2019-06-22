@@ -1335,7 +1335,7 @@ public:
   /**
    * @brief Sets label text
    *
-   * Label needs to be repainted in order to display changed text.
+   * To update label content and size call uiLabel.update().
    *
    * @param value Label text
    */
@@ -1354,6 +1354,13 @@ public:
    * @return L-value representing label style (colors, font, etc...)
    */
   uiLabelStyle & labelStyle() { return m_labelStyle; }
+
+  /**
+   * @brief Updates the label content
+   *
+   * Call this method whenever text or font changes.
+   */
+  void update();
 
 
 private:

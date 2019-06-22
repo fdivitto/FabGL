@@ -2616,9 +2616,13 @@ void uiLabel::setText(char const * value)
   int len = strlen(value);
   m_text = (char*) realloc(m_text, len + 1);
   strcpy(m_text, value);
+  update();
+}
 
-  m_textExtent = Canvas.textExtent(m_labelStyle.textFont, value);
 
+void uiLabel::update()
+{
+  m_textExtent = Canvas.textExtent(m_labelStyle.textFont, m_text);
   if (m_autoSize)
     app()->resizeWindow(this, m_textExtent, m_labelStyle.textFont->height);
 }
