@@ -2012,9 +2012,7 @@ public:
    */
   uiWindow * setFocusedWindow(uiWindow * value);
 
-  uiWindow * setFocusedWindowNext();
-
-  uiWindow * setFocusedWindowPrev();
+  uiWindow * moveFocus(int delta);
 
   void captureMouse(uiWindow * window);
 
@@ -2089,8 +2087,6 @@ private:
 
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
-
-  uiWindow * setFocusedWindowDelta(int delta);
 
 
   uiAppProps    m_appProps;

@@ -543,7 +543,7 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 
 // delta = 1, go next focused index
 // delta = -1, go previous focused index
-uiWindow * uiApp::setFocusedWindowDelta(int delta)
+uiWindow * uiApp::moveFocus(int delta)
 {
   uiWindow * old = m_focusedWindow;
   uiWindow * parent = old ? old->parent() : m_activeWindow;
@@ -566,18 +566,6 @@ uiWindow * uiApp::setFocusedWindowDelta(int delta)
     setFocusedWindow(proposed);
   }
   return old;
-}
-
-
-uiWindow * uiApp::setFocusedWindowNext()
-{
-  return setFocusedWindowDelta(1);
-}
-
-
-uiWindow * uiApp::setFocusedWindowPrev()
-{
-  return setFocusedWindowDelta(-1);
 }
 
 
@@ -1277,9 +1265,9 @@ void uiWindow::processEvent(uiEvent * event)
         // move focused child
         if (event->params.key.VK == VK_TAB) {
           if (event->params.key.SHIFT)
-            app()->setFocusedWindowPrev();
+            app()->moveFocus(-1);
           else
-            app()->setFocusedWindowNext();
+            app()->moveFocus(1);
         }
       }
       break;
