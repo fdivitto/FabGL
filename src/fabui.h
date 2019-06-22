@@ -775,6 +775,7 @@ public:
    * @brief Timer event delegate
    *
    * This delegate is called when the timer expires.
+   * To create a timer use uiApp.setTimer().
    */
   Delegate<uiTimerHandle> onTimer;
 
@@ -2210,11 +2211,19 @@ public:
   uiMessageBoxResult messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text = nullptr, char const * button3Text = nullptr, uiMessageBoxIcon icon = uiMessageBoxIcon::Question);
 
 
-  // events
-
+  /**
+   * @brief Method to inherit to implement an application
+   */
   virtual void init();
 
   // delegates
+
+  /**
+   * @brief Timer event delegate
+   *
+   * This delegate is called when the timer expires.
+   * To create a timer use uiApp.setTimer().
+   */
   Delegate<uiTimerHandle> onTimer;
 
 protected:
