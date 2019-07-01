@@ -211,9 +211,10 @@ struct uiObjectType {
   uint32_t uiListBox           : 1;
   uint32_t uiComboBox          : 1;
   uint32_t uiCheckBox          : 1;
+  uint32_t uiSlider            : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
-                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0)
+                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
     { }
 };
 
@@ -1899,6 +1900,112 @@ private:
   uiCheckBoxKind  m_kind;
   int16_t         m_groupIndex; // -1 = no group
 
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSlider
+
+
+/** @brief Contains the slider style */
+struct uiSliderStyle {
+  RGB backgroundColor = RGB(3, 3, 3);    /**< Slider background color */
+  RGB slideColor      = RGB(0, 2, 2);    /**< Color of internal slide */
+  RGB rangeColor      = RGB(0, 2, 3);    /**< Color of slide before the grip */
+  RGB gripColor       = RGB(0, 0, 3);    /**< Color of slider grip */
+  RGB ticksColor      = RGB(3, 3, 3);    /**> Ticks color */
+};
+
+
+/** @brief A slider or track bar is a graphical control element with which a user may set a value by moving an indicator  */
+class uiSlider : public uiControl {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A slider must always have a parent window
+   * @param pos Top-left coordinates of the slider relative to the parent
+   * @param size The slider size
+   * @param orientation The slider orientation
+   * @param visible If true the slider is immediately visible
+   */
+  uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible = true);
+
+  virtual ~uiSlider();
+
+  virtual void processEvent(uiEvent * event);
+
+  /**
+   * @brief Sets or gets slider style
+   *
+   * @return L-value representing slider style
+   */
+  uiSliderStyle & sliderStyle() { return m_sliderStyle; }
+
+  /**
+   * @brief Determines slider position
+   *
+   * @return Slider position
+   */
+  int position() { return m_position; }
+
+  /**
+   * @brief Sets the slider position
+   *
+   * @param value New slider position
+   */
+  void setPosition(int value);
+
+  /**
+   * @brief Gets minimum position
+   *
+   * @return Minimum position
+   */
+  int min() { return m_min; }
+
+  /**
+   * @brief Gets maximum position
+   *
+   * @return Maximum position
+   */
+  int max() { return m_max; }
+
+  /**
+   * @brief Sets minimum, maximum position and ticks frequency
+   *
+   * @param min Minimum position (default is 0)
+   * @param max Maximum position (default is 99)
+   * @param ticksFrequency Frequency of ticks drawings (default 25, 0 = no ticks)
+   */
+  void setup(int min, int max, int ticksFrequency);
+
+
+  /**
+   * @brief Slider changed event delegate
+   *
+   * This delegate is called whenever slider changes its position
+   */
+  Delegate<> onChange;
+
+
+private:
+
+  void paintSlider();
+  Rect getGripRect();
+  void moveGripTo(int x, int y);
+  void handleKeyDown(uiKeyEventInfo key);
+
+
+  uiSliderStyle m_sliderStyle;
+  uiOrientation m_orientation;
+
+  int16_t       m_position;
+  int16_t       m_min;
+  int16_t       m_max;
+  int16_t       m_ticksFrequency;
 };
 
 

@@ -8,9 +8,11 @@ struct TestControlsFrame : public uiFrame {
   uiComboBox * comboBox1, * comboBox2;
   uiCheckBox * checkBox;
   uiCheckBox * radio1, * radio2, * radio3;
+  uiSlider * slider1, * slider2;
+  uiLabel * sliderLabel1, * sliderLabel2;
 
   TestControlsFrame(uiFrame * parent)
-    : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 250), false) {
+    : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 270), false) {
 
     new uiLabel(this, "Text Label:", Point(10,  33));
     textEdit = new uiTextEdit(this, "Text Edit", Point(70,  30), Size(340, 20));
@@ -76,6 +78,29 @@ struct TestControlsFrame : public uiFrame {
     radio1->setGroupIndex(1);
     radio2->setGroupIndex(1);
     radio3->setGroupIndex(1);
+
+    sliderLabel1 = new uiLabel(this, "0", Point(10, 206));
+    slider1 = new uiSlider(this, Point(30, 205), Size(300, 17), uiOrientation::Horizontal);
+    slider1->anchors().right = true;
+    slider1->onChange = [&]() {
+      char txt[10];
+      snprintf(txt, sizeof(txt), "%d", slider1->position());
+      sliderLabel1->setText(txt);
+      sliderLabel1->update();
+    };
+
+    sliderLabel2 = new uiLabel(this, "0", Point(354, 250));
+    sliderLabel2->anchors().left = false;
+    sliderLabel2->anchors().right = true;
+    slider2 = new uiSlider(this, Point(350, 150), Size(17, 94), uiOrientation::Vertical);
+    slider2->anchors().left = false;
+    slider2->anchors().right = true;
+    slider2->onChange = [&]() {
+      char txt[10];
+      snprintf(txt, sizeof(txt), "%d", slider2->position());
+      sliderLabel2->setText(txt);
+      sliderLabel2->update();
+    };
 
 
   }

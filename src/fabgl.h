@@ -324,5 +324,6 @@ using fabgl::uiListBox;
 using fabgl::uiComboBox;
 using fabgl::uiCheckBox;
 using fabgl::uiCheckBoxKind;
+using fabgl::uiSlider;
 
 

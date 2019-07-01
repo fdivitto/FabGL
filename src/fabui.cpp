@@ -3747,6 +3747,215 @@ void uiCheckBox::unCheckGroup()
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSlider
+
+
+uiSlider::uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible)
+  : uiControl(parent, pos, size, visible),
+    m_orientation(orientation),
+    m_position(0),
+    m_min(0),
+    m_max(99),
+    m_ticksFrequency(25)
+{
+  objectType().uiSlider = true;
+
+  windowStyle().borderSize         = 1;
+  windowStyle().borderColor        = RGB(3, 3, 3);
+  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+
+  windowProps().focusable = true;
+}
+
+
+uiSlider::~uiSlider()
+{
+}
+
+
+void uiSlider::setPosition(int value)
+{
+  if (value != m_position) {
+    m_position = iclamp(value, m_min, m_max);
+    repaint();
+    onChange();
+  }
+}
+
+
+void uiSlider::setup(int min, int max, int ticksFrequency)
+{
+  m_min = min;
+  m_max = max;
+  m_ticksFrequency = ticksFrequency;
+  m_position = iclamp(m_position, m_min, m_max);
+}
+
+
+void uiSlider::paintSlider()
+{
+  Rect cRect     = uiControl::clientRect(uiOrigin::Window);
+  Rect slideRect = cRect.shrink(4);
+  Rect gripRect  = getGripRect();
+  // background
+  Canvas.setBrushColor(m_sliderStyle.backgroundColor);
+  Canvas.fillRectangle(cRect);
+  // slide
+  Canvas.setBrushColor(m_sliderStyle.slideColor);
+  switch (m_orientation) {
+    case uiOrientation::Horizontal:
+      Canvas.fillRectangle(gripRect.X2, slideRect.Y1, slideRect.X2, slideRect.Y2);  // right slide
+      Canvas.setBrushColor(m_sliderStyle.rangeColor);
+      Canvas.fillRectangle(slideRect.X1, slideRect.Y1, gripRect.X1, slideRect.Y2);  // left slide
+      break;
+    case uiOrientation::Vertical:
+      Canvas.fillRectangle(slideRect.X1, slideRect.Y1, slideRect.X2, gripRect.Y1);  // upper slide
+      Canvas.setBrushColor(m_sliderStyle.rangeColor);
+      Canvas.fillRectangle(slideRect.X1, gripRect.Y2, slideRect.X2, slideRect.Y2);  // bottom slide
+      break;
+  }
+  // ticks
+  if (m_ticksFrequency > 0) {
+    Canvas.setPenColor(m_sliderStyle.ticksColor);
+    int range = m_max - m_min + 0;
+    for (int p = m_min; p <= m_max; p += m_ticksFrequency) {
+      switch (m_orientation) {
+        case uiOrientation::Horizontal:
+        {
+          int x = slideRect.X1 + slideRect.width() * (p - m_min) / range;
+          Canvas.drawLine(x, slideRect.Y1, x, slideRect.Y2);
+          break;
+        }
+        case uiOrientation::Vertical:
+        {
+          int y = slideRect.Y2 - slideRect.height() * (p - m_min) / range;
+          Canvas.drawLine(slideRect.X1, y, slideRect.X2, y);
+          break;
+        }
+      }
+    }
+  }
+  // grip
+  Canvas.setBrushColor(m_sliderStyle.gripColor);
+  Canvas.fillRectangle(gripRect);
+}
+
+
+Rect uiSlider::getGripRect()
+{
+  Rect cRect = uiControl::clientRect(uiOrigin::Window);
+  Rect slideRect = cRect.shrink(4);
+  int range = m_max - m_min + 0;
+  switch (m_orientation) {
+    case uiOrientation::Horizontal:
+    {
+      int x = slideRect.X1 + slideRect.width() * (m_position - m_min) / range;
+      return Rect(x - 4, cRect.Y1, x + 4, cRect.Y2);
+    }
+    case uiOrientation::Vertical:
+    {
+      int y = slideRect.Y2 - slideRect.height() * (m_position - m_min) / range;
+      return Rect(cRect.X1, y - 4, cRect.X2, y + 4);
+    }
+    default:
+      return Rect();
+  }
+}
+
+
+void uiSlider::moveGripTo(int x, int y)
+{
+  Rect cRect = uiControl::clientRect(uiOrigin::Window);
+  Rect slideRect = cRect.shrink(4);
+  int range = m_max - m_min + 1;
+  switch (m_orientation) {
+    case uiOrientation::Horizontal:
+      setPosition(m_min + (x - slideRect.X1) * range / slideRect.width());
+      break;
+    case uiOrientation::Vertical:
+      setPosition(m_min + (slideRect.Y2 - y) * range / slideRect.height());
+      break;
+  }
+}
+
+
+void uiSlider::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
+      paintSlider();
+      break;
+
+    case UIEVT_MOUSEBUTTONDOWN:
+      moveGripTo(event->params.mouse.status.X, event->params.mouse.status.Y);
+      break;
+
+    case UIEVT_MOUSEMOVE:
+      if (app()->capturedMouseWindow() == this)
+        moveGripTo(event->params.mouse.status.X, event->params.mouse.status.Y);
+      break;
+
+    case UIEVT_KEYDOWN:
+      handleKeyDown(event->params.key);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiSlider::handleKeyDown(uiKeyEventInfo key)
+{
+  switch (key.VK) {
+    case VK_UP:
+    case VK_KP_UP:
+      setPosition(m_position - 1);
+      break;
+
+    case VK_DOWN:
+    case VK_KP_DOWN:
+      setPosition(m_position + 1);
+      break;
+
+    case VK_PAGEUP:
+    case VK_KP_PAGEUP:
+      setPosition(m_position + m_ticksFrequency);
+      break;
+
+    case VK_PAGEDOWN:
+    case VK_KP_PAGEDOWN:
+      setPosition(m_position - m_ticksFrequency);
+      break;
+
+    case VK_HOME:
+    case VK_KP_HOME:
+      setPosition(m_min);
+      break;
+
+    case VK_END:
+    case VK_KP_END:
+      setPosition(m_max);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+
+
+// uiSlider
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 } // end of namespace
 
