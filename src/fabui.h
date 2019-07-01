@@ -180,6 +180,16 @@ struct uiEvent {
 
 
 
+/** \ingroup Enumerations
+ * @brief Item direction/orientation
+ */
+enum class uiOrientation {
+  Vertical,          /**< Vertical orientation */
+  Horizontal,        /**< Horizontal orientation */
+};
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiObject
 
@@ -859,15 +869,6 @@ struct uiScrollableControlStyle {
 };
 
 
-/** \ingroup Enumerations
- * @brief Scrollbar direction
- */
-enum class uiScrollBar {
-  Vertical,          /**< Vertical scrollbar */
-  Horizontal,        /**< Horizontal scrollbar */
-};
-
-
 enum class uiScrollBarItem {
   None,
   LeftButton,
@@ -996,7 +997,7 @@ protected:
    * @param range Sets vertical scrollbar range. Range is the maximum position of the scrollbar. Maximum value of scrollbar position will range - visible.
    * @param repaintScrollbar If True the scrollbar is repainted immediately.
    */
-  virtual void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar = true);
+  virtual void setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar = true);
 
 
 private:
@@ -1006,7 +1007,7 @@ private:
   Rect getVScrollBarRects(Rect * topButton = nullptr, Rect * bottonButton = nullptr, Rect * bar = nullptr);
   Rect getHScrollBarRects(Rect * leftButton = nullptr, Rect * rightButton = nullptr, Rect * bar = nullptr);
   uiScrollBarItem getItemAt(int x, int y);
-  void repaintScrollBar(uiScrollBar orientation);
+  void repaintScrollBar(uiOrientation orientation);
   void handleFreeMouseMove(int mouseX, int mouseY);
   void handleCapturedMouseMove(int mouseX, int mouseY);
   void handleButtonsScroll();
@@ -1658,7 +1659,7 @@ public:
 
 protected:
 
-  void setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar);
+  void setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar);
 
 private:
 

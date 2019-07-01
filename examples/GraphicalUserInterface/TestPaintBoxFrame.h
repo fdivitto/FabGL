@@ -27,7 +27,7 @@ struct TestPaintBoxFrame : public uiFrame {
     paintBox = new uiPaintBox(this, clientPos(), clientSize());
     paintBox->anchors().right = true;
     paintBox->anchors().bottom = true;
-    paintBox->setScrollBar(uiScrollBar::Horizontal, 0, paintBox->clientSize().width, count);
+    paintBox->setScrollBar(uiOrientation::Horizontal, 0, paintBox->clientSize().width, count);
     paintBox->onPaint = [&](Rect const & r) { onPaintPaintBox(r); };
     paintBox->onChangeHScrollBar = [&]() { paintBox->repaint(); };
   }
@@ -37,7 +37,7 @@ struct TestPaintBoxFrame : public uiFrame {
     int midY = h / 2;
 
     // paint occurs even on resize, so we need to make sure it has the right "width" (w)
-    paintBox->setScrollBar(uiScrollBar::Horizontal, paintBox->HScrollBarPos(), w, count, true);
+    paintBox->setScrollBar(uiOrientation::Horizontal, paintBox->HScrollBarPos(), w, count, true);
 
     Canvas.setPenColor(RGB(3, 3, 0));
     Canvas.selectFont(Canvas.getPresetFontInfoFromHeight(12, false));

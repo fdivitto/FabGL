@@ -2865,11 +2865,11 @@ uiScrollableControl::~uiScrollableControl()
 // position: The position of the scrollbar in scroll units.
 // visible: The size of the visible portion of the scrollbar, in scroll units.
 // range: The maximum position of the scrollbar
-void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar)
+void uiScrollableControl::setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar)
 {
   position = iclamp(position, 0, range - visible);
   switch (orientation) {
-    case uiScrollBar::Vertical:
+    case uiOrientation::Vertical:
     {
       bool changedPos = (m_VScrollBarPosition != position);
       if (m_VScrollBarVisible != visible || m_VScrollBarRange != range || changedPos) {
@@ -2883,7 +2883,7 @@ void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, in
       }
       break;
     }
-    case uiScrollBar::Horizontal:
+    case uiOrientation::Horizontal:
     {
       bool changedPos = (m_HScrollBarPosition != position);
       if (m_HScrollBarVisible != visible || m_HScrollBarRange != range || changedPos) {
@@ -2901,9 +2901,9 @@ void uiScrollableControl::setScrollBar(uiScrollBar orientation, int position, in
 }
 
 
-void uiScrollableControl::repaintScrollBar(uiScrollBar orientation)
+void uiScrollableControl::repaintScrollBar(uiOrientation orientation)
 {
-  repaint( orientation == uiScrollBar::Vertical ? getVScrollBarRects() : getHScrollBarRects() );
+  repaint( orientation == uiOrientation::Vertical ? getVScrollBarRects() : getHScrollBarRects() );
 }
 
 
@@ -2953,7 +2953,7 @@ void uiScrollableControl::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEWHEEL:
       if (m_VScrollBarRange)
-        setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition + event->params.mouse.status.wheelDelta, m_VScrollBarVisible, m_VScrollBarRange);
+        setScrollBar(uiOrientation::Vertical, m_VScrollBarPosition + event->params.mouse.status.wheelDelta, m_VScrollBarVisible, m_VScrollBarRange);
       break;
 
     case UIEVT_TIMER:
@@ -2971,16 +2971,16 @@ void uiScrollableControl::handleButtonsScroll()
 {
   switch (m_mouseOverItem) {
     case uiScrollBarItem::LeftButton:
-      setScrollBar(uiScrollBar::Horizontal, m_HScrollBarPosition - 1, m_HScrollBarVisible, m_HScrollBarRange);
+      setScrollBar(uiOrientation::Horizontal, m_HScrollBarPosition - 1, m_HScrollBarVisible, m_HScrollBarRange);
       break;
     case uiScrollBarItem::RightButton:
-      setScrollBar(uiScrollBar::Horizontal, m_HScrollBarPosition + 1, m_HScrollBarVisible, m_HScrollBarRange);
+      setScrollBar(uiOrientation::Horizontal, m_HScrollBarPosition + 1, m_HScrollBarVisible, m_HScrollBarRange);
       break;
     case uiScrollBarItem::TopButton:
-      setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition - 1, m_VScrollBarVisible, m_VScrollBarRange);
+      setScrollBar(uiOrientation::Vertical, m_VScrollBarPosition - 1, m_VScrollBarVisible, m_VScrollBarRange);
       break;
     case uiScrollBarItem::BottomButton:
-      setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition + 1, m_VScrollBarVisible, m_VScrollBarRange);
+      setScrollBar(uiOrientation::Vertical, m_VScrollBarPosition + 1, m_VScrollBarVisible, m_VScrollBarRange);
       break;
     default:
       break;
@@ -2992,16 +2992,16 @@ void uiScrollableControl::handlePageScroll()
 {
   switch (m_mouseOverItem) {
     case uiScrollBarItem::PageLeft:
-      setScrollBar(uiScrollBar::Horizontal, m_HScrollBarPosition - m_HScrollBarVisible, m_HScrollBarVisible, m_HScrollBarRange);
+      setScrollBar(uiOrientation::Horizontal, m_HScrollBarPosition - m_HScrollBarVisible, m_HScrollBarVisible, m_HScrollBarRange);
       break;
     case uiScrollBarItem::PageRight:
-      setScrollBar(uiScrollBar::Horizontal, m_HScrollBarPosition + m_HScrollBarVisible, m_HScrollBarVisible, m_HScrollBarRange);
+      setScrollBar(uiOrientation::Horizontal, m_HScrollBarPosition + m_HScrollBarVisible, m_HScrollBarVisible, m_HScrollBarRange);
       break;
     case uiScrollBarItem::PageUp:
-      setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition - m_VScrollBarVisible, m_VScrollBarVisible, m_VScrollBarRange);
+      setScrollBar(uiOrientation::Vertical, m_VScrollBarPosition - m_VScrollBarVisible, m_VScrollBarVisible, m_VScrollBarRange);
       break;
     case uiScrollBarItem::PageDown:
-      setScrollBar(uiScrollBar::Vertical, m_VScrollBarPosition + m_VScrollBarVisible, m_VScrollBarVisible, m_VScrollBarRange);
+      setScrollBar(uiOrientation::Vertical, m_VScrollBarPosition + m_VScrollBarVisible, m_VScrollBarVisible, m_VScrollBarRange);
       break;
     default:
       break;
@@ -3015,9 +3015,9 @@ void uiScrollableControl::handleFreeMouseMove(int mouseX, int mouseY)
   m_mouseOverItem = getItemAt(mouseX, mouseY);
   if (m_mouseOverItem != prev) {
     if (m_VScrollBarRange)
-      repaintScrollBar(uiScrollBar::Vertical);
+      repaintScrollBar(uiOrientation::Vertical);
     if (m_HScrollBarRange)
-      repaintScrollBar(uiScrollBar::Horizontal);
+      repaintScrollBar(uiOrientation::Horizontal);
   }
 }
 
@@ -3028,12 +3028,12 @@ void uiScrollableControl::handleCapturedMouseMove(int mouseX, int mouseY)
     // dragging horizontal bar
     int offset = mouseX - mouseDownPos().X;
     int newPos = m_mouseDownHScrollBarPosition + offset * m_HScrollBarRange / m_HBarArea;
-    setScrollBar(uiScrollBar::Horizontal, newPos, m_HScrollBarVisible, m_HScrollBarRange);
+    setScrollBar(uiOrientation::Horizontal, newPos, m_HScrollBarVisible, m_HScrollBarRange);
   } else if (m_mouseOverItem == uiScrollBarItem::VBar) {
     // dragging vertical bar
     int offset = mouseY - mouseDownPos().Y;
     int newPos = m_mouseDownVScrollBarPosition + offset * m_VScrollBarRange / m_VBarArea;
-    setScrollBar(uiScrollBar::Vertical, newPos, m_VScrollBarVisible, m_VScrollBarRange);
+    setScrollBar(uiOrientation::Vertical, newPos, m_VScrollBarVisible, m_VScrollBarRange);
   }
 }
 
@@ -3327,14 +3327,14 @@ void uiListBox::paintListBox()
     int range = m_items.count();
     if (!VScrollBarVisible() || visible != VScrollBarVisible() || range != VScrollBarRange() || m_firstVisibleItem != VScrollBarPos()) {
       // show vertical scrollbar
-      setScrollBar(uiScrollBar::Vertical, m_firstVisibleItem, visible, range, false);
+      setScrollBar(uiOrientation::Vertical, m_firstVisibleItem, visible, range, false);
       repaint();
       return;
     }
   } else if (VScrollBarVisible()) {
     // hide vertical scrollbar
     m_firstVisibleItem = 0;
-    setScrollBar(uiScrollBar::Vertical, 0, 0, 0, false);
+    setScrollBar(uiOrientation::Vertical, 0, 0, 0, false);
     repaint();
     return;
   }
@@ -3387,7 +3387,7 @@ int uiListBox::lastSelectedItem()
 }
 
 
-void uiListBox::setScrollBar(uiScrollBar orientation, int position, int visible, int range, bool repaintScrollbar)
+void uiListBox::setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar)
 {
   uiScrollableControl::setScrollBar(orientation, position, visible, range, false);
   if (VScrollBarVisible() && m_firstVisibleItem != VScrollBarPos()) {
