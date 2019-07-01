@@ -2625,6 +2625,7 @@ void uiLabel::update()
   m_textExtent = Canvas.textExtent(m_labelStyle.textFont, m_text);
   if (m_autoSize)
     app()->resizeWindow(this, m_textExtent, m_labelStyle.textFont->height);
+  repaint();
 }
 
 
