@@ -20,9 +20,12 @@
  */
 
 
-#include "Arduino.h"
-
 #include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
+
+#include <string.h>
+#include <ctype.h>
+#include <stdarg.h>
 
 #include "fabutils.h"
 #include "fabui.h"
@@ -38,6 +41,7 @@ namespace fabgl {
 
 
 // debug only!
+/*
 void dumpEvent(uiEvent * event)
 {
   static int idx = 0;
@@ -97,6 +101,7 @@ void dumpEvent(uiEvent * event)
   }
   Serial.write("\n");
 }
+*/
 
 
 

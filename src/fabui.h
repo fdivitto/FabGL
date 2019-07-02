@@ -65,7 +65,7 @@
           *uiComboBox
           uiMenu
           uiGauge
-          uiSlider
+          *uiSlider
           uiSpinButton
 
 */
