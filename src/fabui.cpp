@@ -3915,11 +3915,15 @@ void uiSlider::handleKeyDown(uiKeyEventInfo key)
   switch (key.VK) {
     case VK_UP:
     case VK_KP_UP:
+    case VK_LEFT:
+    case VK_KP_LEFT:
       setPosition(m_position - 1);
       break;
 
     case VK_DOWN:
     case VK_KP_DOWN:
+    case VK_RIGHT:
+    case VK_KP_RIGHT:
       setPosition(m_position + 1);
       break;
 
