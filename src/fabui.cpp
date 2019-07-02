@@ -2620,6 +2620,20 @@ void uiLabel::setText(char const * value)
 }
 
 
+void uiLabel::setTextFmt(const char *format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int size = vsnprintf(nullptr, 0, format, ap) + 1;
+  if (size > 0) {
+    char buf[size + 1];
+    vsnprintf(buf, size, format, ap);
+    setText(buf);
+  }
+  va_end(ap);
+}
+
+
 void uiLabel::update()
 {
   m_textExtent = Canvas.textExtent(m_labelStyle.textFont, m_text);

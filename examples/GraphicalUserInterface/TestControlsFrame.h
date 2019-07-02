@@ -83,10 +83,7 @@ struct TestControlsFrame : public uiFrame {
     slider1 = new uiSlider(this, Point(30, 205), Size(300, 17), uiOrientation::Horizontal);
     slider1->anchors().right = true;
     slider1->onChange = [&]() {
-      char txt[10];
-      snprintf(txt, sizeof(txt), "%d", slider1->position());
-      sliderLabel1->setText(txt);
-      sliderLabel1->update();
+      sliderLabel1->setTextFmt("%d", slider1->position());
     };
 
     sliderLabel2 = new uiLabel(this, "0", Point(354, 250));
@@ -96,10 +93,7 @@ struct TestControlsFrame : public uiFrame {
     slider2->anchors().left = false;
     slider2->anchors().right = true;
     slider2->onChange = [&]() {
-      char txt[10];
-      snprintf(txt, sizeof(txt), "%d", slider2->position());
-      sliderLabel2->setText(txt);
-      sliderLabel2->update();
+      sliderLabel2->setTextFmt("%d", slider2->position());
     };
 
 

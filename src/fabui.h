@@ -1344,6 +1344,15 @@ public:
   void setText(char const * value);
 
   /**
+   * @brief Sets label formatted text
+   *
+   * To update label content and size call uiLabel.update().
+   *
+   * @param format Format specifier like printf.
+   */
+  void setTextFmt(const char *format, ...);
+
+  /**
    * @brief Determines label text
    *
    * @return Label text

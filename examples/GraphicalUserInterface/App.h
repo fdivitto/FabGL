@@ -82,9 +82,7 @@ class MyApp : public uiApp {
   }
 
   void showFreeMemory() {
-    char txt[36];
-    snprintf(txt, sizeof(txt), "Std: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
-    freeMemLabel->setText(txt);
+    freeMemLabel->setTextFmt("Std: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
     freeMemLabel->repaint();
   }
 
