@@ -743,6 +743,15 @@ public:
   void setTitle(char const * value);
 
   /**
+   * @brief Sets window title as formatted text
+   *
+   * Window needs to be repainted in order to display changed title.
+   *
+   * @param format Format specifier like printf.
+   */
+  void setTitleFmt(const char *format, ...);
+
+  /**
    * @brief Sets or gets frame style
    *
    * @return L-value representing frame style (colors, border size, etc...)

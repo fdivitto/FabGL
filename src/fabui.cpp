@@ -1494,6 +1494,20 @@ void uiFrame::setTitle(char const * value)
 }
 
 
+void uiFrame::setTitleFmt(const char *format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int size = vsnprintf(nullptr, 0, format, ap) + 1;
+  if (size > 0) {
+    char buf[size + 1];
+    vsnprintf(buf, size, format, ap);
+    setTitle(buf);
+  }
+  va_end(ap);
+}
+
+
 int uiFrame::titleBarHeight()
 {
   return m_frameStyle.titleFont->height + 3;
