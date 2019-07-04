@@ -1754,6 +1754,13 @@ public:
   uiComboBoxStyle & comboBoxStyle() { return m_comboBoxStyle; }
 
   /**
+   * @brief Sets or gets listbox style
+   *
+   * @return L-value representing listbox style
+   */
+  uiListBoxStyle & listBoxStyle() { return m_listBox.listBoxStyle(); }
+
+  /**
    * @brief Sets or gets combobox properties
    *
    * @return L-value representing some combobox properties
