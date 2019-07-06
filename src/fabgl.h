@@ -290,6 +290,7 @@
 #include "mouse.h"
 #include "scene.h"
 #include "collisiondetector.h"
+#include "soundgen.h"
 
 
 
@@ -325,5 +326,14 @@ using fabgl::uiComboBox;
 using fabgl::uiCheckBox;
 using fabgl::uiCheckBoxKind;
 using fabgl::uiSlider;
+using fabgl::SoundGenerator;
+using fabgl::uiMessageBoxResult;
+using fabgl::SineWaveformGenerator;
+using fabgl::SquareWaveformGenerator;
+using fabgl::NoiseWaveformGenerator;
+using fabgl::TriangleWaveformGenerator;
+using fabgl::SawtoothWaveformGenerator;
+using fabgl::SamplesGenerator;
+using fabgl::WaveformSampleGenerator;
 
 
