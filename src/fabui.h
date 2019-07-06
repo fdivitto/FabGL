@@ -659,7 +659,7 @@ struct uiFrameStyle {
   RGB              activeTitleBackgroundColor     = RGB(2, 2, 3);  /**< Title background color when active */
   RGB              titleColor                     = RGB(0, 0, 0);  /**< Title color */
   RGB              activeTitleColor               = RGB(0, 0, 0);  /**< Title color when active */
-  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Title font */
+  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(12, false);  /**< Title font */
   RGB              buttonColor                    = RGB(1, 1, 1);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB              activeButtonColor              = RGB(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB              mouseOverBackgroundButtonColor = RGB(0, 0, 3);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */

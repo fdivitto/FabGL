@@ -1611,7 +1611,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(6);
+    r = r.shrink(4);
     Canvas.drawLine(r.X1, r.Y1, r.X2, r.Y2);
     Canvas.drawLine(r.X2, r.Y1, r.X1, r.Y2);
   }
@@ -1625,7 +1625,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(6);
+    r = r.shrink(4);
     if (state().maximized || state().minimized) {
       // draw restore (from maximize or minimize) button
       r = r.shrink(1).translate(-1, +1);
@@ -1649,7 +1649,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       Canvas.setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
       Canvas.setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
-    r = r.shrink(6);
+    r = r.shrink(4);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     Canvas.drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
   }
