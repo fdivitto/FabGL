@@ -44,7 +44,7 @@
  *
  * - - -
  *
- * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br>
+ * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Audio Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br>
  * This library works well with ESP32 revision 1 or upper.
  *
  * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
@@ -71,10 +71,13 @@
  *    * fabgl::MouseClass (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
  *    * fabgl::uiApp base class to build Graphical User Interface applications
+ *    * fabgl::SoundGenerator to generate sound and music.
  *
  * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
  *
  * See @ref confPS2 "Configuring PS/2 port" for PS/2 connection sample schema.
+ *
+ * See @ref confAudio "Configuring Audio port" for audio connection sample schema.
  *
  * - - -
  * <CENTER> @link SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
@@ -82,6 +85,9 @@
  * - - -
  * <CENTER> @link GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link Audio/Audio.ino Audio output demo @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
@@ -130,7 +136,7 @@
  * VGA output can be configured such as 8 colors or 64 colors are displayed.
  * Eight colors require 5 outputs (R, G, B, H and V), while sixty-four colors require 8 outputs (R0, R1, G0, G1, B0, B1, H and V).
  *
- * Following an example of outputs configuration and a simple digital to analog converter circuit:
+ * Following is an example of outputs configuration and a simple digital to analog converter circuit:
  *
  *
  *       === 8 colors, 1 bit per channel, 3 bit per pixel ===
@@ -260,6 +266,39 @@
 
 
 /**
+ * @page confAudio Configuring Audio port
+ *
+ * Audio output connection uses GPIO 25 and requires a simple low-pass filter and peak limiter. This works for me (you may do better):
+ *
+ *
+ *                                                                    10uF
+ *                           -------------                          + | | -
+ *          GPIO25 ----------| R 270 Ohm |-------*---------*----------| |-------> OUT AUX LINE
+ *                           -------------       |         |          | |
+ *                                               |         |
+ *                                               |         |
+ *                                               |        ---
+ *                                               |        |R|
+ *                                      100nF  -----      | |
+ *                                             -----      |1|
+ *                                               |        |5|
+ *                                               |        |0|
+ *                                               |        ---
+ *                                               |         |
+ *                                               |         |
+ *                                               +----*----+
+ *                                                    |
+ *                                                    |
+ *                                                  ----- GND
+ *                                                   ---
+ *                                                    -
+ *
+ */
+
+
+
+
+/**
  * @example AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
  * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
@@ -273,6 +312,7 @@
  * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
  * @example GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
+ * @example Audio/Audio.ino Audio demo
  */
 
 
@@ -334,6 +374,6 @@ using fabgl::NoiseWaveformGenerator;
 using fabgl::TriangleWaveformGenerator;
 using fabgl::SawtoothWaveformGenerator;
 using fabgl::SamplesGenerator;
-using fabgl::WaveformSampleGenerator;
+using fabgl::WaveformGenerator;
 
 

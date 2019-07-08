@@ -31,38 +31,6 @@
 
 
 
-/*
-  Sample audio schematics:
-
-
-
-
-                                                            10uF
-                   -------------                          + | | -
-  GPIO25 ----------| R 270 Ohm |-------*---------*----------| |-------> OUT AUX LINE
-                   -------------       |         |          | |
-                                       |         |
-                                       |         |
-                                       |        ---
-                                       |        |R|
-                              100nF  -----      | |
-                                     -----      |1|
-                                       |        |5|
-                                       |        |0|
-                                       |        ---
-                                       |         |
-                                       |         |
-                                       +----*----+
-                                            |
-                                            |
-                                          ----- GND
-                                           ---
-                                            -
-
-
-*/
-
-
 
 #include <stdint.h>
 #include <stddef.h>
@@ -86,11 +54,12 @@ namespace fabgl {
 #define WAVEGENTASK_STACK_SIZE 1024
 
 
-class WaveformSampleGenerator {
+/** @brief Base abstract class for waveform generators */
+class WaveformGenerator {
 public:
-  WaveformSampleGenerator() : next(nullptr), m_volume(100), m_enabled(false) { }
+  WaveformGenerator() : next(nullptr), m_volume(100), m_enabled(false) { }
 
-  virtual ~WaveformSampleGenerator() { }
+  virtual ~WaveformGenerator() { }
 
   // value: in Hertz
   virtual void setFrequency(int value) = 0;
@@ -107,7 +76,7 @@ public:
 
   void enable(bool value) { m_enabled = value; }
 
-  WaveformSampleGenerator * next;
+  WaveformGenerator * next;
 
 private:
   int8_t m_volume;
@@ -115,7 +84,7 @@ private:
 };
 
 
-class SineWaveformGenerator : public WaveformSampleGenerator {
+class SineWaveformGenerator : public WaveformGenerator {
 public:
   SineWaveformGenerator(int sampleRate = SAMPLE_RATE);
 
@@ -132,7 +101,7 @@ private:
 };
 
 
-class SquareWaveformGenerator : public WaveformSampleGenerator {
+class SquareWaveformGenerator : public WaveformGenerator {
 public:
   SquareWaveformGenerator(int sampleRate = SAMPLE_RATE);
 
@@ -153,7 +122,7 @@ private:
 };
 
 
-class TriangleWaveformGenerator : public WaveformSampleGenerator {
+class TriangleWaveformGenerator : public WaveformGenerator {
 public:
   TriangleWaveformGenerator(int sampleRate = SAMPLE_RATE);
 
@@ -170,7 +139,7 @@ private:
 };
 
 
-class SawtoothWaveformGenerator : public WaveformSampleGenerator {
+class SawtoothWaveformGenerator : public WaveformGenerator {
 public:
   SawtoothWaveformGenerator(int sampleRate = SAMPLE_RATE);
 
@@ -187,7 +156,7 @@ private:
 };
 
 
-class NoiseWaveformGenerator : public WaveformSampleGenerator {
+class NoiseWaveformGenerator : public WaveformGenerator {
 public:
   NoiseWaveformGenerator();
 
@@ -200,7 +169,7 @@ private:
 };
 
 
-class SamplesGenerator : public WaveformSampleGenerator {
+class SamplesGenerator : public WaveformGenerator {
 public:
   SamplesGenerator(int8_t const * data, int length);
 
@@ -231,11 +200,11 @@ public:
 
   bool playing();
 
-  WaveformSampleGenerator * channels() { return m_channels; }
+  WaveformGenerator * channels() { return m_channels; }
 
-  void attach(WaveformSampleGenerator * value);
+  void attach(WaveformGenerator * value);
 
-  void detach(WaveformSampleGenerator * value);
+  void detach(WaveformGenerator * value);
 
   // value: 0..127
   void setVolume(int value) { m_volume = value; }
@@ -251,13 +220,13 @@ private:
   void mutizeOutput();
 
 
-  TaskHandle_t              m_waveGenTaskHandle;
+  TaskHandle_t        m_waveGenTaskHandle;
 
-  WaveformSampleGenerator * m_channels;
+  WaveformGenerator * m_channels;
 
-  uint16_t *                m_sampleBuffer;
+  uint16_t *          m_sampleBuffer;
 
-  int8_t                    m_volume;
+  int8_t              m_volume;
 
 };
 

@@ -120,7 +120,7 @@ class ChannelFrame : public uiFrame {
   SamplesGenerator loop = SamplesGenerator(loopSamples, sizeof(loopSamples));
   SamplesGenerator speech = SamplesGenerator(speechSamples, sizeof(speechSamples));
   SamplesGenerator mario = SamplesGenerator(marioSamples, sizeof(marioSamples));
-  WaveformSampleGenerator * curGen = nullptr;
+  WaveformGenerator * curGen = nullptr;
 
   uiLabel * volumeLabel, * frequencyLabel;
   uiSlider * volumeSlider, * frequencySlider;

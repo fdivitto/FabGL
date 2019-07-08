@@ -439,7 +439,7 @@ bool SoundGenerator::playing()
 
 
 // does NOT take ownership of the waveform generator
-void SoundGenerator::attach(WaveformSampleGenerator * value)
+void SoundGenerator::attach(WaveformGenerator * value)
 {
   bool isPlaying = suspendPlay(false);
 
@@ -450,14 +450,14 @@ void SoundGenerator::attach(WaveformSampleGenerator * value)
 }
 
 
-void SoundGenerator::detach(WaveformSampleGenerator * value)
+void SoundGenerator::detach(WaveformGenerator * value)
 {
   if (!value)
     return;
 
   bool isPlaying = suspendPlay(false);
 
-  for (WaveformSampleGenerator * c = m_channels, * prev = nullptr; c; prev = c, c = c->next) {
+  for (WaveformGenerator * c = m_channels, * prev = nullptr; c; prev = c, c = c->next) {
     if (c == value) {
       if (prev)
         prev->next = c->next;
