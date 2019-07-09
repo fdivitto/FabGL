@@ -59,6 +59,10 @@ TerminalClass Terminal;
 
 void setup()
 {
+  // for ESP32-PICO-D4 use GPIO 13 (RX) and 9 (TX)
+  //Serial2.begin(115200, SERIAL_8N1, 13, 9);
+
+  // other boards
   Serial2.begin(115200);
 
   //Serial.begin(115200); // debug only
