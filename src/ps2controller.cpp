@@ -302,7 +302,7 @@ namespace fabgl {
 
 
 #define PORT0_RX_BUFFER_SIZE 128
-#define PORT1_RX_BUFFER_SIZE 1648
+#define PORT1_RX_BUFFER_SIZE 1644
 
 
 // Locations inside RTC low speed memory
@@ -310,24 +310,25 @@ namespace fabgl {
 #define RTCMEM_PROG_START           0x000  // where the program begins
 #define RTCMEM_VARS_START           0x100  // where the variables begin
 
-#define RTCMEM_PORT0_MODE           (RTCMEM_VARS_START +  0)  // MODE_RECEIVE or MODE_SEND
-#define RTCMEM_PORT0_WRITE_POS      (RTCMEM_VARS_START +  1)  // position of the next word to receive
-#define RTCMEM_PORT0_WORD_RX_READY  (RTCMEM_VARS_START +  2)  // 1 when a word has been received (reset by ISR)
-#define RTCMEM_PORT0_BIT            (RTCMEM_VARS_START +  3)  // send bit counter
-#define RTCMEM_PORT0_STATE          (RTCMEM_VARS_START +  4)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
-#define RTCMEM_PORT0_SEND_WORD      (RTCMEM_VARS_START +  5)  // contains the word to send
-#define RTCMEM_PORT0_WORD_SENT_FLAG (RTCMEM_VARS_START +  6)  // 1 when word has been sent (reset by ISR)
+#define RTCMEM_PORT0_ENABLED        (RTCMEM_VARS_START +  0)  // if 1 then port 0 is enabled
+#define RTCMEM_PORT0_MODE           (RTCMEM_VARS_START +  1)  // MODE_RECEIVE or MODE_SEND
+#define RTCMEM_PORT0_WRITE_POS      (RTCMEM_VARS_START +  2)  // position of the next word to receive
+#define RTCMEM_PORT0_WORD_RX_READY  (RTCMEM_VARS_START +  3)  // 1 when a word has been received (reset by ISR)
+#define RTCMEM_PORT0_BIT            (RTCMEM_VARS_START +  4)  // send bit counter
+#define RTCMEM_PORT0_STATE          (RTCMEM_VARS_START +  5)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
+#define RTCMEM_PORT0_SEND_WORD      (RTCMEM_VARS_START +  6)  // contains the word to send
+#define RTCMEM_PORT0_WORD_SENT_FLAG (RTCMEM_VARS_START +  7)  // 1 when word has been sent (reset by ISR)
 
-#define RTCMEM_PORT1_ENABLED        (RTCMEM_VARS_START +  7)  // if 1 then port 1 is enabled
-#define RTCMEM_PORT1_MODE           (RTCMEM_VARS_START +  8)  // MODE_RECEIVE or MODE_SEND
-#define RTCMEM_PORT1_WRITE_POS      (RTCMEM_VARS_START +  9)  // position of the next word to receive
-#define RTCMEM_PORT1_WORD_RX_READY  (RTCMEM_VARS_START + 10)  // 1 when a word has been received (reset by ISR)
-#define RTCMEM_PORT1_BIT            (RTCMEM_VARS_START + 11)  // receive or send bit counter
-#define RTCMEM_PORT1_STATE          (RTCMEM_VARS_START + 12)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
-#define RTCMEM_PORT1_SEND_WORD      (RTCMEM_VARS_START + 13)  // contains the word to send
-#define RTCMEM_PORT1_WORD_SENT_FLAG (RTCMEM_VARS_START + 14)  // 1 when word has been sent (reset by ISR)
+#define RTCMEM_PORT1_ENABLED        (RTCMEM_VARS_START +  8)  // if 1 then port 1 is enabled
+#define RTCMEM_PORT1_MODE           (RTCMEM_VARS_START +  9)  // MODE_RECEIVE or MODE_SEND
+#define RTCMEM_PORT1_WRITE_POS      (RTCMEM_VARS_START + 10)  // position of the next word to receive
+#define RTCMEM_PORT1_WORD_RX_READY  (RTCMEM_VARS_START + 11)  // 1 when a word has been received (reset by ISR)
+#define RTCMEM_PORT1_BIT            (RTCMEM_VARS_START + 12)  // receive or send bit counter
+#define RTCMEM_PORT1_STATE          (RTCMEM_VARS_START + 13)  // STATE_WAIT_CLK_LOW or STATE_WAIT_CLK_HIGH
+#define RTCMEM_PORT1_SEND_WORD      (RTCMEM_VARS_START + 14)  // contains the word to send
+#define RTCMEM_PORT1_WORD_SENT_FLAG (RTCMEM_VARS_START + 15)  // 1 when word has been sent (reset by ISR)
 
-#define RTCMEM_PORT0_BUFFER_START   (RTCMEM_VARS_START + 15)  // where the receive buffer begins
+#define RTCMEM_PORT0_BUFFER_START   (RTCMEM_VARS_START + 16)  // where the receive buffer begins
 #define RTCMEM_PORT0_BUFFER_END     (RTCMEM_PORT0_BUFFER_START + PORT0_RX_BUFFER_SIZE)  // where the receive buffer ends
 
 #define RTCMEM_PORT1_BUFFER_START   RTCMEM_PORT0_BUFFER_END  // where the receive buffer begins
@@ -363,6 +364,7 @@ namespace fabgl {
 #define PORT1_RECEIVE                10
 #define PORT1_CLK_IS_HIGH            11
 #define MAIN_LOOP                    12
+#define PORT1_INIT                   13
 
 
 
@@ -377,9 +379,12 @@ const ulp_insn_t ULP_code[] = {
 
 M_LABEL(READY_TO_RECEIVE),
 
-
   /////////////////////////////////////////////////////////////////////////////////////////////
   // PORT0 Initialization
+
+  // port 0 enabled?
+  MEM_READR(R0, RTCMEM_PORT0_ENABLED),                      // R0 = [RTCMEM_PORT0_ENABLED]
+  M_BL(PORT1_INIT, 1),                                      // go PORT1_INIT if R0 < 1  (port 0 not enabled)
 
   // Configure CLK and DAT as inputs
   CONFIGURE_CLK_INPUT(PS2_PORT0),
@@ -394,16 +399,18 @@ M_LABEL(READY_TO_RECEIVE),
   MEM_WRITEI(RTCMEM_PORT0_BIT, 0),                          // [RTCMEM_PORT0_BIT] = 0
   I_MOVI(R2, 0),                                            // R2 = 0
 
-  // port 1 enabled?
-  MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
-  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
-
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   // PORT1 Initialization
+
+M_LABEL(PORT1_INIT),
+
+  // port 1 enabled?
+  MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
+  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
 
   // Configure CLK and DAT as inputs
   CONFIGURE_CLK_INPUT(PS2_PORT1),
@@ -435,6 +442,10 @@ M_LABEL(MAIN_LOOP),
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   // PORT0 Receive
+
+  // port 0 enabled?
+  MEM_READR(R0, RTCMEM_PORT0_ENABLED),                      // R0 = [RTCMEM_PORT0_ENABLED]
+  M_BL(PORT1_RECEIVE, 1),                                   // go PORT1_RECEIVE if R0 < 1  (port 0 not enabled)
 
   // wait for CLK low or high?
   MEM_READR(R1, RTCMEM_PORT0_STATE),                        // R1 = [RTCMEM_PORT0_STATE]
@@ -840,6 +851,7 @@ void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPI
     RTC_SLOW_MEM[i] = 0x0000;
 
   // PS/2 port 1 enabled?
+  RTC_SLOW_MEM[RTCMEM_PORT0_ENABLED] = (port0_clkGPIO != GPIO_NUM_39 ? 1 : 0);
   RTC_SLOW_MEM[RTCMEM_PORT1_ENABLED] = (port1_clkGPIO != GPIO_NUM_39 ? 1 : 0);
 
   warmInit();
@@ -854,8 +866,30 @@ void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPI
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
 
   // install RTC interrupt handler (on ULP Wake() instruction)
-  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, nullptr, nullptr);
+  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, nullptr, &m_isrHandle);
   SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
+
+  m_suspendCount = 0;
+}
+
+
+void PS2ControllerClass::suspend()
+{
+  if (m_suspendCount == 0) {
+    CLEAR_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
+    ets_delay_us(50);
+    WRITE_PERI_REG(RTC_CNTL_INT_CLR_REG, READ_PERI_REG(RTC_CNTL_INT_ST_REG));
+  }
+  ++m_suspendCount;
+}
+
+void PS2ControllerClass::resume()
+{
+  --m_suspendCount;
+  if (m_suspendCount <= 0) {
+    m_suspendCount = 0;
+    SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
+  }
 }
 
 

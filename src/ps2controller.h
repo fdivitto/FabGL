@@ -101,6 +101,16 @@ public:
    */
   void injectInRXBuffer(int value, int PS2Port);
 
+  /**
+   * @brief Suspends PS/2 ports operations
+   */
+  void suspend();
+
+  /**
+   * @brief Resumes PS/2 ports operations
+   */
+  void resume();
+
 private:
 
   void warmInit();
@@ -116,6 +126,10 @@ private:
   // task that is waiting for RX event
   volatile TaskHandle_t m_RXWaitTask[2];
 
+  intr_handle_t         m_isrHandle;
+
+  int16_t               m_suspendCount;       // 0 = not suspended, >0 suspended
+  uint16_t              m_suspendPortsState;  // bit 0 = port 0 was enabled, bit 1 = port 1 was enabled
 };
 
 
