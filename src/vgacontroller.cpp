@@ -87,7 +87,8 @@ RGB COLOR2RGB[16] = {
 // pixel : 0  1  2  3  4  5  6  7  8  9 10 11 ...etc...
 // byte  : 2  3  0  1  6  7  4  5 10 11  8  9 ...etc...
 // dword : 0           1           2          ...etc...
-#define PIXELINROW(row, X) (row[((X) & 0xFFFC) + ((2 + (X)) & 3)])
+// Thanks to https://github.com/paulscottrobson for the new macro. Before was: (row[((X) & 0xFFFC) + ((2 + (X)) & 3)])
+#define PIXELINROW(row, X) (row[(X) ^ 2])
 
 // requires variables: m_viewPort
 #define PIXEL(X, Y) PIXELINROW(m_viewPort[(Y)], X)
