@@ -70,9 +70,8 @@ static const int8_t sinTable[257] = {
 };
 
 
-SineWaveformGenerator::SineWaveformGenerator(int sampleRate)
- : m_sampleRate(sampleRate),
-   m_phaseInc(0),
+SineWaveformGenerator::SineWaveformGenerator()
+ : m_phaseInc(0),
    m_phaseAcc(0),
    m_frequency(0),
    m_lastSample(0)
@@ -83,7 +82,7 @@ SineWaveformGenerator::SineWaveformGenerator(int sampleRate)
 void SineWaveformGenerator::setFrequency(int value) {
   if (m_frequency != value) {
     m_frequency = value;
-    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / m_sampleRate;
+    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / sampleRate();
   }
 }
 
@@ -123,9 +122,8 @@ int SineWaveformGenerator::getSample() {
 // SquareWaveformGenerator
 
 
-SquareWaveformGenerator::SquareWaveformGenerator(int sampleRate)
-  : m_sampleRate(sampleRate),
-    m_phaseInc(0),
+SquareWaveformGenerator::SquareWaveformGenerator()
+  : m_phaseInc(0),
     m_phaseAcc(0),
     m_frequency(0),
     m_lastSample(0),
@@ -137,7 +135,7 @@ SquareWaveformGenerator::SquareWaveformGenerator(int sampleRate)
 void SquareWaveformGenerator::setFrequency(int value) {
   if (m_frequency != value) {
     m_frequency = value;
-    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / m_sampleRate;
+    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / sampleRate();
   }
 }
 
@@ -180,9 +178,8 @@ int SquareWaveformGenerator::getSample() {
 // TriangleWaveformGenerator
 
 
-TriangleWaveformGenerator::TriangleWaveformGenerator(int sampleRate)
-  : m_sampleRate(sampleRate),
-    m_phaseInc(0),
+TriangleWaveformGenerator::TriangleWaveformGenerator()
+  : m_phaseInc(0),
     m_phaseAcc(0),
     m_frequency(0),
     m_lastSample(0)
@@ -193,7 +190,7 @@ TriangleWaveformGenerator::TriangleWaveformGenerator(int sampleRate)
 void TriangleWaveformGenerator::setFrequency(int value) {
   if (m_frequency != value) {
     m_frequency = value;
-    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / m_sampleRate;
+    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / sampleRate();
   }
 }
 
@@ -230,9 +227,8 @@ int TriangleWaveformGenerator::getSample() {
 // SawtoothWaveformGenerator
 
 
-SawtoothWaveformGenerator::SawtoothWaveformGenerator(int sampleRate)
-  : m_sampleRate(sampleRate),
-    m_phaseInc(0),
+SawtoothWaveformGenerator::SawtoothWaveformGenerator()
+  : m_phaseInc(0),
     m_phaseAcc(0),
     m_frequency(0),
     m_lastSample(0)
@@ -243,7 +239,7 @@ SawtoothWaveformGenerator::SawtoothWaveformGenerator(int sampleRate)
 void SawtoothWaveformGenerator::setFrequency(int value) {
   if (m_frequency != value) {
     m_frequency = value;
-    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / m_sampleRate;
+    m_phaseInc = (((uint32_t)m_frequency * 256) << 11) / sampleRate();
   }
 }
 
@@ -349,11 +345,12 @@ int SamplesGenerator::getSample() {
 // SoundGenerator
 
 
-SoundGenerator::SoundGenerator()
+SoundGenerator::SoundGenerator(int sampleRate)
   : m_waveGenTaskHandle(nullptr),
     m_channels(nullptr),
     m_sampleBuffer(nullptr),
-    m_volume(100)
+    m_volume(100),
+    m_sampleRate(sampleRate)
 {
   i2s_audio_init();
 }
@@ -378,7 +375,7 @@ void SoundGenerator::i2s_audio_init()
 {
   i2s_config_t i2s_config;
   i2s_config.mode                 = (i2s_mode_t) (I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN);
-  i2s_config.sample_rate          = SAMPLE_RATE;
+  i2s_config.sample_rate          = m_sampleRate;
   i2s_config.bits_per_sample      = I2S_BITS_PER_SAMPLE_16BIT;
   i2s_config.communication_format = (i2s_comm_format_t) I2S_COMM_FORMAT_I2S_MSB;
   i2s_config.channel_format       = I2S_CHANNEL_FMT_ONLY_RIGHT;
@@ -443,6 +440,8 @@ void SoundGenerator::attach(WaveformGenerator * value)
 {
   bool isPlaying = suspendPlay(false);
 
+  value->setSampleRate(m_sampleRate);
+
   value->next = m_channels;
   m_channels = value;
 
@@ -475,7 +474,7 @@ void SoundGenerator::waveGenTask(void * arg)
 {
   SoundGenerator * soundGenerator = (SoundGenerator*) arg;
 
-  i2s_set_clk(I2S_NUM_0, SAMPLE_RATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
+  i2s_set_clk(I2S_NUM_0, soundGenerator->m_sampleRate, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
 
   uint16_t * buf = soundGenerator->m_sampleBuffer;
 

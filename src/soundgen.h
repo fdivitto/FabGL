@@ -45,7 +45,7 @@
 namespace fabgl {
 
 
-#define SAMPLE_RATE 16000
+#define DEFAULT_SAMPLE_RATE 16000
 
 // 512 samples, at 16KHz generate a send every 512/16000*1000 = 32ms (16000/512=31.25 sends per second)
 // 200 samples, at 16Khz generate a send every 200/16000*1000 = 12.5ms (16000/200=80 sends per second)
@@ -54,46 +54,80 @@ namespace fabgl {
 #define WAVEGENTASK_STACK_SIZE 1024
 
 
-/** @brief Base abstract class for waveform generators */
+/** @brief Base abstract class for waveform generators. A waveform generator can be seen as an audio channel that will be mixed by SoundGenerator. */
 class WaveformGenerator {
 public:
-  WaveformGenerator() : next(nullptr), m_volume(100), m_enabled(false) { }
+  WaveformGenerator() : next(nullptr), m_sampleRate(0), m_volume(100), m_enabled(false) { }
 
   virtual ~WaveformGenerator() { }
 
-  // value: in Hertz
+  /**
+   * @brief Sets output frequency
+   *
+   * @param value Frequency in Hertz
+   */
   virtual void setFrequency(int value) = 0;
 
-  // ret value: -128..127
+  /**
+   * @brief Gets next sample
+   *
+   * @return Sample value as signed 8 bit (-128..127 range)
+   */
   virtual int getSample() = 0;
 
-  // value: 0..127
+  /**
+   * @brief Sets volume of this generator
+   *
+   * @value Volume value. Minimum is 0, maximum is 127.
+   */
   void setVolume(int value) { m_volume = value; }
 
+  /**
+   * @brief Determines current volume
+   *
+   * @return Current volume of this generator (0 = minimum, 127 = maximum)
+   */
   int volume() { return m_volume; }
 
+  /**
+   * @brief Determines whether this generator is enabled or disabled
+   *
+   * @return True if this generator is enabled
+   */
   bool enabled() { return m_enabled; }
 
+  /**
+   * @brief Enables or disabled this generator
+   *
+   * A generator is disabled for default and must be enabled in order to play sound
+   *
+   * @value True to enable the generator, False to disable
+   */
   void enable(bool value) { m_enabled = value; }
+
+  void setSampleRate(int value) { m_sampleRate = value; }
+
+  uint16_t sampleRate() { return m_sampleRate; }
 
   WaveformGenerator * next;
 
 private:
-  int8_t m_volume;
-  int8_t m_enabled; // 0 = disabled, 1 = enabled
+  uint16_t m_sampleRate;
+  int8_t   m_volume;
+  int8_t   m_enabled; // 0 = disabled, 1 = enabled
 };
 
 
+/** @brief Sine waveform generator */
 class SineWaveformGenerator : public WaveformGenerator {
 public:
-  SineWaveformGenerator(int sampleRate = SAMPLE_RATE);
+  SineWaveformGenerator();
 
   void setFrequency(int value);
 
   int getSample();
 
 private:
-  int32_t  m_sampleRate;
   uint32_t m_phaseInc;
   uint32_t m_phaseAcc;
   uint16_t m_frequency;
@@ -101,19 +135,24 @@ private:
 };
 
 
+/** @brief Square waveform generator */
 class SquareWaveformGenerator : public WaveformGenerator {
 public:
-  SquareWaveformGenerator(int sampleRate = SAMPLE_RATE);
+  SquareWaveformGenerator();
 
   void setFrequency(int value);
 
   // dutyCycle: 0..255 (255=100%)
+  /**
+   * @brief Sets square wave duty cycle
+   *
+   * dutyCycle Duty cycle in 0..255 range. 255 = 100%
+   */
   void setDutyCycle(int dutyCycle);
 
   int getSample();
 
 private:
-  int32_t  m_sampleRate;
   uint32_t m_phaseInc;
   uint32_t m_phaseAcc;
   uint16_t m_frequency;
@@ -122,16 +161,16 @@ private:
 };
 
 
+/** @brief Triangle waveform generator */
 class TriangleWaveformGenerator : public WaveformGenerator {
 public:
-  TriangleWaveformGenerator(int sampleRate = SAMPLE_RATE);
+  TriangleWaveformGenerator();
 
   void setFrequency(int value);
 
   int getSample();
 
 private:
-  int32_t  m_sampleRate;
   uint32_t m_phaseInc;
   uint32_t m_phaseAcc;
   uint16_t m_frequency;
@@ -139,16 +178,16 @@ private:
 };
 
 
+/** @brief Sawtooth waveform generator */
 class SawtoothWaveformGenerator : public WaveformGenerator {
 public:
-  SawtoothWaveformGenerator(int sampleRate = SAMPLE_RATE);
+  SawtoothWaveformGenerator();
 
   void setFrequency(int value);
 
   int getSample();
 
 private:
-  int32_t  m_sampleRate;
   uint32_t m_phaseInc;
   uint32_t m_phaseAcc;
   uint16_t m_frequency;
@@ -156,6 +195,7 @@ private:
 };
 
 
+/** @brief Noise generator */
 class NoiseWaveformGenerator : public WaveformGenerator {
 public:
   NoiseWaveformGenerator();
@@ -189,7 +229,7 @@ class SoundGenerator {
 
 public:
 
-  SoundGenerator();
+  SoundGenerator(int sampleRate = DEFAULT_SAMPLE_RATE);
 
   ~SoundGenerator();
 
@@ -227,6 +267,8 @@ private:
   uint16_t *          m_sampleBuffer;
 
   int8_t              m_volume;
+
+  uint16_t            m_sampleRate;
 
 };
 
