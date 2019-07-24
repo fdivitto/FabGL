@@ -593,6 +593,18 @@ public:
   void begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t green1GPIO, gpio_num_t green0GPIO, gpio_num_t blue1GPIO, gpio_num_t blue0GPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO);
 
   /**
+   * @brief This is the 64 colors (8 GPIOs) initializer using default pinout.
+   *
+   * Two GPIOs per channel, plus horizontal and vertical sync signals.
+   * Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync
+   *
+   * Example:
+   *
+   *     VGAController.begin();
+   */
+  void begin();
+
+  /**
    * @brief Gets number of bits allocated for each channel.
    *
    * Number of bits depends by which begin() initializer has been called.

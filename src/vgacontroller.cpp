@@ -171,6 +171,13 @@ void VGAControllerClass::begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_nu
 }
 
 
+// initializer for default configuration
+void VGAControllerClass::begin()
+{
+  begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
+}
+
+
 void VGAControllerClass::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
   PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
