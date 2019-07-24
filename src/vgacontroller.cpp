@@ -1670,9 +1670,9 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_full(Glyph const & glyph, Glyph
 
   // a very simple and ugly reduce luminosity (faint) implementation!
   if (glyphOptions.reduceLuminosity) {
-    if (penColor.R > 2) penColor.R -= 2;
-    if (penColor.G > 2) penColor.G -= 2;
-    if (penColor.B > 2) penColor.B -= 2;
+    if (penColor.R > 2) penColor.R -= 1;
+    if (penColor.G > 2) penColor.G -= 1;
+    if (penColor.B > 2) penColor.B -= 1;
   }
 
   uint8_t penPattern   = preparePixel(penColor);
@@ -1798,9 +1798,9 @@ void IRAM_ATTR VGAControllerClass::execDrawGlyph_light(Glyph const & glyph, Glyp
 
   // a very simple and ugly reduce luminosity (faint) implementation!
   if (glyphOptions.reduceLuminosity) {
-    if (penColor.R > 2) penColor.R -= 2;
-    if (penColor.G > 2) penColor.G -= 2;
-    if (penColor.B > 2) penColor.B -= 2;
+    if (penColor.R > 2) penColor.R -= 1;
+    if (penColor.G > 2) penColor.G -= 1;
+    if (penColor.B > 2) penColor.B -= 1;
   }
 
   bool fillBackground = glyphOptions.fillBackground;
