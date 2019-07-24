@@ -23,6 +23,13 @@
 #pragma once
 
 
+/**
+ * @file
+ *
+ * @brief This file contains terminal emulation definitions.
+ */
+
+
 #include "keyboard.h"
 
 
