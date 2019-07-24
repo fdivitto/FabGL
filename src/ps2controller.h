@@ -40,6 +40,26 @@
 namespace fabgl {
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines what is connected to PS/2 ports
+ */
+enum class PS2Preset {
+  KeyboardPort0_MousePort1,   /**< Keyboard on Port 0 and Mouse on Port 1 */
+  KeyboardPort0,              /**< Keyboard on Port 0 (no mouse) */
+  MousePort0,                 /**< Mouse on port 0 (no keyboard) */
+};
+
+
+/** \ingroup Enumerations
+ * @brief This enum defines how handle keyboard virtual keys
+ */
+enum class KbdMode {
+  NoVirtualKeys,           /**< No virtual keys are generated */
+  GenerateVirtualKeys,     /**< Virtual keys are generated. You can call KeyboardClass.isVKDown() only. */
+  CreateVirtualKeysQueue,  /**< Virtual keys are generated and put on a queue. You can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable() and KeyboardClass.getNextVirtualKey() */
+};
+
+
 
 /**
  * @brief The PS2 device controller class.
@@ -62,6 +82,23 @@ public:
   * @param port1_datGPIO The GPIO number of Data line for PS/2 port 1 (GPIO_NUM_39 to disable).
   */
   void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_NUM_39, gpio_num_t port1_datGPIO = GPIO_NUM_39);
+
+  /**
+  * @brief Initializes PS2 device controller using default GPIOs.
+  *
+  * Initializes the PS2 controller assigning:
+  *   - GPIO_NUM_33 (CLK) and GPIO_NUM_32 (DATA) as PS/2 Port 0
+  *   - GPIO_NUM_26 (CLK) and GPIO_NUM_27 (DATA) as PS/2 Port 1
+  *
+  * @param preset Specifies what is connected to PS/2 ports (mouse, keyboard or boths).
+  * @param keyboardMode Specifies how handle keyboard virtual keys.
+  *
+  * Example:
+  *
+  *     // Keyboard connected to port 0 and mouse to port1
+  *     PSController.begin(PS2Preset::KeyboardPort0_MousePort1);
+  */
+  void begin(PS2Preset preset = PS2Preset::KeyboardPort0_MousePort1, KbdMode keyboardMode = KbdMode::CreateVirtualKeysQueue);
 
   /**
    * @brief Gets the number of scancodes available in the controller buffer.

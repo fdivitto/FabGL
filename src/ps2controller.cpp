@@ -31,6 +31,8 @@
 #include "ps2controller.h"
 #include "fabutils.h"
 #include "ulp_macro_ex.h"
+#include "keyboard.h"
+#include "mouse.h"
 
 
 fabgl::PS2ControllerClass PS2Controller;
@@ -870,6 +872,29 @@ void PS2ControllerClass::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPI
   SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
 
   m_suspendCount = 0;
+}
+
+
+void PS2ControllerClass::begin(PS2Preset preset, KbdMode keyboardMode)
+{
+  bool generateVirtualKeys = (keyboardMode == KbdMode::GenerateVirtualKeys || keyboardMode == KbdMode::CreateVirtualKeysQueue);
+  bool createVKQueue       = (keyboardMode == KbdMode::CreateVirtualKeysQueue);
+  switch (preset) {
+    case PS2Preset::KeyboardPort0_MousePort1:
+      // both keyboard (port 0) and mouse configured (port 1)
+      PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
+      Keyboard.begin(generateVirtualKeys, createVKQueue, 0);
+      Mouse.begin(1);
+      break;
+    case PS2Preset::KeyboardPort0:
+      // only keyboard configured on port 0
+      Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32, generateVirtualKeys, createVKQueue);
+      break;
+    case PS2Preset::MousePort0:
+      // only mouse configured on port 0
+      Mouse.begin(GPIO_NUM_33, GPIO_NUM_32);
+      break;
+  };
 }
 
 

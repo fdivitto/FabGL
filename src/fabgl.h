@@ -376,6 +376,8 @@ using fabgl::SawtoothWaveformGenerator;
 using fabgl::SamplesGenerator;
 using fabgl::WaveformGenerator;
 using fabgl::TermType;
+using fabgl::PS2Preset;
+using fabgl::KbdMode;
 
 
 
