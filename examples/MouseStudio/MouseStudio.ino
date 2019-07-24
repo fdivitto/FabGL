@@ -23,22 +23,6 @@
 #include "fabgl.h"
 
 
-/* * * *  C O N F I G U R A T I O N  * * * */
-
-// select Mouse configuration
-#define MOUSE_ON_PORT0 0
-#define MOUSE_ON_PORT1 1
-
-// indicate PS/2 GPIOs for each port
-#define PS2_PORT0_CLK GPIO_NUM_33
-#define PS2_PORT0_DAT GPIO_NUM_32
-#define PS2_PORT1_CLK GPIO_NUM_26
-#define PS2_PORT1_DAT GPIO_NUM_27
-
-/* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
-
-
-
 void printHelp()
 {
   Serial.printf("\n\nPS/2 Mouse Studio\n");
@@ -93,13 +77,7 @@ void setup()
   delay(500);  // avoid garbage into the UART
   Serial.write("\n\nReset\n");
 
-  #if MOUSE_ON_PORT0
-  // mouse configured on port 0
-  Mouse.begin(PS2_PORT0_CLK, PS2_PORT0_DAT);
-  #elif MOUSE_ON_PORT1
-  // mouse configured on port 1
-  Mouse.begin(PS2_PORT1_CLK, PS2_PORT1_DAT);
-  #endif
+  PS2Controller.begin();
 
   printHelp();
 }

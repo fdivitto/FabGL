@@ -23,36 +23,6 @@
 #include "fabgl.h"
 
 
-/* * * *  C O N F I G U R A T I O N  * * * */
-
-// select one color configuration
-#define USE_8_COLORS  0
-#define USE_64_COLORS 1
-
-// indicate VGA GPIOs to use for selected color configuration
-#if USE_8_COLORS
-  #define VGA_RED    GPIO_NUM_22
-  #define VGA_GREEN  GPIO_NUM_21
-  #define VGA_BLUE   GPIO_NUM_19
-  #define VGA_HSYNC  GPIO_NUM_18
-  #define VGA_VSYNC  GPIO_NUM_5
-#elif USE_64_COLORS
-  #define VGA_RED1   GPIO_NUM_22
-  #define VGA_RED0   GPIO_NUM_21
-  #define VGA_GREEN1 GPIO_NUM_19
-  #define VGA_GREEN0 GPIO_NUM_18
-  #define VGA_BLUE1  GPIO_NUM_5
-  #define VGA_BLUE0  GPIO_NUM_4
-  #define VGA_HSYNC  GPIO_NUM_23
-  #define VGA_VSYNC  GPIO_NUM_15
-#endif
-
-// indicate PS/2 GPIOs for Keyboard port
-#define PS2_PORT0_CLK GPIO_NUM_33
-#define PS2_PORT0_DAT GPIO_NUM_32
-
-/* * * *  E N D   O F   C O N F I G U R A T I O N  * * * */
-
 
 TerminalClass Terminal;
 
@@ -68,14 +38,9 @@ void setup()
   //Serial.begin(115200); // debug only
 
   // only keyboard configured on port 0
-  Keyboard.begin(PS2_PORT0_CLK, PS2_PORT0_DAT);
+  PS2Controller.begin(PS2Preset::KeyboardPort0);
 
-  #if USE_8_COLORS
-  VGAController.begin(VGA_RED, VGA_GREEN, VGA_BLUE, VGA_HSYNC, VGA_VSYNC);
-  #elif USE_64_COLORS
-  VGAController.begin(VGA_RED1, VGA_RED0, VGA_GREEN1, VGA_GREEN0, VGA_BLUE1, VGA_BLUE0, VGA_HSYNC, VGA_VSYNC);
-  #endif
-
+  VGAController.begin();
   VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
 
   // this speed-up display but may generate flickering
