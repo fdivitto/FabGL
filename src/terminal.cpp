@@ -378,8 +378,7 @@ void TerminalClass::setBackgroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultBackgroundColor = color;
-  if (color <= Color::BrightBlack)
-    Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 40 : 100 - 8));
+  Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 40 : 92));
 }
 
 
@@ -394,7 +393,7 @@ void TerminalClass::setForegroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultForegroundColor = color;
-  Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 30 : 90 - 8));
+  Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 30 : 82));
 }
 
 
