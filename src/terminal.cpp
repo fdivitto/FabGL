@@ -21,6 +21,7 @@
 
 
 #include <stdarg.h>
+#include <string.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -124,6 +125,8 @@ void TerminalClass::begin()
   m_keyboardReaderTaskHandle = nullptr;
 
   m_outputQueue = nullptr;
+
+  m_termInfo = nullptr;
 
   reset();
 }
@@ -272,6 +275,9 @@ void TerminalClass::reset()
   m_blinkingTextEnabled = true;
 
   m_cursorState = false;
+
+  m_convMatchedCount = 0;
+  m_convMatchedItem  = nullptr;
 
   // this also restore cursor at top-left
   setScrollingRegion(1, m_rows);
@@ -1059,7 +1065,10 @@ int TerminalClass::availableForWrite()
 
 size_t TerminalClass::write(uint8_t c)
 {
-  xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);
+  if (m_termInfo == nullptr)
+    xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);  // send unprocessed
+  else
+    convHandleTranslation(c);
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES
   logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
@@ -1074,6 +1083,199 @@ int TerminalClass::write(const uint8_t * buffer, int size)
   for (int i = 0; i < size; ++i)
     write(*(buffer++));
   return size;
+}
+
+
+void TerminalClass::setTerminalType(TermInfo const * value)
+{
+  m_termInfo = nullptr;
+  write("\e[?2h");  // disable VT52 mode
+  if (value != nullptr)
+    write(value->initString);
+  m_termInfo = value;
+}
+
+
+void TerminalClass::setTerminalType(TermType value)
+{
+  switch (value) {
+    case TermType::ANSI_VT:
+      setTerminalType(nullptr);
+      break;
+    case TermType::ADM3A:
+      setTerminalType(&term_ADM3A);
+      break;
+    case TermType::ADM31:
+      setTerminalType(&term_ADM31);
+      break;
+    case TermType::Hazeltine1500:
+      setTerminalType(&term_Hazeltine1500);
+      break;
+    case TermType::Osborne:
+      setTerminalType(&term_Osborne);
+      break;
+    case TermType::Kaypro:
+      setTerminalType(&term_Kaypro);
+      break;
+    case TermType::VT52:
+      setTerminalType(&term_VT52);
+      break;
+  }
+}
+
+
+void TerminalClass::convHandleTranslation(uint8_t c)
+{
+  if (m_convMatchedCount > 0 || c < 32 || c == 0x7f || c == '~') {
+
+    m_convMatchedChars[m_convMatchedCount] = c;
+
+    if (m_convMatchedItem == nullptr)
+      m_convMatchedItem = m_termInfo->videoCtrlSet;
+
+    for (auto item = m_convMatchedItem; item->termSeq; ++item) {
+      if (item != m_convMatchedItem) {
+        // check if this item can be a new candidate
+        if (m_convMatchedCount == 0 || (item->termSeqLen > m_convMatchedCount && strncmp(item->termSeq, m_convMatchedItem->termSeq, m_convMatchedCount) == 0))
+          m_convMatchedItem = item;
+        else
+          continue;
+      }
+      // here (item == m_convMatchedItem) is always true
+      if (item->termSeq[m_convMatchedCount] == 0xFF || item->termSeq[m_convMatchedCount] == c) {
+        // are there other chars to process?
+        ++m_convMatchedCount;
+        if (item->termSeqLen == m_convMatchedCount) {
+          // full match, send related ANSI sequences (and resets m_convMatchedCount and m_convMatchedItem)
+          for (ConvCtrl const * ctrl = item->convCtrl; *ctrl != ConvCtrl::END; ++ctrl)
+            convSendCtrl(*ctrl);
+        }
+        return;
+      }
+    }
+
+    // no match, send received stuff as is
+    convQueue();
+  } else
+    xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);
+}
+
+
+void TerminalClass::convSendCtrl(ConvCtrl ctrl)
+{
+  switch (ctrl) {
+    case ConvCtrl::CarriageReturn:
+      convQueue("\x0d");
+      break;
+    case ConvCtrl::LineFeed:
+      convQueue("\x0a");
+      break;
+    case ConvCtrl::CursorLeft:
+      convQueue("\e[D");
+      break;
+    case ConvCtrl::CursorUp:
+      convQueue("\e[A");
+      break;
+    case ConvCtrl::CursorRight:
+      convQueue("\e[C");
+      break;
+    case ConvCtrl::EraseToEndOfScreen:
+      convQueue("\e[J");
+      break;
+    case ConvCtrl::EraseToEndOfLine:
+      convQueue("\e[K");
+      break;
+    case ConvCtrl::CursorHome:
+      convQueue("\e[H");
+      break;
+    case ConvCtrl::AttrNormal:
+      convQueue("\e[0m");
+      break;
+    case ConvCtrl::AttrBlank:
+      convQueue("\e[8m");
+      break;
+    case ConvCtrl::AttrBlink:
+      convQueue("\e[5m");
+      break;
+    case ConvCtrl::AttrBlinkOff:
+      convQueue("\e[25m");
+      break;
+    case ConvCtrl::AttrReverse:
+      convQueue("\e[7m");
+      break;
+    case ConvCtrl::AttrReverseOff:
+      convQueue("\e[27m");
+      break;
+    case ConvCtrl::AttrUnderline:
+      convQueue("\e[4m");
+      break;
+    case ConvCtrl::AttrUnderlineOff:
+      convQueue("\e[24m");
+      break;
+    case ConvCtrl::AttrReduce:
+      convQueue("\e[2m");
+      break;
+    case ConvCtrl::AttrReduceOff:
+      convQueue("\e[22m");
+      break;
+    case ConvCtrl::InsertLine:
+      convQueue("\e[L");
+      break;
+    case ConvCtrl::InsertChar:
+      convQueue("\e[@");
+      break;
+    case ConvCtrl::DeleteLine:
+      convQueue("\e[M");
+      break;
+    case ConvCtrl::DeleteCharacter:
+      convQueue("\e[P");
+      break;
+    case ConvCtrl::CursorOn:
+      convQueue("\e[?25h");
+      break;
+    case ConvCtrl::CursorOff:
+      convQueue("\e[?25l");
+      break;
+    case ConvCtrl::SaveCursor:
+      convQueue("\e[?1048h");
+      break;
+    case ConvCtrl::RestoreCursor:
+      convQueue("\e[?1048l");
+      break;
+    case ConvCtrl::CursorPos:
+    case ConvCtrl::CursorPos2:
+    {
+      char s[11];
+      int y = (ctrl == ConvCtrl::CursorPos ? m_convMatchedChars[2] - 31 : m_convMatchedChars[3] + 1);
+      int x = (ctrl == ConvCtrl::CursorPos ? m_convMatchedChars[3] - 31 : m_convMatchedChars[2] + 1);
+      sprintf(s, "\e[%d;%dH", y, x);
+      convQueue(s);
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
+
+// queue m_termMatchedChars[] or specified string
+void TerminalClass::convQueue(const char * str)
+{
+  if (str) {
+    for (; *str; ++str)
+      xQueueSendToBack(m_inputQueue, str, portMAX_DELAY);
+  } else {
+    for (int i = 0; i <= m_convMatchedCount; ++i) {
+
+      //if (m_convMatchedChars[i] != 0x0d && m_convMatchedChars[i] != 0x0a)
+      //  Serial.printf("0x%x %c\n", m_convMatchedChars[i], m_convMatchedChars[i]);
+
+      xQueueSendToBack(m_inputQueue, m_convMatchedChars + i, portMAX_DELAY);
+    }
+  }
+  m_convMatchedCount = 0;
+  m_convMatchedItem = nullptr;
 }
 
 
@@ -2355,10 +2557,13 @@ void TerminalClass::keyboardReaderTask(void * pvParameters)
         continue; // don't repeat
       term->m_lastPressedKey = vk;
 
-      if (term->m_emuState.ANSIMode)
-        term->ANSIDecodeVirtualKey(vk);
-      else
-        term->VT52DecodeVirtualKey(vk);
+      if (term->m_termInfo == nullptr) {
+        if (term->m_emuState.ANSIMode)
+          term->ANSIDecodeVirtualKey(vk);
+        else
+          term->VT52DecodeVirtualKey(vk);
+      } else
+        term->TermDecodeVirtualKey(vk);
 
     } else {
       // !keyDown
@@ -2679,6 +2884,22 @@ void TerminalClass::VT52DecodeVirtualKey(VirtualKey vk)
     }
 
   }
+}
+
+
+void TerminalClass::TermDecodeVirtualKey(VirtualKey vk)
+{
+  for (auto item = m_termInfo->kbdCtrlSet; item->vk != VK_NONE; ++item) {
+    if (item->vk == vk) {
+      send(item->ANSICtrlCode);
+      return;
+    }
+  }
+
+  // default behavior
+  int ascii = Keyboard.virtualKeyToASCII(vk);
+  if (ascii > -1)
+    send(ascii);
 }
 
 

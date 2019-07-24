@@ -36,6 +36,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include "freertos/timers.h"
 
 #include "fabglconf.h"
 #include "fabutils.h"

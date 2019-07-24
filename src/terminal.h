@@ -42,6 +42,7 @@
 #include "fabglconf.h"
 #include "canvas.h"
 #include "keyboard.h"
+#include "terminfo.h"
 
 #include "Stream.h"
 
@@ -590,6 +591,31 @@ public:
    */
   int availableForWrite();
 
+  /**
+   * @brief Sets the terminal type to emulate specifying conversion tables
+   *
+   * @param value Conversione tables for the terminal to emulate. nullptr = native ANSI/VT terminal.
+   *
+   * Default and native is ANSI/VT100 mode. Other terminals are emulated translating to native mode.
+   */
+  void setTerminalType(TermInfo const * value);
+
+  /**
+   * @brief Sets the terminal type to emulate
+   *
+   * @param value A terminal to emulate
+   *
+   * Default and native is ANSI/VT100 mode. Other terminals are emulated translating to native mode.
+   */
+  void setTerminalType(TermType value);
+
+  /**
+   * @brief Determines current terminal type
+   *
+   * @return Terminal type
+   */
+  TermInfo const & terminalType() { return *m_termInfo; }
+
 
   //////////////////////////////////////////////
   //// Stream abstract class implementation ////
@@ -759,6 +785,12 @@ private:
   void ANSIDecodeVirtualKey(VirtualKey vk);
   void VT52DecodeVirtualKey(VirtualKey vk);
 
+  void convHandleTranslation(uint8_t c);
+  void convSendCtrl(ConvCtrl ctrl);
+  void convQueue(const char * str = nullptr);
+  void TermDecodeVirtualKey(VirtualKey vk);
+
+
   Stream *           m_logStream;
 
   // characters, characters attributes and characters colors container
@@ -816,7 +848,7 @@ private:
   // contains characters to be processed (from write() calls)
   QueueHandle_t      m_inputQueue;
 
-  // contains characters received and decoded from keyboard (or as replyed to ANSI-VT queries)
+  // contains characters received and decoded from keyboard (or as replyes from ANSI-VT queries)
   QueueHandle_t      m_outputQueue;
 
   // linked list that contains saved cursor states (first item is the last added)
@@ -830,6 +862,11 @@ private:
 
   // used to implement m_emuState.keyAutorepeat
   VirtualKey         m_lastPressedKey;
+
+  uint8_t                   m_convMatchedCount;
+  char                      m_convMatchedChars[EmuTerminalMaxChars];
+  TermInfoVideoConv const * m_convMatchedItem;
+  TermInfo const *          m_termInfo;
 
 };
 

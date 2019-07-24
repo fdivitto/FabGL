@@ -375,5 +375,7 @@ using fabgl::TriangleWaveformGenerator;
 using fabgl::SawtoothWaveformGenerator;
 using fabgl::SamplesGenerator;
 using fabgl::WaveformGenerator;
+using fabgl::TermType;
+
 
 
