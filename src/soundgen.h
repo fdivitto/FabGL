@@ -78,7 +78,7 @@ public:
   /**
    * @brief Sets volume of this generator
    *
-   * @value Volume value. Minimum is 0, maximum is 127.
+   * @param value Volume value. Minimum is 0, maximum is 127.
    */
   void setVolume(int value) { m_volume = value; }
 
@@ -101,12 +101,24 @@ public:
    *
    * A generator is disabled for default and must be enabled in order to play sound
    *
-   * @value True to enable the generator, False to disable
+   * @param value True to enable the generator, False to disable
    */
   void enable(bool value) { m_enabled = value; }
 
+  /**
+   * @brief Sets the sample rate
+   *
+   * Default sample rate is 160000 Hertz.
+   *
+   * @param value Sample rate in Hertz
+   */
   void setSampleRate(int value) { m_sampleRate = value; }
 
+  /**
+   * @brief Determines the sample rate
+   *
+   * @return Current sample rate in Hertz
+   */
   uint16_t sampleRate() { return m_sampleRate; }
 
   WaveformGenerator * next;
@@ -142,11 +154,10 @@ public:
 
   void setFrequency(int value);
 
-  // dutyCycle: 0..255 (255=100%)
   /**
    * @brief Sets square wave duty cycle
    *
-   * dutyCycle Duty cycle in 0..255 range. 255 = 100%
+   * @param dutyCycle Duty cycle in 0..255 range. 255 = 100%
    */
   void setDutyCycle(int dutyCycle);
 
@@ -209,6 +220,12 @@ private:
 };
 
 
+/**
+ * @brief Samples generator
+ *
+ * Sample data should be sampled at the same samplerate of the sound generator.
+ * Only 8 bit (signed - not compressed) depth is supported.
+ */
 class SamplesGenerator : public WaveformGenerator {
 public:
   SamplesGenerator(int8_t const * data, int length);
@@ -224,31 +241,92 @@ private:
 };
 
 
-
+/**
+ * @brief SoundGenerator handles audio output
+ *
+ * Applications attach waveform generators (like SineWaveformGenerator, SquareWaveformGenerator, etc...) and call SoundGenerator.play() to start audio generation.
+ *
+ * The GPIO used for audio output is GPIO-25. See @ref confAudio "Configuring Audio port" for audio connection sample schema.
+ *
+ * Here is supported sound generators:
+ * SineWaveformGenerator
+ * SquareWaveformGenerator
+ * TriangleWaveformGenerator
+ * SawtoothWaveformGenerator
+ * NoiseWaveformGenerator
+ * SamplesGenerator
+ */
 class SoundGenerator {
 
 public:
 
+  /**
+   * @brief Creates an instance of the sound generator. Only one instance is allowed
+   */
   SoundGenerator(int sampleRate = DEFAULT_SAMPLE_RATE);
 
   ~SoundGenerator();
 
+  /**
+   * @brief Stops playing and removes all attached waveform generators
+   */
   void clear();
 
-  // ret prev state
+  /**
+   * @brief Starts or stops playing
+   *
+   * @param value True = starts playing, False = stops playing
+   *
+   * @return Returns previous playing state
+   *
+   * Example:
+   *
+   *     soundGenerator.play(true);
+   */
   bool play(bool value);
 
+  /**
+   * @brief Determines whether sound generator is playing
+   *
+   * @return True when playing, False otherwise
+   */
   bool playing();
 
   WaveformGenerator * channels() { return m_channels; }
 
+  /**
+   * @brief Attaches a waveform generator
+   *
+   * @param value Pointer of the waveform generator to attach
+   *
+   * Example:
+   *
+   *     SineWaveformGenerator sine;
+   *     soundGenerator.attach(&sine);
+   *     sine.enable(true);
+   *     sine.setFrequency(500);  // 500 Hz
+   */
   void attach(WaveformGenerator * value);
 
+  /**
+   * @brief Detaches a waveform generator
+   *
+   * @param value Pointer of the waveform generator to detach
+   */
   void detach(WaveformGenerator * value);
 
-  // value: 0..127
+  /**
+   * @brief Sets the overall volume
+   *
+   * @param value Volume value. Minimum is 0, maximum is 127.
+   */
   void setVolume(int value) { m_volume = value; }
 
+  /**
+   * @brief Determines current overall volume
+   *
+   * @return Current overall volume (0 = minimum, 127 = maximum)
+   */
   int volume() { return m_volume; }
 
 
