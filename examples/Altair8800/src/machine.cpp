@@ -94,16 +94,24 @@ bool bufferedFileChanged           = false;
 constexpr int bufferedFileDataSize = 4388;
 
 
-void diskFlush(FILE * file)
+void diskFlush(FILE * file = nullptr)
 {
-  if (bufferedFileChanged && file && file == bufferedFile && bufferedFileDataPos != -1) {
+  // flush bufferedFile
+  if (bufferedFileChanged && bufferedFile && bufferedFileDataPos != -1) {
     suspendInterrupts();
-    fseek(file, bufferedFileDataPos, SEEK_SET);
-    fwrite(bufferedFileData, bufferedFileDataSize, 1, file);
+    fseek(bufferedFile, bufferedFileDataPos, SEEK_SET);
+    fwrite(bufferedFileData, bufferedFileDataSize, 1, bufferedFile);
+    fflush(bufferedFile);
+    fsync(fileno(bufferedFile));  // workaround from forums...
+    resumeInterrupts();
+    bufferedFileChanged = false;
+  }
+  if (file) {
+    // flush specified file
+    suspendInterrupts();
     fflush(file);
     fsync(fileno(file));  // workaround from forums...
     resumeInterrupts();
-    bufferedFileChanged = false;
   }
 }
 
@@ -114,14 +122,13 @@ void checkFile(FILE * file, int position, int size)
   if (bufferedFileData == nullptr)
     bufferedFileData = new uint8_t[bufferedFileDataSize];
   if (bufferedFile != file) {
-    diskFlush(bufferedFile);
+    diskFlush();
     bufferedFileDataPos = -1;
-    bufferedFileChanged = false;
     bufferedFile = file;
   }
   if (bufferedFileDataPos == -1 || position < bufferedFileDataPos || position + size >= bufferedFileDataPos + bufferedFileDataSize) {
     suspendInterrupts();
-    diskFlush(file);
+    diskFlush();
     fseek(file, position, SEEK_SET);
     fread(bufferedFileData, bufferedFileDataSize, 1, file);
     resumeInterrupts();
@@ -385,6 +392,12 @@ Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
 
 
 Mits88Disk::~Mits88Disk()
+{
+  detachAll();
+}
+
+
+void Mits88Disk::detachAll()
 {
   for (int i = 0; i < DISKCOUNT; ++i)
     detach(i);

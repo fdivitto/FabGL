@@ -122,6 +122,7 @@ public:
   int drive() { return m_drive; }
 
   void flush();
+  void detachAll();
 
 private:
 

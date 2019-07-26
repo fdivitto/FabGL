@@ -61,6 +61,14 @@
 #include "disks/AltairDOS/DOS_1_dsk.h"
 #include "disks/AltairDOS/DOS_2_dsk.h"
 
+// Basic
+//    MEMORY SIZE? [press ENTER]
+//    LINEPRINTER? [insert "C"]
+//    HIGHEST DISK NUMBER? [press ENTER]
+//    HOW MANY FILES? [press ENTER]
+//    HOW MANY RANDOM FILES? [press ENTER]
+#include "disks/basic/basic5_dsk.h"
+
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -304,8 +312,10 @@ void emulator_menu()
   }
   if (resetRequired) {
     Terminal.write("Reset required. Reset now? (Y/N)");
-    if (toupper(Terminal.read()) == 'Y')
+    if (toupper(Terminal.read()) == 'Y') {
+      diskDrive.detachAll();
       ESP.restart();
+    }
   }
   Terminal.localWrite("\n");
   setTerminalColors();
