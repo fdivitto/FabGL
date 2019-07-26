@@ -897,7 +897,13 @@ void KeyboardClass::suspendVirtualKeyGeneration(bool value)
 
 bool KeyboardClass::isVKDown(VirtualKey virtualKey)
 {
-  return m_VKMap[(int)virtualKey >> 3] & (1 << ((int)virtualKey & 7));
+  bool r = m_VKMap[(int)virtualKey >> 3] & (1 << ((int)virtualKey & 7));
+
+  // VK_PAUSE is never released (no scancode sent from keyboard on key up), so when queried it is like released
+  if (virtualKey == VK_PAUSE)
+    Keyboard.m_VKMap[(int)virtualKey >> 3] &= ~(1 << ((int)virtualKey & 7));
+
+  return r;
 }
 
 
