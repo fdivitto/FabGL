@@ -59,9 +59,6 @@ const TermInfoKbdConv kbdConv_Generic[] = {
   // Delete => CTRL-G, WordStar delete char right
   { VK_DELETE, "\x07" },
 
-  // F12 => CSI 2 4 ~  (required by emulators)
-  { VK_F12, "\e[24~" },
-
   // Last item marker
   { VK_NONE, nullptr },
 };
