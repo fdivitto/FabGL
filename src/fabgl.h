@@ -92,6 +92,9 @@
  * <CENTER> @link SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
+ * <CENTER> @link Altair8800/Altair8800.ino Altair 8800 Emulator @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
  * <CENTER> @link NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
@@ -302,6 +305,7 @@
  * @example AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
  * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
+ * @example Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
  * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
  * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
  * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
