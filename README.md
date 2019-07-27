@@ -35,6 +35,10 @@ If the queue of primitives to draw is not processed before the vertical retracin
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/RQtKFgU7OYI/hqdefault.jpg)](https://www.youtube.com/watch?v=RQtKFgU7OYI "")
 
+### Altair 8800 emulator - CP/M text games (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/y0opVifEyS8/hqdefault.jpg)](https://www.youtube.com/watch?v=y0opVifEyS8 "")
+
 ### Simple Terminal Out Example (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/AmXN0SIRqqU/hqdefault.jpg)](https://www.youtube.com/watch?v=AmXN0SIRqqU "")
