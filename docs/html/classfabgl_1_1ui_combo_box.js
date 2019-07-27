@@ -18,6 +18,7 @@ var classfabgl_1_1ui_combo_box =
     [ "isMouseOver", "classfabgl_1_1ui_combo_box.html#a9a5f66fd22b7c2d08db466f76d8b4088", null ],
     [ "items", "classfabgl_1_1ui_combo_box.html#ae816bcacf2aa32b74a3451df41c66bb2", null ],
     [ "lastChild", "classfabgl_1_1ui_combo_box.html#a66c382ed75bd6bd40693c34eb41e1138", null ],
+    [ "listBoxStyle", "classfabgl_1_1ui_combo_box.html#a5c677f4965176f32b80eab06d1677321", null ],
     [ "mouseDownPos", "classfabgl_1_1ui_combo_box.html#a98f5b2828f58c2dcf9832ed7a52669b1", null ],
     [ "next", "classfabgl_1_1ui_combo_box.html#a2815a9866e3f3c11b4b9ca85d5cd858a", null ],
     [ "objectType", "classfabgl_1_1ui_combo_box.html#a93618eccc73d66e981f8c02170875226", null ],

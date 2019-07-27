@@ -27,6 +27,7 @@ var classfabgl_1_1ui_label =
     [ "repaint", "classfabgl_1_1ui_label.html#ad1986d853fc82a7084467fea41e7a684", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_label.html#a90e462004b5bbd74d5d981ddcbf5a38a", null ],
     [ "setText", "classfabgl_1_1ui_label.html#ae7ed14bb9bc3048941507bc0d1f1d8ad", null ],
+    [ "setTextFmt", "classfabgl_1_1ui_label.html#a538b5fae585eedef21a95c10ec02e937", null ],
     [ "size", "classfabgl_1_1ui_label.html#a50f29dabe9a4c99dfdb01d252fa173f4", null ],
     [ "state", "classfabgl_1_1ui_label.html#a31846cbe8d90b9effac80a15bb541bb2", null ],
     [ "text", "classfabgl_1_1ui_label.html#abe3e7f0c28557bdafd219f8d8ce27079", null ],

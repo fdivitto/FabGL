@@ -11,6 +11,7 @@ var searchData=
   ['uipaintbox',['uiPaintBox',['../classfabgl_1_1ui_paint_box.html#aad7a217e9a7bea125a91664e9ce1def1',1,'fabgl::uiPaintBox']]],
   ['uipanel',['uiPanel',['../classfabgl_1_1ui_panel.html#a20667ba15c019f42481e670a72e9b2d0',1,'fabgl::uiPanel']]],
   ['uiscrollablecontrol',['uiScrollableControl',['../classfabgl_1_1ui_scrollable_control.html#a07f579982c16a8ccdbf8de779fb3aec9',1,'fabgl::uiScrollableControl']]],
+  ['uislider',['uiSlider',['../classfabgl_1_1ui_slider.html#a7c3104c9d052ef468f090619a6366b50',1,'fabgl::uiSlider']]],
   ['uitextedit',['uiTextEdit',['../classfabgl_1_1ui_text_edit.html#a9dfa9ef2d8d7a0653c81ef4964fb03e8',1,'fabgl::uiTextEdit']]],
   ['uiwindow',['uiWindow',['../classfabgl_1_1ui_window.html#aa28216e28543842d5d3a96c66a5c3e27',1,'fabgl::uiWindow']]],
   ['underline',['Underline',['../unionfabgl_1_1_glyph_options.html#a4f1724b11c19a26631ed12f302f61db7',1,'fabgl::GlyphOptions']]],

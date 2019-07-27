@@ -27,6 +27,7 @@ var NAVTREE =
     [ "FabGL Library", "index.html", null ],
     [ "Configuring VGA outputs", "conf_v_g_a.html", null ],
     [ "Configuring PS/2 port", "conf_p_s2.html", null ],
+    [ "Configuring Audio port", "conf_audio.html", null ],
     [ "VTTEST VT100/VT102 Compatibility Test Score Sheet", "vttest.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Classes", "annotated.html", [
@@ -53,12 +54,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classfabgl_1_1ui_button.html#a93618eccc73d66e981f8c02170875226",
-"classfabgl_1_1ui_list_box.html#a089762995d65c9282f545a376810c055",
-"conf_v_g_a.html",
-"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381ae7baafd21c9bfb766f8259914f5a972f",
-"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381ab6cd38f077717c3bffaa1434002aeaad",
-"structfabgl_1_1ui_list_box_style.html#a3fb6cd6e53633b2ef34422bf6da8d1fb"
+"classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6",
+"classfabgl_1_1ui_frame.html#ac2c887ae821ce1a3f64f5888408c121e",
+"classfabgl_1_1ui_scrollable_control.html#ac2c887ae821ce1a3f64f5888408c121e",
+"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a2c299890a952937c2c35ecc42730f090",
+"group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74",
+"ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c",
+"vgacontroller_8h.html#gga843f6f6094fb6666d0e726d7b0e06f3babd066cc7f08ecfdd34e59e9d5348ae67"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

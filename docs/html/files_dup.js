@@ -13,8 +13,10 @@ var files_dup =
     [ "scene.h", "scene_8h.html", [
       [ "Scene", "classfabgl_1_1_scene.html", "classfabgl_1_1_scene" ]
     ] ],
+    [ "soundgen.h", "soundgen_8h.html", "soundgen_8h" ],
     [ "swgenerator.h", "swgenerator_8h.html", "swgenerator_8h" ],
     [ "terminal.h", "terminal_8h.html", "terminal_8h" ],
+    [ "terminfo.h", "terminfo_8h.html", "terminfo_8h" ],
     [ "ulp_macro_ex.h", "ulp__macro__ex_8h_source.html", null ],
     [ "vgacontroller.h", "vgacontroller_8h.html", "vgacontroller_8h" ]
 ];

@@ -2,6 +2,7 @@ var classfabgl_1_1_v_g_a_controller_class =
 [
     [ "begin", "classfabgl_1_1_v_g_a_controller_class.html#acdc8b95372c01a76deeb4abe360d0295", null ],
     [ "begin", "classfabgl_1_1_v_g_a_controller_class.html#ab62e5ccbc44d03e43205403123f2bdd1", null ],
+    [ "begin", "classfabgl_1_1_v_g_a_controller_class.html#af762ae3115f998e6a9fdf12d246689bf", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_controller_class.html#a7e0814c52bfc5eecd93fbb5ebce8d423", null ],
     [ "getBitsPerChannel", "classfabgl_1_1_v_g_a_controller_class.html#a643740e39822e9e74e80be55ab9d34c1", null ],
     [ "getScreenHeight", "classfabgl_1_1_v_g_a_controller_class.html#af3406190a30fc46070da0a7353da4082", null ],

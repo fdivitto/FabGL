@@ -35,7 +35,7 @@ var classfabgl_1_1ui_list_box =
     [ "scrollableControlStyle", "classfabgl_1_1ui_list_box.html#a433e3d6d6a2f3fe2a74c7f80836b5a7f", null ],
     [ "selectItem", "classfabgl_1_1ui_list_box.html#a247efc3a5c5dfa450b555ae632f60d2e", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_list_box.html#a90e462004b5bbd74d5d981ddcbf5a38a", null ],
-    [ "setScrollBar", "classfabgl_1_1ui_list_box.html#ad7d99f5a9af28f7b36c979a8ff334271", null ],
+    [ "setScrollBar", "classfabgl_1_1ui_list_box.html#a25d7d7b97ef7d4d98293c838bc370ff4", null ],
     [ "size", "classfabgl_1_1ui_list_box.html#a50f29dabe9a4c99dfdb01d252fa173f4", null ],
     [ "state", "classfabgl_1_1ui_list_box.html#a31846cbe8d90b9effac80a15bb541bb2", null ],
     [ "transformRect", "classfabgl_1_1ui_list_box.html#ae16282f1881ec8ded65ad239f3d17735", null ],

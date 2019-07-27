@@ -31,6 +31,8 @@ var fabui_8h =
     [ "uiPanelStyle", "structfabgl_1_1ui_panel_style.html", "structfabgl_1_1ui_panel_style" ],
     [ "uiScrollableControl", "classfabgl_1_1ui_scrollable_control.html", "classfabgl_1_1ui_scrollable_control" ],
     [ "uiScrollableControlStyle", "structfabgl_1_1ui_scrollable_control_style.html", "structfabgl_1_1ui_scrollable_control_style" ],
+    [ "uiSlider", "classfabgl_1_1ui_slider.html", "classfabgl_1_1ui_slider" ],
+    [ "uiSliderStyle", "structfabgl_1_1ui_slider_style.html", "structfabgl_1_1ui_slider_style" ],
     [ "uiTextEdit", "classfabgl_1_1ui_text_edit.html", "classfabgl_1_1ui_text_edit" ],
     [ "uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", "structfabgl_1_1ui_text_edit_props" ],
     [ "uiTextEditStyle", "structfabgl_1_1ui_text_edit_style.html", "structfabgl_1_1ui_text_edit_style" ],
@@ -59,13 +61,13 @@ var fabui_8h =
       [ "Button2", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996ae165925a7c2d5ea94209b91389aa189f", null ],
       [ "Button3", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996a6d0c69e60d65a93dd244ae95f90e679c", null ]
     ] ],
+    [ "uiOrientation", "fabui_8h.html#ga688c8791e9a7560496e3c6e7c465c5d2", [
+      [ "Vertical", "fabui_8h.html#gga688c8791e9a7560496e3c6e7c465c5d2a06ce2a25e5d12c166a36f654dbea6012", null ],
+      [ "Horizontal", "fabui_8h.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
+    ] ],
     [ "uiOrigin", "fabui_8h.html#gaddf4af7208ffb7af1f5674e9bfb58fdc", [
       [ "Screen", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca2fc3359e12b2a9104121dcf04246f6a0", null ],
       [ "Parent", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7", null ],
       [ "Window", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b", null ]
-    ] ],
-    [ "uiScrollBar", "fabui_8h.html#ga7ef4f27f0fe142e1727a4692d4bdf5f7", [
-      [ "Vertical", "fabui_8h.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7a06ce2a25e5d12c166a36f654dbea6012", null ],
-      [ "Horizontal", "fabui_8h.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
     ] ]
 ];

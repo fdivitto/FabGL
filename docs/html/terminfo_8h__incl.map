@@ -1,0 +1,10 @@
+<map id="terminfo.h" name="terminfo.h">
+<area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="513,79,601,104"/>
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="235,372,322,397"/>
+<area shape="rect" id="node5" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="182,225,274,251"/>
+<area shape="rect" id="node9" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="745,152,806,177"/>
+<area shape="rect" id="node7" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="174,299,282,324"/>
+<area shape="rect" id="node14" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="345,372,420,397"/>
+<area shape="rect" id="node15" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="592,299,700,324"/>
+<area shape="rect" id="node19" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="776,225,850,251"/>
+</map>

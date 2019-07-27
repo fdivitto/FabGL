@@ -10,6 +10,7 @@ var searchData=
   ['deltaz',['deltaZ',['../structfabgl_1_1_mouse_delta.html#a27ee8b23450a820163dd61d508645db1',1,'fabgl::MouseDelta']]],
   ['deselectall',['deselectAll',['../classfabgl_1_1ui_list_box.html#a20a39f49c01fa05eab05e3395053e7cb',1,'fabgl::uiListBox']]],
   ['destroywindow',['destroyWindow',['../classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952',1,'fabgl::uiApp']]],
+  ['detach',['detach',['../classfabgl_1_1_sound_generator.html#a5d7b92cd65efb7a15539c26ad9a77961',1,'fabgl::SoundGenerator']]],
   ['detectcollision',['detectCollision',['../classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#a7716dbe8f5e5829523a44a0705f7ea0e',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['doubleclicktime',['doubleClickTime',['../structfabgl_1_1ui_app_props.html#a3e73fe6cd43fba3e5cb83385a889848e',1,'fabgl::uiAppProps']]],
   ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options.html#ae41af9a5a078f13ae9c14470d25fc3d8',1,'fabgl::GlyphOptions::doubleWidth()'],['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth(uint8_t value)']]],

@@ -1,14 +1,16 @@
 <map id="fabglconf.h" name="fabglconf.h">
-<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="208,79,316,104"/>
-<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="281,372,360,397"/>
-<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="358,225,419,251"/>
-<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="358,299,446,324"/>
-<area shape="rect" id="node8" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="487,299,559,324"/>
-<area shape="rect" id="node9" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="31,225,99,251"/>
-<area shape="rect" id="node10" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="22,152,150,177"/>
-<area shape="rect" id="node11" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="494,225,587,251"/>
-<area shape="rect" id="node12" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="628,152,736,177"/>
-<area shape="rect" id="node13" href="$swgenerator_8h.html" title="This file contains fabgl::SquareWaveGeneratorClass definition and the SquareWaveGenerator instance..." alt="" coords="677,79,782,104"/>
-<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="225,152,299,177"/>
-<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="290,445,351,471"/>
+<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="224,79,332,104"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="361,445,441,471"/>
+<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="388,225,449,251"/>
+<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="439,299,526,324"/>
+<area shape="rect" id="node9" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="562,299,635,324"/>
+<area shape="rect" id="node10" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="115,225,183,251"/>
+<area shape="rect" id="node11" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="5,152,133,177"/>
+<area shape="rect" id="node12" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="535,225,627,251"/>
+<area shape="rect" id="node13" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="611,152,719,177"/>
+<area shape="rect" id="node14" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="762,372,853,397"/>
+<area shape="rect" id="node15" href="$swgenerator_8h.html" title="This file contains fabgl::SquareWaveGeneratorClass definition and the SquareWaveGenerator instance..." alt="" coords="844,79,950,104"/>
+<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="258,152,333,177"/>
+<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="448,519,509,544"/>
+<area shape="rect" id="node8" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="438,372,519,397"/>
 </map>

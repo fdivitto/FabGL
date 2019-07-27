@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['m2keyboard',['M2Keyboard',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2',1,'fabgl']]],
-  ['magenta',['Magenta',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba6aac28bb501aedeefc7356a6a5c96745',1,'fabgl']]],
-  ['mf2keyboardwithtranslation',['MF2KeyboardWithTranslation',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c',1,'fabgl']]],
-  ['mouse5buttons',['Mouse5Buttons',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa3229d4013ec812e9aeb09bba83568a84',1,'fabgl']]],
-  ['mousestandard',['MouseStandard',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa4ff15555542ae9bfb6d8540324603608',1,'fabgl']]],
-  ['mousewithscrollwheel',['MouseWithScrollWheel',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa21c07e6edcf197ea7673afac2bdb6f08',1,'fabgl']]]
+  ['kaypro',['Kaypro',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda90856a5022c37a3cbd6f9c5c04bc660b',1,'fabgl']]],
+  ['keyboardport0',['KeyboardPort0',['../group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7',1,'fabgl']]],
+  ['keyboardport0_5fmouseport1',['KeyboardPort0_MousePort1',['../group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74',1,'fabgl']]]
 ];

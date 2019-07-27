@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['none',['None',['../group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a6adf97f83acf6453d4a6a4b1070f3754',1,'fabgl']]]
+  ['legacymouse',['LegacyMouse',['../group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5',1,'fabgl']]]
 ];

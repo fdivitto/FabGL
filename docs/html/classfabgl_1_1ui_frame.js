@@ -28,6 +28,7 @@ var classfabgl_1_1ui_frame =
     [ "repaint", "classfabgl_1_1ui_frame.html#ad1986d853fc82a7084467fea41e7a684", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_frame.html#a90e462004b5bbd74d5d981ddcbf5a38a", null ],
     [ "setTitle", "classfabgl_1_1ui_frame.html#a685cd663afda5e3e81b7de1b89cbe777", null ],
+    [ "setTitleFmt", "classfabgl_1_1ui_frame.html#a118a4fa9d5fdd04d9e156ccd9af5b7d4", null ],
     [ "size", "classfabgl_1_1ui_frame.html#a50f29dabe9a4c99dfdb01d252fa173f4", null ],
     [ "state", "classfabgl_1_1ui_frame.html#a31846cbe8d90b9effac80a15bb541bb2", null ],
     [ "title", "classfabgl_1_1ui_frame.html#add07566cca01a56f6fc5b292c4a34d40", null ],

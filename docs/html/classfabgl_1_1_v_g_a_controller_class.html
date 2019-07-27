@@ -107,6 +107,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab62e5ccbc44d03e43205403123f2bdd1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller_class.html#ab62e5ccbc44d03e43205403123f2bdd1">begin</a> (gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t green1GPIO, gpio_num_t green0GPIO, gpio_num_t blue1GPIO, gpio_num_t blue0GPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
 <tr class="memdesc:ab62e5ccbc44d03e43205403123f2bdd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer.  <a href="#ab62e5ccbc44d03e43205403123f2bdd1">More...</a><br /></td></tr>
 <tr class="separator:ab62e5ccbc44d03e43205403123f2bdd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af762ae3115f998e6a9fdf12d246689bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller_class.html#af762ae3115f998e6a9fdf12d246689bf">begin</a> ()</td></tr>
+<tr class="memdesc:af762ae3115f998e6a9fdf12d246689bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer using default pinout.  <a href="#af762ae3115f998e6a9fdf12d246689bf">More...</a><br /></td></tr>
+<tr class="separator:af762ae3115f998e6a9fdf12d246689bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e0814c52bfc5eecd93fbb5ebce8d423"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller_class.html#a7e0814c52bfc5eecd93fbb5ebce8d423">enableBackgroundPrimitiveExecution</a> (bool value)</td></tr>
 <tr class="memdesc:a7e0814c52bfc5eecd93fbb5ebce8d423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables drawings inside vertical retracing time.  <a href="#a7e0814c52bfc5eecd93fbb5ebce8d423">More...</a><br /></td></tr>
 <tr class="separator:a7e0814c52bfc5eecd93fbb5ebce8d423"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,7 +195,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 // Set 640x350@70Hz resolution
 VGAController.setResolution(VGA_640x350_70Hz);</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="acdc8b95372c01a76deeb4abe360d0295"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdc8b95372c01a76deeb4abe360d0295">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acdc8b95372c01a76deeb4abe360d0295">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,12 +251,12 @@ VGAController.setResolution(VGA_640x350_70Hz);</pre> </div><h2 class="groupheade
   </dd>
 </dl>
 <p>Example: </p><pre class="fragment">// Use GPIO 22 for red, GPIO 21 for green, GPIO 19 for blue, GPIO 18 for HSync and GPIO 5 for VSync
-VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a1">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a9">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html#a0">DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a3">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a4">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a51">ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a5">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a4">NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a0">SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a40">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a8">Altair8800/Altair8800.ino</a>, <a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a1">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_audio_2_audio_8ino-example.html#a1">Audio/Audio.ino</a>, <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a9">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html#a0">DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a1">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a4">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a51">ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a5">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a4">NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a0">SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a38">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
 <a id="ab62e5ccbc44d03e43205403123f2bdd1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab62e5ccbc44d03e43205403123f2bdd1">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab62e5ccbc44d03e43205403123f2bdd1">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -333,6 +336,26 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);</pre> 
 </div>
 </div>
+<a id="af762ae3115f998e6a9fdf12d246689bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af762ae3115f998e6a9fdf12d246689bf">&#9670;&nbsp;</a></span>begin() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::VGAControllerClass::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This is the 64 colors (8 GPIOs) initializer using default pinout. </p>
+<p>Two GPIOs per channel, plus horizontal and vertical sync signals. Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync</p>
+<p>Example: </p><pre class="fragment">VGAController.begin();</pre> 
+</div>
+</div>
 <a id="a7e0814c52bfc5eecd93fbb5ebce8d423"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7e0814c52bfc5eecd93fbb5ebce8d423">&#9670;&nbsp;</a></span>enableBackgroundPrimitiveExecution()</h2>
 
@@ -359,7 +382,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a4">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a7">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a3">SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a12">Altair8800/Altair8800.ino</a>, <a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a4">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a7">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a3">SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -387,7 +410,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 </div><div class="memdoc">
 
 <p>Gets number of bits allocated for each channel. </p>
-<p>Number of bits depends by which <a class="el" href="classfabgl_1_1_v_g_a_controller_class.html#acdc8b95372c01a76deeb4abe360d0295" title="This is the 8 colors (5 GPIOs) initializer. ">begin()</a> initializer has been called.</p>
+<p>Number of bits depends by which <a class="el" href="classfabgl_1_1_v_g_a_controller_class.html#af762ae3115f998e6a9fdf12d246689bf" title="This is the 64 colors (8 GPIOs) initializer using default pinout. ">begin()</a> initializer has been called.</p>
 <dl class="section return"><dt>Returns</dt><dd>1 (8 colors) or 2 (64 colors). </dd></dl>
 
 </div>
@@ -626,7 +649,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
   </dd>
 </dl>
 <p>Example: </p><pre class="fragment">// Move screen 4 pixels right, 1 pixel left
-VGAController.moveScreen(4, -1);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a12">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a54">ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a43">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+VGAController.moveScreen(4, -1);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_audio_2_audio_8ino-example.html#a4">Audio/Audio.ino</a>, <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a12">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a54">ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a41">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -921,7 +944,7 @@ VGAController.setResolution(VGA_640x480_60Hz);
 VGAController.setResolution("\"640x480@60Hz\" 25.175 640 656 752 800 480 490 492 525 -HSync -VSync");
 
 // Set 640x382@60Hz but limit the viewport to 640x350
-VGAController.setResolution(VGA_640x382_60Hz, 640, 350);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a2">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a10">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html#a1">DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a4">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a5">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a52">ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a6">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a5">NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a1">SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a41">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+VGAController.setResolution(VGA_640x382_60Hz, 640, 350);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a9">Altair8800/Altair8800.ino</a>, <a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a2">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_audio_2_audio_8ino-example.html#a2">Audio/Audio.ino</a>, <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a10">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html#a1">DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a2">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a5">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a52">ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a6">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a5">NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a1">SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a39">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>

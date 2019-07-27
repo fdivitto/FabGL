@@ -39,6 +39,11 @@ var group___enumerations =
       [ "CursorResize4", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc", null ],
       [ "CursorTextInput", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18", null ]
     ] ],
+    [ "KbdMode", "group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d", [
+      [ "NoVirtualKeys", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06dadaa64f7602ad3caa98f09799e3e683b1", null ],
+      [ "GenerateVirtualKeys", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4", null ],
+      [ "CreateVirtualKeysQueue", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97", null ]
+    ] ],
     [ "MouseType", "group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c", [
       [ "LegacyMouse", "group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5", null ],
       [ "Intellimouse", "group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca", null ]
@@ -52,11 +57,25 @@ var group___enumerations =
       [ "MF2KeyboardWithTranslation", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c", null ],
       [ "M2Keyboard", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2", null ]
     ] ],
+    [ "PS2Preset", "group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017", [
+      [ "KeyboardPort0_MousePort1", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74", null ],
+      [ "KeyboardPort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7", null ],
+      [ "MousePort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4", null ]
+    ] ],
     [ "ScreenBlock", "group___enumerations.html#gac9fa12697d1785c744af01bb0800d652", [
       [ "FrontPorch", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a8a10612c141004c5f2986050c23a349d", null ],
       [ "Sync", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a3883a8f6a8d0924e5083674b04d162e1", null ],
       [ "BackPorch", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652aa2e3d51a4bdf436297de5d18f0fc7fc2", null ],
       [ "VisibleArea", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a9eb43f64e3e327a4e68f4537db8e0582", null ]
+    ] ],
+    [ "TermType", "group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd", [
+      [ "ANSI_VT", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2", null ],
+      [ "ADM3A", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be", null ],
+      [ "ADM31", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda8ac06e0429ea3a6cd71f46c7d4525b95", null ],
+      [ "Hazeltine1500", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf2db09bec0ffa1ed3836fa85a0d82a05", null ],
+      [ "Osborne", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda73e8beb31d6b2ea5697866df7dd578e2", null ],
+      [ "Kaypro", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda90856a5022c37a3cbd6f9c5c04bc660b", null ],
+      [ "VT52", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80", null ]
     ] ],
     [ "uiButtonKind", "group___enumerations.html#ga4c87d379aaa2df71e97a84275fceeec3", [
       [ "Button", "group___enumerations.html#gga4c87d379aaa2df71e97a84275fceeec3a87b7760f14fbff78d8819291f36ab9a0", null ],
@@ -79,14 +98,14 @@ var group___enumerations =
       [ "Button2", "group___enumerations.html#ggaffcd6ee067ff3ac7adbe28eb192cd996ae165925a7c2d5ea94209b91389aa189f", null ],
       [ "Button3", "group___enumerations.html#ggaffcd6ee067ff3ac7adbe28eb192cd996a6d0c69e60d65a93dd244ae95f90e679c", null ]
     ] ],
+    [ "uiOrientation", "group___enumerations.html#ga688c8791e9a7560496e3c6e7c465c5d2", [
+      [ "Vertical", "group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2a06ce2a25e5d12c166a36f654dbea6012", null ],
+      [ "Horizontal", "group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
+    ] ],
     [ "uiOrigin", "group___enumerations.html#gaddf4af7208ffb7af1f5674e9bfb58fdc", [
       [ "Screen", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca2fc3359e12b2a9104121dcf04246f6a0", null ],
       [ "Parent", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7", null ],
       [ "Window", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b", null ]
-    ] ],
-    [ "uiScrollBar", "group___enumerations.html#ga7ef4f27f0fe142e1727a4692d4bdf5f7", [
-      [ "Vertical", "group___enumerations.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7a06ce2a25e5d12c166a36f654dbea6012", null ],
-      [ "Horizontal", "group___enumerations.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
     ] ],
     [ "VirtualKey", "group___enumerations.html#gae12c31a33f64281cba424d993a8a4381", [
       [ "VK_NONE", "group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381afed697c6504b385257870e50df5b034e", null ],

@@ -166,6 +166,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0abd96f5c4075fa9903f2d8d6cfc3d81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html#a0abd96f5c4075fa9903f2d8d6cfc3d81">setLogStream</a> (Stream &amp;stream)</td></tr>
 <tr class="memdesc:a0abd96f5c4075fa9903f2d8d6cfc3d81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stream where to output debugging logs.  <a href="#a0abd96f5c4075fa9903f2d8d6cfc3d81">More...</a><br /></td></tr>
 <tr class="separator:a0abd96f5c4075fa9903f2d8d6cfc3d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a5b764c07691443fa7239b3dbd73c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html#af5a5b764c07691443fa7239b3dbd73c6">setTerminalType</a> (TermInfo const *value)</td></tr>
+<tr class="memdesc:af5a5b764c07691443fa7239b3dbd73c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the terminal type to emulate specifying conversion tables.  <a href="#af5a5b764c07691443fa7239b3dbd73c6">More...</a><br /></td></tr>
+<tr class="separator:af5a5b764c07691443fa7239b3dbd73c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae34626427301c5f15349e15a15d1c495"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html#ae34626427301c5f15349e15a15d1c495">setTerminalType</a> (<a class="el" href="group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd">TermType</a> value)</td></tr>
+<tr class="memdesc:ae34626427301c5f15349e15a15d1c495"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the terminal type to emulate.  <a href="#ae34626427301c5f15349e15a15d1c495">More...</a><br /></td></tr>
+<tr class="separator:ae34626427301c5f15349e15a15d1c495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea444850463fdbec78fe099c822d7478"><td class="memItemLeft" align="right" valign="top">TermInfo const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html#aea444850463fdbec78fe099c822d7478">terminalType</a> ()</td></tr>
+<tr class="memdesc:aea444850463fdbec78fe099c822d7478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines current terminal type.  <a href="#aea444850463fdbec78fe099c822d7478">More...</a><br /></td></tr>
+<tr class="separator:aea444850463fdbec78fe099c822d7478"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a809cabdb06dd2127c99ce68822a6d0a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html#a809cabdb06dd2127c99ce68822a6d0a2">write</a> (const uint8_t *buffer, int size)</td></tr>
 <tr class="memdesc:a809cabdb06dd2127c99ce68822a6d0a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends specified number of codes to the display.  <a href="#a809cabdb06dd2127c99ce68822a6d0a2">More...</a><br /></td></tr>
 <tr class="separator:a809cabdb06dd2127c99ce68822a6d0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -792,6 +801,88 @@ void loop() {
 <p>Example: </p><pre class="fragment">   Serial.begin(115200);
    Terminal.begin();
    Terminal.setLogStream(Serial);</pre> 
+</div>
+</div>
+<a id="af5a5b764c07691443fa7239b3dbd73c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a5b764c07691443fa7239b3dbd73c6">&#9670;&nbsp;</a></span>setTerminalType() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::TerminalClass::setTerminalType </td>
+          <td>(</td>
+          <td class="paramtype">TermInfo const *&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the terminal type to emulate specifying conversion tables. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Conversione tables for the terminal to emulate. nullptr = native ANSI/VT terminal.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Default and native is ANSI/VT100 mode. Other terminals are emulated translating to native mode. </p>
+
+</div>
+</div>
+<a id="ae34626427301c5f15349e15a15d1c495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae34626427301c5f15349e15a15d1c495">&#9670;&nbsp;</a></span>setTerminalType() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::TerminalClass::setTerminalType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd">TermType</a>&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the terminal type to emulate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>A terminal to emulate</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Default and native is ANSI/VT100 mode. Other terminals are emulated translating to native mode. </p>
+
+</div>
+</div>
+<a id="aea444850463fdbec78fe099c822d7478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea444850463fdbec78fe099c822d7478">&#9670;&nbsp;</a></span>terminalType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TermInfo const&amp; fabgl::TerminalClass::terminalType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines current terminal type. </p>
+<dl class="section return"><dt>Returns</dt><dd>Terminal type </dd></dl>
+
 </div>
 </div>
 <a id="a809cabdb06dd2127c99ce68822a6d0a2"></a>

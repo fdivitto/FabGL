@@ -9,6 +9,7 @@ var searchData=
   ['selectedbackgroundcolor',['selectedBackgroundColor',['../structfabgl_1_1ui_list_box_style.html#a2a55f15583daaae9df696b6b74be2d45',1,'fabgl::uiListBoxStyle']]],
   ['selectedtextcolor',['selectedTextColor',['../structfabgl_1_1ui_list_box_style.html#a97854eb78d81a58b1a565caf4c3ffc0f',1,'fabgl::uiListBoxStyle']]],
   ['shift',['shift',['../structfabgl_1_1_alt_virtual_key_def.html#aed18e598aedfdcc1f9b62d3daf613d80',1,'fabgl::AltVirtualKeyDef::shift()'],['../structfabgl_1_1ui_key_event_info.html#a8c0061d1ea840f572c50f944bea56a8e',1,'fabgl::uiKeyEventInfo::SHIFT()']]],
+  ['slidecolor',['slideColor',['../structfabgl_1_1ui_slider_style.html#ac87a463c1eca63dd78a030c0c675ca7d',1,'fabgl::uiSliderStyle']]],
   ['status',['status',['../structfabgl_1_1ui_mouse_event_info.html#a3ced4b54b7c3088e17cef20cc29e533a',1,'fabgl::uiMouseEventInfo']]],
   ['swapfgbg',['swapFGBG',['../structfabgl_1_1_paint_options.html#af85f53f3ae322adfa8ac33bad02e2cb8',1,'fabgl::PaintOptions']]]
 ];

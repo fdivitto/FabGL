@@ -100,6 +100,7 @@ $(document).ready(function(){initNavTree('fabui_8h.html','');});
 <code>#include &lt;stddef.h&gt;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/queue.h&quot;</code><br />
+<code>#include &quot;freertos/timers.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a>&quot;</code><br />
@@ -109,10 +110,10 @@ Include dependency graph for fabui.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabui_8h__incl.png" border="0" usemap="#fabui_8h" alt=""/></div>
 <map name="fabui_8h" id="fabui_8h">
-<area shape="rect" id="node6" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="798,225,884,251"/>
-<area shape="rect" id="node7" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="557,225,632,251"/>
-<area shape="rect" id="node8" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="398,152,506,177"/>
-<area shape="rect" id="node12" href="canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="342,79,417,104"/>
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="798,225,884,251"/>
+<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="557,225,632,251"/>
+<area shape="rect" id="node9" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="398,152,506,177"/>
+<area shape="rect" id="node13" href="canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="348,79,422,104"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -120,10 +121,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabui_8h__dep__incl.png" border="0" usemap="#fabui_8hdep" alt=""/></div>
 <map name="fabui_8hdep" id="fabui_8hdep">
-<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="71,79,158,104"/>
-<area shape="rect" id="node5" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="160,152,232,177"/>
-<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,152,85,177"/>
-<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="92,225,153,251"/>
+<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="53,79,140,104"/>
+<area shape="rect" id="node6" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="176,152,249,177"/>
+<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="22,225,102,251"/>
+<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="108,299,170,324"/>
+<area shape="rect" id="node5" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,152,102,177"/>
 </map>
 </div>
 </div>
@@ -223,6 +225,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_scrollable_control_style.html">fabgl::uiScrollableControlStyle</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the scrollable control style.  <a href="structfabgl_1_1ui_scrollable_control_style.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_slider.html">fabgl::uiSlider</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A slider or track bar is a graphical control element with which a user may set a value by moving an indicator.  <a href="classfabgl_1_1ui_slider.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_slider_style.html">fabgl::uiSliderStyle</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the slider style.  <a href="structfabgl_1_1ui_slider_style.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_text_edit.html">fabgl::uiTextEdit</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a text edit control.  <a href="classfabgl_1_1ui_text_edit.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -275,17 +283,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:gaffcd6ee067ff3ac7adbe28eb192cd996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return values from uiApp.messageBox() method.  <a href="group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996">More...</a><br /></td></tr>
 <tr class="separator:gaffcd6ee067ff3ac7adbe28eb192cd996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga688c8791e9a7560496e3c6e7c465c5d2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga688c8791e9a7560496e3c6e7c465c5d2">fabgl::uiOrientation</a> { <a class="el" href="group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2a06ce2a25e5d12c166a36f654dbea6012">fabgl::uiOrientation::Vertical</a>, 
+<a class="el" href="group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f">fabgl::uiOrientation::Horizontal</a>
+ }</td></tr>
+<tr class="memdesc:ga688c8791e9a7560496e3c6e7c465c5d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Item direction/orientation.  <a href="group___enumerations.html#ga688c8791e9a7560496e3c6e7c465c5d2">More...</a><br /></td></tr>
+<tr class="separator:ga688c8791e9a7560496e3c6e7c465c5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaddf4af7208ffb7af1f5674e9bfb58fdc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gaddf4af7208ffb7af1f5674e9bfb58fdc">fabgl::uiOrigin</a> { <a class="el" href="group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca2fc3359e12b2a9104121dcf04246f6a0">fabgl::uiOrigin::Screen</a>, 
 <a class="el" href="group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7">fabgl::uiOrigin::Parent</a>, 
 <a class="el" href="group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b">fabgl::uiOrigin::Window</a>
  }</td></tr>
 <tr class="memdesc:gaddf4af7208ffb7af1f5674e9bfb58fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies window rectangle origin.  <a href="group___enumerations.html#gaddf4af7208ffb7af1f5674e9bfb58fdc">More...</a><br /></td></tr>
 <tr class="separator:gaddf4af7208ffb7af1f5674e9bfb58fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7ef4f27f0fe142e1727a4692d4bdf5f7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga7ef4f27f0fe142e1727a4692d4bdf5f7">fabgl::uiScrollBar</a> { <a class="el" href="group___enumerations.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7a06ce2a25e5d12c166a36f654dbea6012">fabgl::uiScrollBar::Vertical</a>, 
-<a class="el" href="group___enumerations.html#gga7ef4f27f0fe142e1727a4692d4bdf5f7ac1b5fa03ecdb95d4a45dd1c40b02527f">fabgl::uiScrollBar::Horizontal</a>
- }</td></tr>
-<tr class="memdesc:ga7ef4f27f0fe142e1727a4692d4bdf5f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scrollbar direction.  <a href="group___enumerations.html#ga7ef4f27f0fe142e1727a4692d4bdf5f7">More...</a><br /></td></tr>
-<tr class="separator:ga7ef4f27f0fe142e1727a4692d4bdf5f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains all classes related to FabGL Graphical User Interface. </p>

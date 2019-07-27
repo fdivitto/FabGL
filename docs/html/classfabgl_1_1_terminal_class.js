@@ -21,6 +21,9 @@ var classfabgl_1_1_terminal_class =
     [ "setBackgroundColor", "classfabgl_1_1_terminal_class.html#abca478c62f1e2c49798c4ece90b34656", null ],
     [ "setForegroundColor", "classfabgl_1_1_terminal_class.html#a0652f03d627508afe15b507e7e7f2712", null ],
     [ "setLogStream", "classfabgl_1_1_terminal_class.html#a0abd96f5c4075fa9903f2d8d6cfc3d81", null ],
+    [ "setTerminalType", "classfabgl_1_1_terminal_class.html#af5a5b764c07691443fa7239b3dbd73c6", null ],
+    [ "setTerminalType", "classfabgl_1_1_terminal_class.html#ae34626427301c5f15349e15a15d1c495", null ],
+    [ "terminalType", "classfabgl_1_1_terminal_class.html#aea444850463fdbec78fe099c822d7478", null ],
     [ "write", "classfabgl_1_1_terminal_class.html#a809cabdb06dd2127c99ce68822a6d0a2", null ],
     [ "write", "classfabgl_1_1_terminal_class.html#a537e46d55954ed54ea2da188fe14a4f1", null ]
 ];

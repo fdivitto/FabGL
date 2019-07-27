@@ -22,6 +22,7 @@ var hierarchy =
     [ "fabgl::RGB", "structfabgl_1_1_r_g_b.html", null ],
     [ "fabgl::Scene", "classfabgl_1_1_scene.html", null ],
     [ "fabgl::Size", "structfabgl_1_1_size.html", null ],
+    [ "fabgl::SoundGenerator", "classfabgl_1_1_sound_generator.html", null ],
     [ "fabgl::Sprite", "structfabgl_1_1_sprite.html", null ],
     [ "fabgl::SquareWaveGeneratorClass", "classfabgl_1_1_square_wave_generator_class.html", null ],
     [ "fabgl::TerminalClass", "classfabgl_1_1_terminal_class.html", null ],
@@ -53,6 +54,7 @@ var hierarchy =
               [ "fabgl::uiListBox", "classfabgl_1_1ui_list_box.html", null ],
               [ "fabgl::uiPaintBox", "classfabgl_1_1ui_paint_box.html", null ]
             ] ],
+            [ "fabgl::uiSlider", "classfabgl_1_1ui_slider.html", null ],
             [ "fabgl::uiTextEdit", "classfabgl_1_1ui_text_edit.html", [
               [ "fabgl::uiComboBox", "classfabgl_1_1ui_combo_box.html", null ]
             ] ]
@@ -65,11 +67,20 @@ var hierarchy =
     [ "fabgl::uiPaintBoxStyle", "structfabgl_1_1ui_paint_box_style.html", null ],
     [ "fabgl::uiPanelStyle", "structfabgl_1_1ui_panel_style.html", null ],
     [ "fabgl::uiScrollableControlStyle", "structfabgl_1_1ui_scrollable_control_style.html", null ],
+    [ "fabgl::uiSliderStyle", "structfabgl_1_1ui_slider_style.html", null ],
     [ "fabgl::uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", null ],
     [ "fabgl::uiTextEditStyle", "structfabgl_1_1ui_text_edit_style.html", null ],
     [ "fabgl::uiWindowProps", "structfabgl_1_1ui_window_props.html", null ],
     [ "fabgl::uiWindowState", "structfabgl_1_1ui_window_state.html", null ],
     [ "fabgl::uiWindowStyle", "structfabgl_1_1ui_window_style.html", null ],
     [ "fabgl::VGAControllerClass", "classfabgl_1_1_v_g_a_controller_class.html", null ],
-    [ "fabgl::VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ]
+    [ "fabgl::VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ],
+    [ "fabgl::WaveformGenerator", "classfabgl_1_1_waveform_generator.html", [
+      [ "fabgl::NoiseWaveformGenerator", "classfabgl_1_1_noise_waveform_generator.html", null ],
+      [ "fabgl::SamplesGenerator", "classfabgl_1_1_samples_generator.html", null ],
+      [ "fabgl::SawtoothWaveformGenerator", "classfabgl_1_1_sawtooth_waveform_generator.html", null ],
+      [ "fabgl::SineWaveformGenerator", "classfabgl_1_1_sine_waveform_generator.html", null ],
+      [ "fabgl::SquareWaveformGenerator", "classfabgl_1_1_square_waveform_generator.html", null ],
+      [ "fabgl::TriangleWaveformGenerator", "classfabgl_1_1_triangle_waveform_generator.html", null ]
+    ] ]
 ];

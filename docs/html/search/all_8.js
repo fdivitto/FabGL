@@ -8,7 +8,7 @@ var searchData=
   ['injectinrxbuffer',['injectInRXBuffer',['../classfabgl_1_1_p_s2_controller_class.html#ad9af043671e84f1dc1828aaf1f649fcc',1,'fabgl::PS2ControllerClass']]],
   ['insertevent',['insertEvent',['../classfabgl_1_1ui_app.html#a8d59a05eaedc8f165178fc412e475394',1,'fabgl::uiApp']]],
   ['intellimouse',['Intellimouse',['../group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca',1,'fabgl']]],
-  ['invert',['invert',['../unionfabgl_1_1_glyph_options.html#aa9a34683188bc0d455fc5d22fdb071ce',1,'fabgl::GlyphOptions::invert()'],['../unionfabgl_1_1_glyph_options.html#ae1e4f574b930780b0728c8f501c01a8e',1,'fabgl::GlyphOptions::Invert(uint8_t value)']]],
+  ['invert',['Invert',['../unionfabgl_1_1_glyph_options.html#ae1e4f574b930780b0728c8f501c01a8e',1,'fabgl::GlyphOptions::Invert(uint8_t value)'],['../unionfabgl_1_1_glyph_options.html#aa9a34683188bc0d455fc5d22fdb071ce',1,'fabgl::GlyphOptions::invert()']]],
   ['invertrectangle',['invertRectangle',['../classfabgl_1_1_canvas_class.html#a40b2afd045850f543e19adde90128de2',1,'fabgl::CanvasClass::invertRectangle(int X1, int Y1, int X2, int Y2)'],['../classfabgl_1_1_canvas_class.html#a8ff1750c3c1dec88ae623fc770aba4b3',1,'fabgl::CanvasClass::invertRectangle(Rect const &amp;rect)']]],
   ['isdoublebuffered',['isDoubleBuffered',['../classfabgl_1_1_v_g_a_controller_class.html#ac769ed638e5add668706de38f5d6c55a',1,'fabgl::VGAControllerClass']]],
   ['iskeyboardavailable',['isKeyboardAvailable',['../classfabgl_1_1_keyboard_class.html#a5c07c13d95a52b5c8d91a7328fe17930',1,'fabgl::KeyboardClass']]],

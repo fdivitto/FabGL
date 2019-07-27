@@ -14,6 +14,7 @@ var searchData=
   ['resetpaintoptions',['resetPaintOptions',['../classfabgl_1_1_canvas_class.html#aa6d5cc3e4f24f75643041c28ec1ff768',1,'fabgl::CanvasClass']]],
   ['reshapewindow',['reshapeWindow',['../classfabgl_1_1ui_app.html#a2827139ff542f663753683dd90ae1c16',1,'fabgl::uiApp']]],
   ['resizewindow',['resizeWindow',['../classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73',1,'fabgl::uiApp::resizeWindow(uiWindow *window, int width, int height)'],['../classfabgl_1_1ui_app.html#a6ed22ad4af635c027637db8807b6a9af',1,'fabgl::uiApp::resizeWindow(uiWindow *window, Size size)']]],
+  ['resume',['resume',['../classfabgl_1_1_p_s2_controller_class.html#abcff078ad56eec571592dfbe2c11ca0a',1,'fabgl::PS2ControllerClass']]],
   ['resumebackgroundprimitiveexecution',['resumeBackgroundPrimitiveExecution',['../classfabgl_1_1_v_g_a_controller_class.html#afa57c12d24f1706685afa7d7e96c2cdc',1,'fabgl::VGAControllerClass']]],
   ['rootwindow',['rootWindow',['../classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40',1,'fabgl::uiApp']]],
   ['run',['run',['../classfabgl_1_1ui_app.html#a19d8eb2f48cf67e82096ce09d76c8243',1,'fabgl::uiApp']]]

@@ -104,6 +104,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7082e498e95fd5f5a4edfbe73923f397"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a7082e498e95fd5f5a4edfbe73923f397">begin</a> (gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_NUM_39, gpio_num_t port1_datGPIO=GPIO_NUM_39)</td></tr>
 <tr class="memdesc:a7082e498e95fd5f5a4edfbe73923f397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes PS2 device controller.  <a href="#a7082e498e95fd5f5a4edfbe73923f397">More...</a><br /></td></tr>
 <tr class="separator:a7082e498e95fd5f5a4edfbe73923f397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a033d036bfffbdec66d8d13d1ae0b94c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a033d036bfffbdec66d8d13d1ae0b94c4">begin</a> (<a class="el" href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">PS2Preset</a> preset=<a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74">PS2Preset::KeyboardPort0_MousePort1</a>, <a class="el" href="group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d">KbdMode</a> keyboardMode=<a class="el" href="group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97">KbdMode::CreateVirtualKeysQueue</a>)</td></tr>
+<tr class="memdesc:a033d036bfffbdec66d8d13d1ae0b94c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes PS2 device controller using default GPIOs.  <a href="#a033d036bfffbdec66d8d13d1ae0b94c4">More...</a><br /></td></tr>
+<tr class="separator:a033d036bfffbdec66d8d13d1ae0b94c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6062b2ca4cd3b357065787abffa186af"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a6062b2ca4cd3b357065787abffa186af">dataAvailable</a> (int PS2Port)</td></tr>
 <tr class="memdesc:a6062b2ca4cd3b357065787abffa186af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of scancodes available in the controller buffer.  <a href="#a6062b2ca4cd3b357065787abffa186af">More...</a><br /></td></tr>
 <tr class="separator:a6062b2ca4cd3b357065787abffa186af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,9 +116,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9af043671e84f1dc1828aaf1f649fcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#ad9af043671e84f1dc1828aaf1f649fcc">injectInRXBuffer</a> (int value, int PS2Port)</td></tr>
 <tr class="memdesc:ad9af043671e84f1dc1828aaf1f649fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Injects a byte into the RX buffer.  <a href="#ad9af043671e84f1dc1828aaf1f649fcc">More...</a><br /></td></tr>
 <tr class="separator:ad9af043671e84f1dc1828aaf1f649fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcff078ad56eec571592dfbe2c11ca0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#abcff078ad56eec571592dfbe2c11ca0a">resume</a> ()</td></tr>
+<tr class="memdesc:abcff078ad56eec571592dfbe2c11ca0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resumes PS/2 ports operations.  <a href="#abcff078ad56eec571592dfbe2c11ca0a">More...</a><br /></td></tr>
+<tr class="separator:abcff078ad56eec571592dfbe2c11ca0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ec318ddf10936017940c63665a91b41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a0ec318ddf10936017940c63665a91b41">sendData</a> (uint8_t data, int PS2Port)</td></tr>
 <tr class="memdesc:a0ec318ddf10936017940c63665a91b41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a command to the device.  <a href="#a0ec318ddf10936017940c63665a91b41">More...</a><br /></td></tr>
 <tr class="separator:a0ec318ddf10936017940c63665a91b41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1d688317cb583a680c13e7a83f88aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html#a8d1d688317cb583a680c13e7a83f88aa">suspend</a> ()</td></tr>
+<tr class="memdesc:a8d1d688317cb583a680c13e7a83f88aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends PS/2 ports operations.  <a href="#a8d1d688317cb583a680c13e7a83f88aa">More...</a><br /></td></tr>
+<tr class="separator:a8d1d688317cb583a680c13e7a83f88aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The PS2 device controller class. </p>
@@ -123,7 +132,7 @@ Public Member Functions</h2></td></tr>
  The ULP coprocessor continuously monitor CLK and DATA lines for incoming data. Optionally can send commands to the PS2 devices. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7082e498e95fd5f5a4edfbe73923f397"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7082e498e95fd5f5a4edfbe73923f397">&#9670;&nbsp;</a></span>begin()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7082e498e95fd5f5a4edfbe73923f397">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,8 +180,50 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a0">GraphicalUserInterface/GraphicalUserInterface.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a37">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a7">Altair8800/Altair8800.ino</a>, <a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a0">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_audio_2_audio_8ino-example.html#a0">Audio/Audio.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a0">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_keyboard_studio_2_keyboard_studio_8ino-example.html#a10">KeyboardStudio/KeyboardStudio.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a3">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a8">MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_mouse_studio_2_mouse_studio_8ino-example.html#a8">MouseStudio/MouseStudio.ino</a>, <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a3">NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a37">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
+</div>
+</div>
+<a id="a033d036bfffbdec66d8d13d1ae0b94c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a033d036bfffbdec66d8d13d1ae0b94c4">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::PS2ControllerClass::begin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">PS2Preset</a>&#160;</td>
+          <td class="paramname"><em>preset</em> = <code><a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74">PS2Preset::KeyboardPort0_MousePort1</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d">KbdMode</a>&#160;</td>
+          <td class="paramname"><em>keyboardMode</em> = <code><a class="el" href="group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97">KbdMode::CreateVirtualKeysQueue</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes PS2 device controller using default GPIOs. </p>
+<p>Initializes the PS2 controller assigning:</p><ul>
+<li>GPIO_NUM_33 (CLK) and GPIO_NUM_32 (DATA) as PS/2 Port 0</li>
+<li>GPIO_NUM_26 (CLK) and GPIO_NUM_27 (DATA) as PS/2 Port 1</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">preset</td><td>Specifies what is connected to PS/2 ports (mouse, keyboard or boths). </td></tr>
+    <tr><td class="paramname">keyboardMode</td><td>Specifies how handle keyboard virtual keys.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: </p><pre class="fragment">// Keyboard connected to port 0 and mouse to port1
+PSController.begin(PS2Preset::KeyboardPort0_MousePort1);</pre> 
 </div>
 </div>
 <a id="a6062b2ca4cd3b357065787abffa186af"></a>
@@ -267,6 +318,25 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="abcff078ad56eec571592dfbe2c11ca0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcff078ad56eec571592dfbe2c11ca0a">&#9670;&nbsp;</a></span>resume()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::PS2ControllerClass::resume </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resumes PS/2 ports operations. </p>
+
+</div>
+</div>
 <a id="a0ec318ddf10936017940c63665a91b41"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ec318ddf10936017940c63665a91b41">&#9670;&nbsp;</a></span>sendData()</h2>
 
@@ -301,6 +371,25 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8d1d688317cb583a680c13e7a83f88aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1d688317cb583a680c13e7a83f88aa">&#9670;&nbsp;</a></span>suspend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::PS2ControllerClass::suspend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Suspends PS/2 ports operations. </p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['virtualkey',['VirtualKey',['../group___enumerations.html#gae12c31a33f64281cba424d993a8a4381',1,'fabgl']]]
+  ['termtype',['TermType',['../group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd',1,'fabgl']]]
 ];

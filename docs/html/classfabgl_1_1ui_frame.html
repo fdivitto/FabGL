@@ -206,6 +206,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a685cd663afda5e3e81b7de1b89cbe777"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_frame.html#a685cd663afda5e3e81b7de1b89cbe777">setTitle</a> (char const *value)</td></tr>
 <tr class="memdesc:a685cd663afda5e3e81b7de1b89cbe777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets window title.  <a href="#a685cd663afda5e3e81b7de1b89cbe777">More...</a><br /></td></tr>
 <tr class="separator:a685cd663afda5e3e81b7de1b89cbe777"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a118a4fa9d5fdd04d9e156ccd9af5b7d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_frame.html#a118a4fa9d5fdd04d9e156ccd9af5b7d4">setTitleFmt</a> (const char *format,...)</td></tr>
+<tr class="memdesc:a118a4fa9d5fdd04d9e156ccd9af5b7d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets window title as formatted text.  <a href="#a118a4fa9d5fdd04d9e156ccd9af5b7d4">More...</a><br /></td></tr>
+<tr class="separator:a118a4fa9d5fdd04d9e156ccd9af5b7d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50f29dabe9a4c99dfdb01d252fa173f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_size.html">Size</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_window.html#a50f29dabe9a4c99dfdb01d252fa173f4">size</a> ()</td></tr>
 <tr class="memdesc:a50f29dabe9a4c99dfdb01d252fa173f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the window size.  <a href="#a50f29dabe9a4c99dfdb01d252fa173f4">More...</a><br /></td></tr>
 <tr class="separator:a50f29dabe9a4c99dfdb01d252fa173f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1103,6 +1106,43 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>The window title. nullptr hides the title bar. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a118a4fa9d5fdd04d9e156ccd9af5b7d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a118a4fa9d5fdd04d9e156ccd9af5b7d4">&#9670;&nbsp;</a></span>setTitleFmt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::uiFrame::setTitleFmt </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets window title as formatted text. </p>
+<p>Window needs to be repainted in order to display changed title.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>Format specifier like printf. </td></tr>
   </table>
   </dd>
 </dl>

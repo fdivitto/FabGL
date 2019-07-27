@@ -1,6 +1,8 @@
 var examples =
 [
+    [ "Altair8800/Altair8800.ino", "_altair8800_2_altair8800_8ino-example.html", null ],
     [ "AnsiTerminal/AnsiTerminal.ino", "_ansi_terminal_2_ansi_terminal_8ino-example.html", null ],
+    [ "Audio/Audio.ino", "_audio_2_audio_8ino-example.html", null ],
     [ "CollisionDetection/CollisionDetection.ino", "_collision_detection_2_collision_detection_8ino-example.html", null ],
     [ "DoubleBuffer/DoubleBuffer.ino", "_double_buffer_2_double_buffer_8ino-example.html", null ],
     [ "GraphicalUserInterface/GraphicalUserInterface.ino", "_graphical_user_interface_2_graphical_user_interface_8ino-example.html", null ],

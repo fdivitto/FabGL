@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ps2device',['PS2Device',['../group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a',1,'fabgl']]]
+  ['mousetype',['MouseType',['../group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c',1,'fabgl']]]
 ];

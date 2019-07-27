@@ -1,0 +1,8 @@
+<map id="fabgl::WaveformGenerator" name="fabgl::WaveformGenerator">
+<area shape="rect" id="node2" href="$classfabgl_1_1_noise_waveform_generator.html" title="Noise generator. " alt="" coords="242,5,454,31"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_samples_generator.html" title="Samples generator. " alt="" coords="263,55,433,80"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_sawtooth_waveform_generator.html" title="Sawtooth waveform generator. " alt="" coords="231,104,465,129"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_sine_waveform_generator.html" title="Sine waveform generator. " alt="" coords="246,153,450,179"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1_square_waveform_generator.html" title="Square waveform generator. " alt="" coords="238,203,459,228"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1_triangle_waveform_generator.html" title="Triangle waveform generator. " alt="" coords="235,252,461,277"/>
+</map>

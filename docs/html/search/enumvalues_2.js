@@ -1,4 +1,26 @@
 var searchData=
 [
-  ['error',['Error',['../group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a902b0d55fddef6f8d651fe1035b7d4bd',1,'fabgl']]]
+  ['cancel',['Cancel',['../group___enumerations.html#ggaffcd6ee067ff3ac7adbe28eb192cd996aea4788705e6873b424c65e91c2846b19',1,'fabgl']]],
+  ['checkbox',['CheckBox',['../group___enumerations.html#gga107cf534808867ce4023d92c15ef699ea7ea0f1332ade5b23b34502a3bfe715a2',1,'fabgl']]],
+  ['createvirtualkeysqueue',['CreateVirtualKeysQueue',['../group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97',1,'fabgl']]],
+  ['cursorcross1',['CursorCross1',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa7fee58ccf7b3bb0f4bd95e3acbae422',1,'fabgl']]],
+  ['cursorcross2',['CursorCross2',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9ef4c5d4c8d58c1c107edea14b5b041f',1,'fabgl']]],
+  ['cursordownarrow',['CursorDownArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa4b544c8818fb1732882db741998de58',1,'fabgl']]],
+  ['cursorleftarrow',['CursorLeftArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a4618b74175c970d70d5881fe7632babb',1,'fabgl']]],
+  ['cursormove',['CursorMove',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a922d95253e530a5b23c30b12dfa015ea',1,'fabgl']]],
+  ['cursorpen',['CursorPen',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab7c2bc31c95f4e2d8a79347d2a99c8d5',1,'fabgl']]],
+  ['cursorpoint',['CursorPoint',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab6b8459a0a51aeaef2823516d93a0427',1,'fabgl']]],
+  ['cursorpointer',['CursorPointer',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a0c59ad00b9068bf3a17170d73d3eb2d2',1,'fabgl']]],
+  ['cursorpointeramigalike',['CursorPointerAmigaLike',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa2b52e5387fb021f9d5406c4a21fdafb',1,'fabgl']]],
+  ['cursorpointershadowed',['CursorPointerShadowed',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a37cd4c56b8cb5bda5f30ccd09d51d593',1,'fabgl']]],
+  ['cursorpointersimple',['CursorPointerSimple',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9a2fa1bb8a29fbfd5e12b0718354d231',1,'fabgl']]],
+  ['cursorpointersimplereduced',['CursorPointerSimpleReduced',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a22afcbeb67fb57a80e7bef07ca0758e1',1,'fabgl']]],
+  ['cursorresize1',['CursorResize1',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aae58f3df8a938850a96ec672aa67f635',1,'fabgl']]],
+  ['cursorresize2',['CursorResize2',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372af6c8660afb09c4109a785848af182736',1,'fabgl']]],
+  ['cursorresize3',['CursorResize3',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a37fdc7af04c2597159ce6f1ed6557cf8',1,'fabgl']]],
+  ['cursorresize4',['CursorResize4',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc',1,'fabgl']]],
+  ['cursorrightarrow',['CursorRightArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9d14e52a3cca53b168f79449430e23f2',1,'fabgl']]],
+  ['cursortextinput',['CursorTextInput',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18',1,'fabgl']]],
+  ['cursoruparrow',['CursorUpArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a8479a82edf7f92d5d7859478b1fa78bb',1,'fabgl']]],
+  ['cyan',['Cyan',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba3a80c537a99914e5b7f425c93f0b6f31',1,'fabgl']]]
 ];

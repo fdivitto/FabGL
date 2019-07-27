@@ -3,7 +3,7 @@ var searchData=
   ['capturedmousewindow',['capturedMouseWindow',['../classfabgl_1_1ui_app.html#a0192d896b39a2c0265b87c7f39d32b59',1,'fabgl::uiApp']]],
   ['checkboxstyle',['checkBoxStyle',['../classfabgl_1_1ui_check_box.html#aa9e5e827623091f7fe16ded0b6e94555',1,'fabgl::uiCheckBox']]],
   ['checked',['checked',['../classfabgl_1_1ui_check_box.html#ae1f15607b213f624893240f618847732',1,'fabgl::uiCheckBox']]],
-  ['clear',['clear',['../classfabgl_1_1_canvas_class.html#a37beec4d52526d2710d47d911a1cd8c2',1,'fabgl::CanvasClass::clear()'],['../classfabgl_1_1_terminal_class.html#a6d163d94946147078b7b470ea96c04fe',1,'fabgl::TerminalClass::clear()']]],
+  ['clear',['clear',['../classfabgl_1_1_canvas_class.html#a37beec4d52526d2710d47d911a1cd8c2',1,'fabgl::CanvasClass::clear()'],['../classfabgl_1_1_sound_generator.html#a520b5fdd78bffe7391f125ae3f9fc8e7',1,'fabgl::SoundGenerator::clear()'],['../classfabgl_1_1_terminal_class.html#a6d163d94946147078b7b470ea96c04fe',1,'fabgl::TerminalClass::clear()']]],
   ['clientpos',['clientPos',['../classfabgl_1_1ui_window.html#a770f88193b45a54df6f944efe1fc25d5',1,'fabgl::uiWindow']]],
   ['clientrect',['clientRect',['../classfabgl_1_1ui_window.html#a906aa0c527b912e79c4ebbc0ca2b7a74',1,'fabgl::uiWindow::clientRect()'],['../classfabgl_1_1ui_frame.html#a541be8117157ce54d58b020bdb703618',1,'fabgl::uiFrame::clientRect()'],['../classfabgl_1_1ui_scrollable_control.html#a3ad10b6346f1da2122f08185db94863d',1,'fabgl::uiScrollableControl::clientRect()']]],
   ['clientsize',['clientSize',['../classfabgl_1_1ui_window.html#ac2c887ae821ce1a3f64f5888408c121e',1,'fabgl::uiWindow']]],

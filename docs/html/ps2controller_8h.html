@@ -87,7 +87,8 @@ $(document).ready(function(){initNavTree('ps2controller_8h.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">ps2controller.h File Reference</div>  </div>
 </div><!--header-->
@@ -111,11 +112,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="ps2controller_8h__dep__incl.png" border="0" usemap="#ps2controller_8hdep" alt=""/></div>
 <map name="ps2controller_8hdep" id="ps2controller_8hdep">
-<area shape="rect" id="node2" href="ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="139,79,232,104"/>
-<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="128,299,189,324"/>
-<area shape="rect" id="node3" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="71,152,158,177"/>
-<area shape="rect" id="node6" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="160,225,232,251"/>
-<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,225,85,251"/>
+<area shape="rect" id="node2" href="ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="155,79,248,104"/>
+<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="144,372,206,397"/>
+<area shape="rect" id="node3" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="50,152,137,177"/>
+<area shape="rect" id="node7" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="176,225,248,251"/>
+<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="22,299,102,324"/>
+<area shape="rect" id="node6" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,225,102,251"/>
 </map>
 </div>
 </div>
@@ -126,6 +128,21 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html">fabgl::PS2ControllerClass</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PS2 device controller class.  <a href="classfabgl_1_1_p_s2_controller_class.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ga0eff89ccbe1087e0390e5cae305ef06d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d">fabgl::KbdMode</a> { <a class="el" href="group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06dadaa64f7602ad3caa98f09799e3e683b1">fabgl::KbdMode::NoVirtualKeys</a>, 
+<a class="el" href="group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4">fabgl::KbdMode::GenerateVirtualKeys</a>, 
+<a class="el" href="group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97">fabgl::KbdMode::CreateVirtualKeysQueue</a>
+ }</td></tr>
+<tr class="memdesc:ga0eff89ccbe1087e0390e5cae305ef06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines how handle keyboard virtual keys.  <a href="group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d">More...</a><br /></td></tr>
+<tr class="separator:ga0eff89ccbe1087e0390e5cae305ef06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">fabgl::PS2Preset</a> { <a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74">fabgl::PS2Preset::KeyboardPort0_MousePort1</a>, 
+<a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7">fabgl::PS2Preset::KeyboardPort0</a>, 
+<a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4">fabgl::PS2Preset::MousePort0</a>
+ }</td></tr>
+<tr class="memdesc:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines what is connected to PS/2 ports.  <a href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">More...</a><br /></td></tr>
+<tr class="separator:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">fabgl::PS2ControllerClass</a> definition and the PS2Controller instance. </p>

@@ -29,7 +29,7 @@ var classfabgl_1_1ui_scrollable_control =
     [ "repaint", "classfabgl_1_1ui_scrollable_control.html#ad1986d853fc82a7084467fea41e7a684", null ],
     [ "scrollableControlStyle", "classfabgl_1_1ui_scrollable_control.html#a433e3d6d6a2f3fe2a74c7f80836b5a7f", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_scrollable_control.html#a90e462004b5bbd74d5d981ddcbf5a38a", null ],
-    [ "setScrollBar", "classfabgl_1_1ui_scrollable_control.html#a4f15c6bd49a4f8dda7f34748b8a418f3", null ],
+    [ "setScrollBar", "classfabgl_1_1ui_scrollable_control.html#acc477d2260846f3e73438a9103d330f7", null ],
     [ "size", "classfabgl_1_1ui_scrollable_control.html#a50f29dabe9a4c99dfdb01d252fa173f4", null ],
     [ "state", "classfabgl_1_1ui_scrollable_control.html#a31846cbe8d90b9effac80a15bb541bb2", null ],
     [ "transformRect", "classfabgl_1_1ui_scrollable_control.html#ae16282f1881ec8ded65ad239f3d17735", null ],

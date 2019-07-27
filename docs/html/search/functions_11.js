@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['terminaltype',['terminalType',['../classfabgl_1_1_terminal_class.html#aea444850463fdbec78fe099c822d7478',1,'fabgl::TerminalClass']]],
   ['text',['text',['../classfabgl_1_1ui_button.html#a7dda3febd65ff81f639eb07fa45c10be',1,'fabgl::uiButton::text()'],['../classfabgl_1_1ui_text_edit.html#ad450ee092d4c00b44ec793bf4a1afbe4',1,'fabgl::uiTextEdit::text()'],['../classfabgl_1_1ui_label.html#abe3e7f0c28557bdafd219f8d8ce27079',1,'fabgl::uiLabel::text()']]],
   ['texteditprops',['textEditProps',['../classfabgl_1_1ui_text_edit.html#a2dec323059e7a194576374241936f18e',1,'fabgl::uiTextEdit']]],
   ['texteditstyle',['textEditStyle',['../classfabgl_1_1ui_text_edit.html#a9f95aa7b9ee347f092c67870a31d2341',1,'fabgl::uiTextEdit']]],
