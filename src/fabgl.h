@@ -45,11 +45,11 @@
  * - - -
  *
  * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Audio Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br>
- * This library works well with ESP32 revision 1 or upper.
+ * This library works with ESP32 revision 1 or upper.
  *
  * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
  *
- * Three fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts and resolutions can be used.
+ * Three fixed width fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts are embedded, even with variable width.
  *
  * Sprites can have up to 64 colors (RGB, 2 bits per channel + transparency).<br>
  * A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.<br>
@@ -60,6 +60,10 @@
  *
  * Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing, so no flickering is visible.<br>
  * If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.
+ *
+ * There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).
+ *
+ * Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.
  *
  * - - -
  *
