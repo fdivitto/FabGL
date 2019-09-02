@@ -512,9 +512,10 @@ void SoundGenerator::waveGenTask(void * arg)
 void SoundGenerator::mutizeOutput()
 {
   for (int i = 0; i < I2S_SAMPLE_BUFFER_SIZE; ++i)
-    m_sampleBuffer[i] = 127;
+    m_sampleBuffer[i] = 127 << 8;
   size_t bytes_written;
-  i2s_write(I2S_NUM_0, m_sampleBuffer, I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
+  for (int i = 0; i < 4; ++i)
+    i2s_write(I2S_NUM_0, m_sampleBuffer, I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
 }
 
 
