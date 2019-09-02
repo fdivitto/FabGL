@@ -138,6 +138,9 @@
 /** Modeline for 256x192@50Hz resolution - requires an upscaler*/
 #define VGA_256x192_50Hz "\"256x192@50\" 8.13 256 288 296 328 192 196 198 202 -HSync -VSync DoubleScan"
 
+/** Modeline for 256x384@60Hz resolution */
+#define VGA_256x384_60Hz "\"256x384@60\" 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan FrontPorchBegins"
+
 /** Modeline for 320x200@75Hz resolution */
 #define VGA_320x200_75Hz "\"320x200@75Hz\" 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan"
 

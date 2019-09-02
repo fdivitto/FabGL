@@ -24,6 +24,7 @@
 
 
 const char * PresetResolutions[] = {
+  VGA_256x384_60Hz,
   VGA_320x200_75Hz,
   QVGA_320x240_60Hz,
   VGA_400x300_60Hz,
@@ -54,7 +55,7 @@ const char * PresetResolutions[] = {
 
 
 
-int currentResolution = 0/*8*/;  // VGA_640x350_70HzAlt1
+int currentResolution = 11;  // VGA_640x350_70HzAlt1
 int moveX = 0;
 int moveY = 0;
 int shrinkX = 0;
