@@ -913,6 +913,51 @@ public:
    */
   void writeScreen(Rect const & rect, RGB * srcBuf);
 
+  /**
+   * @brief Creates a raw pixel to use with VGAControllerClass.setRawPixel
+   *
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   *
+   * @param rgb Pixel RGB color
+   *
+   * Example:
+   *
+   *     // Set color of pixel at 100, 100
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB(3, 0, 0));
+   */
+  uint8_t createRawPixel(RGB rgb)             { return preparePixel(rgb); }
+
+  /**
+   * @brief Sets a raw pixel prepared using VGAControllerClass.createRawPixel.
+   *
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   *
+   * @param x Horizontal pixel position
+   * @param y Vertical pixel position
+   * @param rgb Raw pixel color
+   *
+   * Example:
+   *
+   *     // Set color of pixel at 100, 100
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB(3, 0, 0));
+   */
+  void setRawPixel(int x, int y, uint8_t rgb) { PIXEL(x, y) = rgb; }
+
+  /**
+   * @brief Gets a raw scanline pointer.
+   *
+   * A raw scanline must be filled with raw pixel colors. Use VGAControllerClass.createRawPixel to create raw pixel colors.
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   * Pixels are arranged in 32 bit packes as follows:
+   *   pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 :
+   *   pixel : 0  1  2  3  4  5  6  7  8  9 10 11 ...etc...
+   *   byte  : 2  3  0  1  6  7  4  5 10 11  8  9 ...etc...
+   *   dword : 0           1           2          ...etc...
+   *
+   * @param y Vertical scanline position (0 = top row)
+   */
+  uint8_t * getScanline(int y)                { return (uint8_t*) m_viewPort[y]; }
+
 private:
 
   void init(gpio_num_t VSyncGPIO);
