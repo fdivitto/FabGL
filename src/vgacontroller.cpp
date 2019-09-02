@@ -74,26 +74,6 @@ RGB COLOR2RGB[16] = {
 };
 
 
-#define RED_BIT   0
-#define GREEN_BIT 2
-#define BLUE_BIT  4
-#define HSYNC_BIT 6
-#define VSYNC_BIT 7
-
-#define SYNC_MASK ((1 << HSYNC_BIT) | (1 << VSYNC_BIT))
-
-
-// pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 :
-// pixel : 0  1  2  3  4  5  6  7  8  9 10 11 ...etc...
-// byte  : 2  3  0  1  6  7  4  5 10 11  8  9 ...etc...
-// dword : 0           1           2          ...etc...
-// Thanks to https://github.com/paulscottrobson for the new macro. Before was: (row[((X) & 0xFFFC) + ((2 + (X)) & 3)])
-#define PIXELINROW(row, X) (row[(X) ^ 2])
-
-// requires variables: m_viewPort
-#define PIXEL(X, Y) PIXELINROW(m_viewPort[(Y)], X)
-
-
 
 /*************************************************************************************/
 /* RGB definitions */
