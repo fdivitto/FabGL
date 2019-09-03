@@ -37,19 +37,22 @@ namespace fabgl {
 
 
 MouseClass::MouseClass()
-  : m_mouseAvailable(false), m_mouseType(LegacyMouse), m_prevDeltaTime(0),
-    m_movementAcceleration(180), m_wheelAcceleration(60000), m_absoluteUpdateTimer(nullptr),
-    m_absoluteQueue(nullptr), m_updateVGAController(false)
+  : m_mouseAvailable(false),
+    m_mouseType(LegacyMouse),
+    m_prevDeltaTime(0),
+    m_movementAcceleration(180),
+    m_wheelAcceleration(60000),
+    m_absoluteUpdateTimer(nullptr),
+    m_absoluteQueue(nullptr),
+    m_updateVGAController(false),
+    m_uiApp(nullptr)
 {
 }
 
 
 MouseClass::~MouseClass()
 {
-  if (m_absoluteUpdateTimer)
-    xTimerDelete(m_absoluteUpdateTimer, portMAX_DELAY);
-  if (m_absoluteQueue)
-    vQueueDelete(m_absoluteQueue);
+  terminateAbsolutePositioner();
 }
 
 
@@ -96,7 +99,6 @@ int MouseClass::getPacketSize()
 {
   return (m_mouseType == Intellimouse ? 4 : 3);
 }
-
 
 
 int MouseClass::deltaAvailable()
@@ -170,6 +172,21 @@ void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsol
     // create and start the timer
     m_absoluteUpdateTimer = xTimerCreate("", pdMS_TO_TICKS(10), pdTRUE, this, absoluteUpdateTimerFunc);
     xTimerStart(m_absoluteUpdateTimer, portMAX_DELAY);
+  }
+}
+
+
+void MouseClass::terminateAbsolutePositioner()
+{
+  m_updateVGAController = false;
+  m_uiApp = nullptr;
+  if (m_absoluteQueue) {
+    vQueueDelete(m_absoluteQueue);
+    m_absoluteQueue = nullptr;
+  }
+  if (m_absoluteUpdateTimer) {
+    xTimerDelete(m_absoluteUpdateTimer, portMAX_DELAY);
+    m_absoluteUpdateTimer = nullptr;
   }
 }
 

@@ -229,6 +229,11 @@ public:
   void setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app);
 
   /**
+   * @brief Terminates absolute position handler.
+   */
+  void terminateAbsolutePositioner();
+
+  /**
    * @brief Updates absolute position from the specified mouse delta event.
    *
    * This method updates absolute mouse position, mouse wheel and buttons status.<br>
