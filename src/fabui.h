@@ -103,7 +103,7 @@ enum uiEventID {
   UIEVT_MOUSELEAVE,
   UIEVT_MAXIMIZE,   // Request for maximize
   UIEVT_MINIMIZE,   // Request for minimize
-  UIEVT_RESTORE,    // restore from UIEVT_MAXIMIZE or UIEVT_MINIMIZE
+  UIEVT_RESTORE,    // Restore from UIEVT_MAXIMIZE or UIEVT_MINIMIZE
   UIEVT_SHOW,
   UIEVT_HIDE,
   UIEVT_SETFOCUS,
@@ -116,6 +116,7 @@ enum uiEventID {
   UIEVT_EXITMODAL,
   UIEVT_DESTROY,
   UIEVT_CLOSE,      // Request to close (frame Close button)
+  UIEVT_QUIT,       // Quit the application
 };
 
 
@@ -170,6 +171,8 @@ struct uiEvent {
     uiWindow * oldFocused;
     // event: UIEVT_KILLFOCUS
     uiWindow * newFocused;
+    // event: UIEVT_QUIT
+    int exitCode;
 
     uiEventParams() { }
   } params;
@@ -2098,11 +2101,20 @@ public:
   virtual ~uiApp();
 
   /**
-   * @brief Initialize application and executes the main event loop
+   * @brief Initializes application and executes the main event loop
    *
    * This is the last method that should be called: it never returns.
+   *
+   * @return exitCode specified calling uiApp.quit().
    */
-  void run();
+  int run();
+
+  /**
+   * @brief Terminates application and free resources
+   *
+   * @param exitCode Value returned by uiApp.run().
+   */
+  void quit(int exitCode);
 
   /**
    * @brief Places an event in the event queue and returns without waiting for the receiver to process the event

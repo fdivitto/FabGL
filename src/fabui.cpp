@@ -51,6 +51,7 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
                                   "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
                                   "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
+                                  "UIEVT_QUIT",
                                 };
   Serial.printf("#%d ", idx++);
   Serial.write(TOSTR[event->id]);
@@ -175,21 +176,19 @@ uiApp::uiApp()
     m_lastMouseUpTimeMS(0)
 {
   objectType().uiApp = true;
-  m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
   setApp(this);
 }
 
 
 uiApp::~uiApp()
 {
-  showCaret(nullptr);
-  vQueueDelete(m_eventsQueue);
-  delete m_rootWindow;
 }
 
 
-void uiApp::run()
+int uiApp::run()
 {
+  m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
+
   // setup absolute events from mouse
   Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
 
@@ -217,6 +216,8 @@ void uiApp::run()
   uiEvent evt = uiEvent(this, UIEVT_APPINIT);
   postEvent(&evt);
 
+  int exitCode = 0;
+
   // dispatch events
   while (true) {
     uiEvent event;
@@ -229,8 +230,42 @@ void uiApp::run()
 
       if (event.dest)
         event.dest->processEvent(&event);
+
+      if (event.id == UIEVT_QUIT) {
+        exitCode = event.params.exitCode;
+        break;
+      }
     }
   }
+
+  showCaret(nullptr);
+
+  VGAController.setMouseCursor(nullptr);
+
+  Canvas.setBrushColor(m_rootWindow->frameStyle().backgroundColor);
+  Canvas.clear();
+
+  delete m_rootWindow;
+  m_rootWindow = nullptr;
+
+  Keyboard.setUIApp(nullptr);
+
+  Mouse.terminateAbsolutePositioner();
+
+  vQueueDelete(m_eventsQueue);
+  m_eventsQueue = nullptr;
+
+  return exitCode;
+}
+
+
+void uiApp::quit(int exitCode)
+{
+  for (auto child = m_rootWindow->lastChild(); child; child = child->prev())
+    destroyWindow(child);
+  uiEvent evt = uiEvent(nullptr, UIEVT_QUIT);
+  evt.params.exitCode = exitCode;
+  postEvent(&evt);
 }
 
 
