@@ -800,6 +800,16 @@ public:
    */
   Delegate<uiTimerHandle> onTimer;
 
+  /**
+   * @brief Key-down event delegate
+   */
+  Delegate<uiKeyEventInfo> onKeyDown;
+
+  /**
+   * @brief Key-up event delegate
+   */
+  Delegate<uiKeyEventInfo> onKeyUp;
+
 
 protected:
 

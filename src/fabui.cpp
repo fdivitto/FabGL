@@ -1730,6 +1730,14 @@ void uiFrame::processEvent(uiEvent * event)
       onTimer(event->params.timerHandle);
       break;
 
+    case UIEVT_KEYDOWN:
+      onKeyDown(event->params.key);
+      break;
+
+    case UIEVT_KEYUP:
+      onKeyUp(event->params.key);
+      break;
+
     default:
       break;
   }
