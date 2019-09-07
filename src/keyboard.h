@@ -280,6 +280,8 @@ public:
    */
   VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
+  void emptyVirtualKeyQueue();
+
   /**
    * @brief Converts virtual key to ASCII.
    *

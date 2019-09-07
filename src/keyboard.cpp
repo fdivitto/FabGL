@@ -928,6 +928,12 @@ int KeyboardClass::virtualKeyAvailable()
 }
 
 
+void KeyboardClass::emptyVirtualKeyQueue()
+{
+  xQueueReset(m_virtualKeyQueue);
+}
+
+
 
 
 } // end of namespace
