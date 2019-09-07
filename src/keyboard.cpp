@@ -867,7 +867,7 @@ void KeyboardClass::SCodeToVKConverterTask(void * pvParameters)
       // has VK queue? Insert VK into it.
       if (Keyboard.m_virtualKeyQueue) {
         uint16_t code = (uint16_t)vk | (keyDown ? 0x8000 : 0);
-        xQueueSendToBack(Keyboard.m_virtualKeyQueue, &code, portMAX_DELAY);
+        xQueueSendToBack(Keyboard.m_virtualKeyQueue, &code, (Keyboard.m_uiApp ? 0 : portMAX_DELAY));  // 0, and not portMAX_DELAY to avoid uiApp locks
       }
 
       // need to send events to uiApp?
@@ -881,6 +881,7 @@ void KeyboardClass::SCodeToVKConverterTask(void * pvParameters)
         evt.params.key.GUI   = Keyboard.isVKDown(VK_LGUI) || Keyboard.isVKDown(VK_RGUI);
         Keyboard.m_uiApp->postEvent(&evt);
       }
+
     }
   }
 }
