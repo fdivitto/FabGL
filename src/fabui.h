@@ -1758,7 +1758,7 @@ public:
    *
    * @return L-value representing combobox items
    */
-  StringList & items() { return m_listBox.items(); }
+  StringList & items() { return m_listBox->items(); }
 
   /**
    * @brief Sets or gets combobox style
@@ -1772,7 +1772,7 @@ public:
    *
    * @return L-value representing listbox style
    */
-  uiListBoxStyle & listBoxStyle() { return m_listBox.listBoxStyle(); }
+  uiListBoxStyle & listBoxStyle() { return m_listBox->listBoxStyle(); }
 
   /**
    * @brief Sets or gets combobox properties
@@ -1786,7 +1786,7 @@ public:
    *
    * @return Index of the selected item or -1 if no item is selected
    */
-  int selectedItem() { return m_listBox.firstSelectedItem(); }
+  int selectedItem() { return m_listBox->firstSelectedItem(); }
 
   /**
    * @brief Selects an item
@@ -1822,7 +1822,7 @@ private:
   void updateTextEdit();
 
 
-  uiListBox       m_listBox;
+  uiListBox *     m_listBox;
   int             m_listHeight;
   uiComboBoxStyle m_comboBoxStyle;
   uiComboBoxProps m_comboBoxProps;

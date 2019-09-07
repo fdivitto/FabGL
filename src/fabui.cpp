@@ -3511,7 +3511,7 @@ void uiListBox::handleMouseDown(int mouseX, int mouseY)
 
 uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible)
   : uiTextEdit(parent, "", pos, size, visible),
-    m_listBox(parent, Point(0, 0), Size(0, 0), false),
+    m_listBox(new uiListBox(parent, Point(0, 0), Size(0, 0), false)),
     m_listHeight(listHeight)
 {
   objectType().uiComboBox = true;
@@ -3519,16 +3519,16 @@ uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, 
   textEditProps().hasCaret  = false;
   textEditProps().allowEdit = false;
 
-  m_listBox.onKillFocus = [&]() {
+  m_listBox->onKillFocus = [&]() {
     closeListBox();
   };
 
-  m_listBox.onChange = [&]() {
+  m_listBox->onChange = [&]() {
     updateTextEdit();
     onChange();
   };
 
-  m_listBox.onKeyUp = [&](uiKeyEventInfo key) {
+  m_listBox->onKeyUp = [&](uiKeyEventInfo key) {
     if (key.VK == VK_RETURN) {
       closeListBox();
       app()->setFocusedWindow(this);
@@ -3546,9 +3546,9 @@ uiComboBox::~uiComboBox()
 void uiComboBox::selectItem(int index)
 {
   if (index < 0)
-    m_listBox.deselectAll();
+    m_listBox->deselectAll();
   else
-    m_listBox.selectItem(index, true);
+    m_listBox->selectItem(index, true);
   updateTextEdit();
 }
 
@@ -3579,17 +3579,17 @@ void uiComboBox::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SETFOCUS:
-      if (m_comboBoxProps.openOnFocus && event->params.oldFocused != &m_listBox)
+      if (m_comboBoxProps.openOnFocus && event->params.oldFocused != m_listBox)
         openListBox();
       break;
 
     case UIEVT_KILLFOCUS:
-      if (event->params.newFocused != &m_listBox)
+      if (event->params.newFocused != m_listBox)
         closeListBox();
       break;
 
     case UIEVT_KEYDOWN:
-      m_listBox.processEvent(event);
+      m_listBox->processEvent(event);
       break;
 
     case UIEVT_KEYUP:
@@ -3609,22 +3609,22 @@ void uiComboBox::openListBox()
   Rect r = rect(uiOrigin::Parent);
   r.Y1 = r.Y2 + 1;
   r.Y2 = r.Y1 + m_listHeight;
-  m_listBox.bringOnTop();
-  app()->reshapeWindow(&m_listBox, r);
-  app()->showWindow(&m_listBox, true);
-  app()->setFocusedWindow(&m_listBox);
+  m_listBox->bringOnTop();
+  app()->reshapeWindow(m_listBox, r);
+  app()->showWindow(m_listBox, true);
+  app()->setFocusedWindow(m_listBox);
 }
 
 
 void uiComboBox::closeListBox()
 {
-  app()->showWindow(&m_listBox, false);
+  app()->showWindow(m_listBox, false);
 }
 
 
 void uiComboBox::switchListBox()
 {
-  if (m_listBox.state().visible)
+  if (m_listBox->state().visible)
     closeListBox();
   else
     openListBox();
