@@ -580,7 +580,7 @@ public:
   Delegate<> onClick;
 
   /**
-   * @brief Mouse double click event delegate4
+   * @brief Mouse double click event delegate
    *
    * This delegate is called when the mouse button is double pressed and released on the same position.
    * To change double click time use uiAppProps.doubleClickTime of uiApp.appProps().
@@ -1700,6 +1700,7 @@ private:
   int getItemAtMousePos(int mouseX, int mouseY);
   void handleMouseDown(int mouseX, int mouseY);
   void handleKeyDown(uiKeyEventInfo key);
+  void makeItemVisible(int index);
 
 
   uiListBoxStyle m_listBoxStyle;

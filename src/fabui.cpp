@@ -3306,6 +3306,10 @@ void uiListBox::processEvent(uiEvent * event)
       onKillFocus();
       break;
 
+    case UIEVT_SHOW:
+      makeItemVisible(firstSelectedItem());
+      break;
+
     default:
       break;
   }
@@ -3371,16 +3375,22 @@ void uiListBox::selectItem(int index, bool add, bool range)
     }
 
     // make sure the selected item is visible
-    if (VScrollBarVisible()) {
-      if (index < m_firstVisibleItem)
-        m_firstVisibleItem = index;
-      else if (index >= m_firstVisibleItem + VScrollBarVisible())
-        m_firstVisibleItem = index - VScrollBarVisible() + 1;
-    }
+    makeItemVisible(index);
 
     onChange();
 
     repaint();
+  }
+}
+
+
+void uiListBox::makeItemVisible(int index)
+{
+  if (VScrollBarVisible()) {
+    if (index < m_firstVisibleItem)
+      m_firstVisibleItem = index;
+    else if (index >= m_firstVisibleItem + VScrollBarVisible())
+      m_firstVisibleItem = index - VScrollBarVisible() + 1;
   }
 }
 
