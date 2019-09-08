@@ -358,7 +358,12 @@ void * realloc32(void * ptr, size_t size);
 void free32(void * ptr);
 
 
+void suspendInterrupts();
+void resumeInterrupts();
+
+
 ///////////////////////////////////////////////////////////////////////////////////
+
 
 /** \ingroup Enumerations
  * @brief Represents each possible real or derived (SHIFT + real) key.

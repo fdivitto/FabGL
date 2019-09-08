@@ -23,6 +23,8 @@
 #include <string.h>
 
 #include "fabutils.h"
+#include "vgacontroller.h"
+#include "ps2controller.h"
 
 
 
@@ -104,6 +106,24 @@ void free32(void * ptr)
   heap_caps_free(ptr);
 }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// suspendInterrupts
+// resumeInterrupts
+
+void suspendInterrupts()
+{
+  VGAController.suspendBackgroundPrimitiveExecution();
+  PS2Controller.suspend();
+}
+
+
+void resumeInterrupts()
+{
+  PS2Controller.resume();
+  VGAController.resumeBackgroundPrimitiveExecution();
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
