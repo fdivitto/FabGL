@@ -68,20 +68,6 @@ const uint8_t Altair88DiskBootROM[256] = {
 
 
 
-void suspendInterrupts()
-{
-  VGAController.suspendBackgroundPrimitiveExecution();
-  PS2Controller.suspend();
-}
-
-
-void resumeInterrupts()
-{
-  PS2Controller.resume();
-  VGAController.resumeBackgroundPrimitiveExecution();
-}
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////
 // buffered file IO routines
@@ -98,20 +84,20 @@ void diskFlush(FILE * file = nullptr)
 {
   // flush bufferedFile
   if (bufferedFileChanged && bufferedFile && bufferedFileDataPos != -1) {
-    suspendInterrupts();
+    fabgl::suspendInterrupts();
     fseek(bufferedFile, bufferedFileDataPos, SEEK_SET);
     fwrite(bufferedFileData, bufferedFileDataSize, 1, bufferedFile);
     fflush(bufferedFile);
     fsync(fileno(bufferedFile));  // workaround from forums...
-    resumeInterrupts();
+    fabgl::resumeInterrupts();
     bufferedFileChanged = false;
   }
   if (file) {
     // flush specified file
-    suspendInterrupts();
+    fabgl::suspendInterrupts();
     fflush(file);
     fsync(fileno(file));  // workaround from forums...
-    resumeInterrupts();
+    fabgl::resumeInterrupts();
   }
 }
 
@@ -127,11 +113,11 @@ void checkFile(FILE * file, int position, int size)
     bufferedFile = file;
   }
   if (bufferedFileDataPos == -1 || position < bufferedFileDataPos || position + size >= bufferedFileDataPos + bufferedFileDataSize) {
-    suspendInterrupts();
+    fabgl::suspendInterrupts();
     diskFlush();
     fseek(file, position, SEEK_SET);
     fread(bufferedFileData, bufferedFileDataSize, 1, file);
-    resumeInterrupts();
+    fabgl::resumeInterrupts();
     bufferedFileDataPos = position;
   }
 }
@@ -159,19 +145,19 @@ void diskWrite(int position, void * buffer, int size, FILE * file)
 
 void diskRead(int position, void * buffer, int size, FILE * file)
 {
-  suspendInterrupts();
+  fabgl::suspendInterrupts();
   fseek(file, position, SEEK_SET);
   fread(buffer, size, 1, file);
-  resumeInterrupts();
+  fabgl::resumeInterrupts();
 }
 
 
 void diskWrite(int position, void * buffer, int size, FILE * file)
 {
-  suspendInterrupts();
+  fabgl::suspendInterrupts();
   fseek(file, position, SEEK_SET);
   fwrite(buffer, size, 1, file);
-  resumeInterrupts();
+  fabgl::resumeInterrupts();
 }
 */
 

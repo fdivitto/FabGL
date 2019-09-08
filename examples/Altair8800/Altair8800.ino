@@ -25,6 +25,7 @@
 #include "esp_spiffs.h"
 
 #include "fabgl.h"
+#include "fabutils.h"
 
 #include "src/machine.h"
 
@@ -234,9 +235,9 @@ void emulator_menu()
         Terminal.write("Formatting SPIFFS removes RW disks and resets the Altair. Are you sure? (Y/N)");
         if (toupper(Terminal.read()) == 'Y') {
           Terminal.write("\n\rFormatting SPIFFS...");
-          suspendInterrupts();
+          fabgl::suspendInterrupts();
           esp_spiffs_format(nullptr);
-          resumeInterrupts();
+          fabgl::resumeInterrupts();
           resetRequired = true;
         }
         break;
@@ -333,9 +334,9 @@ void loop()
       .max_files = 4,
       .format_if_mount_failed = true
   };
-  suspendInterrupts();
+  fabgl::suspendInterrupts();
   esp_vfs_spiffs_register(&conf);
-  resumeInterrupts();
+  fabgl::resumeInterrupts();
 
   // setup disk drives
 
