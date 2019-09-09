@@ -427,6 +427,12 @@ int CanvasClass::textExtent(FontInfo const * fontInfo, char const * text)
 }
 
 
+int CanvasClass::textExtent(char const * text)
+{
+  return textExtent(m_fontInfo, text);
+}
+
+
 void CanvasClass::drawTextFmt(int X, int Y, const char *format, ...)
 {
   va_list ap;

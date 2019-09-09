@@ -664,6 +664,13 @@ public:
   int textExtent(FontInfo const * fontInfo, char const * text);
 
   /**
+   * @brief Calculates text extension in pixels.
+   *
+   * @param text String to calculate length (indexes in the character font glyphs set).
+   */
+  int textExtent(char const * text);
+
+  /**
    * @brief Draws formatted text at specified position.
    *
    * drawTextFmt() uses currently selected font (selectFont() method) and currently selected glyph options (setGlyphOptions() method).
