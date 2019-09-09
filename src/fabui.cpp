@@ -3537,6 +3537,121 @@ void uiListBox::items_draw(int index, const Rect & itemRect)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiFileBrowser
+
+
+uiFileBrowser::uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiCustomListBox(parent, pos, size, visible),
+    m_selected(-1)
+{
+  objectType().uiFileBrowser = true;
+}
+
+
+void uiFileBrowser::items_draw(int index, const Rect & itemRect)
+{
+  int x = itemRect.X1 + 1;
+  int y = itemRect.Y1 + (itemRect.height() - listBoxStyle().textFont->height) / 2;
+  Canvas.drawText(listBoxStyle().textFont, x, y, m_dir.get(index)->name);
+  if (m_dir.get(index)->isDir) {
+    static const char * DIRTXT = "[dir]";
+    int x = itemRect.X2 - Canvas.textExtent(listBoxStyle().textFont, DIRTXT);
+    Canvas.drawText(listBoxStyle().textFont, x, y, DIRTXT);
+  }
+}
+
+
+void uiFileBrowser::items_select(int index, bool select)
+{
+  if (select)
+    m_selected = index;
+  else if (index == m_selected)
+    m_selected = -1;
+}
+
+
+void uiFileBrowser::setDirectory(char const * path)
+{
+  m_dir.setDirectory(path);
+  m_selected = m_dir.count() > 0 ? 0 : -1;
+  repaint();
+}
+
+
+char const * uiFileBrowser::filename()
+{
+  return m_selected >= 0 ? m_dir.get(m_selected)->name : nullptr;
+}
+
+
+char const * uiFileBrowser::fullFilename()
+{
+  return m_selected >= 0 ? m_dir.fullFilename(m_selected) : nullptr;
+}
+
+
+bool uiFileBrowser::isDirectory()
+{
+  return m_selected >= 0 ? m_dir.get(m_selected)->isDir : false;
+}
+
+
+void uiFileBrowser::enterSubDir()
+{
+  if (m_selected >= 0) {
+    auto selItem = m_dir.get(m_selected);
+    if (selItem->isDir) {
+      m_dir.changeDirectory(selItem->name);
+      m_selected = 0;
+      onChange();
+      repaint();
+    }
+  }
+}
+
+
+void uiFileBrowser::update()
+{
+  m_dir.reload();
+  m_selected = imin(m_dir.count() - 1, m_selected);
+  onChange();
+  repaint();
+}
+
+
+void uiFileBrowser::processEvent(uiEvent * event)
+{
+  uiCustomListBox::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_KEYDOWN:
+      if (event->params.key.VK == VK_RETURN)
+        enterSubDir();
+      else if (event->params.key.VK == VK_BACKSPACE) {
+        // backspace moves to parent dir
+        m_selected = 0; // select ".."
+        enterSubDir();
+      }
+      break;
+
+    case UIEVT_KEYUP:
+      break;
+
+    case UIEVT_DBLCLICK:
+      enterSubDir();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// uiFileBrowser
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiComboBox

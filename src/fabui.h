@@ -62,6 +62,7 @@
             *uiPaintBox
               *uiCustomListBox
                 *uiListBox
+                *uiFileBrowser
             uiMemoEdit
           *uiCheckBox
           *uiComboBox
@@ -215,12 +216,13 @@ struct uiObjectType {
   uint32_t uiPaintBox          : 1;
   uint32_t uiCustomListBox     : 1;
   uint32_t uiListBox           : 1;
+  uint32_t uiFileBrowser       : 1;
   uint32_t uiComboBox          : 1;
   uint32_t uiCheckBox          : 1;
   uint32_t uiSlider            : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
-                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
+                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
     { }
 };
 
@@ -1749,6 +1751,95 @@ private:
 
   StringList     m_items;
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiFileBrowser
+
+/** @brief Shows and navigates Virtual Filesystem content */
+class uiFileBrowser : public uiCustomListBox {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A listbox must always have a parent window
+   * @param pos Top-left coordinates of the listbox relative to the parent
+   * @param size The listbox size
+   * @param visible If true the listbox is immediately visible
+   */
+  uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  /**
+   * @brief Sets current directory
+   *
+   * Path can include subdirectories (even SPIFFS emulated directories).
+   *
+   * @param path Absolute path. It musts include filesystem path (ie "/spiffs")
+   */
+  void setDirectory(char const * path);
+
+  /**
+   * @brief Determines current directory
+   *
+   * @return Full path of current directory
+   */
+  char const * directory() { return m_dir.directory(); }
+
+  /**
+   * @brief Determines number of files in current directory
+   *
+   * @return Number of files, included parent link ("..").
+   */
+  int count()              { return m_dir.count(); }
+
+  /**
+   * @brief Currently selected filename
+   *
+   * @return Currently selected filename or nullptr.
+   */
+  char const * filename();
+
+  /**
+   * @brief Currently selected filename with full path
+   *
+   * @return Full path to currently selected file.
+   */
+  char const * fullFilename();  // path + filename
+
+  /**
+   * @brief Determines whether currently selected item is a directory
+   *
+   * @return True if currently selected item is a directory. If False it is an ordinary file.
+   */
+  bool isDirectory();
+
+  void processEvent(uiEvent * event);
+
+  /**
+   * @brief Reloads current directory content and repaints
+   */
+  void update();
+
+protected:
+
+  virtual int items_getCount()                      { return m_dir.count(); }
+  virtual void items_deselectAll()                  { m_selected = -1; }
+  virtual void items_select(int index, bool select);
+  virtual bool items_selected(int index)            { return index == m_selected; }
+  virtual void items_draw(int index, const Rect & itemRect);
+
+private:
+
+  void enterSubDir();
+
+  DirContent m_dir;
+  int        m_selected;  // -1 = no sel
+
+};
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiComboBox
