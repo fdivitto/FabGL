@@ -60,7 +60,8 @@
           *uiTextEdit
           *uiScrollableControl
             *uiPaintBox
-            *uiListBox
+              *uiCustomListBox
+                *uiListBox
             uiMemoEdit
           *uiCheckBox
           *uiComboBox
@@ -212,13 +213,14 @@ struct uiObjectType {
   uint32_t uiImage             : 1;
   uint32_t uiPanel             : 1;
   uint32_t uiPaintBox          : 1;
+  uint32_t uiCustomListBox     : 1;
   uint32_t uiListBox           : 1;
   uint32_t uiComboBox          : 1;
   uint32_t uiCheckBox          : 1;
   uint32_t uiSlider            : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
-                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
+                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
     { }
 };
 
@@ -1589,7 +1591,7 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// uiListBox
+// uiCustomListBox
 
 
 /** @brief Contains the listbox style */
@@ -1605,8 +1607,8 @@ struct uiListBoxStyle {
 };
 
 
-/** @brief Contains a list of selectable items */
-class uiListBox : public uiScrollableControl {
+/** @brief Shows generic a list of selectable items */
+class uiCustomListBox : public uiScrollableControl {
 
 public:
 
@@ -1618,9 +1620,9 @@ public:
    * @param size The listbox size
    * @param visible If true the listbox is immediately visible
    */
-  uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
 
-  virtual ~uiListBox();
+  virtual ~uiCustomListBox();
 
   virtual void processEvent(uiEvent * event);
 
@@ -1630,16 +1632,6 @@ public:
    * @return L-value representing listbox style
    */
   uiListBoxStyle & listBoxStyle() { return m_listBoxStyle; }
-
-  /**
-   * @brief A list of strings representing the listbox content
-   *
-   * Other than actual strings, StringList indicates which items are selected.
-   * Repainting is required when the string list changes.
-   *
-   * @return L-value representing listbox items
-   */
-  StringList & items() { return m_items; }
 
   /**
    * @brief Gets the first selected item
@@ -1694,6 +1686,13 @@ protected:
 
   void setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar);
 
+  // must be implemented by inherited class
+  virtual int items_getCount()                              = 0;
+  virtual void items_deselectAll()                          = 0;
+  virtual void items_select(int index, bool select)         = 0;
+  virtual bool items_selected(int index)                    = 0;
+  virtual void items_draw(int index, const Rect & itemRect) = 0;
+
 private:
 
   void paintListBox();
@@ -1704,10 +1703,52 @@ private:
 
 
   uiListBoxStyle m_listBoxStyle;
-  StringList     m_items;
   int            m_firstVisibleItem;     // the item on the top
 };
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiListBox
+
+/** @brief Shows a list of selectable string items */
+class uiListBox : public uiCustomListBox {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A listbox must always have a parent window
+   * @param pos Top-left coordinates of the listbox relative to the parent
+   * @param size The listbox size
+   * @param visible If true the listbox is immediately visible
+   */
+  uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+
+  /**
+   * @brief A list of strings representing the listbox content
+   *
+   * Other than actual strings, StringList indicates which items are selected.
+   * Repainting is required when the string list changes.
+   *
+   * @return L-value representing listbox items
+   */
+  StringList & items() { return m_items; }
+
+protected:
+
+  virtual int items_getCount()                      { return m_items.count(); }
+  virtual void items_deselectAll()                  { m_items.deselectAll(); }
+  virtual void items_select(int index, bool select) { m_items.select(index, select); }
+  virtual bool items_selected(int index)            { return m_items.selected(index); }
+  virtual void items_draw(int index, const Rect & itemRect);
+
+
+private:
+
+  StringList     m_items;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiComboBox

@@ -3257,14 +3257,14 @@ Rect uiScrollableControl::clientRect(uiOrigin origin)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// uiListBox
+// uiCustomListBox
 
 
-uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+uiCustomListBox::uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
   : uiScrollableControl(parent, pos, size, visible),
     m_firstVisibleItem(0)
 {
-  objectType().uiListBox = true;
+  objectType().uiCustomListBox = true;
 
   windowProps().focusable = true;
 
@@ -3273,12 +3273,12 @@ uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bo
 }
 
 
-uiListBox::~uiListBox()
+uiCustomListBox::~uiCustomListBox()
 {
 }
 
 
-void uiListBox::processEvent(uiEvent * event)
+void uiCustomListBox::processEvent(uiEvent * event)
 {
   uiScrollableControl::processEvent(event);
 
@@ -3316,7 +3316,7 @@ void uiListBox::processEvent(uiEvent * event)
 }
 
 
-void uiListBox::handleKeyDown(uiKeyEventInfo key)
+void uiCustomListBox::handleKeyDown(uiKeyEventInfo key)
 {
   bool shift = key.SHIFT;
   switch (key.VK) {
@@ -3347,7 +3347,7 @@ void uiListBox::handleKeyDown(uiKeyEventInfo key)
 
     case VK_END:
     case VK_KP_END:
-      selectItem(m_items.count() - 1, shift, shift);
+      selectItem(items_getCount() - 1, shift, shift);
       break;
 
     default:
@@ -3356,22 +3356,23 @@ void uiListBox::handleKeyDown(uiKeyEventInfo key)
 }
 
 
-void uiListBox::selectItem(int index, bool add, bool range)
+void uiCustomListBox::selectItem(int index, bool add, bool range)
 {
-  if (m_items.count() > 0) {
-    index = iclamp(index, 0, m_items.count() - 1);
+  if (items_getCount() > 0) {
+    index = iclamp(index, 0, items_getCount() - 1);
     int first = firstSelectedItem();
     if (!add)
-      m_items.deselectAll();
+      items_deselectAll();
     if (range) {
-      if (index <= first)
+      if (index <= first) {
         for (int i = index; i <= first; ++i)
-          m_items.select(i, true);
-      else
+          items_select(i, true);
+      } else {
         for (int i = index; i >= first; --i)
-          m_items.select(i, true);
+          items_select(i, true);
+      }
     } else {
-      m_items.select(index, true);
+      items_select(index, true);
     }
 
     // make sure the selected item is visible
@@ -3384,7 +3385,7 @@ void uiListBox::selectItem(int index, bool add, bool range)
 }
 
 
-void uiListBox::makeItemVisible(int index)
+void uiCustomListBox::makeItemVisible(int index)
 {
   if (VScrollBarVisible()) {
     if (index < m_firstVisibleItem)
@@ -3395,23 +3396,23 @@ void uiListBox::makeItemVisible(int index)
 }
 
 
-void uiListBox::deselectAll()
+void uiCustomListBox::deselectAll()
 {
-  m_items.deselectAll();
+  items_deselectAll();
   onChange();
   repaint();
 }
 
 
-void uiListBox::paintListBox()
+void uiCustomListBox::paintListBox()
 {
   Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
   Rect itmRect = Rect(cliRect.X1, cliRect.Y1, cliRect.X2, cliRect.Y1 + m_listBoxStyle.itemHeight - 1);
 
   // do we need a vert scrollbar?
-  if (itmRect.height() * m_items.count() > cliRect.height()) {
+  if (itmRect.height() * items_getCount() > cliRect.height()) {
     int visible = cliRect.height() / itmRect.height();
-    int range = m_items.count();
+    int range = items_getCount();
     if (!VScrollBarVisible() || visible != VScrollBarVisible() || range != VScrollBarRange() || m_firstVisibleItem != VScrollBarPos()) {
       // show vertical scrollbar
       setScrollBar(uiOrientation::Vertical, m_firstVisibleItem, visible, range, false);
@@ -3433,17 +3434,15 @@ void uiListBox::paintListBox()
 
     // background
     RGB bkColor = hasFocus() ? m_listBoxStyle.focusedBackgroundColor : m_listBoxStyle.backgroundColor;
-    if (index < m_items.count() && m_items.selected(index))
+    if (index < items_getCount() && items_selected(index))
       bkColor = (hasFocus() ? m_listBoxStyle.focusedSelectedBackgroundColor : m_listBoxStyle.selectedBackgroundColor);
     Canvas.setBrushColor(bkColor);
     Canvas.fillRectangle(itmRect);
 
-    if (index < m_items.count()) {
+    if (index < items_getCount()) {
       // text
-      Canvas.setPenColor(m_items.selected(index) ? m_listBoxStyle.selectedTextColor : m_listBoxStyle.textColor);
-      int x = itmRect.X1 + 1;
-      int y = itmRect.Y1 + (itmRect.height() - m_listBoxStyle.textFont->height) / 2;
-      Canvas.drawText(m_listBoxStyle.textFont, x, y, m_items.get(index));
+      Canvas.setPenColor(items_selected(index) ? m_listBoxStyle.selectedTextColor : m_listBoxStyle.textColor);
+      items_draw(index, itmRect);
     }
 
     // move to next item
@@ -3455,26 +3454,26 @@ void uiListBox::paintListBox()
 
 
 // get first selected item (-1 = no selected item)
-int uiListBox::firstSelectedItem()
+int uiCustomListBox::firstSelectedItem()
 {
-  for (int i = 0; i < m_items.count(); ++i)
-    if (m_items.selected(i))
+  for (int i = 0; i < items_getCount(); ++i)
+    if (items_selected(i))
       return i;
   return -1;
 }
 
 
 // get last selected item (-1 = no selected item)
-int uiListBox::lastSelectedItem()
+int uiCustomListBox::lastSelectedItem()
 {
-  for (int i = m_items.count() - 1; i >= 0; --i)
-    if (m_items.selected(i))
+  for (int i = items_getCount() - 1; i >= 0; --i)
+    if (items_selected(i))
       return i;
   return -1;
 }
 
 
-void uiListBox::setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar)
+void uiCustomListBox::setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar)
 {
   uiScrollableControl::setScrollBar(orientation, position, visible, range, false);
   if (VScrollBarVisible() && m_firstVisibleItem != VScrollBarPos()) {
@@ -3484,7 +3483,7 @@ void uiListBox::setScrollBar(uiOrientation orientation, int position, int visibl
 }
 
 
-int uiListBox::getItemAtMousePos(int mouseX, int mouseY)
+int uiCustomListBox::getItemAtMousePos(int mouseX, int mouseY)
 {
   Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
   if (cliRect.contains(mouseX, mouseY))
@@ -3493,22 +3492,46 @@ int uiListBox::getItemAtMousePos(int mouseX, int mouseY)
 }
 
 
-void uiListBox::handleMouseDown(int mouseX, int mouseY)
+void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
 {
   int idx = getItemAtMousePos(mouseX, mouseY);
   if (idx > -1) {
     if (Keyboard.isVKDown(VK_LCTRL) || Keyboard.isVKDown(VK_RCTRL)) {
       // CTRL is down
-      m_items.select(idx, !m_items.selected(idx));
+      items_select(idx, !items_selected(idx));
     } else {
       // CTRL is up
-      m_items.deselectAll();
-      m_items.select(idx, true);
+      items_deselectAll();
+      items_select(idx, true);
     }
     onChange();
     repaint();
   }
 }
+
+
+// uiCustomListBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiListBox
+
+
+uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+  : uiCustomListBox(parent, pos, size, visible)
+{
+  objectType().uiListBox = true;
+}
+
+
+void uiListBox::items_draw(int index, const Rect & itemRect)
+{
+  int x = itemRect.X1 + 1;
+  int y = itemRect.Y1 + (itemRect.height() - listBoxStyle().textFont->height) / 2;
+  Canvas.drawText(listBoxStyle().textFont, x, y, m_items.get(index));
+}
+
 
 // uiListBox
 ////////////////////////////////////////////////////////////////////////////////////////////////////
