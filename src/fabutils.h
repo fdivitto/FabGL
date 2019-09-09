@@ -338,6 +338,52 @@ private:
 };
 
 
+///////////////////////////////////////////////////////////////////////////////////
+// DirContent
+
+
+struct DirItem {
+  bool isDir;
+  char * name;
+};
+
+
+class DirContent {
+public:
+
+  DirContent();
+  ~DirContent();
+
+  void clear();
+
+  void setDirectory(const char * path);    // set absolute path
+  void changeDirectory(const char * subdir); // set relative path
+  void reload();
+
+  char const * directory() { return m_dir; }
+
+  int count() { return m_count; }
+
+  DirItem const * get(int index) { return m_items + index; }
+
+  char const * fullFilename(int index); // m_dir + '/' + filename. not thread safe!
+
+  bool fileExists(char const * name);
+
+  void setSorted(bool value);
+
+private:
+
+  int countDirEntries();
+
+  char *    m_dir;
+  int       m_count;
+  DirItem * m_items;
+  bool      m_sorted;
+  char *    m_fullFilename; // used as store for fullFilename() method
+};
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////

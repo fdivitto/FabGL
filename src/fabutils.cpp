@@ -21,6 +21,8 @@
 
 
 #include <string.h>
+#include <stdlib.h>
+#include <dirent.h>
 
 #include "fabutils.h"
 #include "vgacontroller.h"
@@ -367,6 +369,181 @@ void StringList::select(int index, bool value)
 // StringList
 ///////////////////////////////////////////////////////////////////////////////////
 
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// DirContent
+
+DirContent::DirContent()
+  : m_dir(nullptr),
+    m_count(0),
+    m_items(nullptr),
+    m_sorted(true),
+    m_fullFilename(nullptr)
+{
+}
+
+
+DirContent::~DirContent()
+{
+  clear();
+}
+
+
+void DirContent::clear()
+{
+  if (m_items) {
+    for (int i = 0; i < m_count; ++i)
+      free(m_items[i].name);
+    free(m_items);
+    m_items = nullptr;
+  }
+  m_count = 0;
+  if (m_fullFilename) {
+    free(m_fullFilename);
+    m_fullFilename = nullptr;
+  }
+}
+
+
+// set absolute directory (full path must be specified)
+void DirContent::setDirectory(const char * path)
+{
+  if (m_dir)
+    free(m_dir);
+  m_dir = strdup(path);
+  reload();
+}
+
+
+// concat m_dir + '/' + filename
+char const * DirContent::fullFilename(int index)
+{
+  if (m_fullFilename)
+    free(m_fullFilename);
+  int dirLen = strlen(m_dir);
+  m_fullFilename = (char*) malloc(dirLen + 1 + strlen(m_items[index].name) + 1);
+  strncpy(m_fullFilename, m_dir, dirLen);
+  m_fullFilename[dirLen] = '/';
+  strcpy(m_fullFilename + dirLen + 1, m_items[index].name);
+  return m_fullFilename;
+}
+
+
+// set relative directory:
+//   ".." : go to the parent directory
+//   "dirname": go inside the specified sub directory
+void DirContent::changeDirectory(const char * subdir)
+{
+  if (!m_dir)
+    return;
+  if (strcmp(subdir, "..") == 0) {
+    // go to parent directory
+    auto lastSlash = strrchr(m_dir, '/');
+    if (lastSlash && lastSlash != m_dir) {
+      *lastSlash = 0;
+      reload();
+    }
+  } else {
+    // go to sub directory
+    int oldLen = strlen(m_dir);
+    char * newDir = (char*) malloc(oldLen + 1 + strlen(subdir) + 1);  // m_dir + '/' + subdir + 0
+    strcpy(newDir, m_dir);
+    newDir[oldLen] = '/';
+    strcpy(newDir + oldLen + 1, subdir);
+    free(m_dir);
+    m_dir = newDir;
+    reload();
+  }
+}
+
+
+int DirContent::countDirEntries()
+{
+  int c = 0;
+  if (m_dir) {
+    suspendInterrupts();
+    auto dirp = opendir(m_dir);
+    while (dirp) {
+      auto dp = readdir(dirp);
+      if (dp == NULL)
+        break;
+      if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN)
+        ++c;
+    }
+    closedir(dirp);
+    resumeInterrupts();
+  }
+  return c;
+}
+
+
+bool DirContent::fileExists(char const * name)
+{
+  for (int i = 0; i < m_count; ++i)
+    if (strcmp(name, m_items[i].name) == 0)
+      return true;
+  return false;
+}
+
+
+int DirComp(const void * i1, const void * i2)
+{
+  DirItem * d1 = (DirItem*)i1;
+  DirItem * d2 = (DirItem*)i2;
+  if (d1->isDir != d2->isDir) // directories first
+    return d1->isDir ? -1 : +1;
+  else
+    return strcmp(d1->name, d2->name);
+}
+
+
+void DirContent::reload()
+{
+  clear();
+  int c = countDirEntries();
+  m_items = (DirItem*) malloc(sizeof(DirItem) * (c + 1));
+
+  // first item is always ".."
+  m_items[0].name  = strdup("..");
+  m_items[0].isDir = true;
+  ++m_count;
+
+  suspendInterrupts();
+  auto dirp = opendir(m_dir);
+  for (int i = 0; i < c; ++i) {
+    auto dp = readdir(dirp);
+    if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
+      DirItem * di = m_items + m_count;
+      // check if this is a simulated directory (like in SPIFFS)
+      auto slashPos = strchr(dp->d_name, '/');
+      if (slashPos) {
+        // yes, this is a simulated dir. Trunc and avoid to insert it twice
+        int len = slashPos - dp->d_name;
+        char name[len + 1];
+        strncpy(name, dp->d_name, len);
+        name[len] = 0;
+        if (!fileExists(name)) {
+          di->name  = strdup(name);
+          di->isDir = true;
+          ++m_count;
+        }
+      } else {
+        di->name  = strdup(dp->d_name);
+        di->isDir = (dp->d_type == DT_DIR);
+        ++m_count;
+      }
+    }
+  }
+  closedir(dirp);
+  resumeInterrupts();
+  if (m_sorted)
+    qsort(m_items, m_count, sizeof(DirItem), DirComp);
+}
+
+
+// DirContent
+///////////////////////////////////////////////////////////////////////////////////
 
 
 
