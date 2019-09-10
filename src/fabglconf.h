@@ -226,5 +226,11 @@
 #define SVGA_800x600_60Hz "\"800x600@60Hz\" 40 800 840 968 1056 600 601 605 628 -HSync -VSync"
 
 
+// Thanks to Paul Rickards (http://biosrhythm.com)
+
+#define NTSC_640x240_60hz "\"NTSC 640x240 (60Hz)\" 12.312 640 662 719 784 240 244 247 262 -hsync -vsync"
+#define NTSC_720x240_60hz "\"NTSC 720x240 (60Hz)\" 13.820 720 744 809 880 240 244 247 262 -hsync -vsync"
+#define PAL_720x288_50hz "\"PAL  720x288 (50Hz)\" 13.853 720 741 806 888 288 290 293 312 -hsync -vsync"
+#define PAL_768x288_50hz "\"PAL  768x288 (50Hz)\" 14.726 768 790 859 944 288 290 293 312 -hsync -vsync"
 
 
