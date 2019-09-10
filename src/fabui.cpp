@@ -956,6 +956,95 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
 }
 
 
+uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char * inOutString, int maxLength, char const * button1Text, char const * button2Text)
+{
+  auto font = Canvas.getPresetFontInfoFromHeight(14, false);
+  const int titleHeight   = title && strlen(title) ? font->height : 0;
+  const int textExtent    = Canvas.textExtent(font, text);
+  const int editExtent    = imin(maxLength * Canvas.textExtent(font, "M"), m_rootWindow->clientSize().width / 2 - textExtent);
+  const int button1Extent = button1Text ? Canvas.textExtent(font, button1Text) + 10 : 0;
+  const int button2Extent = button2Text ? Canvas.textExtent(font, button2Text) + 10 : 0;
+  const int buttonsWidth  = imax(imax(button1Extent, button2Extent), 40);
+  int totButtons = 0;
+  if (button1Extent)
+    ++totButtons;
+  if (button2Extent)
+    ++totButtons;
+  const int buttonsHeight    = font->height + 6;
+  const int textHeight       = font->height;
+  constexpr int buttonsSpace = 10;
+  const int requiredWidth    = imin(imax(editExtent + textExtent + 10, buttonsWidth * totButtons + (2 + buttonsSpace) * totButtons), Canvas.getWidth());
+  const int requiredHeight   = textHeight + buttonsHeight + titleHeight + font->height * 3;
+  const int frameX           = (Canvas.getWidth() - requiredWidth) / 2;
+  const int frameY           = (Canvas.getHeight() - requiredHeight) / 2;
+
+  auto mainFrame = new uiFrame(m_rootWindow, title, Point(frameX, frameY), Size(requiredWidth, requiredHeight), false);
+  mainFrame->frameProps().resizeable        = false;
+  mainFrame->frameProps().hasMaximizeButton = false;
+  mainFrame->frameProps().hasMinimizeButton = false;
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+    if (key.VK == VK_RETURN)
+      mainFrame->exitModal(1);
+    else if (key.VK == VK_ESCAPE)
+      mainFrame->exitModal(0);
+  };
+
+  int x = 10;
+  int y = font->height + titleHeight + (textHeight - font->height) / 2;
+  new uiLabel(mainFrame, text, Point(x, y));
+
+  auto edit = new uiTextEdit(mainFrame, inOutString, Point(x + textExtent + 5, y - 4), Size(editExtent - 15, textHeight + 6));
+
+  // setup panel (where buttons are positioned)
+
+  y += textHeight + titleHeight;
+  auto panel = new uiPanel(mainFrame, Point(0, y), Size(mainFrame->size().width, mainFrame->size().height - y));
+  panel->windowStyle().borderColor = RGB(2, 2, 2);
+  panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
+
+  // setup buttons
+
+  y = (panel->size().height - buttonsHeight) / 2;
+  x = mainFrame->windowStyle().borderSize + requiredWidth - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
+
+  auto button1 = button1Text ? new uiButton(panel, button1Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
+  if (button1) {
+    button1->onClick = [&]() { mainFrame->exitModal(1); };
+    x += buttonsWidth + buttonsSpace;
+  }
+
+  auto button2 = button2Text ? new uiButton(panel, button2Text, Point(x, y), Size(buttonsWidth, buttonsHeight)) : nullptr;
+  if (button2) {
+    button2->onClick = [&]() { mainFrame->exitModal(2); };
+    x += buttonsWidth + buttonsSpace;
+  }
+
+  // focus on edit
+  mainFrame->onShow = [&]() {
+    setFocusedWindow(edit);
+  };
+
+  // run
+
+  int modalResult = showModalWindow(mainFrame);
+  destroyWindow(mainFrame);
+
+  switch (modalResult) {
+    case 1:
+    {
+      int len = imin(maxLength, strlen(edit->text()));
+      memcpy(inOutString, edit->text(), len);
+      inOutString[len] = 0;
+      return uiMessageBoxResult::Button1;
+    }
+    case 2:
+      return uiMessageBoxResult::Button2;
+    default:
+      return uiMessageBoxResult::Cancel;
+  }
+}
+
+
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -2506,6 +2506,22 @@ public:
    */
   uiMessageBoxResult messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text = nullptr, char const * button3Text = nullptr, uiMessageBoxIcon icon = uiMessageBoxIcon::Question);
 
+  /**
+   * @brief Displays a modal dialog box with a text, a text edit and up to two buttons
+   *
+   * Pressing ENTER (RETURN) equals to press first button.
+   * Pressing ESC cancels the dialog box.
+   *
+   * @param title The dialog box title. If nullptr the messaebox has no title bar
+   * @param text The message to be displayed
+   * @param inOutString Initial string of the text edit
+   * @param maxLength Maximum length of inOutString buffer (ending zero not included)
+   * @param button1Text Left button text
+   * @param button2Text Right button text (may be nullptr, if not present)
+   *
+   * @return Message box result
+   */
+  uiMessageBoxResult inputBox(char const * title, char const * text, char * inOutString, int maxLength, char const * button1Text, char const * button2Text = nullptr);
 
   /**
    * @brief Method to inherit to implement an application
