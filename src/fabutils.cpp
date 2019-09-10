@@ -372,9 +372,9 @@ void StringList::select(int index, bool value)
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-// DirContent
+// FileBrowser
 
-DirContent::DirContent()
+FileBrowser::FileBrowser()
   : m_dir(nullptr),
     m_count(0),
     m_items(nullptr),
@@ -386,13 +386,13 @@ DirContent::DirContent()
 }
 
 
-DirContent::~DirContent()
+FileBrowser::~FileBrowser()
 {
   clear();
 }
 
 
-void DirContent::clear()
+void FileBrowser::clear()
 {
   free(m_items);
   m_items = nullptr;
@@ -408,7 +408,7 @@ void DirContent::clear()
 
 
 // set absolute directory (full path must be specified)
-void DirContent::setDirectory(const char * path)
+void FileBrowser::setDirectory(const char * path)
 {
   free(m_dir);
   m_dir = strdup(path);
@@ -417,7 +417,7 @@ void DirContent::setDirectory(const char * path)
 
 
 // concat m_dir + '/' + filename
-char const * DirContent::fullFilename(int index)
+char const * FileBrowser::fullFilename(int index)
 {
   free(m_fullFilename);
   int dirLen = strlen(m_dir);
@@ -432,7 +432,7 @@ char const * DirContent::fullFilename(int index)
 // set relative directory:
 //   ".." : go to the parent directory
 //   "dirname": go inside the specified sub directory
-void DirContent::changeDirectory(const char * subdir)
+void FileBrowser::changeDirectory(const char * subdir)
 {
   if (!m_dir)
     return;
@@ -457,7 +457,7 @@ void DirContent::changeDirectory(const char * subdir)
 }
 
 
-int DirContent::countDirEntries(int * namesLength)
+int FileBrowser::countDirEntries(int * namesLength)
 {
   int c = 0;
   *namesLength = 0;
@@ -480,7 +480,7 @@ int DirContent::countDirEntries(int * namesLength)
 }
 
 
-bool DirContent::fileExists(char const * name)
+bool FileBrowser::fileExists(char const * name)
 {
   for (int i = 0; i < m_count; ++i)
     if (strcmp(name, m_items[i].name) == 0)
@@ -500,7 +500,7 @@ int DirComp(const void * i1, const void * i2)
 }
 
 
-void DirContent::reload()
+void FileBrowser::reload()
 {
   clear();
   int namesAlloc;
@@ -549,7 +549,7 @@ void DirContent::reload()
 }
 
 
-// DirContent
+// FileBrowser
 ///////////////////////////////////////////////////////////////////////////////////
 
 

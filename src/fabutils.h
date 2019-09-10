@@ -339,7 +339,7 @@ private:
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-// DirContent
+// FileBrowser
 
 
 struct DirItem {
@@ -348,11 +348,11 @@ struct DirItem {
 };
 
 
-class DirContent {
+class FileBrowser {
 public:
 
-  DirContent();
-  ~DirContent();
+  FileBrowser();
+  ~FileBrowser();
 
   void clear();
 

@@ -1834,8 +1834,8 @@ private:
 
   void enterSubDir();
 
-  DirContent m_dir;
-  int        m_selected;  // -1 = no sel
+  FileBrowser m_dir;
+  int         m_selected;  // -1 = no sel
 
 };
 

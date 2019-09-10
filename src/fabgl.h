@@ -390,7 +390,7 @@ using fabgl::VirtualKey;
 using fabgl::uiKeyEventInfo;
 using fabgl::uiCustomListBox;
 using fabgl::uiFileBrowser;
-using fabgl::DirContent;
+using fabgl::FileBrowser;
 
 
 
