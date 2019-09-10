@@ -344,7 +344,7 @@ private:
 
 struct DirItem {
   bool isDir;
-  char * name;
+  char const * name;
 };
 
 
@@ -372,15 +372,19 @@ public:
 
   void setSorted(bool value);
 
+  void setIncludeHiddenFiles(bool value) { m_includeHiddenFiles = value; }
+
 private:
 
-  int countDirEntries();
+  int countDirEntries(int * namesLength);
 
   char *    m_dir;
   int       m_count;
   DirItem * m_items;
   bool      m_sorted;
   char *    m_fullFilename; // used as store for fullFilename() method
+  bool      m_includeHiddenFiles;
+  char *    m_namesStorage;
 };
 
 

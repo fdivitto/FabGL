@@ -379,7 +379,9 @@ DirContent::DirContent()
     m_count(0),
     m_items(nullptr),
     m_sorted(true),
-    m_fullFilename(nullptr)
+    m_fullFilename(nullptr),
+    m_includeHiddenFiles(false),
+    m_namesStorage(nullptr)
 {
 }
 
@@ -392,25 +394,23 @@ DirContent::~DirContent()
 
 void DirContent::clear()
 {
-  if (m_items) {
-    for (int i = 0; i < m_count; ++i)
-      free(m_items[i].name);
-    free(m_items);
-    m_items = nullptr;
-  }
+  free(m_items);
+  m_items = nullptr;
+
+  free(m_namesStorage);
+  m_namesStorage = nullptr;
+
+  free(m_fullFilename);
+  m_fullFilename = nullptr;
+
   m_count = 0;
-  if (m_fullFilename) {
-    free(m_fullFilename);
-    m_fullFilename = nullptr;
-  }
 }
 
 
 // set absolute directory (full path must be specified)
 void DirContent::setDirectory(const char * path)
 {
-  if (m_dir)
-    free(m_dir);
+  free(m_dir);
   m_dir = strdup(path);
   reload();
 }
@@ -419,8 +419,7 @@ void DirContent::setDirectory(const char * path)
 // concat m_dir + '/' + filename
 char const * DirContent::fullFilename(int index)
 {
-  if (m_fullFilename)
-    free(m_fullFilename);
+  free(m_fullFilename);
   int dirLen = strlen(m_dir);
   m_fullFilename = (char*) malloc(dirLen + 1 + strlen(m_items[index].name) + 1);
   strncpy(m_fullFilename, m_dir, dirLen);
@@ -458,9 +457,10 @@ void DirContent::changeDirectory(const char * subdir)
 }
 
 
-int DirContent::countDirEntries()
+int DirContent::countDirEntries(int * namesLength)
 {
   int c = 0;
+  *namesLength = 0;
   if (m_dir) {
     suspendInterrupts();
     auto dirp = opendir(m_dir);
@@ -468,8 +468,10 @@ int DirContent::countDirEntries()
       auto dp = readdir(dirp);
       if (dp == NULL)
         break;
-      if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN)
+      if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
+        *namesLength += strlen(dp->d_name) + 1;
         ++c;
+      }
     }
     closedir(dirp);
     resumeInterrupts();
@@ -501,11 +503,14 @@ int DirComp(const void * i1, const void * i2)
 void DirContent::reload()
 {
   clear();
-  int c = countDirEntries();
+  int namesAlloc;
+  int c = countDirEntries(&namesAlloc);
   m_items = (DirItem*) malloc(sizeof(DirItem) * (c + 1));
+  m_namesStorage = (char*) malloc(namesAlloc);
+  char * sname = m_namesStorage;
 
   // first item is always ".."
-  m_items[0].name  = strdup("..");
+  m_items[0].name  = "..";
   m_items[0].isDir = true;
   ++m_count;
 
@@ -520,17 +525,19 @@ void DirContent::reload()
       if (slashPos) {
         // yes, this is a simulated dir. Trunc and avoid to insert it twice
         int len = slashPos - dp->d_name;
-        char name[len + 1];
-        strncpy(name, dp->d_name, len);
-        name[len] = 0;
-        if (!fileExists(name)) {
-          di->name  = strdup(name);
+        strncpy(sname, dp->d_name, len);
+        sname[len] = 0;
+        if (!fileExists(sname)) {
+          di->name  = sname;
           di->isDir = true;
+          sname += len + 1;
           ++m_count;
         }
-      } else {
-        di->name  = strdup(dp->d_name);
+      } else if (m_includeHiddenFiles || dp->d_name[0] != '.') {
+        strcpy(sname, dp->d_name);
+        di->name  = sname;
         di->isDir = (dp->d_type == DT_DIR);
+        sname += strlen(sname) + 1;
         ++m_count;
       }
     }
