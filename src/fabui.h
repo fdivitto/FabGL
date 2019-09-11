@@ -1802,13 +1802,6 @@ public:
   char const * filename();
 
   /**
-   * @brief Currently selected filename with full path
-   *
-   * @return Full path to currently selected file.
-   */
-  char const * fullFilename();  // path + filename
-
-  /**
    * @brief Determines whether currently selected item is a directory
    *
    * @return True if currently selected item is a directory. If False it is an ordinary file.
@@ -1821,6 +1814,14 @@ public:
    * @brief Reloads current directory content and repaints
    */
   void update();
+
+  /**
+   * @brief Contains current directory representation
+   *
+   * @return A FileBrowser object which allows to know directory content and to manipulate it
+   */
+  FileBrowser & content() { return m_dir; }
+
 
 protected:
 

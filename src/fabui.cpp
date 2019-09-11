@@ -3674,12 +3674,6 @@ char const * uiFileBrowser::filename()
 }
 
 
-char const * uiFileBrowser::fullFilename()
-{
-  return m_selected >= 0 ? m_dir.fullFilename(m_selected) : nullptr;
-}
-
-
 bool uiFileBrowser::isDirectory()
 {
   return m_selected >= 0 ? m_dir.get(m_selected)->isDir : false;
