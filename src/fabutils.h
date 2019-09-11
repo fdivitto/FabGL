@@ -342,47 +342,128 @@ private:
 // FileBrowser
 
 
+/**
+ * @brief FileBrowser item specificator
+ */
 struct DirItem {
-  bool isDir;
-  char const * name;
+  bool isDir;          /**< True if this is a directory, false if this is an ordinary file */
+  char const * name;   /**< File or directory name */
 };
 
 
+/**
+ * @brief FileBrowser allows basic file system operations (dir, mkdir, remove and rename)
+ */
 class FileBrowser {
 public:
 
   FileBrowser();
   ~FileBrowser();
 
-  void clear();
-
+  /**
+   * @brief Sets absolute directory path
+   *
+   * @param path Absolute directory path (ie "/spiffs")
+   */
   void setDirectory(const char * path);    // set absolute path
+
+  /**
+   * @brief Sets relative directory path
+   *
+   * @param subdir Relative directory path (ie "subdir")
+   */
   void changeDirectory(const char * subdir); // set relative path
+
+  /**
+   * @brief Reloads directory content
+   */
   void reload();
 
+  /**
+   * @brief Determines absolute path of current directory
+   *
+   * @return Absolute path of current directory
+   */
   char const * directory() { return m_dir; }
 
+  /**
+   * @brief Determines number of files in current directory
+   *
+   * @return Number of directory files, included parent ".."
+   */
   int count() { return m_count; }
 
+  /**
+   * @brief Gets file/directory at index
+   *
+   * @param index File or directory index. 0 = is always parent directory
+   *
+   * @return File or directory specificator
+   */
   DirItem const * get(int index) { return m_items + index; }
 
-  char const * fullFilename(int index); // m_dir + '/' + filename. not thread safe!
+  /**
+   * @brief Determines if a file exists
+   *
+   * @param name Relative file or directory name
+   *
+   * @return True if the file exists
+   */
+  bool exists(char const * name);
 
-  bool fileExists(char const * name);
-
+  /**
+   * @brief Determines if the items are sorted
+   *
+   * @param value If true items will be sorted in ascending order (directories first)
+   */
   void setSorted(bool value);
 
   void setIncludeHiddenFiles(bool value) { m_includeHiddenFiles = value; }
 
+  /**
+   * @brief Creates a directory
+   *
+   * @param dirname Relative directory name
+   */
+  void makeDirectory(char const * dirname);
+
+  /**
+   * @brief Removes a file or directory
+   *
+   * If filesystem is SPIFFS then this method can also remove a non empty directory
+   *
+   * @param name Relative file or directory name
+   */
+  void remove(char const * name);
+
+  /**
+   * @brief Renames a file
+   *
+   * @param oldName Relative old file name
+   * @param newName Relative new file name
+   */
+  void rename(char const * oldName, char const * newName);
+
+  /**
+   * @brief Compose a full file path given a relative name
+   *
+   * @param name Relative file name
+   * @param outPath Where to place the full path. This can be NULL (used to calculate required buffer size).
+   * @param maxlen Maximum size of outPath string. This can be 0 when outPath is NULL.
+   *
+   * @return Required outPath size
+   */
+  int getFullPath(char const * name, char * outPath = nullptr, int maxlen = 0);
+
 private:
 
+  void clear();
   int countDirEntries(int * namesLength);
 
   char *    m_dir;
   int       m_count;
   DirItem * m_items;
   bool      m_sorted;
-  char *    m_fullFilename; // used as store for fullFilename() method
   bool      m_includeHiddenFiles;
   char *    m_namesStorage;
 };
