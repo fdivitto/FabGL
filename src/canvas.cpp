@@ -488,7 +488,7 @@ FontInfo const * CanvasClass::getPresetFontInfo(int columns, int rows)
 {
   FontInfo const * * fontInfo = &FIXED_WIDTH_EMBEDDED_FONTS[0];
 
-  for (int i = 0; i < sizeof(FIXED_WIDTH_EMBEDDED_FONTS) / sizeof(FontInfo*); ++i, ++fontInfo)
+  for (int i = 0; i < sizeof(FIXED_WIDTH_EMBEDDED_FONTS) / sizeof(FontInfo*) - 1; ++i, ++fontInfo)  // -1, so the smallest is always selected
     if (Canvas.getWidth() / (*fontInfo)->width >= columns && Canvas.getHeight() / (*fontInfo)->height >= rows)
       break;
 
@@ -501,7 +501,7 @@ FontInfo const * CanvasClass::getPresetFontInfoFromHeight(int height, bool fixed
   FontInfo const * * fontInfo = fixedWidth ? &FIXED_WIDTH_EMBEDDED_FONTS[0] : &VAR_WIDTH_EMBEDDED_FONTS[0];
   int count = (fixedWidth ? sizeof(FIXED_WIDTH_EMBEDDED_FONTS) : sizeof(VAR_WIDTH_EMBEDDED_FONTS)) / sizeof(FontInfo*);
 
-  for (int i = 0; i < count; ++i, ++fontInfo)
+  for (int i = 0; i < count - 1; ++i, ++fontInfo) // -1, so the smallest is always selected
     if (height >= (*fontInfo)->height)
       break;
 
