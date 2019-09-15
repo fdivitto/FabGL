@@ -105,6 +105,7 @@ void VGAControllerClass::init(gpio_num_t VSyncGPIO)
   m_spritesHidden = true;
   m_doubleBuffered = false;
   m_mouseCursor.visible = false;
+  m_backgroundPrimitiveTimeoutEnabled = true;
 
   SquareWaveGenerator.begin();
 }
@@ -797,7 +798,7 @@ void IRAM_ATTR VGAControllerClass::processPrimitives()
 
 void IRAM_ATTR VGAControllerClass::VSyncInterrupt()
 {
-  int64_t startTime = esp_timer_get_time();
+  int64_t startTime = VGAController.backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
   bool isFirst = true;
   do {
     Primitive prim;
@@ -805,7 +806,7 @@ void IRAM_ATTR VGAControllerClass::VSyncInterrupt()
       break;
 
     if (prim.cmd == PrimitiveCmd::SwapBuffers && !isFirst) {
-      // SwapBuffers must be the first primitive executed at VSync. If not reinsert it and interrupt execution to wait for next VSync.
+      // SwapBuffers must be the first primitive executed at VSync. If not reinsert it and break execution to wait for next VSync.
       xQueueSendToFrontFromISR(VGAController.m_execQueue, &prim, nullptr);
       break;
     }
@@ -813,7 +814,7 @@ void IRAM_ATTR VGAControllerClass::VSyncInterrupt()
     VGAController.execPrimitive(prim);
 
     isFirst = false;
-  } while (startTime + VGAController.m_maxVSyncISRTime > esp_timer_get_time());
+  } while (!VGAController.backgroundPrimitiveTimeoutEnabled() || (startTime + VGAController.m_maxVSyncISRTime > esp_timer_get_time()));
   VGAController.showSprites();
 }
 

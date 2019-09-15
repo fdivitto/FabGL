@@ -724,6 +724,17 @@ public:
   void enableBackgroundPrimitiveExecution(bool value);
 
   /**
+   * @brief Enables or disables execution time limitation inside vertical retracing interrupt
+   *
+   * Disabling interrupt execution timeout may generate flickering but speedup drawing operations.
+   *
+   * @param value True enables timeout (default), False disables timeout
+   */
+  void enableBackgroundPrimitiveTimeout(bool value) { m_backgroundPrimitiveTimeoutEnabled = value; }
+
+  bool backgroundPrimitiveTimeoutEnabled()          { return m_backgroundPrimitiveTimeoutEnabled; }
+
+  /**
    * @brief Suspends drawings.
    *
    * Suspends drawings disabling vertical sync interrupt.<br>
@@ -1061,6 +1072,7 @@ private:
   gpio_num_t             m_VSyncGPIO;
   int                    m_VSyncInterruptSuspended;             // 0 = enabled, >0 suspended
   bool                   m_backgroundPrimitiveExecutionEnabled; // when False primitives are execute immediately
+  volatile bool          m_backgroundPrimitiveTimeoutEnabled;   // when False VSyncInterrupt() has not timeout
 
   void *                 m_sprites;       // pointer to array of sprite structures
   int                    m_spriteSize;    // size of sprite structure
