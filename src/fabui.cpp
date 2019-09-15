@@ -3589,8 +3589,11 @@ void uiCustomListBox::setScrollBar(uiOrientation orientation, int position, int 
 int uiCustomListBox::getItemAtMousePos(int mouseX, int mouseY)
 {
   Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
-  if (cliRect.contains(mouseX, mouseY))
-    return m_firstVisibleItem + (mouseY - cliRect.Y1) / m_listBoxStyle.itemHeight;
+  if (cliRect.contains(mouseX, mouseY)) {
+    int idx = m_firstVisibleItem + (mouseY - cliRect.Y1) / m_listBoxStyle.itemHeight;
+    if (idx < items_getCount())
+      return idx;
+  }
   return -1;
 }
 
@@ -3607,9 +3610,10 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
       items_deselectAll();
       items_select(idx, true);
     }
-    onChange();
-    repaint();
-  }
+  } else
+    items_deselectAll();
+  onChange();
+  repaint();
 }
 
 
@@ -3669,7 +3673,7 @@ void uiFileBrowser::items_select(int index, bool select)
 {
   if (select)
     m_selected = index;
-  else if (index == m_selected)
+  else if (index == m_selected || index == -1)
     m_selected = -1;
 }
 
@@ -3793,7 +3797,7 @@ void uiComboBox::selectItem(int index)
   if (index < 0)
     m_listBox->deselectAll();
   else
-    m_listBox->selectItem(index, true);
+    m_listBox->selectItem(index);
   updateTextEdit();
 }
 
