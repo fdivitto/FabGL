@@ -1045,6 +1045,20 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
 }
 
 
+void uiApp::enableKeyboardAndMouseEvents(bool value)
+{
+  if (value) {
+    Keyboard.setUIApp(this);
+    Mouse.setUIApp(this);
+    VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+  } else {
+    Keyboard.setUIApp(nullptr);
+    Mouse.setUIApp(nullptr);
+    VGAController.setMouseCursor(nullptr);
+  }
+}
+
+
 // uiApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

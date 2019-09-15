@@ -2494,6 +2494,15 @@ public:
   void cleanWindowReferences(uiWindow * window);
 
   /**
+   * @brief Enables or disables mouse and keyboard events
+   *
+   * For default mouse and keyboard events are enabled.
+   *
+   * @param value True to enable events, False to disable events
+   */
+  void enableKeyboardAndMouseEvents(bool value);
+
+  /**
    * @brief Displays a modal dialog box with an icon, text and some buttons
    *
    * @param title The dialog box title. If nullptr the messaebox has no title bar
