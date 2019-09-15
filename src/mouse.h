@@ -229,6 +229,13 @@ public:
   void setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app);
 
   /**
+   * @brief Sets current UI app
+   *
+   * @param app The UI app where to send mouse events
+   */
+  void setUIApp(uiApp * app) { m_uiApp = app; }
+
+  /**
    * @brief Terminates absolute position handler.
    */
   void terminateAbsolutePositioner();
