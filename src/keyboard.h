@@ -203,7 +203,13 @@ public:
    */
   void begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port);
 
-  // to use this generateVirtualKeys must be true in begin()
+  /**
+   * @brief Sets current UI app
+   *
+   * To use this generateVirtualKeys must be true in begin().
+   *
+   * @param app The UI app where to send keyboard events
+   */
   void setUIApp(uiApp * app) { m_uiApp = app; }
 
   /**
@@ -280,6 +286,9 @@ public:
    */
   VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
+  /**
+   * @brief Empties the virtual keys queue
+   */
   void emptyVirtualKeyQueue();
 
   /**
