@@ -2220,6 +2220,16 @@ enum class uiMessageBoxIcon {
 };
 
 
+struct ModalWindowState {
+  uiWindow * window;
+  uiWindow * prevFocusedWindow;
+  uiWindow * prevActiveWindow;
+  uiWindow * prevModal;
+  int        modalResult;
+};
+
+
+
 /**
  * @brief Represents the whole application base class.
  *
@@ -2429,12 +2439,48 @@ public:
    *
    * A modal window disables the main window but keeps it visible. Users must interact with the modal window before they can return to the parent window.
    * A modal window exits from modal state using uiWindow.exitModal().
+   * showModalWindow() is the combination of initModalWindow(), processModalWindowEvents() and endModalWindow() called in sequence.
    *
    * @param window Window to be made visible and modal
    *
    * @return The same value specified calling uiWindow.exitModal()
    */
   int showModalWindow(uiWindow * window);
+
+  /**
+   * @brief Begins modal window processing
+   *
+   * initModalWindow(), processModalWindowEvents() and endModalWindow() are useful when a long processing operation is necessary inside a modal window.
+   *
+   * @param window The form to use as modal window
+   *
+   * @return Modal window status. This value must be passed to processModalWindowEvents() and endModalWindow() to maintain modal window state.
+   */
+  ModalWindowState * initModalWindow(uiWindow * window);
+
+  /**
+   * @brief Processes all messages from modal window
+   *
+   * This method must be called whenever UI needs to be updated.
+   *
+   * @param state This parameter comes from initModalWindow() and is used internally to maintain modal window status.
+   * @param timeout Timeout in milliseconds to wait for messages. -1 = infinite timeout, 0 = no timeout.
+   *
+   * @return False: EXIT or CLOSE received, modal window should close (call endModalWindow). True  = other processModalWindowEvents required, continue outer loop.
+   */
+  bool processModalWindowEvents(ModalWindowState * state, int timeout);
+
+  /**
+   * @brief Ends modal window processing
+   *
+   * Ends the modal window status. After this other windows can receive input.
+   * This method should be always called when processModalWindowEvents() returns False, or when modal window must be anyway closed.
+   *
+   * @param state This parameter comes from initModalWindow() and is used internally to maintain modal window status.
+   *
+   * @return The same value specified calling uiWindow.exitModal()
+   */
+  int endModalWindow(ModalWindowState * state);
 
   /**
    * @brief Maximizes or restores a window

@@ -672,47 +672,72 @@ void uiApp::showWindow(uiWindow * window, bool value)
 }
 
 
+ModalWindowState * uiApp::initModalWindow(uiWindow * window)
+{
+  showWindow(window, true);
+
+  auto state = new ModalWindowState;
+  state->window            = window;
+  state->modalResult       = -1;
+  state->prevFocusedWindow = setFocusedWindow(nullptr);
+  state->prevActiveWindow  = setActiveWindow(window);
+  state->prevModal         = m_modalWindow;
+
+  return state;
+}
+
+
+// ret:
+//   false = EXIT or CLOSE received, modal window should close (call endModalWindow)
+//   true  = other processModalWindowEvents required, continue outer loop
+bool uiApp::processModalWindowEvents(ModalWindowState * state, int timeout)
+{
+  // a new inner event loop...
+  uiEvent event;
+  while (getEvent(&event, timeout)) {
+
+    if (m_modalWindow != state->window && event.dest == state->window) {
+      // becomes modal when first message arrives
+      m_modalWindow = state->window;
+    }
+    if (event.id == UIEVT_EXITMODAL) {
+      // clean exit using exitModal() method
+      state->modalResult = event.params.modalResult;
+      return false;
+    } else if (event.id == UIEVT_CLOSE) {
+      // exit using Close button (default return value remains -1)
+      return false;
+    }
+
+    preprocessEvent(&event);
+
+    if (event.dest)
+      event.dest->processEvent(&event);
+
+  }
+  return true;
+}
+
+
+// ret: modal result
+int uiApp::endModalWindow(ModalWindowState * state)
+{
+  m_modalWindow = state->prevModal;
+  setActiveWindow(state->prevActiveWindow);
+  showWindow(state->window, false);
+  setFocusedWindow(state->prevFocusedWindow);
+  int result = state->modalResult;
+  free(state);
+  return result;
+}
+
+
 int uiApp::showModalWindow(uiWindow * window)
 {
-  int modalResult = -1;
-
-  showWindow(window, true);
-  uiWindow * prevFocusedWindow = setFocusedWindow(nullptr);
-  uiWindow * prevActiveWindow = setActiveWindow(window);
-  uiWindow * prevModal = m_modalWindow;
-
-  // a new inner event loop...
-  while (true) {
-    uiEvent event;
-    if (getEvent(&event, -1)) {
-
-      if (m_modalWindow != window && event.dest == window) {
-        // becomes modal when first message arrives
-        m_modalWindow = window;
-      }
-      if (event.id == UIEVT_EXITMODAL) {
-        // clean exit using exitModal() method
-        modalResult = event.params.modalResult;
-        break;
-      } else if (event.id == UIEVT_CLOSE) {
-        // exit using Close button (default return value remains -1)
-        break;
-      }
-
-      preprocessEvent(&event);
-
-      if (event.dest)
-        event.dest->processEvent(&event);
-
-    }
-  }
-
-  m_modalWindow = prevModal;
-  setActiveWindow(prevActiveWindow);
-  showWindow(window, false);
-  setFocusedWindow(prevFocusedWindow);
-
-  return modalResult;
+  auto state = initModalWindow(window);
+  while (processModalWindowEvents(state, -1))
+    ;
+  return endModalWindow(state);
 }
 
 
