@@ -2273,6 +2273,13 @@ public:
   virtual void processEvent(uiEvent * event);
 
   /**
+   * @brief Processes all events in queue
+   *
+   * This method is useful to update UI while running long time tasks.
+   */
+  void processEvents();
+
+  /**
    * @brief Gets a pointer to the root window
    *
    * The root window is the first window created and covers the whole screen.

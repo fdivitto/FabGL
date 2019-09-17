@@ -259,6 +259,19 @@ int uiApp::run()
 }
 
 
+void uiApp::processEvents()
+{
+  uiEvent event;
+  while (getEvent(&event, 0)) {
+
+    preprocessEvent(&event);
+
+    if (event.dest)
+      event.dest->processEvent(&event);
+  }
+}
+
+
 void uiApp::quit(int exitCode)
 {
   for (auto child = m_rootWindow->lastChild(); child; child = child->prev())

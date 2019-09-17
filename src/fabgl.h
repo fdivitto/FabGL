@@ -391,6 +391,6 @@ using fabgl::uiKeyEventInfo;
 using fabgl::uiCustomListBox;
 using fabgl::uiFileBrowser;
 using fabgl::FileBrowser;
-
+using fabgl::ModalWindowState;
 
 
