@@ -24,6 +24,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include "esp_spiffs.h"
+#include "esp_task_wdt.h"
 #include <stdio.h>
 
 
@@ -128,6 +129,7 @@ class MyApp : public uiApp {
     formatBtn->onClick = [&]() {
       if (messageBox("Format SPIFFS", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
         fabgl::suspendInterrupts();
+        esp_task_wdt_init(45, false);
         esp_spiffs_format(nullptr);
         fabgl::resumeInterrupts();
         fileBrowser->update();
