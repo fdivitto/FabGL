@@ -1,5 +1,7 @@
 var fabutils_8h =
 [
+    [ "DirItem", "structfabgl_1_1_dir_item.html", "structfabgl_1_1_dir_item" ],
+    [ "FileBrowser", "classfabgl_1_1_file_browser.html", "classfabgl_1_1_file_browser" ],
     [ "MouseButtons", "structfabgl_1_1_mouse_buttons.html", "structfabgl_1_1_mouse_buttons" ],
     [ "MouseStatus", "structfabgl_1_1_mouse_status.html", "structfabgl_1_1_mouse_status" ],
     [ "Point", "structfabgl_1_1_point.html", "structfabgl_1_1_point" ],

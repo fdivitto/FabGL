@@ -2,6 +2,7 @@ var searchData=
 [
   ['m2keyboard',['M2Keyboard',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2',1,'fabgl']]],
   ['magenta',['Magenta',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba6aac28bb501aedeefc7356a6a5c96745',1,'fabgl']]],
+  ['makedirectory',['makeDirectory',['../classfabgl_1_1_file_browser.html#aaeff942e0f9ed753ae514cbeb2e1246d',1,'fabgl::FileBrowser']]],
   ['max',['max',['../classfabgl_1_1ui_slider.html#adf9b43ff69dffc10c436207ba320ae09',1,'fabgl::uiSlider']]],
   ['maximized',['maximized',['../structfabgl_1_1ui_window_state.html#a4f5374c34382ac9279123b0d2c133036',1,'fabgl::uiWindowState']]],
   ['maximizewindow',['maximizeWindow',['../classfabgl_1_1ui_app.html#ae5d4a0245850056343938ef814726407',1,'fabgl::uiApp']]],

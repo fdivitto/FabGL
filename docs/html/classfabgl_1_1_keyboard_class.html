@@ -123,6 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4b9610e8c76fcb88c41113c9537b396"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#af4b9610e8c76fcb88c41113c9537b396">begin</a> (bool generateVirtualKeys, bool createVKQueue, int PS2Port)</td></tr>
 <tr class="memdesc:af4b9610e8c76fcb88c41113c9537b396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">KeyboardClass</a> without initializing the PS/2 controller.  <a href="#af4b9610e8c76fcb88c41113c9537b396">More...</a><br /></td></tr>
 <tr class="separator:af4b9610e8c76fcb88c41113c9537b396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d430ea3eeaeaa6fbf57fb534e640bf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a3d430ea3eeaeaa6fbf57fb534e640bf6">emptyVirtualKeyQueue</a> ()</td></tr>
+<tr class="memdesc:a3d430ea3eeaeaa6fbf57fb534e640bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the virtual keys queue.  <a href="#a3d430ea3eeaeaa6fbf57fb534e640bf6">More...</a><br /></td></tr>
+<tr class="separator:a3d430ea3eeaeaa6fbf57fb534e640bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7919c90b9cc0af1800b18aba04d0218"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_keyboard_layout.html">KeyboardLayout</a> const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae7919c90b9cc0af1800b18aba04d0218">getLayout</a> ()</td></tr>
 <tr class="memdesc:ae7919c90b9cc0af1800b18aba04d0218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current keyboard layout.  <a href="#ae7919c90b9cc0af1800b18aba04d0218">More...</a><br /></td></tr>
 <tr class="separator:ae7919c90b9cc0af1800b18aba04d0218"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,6 +165,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae98950d23410af6fb820787c54b43198"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#ae98950d23410af6fb820787c54b43198">setTypematicRateAndDelay</a> (int repeatRateMS, int repeatDelayMS)</td></tr>
 <tr class="memdesc:ae98950d23410af6fb820787c54b43198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets typematic rate and delay.  <a href="#ae98950d23410af6fb820787c54b43198">More...</a><br /></td></tr>
 <tr class="separator:ae98950d23410af6fb820787c54b43198"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c35974d5a23cc4e110d9ec830b2b587"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a6c35974d5a23cc4e110d9ec830b2b587">setUIApp</a> (<a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app)</td></tr>
+<tr class="memdesc:a6c35974d5a23cc4e110d9ec830b2b587"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current UI app.  <a href="#a6c35974d5a23cc4e110d9ec830b2b587">More...</a><br /></td></tr>
+<tr class="separator:a6c35974d5a23cc4e110d9ec830b2b587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d79d73d9a71bbe889a89cb6358d64db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_class.html#a7d79d73d9a71bbe889a89cb6358d64db">suspendVirtualKeyGeneration</a> (bool value)</td></tr>
 <tr class="memdesc:a7d79d73d9a71bbe889a89cb6358d64db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends or resume the virtual key generation task.  <a href="#a7d79d73d9a71bbe889a89cb6358d64db">More...</a><br /></td></tr>
 <tr class="separator:a7d79d73d9a71bbe889a89cb6358d64db"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -290,6 +296,25 @@ Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat</pre>
 <p>Example: </p><pre class="fragment">// Setup pins GPIO33 for CLK and GPIO32 for DATA on port 0
 PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32); // clk, dat
 Keyboard.begin(true, true, 0); // port 0</pre> 
+</div>
+</div>
+<a id="a3d430ea3eeaeaa6fbf57fb534e640bf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d430ea3eeaeaa6fbf57fb534e640bf6">&#9670;&nbsp;</a></span>emptyVirtualKeyQueue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::KeyboardClass::emptyVirtualKeyQueue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Empties the virtual keys queue. </p>
+
 </div>
 </div>
 <a id="ae7919c90b9cc0af1800b18aba04d0218"></a>
@@ -744,6 +769,41 @@ setLayout(&amp;fabgl::GermanLayout);</pre> <dl><dt><b>Examples: </b></dt><dd><a 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if command has been successfully delivered to the keyboard. </dd></dl>
+
+</div>
+</div>
+<a id="a6c35974d5a23cc4e110d9ec830b2b587"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c35974d5a23cc4e110d9ec830b2b587">&#9670;&nbsp;</a></span>setUIApp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::KeyboardClass::setUIApp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *&#160;</td>
+          <td class="paramname"><em>app</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets current UI app. </p>
+<p>To use this generateVirtualKeys must be true in <a class="el" href="classfabgl_1_1_keyboard_class.html#ae9d8a142c516c27a1760944b07a87f93" title="Initializes KeyboardClass specifying CLOCK and DATA GPIOs. ">begin()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td>The UI app where to send keyboard events </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

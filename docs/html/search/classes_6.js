@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['noisewaveformgenerator',['NoiseWaveformGenerator',['../classfabgl_1_1_noise_waveform_generator.html',1,'fabgl']]]
+  ['keyboardclass',['KeyboardClass',['../classfabgl_1_1_keyboard_class.html',1,'fabgl']]],
+  ['keyboardlayout',['KeyboardLayout',['../structfabgl_1_1_keyboard_layout.html',1,'fabgl']]]
 ];

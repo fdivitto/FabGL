@@ -38,6 +38,9 @@ var classfabgl_1_1ui_frame =
     [ "onClick", "classfabgl_1_1ui_frame.html#a8a314b4877419783308d71f688339d14", null ],
     [ "onDblClick", "classfabgl_1_1ui_frame.html#a4e8935392003598877aac433827d4b42", null ],
     [ "onHide", "classfabgl_1_1ui_frame.html#ac6ca377547d7e930183733e27c8505c4", null ],
+    [ "onKeyDown", "classfabgl_1_1ui_frame.html#a323743e25fc31b5b8d7e170f8362e45c", null ],
+    [ "onKeyUp", "classfabgl_1_1ui_frame.html#a64573516a2732544736f02fb505f5608", null ],
+    [ "onPaint", "classfabgl_1_1ui_frame.html#a5df62d77759f8ef2e290b01555c9bce9", null ],
     [ "onResize", "classfabgl_1_1ui_frame.html#a820c36479c29fe299c4369251e487276", null ],
     [ "onShow", "classfabgl_1_1ui_frame.html#ab54e1bc7d181b244c709662eb819712c", null ],
     [ "onTimer", "classfabgl_1_1ui_frame.html#a4b83f94ef3e8b943e2c9ada8e212fa31", null ]

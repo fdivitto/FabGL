@@ -54,13 +54,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6",
-"classfabgl_1_1ui_frame.html#ac2c887ae821ce1a3f64f5888408c121e",
-"classfabgl_1_1ui_scrollable_control.html#ac2c887ae821ce1a3f64f5888408c121e",
-"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a2c299890a952937c2c35ecc42730f090",
-"group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74",
-"ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c",
-"vgacontroller_8h.html#gga843f6f6094fb6666d0e726d7b0e06f3babd066cc7f08ecfdd34e59e9d5348ae67"
+"classfabgl_1_1_terminal_class.html#af5a5b764c07691443fa7239b3dbd73c6",
+"classfabgl_1_1ui_custom_list_box.html#a255c095f02a3d23689856ffad66aebc3",
+"classfabgl_1_1ui_list_box.html#a8a314b4877419783308d71f688339d14",
+"classfabgl_1_1ui_window.html#a98f5b2828f58c2dcf9832ed7a52669b1",
+"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381acb1663246ab444e64b674ea97b6619ad",
+"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381a84bcd6749a9c8f199272b74b6f970493",
+"structfabgl_1_1ui_button_style.html#a51d9b0b76fc1e4551520e49b0a64ff92"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

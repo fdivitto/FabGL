@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['keyboardclass',['KeyboardClass',['../classfabgl_1_1_keyboard_class.html',1,'fabgl']]],
-  ['keyboardlayout',['KeyboardLayout',['../structfabgl_1_1_keyboard_layout.html',1,'fabgl']]]
+  ['filebrowser',['FileBrowser',['../classfabgl_1_1_file_browser.html',1,'fabgl']]]
 ];

@@ -9,7 +9,7 @@ var searchData=
   ['black',['Black',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0',1,'fabgl']]],
   ['blank',['blank',['../unionfabgl_1_1_glyph_options.html#a4387a1e3e2332670f0de78d9d25533a8',1,'fabgl::GlyphOptions']]],
   ['blue',['Blue',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3bab269b90a1d510bf6861b4584f7aa9720',1,'fabgl']]],
-  ['bold',['bold',['../unionfabgl_1_1_glyph_options.html#aba085838d6ad3eda4879a48ee8f31cd2',1,'fabgl::GlyphOptions::bold()'],['../unionfabgl_1_1_glyph_options.html#acfb9834549b90097962f658421fe731a',1,'fabgl::GlyphOptions::Bold(bool value)']]],
+  ['bold',['Bold',['../unionfabgl_1_1_glyph_options.html#acfb9834549b90097962f658421fe731a',1,'fabgl::GlyphOptions::Bold(bool value)'],['../unionfabgl_1_1_glyph_options.html#aba085838d6ad3eda4879a48ee8f31cd2',1,'fabgl::GlyphOptions::bold()']]],
   ['bordercolor',['borderColor',['../structfabgl_1_1ui_window_style.html#a7096066cacf5e00d903b91a996d21f98',1,'fabgl::uiWindowStyle']]],
   ['bordersize',['borderSize',['../structfabgl_1_1ui_window_style.html#a0122141b631c9028d84bff80eb60b05c',1,'fabgl::uiWindowStyle']]],
   ['bottom',['bottom',['../structfabgl_1_1ui_anchors.html#acc85eb95ad40f64ddb49cce9a14c7c54',1,'fabgl::uiAnchors']]],

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['makedirectory',['makeDirectory',['../classfabgl_1_1_file_browser.html#aaeff942e0f9ed753ae514cbeb2e1246d',1,'fabgl::FileBrowser']]],
   ['max',['max',['../classfabgl_1_1ui_slider.html#adf9b43ff69dffc10c436207ba320ae09',1,'fabgl::uiSlider']]],
   ['maximizewindow',['maximizeWindow',['../classfabgl_1_1ui_app.html#ae5d4a0245850056343938ef814726407',1,'fabgl::uiApp']]],
   ['messagebox',['messageBox',['../classfabgl_1_1ui_app.html#add1a241eb65b95232d28a469c025e46c',1,'fabgl::uiApp']]],

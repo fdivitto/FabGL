@@ -31,6 +31,7 @@ var fabglconf_8h =
     [ "VESA_720x400_85Hz", "fabglconf_8h.html#aa25f5e5fe69b269367ac35791e502c03", null ],
     [ "VESA_768x576_60Hz", "fabglconf_8h.html#a82f3c24fd89e8698ef7a729e0711690e", null ],
     [ "VGA_256x192_50Hz", "fabglconf_8h.html#a785fff11719996c07ee68a7d99949d47", null ],
+    [ "VGA_256x384_60Hz", "fabglconf_8h.html#a79c16e345febd0d26723e122a4b939b4", null ],
     [ "VGA_320x200_75Hz", "fabglconf_8h.html#a053cde6629b66d4ba3e31e92af8861bb", null ],
     [ "VGA_320x200_75HzRetro", "fabglconf_8h.html#a4d2c0a4aa4d99fd8e4e32b0f9f7211ab", null ],
     [ "VGA_400x300_60Hz", "fabglconf_8h.html#a8052201f91850dfc935be639a91da6ee", null ],

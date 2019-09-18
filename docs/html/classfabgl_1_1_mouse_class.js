@@ -14,8 +14,10 @@ var classfabgl_1_1_mouse_class =
     [ "setResolution", "classfabgl_1_1_mouse_class.html#a1e894357caf95e95cb1d40fc709a0240", null ],
     [ "setSampleRate", "classfabgl_1_1_mouse_class.html#ad5703729d19c021a763c5ac819a72576", null ],
     [ "setScaling", "classfabgl_1_1_mouse_class.html#adf4c50d2b747ef1e2cc73ead1b0108bc", null ],
+    [ "setUIApp", "classfabgl_1_1_mouse_class.html#a59dcb39ad1eef8cf2cd149b0fb306a00", null ],
     [ "setupAbsolutePositioner", "classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d", null ],
     [ "status", "classfabgl_1_1_mouse_class.html#abd37dd534acd79983406a7327f040123", null ],
+    [ "terminateAbsolutePositioner", "classfabgl_1_1_mouse_class.html#a8745335a55407148cc1dc73f82597d02", null ],
     [ "unlock", "classfabgl_1_1_mouse_class.html#aed4e98813779c2d51bd304aef5aed7e9", null ],
     [ "updateAbsolutePosition", "classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5", null ],
     [ "wheelAcceleration", "classfabgl_1_1_mouse_class.html#a5001a4b84fbc6c1ae7f2c909882649cb", null ]

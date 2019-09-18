@@ -50,5 +50,6 @@ var classfabgl_1_1_canvas_class =
     [ "swapBuffers", "classfabgl_1_1_canvas_class.html#a548e3986a6701b3794853bf738ef3093", null ],
     [ "swapRectangle", "classfabgl_1_1_canvas_class.html#a23865421cc21cee94a22bb2289466f63", null ],
     [ "textExtent", "classfabgl_1_1_canvas_class.html#a86e33b9fedf29a2d06a74377088ed645", null ],
+    [ "textExtent", "classfabgl_1_1_canvas_class.html#a6f922900e46395ef17e56d8f7289b6d2", null ],
     [ "waitCompletion", "classfabgl_1_1_canvas_class.html#ad2f55393ab2f38be5779fd8651979cca", null ]
 ];

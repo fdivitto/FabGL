@@ -11,8 +11,11 @@ var searchData=
   ['red',['Red',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba484f8e53a97d2d8402fb3d7789833235',1,'fabgl']]],
   ['reduceluminosity',['reduceLuminosity',['../unionfabgl_1_1_glyph_options.html#adef7ccf23f62fbe65bd098a3454a5712',1,'fabgl::GlyphOptions']]],
   ['refreshsprites',['refreshSprites',['../classfabgl_1_1_v_g_a_controller_class.html#a9ad964ad05d839dd99bd73897b5cab84',1,'fabgl::VGAControllerClass']]],
+  ['reload',['reload',['../classfabgl_1_1_file_browser.html#acc55e9f45c4429b21fd6c7a72f33a18b',1,'fabgl::FileBrowser']]],
+  ['remove',['remove',['../classfabgl_1_1_file_browser.html#ab83743f55517d6d4ea47a16ccbadce34',1,'fabgl::FileBrowser']]],
   ['removesprite',['removeSprite',['../classfabgl_1_1_collision_detector.html#a4eb7cf8e9b5b3c9bede09bfc450bb53a',1,'fabgl::CollisionDetector::removeSprite()'],['../classfabgl_1_1_scene.html#ac12a6954552cd33a4bba2d941f80c5ef',1,'fabgl::Scene::removeSprite()']]],
   ['removesprites',['removeSprites',['../classfabgl_1_1_v_g_a_controller_class.html#a574b90ddf0e243837ea00ff0c3ebc8d6',1,'fabgl::VGAControllerClass']]],
+  ['rename',['rename',['../classfabgl_1_1_file_browser.html#a371592986f622b4d11d31485a173128f',1,'fabgl::FileBrowser']]],
   ['repaint',['repaint',['../classfabgl_1_1ui_window.html#a255c095f02a3d23689856ffad66aebc3',1,'fabgl::uiWindow::repaint(Rect const &amp;rect)'],['../classfabgl_1_1ui_window.html#ad1986d853fc82a7084467fea41e7a684',1,'fabgl::uiWindow::repaint()']]],
   ['repaintrect',['repaintRect',['../classfabgl_1_1ui_app.html#a68077cf2afc33bb423e924fa5bcfa4f8',1,'fabgl::uiApp']]],
   ['repaintwindow',['repaintWindow',['../classfabgl_1_1ui_app.html#a9ae6a6ec628a81da2c936deb63d9ca0e',1,'fabgl::uiApp']]],
@@ -28,5 +31,5 @@ var searchData=
   ['rgb',['RGB',['../structfabgl_1_1_r_g_b.html',1,'fabgl']]],
   ['right',['right',['../structfabgl_1_1ui_anchors.html#a81d9e254c7b3be5e39deffa0836a622f',1,'fabgl::uiAnchors::right()'],['../structfabgl_1_1_mouse_buttons.html#a77015fe45bf18bf673ae0e10e7e40e76',1,'fabgl::MouseButtons::right()']]],
   ['rootwindow',['rootWindow',['../classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40',1,'fabgl::uiApp']]],
-  ['run',['run',['../classfabgl_1_1ui_app.html#a19d8eb2f48cf67e82096ce09d76c8243',1,'fabgl::uiApp']]]
+  ['run',['run',['../classfabgl_1_1ui_app.html#a0a9f31828a3997124020256e11e9ade8',1,'fabgl::uiApp']]]
 ];

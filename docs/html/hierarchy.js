@@ -5,6 +5,8 @@ var hierarchy =
     [ "fabgl::CanvasClass", "classfabgl_1_1_canvas_class.html", null ],
     [ "fabgl::CollisionDetector", "classfabgl_1_1_collision_detector.html", null ],
     [ "fabgl::Cursor", "structfabgl_1_1_cursor.html", null ],
+    [ "fabgl::DirItem", "structfabgl_1_1_dir_item.html", null ],
+    [ "fabgl::FileBrowser", "classfabgl_1_1_file_browser.html", null ],
     [ "fabgl::Glyph", "structfabgl_1_1_glyph.html", null ],
     [ "fabgl::GlyphOptions", "unionfabgl_1_1_glyph_options.html", null ],
     [ "fabgl::KeyboardLayout", "structfabgl_1_1_keyboard_layout.html", null ],
@@ -51,7 +53,10 @@ var hierarchy =
             [ "fabgl::uiLabel", "classfabgl_1_1ui_label.html", null ],
             [ "fabgl::uiPanel", "classfabgl_1_1ui_panel.html", null ],
             [ "fabgl::uiScrollableControl", "classfabgl_1_1ui_scrollable_control.html", [
-              [ "fabgl::uiListBox", "classfabgl_1_1ui_list_box.html", null ],
+              [ "fabgl::uiCustomListBox", "classfabgl_1_1ui_custom_list_box.html", [
+                [ "fabgl::uiFileBrowser", "classfabgl_1_1ui_file_browser.html", null ],
+                [ "fabgl::uiListBox", "classfabgl_1_1ui_list_box.html", null ]
+              ] ],
               [ "fabgl::uiPaintBox", "classfabgl_1_1ui_paint_box.html", null ]
             ] ],
             [ "fabgl::uiSlider", "classfabgl_1_1ui_slider.html", null ],

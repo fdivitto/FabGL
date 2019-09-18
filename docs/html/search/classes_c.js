@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['vgacontrollerclass',['VGAControllerClass',['../classfabgl_1_1_v_g_a_controller_class.html',1,'fabgl']]],
-  ['virtualkeydef',['VirtualKeyDef',['../structfabgl_1_1_virtual_key_def.html',1,'fabgl']]]
+  ['terminalclass',['TerminalClass',['../classfabgl_1_1_terminal_class.html',1,'fabgl']]],
+  ['timings',['Timings',['../structfabgl_1_1_timings.html',1,'fabgl']]],
+  ['trianglewaveformgenerator',['TriangleWaveformGenerator',['../classfabgl_1_1_triangle_waveform_generator.html',1,'fabgl']]]
 ];

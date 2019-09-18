@@ -159,12 +159,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#adf4c50d2b747ef1e2cc73ead1b0108bc">setScaling</a> (int value)</td></tr>
 <tr class="memdesc:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the scaling.  <a href="#adf4c50d2b747ef1e2cc73ead1b0108bc">More...</a><br /></td></tr>
 <tr class="separator:adf4c50d2b747ef1e2cc73ead1b0108bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59dcb39ad1eef8cf2cd149b0fb306a00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a59dcb39ad1eef8cf2cd149b0fb306a00">setUIApp</a> (<a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app)</td></tr>
+<tr class="memdesc:a59dcb39ad1eef8cf2cd149b0fb306a00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current UI app.  <a href="#a59dcb39ad1eef8cf2cd149b0fb306a00">More...</a><br /></td></tr>
+<tr class="separator:a59dcb39ad1eef8cf2cd149b0fb306a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27d4c98be698b46eabc8faea1d1cf48d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a27d4c98be698b46eabc8faea1d1cf48d">setupAbsolutePositioner</a> (int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, <a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app)</td></tr>
 <tr class="memdesc:a27d4c98be698b46eabc8faea1d1cf48d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes absolute position handler.  <a href="#a27d4c98be698b46eabc8faea1d1cf48d">More...</a><br /></td></tr>
 <tr class="separator:a27d4c98be698b46eabc8faea1d1cf48d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd37dd534acd79983406a7327f040123"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#abd37dd534acd79983406a7327f040123">status</a> ()</td></tr>
 <tr class="memdesc:abd37dd534acd79983406a7327f040123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets current mouse status.  <a href="#abd37dd534acd79983406a7327f040123">More...</a><br /></td></tr>
 <tr class="separator:abd37dd534acd79983406a7327f040123"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8745335a55407148cc1dc73f82597d02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_class.html#a8745335a55407148cc1dc73f82597d02">terminateAbsolutePositioner</a> ()</td></tr>
+<tr class="memdesc:a8745335a55407148cc1dc73f82597d02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Terminates absolute position handler.  <a href="#a8745335a55407148cc1dc73f82597d02">More...</a><br /></td></tr>
+<tr class="separator:a8745335a55407148cc1dc73f82597d02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed4e98813779c2d51bd304aef5aed7e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_class.html#aed4e98813779c2d51bd304aef5aed7e9">unlock</a> ()</td></tr>
 <tr class="memdesc:aed4e98813779c2d51bd304aef5aed7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases device from exclusive access.  <a href="#aed4e98813779c2d51bd304aef5aed7e9">More...</a><br /></td></tr>
 <tr class="separator:aed4e98813779c2d51bd304aef5aed7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -648,6 +654,40 @@ if (status.buttons.left) {
 </dl>
 </div>
 </div>
+<a id="a59dcb39ad1eef8cf2cd149b0fb306a00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59dcb39ad1eef8cf2cd149b0fb306a00">&#9670;&nbsp;</a></span>setUIApp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::MouseClass::setUIApp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *&#160;</td>
+          <td class="paramname"><em>app</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets current UI app. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td>The UI app where to send mouse events </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a27d4c98be698b46eabc8faea1d1cf48d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a27d4c98be698b46eabc8faea1d1cf48d">&#9670;&nbsp;</a></span>setupAbsolutePositioner()</h2>
 
@@ -737,6 +777,25 @@ if (status.buttons.left) {
 <p>Gets or sets current mouse status. </p>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a18">MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a21">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
+</div>
+</div>
+<a id="a8745335a55407148cc1dc73f82597d02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8745335a55407148cc1dc73f82597d02">&#9670;&nbsp;</a></span>terminateAbsolutePositioner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::MouseClass::terminateAbsolutePositioner </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Terminates absolute position handler. </p>
+
 </div>
 </div>
 <a id="aed4e98813779c2d51bd304aef5aed7e9"></a>
