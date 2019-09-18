@@ -1842,6 +1842,7 @@ void uiFrame::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiWindow::clientRect(uiOrigin::Window));
       paintFrame();
+      onPaint();
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:

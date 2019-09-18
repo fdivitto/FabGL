@@ -817,6 +817,11 @@ public:
    */
   Delegate<uiKeyEventInfo> onKeyUp;
 
+  /**
+   * @brief Paint event delegate
+   */
+  Delegate<> onPaint;
+
 
 protected:
 
