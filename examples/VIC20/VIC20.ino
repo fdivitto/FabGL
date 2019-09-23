@@ -384,8 +384,13 @@ class Menu : public uiApp {
     WiFiStatusLbl = new uiLabel(rootWindow(), "WiFi", Point(5, 332));
     WiFiStatusLbl->labelStyle().textColor = RGB(2, 2, 2);
 
+    // "Download From" label
+    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 354));
+    downloadFromLbl->labelStyle().textColor = RGB(1, 1, 3);
+    downloadFromLbl->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
+
     // Download List button (download programs listed and linked in LIST_URL)
-    auto downloadProgsBtn = new uiButton(rootWindow(), "Download List", Point(28, 352), Size(84, 19));
+    auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19));
     downloadProgsBtn->onClick = [&]() {
       if (!WiFiConnected()) {
         messageBox("Network Error", "Please activate WiFi", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
@@ -422,6 +427,29 @@ class Menu : public uiApp {
       }
     };
 
+    // Download from URL
+    auto downloadURLBtn = new uiButton(rootWindow(), "URL", Point(107, 352), Size(27, 19));
+    downloadURLBtn->onClick = [&]() {
+      char * URL = new char[128];
+      char * filename = new char[25];
+      strcpy(URL, "http://");
+      if (inputBox("Download From URL", "URL", URL, 127, "OK", "Cancel") == uiMessageBoxResult::Button1) {
+        char * lastslash = strrchr(URL, '/');
+        if (lastslash) {
+          strcpy(filename, lastslash + 1);
+          if (inputBox("Download From URL", "Filename", filename, 24, "OK", "Cancel") == uiMessageBoxResult::Button1) {
+            if (downloadURL(URL, filename)) {
+              messageBox("Success", "Download OK!", "OK", nullptr, nullptr);
+              fileBrowser->update();
+              updateFreeSpaceLabel();
+            } else
+              messageBox("Error", "Download Failed!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
+          }
+        }
+      }
+      delete [] filename;
+      delete [] URL;
+    };
 
     // process ESC and F12: boths run the emulator
     rootWindow()->onKeyUp = [&](uiKeyEventInfo key) {
@@ -530,8 +558,8 @@ class Menu : public uiApp {
     if (fname) {
       FileBrowser & dir  = fileBrowser->content();
 
-      bool isPRG = strstr(fname, ".PRG");
-      bool isCRT = strstr(fname, ".CRT");
+      bool isPRG = strstr(fname, ".PRG") || strstr(fname, ".prg");
+      bool isCRT = strstr(fname, ".CRT") || strstr(fname, ".crt");
 
       if (isPRG || isCRT) {
 
