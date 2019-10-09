@@ -72,12 +72,12 @@ const uint8_t Altair88DiskBootROM[256] = {
 ////////////////////////////////////////////////////////////////////////////////////
 // buffered file IO routines
 
-
+///*
 FILE * bufferedFile                = nullptr;
 uint8_t * bufferedFileData         = nullptr;
 int bufferedFileDataPos            = -1; // position of bufferedFileData related to the actual file
 bool bufferedFileChanged           = false;
-constexpr int bufferedFileDataSize = 4388;
+constexpr int bufferedFileDataSize = 4388;//4388;
 
 
 void diskFlush(FILE * file = nullptr)
@@ -86,6 +86,7 @@ void diskFlush(FILE * file = nullptr)
   if (bufferedFileChanged && bufferedFile && bufferedFileDataPos != -1) {
     fabgl::suspendInterrupts();
     fseek(bufferedFile, bufferedFileDataPos, SEEK_SET);
+    //fprintf(stderr, "fseek(%d) fwrite(%d)\n", bufferedFileDataPos, bufferedFileDataSize);
     fwrite(bufferedFileData, bufferedFileDataSize, 1, bufferedFile);
     fflush(bufferedFile);
     fsync(fileno(bufferedFile));  // workaround from forums...
@@ -102,8 +103,8 @@ void diskFlush(FILE * file = nullptr)
 }
 
 
-// note: size cannot be > bufferedFileDataSize
-void checkFile(FILE * file, int position, int size)
+// size cannot be > Mits88Disk::SECTOR_SIZE
+void fetchFileData(FILE * file, int position, int size)
 {
   if (bufferedFileData == nullptr)
     bufferedFileData = new uint8_t[bufferedFileDataSize];
@@ -116,6 +117,7 @@ void checkFile(FILE * file, int position, int size)
     fabgl::suspendInterrupts();
     diskFlush();
     fseek(file, position, SEEK_SET);
+    //fprintf(stderr, "fseek(%d) fread(%d)\n", position, bufferedFileDataSize);
     fread(bufferedFileData, bufferedFileDataSize, 1, file);
     fabgl::resumeInterrupts();
     bufferedFileDataPos = position;
@@ -123,20 +125,22 @@ void checkFile(FILE * file, int position, int size)
 }
 
 
+// size cannot be > Mits88Disk::SECTOR_SIZE
 void diskRead(int position, void * buffer, int size, FILE * file)
 {
-  checkFile(file, position, size);
+  fetchFileData(file, position, size);
   memcpy(buffer, bufferedFileData + position - bufferedFileDataPos, size);
 }
 
 
+// size cannot be > Mits88Disk::SECTOR_SIZE
 void diskWrite(int position, void * buffer, int size, FILE * file)
 {
-  checkFile(file, position, size);
+  fetchFileData(file, position, size);
   memcpy(bufferedFileData + position - bufferedFileDataPos, buffer, size);
   bufferedFileChanged = true;
 }
-
+//*/
 
 
 /*
@@ -159,7 +163,16 @@ void diskWrite(int position, void * buffer, int size, FILE * file)
   fwrite(buffer, size, 1, file);
   fabgl::resumeInterrupts();
 }
-*/
+
+void diskFlush(FILE * file = nullptr)
+{
+  fabgl::suspendInterrupts();
+  fflush(file);
+  fsync(fileno(file));  // workaround from forums...
+  fabgl::resumeInterrupts();
+}
+
+//*/
 
 
 
@@ -223,17 +236,20 @@ IRAM_ATTR void Machine::run(CPU cpu, int address)
   }
 
   while (true) {
+    int cycles = 0;
     if (m_realSpeed) {
       int64_t t = esp_timer_get_time();  // time in microseconds
-      int cycles = nextStep(cpu, &Z80State);
+      cycles = nextStep(cpu, &Z80State);
       if (m_realSpeed) {
         t += cycles / 2;    // at 2MHz each cycle last 0.5us, so instruction time is cycles*0.5, that is cycles/2
         while (esp_timer_get_time() < t)
           ;
       }
     } else {
-      nextStep(cpu, &Z80State);
+      cycles = nextStep(cpu, &Z80State);
     }
+    for (Device * d = m_devices; d; d = d->next)
+      d->tick(cycles);
   }
 
 }
@@ -335,6 +351,7 @@ bool SIO::write(int address, int value)
     // DATA
     if (m_stream)
       m_stream->write(value);
+    //fprintf(stderr, "SIO: %c\n", value);
     return true;
   }
   return false;
@@ -345,23 +362,26 @@ bool SIO::write(int address, int value)
 
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////
 // Mits88Disk disk drive controller
 
 
 Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
-  : Device(machine), m_diskFormat(diskFormat), m_drive(0)
+  : Device(machine), m_tick(0), m_diskFormat(diskFormat), m_drive(-1), m_enabled(false)
 {
   switch (diskFormat) {
     // 88-Disk 8'' inches has 77 tracks and 32 sectors
     case Disk_338K:
       m_trackSize   = 32;
       m_tracksCount = 77;
+      m_sectorChangeDuration = sectorChangeDurationDisk;  // us
       break;
     // minidisk has 35 tracks and 16 sectors
     case MiniDisk_76K:
       m_trackSize   = 16;
       m_tracksCount = 35;
+      m_sectorChangeDuration = sectorChangeDurationMiniDisk;  // us
       break;
   };
 
@@ -371,8 +391,14 @@ Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
     m_readOnlyBuffer[i]   = nullptr;
     m_fileSectorBuffer[i] = nullptr;
     m_file[i]  = nullptr;
-    m_track[i] = m_sector[i] = m_sectorPositioned[i] = m_pos[i] = 0;
+    m_track[i] = 0;
+    m_sector[i] = 0;
+    m_pos[i] = 0;
+    m_readByteTime[i] = 0;
     m_readByteReady[i] = 1;
+    m_sectorChangeTime[i] = 0;
+    m_sectorTrue[i] = 1;
+    m_headLoaded[i] = 1;
   }
 }
 
@@ -429,6 +455,8 @@ void Mits88Disk::attachFile(int drive, char const * filename)
     // file already exists, just open for read/write
     m_file[drive] = fopen(filename, "r+");
   }
+
+  flush();
 }
 
 
@@ -442,25 +470,34 @@ void Mits88Disk::flush()
 
 int Mits88Disk::readByteFromDisk()
 {
-  int value;
-  const int track  = m_track[m_drive];
-  const int sector = m_sector[m_drive];
-  const int pos    = m_pos[m_drive];
+  int value = 0;
 
-  if (m_readOnlyBuffer[m_drive]) {
-    int position = (int) m_trackSize * SECTOR_SIZE * track + sector * SECTOR_SIZE + pos;
-    value = m_readOnlyBuffer[m_drive][position];
-  } else if (m_file[m_drive]) {
-    if (pos == 0) {
-      // read the entire sector into the buffer
-      int position = (int) m_trackSize * SECTOR_SIZE * track + sector * SECTOR_SIZE;
-      diskRead(position, m_fileSectorBuffer[m_drive], SECTOR_SIZE, m_file[m_drive]);
-    }
-    value = m_fileSectorBuffer[m_drive][pos];
-  } else
-    value = 0xFF;
+  if (m_enabled && m_drive > -1 && m_headLoaded[m_drive] == 0) {
 
-  m_pos[m_drive] = (pos + 1) % SECTOR_SIZE;
+    const int track  = m_track[m_drive];
+    const int sector = m_sector[m_drive];
+    const int pos    = m_pos[m_drive];
+
+    if (m_readOnlyBuffer[m_drive]) {
+      int position = (int) m_trackSize * SECTOR_SIZE * track + sector * SECTOR_SIZE + pos;
+      value = m_readOnlyBuffer[m_drive][position];
+    } else if (m_file[m_drive]) {
+      if (pos == 0) {
+        // prefetch entire track if required
+        fetchFileData(m_file[m_drive], (int) m_trackSize * SECTOR_SIZE * track, (int) m_trackSize * SECTOR_SIZE);
+        // read the entire sector into the buffer
+        int position = (int) m_trackSize * SECTOR_SIZE * track + sector * SECTOR_SIZE;
+        diskRead(position, m_fileSectorBuffer[m_drive], SECTOR_SIZE, m_file[m_drive]);
+      }
+      value = m_fileSectorBuffer[m_drive][pos];
+    } else
+      value = 0xFF;
+
+    //fprintf(stderr, "%lld: read d=%d t=%d s=%d p=%d =>%02x\n", m_tick, m_drive, m_track[m_drive], m_sector[m_drive], m_pos[m_drive], value);
+
+    m_pos[m_drive] = (pos + 1) % SECTOR_SIZE;
+
+  }
 
   return value;
 }
@@ -468,54 +505,63 @@ int Mits88Disk::readByteFromDisk()
 
 void Mits88Disk::writeByteToDisk(int value)
 {
-  const int track  = m_track[m_drive];
-  const int sector = m_sector[m_drive];
-  const int pos    = m_pos[m_drive];
+  if (m_enabled && m_drive > -1 && m_headLoaded[m_drive] == 0) {
 
-  // writing 138th byte after the end of sector.
-  bool endOfSector = (pos== SECTOR_SIZE);
+    if (m_file[m_drive] && m_pos[m_drive] < SECTOR_SIZE) {
+      if (m_pos[m_drive] == 0) {
+        // prefetch entire track if required
+        fetchFileData(m_file[m_drive], (int) m_trackSize * SECTOR_SIZE * m_track[m_drive], (int) m_trackSize * SECTOR_SIZE);
+      }
 
-  if (m_readOnlyBuffer[m_drive]) {
-    // this is read only!
-  } else if (m_file[m_drive]) {
-    if (endOfSector) {
-      int position = (int) m_trackSize * SECTOR_SIZE * track + sector * SECTOR_SIZE;
-      diskWrite(position, m_fileSectorBuffer[m_drive], SECTOR_SIZE, m_file[m_drive]);
-    } else {
-      m_fileSectorBuffer[m_drive][pos] = value;
+      int position = (int) m_trackSize * SECTOR_SIZE * m_track[m_drive] + m_sector[m_drive] * SECTOR_SIZE + m_pos[m_drive];
+      uint8_t b = value;
+      diskWrite(position, &b, 1, m_file[m_drive]);
+
+      //fprintf(stderr, "%lld: write d=%d t=%d s=%d p=%d v=%02x\n", m_tick, m_drive, m_track[m_drive], m_sector[m_drive], m_pos[m_drive], value);
+
+      m_pos[m_drive] += 1;
     }
-  }
 
-  m_pos[m_drive] = (endOfSector ? 0 : pos + 1);
+  }
 }
 
 
 bool Mits88Disk::read(int address, int * result)
 {
+  //fprintf(stderr, "%lld: read(%02x)\n", m_tick, address);
   switch (address) {
     case 0x08:
-    {
       // Drive Status
-      int track0 = (m_track[m_drive] == 0 ? 0 : 1);
-      *result = 0b00100000 | (track0 << 6) | (m_readByteReady[m_drive] << 7);
+      if (m_enabled && m_drive > -1) {
+        int track0 = (m_track[m_drive] == 0 ? 0 : 1);
+        *result = 0b00100000 | (track0 << 6) | (m_readByteReady[m_drive] << 7) | (m_headLoaded[m_drive] << 2);
+        //fprintf(stderr, "%lld: status: track0=%s byteReady=%s\n", m_tick, track0?"F":"T", m_readByteReady[m_drive]?"F":"T");
+      } else {
+        *result = 0b11100111;
+        //fprintf(stderr, "%lld: status: DISABLED\n", m_tick);
+      }
       return true;
-    }
 
     case 0x09:
       // Sector Number
-      if (m_sectorPositioned[m_drive] == sectorPositionedDelay) {
-        m_sector[m_drive] = (m_sector[m_drive] + 1) % m_trackSize;
-        m_sectorPositioned[m_drive] = 0;
-        m_pos[m_drive] = 0;
-      } else
-        ++m_sectorPositioned[m_drive];
-      m_readByteReady[m_drive] = (m_sectorPositioned[m_drive] == sectorPositionedDelay ? 0 : 1);
-      *result = (m_sector[m_drive] << 1) | m_readByteReady[m_drive];
+      if (m_enabled && m_drive > -1 && m_headLoaded[m_drive] == 0) {
+        *result = (m_sector[m_drive] << 1) | m_sectorTrue[m_drive];
+        //fprintf(stderr, "%lld: ask sector: num=%d sectorTrue=%s\n", m_tick, m_sector[m_drive], m_sectorTrue[m_drive]?"F":"T");
+      } else {
+        *result = 0xff;
+        //fprintf(stderr, "%lld: ask sector: num=DISABLED\n", m_tick);
+      }
       return true;
 
     case 0x0A:
       // read data
-      *result = readByteFromDisk();
+      if (m_enabled && m_drive > -1 && m_headLoaded[m_drive] == 0) {
+        *result = readByteFromDisk();
+        m_readByteReady[m_drive] = 1; // byte not ready
+        m_readByteTime[m_drive] = m_tick;
+      } else {
+        *result = 0;
+      }
       return true;
 
     default:
@@ -526,25 +572,69 @@ bool Mits88Disk::read(int address, int * result)
 
 bool Mits88Disk::write(int address, int value)
 {
+  //fprintf(stderr, "%lld: write(%02x, %02x)\n", m_tick, address, value);
   switch (address) {
 
     case 0x08:
       //  Drive Select
-      if ((value & 0x80) == 0)
+      if (value & 0x80) {
+        m_enabled = false;
+        if (value != 0xff)
+          setDrive(value & 0xF);
+      } else {
+        m_enabled = true;
         setDrive(value & 0xF);
+
+        m_readByteReady[m_drive] = 1; // byte not ready
+        m_readByteTime[m_drive] = 0;
+        m_sectorChangeTime[m_drive] = m_tick;
+        m_sector[m_drive] = 0;
+        m_pos[m_drive] = 0;
+        m_sectorTrue[m_drive] = 1;
+
+        // on minidisk head is loaded when a drive is selected
+        if (m_diskFormat == MiniDisk_76K)
+          m_headLoaded[m_drive] = 0;
+      }
+
+      //fprintf(stderr, "%lld: drive select=%d\n", m_tick, m_drive);
       return true;
 
     case 0x09:
       // Drive control
-      if (value & 1)
-        m_track[m_drive] = (m_track[m_drive] < m_tracksCount - 1 ? m_track[m_drive] + 1 : m_tracksCount - 1);
-      else if (value & 2)
-        m_track[m_drive] = (m_track[m_drive] > 0 ? m_track[m_drive] - 1 : 0);
+      if (m_drive > -1) {
+        if ((value & (1 | 2))) {
+          // change track
+          if (value & 1)
+            m_track[m_drive] = (m_track[m_drive] < m_tracksCount - 1 ? m_track[m_drive] + 1 : m_tracksCount - 1);
+          else if (value & 2)
+            m_track[m_drive] = (m_track[m_drive] > 0 ? m_track[m_drive] - 1 : 0);
+
+          m_readByteReady[m_drive] = 1; // byte not ready
+          m_readByteTime[m_drive] = 0;
+          m_sectorChangeTime[m_drive] = m_tick;
+          m_sector[m_drive] = 0;
+          m_pos[m_drive] = 0;
+          m_sectorTrue[m_drive] = 1;
+
+          //fprintf(stderr, "%lld: selected track=%d\n", m_tick, m_track[m_drive]);
+        }
+        if (value & 4) {
+          // head load
+          m_enabled = true;
+          m_headLoaded[m_drive] = 0;
+        }
+        if (value & 8) {
+          // head unload
+          m_headLoaded[m_drive] = 1;
+        }
+      }
       return true;
 
     case 0x0A:
       // write data
-      writeByteToDisk(value);
+      if (m_enabled && m_drive > -1 && m_headLoaded[m_drive] == 0)
+        writeByteToDisk(value);
       return true;
 
     default:
@@ -553,10 +643,43 @@ bool Mits88Disk::write(int address, int value)
 }
 
 
+void Mits88Disk::tick(int ticks)
+{
+  m_tick += ticks;
+
+  if (m_enabled == false || m_drive == -1 || m_headLoaded[m_drive] == 1)
+    return;
+
+  if (m_tick >= m_sectorChangeTime[m_drive] + m_sectorChangeDuration
+      || (m_tick >= m_sectorChangeTime[m_drive] + sectorTrueDuration + readByteDuration + sectorChangeShortDuration && m_pos[m_drive] == 0)) {
+    // it is time to change sector
+    m_sector[m_drive] = (m_sector[m_drive] + 1) % m_trackSize;
+    //fprintf(stderr, "%lld: new sector=%d track=%d\n", m_tick, m_sector[m_drive], m_track[m_drive]);
+
+    m_readByteReady[m_drive] = 0;
+    m_sectorTrue[m_drive] = 0;
+    m_readByteTime[m_drive] = m_tick;
+    m_sectorChangeTime[m_drive] = m_tick;
+    m_pos[m_drive] = 0;
+  }
+
+  if (m_readByteTime[m_drive] > 0 && m_tick >= m_readByteTime[m_drive] + readByteDuration) {
+    m_readByteReady[m_drive] = 0; // byte ready
+  }
+
+  if (m_tick >= m_sectorChangeTime[m_drive] + sectorTrueDuration) {
+    m_sectorTrue[m_drive] = 1;
+  }
+
+}
+
+
+
 void Mits88Disk::setDrive(int value)
 {
   m_drive = fabgl::iclamp(value, 0, DISKCOUNT - 1);
 }
+
 
 
 void Mits88Disk::sendDiskImageToStream(int drive, Stream * stream)
@@ -610,6 +733,8 @@ void Mits88Disk::receiveDiskImageFromStream(int drive, Stream * stream)
   setDrive(prevDrive);
   m_track[m_drive] = prevTrack;
 }
+
+
 
 
 // Mits88Disk disk drive controller

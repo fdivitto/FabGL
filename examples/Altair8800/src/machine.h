@@ -52,6 +52,8 @@ struct Device {
 
   Machine * machine() { return m_machine; }
 
+  virtual void tick(int ticks) = 0;
+
 private:
   Machine * m_machine;
 };
@@ -71,6 +73,8 @@ public:
   SIO(Machine * machine, int address);
 
   void attachStream(Stream * value, GetCharPreprocessor getCharPreprocessor = nullptr);
+
+  void tick(int ticks) { }
 
 private:
 
@@ -99,9 +103,13 @@ class Mits88Disk : public Device {
 
 public:
 
-  static const int sectorPositionedDelay = 1;
-  static const int DISKCOUNT    = 4;
-  static const int SECTOR_SIZE  = 137;   // number of bytes per sector
+  static const int sectorChangeDurationDisk     = 9500;  // us
+  static const int sectorChangeDurationMiniDisk = 11000; // us
+  static const int sectorChangeShortDuration    = 200;    // us
+  static const int readByteDuration      = 32;    // us
+  static const int sectorTrueDuration    = 90;    // us
+  static const int DISKCOUNT             = 4;
+  static const int SECTOR_SIZE           = 137;   // number of bytes per sector
 
   Mits88Disk(Machine * machine, DiskFormat diskFormat);
   ~Mits88Disk();
@@ -115,19 +123,22 @@ public:
   void receiveDiskImageFromStream(int drive, Stream * stream);
 
   void setDrive(int value);
-  int drive() { return m_drive; }
+  int  drive() { return m_drive; }
 
   void flush();
   void detachAll();
+
+  void tick(int ticks);
 
 private:
 
   bool read(int address, int * result);
   bool write(int address, int value);
 
-  int readByteFromDisk();
+  int  readByteFromDisk();
   void writeByteToDisk(int value);
 
+  uint64_t        m_tick;
   DiskFormat      m_diskFormat;
   uint8_t const * m_readOnlyBuffer[DISKCOUNT];    // when using attachReadOnlyBuffer
   FILE *          m_file[DISKCOUNT];              // when using attachFile
@@ -135,11 +146,18 @@ private:
   int8_t          m_drive;
   uint8_t         m_track[DISKCOUNT];
   int8_t          m_sector[DISKCOUNT];
-  int8_t          m_sectorPositioned[DISKCOUNT];
+  uint8_t         m_pos[DISKCOUNT];               // read/write position
+  uint8_t         m_trackSize;                    // number of sectors per track
+  uint8_t         m_tracksCount;                  // number of tracks per disc
+  // status word (0 = active, 1 = inactive)
   int8_t          m_readByteReady[DISKCOUNT];
-  uint8_t         m_pos[DISKCOUNT]; // read/write position
-  uint8_t         m_trackSize;       // number of sectors per track
-  uint8_t         m_tracksCount;     // number of tracks per disc
+  int8_t          m_sectorTrue[DISKCOUNT];
+  int8_t          m_headLoaded[DISKCOUNT];
+  // state changes timings (in ticks)
+  uint64_t        m_readByteTime[DISKCOUNT];
+  uint64_t        m_sectorChangeTime[DISKCOUNT];
+  bool            m_enabled;
+  int32_t         m_sectorChangeDuration; // us
 };
 
 
