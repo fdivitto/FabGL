@@ -29,7 +29,7 @@ TerminalClass Terminal;
 
 void setup()
 {
-  // for ESP32-PICO-D4 use GPIO 13 (RX) and 9 (TX)
+  // for ESP32-PICO-D4 use GPIO 12 (RX) and 2 (TX)
   Serial2.begin(115200, SERIAL_8N1, 12, 2);
 
   // other boards
