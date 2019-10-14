@@ -28,6 +28,10 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 
 
 
+### Installation Tutorial (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/8OTaPQlSTas/hqdefault.jpg)](https://www.youtube.com/watch?v=LL8J7tjxeXA "")
+
 ### Space Invaders Example (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/LL8J7tjxeXA/hqdefault.jpg)](https://www.youtube.com/watch?v=LL8J7tjxeXA "")
@@ -43,6 +47,10 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 ### Altair 8800 emulator - CP/M text games (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/y0opVifEyS8/hqdefault.jpg)](https://www.youtube.com/watch?v=y0opVifEyS8 "")
+
+### Commodore VIC20 emulator (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/ZW427HVWYys/hqdefault.jpg)](https://www.youtube.com/watch?v=y0opVifEyS8 "")
 
 ### Simple Terminal Out Example (click for video):
 
