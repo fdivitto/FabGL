@@ -83,6 +83,11 @@
  *
  * See @ref confAudio "Configuring Audio port" for audio connection sample schema.
  *
+ * See @ref genSchema "Generic Circuit Diagram" for a generic complete circuit diagram.
+ *
+ * - - -
+ * <CENTER> Installation Tutorial </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
@@ -98,6 +103,9 @@
  * - - -
  * <CENTER> @link Altair8800/Altair8800.ino Altair 8800 Emulator @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
+ * <CENTER> @link VIC20/VIC20.ino Commodore VIC20 Emulator @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
@@ -143,65 +151,17 @@
  * VGA output can be configured such as 8 colors or 64 colors are displayed.
  * Eight colors require 5 outputs (R, G, B, H and V), while sixty-four colors require 8 outputs (R0, R1, G0, G1, B0, B1, H and V).
  *
- * Following is an example of outputs configuration and a simple digital to analog converter circuit:
+ * Following is an example of outputs configuration and a simple digital to analog converter circuit, with 64 colors, 2 bit per channel and 6 bit per pixel:
  *
  *
- *       === 8 colors, 1 bit per channel, 3 bit per pixel ===
+ * \image html schema_VGA64.png width=500cm
  *
- *       Sample connection scheme:
- *                            -----------
- *        GPIO22 (red0) ------|R 270 Ohm|---- VGA_R
- *                            -----------
  *
- *                            -----------
- *        GPIO21 (green0) ----|R 270 Ohm|---- VGA_G
- *                            -----------
+ * Using above GPIOs the VGA Controller may be initialized in this way:
  *
- *                            -----------
- *        GPIO19 (blue0) -----|R 270 Ohm|---- VGA_B
- *                            -----------
+ *     VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
  *
- *        GPIO18 ---------------------------- VGA_HSYNC
- *
- *        GPIO5  ---------------------------- VGA_VSYNC
- *
- *       Using above GPIOs the VGA Controller may be initialized in this way:
- *         VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);
- *
- *       === 64 colors, 2 bit per channel, 6 bit per pixel ===
- *
- *            One resistor for each R0, R1, G0, G1, B0 and B1. Low bit (LSB) should have
- *            twice resistance value than high bit (MSB), for example 800Ohm (LSB) and 400Ohm (MSB).
- *
- *                            ------------
- *        GPIO22 (red1) ------|R 400 Ohm |------*---- VGA_R
- *                            ------------      |
- *                            ------------      |
- *        GPIO21 (red0) ------|R 800 Ohm |------*
- *                            ------------
- *
- *                            ------------
- *        GPIO19 (green1) ----|R 400 Ohm |------*---- VGA_G
- *                            ------------      |
- *                            ------------      |
- *        GPIO18 (green0) ----|R 800 Ohm |------*
- *                            ------------
- *
- *                            ------------
- *        GPIO5 (blue1) ------|R 400 Ohm |------*---- VGA_B
- *                            ------------      |
- *                            ------------      |
- *        GPIO4 (blue0) ------|R 800 Ohm |------*
- *                            ------------
- *
- *        GPIO23 ------------------------------------ VGA_HSYNC
- *
- *        GPIO15 ------------------------------------ VGA_VSYNC
- *
- *       Using above GPIOs the VGA Controller may be initialized in this way:
- *         VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
- *
- *     Note: Do not connect GPIO_NUM_2 (led) to the VGA signals.
+ * Note: Do not connect GPIO_NUM_2 (led) to the VGA signals.
  *
  */
 
@@ -210,64 +170,27 @@
 /**
  * @page confPS2 Configuring PS/2 port
  *
- * PS2 Keyboard connection uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
+ * PS2 Keyboard or Mouse connection uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
  *
- *                                             +5V
- *                                              |
- *                                              |
- *                                              *-----+
- *                                              |     |
- *                                             ---   ---
- *                                             | |   | |
- *                                             |R|   |R|
- *                                             |2|   |2|
- *                                             |K|   |K|
- *                                             | |   | |
- *                                             ---   ---
- *                            ------------      |     |
- *        GPIO33 (CLK)    ----|R 120 Ohm |------*--------- PS/2 KEYBOARD CLK
- *                            ------------            |
- *                            ------------            |
- *        GPIO32 (DAT)    ----|R 120 Ohm |------------*--- PS/2 KEYBOARD DAT
- *                            ------------
- *
- *       Using above GPIOs the PS2 Keyboard Controller may be initialized in this way:
- *         Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
+ * \image html schema_PS2.png width=500cm
  *
  *
+ * Using above GPIOs the PS2 Mouse Controller may be initialized in this way:
  *
- * PS2 Mouse connection also uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
+ *     Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);  // clk, dat
  *
- *                                             +5V
- *                                              |
- *                                              |
- *                                              *-----+
- *                                              |     |
- *                                             ---   ---
- *                                             | |   | |
- *                                             |R|   |R|
- *                                             |2|   |2|
- *                                             |K|   |K|
- *                                             | |   | |
- *                                             ---   ---
- *                            ------------      |     |
- *        GPIO26 (CLK)    ----|R 120 Ohm |------*--------- PS/2 MOUSE CLK
- *                            ------------            |
- *                            ------------            |
- *        GPIO27 (DAT)    ----|R 120 Ohm |------------*--- PS/2 MOUSE DAT
- *                            ------------
+ * When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
  *
- *       Using above GPIOs the PS2 Mouse Controller may be initialized in this way:
- *         Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);  // clk, dat
+ *     // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
+ *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
+ *     // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
+ *     Keyboard.begin(true, true, 0);
+ *     // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
+ *     Mouse.begin(1);
  *
+ * A simplified way to configure Mouse and Keyboard, when you have all GPIOs as before is:
  *
- *       When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
- *         // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
- *         PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
- *         // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
- *         Keyboard.begin(true, true, 0);
- *         // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
- *         Mouse.begin(1);
+ *     PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
  */
 
 
@@ -275,33 +198,21 @@
 /**
  * @page confAudio Configuring Audio port
  *
- * Audio output connection uses GPIO 25 and requires a simple low-pass filter and peak limiter. This works for me (you may do better):
+ * Audio output connection uses GPIO 25 and requires a simple low-pass filter and peak limiter. This works for me (you may do a better job):
  *
- *
- *                                                                    10uF
- *                           -------------                          + | | -
- *          GPIO25 ----------| R 270 Ohm |-------*---------*----------| |-------> OUT AUX LINE
- *                           -------------       |         |          | |
- *                                               |         |
- *                                               |         |
- *                                               |        ---
- *                                               |        |R|
- *                                      100nF  -----      | |
- *                                             -----      |1|
- *                                               |        |5|
- *                                               |        |0|
- *                                               |        ---
- *                                               |         |
- *                                               |         |
- *                                               +----*----+
- *                                                    |
- *                                                    |
- *                                                  ----- GND
- *                                                   ---
- *                                                    -
+ * \image html schema_audio.png width=500cm
  *
  */
 
+
+/**
+ * @page genSchema Generic Circuit Diagram
+ *
+ * This is a sample schema using ESP32 Devkit V1, with VGA Output, Audio Output, two PS/2 ports and a UART port
+ *
+ * \image html schema.png width=800cm
+ *
+ */
 
 
 
@@ -310,6 +221,7 @@
  * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
+ * @example VIC20/VIC20.ino Commodore VIC20 Emulator
  * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
  * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
  * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
