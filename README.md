@@ -30,7 +30,7 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 
 ### Installation Tutorial (click for video):
 
-[![Everything Is AWESOME](https://img.youtube.com/vi/8OTaPQlSTas/hqdefault.jpg)](https://www.youtube.com/watch?v=LL8J7tjxeXA "")
+[![Everything Is AWESOME](https://img.youtube.com/vi/8OTaPQlSTas/hqdefault.jpg)](https://www.youtube.com/watch?v=8OTaPQlSTas "")
 
 ### Space Invaders Example (click for video):
 
@@ -50,7 +50,7 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 
 ### Commodore VIC20 emulator (click for video):
 
-[![Everything Is AWESOME](https://img.youtube.com/vi/ZW427HVWYys/hqdefault.jpg)](https://www.youtube.com/watch?v=y0opVifEyS8 "")
+[![Everything Is AWESOME](https://img.youtube.com/vi/ZW427HVWYys/hqdefault.jpg)](https://www.youtube.com/watch?v=ZW427HVWYys "")
 
 ### Simple Terminal Out Example (click for video):
 
