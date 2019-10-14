@@ -90,28 +90,11 @@ $(document).ready(function(){initNavTree('conf_audio.html','');});
 <div class="title">Configuring Audio port </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Audio output connection uses GPIO 25 and requires a simple low-pass filter and peak limiter. This works for me (you may do better):</p>
-<pre class="fragment">                                                               10uF
-                      -------------                          + | | -
-     GPIO25 ----------| R 270 Ohm |-------*---------*----------| |-------&gt; OUT AUX LINE
-                      -------------       |         |          | |
-                                          |         |
-                                          |         |
-                                          |        ---
-                                          |        |R|
-                                 100nF  -----      | |
-                                        -----      |1|
-                                          |        |5|
-                                          |        |0|
-                                          |        ---
-                                          |         |
-                                          |         |
-                                          +----*----+
-                                               |
-                                               |
-                                             ----- GND
-                                              ---
-                                               -</pre> </div></div><!-- contents -->
+<div class="textblock"><p>Audio output connection uses GPIO 25 and requires a simple low-pass filter and peak limiter. This works for me (you may do a better job):</p>
+<div class="image">
+<img src="schema_audio.png" alt="schema_audio.png" width="500cm"/>
+</div>
+ </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

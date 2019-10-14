@@ -14,5 +14,6 @@ var examples =
     [ "NetworkTerminal/NetworkTerminal.ino", "_network_terminal_2_network_terminal_8ino-example.html", null ],
     [ "SimpleTerminalOut/SimpleTerminalOut.ino", "_simple_terminal_out_2_simple_terminal_out_8ino-example.html", null ],
     [ "SpaceInvaders/SpaceInvaders.ino", "_space_invaders_2_space_invaders_8ino-example.html", null ],
-    [ "SquareWaveGenerator/SquareWaveGenerator.ino", "_square_wave_generator_2_square_wave_generator_8ino-example.html", null ]
+    [ "SquareWaveGenerator/SquareWaveGenerator.ino", "_square_wave_generator_2_square_wave_generator_8ino-example.html", null ],
+    [ "VIC20/VIC20.ino", "_v_i_c20_2_v_i_c20_8ino-example.html", null ]
 ];

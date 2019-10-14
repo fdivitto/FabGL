@@ -2,6 +2,7 @@ var searchData=
 [
   ['g',['G',['../structfabgl_1_1_r_g_b.html#a12b47610fd99278b774f68a57bef4607',1,'fabgl::RGB']]],
   ['generatevirtualkeys',['GenerateVirtualKeys',['../group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4',1,'fabgl']]],
+  ['generic_20circuit_20diagram',['Generic Circuit Diagram',['../gen_schema.html',1,'']]],
   ['get',['get',['../classfabgl_1_1_file_browser.html#af318c25a4f9790953af285970a0ed7ce',1,'fabgl::FileBrowser']]],
   ['getbitsperchannel',['getBitsPerChannel',['../classfabgl_1_1_v_g_a_controller_class.html#a643740e39822e9e74e80be55ab9d34c1',1,'fabgl::VGAControllerClass']]],
   ['getclippingrect',['getClippingRect',['../classfabgl_1_1_canvas_class.html#a65ffe98c469f88123c8c638f88e4d4dc',1,'fabgl::CanvasClass']]],
