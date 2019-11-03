@@ -156,6 +156,9 @@
 /** Modeline for 480x300@75Hz resolution */
 #define VGA_480x300_75Hz "\"480x300@75Hz\" 31.22 480 504 584 624 300 319 322 333 -HSync -VSync DoubleScan"
 
+/** Modeline for 512x192@60Hz resolution */
+#define VGA_512x192_60Hz "\"512x192@60Hz\" 32.5 512 524 592 672 192 193 194 202 -HSync -VSync QuadScan"
+
 /** Modeline for 512x384@60Hz resolution */
 #define VGA_512x384_60Hz "\"512x384@60Hz\" 32.5 512 524 592 672 384 385 388 403 -HSync -VSync DoubleScan"
 
