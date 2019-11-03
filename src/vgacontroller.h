@@ -636,7 +636,7 @@ public:
    *
    * Modeline must have following syntax (non case sensitive):
    *
-   *     "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
+   *     "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
    *
    * In fabglconf.h there are macros with some predefined modelines for common resolutions.
    * When MultiScanBlank and DoubleScan is specified then additional rows are not repeated, but just filled with blank lines.

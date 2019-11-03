@@ -178,7 +178,7 @@ void VGAControllerClass::setSprites(Sprite * sprites, int count, int spriteSize)
 
 
 // modeline syntax:
-//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
+//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
 static bool convertModelineToTimings(char const * modeline, Timings * timings)
 {
   float freq;
@@ -220,13 +220,17 @@ static bool convertModelineToTimings(char const * modeline, Timings * timings)
       }
     }
 
-    // get [DoubleScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
+    // get [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
     // actually this gets only the first character
     while (*pc) {
       switch (*pc) {
         case 'D':
         case 'd':
           timings->scanCount = 2;
+          break;
+        case 'Q':
+        case 'q':
+          timings->scanCount = 4;
           break;
         case 'F':
         case 'f':
