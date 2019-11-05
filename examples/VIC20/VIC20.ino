@@ -123,6 +123,9 @@ void vTimerCallback1SecExpired(xTimerHandle pxTimer)
 #endif
 
 
+fabgl::PS2Controller PS2Controller;
+
+
 // where to store WiFi info, etc...
 Preferences preferences;
 
@@ -461,11 +464,13 @@ class Menu : public uiApp {
     setFocusedWindow(fileBrowser);
   }
 
-  // this is the main loop where VIC20 instructions are executed until F12 has been pressed
+  // this is the main loop where 6502 instructions are executed until F12 has been pressed
   void runVIC20()
   {
+    auto keyboard = PS2Controller.keyboard();
+
     enableKeyboardAndMouseEvents(false);
-    Keyboard.emptyVirtualKeyQueue();
+    keyboard->emptyVirtualKeyQueue();
     machine.VIC().enableAudio(true);
     Canvas.setBrushColor(0, 0, 0);
     Canvas.clear();
@@ -485,9 +490,9 @@ class Menu : public uiApp {
       #endif
 
       // read keyboard
-      if (Keyboard.virtualKeyAvailable()) {
+      if (keyboard->virtualKeyAvailable()) {
         bool keyDown;
-        VirtualKey vk = Keyboard.getNextVirtualKey(&keyDown);
+        VirtualKey vk = keyboard->getNextVirtualKey(&keyDown);
         switch (vk) {
 
           // F12 - stop running
@@ -506,7 +511,7 @@ class Menu : public uiApp {
 
     }
     machine.VIC().enableAudio(false);
-    Keyboard.emptyVirtualKeyQueue();
+    keyboard->emptyVirtualKeyQueue();
     enableKeyboardAndMouseEvents(true);
     rootWindow()->repaint();
   }
@@ -756,7 +761,6 @@ class Menu : public uiApp {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-fabgl::PS2Controller PS2Controller;
 
 
 void setup()
@@ -766,7 +770,7 @@ void setup()
   preferences.begin("VIC20", false);
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::CreateVirtualKeysQueue);
-  Keyboard.setLayout(&fabgl::UKLayout);
+  PS2Controller.keyboard()->setLayout(&fabgl::UKLayout);
 
   VGAController.begin();
   VGAController.setResolution(VGA_256x384_60Hz);

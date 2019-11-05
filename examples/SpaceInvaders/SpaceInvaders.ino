@@ -31,6 +31,8 @@
 using fabgl::iclamp;
 
 
+fabgl::PS2Controller PS2Controller;
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,6 +86,8 @@ struct IntroScene : public Scene {
   {
     static const char * scoreText[] = {"= ? MISTERY", "= 30 POINTS", "= 20 POINTS", "= 10 POINTS" };
 
+    auto keyboard = PS2Controller.keyboard();
+
     if (starting_) {
 
       if (starting_ > 50)
@@ -107,9 +111,9 @@ struct IntroScene : public Scene {
 
       if (updateCount % 20 == 0) {
         Canvas.setPenColor(random(4), random(4), random(4));
-        if (Keyboard.isKeyboardAvailable() && Mouse.isMouseAvailable())
+        if (keyboard->isKeyboardAvailable() && Mouse.isMouseAvailable())
           Canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
-        else if (Keyboard.isKeyboardAvailable())
+        else if (keyboard->isKeyboardAvailable())
           Canvas.drawText(80, 75, "Press [SPACE] to Play");
         else if (Mouse.isMouseAvailable())
           Canvas.drawText(105, 75, "Click to Play");
@@ -117,7 +121,7 @@ struct IntroScene : public Scene {
 
       // handle keyboard or mouse (after two seconds)
       if (updateCount > 50) {
-        if (Keyboard.isKeyboardAvailable() && Keyboard.isVKDown(fabgl::VK_SPACE))
+        if (keyboard->isKeyboardAvailable() && keyboard->isVKDown(fabgl::VK_SPACE))
           controller_ = 1;  // select keyboard as controller
         else if (Mouse.isMouseAvailable() && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left)
           controller_ = 2;  // select mouse as controller
@@ -360,6 +364,8 @@ struct GameScene : public Scene {
 
   void update(int updateCount)
   {
+    auto keyboard = PS2Controller.keyboard();
+
     if (updateScore_) {
       updateScore_ = false;
       drawScore();
@@ -470,13 +476,13 @@ struct GameScene : public Scene {
       // handle fire and movement from controller
       if (IntroScene::controller_ == 1) {
         // KEYBOARD controller
-        if (Keyboard.isVKDown(fabgl::VK_LEFT))
+        if (keyboard->isVKDown(fabgl::VK_LEFT))
           playerVelX_ = -1;
-        else if (Keyboard.isVKDown(fabgl::VK_RIGHT))
+        else if (keyboard->isVKDown(fabgl::VK_RIGHT))
           playerVelX_ = +1;
         else
           playerVelX_ = 0;
-        if (Keyboard.isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)  // fire?
+        if (keyboard->isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)  // fire?
           playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
       } else if (IntroScene::controller_ == 2) {
         // MOUSE controller
@@ -507,7 +513,7 @@ struct GameScene : public Scene {
         player_->setFrame( player_->getFrameIndex() == 1 ? 2 : 1);
 
       // wait for SPACE or click from controller
-      if ((IntroScene::controller_ == 1 && Keyboard.isVKDown(fabgl::VK_SPACE)) ||
+      if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
           (IntroScene::controller_ == 2 && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left))
         stop();
 
@@ -586,8 +592,6 @@ int GameScene::score_   = 0;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-fabgl::PS2Controller PS2Controller;
 
 
 void setup()

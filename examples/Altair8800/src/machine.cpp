@@ -217,7 +217,8 @@ void Machine::attachRAM(int RAMSize)
 
 IRAM_ATTR int Machine::nextStep(CPU cpu, void * param)
 {
-  if (m_menuCallback && Keyboard.isVKDown(VirtualKey::VK_PAUSE))
+  auto keyboard = fabgl::PS2Controller::instance()->keyboard();
+  if (m_menuCallback && keyboard->isVKDown(VirtualKey::VK_PAUSE))
     m_menuCallback();
   return (cpu == i8080 ? i8080_instruction() : Z80Emulate((Z80_STATE*)param, 0, this));
 }

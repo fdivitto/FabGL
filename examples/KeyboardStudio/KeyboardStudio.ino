@@ -45,9 +45,11 @@ void printHelp()
 
 void printInfo()
 {
-  if (Keyboard.isKeyboardAvailable()) {
+  auto keyboard = PS2Controller.keyboard();
+
+  if (keyboard->isKeyboardAvailable()) {
     Serial.write("Device Id = ");
-    switch (Keyboard.identify()) {
+    switch (keyboard->identify()) {
       case fabgl::OldATKeyboard:
         Serial.write("\"Old AT Keyboard\"");
         break;
@@ -70,7 +72,7 @@ void printInfo()
         Serial.write("\"Unknown\"");
         break;
     }
-    Serial.printf("  Keyboard Layout: \"%s\"\n", Keyboard.getLayout()->name);
+    Serial.printf("  Keyboard Layout: \"%s\"\n", keyboard->getLayout()->name);
   } else
     Serial.write("Keyboard Error!\n");
 }
@@ -93,6 +95,8 @@ void setup()
 
 void loop()
 {
+  auto keyboard = PS2Controller.keyboard();
+
   static char mode = 'a';
   //static fabgl::VirtualKey lastvk = fabgl::VK_NONE; // avoid to repeat last vk
 
@@ -103,54 +107,54 @@ void loop()
         printHelp();
         break;
       case '1':
-        Keyboard.setLayout(&fabgl::USLayout);
+        keyboard->setLayout(&fabgl::USLayout);
         printInfo();
         break;
       case '2':
-        Keyboard.setLayout(&fabgl::UKLayout);
+        keyboard->setLayout(&fabgl::UKLayout);
         printInfo();
         break;
       case '3':
-        Keyboard.setLayout(&fabgl::GermanLayout);
+        keyboard->setLayout(&fabgl::GermanLayout);
         printInfo();
         break;
       case '4':
-        Keyboard.setLayout(&fabgl::ItalianLayout);
+        keyboard->setLayout(&fabgl::ItalianLayout);
         printInfo();
         break;
       case 'r':
-        Keyboard.reset();
+        keyboard->reset();
         printInfo();
         break;
       case 's':
       case 'a':
         mode = c;
-        Keyboard.suspendVirtualKeyGeneration(c == 's');
+        keyboard->suspendVirtualKeyGeneration(c == 's');
         break;
       case 'l':
       {
         for (int i = 0; i < 8; ++i) {
-          Keyboard.setLEDs(i & 1, i & 2, i & 4);
+          keyboard->setLEDs(i & 1, i & 2, i & 4);
           delay(1000);
         }
         delay(2000);
-        if (Keyboard.setLEDs(0, 0, 0))
+        if (keyboard->setLEDs(0, 0, 0))
           Serial.write("OK\n");
         break;
       }
     }
   }
 
-  if (mode == 's' && Keyboard.scancodeAvailable()) {
+  if (mode == 's' && keyboard->scancodeAvailable()) {
     // scancode mode (show scancodes)
-    Serial.printf("Scancode = 0x%02X\n", Keyboard.getNextScancode());
-  } else if (Keyboard.virtualKeyAvailable()) {
+    Serial.printf("Scancode = 0x%02X\n", keyboard->getNextScancode());
+  } else if (keyboard->virtualKeyAvailable()) {
     // ascii mode (show ASCII and VirtualKeys)
     bool down;
-    auto vk = Keyboard.getNextVirtualKey(&down);
+    auto vk = keyboard->getNextVirtualKey(&down);
     //if (vk != lastvk) {
-      Serial.printf("VirtualKey = %s", Keyboard.virtualKeyToString(vk));
-      int c = Keyboard.virtualKeyToASCII(vk);
+      Serial.printf("VirtualKey = %s", keyboard->virtualKeyToString(vk));
+      int c = keyboard->virtualKeyToASCII(vk);
       if (c > -1) {
         Serial.printf("  ASCII = 0x%02X   ", c);
         if (c >= ' ')

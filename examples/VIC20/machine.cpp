@@ -433,6 +433,8 @@ void Machine::busWrite(int addr, uint8_t value)
 // TODO: check all keys!!!
 void Machine::setKeyboard(VirtualKey key, bool down)
 {
+  auto keyboard = fabgl::PS2Controller::instance()->keyboard();
+
   switch (key) {
     case VirtualKey::VK_0:
       m_KBD[4][7] = down;
@@ -465,7 +467,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[4][0] = down;
       break;
     case VirtualKey::VK_w:
-      if (Keyboard.isVKDown(VirtualKey::VK_LALT)) {
+      if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // LALT-W move screen up
         if (down) {
           int c = (int) VIC().readReg(1) - 1;
@@ -489,7 +491,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[5][1] = down;
       break;
     case VirtualKey::VK_a:
-      if (Keyboard.isVKDown(VirtualKey::VK_LALT)) {
+      if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-A move screen left
         if (down) {
           int c = (int)(VIC().readReg(0) & 0x7f) - 1;
@@ -522,7 +524,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[4][3] = down;
       break;
     case VirtualKey::VK_z:
-      if (Keyboard.isVKDown(VirtualKey::VK_LALT)) {
+      if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-Z move screen down
         if (down) {
           int c = (int) VIC().readReg(1) + 1;
@@ -543,7 +545,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[4][4] = down;
       break;
     case VirtualKey::VK_s:
-      if (Keyboard.isVKDown(VirtualKey::VK_LALT)) {
+      if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-S move screen right
         if (down) {
           int c = (int)(VIC().readReg(0) & 0x7f) + 1;
@@ -754,7 +756,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[5][4] = down;
       break;
     case VirtualKey::VK_LEFT:
-      if (m_joyEmu == JE_CursorKeys || Keyboard.isVKDown(VirtualKey::VK_RALT)) {
+      if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-LEFT move joystick left
         setJoy(JoyLeft, down);
         break;
@@ -763,7 +765,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[1][3] = down; // press LSHIFT
       break;
     case VirtualKey::VK_RIGHT:
-      if (m_joyEmu == JE_CursorKeys || Keyboard.isVKDown(VirtualKey::VK_RALT)) {
+      if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-RIGHT move joystick right
         setJoy(JoyRight, down);
         break;
@@ -771,7 +773,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[7][2] = down;
       break;
     case VirtualKey::VK_UP:
-      if (m_joyEmu == JE_CursorKeys || Keyboard.isVKDown(VirtualKey::VK_RALT)) {
+      if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-UP move joystick up
         setJoy(JoyUp, down);
         break;
@@ -780,7 +782,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[1][3] = down; // press LSHIFT
       break;
     case VirtualKey::VK_DOWN:
-      if (m_joyEmu == JE_CursorKeys || Keyboard.isVKDown(VirtualKey::VK_RALT)) {
+      if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-DOWN move joystick down
         setJoy(JoyDown, down);
         break;
@@ -788,7 +790,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[7][3] = down;
       break;
     case VirtualKey::VK_APPLICATION:  // also called MENU key
-      if (m_joyEmu == JE_CursorKeys || Keyboard.isVKDown(VirtualKey::VK_RALT)) {
+      if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-MENU fires joystick
         setJoy(JoyFire, down);
         break;

@@ -60,7 +60,7 @@ void setup()
   Terminal.printf("Screen Size        : %d x %d\r\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
   Terminal.printf("Viewport Size      : %d x %d\r\n", Canvas.getWidth(), Canvas.getHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
-  Terminal.printf("Keyboard           : %s\r\n\r\n", Keyboard.isKeyboardAvailable() ? "OK" : "Error");
+  Terminal.printf("Keyboard           : %s\r\n\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
   Terminal.printf("Free DMA Memory    : %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
   Terminal.printf("Free 32 bit Memory : %d\r\n\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
   Terminal.write("Connect server to UART2 - 8N1 - 115200 baud\r\n\n");

@@ -286,7 +286,7 @@ void emulator_menu()
         if (kbdLayIndex > MaxKbdLayIndex)
           kbdLayIndex = 0;
         preferences.putInt("kbdLay", kbdLayIndex);
-        Keyboard.setLayout(KdbLay[kbdLayIndex]);
+        PS2Controller.keyboard()->setLayout(KdbLay[kbdLayIndex]);
         break;
       }
 
@@ -401,7 +401,7 @@ void loop()
 
   // setup keyboard layout
   int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex);
-  Keyboard.setLayout(KdbLay[kbdLayIndex]);
+  PS2Controller.keyboard()->setLayout(KdbLay[kbdLayIndex]);
 
   // setup terminal emulation
   int termIndex = preferences.getInt("termEmu", DefaultTermIndex);
