@@ -95,7 +95,7 @@ void PS2DeviceClass::begin(int PS2Port)
 
 int PS2DeviceClass::dataAvailable()
 {
-  return PS2Controller.dataAvailable(m_PS2Port);
+  return PS2Controller::instance()->dataAvailable(m_PS2Port);
 }
 
 
@@ -105,12 +105,12 @@ int PS2DeviceClass::getData(int timeOutMS)
   int ret = -1;
   while (!timeout.expired(timeOutMS)) {
     lock(-1);
-    ret = PS2Controller.getData(m_PS2Port);
+    ret = PS2Controller::instance()->getData(m_PS2Port);
     unlock();
     if (ret > -1)
       break;
     lock(-1);
-    PS2Controller.waitData((timeOutMS > -1 ? timeOutMS : PS2_CMD_GETDATA_SUBTIMEOUT), m_PS2Port);
+    PS2Controller::instance()->waitData((timeOutMS > -1 ? timeOutMS : PS2_CMD_GETDATA_SUBTIMEOUT), m_PS2Port);
     unlock();
     delay(10);
   }
@@ -121,7 +121,7 @@ int PS2DeviceClass::getData(int timeOutMS)
 bool PS2DeviceClass::sendCommand(uint8_t cmd, uint8_t expectedReply)
 {
   for (int i = 0; i < PS2_CMD_RETRY_COUNT; ++i) {
-    PS2Controller.sendData(cmd, m_PS2Port);
+    PS2Controller::instance()->sendData(cmd, m_PS2Port);
     if (getData(PS2_CMD_TIMEOUT) != expectedReply)
       continue;
     return true;
@@ -132,7 +132,7 @@ bool PS2DeviceClass::sendCommand(uint8_t cmd, uint8_t expectedReply)
 
 void PS2DeviceClass::requestToResendLastByte()
 {
-  PS2Controller.sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);
+  PS2Controller::instance()->sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);
 }
 
 

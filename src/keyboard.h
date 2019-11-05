@@ -134,7 +134,7 @@ extern const KeyboardLayout ItalianLayout;
 /**
  * @brief The PS2 Keyboard controller class.
  *
- * KeyboardClass connects to one port of the PS2 Controller class (fabgl::PS2ControllerClass) and provides the logic
+ * KeyboardClass connects to one port of the PS2 Controller class (fabgl::PS2Controller) and provides the logic
  * that converts scancodes to virtual keys or ASCII (and ANSI) codes.<br>
  * It optionally creates a task that waits for scan codes from the PS2 device and puts virtual keys in a queue.<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
@@ -165,7 +165,7 @@ public:
    * @brief Initializes KeyboardClass specifying CLOCK and DATA GPIOs.
    *
    * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
-   * This method also initializes the PS2ControllerClass to use port 0 only.
+   * This method also initializes the PS2Controller to use port 0 only.
    *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
@@ -186,7 +186,7 @@ public:
    * @brief Initializes KeyboardClass without initializing the PS/2 controller.
    *
    * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
-   * This method does not initialize the PS2ControllerClass.
+   * This method does not initialize the PS2Controller.
    *
    * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
    *                            so you can call KeyboardClass.isVKDown().

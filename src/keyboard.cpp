@@ -432,7 +432,7 @@ void KeyboardClass::begin(bool generateVirtualKeys, bool createVKQueue, int PS2P
 
 void KeyboardClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys, bool createVKQueue)
 {
-  PS2Controller.begin(clkGPIO, dataGPIO);
+  PS2Controller::instance()->begin(clkGPIO, dataGPIO);
   begin(generateVirtualKeys, createVKQueue, 0);
 }
 

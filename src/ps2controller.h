@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance.
+ * @brief This file contains fabgl::PS2Controller definition.
  */
 
 
@@ -67,9 +67,15 @@ enum class KbdMode {
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with up to two PS2 devices.<br>
  * The ULP coprocessor continuously monitor CLK and DATA lines for incoming data. Optionally can send commands to the PS2 devices.
  */
-class PS2ControllerClass {
+class PS2Controller {
 
 public:
+
+  PS2Controller();
+
+  // unwanted methods
+  PS2Controller(PS2Controller const&)   = delete;
+  void operator=(PS2Controller const&)  = delete;
 
   /**
   * @brief Initializes PS2 device controller.
@@ -148,11 +154,16 @@ public:
    */
   void resume();
 
+  static PS2Controller * instance() { return s_instance; }
+
+
 private:
 
   void warmInit();
 
   static void IRAM_ATTR rtc_isr(void * arg);
+
+  static PS2Controller * s_instance;
 
   // address of next word to read in the circular buffer
   int                   m_readPos[2];
@@ -177,6 +188,6 @@ private:
 
 
 
-extern fabgl::PS2ControllerClass PS2Controller;
+
 
 

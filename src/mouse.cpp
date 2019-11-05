@@ -65,7 +65,7 @@ void MouseClass::begin(int PS2Port)
 
 void MouseClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
 {
-  PS2Controller.begin(clkGPIO, dataGPIO);
+  PS2Controller::instance()->begin(clkGPIO, dataGPIO);
   begin(0);
 }
 

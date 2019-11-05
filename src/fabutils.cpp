@@ -119,13 +119,15 @@ void free32(void * ptr)
 void suspendInterrupts()
 {
   VGAController.suspendBackgroundPrimitiveExecution();
-  PS2Controller.suspend();
+  if (PS2Controller::instance())
+    PS2Controller::instance()->suspend();
 }
 
 
 void resumeInterrupts()
 {
-  PS2Controller.resume();
+  if (PS2Controller::instance())
+    PS2Controller::instance()->resume();
   VGAController.resumeBackgroundPrimitiveExecution();
 }
 

@@ -70,14 +70,14 @@ enum MouseType {
 /**
  * @brief The PS2 Mouse controller class.
  *
- * MouseClass connects to one port of the PS2 Controller class (fabgl::PS2ControllerClass) to decode and get mouse movements.<br>
+ * MouseClass connects to one port of the PS2 Controller class (fabgl::PS2Controller) to decode and get mouse movements.<br>
  * At the moment MouseClass supports standard PS/2 mouse (X and Y axis with three buttons) and Microsoft Intellimouse compatible mouse
  * (X and Y axis, scroll wheel with three buttons).<br>
  * MouseClass allows to set movement parameters, like sample rate, resolution and scaling.<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
  * <br>
  * Applications do not need to create an instance of MouseClass because an instance named Mouse is created automatically.<br>
- * Because fabgl::PS2ControllerClass supports up to two PS/2 ports, it is possible to have connected two PS/2 devices. The most common
+ * Because fabgl::PS2Controller supports up to two PS/2 ports, it is possible to have connected two PS/2 devices. The most common
  * configuration is Keyboard on port 0 and Mouse on port 1. However you may have two mice connected at the same time using the Mouse
  * instance on port 0 and creating a new one on port 1.<br>
  *
@@ -108,7 +108,7 @@ public:
    * @brief Initializes MouseClass specifying CLOCK and DATA GPIOs.
    *
    * A reset command (MouseClass.reset() method) is automatically sent to the mouse.<br>
-   * This method also initializes the PS2ControllerClass to use port 0 only.
+   * This method also initializes the PS2Controller to use port 0 only.
    *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
@@ -124,7 +124,7 @@ public:
    * @brief Initializes MouseClass without initializing the PS/2 controller.
    *
    * A reset command (MouseClass.reset() method) is automatically sent to the mouse.<br>
-   * This method does not initialize the PS2ControllerClass.
+   * This method does not initialize the PS2Controller.
    *
    * @param PS2Port The PS/2 port to use (0 or 1).
    *
