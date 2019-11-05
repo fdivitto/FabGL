@@ -47,7 +47,7 @@ void setup()
 
   // Setup mouse
   PS2Controller.begin();
-  Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, nullptr);
+  PS2Controller.mouse()->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, true, nullptr);
   VGAController.setMouseCursor((CursorName)cursor);
 
   Canvas.setBrushColor(Color::Blue);
@@ -55,13 +55,13 @@ void setup()
   Canvas.selectFont(Canvas.getPresetFontInfo(80, 25));
   Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
 
-  showCursorPos(Mouse.status());
+  showCursorPos(PS2Controller.mouse()->status());
 }
 
 
 void loop()
 {
-  MouseStatus status = Mouse.getNextStatus(-1); // -1 = blocking operation
+  MouseStatus status = PS2Controller.mouse()->getNextStatus(-1); // -1 = blocking operation
 
   // left button writes pixels
   if (status.buttons.left) {
@@ -85,7 +85,7 @@ void loop()
   // mouse wheel moves cursor position indicator
   if (status.wheelDelta != 0) {
     indicatorY = fabgl::tclamp(indicatorY + status.wheelDelta, 0, Canvas.getHeight() - 16);
-    Mouse.status().wheelDelta = 0;
+    PS2Controller.mouse()->status().wheelDelta = 0;
     Canvas.setBrushColor(Color::Blue);
     Canvas.clear();
   }

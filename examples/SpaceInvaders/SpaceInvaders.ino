@@ -87,6 +87,7 @@ struct IntroScene : public Scene {
     static const char * scoreText[] = {"= ? MISTERY", "= 30 POINTS", "= 20 POINTS", "= 10 POINTS" };
 
     auto keyboard = PS2Controller.keyboard();
+    auto mouse    = PS2Controller.mouse();
 
     if (starting_) {
 
@@ -111,11 +112,11 @@ struct IntroScene : public Scene {
 
       if (updateCount % 20 == 0) {
         Canvas.setPenColor(random(4), random(4), random(4));
-        if (keyboard->isKeyboardAvailable() && Mouse.isMouseAvailable())
+        if (keyboard->isKeyboardAvailable() && mouse->isMouseAvailable())
           Canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
         else if (keyboard->isKeyboardAvailable())
           Canvas.drawText(80, 75, "Press [SPACE] to Play");
-        else if (Mouse.isMouseAvailable())
+        else if (mouse->isMouseAvailable())
           Canvas.drawText(105, 75, "Click to Play");
       }
 
@@ -123,7 +124,7 @@ struct IntroScene : public Scene {
       if (updateCount > 50) {
         if (keyboard->isKeyboardAvailable() && keyboard->isVKDown(fabgl::VK_SPACE))
           controller_ = 1;  // select keyboard as controller
-        else if (Mouse.isMouseAvailable() && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left)
+        else if (mouse->isMouseAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
           controller_ = 2;  // select mouse as controller
         starting_ = (controller_ > 0);  // start only when a controller has been selected
       }
@@ -292,8 +293,9 @@ struct GameScene : public Scene {
 
     if (IntroScene::controller_ == 2) {
       // setup mouse controller
-      Mouse.setSampleRate(40);  // reduce number of samples from mouse to reduce delays
-      Mouse.setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, nullptr); // take advantage of mouse acceleration
+      auto mouse = PS2Controller.mouse();
+      mouse->setSampleRate(40);  // reduce number of samples from mouse to reduce delays
+      mouse->setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, nullptr); // take advantage of mouse acceleration
     }
 
     showLives();
@@ -365,6 +367,7 @@ struct GameScene : public Scene {
   void update(int updateCount)
   {
     auto keyboard = PS2Controller.keyboard();
+    auto mouse    = PS2Controller.mouse();
 
     if (updateScore_) {
       updateScore_ = false;
@@ -486,11 +489,11 @@ struct GameScene : public Scene {
           playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
       } else if (IntroScene::controller_ == 2) {
         // MOUSE controller
-        if (Mouse.deltaAvailable()) {
+        if (mouse->deltaAvailable()) {
           MouseDelta delta;
-          Mouse.getNextDelta(&delta);
-          Mouse.updateAbsolutePosition(&delta);
-          playerAbsX_ = Mouse.status().X;
+          mouse->getNextDelta(&delta);
+          mouse->updateAbsolutePosition(&delta);
+          playerAbsX_ = mouse->status().X;
           if (delta.buttons.left && !playerFire_->visible)    // fire?
             playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
         }
@@ -514,7 +517,7 @@ struct GameScene : public Scene {
 
       // wait for SPACE or click from controller
       if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
-          (IntroScene::controller_ == 2 && Mouse.getNextDelta(nullptr, 0) && Mouse.status().buttons.left))
+          (IntroScene::controller_ == 2 && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left))
         stop();
 
     }

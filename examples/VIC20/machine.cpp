@@ -202,9 +202,10 @@ void Machine::handleMouse()
     setJoy(JoyDown,  false);
     setJoy(JoyLeft,  false);
     setJoy(JoyRight, false);
-    if (Mouse.deltaAvailable()) {
+    auto mouse = fabgl::PS2Controller::instance()->mouse();
+    if (mouse->deltaAvailable()) {
       MouseDelta d;
-      Mouse.getNextDelta(&d);
+      mouse->getNextDelta(&d);
       if (d.deltaX < 0)
         setJoy(JoyLeft,  true);
       else if (d.deltaX > 0)

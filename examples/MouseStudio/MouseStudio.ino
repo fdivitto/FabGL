@@ -43,9 +43,11 @@ void printHelp()
 
 void printInfo()
 {
-  if (Mouse.isMouseAvailable()) {
+  auto mouse = PS2Controller.mouse();
+
+  if (mouse->isMouseAvailable()) {
     Serial.write("Device Id = ");
-    switch (Mouse.identify()) {
+    switch (mouse->identify()) {
       case fabgl::OldATKeyboard:
         Serial.write("\"Old AT Keyboard\"");
         break;
@@ -99,6 +101,7 @@ int currentScaling = 1;         // reset is 1 (1:1)
 
 void loop()
 {
+  auto mouse = PS2Controller.mouse();
 
   if (Serial.available() > 0) {
     char c = Serial.read();
@@ -107,36 +110,36 @@ void loop()
         printHelp();
         break;
       case 'r':
-        Mouse.reset();
+        mouse->reset();
         printInfo();
         break;
       case 's':
         ++currentSampleRateIndex;
         if (currentSampleRateIndex == sizeof(SampleRates))
           currentSampleRateIndex = 0;
-        if (Mouse.setSampleRate(SampleRates[currentSampleRateIndex]))
+        if (mouse->setSampleRate(SampleRates[currentSampleRateIndex]))
           Serial.printf("Sample rate = %d\n", SampleRates[currentSampleRateIndex]);
         break;
       case 'e':
         ++currentResolution;
         if (currentResolution == 4)
           currentResolution = 0;
-        if (Mouse.setResolution(currentResolution))
+        if (mouse->setResolution(currentResolution))
           Serial.printf("Resolution = %d\n", 1 << currentResolution);
         break;
       case 'c':
         ++currentScaling;
         if (currentScaling == 3)
           currentScaling = 1;
-        if (Mouse.setScaling(currentScaling))
+        if (mouse->setScaling(currentScaling))
           Serial.printf("Scaling = 1:%d\n", currentScaling);
         break;
     }
   }
 
-  if (Mouse.deltaAvailable()) {
+  if (mouse->deltaAvailable()) {
     MouseDelta mouseDelta;
-    Mouse.getNextDelta(&mouseDelta);
+    mouse->getNextDelta(&mouseDelta);
 
     Serial.printf("deltaX = %d  deltaY = %d  deltaZ = %d  leftBtn = %d  midBtn = %d  rightBtn = %d\n",
                   mouseDelta.deltaX, mouseDelta.deltaY, mouseDelta.deltaZ,
