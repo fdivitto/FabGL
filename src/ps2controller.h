@@ -55,10 +55,12 @@ enum class PS2Preset {
  */
 enum class KbdMode {
   NoVirtualKeys,           /**< No virtual keys are generated */
-  GenerateVirtualKeys,     /**< Virtual keys are generated. You can call KeyboardClass.isVKDown() only. */
-  CreateVirtualKeysQueue,  /**< Virtual keys are generated and put on a queue. You can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable() and KeyboardClass.getNextVirtualKey() */
+  GenerateVirtualKeys,     /**< Virtual keys are generated. You can call Keyboard.isVKDown() only. */
+  CreateVirtualKeysQueue,  /**< Virtual keys are generated and put on a queue. You can call Keyboard.isVKDown(), Keyboard.virtualKeyAvailable() and Keyboard.getNextVirtualKey() */
 };
 
+
+class Keyboard;
 
 
 /**
@@ -154,6 +156,11 @@ public:
    */
   void resume();
 
+  Keyboard * keyboard() { return m_keyboard; }
+
+  void setKeyboard(Keyboard * value) { m_keyboard = value; }
+
+
   static PS2Controller * instance() { return s_instance; }
 
 
@@ -164,6 +171,8 @@ private:
   static void IRAM_ATTR rtc_isr(void * arg);
 
   static PS2Controller * s_instance;
+
+  Keyboard *            m_keyboard;
 
   // address of next word to read in the circular buffer
   int                   m_readPos[2];

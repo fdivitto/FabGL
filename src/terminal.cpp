@@ -82,8 +82,14 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 
 
-void TerminalClass::begin()
+void TerminalClass::begin(Keyboard * keyboard)
 {
+  m_keyboard = keyboard;
+  if (m_keyboard == nullptr && PS2Controller::instance()) {
+    // get default keyboard from PS/2 controller
+    m_keyboard = PS2Controller::instance()->keyboard();
+  }
+
   m_logStream = nullptr;
 
   m_glyphsBuffer = (GlyphsBuffer){0, 0, nullptr, 0, 0, nullptr};
@@ -141,7 +147,7 @@ void TerminalClass::connectSerialPort(HardwareSerial & serialPort, bool autoXONX
 
   m_serialPort->setRxBufferSize(FABGLIB_TERMINAL_INPUT_QUEUE_SIZE);
 
-  if (Keyboard.isKeyboardAvailable())
+  if (m_keyboard->isKeyboardAvailable())
     xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 
   // just in case a reset occurred after an XOFF
@@ -153,7 +159,7 @@ void TerminalClass::connectSerialPort(HardwareSerial & serialPort, bool autoXONX
 void TerminalClass::connectLocally()
 {
   m_outputQueue = xQueueCreate(FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE, sizeof(uint8_t));
-  if (!m_keyboardReaderTaskHandle && Keyboard.isKeyboardAvailable())
+  if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
     xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
 
@@ -1974,7 +1980,7 @@ void TerminalClass::consumeCSI()
       paramsCount = tmax(1, paramsCount);  // default paramater in case no params are provided
       for (int i = 0; i < paramsCount; ++i) {
         bool numLock, capsLock, scrollLock;
-        Keyboard.getLEDs(&numLock, &capsLock, &scrollLock);
+        m_keyboard->getLEDs(&numLock, &capsLock, &scrollLock);
         switch (params[i]) {
           case 0:
             numLock = capsLock = scrollLock = false;
@@ -1998,7 +2004,7 @@ void TerminalClass::consumeCSI()
             scrollLock = false;
             break;
         }
-        Keyboard.setLEDs(numLock, capsLock, scrollLock);
+        m_keyboard->setLEDs(numLock, capsLock, scrollLock);
       }
       break;
 
@@ -2548,7 +2554,7 @@ void TerminalClass::keyboardReaderTask(void * pvParameters)
   while (true) {
 
     bool keyDown;
-    VirtualKey vk = Keyboard.getNextVirtualKey(&keyDown);
+    VirtualKey vk = term->m_keyboard->getNextVirtualKey(&keyDown);
 
     if (keyDown) {
 
@@ -2765,7 +2771,7 @@ void TerminalClass::ANSIDecodeVirtualKey(VirtualKey vk)
 
     default:
     {
-      int ascii = Keyboard.virtualKeyToASCII(vk);
+      int ascii = m_keyboard->virtualKeyToASCII(vk);
       switch (ascii) {
 
         // RETURN (CR)?
@@ -2876,7 +2882,7 @@ void TerminalClass::VT52DecodeVirtualKey(VirtualKey vk)
 
     default:
     {
-      int ascii = Keyboard.virtualKeyToASCII(vk);
+      int ascii = m_keyboard->virtualKeyToASCII(vk);
       if (ascii > -1)
         send(ascii);
       break;
@@ -2896,7 +2902,7 @@ void TerminalClass::TermDecodeVirtualKey(VirtualKey vk)
   }
 
   // default behavior
-  int ascii = Keyboard.virtualKeyToASCII(vk);
+  int ascii = m_keyboard->virtualKeyToASCII(vk);
   if (ascii > -1)
     send(ascii);
 }

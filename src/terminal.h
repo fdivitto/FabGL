@@ -340,6 +340,7 @@ struct EmuState {
  *
  * Example 1:
  *
+ *     fabgl::Keyboard Keyboard;
  *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns loop-back terminal (send what you type on keyboard to the display)
@@ -375,6 +376,7 @@ struct EmuState {
  *
  * Example 2:
  *
+ *     fabgl::Keyboard Keyboard;
  *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns terminal using UART2 to communicate with the server,
@@ -406,7 +408,7 @@ public:
    *
    * Applications should call this method before any other method call or after resolution has been set.
    */
-  void begin();
+  void begin(Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -790,6 +792,8 @@ private:
   void convQueue(const char * str = nullptr);
   void TermDecodeVirtualKey(VirtualKey vk);
 
+
+  Keyboard *         m_keyboard;
 
   Stream *           m_logStream;
 

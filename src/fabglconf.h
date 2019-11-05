@@ -75,11 +75,11 @@
 #define FABGLIB_KEYBOARD_READER_TASK_PRIORITY 5
 
 
-/** Stack size of the task that converts scancodes to virtualkeys KeyboardClass */
+/** Stack size of the task that converts scancodes to virtualkeys Keyboard */
 #define FABGLIB_SCODETOVK_TASK_STACK_SIZE 800
 
 
-/** Priority of the task that converts scancodes to virtualkeys KeyboardClass */
+/** Priority of the task that converts scancodes to virtualkeys Keyboard */
 #define FABGLIB_SCODETOVK_TASK_PRIORITY 5
 
 
@@ -91,7 +91,7 @@
 #define FABGLIB_CACHE_FONT_IN_RAM 0
 
 
-/** Optional feature. Enables KeyboardClass.virtualKeyToString() method */
+/** Optional feature. Enables Keyboard.virtualKeyToString() method */
 #define FABGLIB_HAS_VirtualKeyO_STRING 1
 
 

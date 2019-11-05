@@ -2234,6 +2234,8 @@ struct ModalWindowState {
 };
 
 
+class Keyboard;
+
 
 /**
  * @brief Represents the whole application base class.
@@ -2256,7 +2258,7 @@ public:
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run();
+  int run(Keyboard * keyboard = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2606,6 +2608,8 @@ public:
    */
   Delegate<uiTimerHandle> onTimer;
 
+  Keyboard * keyboard() { return m_keyboard; }
+
 protected:
 
   bool getEvent(uiEvent * event, int timeOutMS);
@@ -2624,6 +2628,8 @@ private:
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
 
+
+  Keyboard *    m_keyboard;
 
   uiAppProps    m_appProps;
 

@@ -62,8 +62,6 @@ enum PS2Device {
  *
  * PS2DeviceClass connects to one port of the PS2 Controller class (fabgl::PS2Controller).<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
- *
- * Applications should not use PS2DeviceClass directly: use instead fabgl::MouseClass or fabgl::KeyboardClass.
  */
 class PS2DeviceClass {
 

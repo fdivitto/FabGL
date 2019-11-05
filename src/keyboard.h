@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::KeyboardClass definition and the Keyboard instance.
+ * @brief This file contains fabgl::Keyboard definition.
  */
 
 
@@ -134,7 +134,7 @@ extern const KeyboardLayout ItalianLayout;
 /**
  * @brief The PS2 Keyboard controller class.
  *
- * KeyboardClass connects to one port of the PS2 Controller class (fabgl::PS2Controller) and provides the logic
+ * Keyboard connects to one port of the PS2 Controller class (fabgl::PS2Controller) and provides the logic
  * that converts scancodes to virtual keys or ASCII (and ANSI) codes.<br>
  * It optionally creates a task that waits for scan codes from the PS2 device and puts virtual keys in a queue.<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
@@ -143,10 +143,12 @@ extern const KeyboardLayout ItalianLayout;
  * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German) and IT (Italian). Other layout can be added
  * inheriting from US or from any other layout.
  *
- * Applications do not need to create an instance of KeyboardClass because an instance named Keyboard is created automatically.
+ * Applications do not need to create an instance of Keyboard because an instance named Keyboard is created automatically.
  *
  * Example:
  *
+ *     fabgl::Keyboard Keyboard;
+ *     
  *     // Setup pins GPIO33 for CLK and GPIO32 for DATA
  *     Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
  *
@@ -155,25 +157,25 @@ extern const KeyboardLayout ItalianLayout;
  *       Serial.printf("VirtualKey = %s\n", Keyboard.virtualKeyToString(Keyboard.getNextVirtualKey()));
  *
  */
-class KeyboardClass : public PS2DeviceClass {
+class Keyboard : public PS2DeviceClass {
 
 public:
 
-  KeyboardClass();
+  Keyboard();
 
   /**
-   * @brief Initializes KeyboardClass specifying CLOCK and DATA GPIOs.
+   * @brief Initializes Keyboard specifying CLOCK and DATA GPIOs.
    *
-   * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
+   * A reset command (Keyboard.reset() method) is automatically sent to the keyboard.<br>
    * This method also initializes the PS2Controller to use port 0 only.
    *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
    * @param generateVirtualKeys If true creates a task which consumes scancodes to produce virtual keys,
-   *                            so you can call KeyboardClass.isVKDown().
+   *                            so you can call Keyboard.isVKDown().
    * @param createVKQueue If true creates a task which consunes scancodes and produces virtual keys
-   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable()
-   *                      and KeyboardClass.getNextVirtualKey().
+   *                      and put them in a queue, so you can call Keyboard.isVKDown(), Keyboard.virtualKeyAvailable()
+   *                      and Keyboard.getNextVirtualKey().
    *
    * Example:
    *
@@ -183,16 +185,16 @@ public:
   void begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtualKeys = true, bool createVKQueue = true);
 
   /**
-   * @brief Initializes KeyboardClass without initializing the PS/2 controller.
+   * @brief Initializes Keyboard without initializing the PS/2 controller.
    *
-   * A reset command (KeyboardClass.reset() method) is automatically sent to the keyboard.<br>
+   * A reset command (Keyboard.reset() method) is automatically sent to the keyboard.<br>
    * This method does not initialize the PS2Controller.
    *
    * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
-   *                            so you can call KeyboardClass.isVKDown().
+   *                            so you can call Keyboard.isVKDown().
    * @param createVKQueue If true creates a task which consunes scancodes to produce virtual keys
-   *                      and put them in a queue, so you can call KeyboardClass.isVKDown(), KeyboardClass.virtualKeyAvailable()
-   *                      and KeyboardClass.getNextVirtualKey().
+   *                      and put them in a queue, so you can call Keyboard.isVKDown(), Keyboard.virtualKeyAvailable()
+   *                      and Keyboard.getNextVirtualKey().
    * @param PS2Port The PS/2 port to use (0 or 1).
    *
    * Example:
@@ -222,7 +224,7 @@ public:
   /**
    * @brief Checks if keyboard has been detected and correctly initialized.
    *
-   * isKeyboardAvailable() returns a valid value only after KeyboardClass.begin() or KeyboardClass.reset() has been called.
+   * isKeyboardAvailable() returns a valid value only after Keyboard.begin() or Keyboard.reset() has been called.
    *
    * @return True if the keyboard is correctly initialized.
    */
@@ -255,7 +257,7 @@ public:
    * @brief Gets the virtual keys status.
    *
    * This method allows to know the status of each virtual key (Down or Up).<br>
-   * Virtual keys are generated from scancodes only if generateVirtualKeys parameter of KeyboardClass.begin() method is true (default).
+   * Virtual keys are generated from scancodes only if generateVirtualKeys parameter of Keyboard.begin() method is true (default).
    *
    * @param virtualKey The Virtual Key to test.
    *
@@ -267,7 +269,7 @@ public:
    * @brief Gets the number of virtual keys available in the queue.
    *
    * Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default)
-   * and createVKQueue parameter is true (default) of KeyboardClass.begin() method.
+   * and createVKQueue parameter is true (default) of Keyboard.begin() method.
    *
    * @return The number of virtual keys available to read.
    */
@@ -277,7 +279,7 @@ public:
    * @brief Gets a virtual key from the queue.
    *
    * Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default)
-   * and createVKQueue parameter is true (default) of KeyboardClass.begin() method.
+   * and createVKQueue parameter is true (default) of Keyboard.begin() method.
    *
    * @param keyDown A pointer to boolean variable which will contain if the virtual key is depressed (true) or released (false).
    * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
@@ -310,8 +312,8 @@ public:
    * @brief Gets the number of scancodes available in the queue.
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
-   * method KeyboardClass.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
-   * Alternatively it is also possible to suspend the conversion task calling KeyboardClass.suspendVirtualKeyGeneration() method.
+   * method Keyboard.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
+   * Alternatively it is also possible to suspend the conversion task calling Keyboard.suspendVirtualKeyGeneration() method.
    *
    * @return The number of scancodes available to read.
    */
@@ -321,8 +323,8 @@ public:
    * @brief Gets a scancode from the queue.
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
-   * method KeyboardClass.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
-   * Alternatively it is also possible to suspend the conversion task calling KeyboardClass.suspendVirtualKeyGeneration() method.
+   * method Keyboard.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
+   * Alternatively it is also possible to suspend the conversion task calling Keyboard.suspendVirtualKeyGeneration() method.
    *
    * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
    * @param requestResendOnTimeOut If true and timeout has expired then asks the keyboard to resend the scancode.
@@ -423,7 +425,7 @@ private:
 
 
 
-extern fabgl::KeyboardClass Keyboard;
+
 
 
 

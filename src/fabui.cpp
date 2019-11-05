@@ -185,15 +185,21 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run()
+int uiApp::run(Keyboard * keyboard)
 {
+  m_keyboard = keyboard;
+  if (m_keyboard == nullptr && PS2Controller::instance()) {
+    // get default keyboard from PS/2 controller
+    m_keyboard = PS2Controller::instance()->keyboard();
+  }
+
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
   Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
 
   // setup keyboard
-  Keyboard.setUIApp(this);
+  m_keyboard->setUIApp(this);
 
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(Canvas.getWidth(), Canvas.getHeight()), false);
@@ -248,7 +254,7 @@ int uiApp::run()
   delete m_rootWindow;
   m_rootWindow = nullptr;
 
-  Keyboard.setUIApp(nullptr);
+  m_keyboard->setUIApp(nullptr);
 
   Mouse.terminateAbsolutePositioner();
 
@@ -1086,11 +1092,11 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
 void uiApp::enableKeyboardAndMouseEvents(bool value)
 {
   if (value) {
-    Keyboard.setUIApp(this);
+    m_keyboard->setUIApp(this);
     Mouse.setUIApp(this);
     VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
   } else {
-    Keyboard.setUIApp(nullptr);
+    m_keyboard->setUIApp(nullptr);
     Mouse.setUIApp(nullptr);
     VGAController.setMouseCursor(nullptr);
   }
@@ -2483,7 +2489,7 @@ void uiTextEdit::handleKeyDown(uiKeyEventInfo key)
       default:
       {
         // normal keys
-        int c = Keyboard.virtualKeyToASCII(key.VK);
+        int c = app()->keyboard()->virtualKeyToASCII(key.VK);
         if (c >= 0x20 && c != 0x7F) {
           if (m_cursorCol != m_selCursorCol)
             removeSel();  // there is a selection, same behavior of VK_DELETE
@@ -3641,7 +3647,7 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
 {
   int idx = getItemAtMousePos(mouseX, mouseY);
   if (idx > -1) {
-    if (Keyboard.isVKDown(VK_LCTRL) || Keyboard.isVKDown(VK_RCTRL)) {
+    if (app()->keyboard()->isVKDown(VK_LCTRL) || app()->keyboard()->isVKDown(VK_RCTRL)) {
       // CTRL is down
       items_select(idx, !items_selected(idx));
     } else {

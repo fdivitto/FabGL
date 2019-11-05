@@ -71,7 +71,7 @@
  *    * fabgl::VGAControllerClass (instanced as \b VGAController), that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.
  *    * fabgl::CanvasClass (instanced as \b Canvas), that provides a set of drawing primitives (lines, rectangles, text...).
  *    * fabgl::TerminalClass, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
- *    * fabgl::KeyboardClass (instanced as \b Keyboard), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
+ *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
  *    * fabgl::MouseClass (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
  *    * fabgl::uiApp base class to build Graphical User Interface applications
@@ -181,6 +181,10 @@
  *
  * When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way:
  *
+ *     fabgl::PS2Controller PS2Controller;
+ *     fabgl::Keyboard Keyboard;
+ *     fabgl::Mouse;
+ *
  *     // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
  *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
  *     // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
@@ -190,6 +194,7 @@
  *
  * A simplified way to configure Mouse and Keyboard, when you have all GPIOs as before is:
  *
+ *     fabgl::PS2Controller PS2Controller;
  *     PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
  */
 
@@ -304,5 +309,6 @@ using fabgl::uiCustomListBox;
 using fabgl::uiFileBrowser;
 using fabgl::FileBrowser;
 using fabgl::ModalWindowState;
+
 
 
