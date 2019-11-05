@@ -838,6 +838,8 @@ PS2Controller * PS2Controller::s_instance = nullptr;
 
 
 PS2Controller::PS2Controller()
+  : m_keyboard(nullptr),
+    m_mouse(nullptr)
 {
   s_instance = this;
 }
@@ -894,7 +896,8 @@ void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
       begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
       setKeyboard(new Keyboard);
       keyboard()->begin(generateVirtualKeys, createVKQueue, 0);
-      Mouse.begin(1);
+      setMouse(new Mouse);
+      mouse()->begin(1);
       break;
     case PS2Preset::KeyboardPort0:
       // only keyboard configured on port 0
@@ -903,7 +906,8 @@ void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
       break;
     case PS2Preset::MousePort0:
       // only mouse configured on port 0
-      Mouse.begin(GPIO_NUM_33, GPIO_NUM_32);
+      setMouse(new Mouse);
+      mouse()->begin(GPIO_NUM_33, GPIO_NUM_32);
       break;
   };
 }

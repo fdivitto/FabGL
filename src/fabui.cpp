@@ -185,18 +185,22 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run(Keyboard * keyboard)
+int uiApp::run(Keyboard * keyboard, Mouse * mouse)
 {
   m_keyboard = keyboard;
-  if (m_keyboard == nullptr && PS2Controller::instance()) {
-    // get default keyboard from PS/2 controller
-    m_keyboard = PS2Controller::instance()->keyboard();
+  m_mouse    = mouse;
+  if (PS2Controller::instance()) {
+    // get default keyboard and mouse from the PS/2 controller
+    if (m_keyboard == nullptr)
+      m_keyboard = PS2Controller::instance()->keyboard();
+    if (m_mouse == nullptr)
+      m_mouse = PS2Controller::instance()->mouse();
   }
 
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
-  Mouse.setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
+  m_mouse->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
 
   // setup keyboard
   m_keyboard->setUIApp(this);
@@ -256,7 +260,7 @@ int uiApp::run(Keyboard * keyboard)
 
   m_keyboard->setUIApp(nullptr);
 
-  Mouse.terminateAbsolutePositioner();
+  m_mouse->terminateAbsolutePositioner();
 
   vQueueDelete(m_eventsQueue);
   m_eventsQueue = nullptr;
@@ -1093,11 +1097,11 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
 {
   if (value) {
     m_keyboard->setUIApp(this);
-    Mouse.setUIApp(this);
+    m_mouse->setUIApp(this);
     VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
   } else {
     m_keyboard->setUIApp(nullptr);
-    Mouse.setUIApp(nullptr);
+    m_mouse->setUIApp(nullptr);
     VGAController.setMouseCursor(nullptr);
   }
 }

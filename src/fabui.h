@@ -2235,6 +2235,7 @@ struct ModalWindowState {
 
 
 class Keyboard;
+class Mouse;
 
 
 /**
@@ -2258,7 +2259,7 @@ public:
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(Keyboard * keyboard = nullptr);
+  int run(Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2610,6 +2611,9 @@ public:
 
   Keyboard * keyboard() { return m_keyboard; }
 
+  Mouse * mouse() { return m_mouse; }
+
+
 protected:
 
   bool getEvent(uiEvent * event, int timeOutMS);
@@ -2630,6 +2634,8 @@ private:
 
 
   Keyboard *    m_keyboard;
+
+  Mouse *       m_mouse;
 
   uiAppProps    m_appProps;
 

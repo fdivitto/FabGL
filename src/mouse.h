@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::MouseClass definition and the Mouse instance.
+ * @brief This file contains fabgl::Mouse definition.
  */
 
 
@@ -70,13 +70,12 @@ enum MouseType {
 /**
  * @brief The PS2 Mouse controller class.
  *
- * MouseClass connects to one port of the PS2 Controller class (fabgl::PS2Controller) to decode and get mouse movements.<br>
- * At the moment MouseClass supports standard PS/2 mouse (X and Y axis with three buttons) and Microsoft Intellimouse compatible mouse
+ * Mouse class connects to one port of the PS2 Controller class (fabgl::PS2Controller) to decode and get mouse movements.<br>
+ * At the moment Mouse class supports standard PS/2 mouse (X and Y axis with three buttons) and Microsoft Intellimouse compatible mouse
  * (X and Y axis, scroll wheel with three buttons).<br>
- * MouseClass allows to set movement parameters, like sample rate, resolution and scaling.<br>
+ * Mouse class allows to set movement parameters, like sample rate, resolution and scaling.<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
  * <br>
- * Applications do not need to create an instance of MouseClass because an instance named Mouse is created automatically.<br>
  * Because fabgl::PS2Controller supports up to two PS/2 ports, it is possible to have connected two PS/2 devices. The most common
  * configuration is Keyboard on port 0 and Mouse on port 1. However you may have two mice connected at the same time using the Mouse
  * instance on port 0 and creating a new one on port 1.<br>
@@ -84,6 +83,7 @@ enum MouseType {
  * Example:
  *
  *     // Setup pins GPIO26 for CLK and GPIO27 for DATA
+ *     fabgl::Mouse Mouse;
  *     Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);
  *
  *     if (Mouse.deltaAvailable()) {
@@ -96,18 +96,18 @@ enum MouseType {
  *     }
  *
  */
-class MouseClass : public PS2DeviceClass {
+class Mouse : public PS2DeviceClass {
 
 public:
 
-  MouseClass();
+  Mouse();
 
-  ~MouseClass();
+  ~Mouse();
 
   /**
-   * @brief Initializes MouseClass specifying CLOCK and DATA GPIOs.
+   * @brief Initializes Mouse specifying CLOCK and DATA GPIOs.
    *
-   * A reset command (MouseClass.reset() method) is automatically sent to the mouse.<br>
+   * A reset command (Mouse.reset() method) is automatically sent to the mouse.<br>
    * This method also initializes the PS2Controller to use port 0 only.
    *
    * @param clkGPIO The GPIO number of Clock line
@@ -121,9 +121,9 @@ public:
   void begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO);
 
   /**
-   * @brief Initializes MouseClass without initializing the PS/2 controller.
+   * @brief Initializes Mouse without initializing the PS/2 controller.
    *
-   * A reset command (MouseClass.reset() method) is automatically sent to the mouse.<br>
+   * A reset command (Mouse.reset() method) is automatically sent to the mouse.<br>
    * This method does not initialize the PS2Controller.
    *
    * @param PS2Port The PS/2 port to use (0 or 1).
@@ -146,7 +146,7 @@ public:
   /**
    * @brief Checks if mouse has been detected and correctly initialized.
    *
-   * isMouseAvailable() returns a valid value only after MouseClass.begin() or MouseClass.reset() has been called.
+   * isMouseAvailable() returns a valid value only after Mouse.begin() or Mouse.reset() has been called.
    *
    * @return True if the mouse is correctly initialized.
    */
@@ -245,7 +245,7 @@ public:
    *
    * This method updates absolute mouse position, mouse wheel and buttons status.<br>
    * In order to improve quality of acceleration it is important to call updateAbsolutePosition() often and at constant frequency.<br>
-   * updateAbsolutePosition() is automatically executed when updateVGAController or createAbsolutePositionsQueue parameters of MouseClass.setupAbsolutePositioner() is true.<br>
+   * updateAbsolutePosition() is automatically executed when updateVGAController or createAbsolutePositionsQueue parameters of Mouse.setupAbsolutePositioner() is true.<br>
    *
    * @param delta Mouse event to process.
    *
@@ -271,7 +271,7 @@ public:
    * @brief Gets the number of available mouse status.
    *
    * Mouse status contains absolute mouse position, scroll wheel delta and buttons status.<br>
-   * Mouse status queue is populated only when createAbsolutePositionsQueue parameter of MouseClass.setupAbsolutePositioner() is true.
+   * Mouse status queue is populated only when createAbsolutePositionsQueue parameter of Mouse.setupAbsolutePositioner() is true.
    *
    * @return Number of available mouse status.
    */
@@ -281,7 +281,7 @@ public:
    * @brief Gets the next status from the status queue.
    *
    * Mouse status contains absolute mouse position, scroll wheel delta and buttons status.<br>
-   * Mouse status queue is populated only when createAbsolutePositionsQueue parameter of MouseClass.setupAbsolutePositioner() is true.
+   * Mouse status queue is populated only when createAbsolutePositionsQueue parameter of Mouse.setupAbsolutePositioner() is true.
    *
    * @param timeOutMS Timeout in milliseconds to wait for a new status. -1 = wait forever.
    *
@@ -301,7 +301,7 @@ public:
   /**
    * @brief Gets or set mouse movement acceleration factor.
    *
-   * Mouse movement acceleration is calculated in MouseClass.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
+   * Mouse movement acceleration is calculated in Mouse.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
    * Lower values generate little acceleration, high values generate a lot of acceleration.<br>
    * Suggested range is 0 ... 2000. Default value is 180.
    */
@@ -310,7 +310,7 @@ public:
   /**
    * @brief Gets or sets wheel acceleration factor.
    *
-   * Wheel acceleration is calculated in MouseClass.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
+   * Wheel acceleration is calculated in Mouse.updateAbsolutePosition() and depends by the acceleration factor and time of call.<br>
    * Lower values generate little acceleration, high values generate a lot of acceleration.<br>
    * Suggested range is 0 ... 100000. Default value is 60000.
    */
@@ -346,7 +346,7 @@ private:
 
 
 
-extern fabgl::MouseClass Mouse;
+
 
 
 

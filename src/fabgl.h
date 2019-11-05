@@ -72,7 +72,7 @@
  *    * fabgl::CanvasClass (instanced as \b Canvas), that provides a set of drawing primitives (lines, rectangles, text...).
  *    * fabgl::TerminalClass, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
  *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
- *    * fabgl::MouseClass (instanced as \b Mouse), that controls a PS2 mouse.
+ *    * fabgl::Mouse (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
  *    * fabgl::uiApp base class to build Graphical User Interface applications
  *    * fabgl::SoundGenerator to generate sound and music.
@@ -183,7 +183,7 @@
  *
  *     fabgl::PS2Controller PS2Controller;
  *     fabgl::Keyboard Keyboard;
- *     fabgl::Mouse;
+ *     fabgl::Mouse Mouse;
  *
  *     // port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
  *     PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);

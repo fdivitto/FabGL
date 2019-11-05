@@ -29,14 +29,14 @@
 #include "vgacontroller.h"
 
 
-fabgl::MouseClass Mouse;
+
 
 
 
 namespace fabgl {
 
 
-MouseClass::MouseClass()
+Mouse::Mouse()
   : m_mouseAvailable(false),
     m_mouseType(LegacyMouse),
     m_prevDeltaTime(0),
@@ -50,27 +50,29 @@ MouseClass::MouseClass()
 }
 
 
-MouseClass::~MouseClass()
+Mouse::~Mouse()
 {
   terminateAbsolutePositioner();
 }
 
 
-void MouseClass::begin(int PS2Port)
+void Mouse::begin(int PS2Port)
 {
   PS2DeviceClass::begin(PS2Port);
   reset();
 }
 
 
-void MouseClass::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
+void Mouse::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
 {
-  PS2Controller::instance()->begin(clkGPIO, dataGPIO);
+  PS2Controller * PS2 = PS2Controller::instance();
+  PS2->begin(clkGPIO, dataGPIO);
+  PS2->setMouse(this);
   begin(0);
 }
 
 
-bool MouseClass::reset()
+bool Mouse::reset()
 {
   // tries up to six times for mouse reset
   for (int i = 0; i < 3; ++i) {
@@ -95,19 +97,19 @@ bool MouseClass::reset()
 }
 
 
-int MouseClass::getPacketSize()
+int Mouse::getPacketSize()
 {
   return (m_mouseType == Intellimouse ? 4 : 3);
 }
 
 
-int MouseClass::deltaAvailable()
+int Mouse::deltaAvailable()
 {
   return dataAvailable() / getPacketSize();
 }
 
 
-bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOnTimeOut)
+bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOnTimeOut)
 {
   // receive packet
   int packetSize = getPacketSize();
@@ -144,7 +146,7 @@ bool MouseClass::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestRes
 }
 
 
-void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app)
+void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app)
 {
   m_area                  = Size(width, height);
   m_status.X              = width >> 1;
@@ -176,7 +178,7 @@ void MouseClass::setupAbsolutePositioner(int width, int height, bool createAbsol
 }
 
 
-void MouseClass::terminateAbsolutePositioner()
+void Mouse::terminateAbsolutePositioner()
 {
   m_updateVGAController = false;
   m_uiApp = nullptr;
@@ -191,7 +193,7 @@ void MouseClass::terminateAbsolutePositioner()
 }
 
 
-void MouseClass::updateAbsolutePosition(MouseDelta * delta)
+void Mouse::updateAbsolutePosition(MouseDelta * delta)
 {
   const int maxDeltaTimeUS = 500000; // after 0.5s doesn't consider acceleration
 
@@ -232,9 +234,9 @@ void MouseClass::updateAbsolutePosition(MouseDelta * delta)
 }
 
 
-void MouseClass::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
+void Mouse::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
 {
-  MouseClass * mouse = (MouseClass*) pvTimerGetTimerID(xTimer);
+  Mouse * mouse = (Mouse*) pvTimerGetTimerID(xTimer);
   MouseDelta delta;
   if (mouse->deltaAvailable() && mouse->getNextDelta(&delta, 0, false)) {
     mouse->updateAbsolutePosition(&delta);
@@ -291,13 +293,13 @@ void MouseClass::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
 }
 
 
-int MouseClass::availableStatus()
+int Mouse::availableStatus()
 {
   return m_absoluteQueue ? uxQueueMessagesWaiting(m_absoluteQueue) : 0;
 }
 
 
-MouseStatus MouseClass::getNextStatus(int timeOutMS)
+MouseStatus Mouse::getNextStatus(int timeOutMS)
 {
   MouseStatus status;
   if (m_absoluteQueue)

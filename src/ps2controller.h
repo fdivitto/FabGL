@@ -61,6 +61,7 @@ enum class KbdMode {
 
 
 class Keyboard;
+class Mouse;
 
 
 /**
@@ -156,11 +157,29 @@ public:
    */
   void resume();
 
+  /**
+   * @brief Returns the instance of Keyboard object automatically created by PS2Controller.
+   *
+   * @return A pointer to a Keyboard object
+   */
   Keyboard * keyboard() { return m_keyboard; }
 
   void setKeyboard(Keyboard * value) { m_keyboard = value; }
 
+  /**
+   * @brief Returns the instance of Mouse object automatically created by PS2Controller.
+   *
+   * @return A pointer to a Mouse object
+   */
+  Mouse * mouse() { return m_mouse; }
 
+  void setMouse(Mouse * value) { m_mouse = value; }
+
+  /**
+   * @brief Returns the singleton instance of PS2Controller class
+   *
+   * @return A pointer to PS2Controller singleton object
+   */
   static PS2Controller * instance() { return s_instance; }
 
 
@@ -172,7 +191,10 @@ private:
 
   static PS2Controller * s_instance;
 
+  // Keyboard and Mouse instances can be created by PS2Controller in one of the begin() calls, or can be
+  // set using setKeyboard() and setMouse() calls.
   Keyboard *            m_keyboard;
+  Mouse *               m_mouse;
 
   // address of next word to read in the circular buffer
   int                   m_readPos[2];
