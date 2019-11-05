@@ -30,7 +30,7 @@
 
 
 
-
+fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 
 

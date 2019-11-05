@@ -23,6 +23,10 @@
 #include "fabgl.h"
 
 
+fabgl::PS2Controller PS2Controller;
+
+
+
 void printHelp()
 {
   Serial.printf("\n\nPS/2 Mouse Studio\n");

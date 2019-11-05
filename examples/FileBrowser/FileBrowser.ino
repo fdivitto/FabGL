@@ -35,6 +35,7 @@
 
 
 Preferences preferences;
+fabgl::PS2Controller PS2Controller;
 
 
 

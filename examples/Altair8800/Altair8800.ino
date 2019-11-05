@@ -135,6 +135,7 @@ constexpr int MaxColorsIndex     = 5;
 
 // globals
 
+fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 Machine       altair;
 Mits88Disk    diskDrive(&altair, DISKFORMAT);

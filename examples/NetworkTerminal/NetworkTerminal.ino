@@ -44,6 +44,8 @@ WiFiClient   client;
 char const * currentScript = nullptr;
 bool         error = false;
 
+
+fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 
 

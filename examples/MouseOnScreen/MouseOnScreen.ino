@@ -23,6 +23,9 @@
 #include "fabgl.h"
 
 
+fabgl::PS2Controller PS2Controller;
+
+
 int indicatorX = 300;
 int indicatorY = 170;
 int cursor     = 0;

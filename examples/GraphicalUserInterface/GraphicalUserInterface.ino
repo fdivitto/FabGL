@@ -26,6 +26,8 @@
 #include "App.h"
 
 
+fabgl::PS2Controller PS2Controller;
+
 
 void setup()
 {

@@ -30,6 +30,10 @@
 
 
 
+fabgl::PS2Controller PS2Controller;
+SoundGenerator soundGenerator;
+
+
 void setup()
 {
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
@@ -41,9 +45,6 @@ void setup()
   //VGAController.moveScreen(20, -2);
   VGAController.moveScreen(-6, 0);
 }
-
-
-SoundGenerator soundGenerator;
 
 
 class ChannelFrame : public uiFrame {
