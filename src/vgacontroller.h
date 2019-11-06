@@ -483,10 +483,9 @@ struct Sprite {
   void clearBitmaps();
   int getWidth()  { return frames[currentFrame]->width; }
   int getHeight() { return frames[currentFrame]->height; }
-  Sprite * move(int offsetX, int offsetY, bool wrapAround = true);
+  Sprite * moveBy(int offsetX, int offsetY);
+  Sprite * moveBy(int offsetX, int offsetY, int wrapAroundWidth, int wrapAroundHeight);
   Sprite * moveTo(int x, int y);
-
-private:
   void allocRequiredBackgroundBuffer();
 };
 

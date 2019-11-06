@@ -183,6 +183,13 @@ void VGAController::setSprites(Sprite * sprites, int count, int spriteSize)
   m_sprites      = sprites;
   m_spriteSize   = spriteSize;
   m_spritesCount = count;
+  if (!isDoubleBuffered()) {
+    uint8_t * spritePtr = (uint8_t*)m_sprites;
+    for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
+      Sprite * sprite = (Sprite*) spritePtr;
+      sprite->allocRequiredBackgroundBuffer();
+    }
+  }
 }
 
 
@@ -2235,12 +2242,14 @@ void VGAController::setMouseCursor(Cursor const * cursor)
     primitivesExecutionWait();
 
     if (cursor) {
-      m_mouseCursor.move(+m_mouseHotspotX, +m_mouseHotspotY, false);
+      m_mouseCursor.moveBy(+m_mouseHotspotX, +m_mouseHotspotY);
       m_mouseHotspotX = cursor->hotspotX;
       m_mouseHotspotY = cursor->hotspotY;
       m_mouseCursor.addBitmap(&cursor->bitmap);
       m_mouseCursor.visible = true;
-      m_mouseCursor.move(-m_mouseHotspotX, -m_mouseHotspotY, false);
+      m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
+      if (!isDoubleBuffered())
+        m_mouseCursor.allocRequiredBackgroundBuffer();
     }
     refreshSprites();
   }
@@ -2290,14 +2299,13 @@ Sprite::~Sprite()
 
 
 // calc and alloc required save-background space
+// Display controller requires to call using Single Buffering display (Double Buffering doesn't require this)
 void Sprite::allocRequiredBackgroundBuffer()
 {
-  if (!VGAController::instance()->isDoubleBuffered()) {
-    int reqBackBufferSize = 0;
-    for (int i = 0; i < framesCount; ++i)
-      reqBackBufferSize = tmax(reqBackBufferSize, frames[i]->width * frames[i]->height);
-    savedBackground = (uint8_t*) realloc(savedBackground, reqBackBufferSize);
-  }
+  int reqBackBufferSize = 0;
+  for (int i = 0; i < framesCount; ++i)
+    reqBackBufferSize = tmax(reqBackBufferSize, frames[i]->width * frames[i]->height);
+  savedBackground = (uint8_t*) realloc(savedBackground, reqBackBufferSize);
 }
 
 
@@ -2314,7 +2322,6 @@ Sprite * Sprite::addBitmap(Bitmap const * bitmap)
   ++framesCount;
   frames = (Bitmap const **) realloc(frames, sizeof(Bitmap*) * framesCount);
   frames[framesCount - 1] = bitmap;
-  allocRequiredBackgroundBuffer();
   return this;
 }
 
@@ -2325,25 +2332,30 @@ Sprite * Sprite::addBitmap(Bitmap const * bitmap[], int count)
   for (int i = 0; i < count; ++i)
     frames[framesCount + i] = bitmap[i];
   framesCount += count;
-  allocRequiredBackgroundBuffer();
   return this;
 }
 
 
-Sprite * Sprite::move(int offsetX, int offsetY, bool wrapAround)
+Sprite * Sprite::moveBy(int offsetX, int offsetY)
 {
   x += offsetX;
   y += offsetY;
-  if (wrapAround) {
-    if (x > VGAController::instance()->getViewPortWidth())
-      x = - (int) getWidth();
-    if (x < - (int) getWidth())
-      x = VGAController::instance()->getViewPortWidth();
-    if (y > VGAController::instance()->getViewPortHeight())
-      y = - (int) getHeight();
-    if (y < - (int) getHeight())
-      y = VGAController::instance()->getViewPortHeight();
-  }
+  return this;
+}
+
+
+Sprite * Sprite::moveBy(int offsetX, int offsetY, int wrapAroundWidth, int wrapAroundHeight)
+{
+  x += offsetX;
+  y += offsetY;
+  if (x > wrapAroundWidth)
+    x = - (int) getWidth();
+  if (x < - (int) getWidth())
+    x = wrapAroundWidth;
+  if (y > wrapAroundHeight)
+    y = - (int) getHeight();
+  if (y < - (int) getHeight())
+    y = wrapAroundHeight;
   return this;
 }
 
