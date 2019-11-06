@@ -507,8 +507,10 @@ struct GameScene : public Scene {
     if (gameState_ == GAMESTATE_LEVELCHANGING)
       levelChange();
 
-    if (gameState_ == GAMESTATE_LEVELCHANGED && esp_timer_get_time() >= pauseStart_ + 2500000)
+    if (gameState_ == GAMESTATE_LEVELCHANGED && esp_timer_get_time() >= pauseStart_ + 2500000) {
       stop(); // restart from next level
+      VGAController.removeSprites();
+    }
 
     if (gameState_ == GAMESTATE_GAMEOVER) {
 
@@ -516,10 +518,12 @@ struct GameScene : public Scene {
       if ((updateCount % 20) == 0)
         player_->setFrame( player_->getFrameIndex() == 1 ? 2 : 1);
 
-      // wait for SPACE or click from controller
+      // wait for SPACE or click from mouse
       if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
-          (IntroScene::controller_ == 2 && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left))
+          (IntroScene::controller_ == 2 && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)) {
         stop();
+        VGAController.removeSprites();
+      }
 
     }
 
