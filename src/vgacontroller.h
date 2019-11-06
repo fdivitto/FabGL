@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::VGAControllerClass definition and the VGAController instance.
+ * @brief This file contains fabgl::VGAController definition.
  */
 
 
@@ -483,9 +483,11 @@ struct Sprite {
   void clearBitmaps();
   int getWidth()  { return frames[currentFrame]->width; }
   int getHeight() { return frames[currentFrame]->height; }
-  void allocRequiredBackgroundBuffer();
   Sprite * move(int offsetX, int offsetY, bool wrapAround = true);
   Sprite * moveTo(int x, int y);
+
+private:
+  void allocRequiredBackgroundBuffer();
 };
 
 
@@ -567,9 +569,24 @@ struct PaintState {
 *     // Set 640x350@70Hz resolution
 *     VGAController.setResolution(VGA_640x350_70Hz);
 */
-class VGAControllerClass {
+class VGAController {
 
 public:
+
+  VGAController();
+
+  // unwanted methods
+  VGAController(VGAController const&)   = delete;
+  void operator=(VGAController const&)  = delete;
+
+
+  /**
+   * @brief Returns the singleton instance of VGAController class
+   *
+   * @return A pointer to VGAController singleton object
+   */
+  static VGAController * instance() { return s_instance; }
+
 
   /**
    * @brief This is the 8 colors (5 GPIOs) initializer.
@@ -796,7 +813,7 @@ public:
    * A sprite is an image that keeps background unchanged.<br>
    * There is no limit to the number of active sprites, but flickering and slow
    * refresh happens when a lot of sprites (or large sprites) are visible.<br>
-   * To empty the list of active sprites call VGAControllerClass.removeSprites().
+   * To empty the list of active sprites call VGAController.removeSprites().
    *
    * @param sprites The list of sprites to make currently active.
    * @param count Number of sprites in the list.
@@ -831,14 +848,14 @@ public:
    * Screen is automatically updated whenever a primitive is painted (look at CanvasClass).<br>
    * When a sprite updates its image or its position (or any other property) it is required
    * to force a refresh using this method.<br>
-   * VGAControllerClass.refreshSprites() is required also when using the double buffered mode, to paint sprites.
+   * VGAController.refreshSprites() is required also when using the double buffered mode, to paint sprites.
    */
   void refreshSprites();
 
   /**
-   * @brief Determines whether VGAControllerClass is on double buffered mode.
+   * @brief Determines whether VGAController is on double buffered mode.
    *
-   * @return True if VGAControllerClass is on double buffered mode.
+   * @return True if VGAController is on double buffered mode.
    */
   bool isDoubleBuffered() { return m_doubleBuffered; }
 
@@ -925,7 +942,7 @@ public:
   void writeScreen(Rect const & rect, RGB * srcBuf);
 
   /**
-   * @brief Creates a raw pixel to use with VGAControllerClass.setRawPixel
+   * @brief Creates a raw pixel to use with VGAController.setRawPixel
    *
    * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
    *
@@ -939,7 +956,7 @@ public:
   uint8_t createRawPixel(RGB rgb)             { return preparePixel(rgb); }
 
   /**
-   * @brief Sets a raw pixel prepared using VGAControllerClass.createRawPixel.
+   * @brief Sets a raw pixel prepared using VGAController.createRawPixel.
    *
    * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
    *
@@ -957,7 +974,7 @@ public:
   /**
    * @brief Gets a raw scanline pointer.
    *
-   * A raw scanline must be filled with raw pixel colors. Use VGAControllerClass.createRawPixel to create raw pixel colors.
+   * A raw scanline must be filled with raw pixel colors. Use VGAController.createRawPixel to create raw pixel colors.
    * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
    * Pixels are arranged in 32 bit packes as follows:
    *   pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 :
@@ -1033,6 +1050,9 @@ private:
   void setDMABufferView(int index, int row, int scan);
   void volatile * getDMABuffer(int index, int * length);
 
+
+  static VGAController * s_instance;
+
   int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
   Timings                m_timings;
   int16_t                m_linesCount;
@@ -1092,7 +1112,7 @@ private:
 } // end of namespace
 
 
-extern fabgl::VGAControllerClass VGAController;
+
 
 
 

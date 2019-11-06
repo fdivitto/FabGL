@@ -167,7 +167,7 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
 
   if (m_updateVGAController) {
     // setup initial position
-    VGAController.setMouseCursorPos(m_status.X, m_status.Y);
+    VGAController::instance()->setMouseCursorPos(m_status.X, m_status.Y);
   }
 
   if (m_updateVGAController || createAbsolutePositionsQueue || m_uiApp) {
@@ -243,7 +243,7 @@ void Mouse::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
 
     // VGA Controller
     if (mouse->m_updateVGAController)
-      VGAController.setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
+      VGAController::instance()->setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
 
     // queue (if you need availableStatus() or getNextStatus())
     if (mouse->m_absoluteQueue) {

@@ -62,7 +62,7 @@ void Scene::start(bool suspendTask)
 
 void Scene::stop()
 {
-  VGAController.removeSprites();
+  VGAController::instance()->removeSprites();
   xTimerStop(m_updateTimer, portMAX_DELAY);
   if (m_suspendedTask)
     vTaskResume(m_suspendedTask);

@@ -102,7 +102,7 @@ public:
    *
    * @return The canvas width in pixels.
    */
-  int getWidth() { return VGAController.getViewPortWidth(); }
+  int getWidth() { return VGAController::instance()->getViewPortWidth(); }
 
   /**
    * @brief Determines the canvas height in pixels.
@@ -111,7 +111,7 @@ public:
    *
    * @return The canvas height in pixels.
    */
-  int getHeight() { return VGAController.getViewPortHeight(); }
+  int getHeight() { return VGAController::instance()->getViewPortHeight(); }
 
   /**
    * @brief Sets the axes origin.
@@ -724,7 +724,7 @@ public:
    * @brief Draws a sequence of lines.
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
-   * To avoid it, application can disable drawing on vsync (calling VGAControllerClass.enableBackgroundPrimitiveExecution()) or just wait
+   * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
    * until all the drawing have been completed(calling CanvasClass.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.
@@ -743,7 +743,7 @@ public:
    * @brief Fills the polygon enclosed in a sequence of lines.
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
-   * To avoid it, application can disable drawing on vsync (calling VGAControllerClass.enableBackgroundPrimitiveExecution()) or just wait
+   * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
    * until all the drawing have been completed(calling CanvasClass.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.

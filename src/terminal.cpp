@@ -1368,13 +1368,13 @@ void TerminalClass::refresh(int X1, int Y1, int X2, int Y2)
 // should be performed very often.
 void TerminalClass::beginRefresh()
 {
-  VGAController.suspendBackgroundPrimitiveExecution();
+  VGAController::instance()->suspendBackgroundPrimitiveExecution();
 }
 
 
 void TerminalClass::endRefresh()
 {
-  VGAController.resumeBackgroundPrimitiveExecution();
+  VGAController::instance()->resumeBackgroundPrimitiveExecution();
 }
 
 

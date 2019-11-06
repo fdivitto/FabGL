@@ -216,7 +216,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
   m_rootWindow->frameProps().moveable   = false;
 
   // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
-  VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+  VGAController::instance()->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
   showWindow(m_rootWindow, true);
 
@@ -250,7 +250,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
 
   showCaret(nullptr);
 
-  VGAController.setMouseCursor(nullptr);
+  VGAController::instance()->setMouseCursor(nullptr);
 
   Canvas.setBrushColor(m_rootWindow->frameStyle().backgroundColor);
   Canvas.clear();
@@ -346,7 +346,7 @@ void uiApp::filterModalEvent(uiEvent * event)
         event->dest = nullptr;
         if (event->id == UIEVT_MOUSEENTER) {
           // a little hack to set the right mouse pointer exiting from modal window
-          VGAController.setMouseCursor(m_modalWindow->windowStyle().defaultCursor);
+          VGAController::instance()->setMouseCursor(m_modalWindow->windowStyle().defaultCursor);
         }
         break;
 
@@ -1098,11 +1098,11 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
   if (value) {
     m_keyboard->setUIApp(this);
     m_mouse->setUIApp(this);
-    VGAController.setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+    VGAController::instance()->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
   } else {
     m_keyboard->setUIApp(nullptr);
     m_mouse->setUIApp(nullptr);
-    VGAController.setMouseCursor(nullptr);
+    VGAController::instance()->setMouseCursor(nullptr);
   }
 }
 
@@ -1443,7 +1443,7 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEENTER:
       m_isMouseOver = true;
-      VGAController.setMouseCursor(m_windowStyle.defaultCursor);
+      VGAController::instance()->setMouseCursor(m_windowStyle.defaultCursor);
       break;
 
     case UIEVT_MOUSELEAVE:
@@ -2157,7 +2157,7 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
       break;
   }
 
-  VGAController.setMouseCursor(cur);
+  VGAController::instance()->setMouseCursor(cur);
 }
 
 
