@@ -62,6 +62,8 @@ int shrinkX = 0;
 int shrinkY = 0;
 
 
+fabgl::VGAController VGAController;
+
 
 void printHelp()
 {

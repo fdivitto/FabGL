@@ -31,6 +31,7 @@
 using fabgl::iclamp;
 
 
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 
 

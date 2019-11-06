@@ -23,6 +23,7 @@
 #include "fabgl.h"
 
 
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 

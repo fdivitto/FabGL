@@ -123,6 +123,7 @@ void vTimerCallback1SecExpired(xTimerHandle pxTimer)
 #endif
 
 
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -131,7 +132,7 @@ Preferences preferences;
 
 
 // Main machine
-Machine machine;
+Machine machine(&VGAController);
 
 
 void initSPIFFS()

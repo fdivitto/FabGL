@@ -23,6 +23,11 @@
 #include "fabgl.h"
 
 
+
+fabgl::VGAController VGAController;
+
+
+
 #define DOUBLEBUFFERING 1
 
 

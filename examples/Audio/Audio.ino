@@ -29,7 +29,7 @@
 #include "mario.h"
 
 
-
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 SoundGenerator soundGenerator;
 

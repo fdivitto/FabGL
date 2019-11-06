@@ -135,6 +135,7 @@ constexpr int MaxColorsIndex     = 5;
 
 // globals
 
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 Machine       altair;

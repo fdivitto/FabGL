@@ -35,6 +35,8 @@
 
 
 Preferences preferences;
+
+fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -259,7 +261,7 @@ void setup()
   VGAController.begin();
 
   // maintain LOW!!! otherwise there isn't enough memory for WiFi!!!
-  VGAController.setResolution(VGA_400x300_60Hz);
+  VGAController.setResolution(VGA_480x300_75Hz);
 
   // adjust this to center screen in your monitor
   //VGAController.moveScreen(-6, 0);

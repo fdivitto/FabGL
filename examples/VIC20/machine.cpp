@@ -29,11 +29,11 @@
 #include "ROM/char_rom.h"
 
 
-Machine::Machine()
+Machine::Machine(fabgl::VGAController * displayController)
   : m_CPU(this),
     m_VIA1(this, 1, &Machine::VIA1PortOut, &Machine::VIA1PortIn),
     m_VIA2(this, 2, &Machine::VIA2PortOut, &Machine::VIA2PortIn),
-    m_VIC(this),
+    m_VIC(this, displayController),
     m_joyEmu(JE_CursorKeys)
 {
   m_RAM1K    = new uint8_t[0x0400];
@@ -1395,11 +1395,12 @@ static const RGB COLORS[16] = { {0, 0, 0},   // black
 static uint8_t RAWCOLORS[16];
 
 
-MOS6561::MOS6561(Machine * machine)
-  : m_machine(machine)
+MOS6561::MOS6561(Machine * machine, fabgl::VGAController * displayController)
+  : m_machine(machine),
+    m_displayController(displayController)
 {
   for (int i = 0; i < 16; ++i)
-    RAWCOLORS[i] = VGAController.createRawPixel(COLORS[i]);
+    RAWCOLORS[i] = m_displayController->createRawPixel(COLORS[i]);
 
   m_soundGen.attach(&m_sqGen1);
   m_soundGen.attach(&m_sqGen2);
@@ -1466,7 +1467,7 @@ void MOS6561::tick(int cycles)
       } else if (m_scanY >= VerticalBlanking) {
         // visible area, including vertical borders
         m_Y            = m_scanY - VerticalBlanking;
-        m_destScanline = (uint32_t*) (VGAController.getScanline(ScreenOffsetY + m_Y) + ScreenOffsetX);
+        m_destScanline = (uint32_t*) (m_displayController->getScanline(ScreenOffsetY + m_Y) + ScreenOffsetX);
         m_isVBorder    = (m_Y < m_topPos || m_Y >= m_topPos + m_charAreaHeight);
         if (!m_isVBorder) {
           // char area, including horizontal borders

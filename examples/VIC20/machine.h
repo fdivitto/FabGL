@@ -205,7 +205,7 @@ public:
   static const int MaxTextColumns     = 32;
 
 
-  MOS6561(Machine * machine);
+  MOS6561(Machine * machine, fabgl::VGAController * displayController);
 
   void reset();
 
@@ -224,6 +224,8 @@ private:
   void drawNextPixels();
 
   Machine *               m_machine;
+  fabgl::VGAController *  m_displayController;
+
   int                     m_charHeight;
   int                     m_colCount;
   int                     m_rowCount;
@@ -301,7 +303,7 @@ class Machine {
 
 public:
 
-  Machine();
+  Machine(fabgl::VGAController * displayController);
   ~Machine();
 
   void reset();

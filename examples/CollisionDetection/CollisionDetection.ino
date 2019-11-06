@@ -26,6 +26,9 @@
 
 
 
+fabgl::VGAController VGAController;
+
+
 #define SPACESHIP_COUNT 10
 #define ASTEROID_COUNT   4
 

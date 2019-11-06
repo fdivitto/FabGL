@@ -26,7 +26,7 @@
 
 
 
-
+fabgl::VGAController VGAController;
 TerminalClass Terminal;
 
 
