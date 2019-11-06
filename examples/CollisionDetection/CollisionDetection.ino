@@ -104,7 +104,7 @@ struct MyScene : public Scene {
       if (sprite->isAlive) {
 
         // this object is alive, move to the next position
-        sprite->move(sprite->velX, sprite->velY);
+        sprite->moveBy(sprite->velX, sprite->velY, VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
 
         // update the collision detector and check for a possible collision
         updateSpriteAndDetectCollisions(sprite);
@@ -121,7 +121,7 @@ struct MyScene : public Scene {
 
     // move Jupiter every 20 updates
     if ((updateCount % 20) == 0)
-      objects_[0].move(1, 0);
+      objects_[0].moveBy(1, 0, VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
 
     VGAController.refreshSprites();
   }
