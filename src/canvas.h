@@ -114,6 +114,34 @@ public:
   int getHeight() { return VGAController::instance()->getViewPortHeight(); }
 
   /**
+   * @brief Waits for drawing queue to become empty.
+   *
+   * @param waitVSync If true drawings are done on vertical retracing (slow), if false drawings are perfomed immediately (fast with flickering).
+   */
+  void waitCompletion(bool waitVSync = true);
+
+  /**
+   * @brief Suspends drawings.
+   *
+   * After call to beginUpdate() adding new primitives may cause a deadlock.<br>
+   * To avoid this a call to "Canvas.waitCompletion(false)" should be performed very often.
+   */
+  void beginUpdate();
+
+  /**
+   * @brief Resumes drawings after beginUpdate().
+   */
+  void endUpdate();
+
+  /**
+   * @brief Swaps screen buffer when double buffering is enabled.
+   *
+   * Double buffering is enabled calling VGAController.setResolution() with doubleBuffered = true.<br>
+   * Buffers swap is always executed in vertical retracing (at VSync pulse).
+   */
+  void swapBuffers();
+
+  /**
    * @brief Sets the axes origin.
    *
    * Setting axes origin will translate every coordinate by the specified value (expect for sprites).
@@ -476,13 +504,6 @@ public:
   void fillEllipse(int X, int Y, int width, int height);
 
   /**
-   * @brief Waits for drawing queue to become empty.
-   *
-   * @param waitVSync If true drawings are done on vertical retracing (slow), if false drawings are perfomed immediately (fast with flickering).
-   */
-  void waitCompletion(bool waitVSync = true);
-
-  /**
    * @brief Draws a glyph at specified position.
    *
    * A Glyph is a monochrome bitmap (1 bit per pixel) that can be painted using pen (foreground) and brush (background) colors.<br>
@@ -711,14 +732,6 @@ public:
    * @param bitmap Pointer to bitmap structure.
    */
   void drawBitmap(int X, int Y, Bitmap const * bitmap);
-
-  /**
-   * @brief Swaps screen buffer when double buffering is enabled.
-   *
-   * Double buffering is enabled calling VGAController.setResolution() with doubleBuffered = true.<br>
-   * Buffers swap is always executed in vertical retracing (at VSync pulse).
-   */
-  void swapBuffers();
 
   /**
    * @brief Draws a sequence of lines.

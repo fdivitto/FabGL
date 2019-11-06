@@ -97,6 +97,22 @@ void CanvasClass::waitCompletion(bool waitVSync)
 }
 
 
+// Warning: beginUpdate() disables vertical sync interrupts. This means that
+// the VGAController primitives queue is not processed, and adding primitives may
+// cause a deadlock. To avoid this a call to "Canvas.waitCompletion(false)"
+// should be performed very often.
+void CanvasClass::beginUpdate()
+{
+  VGAController::instance()->suspendBackgroundPrimitiveExecution();
+}
+
+
+void CanvasClass::endUpdate()
+{
+  VGAController::instance()->resumeBackgroundPrimitiveExecution();
+}
+
+
 void CanvasClass::clear()
 {
   Primitive p;
