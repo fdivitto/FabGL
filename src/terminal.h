@@ -767,8 +767,6 @@ private:
   void refresh();
   void refresh(int X, int Y);
   void refresh(int X1, int Y1, int X2, int Y2);
-  void beginRefresh();
-  void endRefresh();
 
   void setLineDoubleWidth(int row, int value);
   int getCharWidthAt(int row);

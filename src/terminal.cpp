@@ -583,7 +583,7 @@ void TerminalClass::blinkText()
   bool keepEnabled = false;
   int rows = m_rows;
   int cols = m_columns;
-  beginRefresh();
+  Canvas.beginUpdate();
   for (int y = 0; y < rows; ++y) {
     uint32_t * itemPtr = m_glyphsBuffer.map + y * cols;
     for (int x = 0; x < cols; ++x, ++itemPtr) {
@@ -598,7 +598,7 @@ void TerminalClass::blinkText()
     }
     Canvas.waitCompletion(false);
   }
-  endRefresh();
+  Canvas.endUpdate();
   if (!keepEnabled)
     m_blinkingTextEnabled = false;
 }
@@ -1359,22 +1359,6 @@ void TerminalClass::refresh(int X1, int Y1, int X2, int Y2)
       Canvas.renderGlyphsBuffer(x, y, &m_glyphsBuffer);
     Canvas.waitCompletion(false);
   }
-}
-
-
-// Warning: beginRefresh() disables vertical sync interrupts. This means that
-// the VGAController primitives queue is not processed, and adding primitives may
-// cause a deadlock. To avoid this a call to "Canvas.waitCompletion(false)"
-// should be performed very often.
-void TerminalClass::beginRefresh()
-{
-  VGAController::instance()->suspendBackgroundPrimitiveExecution();
-}
-
-
-void TerminalClass::endRefresh()
-{
-  VGAController::instance()->resumeBackgroundPrimitiveExecution();
 }
 
 
