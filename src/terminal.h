@@ -340,18 +340,18 @@ struct EmuState {
  *
  * Example 1:
  *
- *     fabgl::Keyboard Keyboard;
+ *     fabgl::VGAController VGAController;
+ *     fabgl::PS2Controller PS2Controller;
  *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns loop-back terminal (send what you type on keyboard to the display)
  *     void setup() {
- *       Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // GPIOs for keyboard (CLK, DATA)
+ *       PS2Controller.begin(PS2Preset::KeyboardPort0);
  *
- *       // GPIOs for VGA (RED0, RED1, GREEN0, GREEN1, BLUE0, BLUE1, HSYNC, VSYNC)
- *       VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
- *       VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350); // 640x350, 80x25 columns
+ *       VGAController.begin();
+ *       VGAController.setResolution(VGA_640x350_70HzAlt1);
  *
- *       Terminal.begin();
+ *       Terminal.begin(&VGAController);
  *       Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
  *       Terminal.enableCursor(true);
  *     }
@@ -376,7 +376,8 @@ struct EmuState {
  *
  * Example 2:
  *
- *     fabgl::Keyboard Keyboard;
+ *     fabgl::VGAController VGAController;
+ *     fabgl::PS2Controller PS2Controller;
  *     TerminalClass Terminal;
  *
  *     // Setup 80x25 columns terminal using UART2 to communicate with the server,
@@ -384,13 +385,12 @@ struct EmuState {
  *     void setup() {
  *       Serial2.begin(115200);
  *
- *       Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32); // GPIOs for keyboard (CLK, DATA)
+ *       PS2Controller.begin(PS2Preset::KeyboardPort0);
  *
- *       // GPIOs for VGA (RED0, RED1, GREEN0, GREEN1, BLUE0, BLUE1, HSYNC, VSYNC)
- *       VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
- *       VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350); // 640x350, 80x25 columns
+ *       VGAController.begin();
+ *       VGAController.setResolution(VGA_640x350_70HzAlt1);
  *
- *       Terminal.begin();
+ *       Terminal.begin(&VGAController);
  *       Terminal.connectSerialPort(Serial2);
  *       Terminal.enableCursor(true);
  *     }
@@ -403,12 +403,19 @@ class TerminalClass : public Stream {
 
 public:
 
+  TerminalClass();
+
+  ~TerminalClass();
+
   /**
    * @brief Initializes the terminal.
    *
-   * Applications should call this method before any other method call or after resolution has been set.
+   * Applications should call this method before any other method call and after resolution has been set.
+   *
+   * @param displayController The output display controller
+   * @param keyboard Keyboard device. nullptr = gets from PS2Controller
    */
-  void begin(Canvas * canvas, Keyboard * keyboard = nullptr);
+  void begin(VGAController * displayController, Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -431,7 +438,7 @@ public:
    *
    * Example:
    *
-   *       Terminal.begin();
+   *       Terminal.begin(&VGAController);
    *       Terminal.connectSerialPort(Serial);
    */
   void connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF = true);
@@ -459,7 +466,7 @@ public:
    *
    * Example:
    *
-   *        Terminal.begin();
+   *        Terminal.begin(&VGAController);
    *        Terminal.connectLocally();
    *        // from here you can use Terminal.read() to receive keys from keyboard
    *        // and Terminal.write() to control the display.
@@ -494,7 +501,7 @@ public:
    * Example:
    *
    *        Serial.begin(115200);
-   *        Terminal.begin();
+   *        Terminal.begin(&VGAController);
    *        Terminal.setLogStream(Serial);
    */
   void setLogStream(Stream & stream) { m_logStream = &stream; }
@@ -790,7 +797,7 @@ private:
   void convQueue(const char * str = nullptr);
   void TermDecodeVirtualKey(VirtualKey vk);
 
-
+  VGAController *    m_displayController;
   Canvas *           m_canvas;
 
   Keyboard *         m_keyboard;

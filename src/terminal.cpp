@@ -82,9 +82,23 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 
 
-void TerminalClass::begin(Canvas * canvas, Keyboard * keyboard)
+TerminalClass::TerminalClass()
+  : m_canvas(nullptr)
 {
-  m_canvas = canvas;
+}
+
+
+TerminalClass::~TerminalClass()
+{
+  delete m_canvas;
+}
+
+
+void TerminalClass::begin(VGAController * displayController, Keyboard * keyboard)
+{
+  m_displayController = displayController;
+
+  m_canvas = new Canvas(m_displayController);
 
   m_keyboard = keyboard;
   if (m_keyboard == nullptr && PS2Controller::instance()) {
