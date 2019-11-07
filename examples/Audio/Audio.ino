@@ -30,7 +30,6 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 SoundGenerator       soundGenerator;
 
@@ -100,8 +99,8 @@ public:
     // generator combobox
     new uiLabel(this, "Type", Point(230, 20));
     genComboBox = new uiComboBox(this, Point(260, 20), Size(140, 16), 35);
-    genComboBox->listBoxStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
-    genComboBox->textEditStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
+    genComboBox->listBoxStyle().textFont = Canvas::getPresetFontInfoFromHeight(12, false);
+    genComboBox->textEditStyle().textFont = Canvas::getPresetFontInfoFromHeight(12, false);
     genComboBox->items().append("Sine Wave");
     genComboBox->items().append("Square Wave");
     genComboBox->items().append("Triangle Wave");
@@ -180,7 +179,7 @@ public:
   CommandsFrame(uiWindow * parent)
    : uiFrame(parent, "Main Controls", Point(500, 4), Size(133, 200))
   {
-    frameStyle().titleFont = Canvas.getPresetFontInfoFromHeight(12, false);
+    frameStyle().titleFont = Canvas::getPresetFontInfoFromHeight(12, false);
     frameProps().resizeable = false;
     frameProps().hasMaximizeButton = false;
     frameProps().hasMinimizeButton = false;
@@ -245,7 +244,7 @@ class MyApp : public uiApp {
 
 void loop()
 {
-  app.run(&VGAController, &Canvas);
+  app.run(&VGAController);
 }
 
 

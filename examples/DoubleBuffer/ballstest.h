@@ -30,23 +30,23 @@ public:
 
   void update()
   {
-    Canvas.setBrushColor(Color::Black);
-    Canvas.clear();
+    canvas.setBrushColor(Color::Black);
+    canvas.clear();
 
     for (int i = 0; i < ballsCount_; ++i) {
       Ball * ball = &balls_[i];
 
       // test collision with borders and bounce
-      if (ball->x < ball->size / 2 || ball->x > Canvas.getWidth() - ball->size / 2)
+      if (ball->x < ball->size / 2 || ball->x > canvas.getWidth() - ball->size / 2)
         ball->dir = PI - ball->dir;
-      else if (ball->y < ball->size / 2 || ball->y > Canvas.getHeight() - ball->size / 2)
+      else if (ball->y < ball->size / 2 || ball->y > canvas.getHeight() - ball->size / 2)
         ball->dir = 2 * PI - ball->dir;
 
       ball->x += ball->vel * cos(ball->dir);
       ball->y += ball->vel * sin(ball->dir);
 
-      Canvas.setBrushColor(ball->color);
-      Canvas.fillEllipse(ceil(ball->x), ceil(ball->y), ball->size, ball->size);
+      canvas.setBrushColor(ball->color);
+      canvas.fillEllipse(ceil(ball->x), ceil(ball->y), ball->size, ball->size);
     }
   }
 
@@ -60,9 +60,9 @@ public:
     ++ballsCount_;
     balls_ = (Ball*) realloc(balls_, sizeof(Ball) * ballsCount_);
     Ball * newBall = &balls_[ballsCount_ - 1];
-    newBall->x     = Canvas.getWidth() / 2;
-    newBall->y     = Canvas.getHeight() / 2;
-    newBall->size  = random(6, Canvas.getHeight() / 6);
+    newBall->x     = canvas.getWidth() / 2;
+    newBall->y     = canvas.getHeight() / 2;
+    newBall->size  = random(6, canvas.getHeight() / 6);
     newBall->dir   = random(360) * PI / 180.0;
     newBall->vel   = 0.1 + random(10) / 2.0;
     newBall->color = (Color) random(1, 16);

@@ -27,7 +27,6 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 TerminalClass        Terminal;
 
 
@@ -42,7 +41,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin(&Canvas);
+  Terminal.begin(&VGAController);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
 
   Terminal.enableCursor(true);
@@ -141,33 +140,34 @@ void demo3()
 
 void demo4()
 {
+  Canvas cv(&VGAController);
   Terminal.write("\e[40;32m"); // background: black, foreground: green
   slowPrintf("\nMixed text and graphics:\r\n");
   slowPrintf("Points...\r\n");
   for (int i = 0; i < 500; ++i) {
-    Canvas.setPenColor(random(4), random(4), random(4));
-    Canvas.setPixel(random(640), random(350));
+    cv.setPenColor(random(4), random(4), random(4));
+    cv.setPixel(random(640), random(350));
     delay(15);
   }
   delay(500);
   slowPrintf("\e[40;32mLines...\r\n");
   for (int i = 0; i < 50; ++i) {
-    Canvas.setPenColor(random(4), random(4), random(4));
-    Canvas.drawLine(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(4), random(4), random(4));
+    cv.drawLine(random(640), random(350), random(640), random(350));
     delay(50);
   }
   delay(500);
   slowPrintf("\e[40;32mRectangles...\r\n");
   for (int i = 0; i < 50; ++i) {
-    Canvas.setPenColor(random(4), random(4), random(4));
-    Canvas.drawRectangle(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(4), random(4), random(4));
+    cv.drawRectangle(random(640), random(350), random(640), random(350));
     delay(50);
   }
   delay(500);
   slowPrintf("\e[40;32mEllipses...\r\n");
   for (int i = 0; i < 50; ++i) {
-    Canvas.setPenColor(random(4), random(4), random(4));
-    Canvas.drawEllipse(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(4), random(4), random(4));
+    cv.drawEllipse(random(640), random(350), random(640), random(350));
     delay(50);
   }
   for (int i = 0; i < 30; ++i) {

@@ -37,7 +37,6 @@
 Preferences preferences;
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -267,19 +266,20 @@ void setup()
   // adjust this to center screen in your monitor
   //VGAController.moveScreen(-6, 0);
 
-  Canvas.clear();
-  Canvas.drawText(50, 170, "Initializing SPIFFS...");
-  Canvas.waitCompletion();
+  Canvas cv(&VGAController);
+  cv.clear();
+  cv.drawText(50, 170, "Initializing SPIFFS...");
+  cv.waitCompletion();
   initSPIFFS();
-  Canvas.clear();
-  Canvas.drawText(50, 170, "Connecting WiFi...");
-  Canvas.waitCompletion();
+  cv.clear();
+  cv.drawText(50, 170, "Connecting WiFi...");
+  cv.waitCompletion();
 }
 
 
 void loop()
 {
-  app.run(&VGAController, &Canvas);
+  app.run(&VGAController);
 }
 
 

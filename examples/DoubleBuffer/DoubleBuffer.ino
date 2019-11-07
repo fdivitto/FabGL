@@ -25,7 +25,7 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
+fabgl::Canvas        canvas(&VGAController);
 
 
 
@@ -54,8 +54,8 @@ void setup()
   //VGAController.moveScreen(20, 0);
   //VGAController.moveScreen(-8, 0);
 
-  Canvas.selectFont(Canvas.getPresetFontInfo(40, 14)); // get a font for about 40x14 text screen
-  Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
+  canvas.selectFont(canvas.getPresetFontInfo(40, 14)); // get a font for about 40x14 text screen
+  canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
 }
 
 
@@ -95,10 +95,10 @@ void loop()
   test->update();
 
   // display test state and FPS
-  Canvas.setPenColor(Color::Blue);
-  Canvas.setBrushColor(Color::Yellow);
-  Canvas.drawTextFmt(80, 5, " %d %s at %d FPS ", test->testState(), test->name(), FPS);
+  canvas.setPenColor(Color::Blue);
+  canvas.setBrushColor(Color::Yellow);
+  canvas.drawTextFmt(80, 5, " %d %s at %d FPS ", test->testState(), test->name(), FPS);
 
   if (DOUBLEBUFFERING)
-    Canvas.swapBuffers();
+    canvas.swapBuffers();
 }

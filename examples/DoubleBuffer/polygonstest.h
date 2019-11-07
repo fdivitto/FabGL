@@ -49,16 +49,16 @@ public:
 
   void update()
   {
-    Canvas.setBrushColor(Color::Black);
-    Canvas.clear();
+    canvas.setBrushColor(Color::Black);
+    canvas.clear();
 
     for (int i = 0; i < polygonsCount_; ++i) {
       Polygon * polygon = &polygons_[i];
 
       rotate(polygon);
 
-      Canvas.setBrushColor(polygon->color);
-      Canvas.fillPath(polygon->ipoints, polygon->pointsCount);
+      canvas.setBrushColor(polygon->color);
+      canvas.fillPath(polygon->ipoints, polygon->pointsCount);
     }
   }
 
@@ -73,8 +73,8 @@ public:
     polygons_ = (Polygon*) realloc(polygons_, sizeof(Polygon) * polygonsCount_);
     Polygon * newPolygon = &polygons_[polygonsCount_ - 1];
     newPolygon->pointsCount = random(3, MAXPOINTS);
-    int translateX = random(-MAXPOLYSIZE / 2, Canvas.getWidth() - MAXPOLYSIZE / 2);
-    int translateY = random(-MAXPOLYSIZE / 2, Canvas.getHeight() - MAXPOLYSIZE / 2);
+    int translateX = random(-MAXPOLYSIZE / 2, canvas.getWidth() - MAXPOLYSIZE / 2);
+    int translateY = random(-MAXPOLYSIZE / 2, canvas.getHeight() - MAXPOLYSIZE / 2);
     newPolygon->center.X = 0;
     newPolygon->center.Y = 0;
     for (int i = 0; i < newPolygon->pointsCount; ++i) {

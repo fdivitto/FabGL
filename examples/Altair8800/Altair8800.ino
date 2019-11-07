@@ -136,7 +136,6 @@ constexpr int MaxColorsIndex     = 5;
 // globals
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 TerminalClass        Terminal;
 
@@ -151,41 +150,6 @@ void setTerminalColors()
   int colorsIndex = preferences.getInt("colors", DefaultColorsIndex);
   Terminal.setForegroundColor(TextColors[colorsIndex]);
   Terminal.setBackgroundColor(BackColors[colorsIndex]);
-}
-
-
-
-void setup()
-{
-  preferences.begin("altair8800", false);
-
-  Serial.begin(115200);
-
-  // setup Keyboard (default configuration)
-  PS2Controller.begin(PS2Preset::KeyboardPort0);
-
-  // setup VGA (default configuration with 64 colors)
-  VGAController.begin();
-
-  if (preferences.getBool("emuCRT", false))
-    VGAController.setResolution(VGA_640x200_70HzRetro);
-  else
-    VGAController.setResolution(VGA_640x200_70Hz);
-
-  //VGAController.shrinkScreen(5, 0);
-  //VGAController.moveScreen(-1, 0);
-
-  // this speed-up display but may generate flickering
-  VGAController.enableBackgroundPrimitiveExecution(false);
-
-  Terminal.begin(&Canvas);
-  Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
-
-  Terminal.setBackgroundColor(Color::Black);
-  Terminal.setForegroundColor(Color::BrightGreen);
-  Terminal.clear();
-
-  Terminal.enableCursor(true);
 }
 
 
@@ -324,6 +288,40 @@ void emulator_menu()
   }
   Terminal.localWrite("\n");
   setTerminalColors();
+}
+
+
+void setup()
+{
+  preferences.begin("altair8800", false);
+
+  Serial.begin(115200);
+
+  // setup Keyboard (default configuration)
+  PS2Controller.begin(PS2Preset::KeyboardPort0);
+
+  // setup VGA (default configuration with 64 colors)
+  VGAController.begin();
+
+  if (preferences.getBool("emuCRT", false))
+    VGAController.setResolution(VGA_640x200_70HzRetro);
+  else
+    VGAController.setResolution(VGA_640x200_70Hz);
+
+  //VGAController.shrinkScreen(5, 0);
+  //VGAController.moveScreen(-1, 0);
+
+  // this speed-up display but may generate flickering
+  VGAController.enableBackgroundPrimitiveExecution(false);
+
+  Terminal.begin(&VGAController);
+  Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
+
+  Terminal.setBackgroundColor(Color::Black);
+  Terminal.setForegroundColor(Color::BrightGreen);
+  Terminal.clear();
+
+  Terminal.enableCursor(true);
 }
 
 

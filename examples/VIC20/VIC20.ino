@@ -124,7 +124,6 @@ void vTimerCallback1SecExpired(xTimerHandle pxTimer)
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -207,25 +206,26 @@ struct HelpFame : public uiFrame {
     button->onClick = [&]() { exitModal(0); };
 
     onPaint = [&]() {
-      Canvas.selectFont(Canvas.getPresetFontInfoFromHeight(12, false));
+      auto cv = canvas();
+      cv->selectFont(Canvas::getPresetFontInfoFromHeight(12, false));
       int x = 10;
       int y = 10;
-      Canvas.setPenColor(RGB(0, 2, 0));
-      Canvas.drawText(x, y += 14, "Keyboard Shortcuts:");
-      Canvas.setPenColor(RGB(0, 0, 0));
-      Canvas.drawText(x, y += 14, "   F12: Switch Emulator and Menu");
-      Canvas.drawText(x, y += 14, "   DEL: Delete File or Folder");
-      Canvas.drawText(x, y += 14, "   ALT + A-S-W-Z: Move Screen");
-      Canvas.setPenColor(RGB(0, 0, 2));
-      Canvas.drawText(x, y += 18, "\"None\" Joystick Mode:");
-      Canvas.setPenColor(RGB(0, 0, 0));
-      Canvas.drawText(x, y += 14, "   ALT + MENU: Joystick Fire");
-      Canvas.drawText(x, y += 14, "   ALT + CURSOR: Joystick Move");
-      Canvas.setPenColor(RGB(2, 0, 0));
-      Canvas.drawText(x, y += 18, "\"Cursor Keys\" Joystick Mode:");
-      Canvas.setPenColor(RGB(0, 0, 0));
-      Canvas.drawText(x, y += 14, "   MENU: Joystick Fire");
-      Canvas.drawText(x, y += 14, "   CURSOR: Joystick Move");
+      cv->setPenColor(RGB(0, 2, 0));
+      cv->drawText(x, y += 14, "Keyboard Shortcuts:");
+      cv->setPenColor(RGB(0, 0, 0));
+      cv->drawText(x, y += 14, "   F12: Switch Emulator and Menu");
+      cv->drawText(x, y += 14, "   DEL: Delete File or Folder");
+      cv->drawText(x, y += 14, "   ALT + A-S-W-Z: Move Screen");
+      cv->setPenColor(RGB(0, 0, 2));
+      cv->drawText(x, y += 18, "\"None\" Joystick Mode:");
+      cv->setPenColor(RGB(0, 0, 0));
+      cv->drawText(x, y += 14, "   ALT + MENU: Joystick Fire");
+      cv->drawText(x, y += 14, "   ALT + CURSOR: Joystick Move");
+      cv->setPenColor(RGB(2, 0, 0));
+      cv->drawText(x, y += 18, "\"Cursor Keys\" Joystick Mode:");
+      cv->setPenColor(RGB(0, 0, 0));
+      cv->drawText(x, y += 14, "   MENU: Joystick Fire");
+      cv->drawText(x, y += 14, "   CURSOR: Joystick Move");
     };
   }
 
@@ -245,12 +245,13 @@ class Menu : public uiApp {
 
     // some static text
     rootWindow()->onPaint = [&]() {
-      Canvas.selectFont(Canvas.getPresetFontInfoFromHeight(12, false));
-      Canvas.setPenColor(RGB(3, 1, 1));
-      Canvas.drawText(155, 345, "V I C 2 0  Emulator");
-      Canvas.setPenColor(RGB(2, 1, 1));
-      Canvas.drawText(167, 357, "www.fabgl.com");
-      Canvas.drawText(141, 369, "2019 by Fabrizio Di Vittorio");
+      auto cv = canvas();
+      cv->selectFont(Canvas::getPresetFontInfoFromHeight(12, false));
+      cv->setPenColor(RGB(3, 1, 1));
+      cv->drawText(155, 345, "V I C 2 0  Emulator");
+      cv->setPenColor(RGB(2, 1, 1));
+      cv->drawText(167, 357, "www.fabgl.com");
+      cv->drawText(141, 369, "2019 by Fabrizio Di Vittorio");
     };
 
     // programs list
@@ -392,7 +393,7 @@ class Menu : public uiApp {
     // "Download From" label
     auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 354));
     downloadFromLbl->labelStyle().textColor = RGB(1, 1, 3);
-    downloadFromLbl->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
+    downloadFromLbl->labelStyle().textFont = Canvas::getPresetFontInfoFromHeight(12, false);
 
     // Download List button (download programs listed and linked in LIST_URL)
     auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19));
@@ -474,8 +475,10 @@ class Menu : public uiApp {
     enableKeyboardAndMouseEvents(false);
     keyboard->emptyVirtualKeyQueue();
     machine.VIC().enableAudio(true);
-    Canvas.setBrushColor(0, 0, 0);
-    Canvas.clear();
+
+    auto cv = canvas();
+    cv->setBrushColor(0, 0, 0);
+    cv->clear();
 
     bool run = true;
     while (run) {
@@ -781,15 +784,16 @@ void setup()
   // adjust this to center screen in your monitor
   //VGAController.moveScreen(20, -2);
 
-  Canvas.selectFont(Canvas.getPresetFontInfo(32, 48));
+  Canvas cv(&VGAController);
+  cv.selectFont(cv.getPresetFontInfo(32, 48));
 
-  Canvas.clear();
-  Canvas.drawText(25, 10, "Initializing SPIFFS...");
-  Canvas.waitCompletion();
+  cv.clear();
+  cv.drawText(25, 10, "Initializing SPIFFS...");
+  cv.waitCompletion();
   initSPIFFS();
 
-  Canvas.drawText(25, 30, "Copying embedded programs...");
-  Canvas.waitCompletion();
+  cv.drawText(25, 30, "Copying embedded programs...");
+  cv.waitCompletion();
   copyEmbeddedPrograms();
 }
 
@@ -802,6 +806,6 @@ void loop()
   #endif
 
   auto menu = new Menu;
-  menu->run(&VGAController, &Canvas);
+  menu->run(&VGAController);
 }
 

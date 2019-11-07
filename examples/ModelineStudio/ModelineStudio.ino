@@ -63,7 +63,7 @@ int shrinkY = 0;
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
+
 
 
 void printHelp()
@@ -121,7 +121,7 @@ void printInfo()
   if (shrinkX || shrinkY)
     Serial.printf("shrinkScreen(%d, %d)\n", shrinkX, shrinkY);
   Serial.printf("Screen size   : %d x %d\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
-  Serial.printf("Viewport size : %d x %d\n", Canvas.getWidth(), Canvas.getHeight());
+  Serial.printf("Viewport size : %d x %d\n", VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
   Serial.printf("Free memory (total, min, largest): %d, %d, %d\n\n", heap_caps_get_free_size(MALLOC_CAP_DMA),
                                                                    heap_caps_get_minimum_free_size(MALLOC_CAP_DMA),
                                                                    heap_caps_get_largest_free_block(MALLOC_CAP_DMA));
@@ -130,29 +130,30 @@ void printInfo()
 
 void updateScreen()
 {
-  Canvas.setPenColor(Color::BrightRed);
-  Canvas.setBrushColor(Color::BrightBlue);
-  Canvas.clear();
-  Canvas.fillRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
-  Canvas.drawRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
+  Canvas cv(&VGAController);
+  cv.setPenColor(Color::BrightRed);
+  cv.setBrushColor(Color::BrightBlue);
+  cv.clear();
+  cv.fillRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
+  cv.drawRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
 
-  Canvas.setPenColor(Color::Black);
-  Canvas.setBrushColor(Color::BrightYellow);
-  Canvas.selectFont(Canvas.getPresetFontInfo(40, 14));
-  Canvas.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(1));
-  Canvas.drawText(40, 20, VGAController.getResolutionTimings()->label);
+  cv.setPenColor(Color::Black);
+  cv.setBrushColor(Color::BrightYellow);
+  cv.selectFont(cv.getPresetFontInfo(40, 14));
+  cv.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(1));
+  cv.drawText(40, 20, VGAController.getResolutionTimings()->label);
 
-  Canvas.setGlyphOptions(GlyphOptions());
-  Canvas.setPenColor(Color::BrightWhite);
-  Canvas.setBrushColor(Color::BrightBlue);
-  Canvas.drawTextFmt(40, 40, "Screen Size   : %d x %d", VGAController.getScreenWidth(), VGAController.getScreenHeight());
-  Canvas.drawTextFmt(40, 60, "Viewport Size : %d x %d", Canvas.getWidth(), Canvas.getHeight());
-  Canvas.drawText(40, 80,    "Commands (More on UART):");
-  Canvas.drawText(40, 100,   "  w = Move Up    z = Move Down");
-  Canvas.drawText(40, 120,   "  a = Move Left  s = Move Right");
-  Canvas.drawText(40, 140,   "  + = Next Resolution");
-  Canvas.setPenColor(Color::BrightGreen);
-  Canvas.drawRectangle(35, 15, 295, 155);
+  cv.setGlyphOptions(GlyphOptions());
+  cv.setPenColor(Color::BrightWhite);
+  cv.setBrushColor(Color::BrightBlue);
+  cv.drawTextFmt(40, 40, "Screen Size   : %d x %d", VGAController.getScreenWidth(), VGAController.getScreenHeight());
+  cv.drawTextFmt(40, 60, "Viewport Size : %d x %d", cv.getWidth(), cv.getHeight());
+  cv.drawText(40, 80,    "Commands (More on UART):");
+  cv.drawText(40, 100,   "  w = Move Up    z = Move Down");
+  cv.drawText(40, 120,   "  a = Move Left  s = Move Right");
+  cv.drawText(40, 140,   "  + = Next Resolution");
+  cv.setPenColor(Color::BrightGreen);
+  cv.drawRectangle(35, 15, 295, 155);
 }
 
 

@@ -32,7 +32,7 @@ using fabgl::iclamp;
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
+fabgl::Canvas        canvas(&VGAController);
 fabgl::PS2Controller PS2Controller;
 
 
@@ -59,27 +59,27 @@ struct IntroScene : public Scene {
 
   void init()
   {
-    Canvas.setBrushColor(Color::Black);
-    Canvas.clear();
-    Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
-    Canvas.selectFont(Canvas.getPresetFontInfo(40, 14));
-    Canvas.setPenColor(Color::BrightWhite);
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
-    Canvas.drawText(50, 15, "SPACE INVADERS");
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
+    canvas.setBrushColor(Color::Black);
+    canvas.clear();
+    canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
+    canvas.selectFont(canvas.getPresetFontInfo(40, 14));
+    canvas.setPenColor(Color::BrightWhite);
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
+    canvas.drawText(50, 15, "SPACE INVADERS");
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
 
-    Canvas.setPenColor(Color::Green);
-    Canvas.drawText(10, 40, "ESP32 version by Fabrizio Di Vittorio");
-    Canvas.drawText(105, 55, "www.fabgl.com");
+    canvas.setPenColor(Color::Green);
+    canvas.drawText(10, 40, "ESP32 version by Fabrizio Di Vittorio");
+    canvas.drawText(105, 55, "www.fabgl.com");
 
-    Canvas.setPenColor(Color::Yellow);
-    Canvas.drawText(72, 97, "* SCORE ADVANCE TABLE *");
-    Canvas.drawBitmap(TEXT_X - 20 - 2, TEXT_Y, &bmpEnemyD);
-    Canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 15, &bmpEnemyA[0]);
-    Canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 30, &bmpEnemyB[0]);
-    Canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 45, &bmpEnemyC[0]);
+    canvas.setPenColor(Color::Yellow);
+    canvas.drawText(72, 97, "* SCORE ADVANCE TABLE *");
+    canvas.drawBitmap(TEXT_X - 20 - 2, TEXT_Y, &bmpEnemyD);
+    canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 15, &bmpEnemyA[0]);
+    canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 30, &bmpEnemyB[0]);
+    canvas.drawBitmap(TEXT_X - 20, TEXT_Y + 45, &bmpEnemyC[0]);
 
-    Canvas.setBrushColor(Color::Black);
+    canvas.setBrushColor(Color::Black);
 
     controller_ = 0;
   }
@@ -97,14 +97,14 @@ struct IntroScene : public Scene {
         stop();
 
       ++starting_;
-      Canvas.scroll(0, -5);
+      canvas.scroll(0, -5);
 
     } else {
       if (updateCount > 30 && updateCount % 5 == 0 && textRow_ < 4) {
-        int x = TEXT_X + textCol_ * Canvas.getFontInfo()->width;
+        int x = TEXT_X + textCol_ * canvas.getFontInfo()->width;
         int y = TEXT_Y + textRow_ * 15 - 4;
-        Canvas.setPenColor(Color::White);
-        Canvas.drawChar(x, y, scoreText[textRow_][textCol_]);
+        canvas.setPenColor(Color::White);
+        canvas.drawChar(x, y, scoreText[textRow_][textCol_]);
         ++textCol_;
         if (scoreText[textRow_][textCol_] == 0) {
           textCol_ = 0;
@@ -113,13 +113,13 @@ struct IntroScene : public Scene {
       }
 
       if (updateCount % 20 == 0) {
-        Canvas.setPenColor(random(4), random(4), random(4));
+        canvas.setPenColor(random(4), random(4), random(4));
         if (keyboard->isKeyboardAvailable() && mouse->isMouseAvailable())
-          Canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
+          canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
         else if (keyboard->isKeyboardAvailable())
-          Canvas.drawText(80, 75, "Press [SPACE] to Play");
+          canvas.drawText(80, 75, "Press [SPACE] to Play");
         else if (mouse->isMouseAvailable())
-          Canvas.drawText(105, 75, "Click to Play");
+          canvas.drawText(105, 75, "Click to Play");
       }
 
       // handle keyboard or mouse (after two seconds)
@@ -272,26 +272,26 @@ struct GameScene : public Scene {
 
     VGAController.setSprites(sprites_, SPRITESCOUNT);
 
-    Canvas.setBrushColor(Color::Black);
-    Canvas.clear();
+    canvas.setBrushColor(Color::Black);
+    canvas.clear();
 
-    Canvas.setPenColor(Color::Green);
-    Canvas.drawLine(0, 180, 320, 180);
+    canvas.setPenColor(Color::Green);
+    canvas.drawLine(0, 180, 320, 180);
 
-    //Canvas.setPenColor(Color::Yellow);
-    //Canvas.drawRectangle(0, 0, getWidth() - 1, getHeight() - 1);
+    //canvas.setPenColor(Color::Yellow);
+    //canvas.drawRectangle(0, 0, getWidth() - 1, getHeight() - 1);
 
-    Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
-    Canvas.selectFont(Canvas.getPresetFontInfo(80, 33));
-    Canvas.setPenColor(Color::White);
-    Canvas.drawText(125, 20, "WE COME IN PEACE");
-    Canvas.selectFont(Canvas.getPresetFontInfo(40, 14));
-    Canvas.setPenColor(0, 3, 3);
-    Canvas.drawText(2, 2, "SCORE");
-    Canvas.setPenColor(0, 0, 3);
-    Canvas.drawText(254, 2, "HI-SCORE");
-    Canvas.setPenColor(3, 3, 3);
-    Canvas.drawTextFmt(254, 181, "Level %02d", level_);
+    canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
+    canvas.selectFont(canvas.getPresetFontInfo(80, 33));
+    canvas.setPenColor(Color::White);
+    canvas.drawText(125, 20, "WE COME IN PEACE");
+    canvas.selectFont(canvas.getPresetFontInfo(40, 14));
+    canvas.setPenColor(0, 3, 3);
+    canvas.drawText(2, 2, "SCORE");
+    canvas.setPenColor(0, 0, 3);
+    canvas.drawText(254, 2, "HI-SCORE");
+    canvas.setPenColor(3, 3, 3);
+    canvas.drawTextFmt(254, 181, "Level %02d", level_);
 
     if (IntroScene::controller_ == 2) {
       // setup mouse controller
@@ -305,12 +305,12 @@ struct GameScene : public Scene {
 
   void drawScore()
   {
-    Canvas.setPenColor(3, 3, 3);
-    Canvas.drawTextFmt(2, 14, "%05d", score_);
+    canvas.setPenColor(3, 3, 3);
+    canvas.drawTextFmt(2, 14, "%05d", score_);
     if (score_ > hiScore_)
       hiScore_ = score_;
-    Canvas.setPenColor(3, 3, 3);
-    Canvas.drawTextFmt(266, 14, "%05d", hiScore_);
+    canvas.setPenColor(3, 3, 3);
+    canvas.drawTextFmt(266, 14, "%05d", hiScore_);
   }
 
   void moveEnemy(SISprite * enemy, int x, int y)
@@ -332,19 +332,19 @@ struct GameScene : public Scene {
     for (int i = 0; i < ROWENEMIESCOUNT * 5; ++i)
       enemies_[i].allowDraw = false;
     // show game over
-    Canvas.setPenColor(0, 3, 0);
-    Canvas.setBrushColor(0, 0, 0);
-    Canvas.fillRectangle(80, 60, 240, 130);
-    Canvas.drawRectangle(80, 60, 240, 130);
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
-    Canvas.setPenColor(3, 3, 3);
-    Canvas.drawText(90, 80, "GAME OVER");
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
-    Canvas.setPenColor(0, 3, 0);
+    canvas.setPenColor(0, 3, 0);
+    canvas.setBrushColor(0, 0, 0);
+    canvas.fillRectangle(80, 60, 240, 130);
+    canvas.drawRectangle(80, 60, 240, 130);
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
+    canvas.setPenColor(3, 3, 3);
+    canvas.drawText(90, 80, "GAME OVER");
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
+    canvas.setPenColor(0, 3, 0);
     if (IntroScene::controller_ == 1)
-      Canvas.drawText(110, 100, "Press [SPACE]");
+      canvas.drawText(110, 100, "Press [SPACE]");
     else if (IntroScene::controller_ == 2)
-      Canvas.drawText(93, 100, "Click to continue");
+      canvas.drawText(93, 100, "Click to continue");
     // change state
     gameState_ = GAMESTATE_GAMEOVER;
     level_ = 1;
@@ -356,11 +356,11 @@ struct GameScene : public Scene {
   {
     ++level_;
     // show game over
-    Canvas.setPenColor(0, 3, 0);
-    Canvas.drawRectangle(80, 80, 240, 110);
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
-    Canvas.drawTextFmt(105, 88, "LEVEL %d", level_);
-    Canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
+    canvas.setPenColor(0, 3, 0);
+    canvas.drawRectangle(80, 80, 240, 110);
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
+    canvas.drawTextFmt(105, 88, "LEVEL %d", level_);
+    canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
     // change state
     gameState_  = GAMESTATE_LEVELCHANGED;
     pauseStart_ = esp_timer_get_time();
@@ -545,11 +545,11 @@ struct GameScene : public Scene {
 
   void showLives()
   {
-    Canvas.fillRectangle(1, 181, 100, 195);
-    Canvas.setPenColor(Color::White);
-    Canvas.drawTextFmt(5, 181, "%d", lives_);
+    canvas.fillRectangle(1, 181, 100, 195);
+    canvas.setPenColor(Color::White);
+    canvas.drawTextFmt(5, 181, "%d", lives_);
     for (int i = 0; i < lives_; ++i)
-      Canvas.drawBitmap(15 + i * (bmpPlayer.width + 5), 183, &bmpPlayer);
+      canvas.drawBitmap(15 + i * (bmpPlayer.width + 5), 183, &bmpPlayer);
   }
 
   void collisionDetected(Sprite * spriteA, Sprite * spriteB, Point collisionPoint)

@@ -46,7 +46,6 @@ bool         error = false;
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 TerminalClass        Terminal;
 
@@ -343,7 +342,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin(&Canvas);
+  Terminal.begin(&VGAController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
   Terminal.setLogStream(Serial);  // DEBUG ONLY
 

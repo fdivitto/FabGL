@@ -24,7 +24,6 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 
@@ -48,7 +47,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin(&Canvas);
+  Terminal.begin(&VGAController);
   Terminal.connectSerialPort(Serial2);
   //Terminal.setLogStream(Serial);  // debug only
 
@@ -60,7 +59,7 @@ void setup()
   Terminal.write("* * FabGL - Serial VT/ANSI Terminal\r\n");
   Terminal.write("* * 2019 by Fabrizio Di Vittorio - www.fabgl.com\r\n\n");
   Terminal.printf("Screen Size        : %d x %d\r\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
-  Terminal.printf("Viewport Size      : %d x %d\r\n", Canvas.getWidth(), Canvas.getHeight());
+  Terminal.printf("Viewport Size      : %d x %d\r\n", VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
   Terminal.printf("Keyboard           : %s\r\n\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
   Terminal.printf("Free DMA Memory    : %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));

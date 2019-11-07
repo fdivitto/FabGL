@@ -27,7 +27,6 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
 
 
 #define SPACESHIP_COUNT 10
@@ -149,21 +148,22 @@ struct MyScene : public Scene {
 
   void paintSpace()
   {
-    Canvas.setBrushColor(Color::Black);
-    Canvas.clear();
-    Canvas.setPenColor(Color::White);
-    Canvas.setBrushColor(Color::White);
+    Canvas cv(&VGAController);
+    cv.setBrushColor(Color::Black);
+    cv.clear();
+    cv.setPenColor(Color::White);
+    cv.setBrushColor(Color::White);
     // far stars
-    Canvas.setPenColor(1, 1, 1);
+    cv.setPenColor(1, 1, 1);
     for (int i = 0; i < 400; ++i)
-      Canvas.setPixel(random(getWidth()), random(getHeight()));
+      cv.setPixel(random(getWidth()), random(getHeight()));
     // near stars
-    Canvas.setPenColor(2, 2, 2);
+    cv.setPenColor(2, 2, 2);
     for (int i = 0; i < 50; ++i)
-      Canvas.setPixel(random(getWidth()), random(getHeight()));
+      cv.setPixel(random(getWidth()), random(getHeight()));
     // galaxy
-    Canvas.drawBitmap(80, 35, &galaxy);
-    Canvas.drawBitmap(220, 130, &galaxy);
+    cv.drawBitmap(80, 35, &galaxy);
+    cv.drawBitmap(220, 130, &galaxy);
   }
 
 };

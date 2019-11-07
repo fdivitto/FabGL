@@ -24,7 +24,7 @@
 
 
 fabgl::VGAController VGAController;
-fabgl::Canvas        Canvas;
+fabgl::Canvas        canvas(&VGAController);
 fabgl::PS2Controller PS2Controller;
 
 
@@ -35,9 +35,9 @@ int cursor     = 0;
 
 void showCursorPos(MouseStatus const & status)
 {
-  Canvas.setPenColor(Color::Blue);
-  Canvas.setBrushColor(Color::Yellow);
-  Canvas.drawTextFmt(indicatorX, indicatorY, " %d %d ", status.X, status.Y);
+  canvas.setPenColor(Color::Blue);
+  canvas.setBrushColor(Color::Yellow);
+  canvas.drawTextFmt(indicatorX, indicatorY, " %d %d ", status.X, status.Y);
 }
 
 
@@ -49,13 +49,13 @@ void setup()
 
   // Setup mouse
   PS2Controller.begin();
-  PS2Controller.mouse()->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), true, &VGAController);
+  PS2Controller.mouse()->setupAbsolutePositioner(canvas.getWidth(), canvas.getHeight(), true, &VGAController);
   VGAController.setMouseCursor((CursorName)cursor);
 
-  Canvas.setBrushColor(Color::Blue);
-  Canvas.clear();
-  Canvas.selectFont(Canvas.getPresetFontInfo(80, 25));
-  Canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
+  canvas.setBrushColor(Color::Blue);
+  canvas.clear();
+  canvas.selectFont(canvas.getPresetFontInfo(80, 25));
+  canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
 
   showCursorPos(PS2Controller.mouse()->status());
 }
@@ -67,9 +67,9 @@ void loop()
 
   // left button writes pixels
   if (status.buttons.left) {
-    Canvas.setPenColor(Color::BrightRed);
-    Canvas.setPixel(status.X, status.Y);
-    Canvas.moveTo(status.X, status.Y);
+    canvas.setPenColor(Color::BrightRed);
+    canvas.setPixel(status.X, status.Y);
+    canvas.moveTo(status.X, status.Y);
   }
 
   // right button change mouse shape
@@ -80,16 +80,16 @@ void loop()
 
   // middle button clear screen
   if (status.buttons.middle) {
-    Canvas.setBrushColor(Color::Blue);
-    Canvas.clear();
+    canvas.setBrushColor(Color::Blue);
+    canvas.clear();
   }
 
   // mouse wheel moves cursor position indicator
   if (status.wheelDelta != 0) {
-    indicatorY = fabgl::tclamp(indicatorY + status.wheelDelta, 0, Canvas.getHeight() - 16);
+    indicatorY = fabgl::tclamp(indicatorY + status.wheelDelta, 0, canvas.getHeight() - 16);
     PS2Controller.mouse()->status().wheelDelta = 0;
-    Canvas.setBrushColor(Color::Blue);
-    Canvas.clear();
+    canvas.setBrushColor(Color::Blue);
+    canvas.clear();
   }
 
   showCursorPos(status);
