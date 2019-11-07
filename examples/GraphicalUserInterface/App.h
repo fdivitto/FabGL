@@ -30,7 +30,7 @@ class MyApp : public uiApp {
     // author label
     authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(376, 324));
     authorLabel->labelStyle().backgroundColor = RGB(3, 3, 0);
-    authorLabel->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(22, false);
+    authorLabel->labelStyle().textFont = canvas()->getPresetFontInfoFromHeight(22, false);
     authorLabel->update();
 
     // frame where to put test buttons
@@ -40,7 +40,7 @@ class MyApp : public uiApp {
 
     // label where to show free memory
     freeMemLabel = new uiLabel(testsFrame, "", Point(2, 312));
-    freeMemLabel->labelStyle().textFont = Canvas.getPresetFontInfoFromHeight(12, false);
+    freeMemLabel->labelStyle().textFont = canvas()->getPresetFontInfoFromHeight(12, false);
 
     // button to show TestControlsFrame
     testControlsFrame = new TestControlsFrame(rootWindow());
@@ -93,7 +93,7 @@ class MyApp : public uiApp {
     auto label = new uiLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30), Size(160, 35));
     label->anchors().left = false;
     label->anchors().top = false;
-    label->labelStyle().textFont  = Canvas.getPresetFontInfoFromHeight(24, false);
+    label->labelStyle().textFont  = canvas()->getPresetFontInfoFromHeight(24, false);
     label->labelStyle().textColor = RGB(random(4), random(4), random(4));
     label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
     dynamicFrames.push(newFrame);

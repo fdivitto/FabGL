@@ -41,16 +41,18 @@ struct TestTimerFrame : public uiFrame {
     double cx = width / 2.0;
     double cy = height / 2.0;
 
-    Canvas.setPenColor(Color::BrightWhite);
-    Canvas.drawLine(cx, cy, cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius);
-    Canvas.drawLine(cx, cy, cx + cos(m) * minutesRadius, cy + sin(m) * minutesRadius);
-    Canvas.drawLine(cx, cy, cx + cos(h) * hoursRadius,   cy + sin(h) * hoursRadius);
+    auto cv = canvas();
+
+    cv->setPenColor(Color::BrightWhite);
+    cv->drawLine(cx, cy, cx + cos(s) * secondsRadius, cy + sin(s) * secondsRadius);
+    cv->drawLine(cx, cy, cx + cos(m) * minutesRadius, cy + sin(m) * minutesRadius);
+    cv->drawLine(cx, cy, cx + cos(h) * hoursRadius,   cy + sin(h) * hoursRadius);
 
     for (int a = 0; a < 360; a += 6) {
       double arad = radians(a);
       double x = cx + cos(arad) * pointsRadius;
       double y = cy + sin(arad) * pointsRadius;
-      Canvas.setPixel(x, y);
+      cv->setPixel(x, y);
     }
   }
 

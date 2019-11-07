@@ -32,6 +32,7 @@ using fabgl::iclamp;
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -52,7 +53,7 @@ struct IntroScene : public Scene {
   int starting_ = 0;
 
   IntroScene()
-    : Scene(0)
+    : Scene(0, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
   {
   }
 
@@ -211,7 +212,7 @@ struct GameScene : public Scene {
                           Bitmap(22, 16, shield_data, 1, RGB(0, 3, 0), true), };
 
   GameScene()
-    : Scene(SPRITESCOUNT)
+    : Scene(SPRITESCOUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
   {
   }
 

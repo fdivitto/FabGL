@@ -37,6 +37,7 @@
 Preferences preferences;
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -278,7 +279,7 @@ void setup()
 
 void loop()
 {
-  app.run(&VGAController);
+  app.run(&VGAController, &Canvas);
 }
 
 

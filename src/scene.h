@@ -34,7 +34,6 @@
 #include "freertos/FreeRTOS.h"
 
 #include "fabglconf.h"
-#include "canvas.h"
 #include "collisiondetector.h"
 
 
@@ -58,7 +57,7 @@ public:
    * @param width The scene width in pixels.
    * @param height The scene height in pixels.
    */
-  Scene(int maxSpritesCount, int updateTimeMS = 20, int width = Canvas.getWidth(), int height = Canvas.getHeight());
+  Scene(int maxSpritesCount, int updateTimeMS, int width, int height);
 
   virtual ~Scene();
 

@@ -30,8 +30,9 @@
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
-SoundGenerator soundGenerator;
+SoundGenerator       soundGenerator;
 
 
 void setup()
@@ -244,7 +245,7 @@ class MyApp : public uiApp {
 
 void loop()
 {
-  app.run(&VGAController);
+  app.run(&VGAController, &Canvas);
 }
 
 

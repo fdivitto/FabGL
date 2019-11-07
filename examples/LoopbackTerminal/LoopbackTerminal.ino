@@ -31,6 +31,7 @@
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 
@@ -59,7 +60,7 @@ void setup()
   //VGAController.shrinkScreen(5, 0);
   //VGAController.moveScreen(-1, 0);
 
-  Terminal.begin();
+  Terminal.begin(&Canvas);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
 
   Terminal.setBackgroundColor(Color::Black);

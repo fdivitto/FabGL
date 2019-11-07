@@ -124,6 +124,7 @@ void vTimerCallback1SecExpired(xTimerHandle pxTimer)
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -801,6 +802,6 @@ void loop()
   #endif
 
   auto menu = new Menu;
-  menu->run(&VGAController);
+  menu->run(&VGAController, &Canvas);
 }
 

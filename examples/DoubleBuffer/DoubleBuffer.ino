@@ -25,6 +25,7 @@
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 
 
 

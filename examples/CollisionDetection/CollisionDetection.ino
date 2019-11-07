@@ -27,6 +27,7 @@
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 
 
 #define SPACESHIP_COUNT 10
@@ -48,7 +49,7 @@ struct MyScene : public Scene {
   MySprite objects_[OBJECTS_COUNT];
 
   MyScene()
-    : Scene(OBJECTS_COUNT)
+    : Scene(OBJECTS_COUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
   {
   }
 

@@ -408,7 +408,7 @@ public:
    *
    * Applications should call this method before any other method call or after resolution has been set.
    */
-  void begin(Keyboard * keyboard = nullptr);
+  void begin(Canvas * canvas, Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -790,6 +790,8 @@ private:
   void convQueue(const char * str = nullptr);
   void TermDecodeVirtualKey(VirtualKey vk);
 
+
+  Canvas *           m_canvas;
 
   Keyboard *         m_keyboard;
 

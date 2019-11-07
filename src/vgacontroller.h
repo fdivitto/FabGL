@@ -844,7 +844,7 @@ public:
   /**
    * @brief Forces the sprites to be updated.
    *
-   * Screen is automatically updated whenever a primitive is painted (look at CanvasClass).<br>
+   * Screen is automatically updated whenever a primitive is painted (look at Canvas).<br>
    * When a sprite updates its image or its position (or any other property) it is required
    * to force a refresh using this method.<br>
    * VGAController.refreshSprites() is required also when using the double buffered mode, to paint sprites.

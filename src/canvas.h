@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::CanvasClass definition and the related Canvas instance.
+ * @brief This file contains fabgl::Canvas definition.
  */
 
 
@@ -89,11 +89,11 @@ struct FontInfo {
 *     Canvas.drawRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
 *
 */
-class CanvasClass {
+class Canvas {
 
 public:
 
-  CanvasClass();
+  Canvas();
 
   /**
    * @brief Determines the canvas width in pixels.
@@ -192,7 +192,7 @@ public:
   /**
    * @brief Defines the scrolling region.
    *
-   * A scrolling region is the rectangle area where CanvasClass.scroll() method can operate.
+   * A scrolling region is the rectangle area where Canvas.scroll() method can operate.
    *
    * @param X1 Top left horizontal coordinate.
    * @param Y1 Top left vertical coordiante.
@@ -204,7 +204,7 @@ public:
   /**
    * @brief Scrolls pixels horizontally and/or vertically.
    *
-   * Scrolling occurs inside the scrolling region defined by CanvasClass.setScrollingRegion().<br>
+   * Scrolling occurs inside the scrolling region defined by Canvas.setScrollingRegion().<br>
    * Vertical scroll is done moving line pointers, so it is very fast to perform.<br>
    * Horizontal scroll is done moving pixel by pixel (CPU intensive task).
    *
@@ -340,8 +340,8 @@ public:
   /**
    * @brief Draws a line starting from current pen position.
    *
-   * Starting pen position is specified using CanvasClass.moveTo() method or
-   * from ending position of the last call to CanvasClass.lineTo().<br>
+   * Starting pen position is specified using Canvas.moveTo() method or
+   * from ending position of the last call to Canvas.lineTo().<br>
    * The line has the current pen color.
    *
    * @param X Horizontal ending line position.
@@ -507,7 +507,7 @@ public:
    * @brief Draws a glyph at specified position.
    *
    * A Glyph is a monochrome bitmap (1 bit per pixel) that can be painted using pen (foreground) and brush (background) colors.<br>
-   * Various drawing options can be set using CanvasClass.setGlyphOptions() method.<br>
+   * Various drawing options can be set using Canvas.setGlyphOptions() method.<br>
    * Glyphs are used by TerminalClass to render characters.
    *
    * @param X Horizontal coordinate where to draw the glyph.
@@ -540,7 +540,7 @@ public:
    *
    * Setting glyph options allows to slightly change how a glyph is rendered, applying
    * effects like Bold, Italic, Inversion, double width or height and so on.<br>
-   * Because CanvasClass draws text using glyphs these options affects
+   * Because Canvas draws text using glyphs these options affects
    * also how text is rendered.
    *
    * @param options A bit field to specify multiple options
@@ -580,7 +580,7 @@ public:
    *
    * @return The font info found.
    */
-  static FontInfo const * getPresetFontInfo(int columns, int rows);
+  FontInfo const * getPresetFontInfo(int columns, int rows);
 
   /**
    * @brief Gets the font info that best fits the specified height.
@@ -738,7 +738,7 @@ public:
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
    * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawing have been completed(calling CanvasClass.waitCompletion()).
+   * until all the drawing have been completed(calling Canvas.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.
    * @param pointsCount Number of points in the array.
@@ -757,7 +757,7 @@ public:
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
    * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawing have been completed(calling CanvasClass.waitCompletion()).
+   * until all the drawing have been completed(calling Canvas.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.
    * @param pointsCount Number of points in the array.
@@ -798,7 +798,7 @@ private:
 
 
 
-extern fabgl::CanvasClass Canvas;
+
 
 
 

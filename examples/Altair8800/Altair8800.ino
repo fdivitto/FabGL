@@ -136,8 +136,10 @@ constexpr int MaxColorsIndex     = 5;
 // globals
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
-TerminalClass Terminal;
+TerminalClass        Terminal;
+
 Machine       altair;
 Mits88Disk    diskDrive(&altair, DISKFORMAT);
 Preferences   preferences;
@@ -176,7 +178,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin();
+  Terminal.begin(&Canvas);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
 
   Terminal.setBackgroundColor(Color::Black);
@@ -412,6 +414,6 @@ void loop()
   altair.setRealSpeed(preferences.getBool("realSpeed", false));
 
   CPU cpu = (preferences.getInt("CPU", DefaultCPU) == 1 ? Z80 : i8080);
-  altair.run(&VGAController, cpu, Altair88DiskBootROMRun);
+  altair.run(cpu, Altair88DiskBootROMRun);
 }
 

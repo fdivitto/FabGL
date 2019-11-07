@@ -27,7 +27,8 @@
 
 
 fabgl::VGAController VGAController;
-TerminalClass Terminal;
+fabgl::Canvas        Canvas;
+TerminalClass        Terminal;
 
 
 void setup()
@@ -41,7 +42,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin();
+  Terminal.begin(&Canvas);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
 
   Terminal.enableCursor(true);

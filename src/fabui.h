@@ -361,6 +361,8 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
+  void setCanvas(Canvas * canvas) { m_canvas = canvas; }
+
   /**
    * @brief Gets next sibling
    *
@@ -573,6 +575,8 @@ public:
    */
   int focusIndex() { return m_focusIndex; }
 
+  Canvas * canvas() { return m_canvas; }
+  
 
   // Delegates
 
@@ -622,6 +626,8 @@ private:
 
   uiWindow *    m_parent;
 
+  Canvas *      m_canvas;
+
   Point         m_pos;
   Size          m_size;
 
@@ -667,7 +673,7 @@ struct uiFrameStyle {
   RGB              activeTitleBackgroundColor     = RGB(2, 2, 3);  /**< Title background color when active */
   RGB              titleColor                     = RGB(0, 0, 0);  /**< Title color */
   RGB              activeTitleColor               = RGB(0, 0, 0);  /**< Title color when active */
-  FontInfo const * titleFont                      = Canvas.getPresetFontInfoFromHeight(12, false);  /**< Title font */
+  FontInfo const * titleFont                      = Canvas::getPresetFontInfoFromHeight(12, false);  /**< Title font */
   RGB              buttonColor                    = RGB(1, 1, 1);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB              activeButtonColor              = RGB(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB              mouseOverBackgroundButtonColor = RGB(0, 0, 3);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
@@ -1081,7 +1087,7 @@ struct uiButtonStyle {
   RGB              mouseOverBackgroundColor = RGB(2, 2, 3); /**< Background color when mouse is over */
   RGB              mouseDownBackgroundColor = RGB(3, 3, 3); /**< Background color when mouse is down */
   RGB              textColor                = RGB(0, 0, 0); /**< Text color */
-  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false); /**< Text font */
+  FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
   uint8_t          bitmapTextSpace          = 4;            /**< Spaces between image and text */
   Bitmap const *   bitmap                   = nullptr;      /**< Bitmap to display */
   Bitmap const *   downBitmap               = nullptr;      /**< Bitmap to display when button is down */
@@ -1206,7 +1212,7 @@ struct uiTextEditStyle {
   RGB              mouseOverBackgroundColor   = RGB(2, 2, 3);                                   /**< Background color when mouse is over */
   RGB              focusedBackgroundColor     = RGB(3, 3, 3);                                   /**< Background color when focused */
   RGB              textColor                  = RGB(0, 0, 0);                                   /**< Text color */
-  FontInfo const * textFont                   = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
+  FontInfo const * textFont                   = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
 };
 
 
@@ -1340,7 +1346,7 @@ private:
 
 /** @brief Contains the label style */
 struct uiLabelStyle {
-  FontInfo const * textFont                 = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
+  FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
   RGB              backgroundColor          = RGB(3, 3, 3);                                   /**< Background color */
   RGB              textColor                = RGB(0, 0, 0);                                   /**< Text color */
 };
@@ -1608,7 +1614,7 @@ struct uiListBoxStyle {
   RGB              selectedBackgroundColor        = RGB(0, 0, 2);                                   /**< Background color when selected */
   RGB              focusedSelectedBackgroundColor = RGB(0, 0, 3);                                   /**< Background color when selected and focused */
   int              itemHeight                     = 16;                                             /**< Item height in pixels */
-  FontInfo const * textFont                       = Canvas.getPresetFontInfoFromHeight(14, false);  /**< Text font */
+  FontInfo const * textFont                       = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
   RGB              textColor                      = RGB(0, 0, 0);                                   /**< Text foreground color */
   RGB              selectedTextColor              = RGB(3, 3, 3);                                   /**< Text foreground color when selected */
 };
@@ -2256,12 +2262,13 @@ public:
    * @brief Initializes application and executes the main event loop
    *
    * @param displayController Specifies the display controller where to run the UI
+   * @param canvas Specifies the canvas where to draw the UI
    * @param keyboard The keyboard device. The default (nullptr) gets it from the PS2Controller
    * @param nouse The mouse device. The default (nullptr) gets it from the PS2Controller
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(VGAController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  int run(VGAController * displayController, Canvas * canvas, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2617,6 +2624,8 @@ public:
 
   VGAController * displayController() { return m_displayController; }
 
+  Canvas * canvas() { return m_canvas; }
+
 
 protected:
 
@@ -2638,6 +2647,8 @@ private:
 
 
   VGAController * m_displayController;
+
+  Canvas *        m_canvas;
 
   Keyboard *      m_keyboard;
 

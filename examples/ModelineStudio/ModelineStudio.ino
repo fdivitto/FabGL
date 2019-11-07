@@ -63,6 +63,7 @@ int shrinkY = 0;
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 
 
 void printHelp()

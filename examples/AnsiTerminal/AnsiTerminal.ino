@@ -24,6 +24,7 @@
 
 
 fabgl::VGAController VGAController;
+fabgl::Canvas        Canvas;
 fabgl::PS2Controller PS2Controller;
 TerminalClass Terminal;
 
@@ -47,7 +48,7 @@ void setup()
   // this speed-up display but may generate flickering
   VGAController.enableBackgroundPrimitiveExecution(false);
 
-  Terminal.begin();
+  Terminal.begin(&Canvas);
   Terminal.connectSerialPort(Serial2);
   //Terminal.setLogStream(Serial);  // debug only
 

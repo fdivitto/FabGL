@@ -41,7 +41,7 @@
 #endif
 
 
-fabgl::CanvasClass Canvas;
+
 
 
 namespace fabgl {
@@ -50,19 +50,22 @@ namespace fabgl {
 #define INVALIDRECT Rect(-32768, -32768, -32768, -32768)
 
 
-CanvasClass::CanvasClass()
-  : m_fontInfo(nullptr), m_textHorizRate(1), m_origin(Point(0, 0)), m_clippingRect(INVALIDRECT)
+Canvas::Canvas()
+  : m_fontInfo(nullptr),
+    m_textHorizRate(1),
+    m_origin(Point(0, 0)),
+    m_clippingRect(INVALIDRECT)
 {
 }
 
 
-void CanvasClass::setOrigin(int X, int Y)
+void Canvas::setOrigin(int X, int Y)
 {
   setOrigin(Point(X, Y));
 }
 
 
-void CanvasClass::setOrigin(Point const & origin)
+void Canvas::setOrigin(Point const & origin)
 {
   Primitive p;
   p.cmd      = PrimitiveCmd::SetOrigin;
@@ -71,7 +74,7 @@ void CanvasClass::setOrigin(Point const & origin)
 }
 
 
-void CanvasClass::setClippingRect(Rect const & rect)
+void Canvas::setClippingRect(Rect const & rect)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::SetClippingRect;
@@ -80,7 +83,7 @@ void CanvasClass::setClippingRect(Rect const & rect)
 }
 
 
-Rect CanvasClass::getClippingRect()
+Rect Canvas::getClippingRect()
 {
   if (m_clippingRect == INVALIDRECT)
     m_clippingRect = Rect(0, 0, getWidth() - 1, getHeight() - 1);
@@ -88,7 +91,7 @@ Rect CanvasClass::getClippingRect()
 }
 
 
-void CanvasClass::waitCompletion(bool waitVSync)
+void Canvas::waitCompletion(bool waitVSync)
 {
   if (waitVSync)
     VGAController::instance()->primitivesExecutionWait();   // wait on VSync normal processing
@@ -101,19 +104,19 @@ void CanvasClass::waitCompletion(bool waitVSync)
 // the VGAController primitives queue is not processed, and adding primitives may
 // cause a deadlock. To avoid this a call to "Canvas.waitCompletion(false)"
 // should be performed very often.
-void CanvasClass::beginUpdate()
+void Canvas::beginUpdate()
 {
   VGAController::instance()->suspendBackgroundPrimitiveExecution();
 }
 
 
-void CanvasClass::endUpdate()
+void Canvas::endUpdate()
 {
   VGAController::instance()->resumeBackgroundPrimitiveExecution();
 }
 
 
-void CanvasClass::clear()
+void Canvas::clear()
 {
   Primitive p;
   p.cmd = PrimitiveCmd::Clear;
@@ -122,7 +125,7 @@ void CanvasClass::clear()
 }
 
 
-void CanvasClass::scroll(int offsetX, int offsetY)
+void Canvas::scroll(int offsetX, int offsetY)
 {
   Primitive p;
   if (offsetY != 0) {
@@ -138,7 +141,7 @@ void CanvasClass::scroll(int offsetX, int offsetY)
 }
 
 
-void CanvasClass::setScrollingRegion(int X1, int Y1, int X2, int Y2)
+void Canvas::setScrollingRegion(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::SetScrollingRegion;
@@ -147,7 +150,7 @@ void CanvasClass::setScrollingRegion(int X1, int Y1, int X2, int Y2)
 }
 
 
-void CanvasClass::setPixel(int X, int Y)
+void Canvas::setPixel(int X, int Y)
 {
   Primitive p;
   p.cmd      = PrimitiveCmd::SetPixel;
@@ -156,13 +159,13 @@ void CanvasClass::setPixel(int X, int Y)
 }
 
 
-void CanvasClass::setPixel(int X, int Y, RGB const & color)
+void Canvas::setPixel(int X, int Y, RGB const & color)
 {
   setPixel(Point(X, Y), color);
 }
 
 
-void CanvasClass::setPixel(Point const & pos, RGB const & color)
+void Canvas::setPixel(Point const & pos, RGB const & color)
 {
   Primitive p;
   p.cmd       = PrimitiveCmd::SetPixelAt;
@@ -171,7 +174,7 @@ void CanvasClass::setPixel(Point const & pos, RGB const & color)
 }
 
 
-void CanvasClass::moveTo(int X, int Y)
+void Canvas::moveTo(int X, int Y)
 {
   Primitive p;
   p.cmd      = PrimitiveCmd::MoveTo;
@@ -180,19 +183,19 @@ void CanvasClass::moveTo(int X, int Y)
 }
 
 
-void CanvasClass::setPenColor(Color color)
+void Canvas::setPenColor(Color color)
 {
   setPenColor(RGB(color));
 }
 
 
-void CanvasClass::setPenColor(uint8_t red, uint8_t green, uint8_t blue)
+void Canvas::setPenColor(uint8_t red, uint8_t green, uint8_t blue)
 {
   setPenColor(RGB(red, green, blue));
 }
 
 
-void CanvasClass::setPenColor(RGB const & color)
+void Canvas::setPenColor(RGB const & color)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetPenColor;
@@ -201,19 +204,19 @@ void CanvasClass::setPenColor(RGB const & color)
 }
 
 
-void CanvasClass::setBrushColor(Color color)
+void Canvas::setBrushColor(Color color)
 {
   setBrushColor(RGB(color));
 }
 
 
-void CanvasClass::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
+void Canvas::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 {
   setBrushColor(RGB(red, green, blue));
 }
 
 
-void CanvasClass::setBrushColor(RGB const & color)
+void Canvas::setBrushColor(RGB const & color)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetBrushColor;
@@ -222,7 +225,7 @@ void CanvasClass::setBrushColor(RGB const & color)
 }
 
 
-void CanvasClass::lineTo(int X, int Y)
+void Canvas::lineTo(int X, int Y)
 {
   Primitive p;
   p.cmd      = PrimitiveCmd::LineTo;
@@ -231,14 +234,14 @@ void CanvasClass::lineTo(int X, int Y)
 }
 
 
-void CanvasClass::drawLine(int X1, int Y1, int X2, int Y2)
+void Canvas::drawLine(int X1, int Y1, int X2, int Y2)
 {
   moveTo(X1, Y1);
   lineTo(X2, Y2);
 }
 
 
-void CanvasClass::drawRectangle(int X1, int Y1, int X2, int Y2)
+void Canvas::drawRectangle(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::DrawRect;
@@ -247,13 +250,13 @@ void CanvasClass::drawRectangle(int X1, int Y1, int X2, int Y2)
 }
 
 
-void CanvasClass::drawRectangle(Rect const & rect)
+void Canvas::drawRectangle(Rect const & rect)
 {
   drawRectangle(rect.X1, rect.Y1, rect.X2, rect.Y2);
 }
 
 
-void CanvasClass::fillRectangle(int X1, int Y1, int X2, int Y2)
+void Canvas::fillRectangle(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::FillRect;
@@ -262,7 +265,7 @@ void CanvasClass::fillRectangle(int X1, int Y1, int X2, int Y2)
 }
 
 
-void CanvasClass::fillRectangle(Rect const & rect)
+void Canvas::fillRectangle(Rect const & rect)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::FillRect;
@@ -271,13 +274,13 @@ void CanvasClass::fillRectangle(Rect const & rect)
 }
 
 
-void CanvasClass::invertRectangle(int X1, int Y1, int X2, int Y2)
+void Canvas::invertRectangle(int X1, int Y1, int X2, int Y2)
 {
   invertRectangle(Rect(X1, Y1, X2, Y2));
 }
 
 
-void CanvasClass::invertRectangle(Rect const & rect)
+void Canvas::invertRectangle(Rect const & rect)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::InvertRect;
@@ -286,7 +289,7 @@ void CanvasClass::invertRectangle(Rect const & rect)
 }
 
 
-void CanvasClass::swapRectangle(int X1, int Y1, int X2, int Y2)
+void Canvas::swapRectangle(int X1, int Y1, int X2, int Y2)
 {
   Primitive p;
   p.cmd  = PrimitiveCmd::SwapFGBG;
@@ -295,7 +298,7 @@ void CanvasClass::swapRectangle(int X1, int Y1, int X2, int Y2)
 }
 
 
-void CanvasClass::fillEllipse(int X, int Y, int width, int height)
+void Canvas::fillEllipse(int X, int Y, int width, int height)
 {
   moveTo(X, Y);
   Primitive p;
@@ -305,7 +308,7 @@ void CanvasClass::fillEllipse(int X, int Y, int width, int height)
 }
 
 
-void CanvasClass::drawEllipse(int X, int Y, int width, int height)
+void Canvas::drawEllipse(int X, int Y, int width, int height)
 {
   moveTo(X, Y);
   Primitive p;
@@ -315,7 +318,7 @@ void CanvasClass::drawEllipse(int X, int Y, int width, int height)
 }
 
 
-void CanvasClass::drawGlyph(int X, int Y, int width, int height, uint8_t const * data, int index)
+void Canvas::drawGlyph(int X, int Y, int width, int height, uint8_t const * data, int index)
 {
   Primitive p;
   p.cmd   = PrimitiveCmd::DrawGlyph;
@@ -324,7 +327,7 @@ void CanvasClass::drawGlyph(int X, int Y, int width, int height, uint8_t const *
 }
 
 
-void CanvasClass::renderGlyphsBuffer(int itemX, int itemY, GlyphsBuffer const * glyphsBuffer)
+void Canvas::renderGlyphsBuffer(int itemX, int itemY, GlyphsBuffer const * glyphsBuffer)
 {
   Primitive p;
   p.cmd                    = PrimitiveCmd::RenderGlyphsBuffer;
@@ -333,7 +336,7 @@ void CanvasClass::renderGlyphsBuffer(int itemX, int itemY, GlyphsBuffer const * 
 }
 
 
-void CanvasClass::setGlyphOptions(GlyphOptions options)
+void Canvas::setGlyphOptions(GlyphOptions options)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetGlyphOptions;
@@ -343,13 +346,13 @@ void CanvasClass::setGlyphOptions(GlyphOptions options)
 }
 
 
-void CanvasClass::resetGlyphOptions()
+void Canvas::resetGlyphOptions()
 {
   setGlyphOptions(GlyphOptions());
 }
 
 
-void CanvasClass::setPaintOptions(PaintOptions options)
+void Canvas::setPaintOptions(PaintOptions options)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetPaintOptions;
@@ -358,25 +361,25 @@ void CanvasClass::setPaintOptions(PaintOptions options)
 }
 
 
-void CanvasClass::resetPaintOptions()
+void Canvas::resetPaintOptions()
 {
   setPaintOptions(PaintOptions());
 }
 
 
-void CanvasClass::selectFont(FontInfo const * fontInfo)
+void Canvas::selectFont(FontInfo const * fontInfo)
 {
   m_fontInfo = fontInfo;
 }
 
 
-void CanvasClass::drawChar(int X, int Y, char c)
+void Canvas::drawChar(int X, int Y, char c)
 {
   drawGlyph(X, Y, m_fontInfo->width, m_fontInfo->height, m_fontInfo->data, c);
 }
 
 
-void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
+void Canvas::drawText(int X, int Y, char const * text, bool wrap)
 {
   if (m_fontInfo == nullptr)
     selectFont(getPresetFontInfo(80, 25));
@@ -384,7 +387,7 @@ void CanvasClass::drawText(int X, int Y, char const * text, bool wrap)
 }
 
 
-void CanvasClass::drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap)
+void Canvas::drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap)
 {
   int fontWidth = fontInfo->width;
   for (; *text; ++text, X += fontWidth * m_textHorizRate) {
@@ -405,7 +408,7 @@ void CanvasClass::drawText(FontInfo const * fontInfo, int X, int Y, char const *
 }
 
 
-void CanvasClass::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX)
+void Canvas::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, char const * text, int maxX)
 {
   int fontWidth  = fontInfo->width;
   int fontHeight = fontInfo->height;
@@ -428,7 +431,7 @@ void CanvasClass::drawTextWithEllipsis(FontInfo const * fontInfo, int X, int Y, 
 }
 
 
-int CanvasClass::textExtent(FontInfo const * fontInfo, char const * text)
+int Canvas::textExtent(FontInfo const * fontInfo, char const * text)
 {
   int fontWidth  = fontInfo->width;
   int extent = 0;
@@ -443,13 +446,13 @@ int CanvasClass::textExtent(FontInfo const * fontInfo, char const * text)
 }
 
 
-int CanvasClass::textExtent(char const * text)
+int Canvas::textExtent(char const * text)
 {
   return textExtent(m_fontInfo, text);
 }
 
 
-void CanvasClass::drawTextFmt(int X, int Y, const char *format, ...)
+void Canvas::drawTextFmt(int X, int Y, const char *format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -463,7 +466,7 @@ void CanvasClass::drawTextFmt(int X, int Y, const char *format, ...)
 }
 
 
-void CanvasClass::copyRect(int sourceX, int sourceY, int destX, int destY, int width, int height)
+void Canvas::copyRect(int sourceX, int sourceY, int destX, int destY, int width, int height)
 {
   moveTo(destX, destY);
   int sourceX2 = sourceX + width - 1;
@@ -500,19 +503,19 @@ static const FontInfo * VAR_WIDTH_EMBEDDED_FONTS[] = {
 };
 
 
-FontInfo const * CanvasClass::getPresetFontInfo(int columns, int rows)
+FontInfo const * Canvas::getPresetFontInfo(int columns, int rows)
 {
   FontInfo const * * fontInfo = &FIXED_WIDTH_EMBEDDED_FONTS[0];
 
   for (int i = 0; i < sizeof(FIXED_WIDTH_EMBEDDED_FONTS) / sizeof(FontInfo*) - 1; ++i, ++fontInfo)  // -1, so the smallest is always selected
-    if (Canvas.getWidth() / (*fontInfo)->width >= columns && Canvas.getHeight() / (*fontInfo)->height >= rows)
+    if (getWidth() / (*fontInfo)->width >= columns && getHeight() / (*fontInfo)->height >= rows)
       break;
 
   return *fontInfo;
 }
 
 
-FontInfo const * CanvasClass::getPresetFontInfoFromHeight(int height, bool fixedWidth)
+FontInfo const * Canvas::getPresetFontInfoFromHeight(int height, bool fixedWidth)
 {
   FontInfo const * * fontInfo = fixedWidth ? &FIXED_WIDTH_EMBEDDED_FONTS[0] : &VAR_WIDTH_EMBEDDED_FONTS[0];
   int count = (fixedWidth ? sizeof(FIXED_WIDTH_EMBEDDED_FONTS) : sizeof(VAR_WIDTH_EMBEDDED_FONTS)) / sizeof(FontInfo*);
@@ -525,7 +528,7 @@ FontInfo const * CanvasClass::getPresetFontInfoFromHeight(int height, bool fixed
 }
 
 
-void CanvasClass::drawBitmap(int X, int Y, Bitmap const * bitmap)
+void Canvas::drawBitmap(int X, int Y, Bitmap const * bitmap)
 {
   Primitive p;
   p.cmd               = PrimitiveCmd::DrawBitmap;
@@ -534,7 +537,7 @@ void CanvasClass::drawBitmap(int X, int Y, Bitmap const * bitmap)
 }
 
 
-void CanvasClass::swapBuffers()
+void Canvas::swapBuffers()
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SwapBuffers;
@@ -544,7 +547,7 @@ void CanvasClass::swapBuffers()
 
 
 // warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
-void CanvasClass::drawPath(Point const * points, int pointsCount)
+void Canvas::drawPath(Point const * points, int pointsCount)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::DrawPath;
@@ -554,7 +557,7 @@ void CanvasClass::drawPath(Point const * points, int pointsCount)
 }
 
 // warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
-void CanvasClass::fillPath(Point const * points, int pointsCount)
+void Canvas::fillPath(Point const * points, int pointsCount)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::FillPath;
@@ -564,7 +567,7 @@ void CanvasClass::fillPath(Point const * points, int pointsCount)
 }
 
 
-RGB CanvasClass::getPixel(int X, int Y)
+RGB Canvas::getPixel(int X, int Y)
 {
   RGB rgb;
   VGAController::instance()->readScreen(Rect(X, Y, X, Y), &rgb);

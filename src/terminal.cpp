@@ -82,8 +82,10 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 
 
-void TerminalClass::begin(Keyboard * keyboard)
+void TerminalClass::begin(Canvas * canvas, Keyboard * keyboard)
 {
+  m_canvas = canvas;
+
   m_keyboard = keyboard;
   if (m_keyboard == nullptr && PS2Controller::instance()) {
     // get default keyboard from PS/2 controller
@@ -302,7 +304,7 @@ void TerminalClass::reset()
     .userOpt1         = 0,    // blinking
     .userOpt2         = 0,    // 0 = erasable by DECSED or DECSEL,  1 = not erasable by DECSED or DECSEL
   }};
-  Canvas.setGlyphOptions(m_glyphOptions);
+  m_canvas->setGlyphOptions(m_glyphOptions);
 
   m_paintOptions = PaintOptions();
 
@@ -336,8 +338,8 @@ void TerminalClass::loadFont(FontInfo const * font)
   m_font.data = font->data;
 #endif
 
-  m_columns = tmin(Canvas.getWidth() / m_font.width, 132);
-  m_rows    = tmin(Canvas.getHeight() / m_font.height, 25);
+  m_columns = tmin(m_canvas->getWidth() / m_font.width, 132);
+  m_rows    = tmin(m_canvas->getHeight() / m_font.height, 25);
 
   freeTabStops();
   m_emuState.tabStop = (uint8_t*) malloc(m_columns);
@@ -363,7 +365,7 @@ void TerminalClass::flush(bool waitVSync)
 
   while (uxQueueMessagesWaiting(m_inputQueue) > 0)
     ;
-  Canvas.waitCompletion(waitVSync);
+  m_canvas->waitCompletion(waitVSync);
 }
 
 
@@ -375,7 +377,7 @@ void TerminalClass::set132ColumnMode(bool value)
   log("set132ColumnMode()\n");
   #endif
 
-  loadFont(Canvas.getPresetFontInfo(value ? 132 : 80, 25));
+  loadFont(m_canvas->getPresetFontInfo(value ? 132 : 80, 25));
   setScrollingRegion(1, m_rows);
 }
 
@@ -391,7 +393,7 @@ void TerminalClass::setBackgroundColor(Color color, bool setAsDefault)
 void TerminalClass::int_setBackgroundColor(Color color)
 {
   m_emuState.backgroundColor = color;
-  Canvas.setBrushColor(color);
+  m_canvas->setBrushColor(color);
 }
 
 
@@ -406,7 +408,7 @@ void TerminalClass::setForegroundColor(Color color, bool setAsDefault)
 void TerminalClass::int_setForegroundColor(Color color)
 {
   m_emuState.foregroundColor = color;
-  Canvas.setPenColor(color);
+  m_canvas->setPenColor(color);
 }
 
 
@@ -414,9 +416,9 @@ void TerminalClass::reverseVideo(bool value)
 {
   if (m_paintOptions.swapFGBG != value) {
     m_paintOptions.swapFGBG = value;
-    Canvas.setPaintOptions(m_paintOptions);
+    m_canvas->setPaintOptions(m_paintOptions);
 
-    Canvas.swapRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
+    m_canvas->swapRectangle(0, 0, m_canvas->getWidth() - 1, m_canvas->getHeight() - 1);
   }
 }
 
@@ -433,7 +435,7 @@ void TerminalClass::int_clear()
   log("int_clear()\n");
   #endif
 
-  Canvas.clear();
+  m_canvas->clear();
   clearMap(m_glyphsBuffer.map);
 }
 
@@ -563,15 +565,15 @@ void TerminalClass::blinkCursor()
   switch (m_emuState.cursorStyle) {
     case 0 ... 2:
       // block cursor
-      Canvas.swapRectangle(X, Y, X + m_font.width - 1, Y + m_font.height - 1);
+      m_canvas->swapRectangle(X, Y, X + m_font.width - 1, Y + m_font.height - 1);
       break;
     case 3 ... 4:
       // underline cursor
-      Canvas.swapRectangle(X, Y + m_font.height - 2, X + m_font.width - 1, Y + m_font.height - 1);
+      m_canvas->swapRectangle(X, Y + m_font.height - 2, X + m_font.width - 1, Y + m_font.height - 1);
       break;
     case 5 ... 6:
       // bar cursor
-      Canvas.swapRectangle(X, Y, X + 1, Y + m_font.height - 1);
+      m_canvas->swapRectangle(X, Y, X + 1, Y + m_font.height - 1);
       break;
   }
 }
@@ -583,7 +585,7 @@ void TerminalClass::blinkText()
   bool keepEnabled = false;
   int rows = m_rows;
   int cols = m_columns;
-  Canvas.beginUpdate();
+  m_canvas->beginUpdate();
   for (int y = 0; y < rows; ++y) {
     uint32_t * itemPtr = m_glyphsBuffer.map + y * cols;
     for (int x = 0; x < cols; ++x, ++itemPtr) {
@@ -596,9 +598,9 @@ void TerminalClass::blinkText()
         keepEnabled = true;
       }
     }
-    Canvas.waitCompletion(false);
+    m_canvas->waitCompletion(false);
   }
-  Canvas.endUpdate();
+  m_canvas->endUpdate();
   if (!keepEnabled)
     m_blinkingTextEnabled = false;
 }
@@ -653,9 +655,9 @@ void TerminalClass::scrollDown()
   // scroll down using canvas
   if (m_emuState.smoothScroll) {
     for (int i = 0; i < m_font.height; ++i)
-      Canvas.scroll(0, 1);
+      m_canvas->scroll(0, 1);
   } else
-    Canvas.scroll(0, m_font.height);
+    m_canvas->scroll(0, m_font.height);
 
   // move down scren buffer
   for (int y = m_emuState.scrollingRegionDown - 1; y > m_emuState.scrollingRegionTop - 1; --y)
@@ -691,9 +693,9 @@ void TerminalClass::scrollUp()
   // scroll up using canvas
   if (m_emuState.smoothScroll) {
     for (int i = 0; i < m_font.height; ++i)
-      Canvas.scroll(0, -1);
+      m_canvas->scroll(0, -1);
   } else
-    Canvas.scroll(0, -m_font.height);
+    m_canvas->scroll(0, -m_font.height);
 
   // move up screen buffer
   for (int y = m_emuState.scrollingRegionTop - 1; y < m_emuState.scrollingRegionDown - 1; ++y)
@@ -735,7 +737,7 @@ void TerminalClass::setScrollingRegion(int top, int down, bool resetCursorPos)
 
 void TerminalClass::updateCanvasScrollingRegion()
 {
-  Canvas.setScrollingRegion(0, (m_emuState.scrollingRegionTop - 1) * m_font.height, Canvas.getWidth() - 1, m_emuState.scrollingRegionDown * m_font.height - 1);
+  m_canvas->setScrollingRegion(0, (m_emuState.scrollingRegionTop - 1) * m_font.height, m_canvas->getWidth() - 1, m_emuState.scrollingRegionDown * m_font.height - 1);
 }
 
 
@@ -750,8 +752,8 @@ void TerminalClass::insertAt(int column, int row, int count)
 
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
-  Canvas.setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
-  Canvas.scroll(count * charWidth, 0);
+  m_canvas->setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
+  m_canvas->scroll(count * charWidth, 0);
   updateCanvasScrollingRegion();  // restore original scrolling region
 
   // move characters in the screen buffer
@@ -780,10 +782,10 @@ void TerminalClass::deleteAt(int column, int row, int count)
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
 //logFmt("charWidth=%d\n", charWidth);
-//logFmt("Canvas.setScrollingRegion(%d, %d, %d, %d)\n", (column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
-  Canvas.setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
-//logFmt("Canvas.scroll(%d, 0)\n\n", -count * charWidth);
-  Canvas.scroll(-count * charWidth, 0);
+//logFmt("m_canvas->setScrollingRegion(%d, %d, %d, %d)\n", (column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
+  m_canvas->setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
+//logFmt("m_canvas->scroll(%d, 0)\n\n", -count * charWidth);
+  m_canvas->scroll(-count * charWidth, 0);
   updateCanvasScrollingRegion();  // restore original scrolling region
 
   // move characters in the screen buffer
@@ -816,7 +818,7 @@ void TerminalClass::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainD
 
   if (c == ASCII_SPC && !selective) {
     int charWidth = getCharWidthAt(m_emuState.cursorY);
-    Canvas.fillRectangle(X1 * charWidth, Y1 * m_font.height, (X2 + 1) * charWidth - 1, (Y2 + 1) * m_font.height - 1);
+    m_canvas->fillRectangle(X1 * charWidth, Y1 * m_font.height, (X2 + 1) * charWidth - 1, (Y2 + 1) * m_font.height - 1);
   }
 
   GlyphOptions glyphOptions = {.value = 0};
@@ -891,7 +893,7 @@ void TerminalClass::restoreCursorState()
     if (m_savedCursorStateList->tabStop)
       memcpy(m_emuState.tabStop, m_savedCursorStateList->tabStop, m_columns);
     m_glyphOptions = m_savedCursorStateList->glyphOptions;
-    Canvas.setGlyphOptions(m_glyphOptions);
+    m_canvas->setGlyphOptions(m_glyphOptions);
     m_emuState.characterSetIndex = m_savedCursorStateList->characterSetIndex;
     for (int i = 0; i < 4; ++i)
       m_emuState.characterSet[i] = m_savedCursorStateList->characterSet[i];
@@ -1306,14 +1308,14 @@ void TerminalClass::setChar(char c)
   *mapItemPtr = GLYPHMAP_ITEM_MAKE(c, m_emuState.backgroundColor, m_emuState.foregroundColor, glyphOptions);
 
   if (glyphOptions.value != m_glyphOptions.value)
-    Canvas.setGlyphOptions(glyphOptions);
+    m_canvas->setGlyphOptions(glyphOptions);
 
   int x = (m_emuState.cursorX - 1) * m_font.width * (glyphOptions.doubleWidth ? 2 : 1);
   int y = (m_emuState.cursorY - 1) * m_font.height;
-  Canvas.drawGlyph(x, y, m_font.width, m_font.height, m_font.data, c);
+  m_canvas->drawGlyph(x, y, m_font.width, m_font.height, m_font.data, c);
 
   if (glyphOptions.value != m_glyphOptions.value)
-    Canvas.setGlyphOptions(m_glyphOptions);
+    m_canvas->setGlyphOptions(m_glyphOptions);
 
   // blinking text?
   if (m_glyphOptions.userOpt1)
@@ -1344,7 +1346,7 @@ void TerminalClass::refresh(int X, int Y)
   logFmt("refresh(%d, %d)\n", X, Y);
   #endif
 
-  Canvas.renderGlyphsBuffer(X - 1, Y - 1, &m_glyphsBuffer);
+  m_canvas->renderGlyphsBuffer(X - 1, Y - 1, &m_glyphsBuffer);
 }
 
 
@@ -1356,8 +1358,8 @@ void TerminalClass::refresh(int X1, int Y1, int X2, int Y2)
 
   for (int y = Y1 - 1; y < Y2; ++y) {
     for (int x = X1 - 1; x < X2; ++x)
-      Canvas.renderGlyphsBuffer(x, y, &m_glyphsBuffer);
-    Canvas.waitCompletion(false);
+      m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
+    m_canvas->waitCompletion(false);
   }
 }
 
@@ -2352,7 +2354,7 @@ void TerminalClass::execSGRParameters(int const * params, int paramsCount)
 
     }
   }
-  Canvas.setGlyphOptions(m_glyphOptions);
+  m_canvas->setGlyphOptions(m_glyphOptions);
 }
 
 
