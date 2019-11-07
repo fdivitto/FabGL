@@ -37,7 +37,7 @@
 
 
 
-fabgl::SquareWaveGeneratorClass SquareWaveGenerator;
+
 
 
 namespace fabgl {
@@ -45,9 +45,9 @@ namespace fabgl {
 
 
 /*************************************************************************************/
-/* SquareWaveGeneratorClass definitions */
+/* GPIOStream definitions */
 
-void SquareWaveGeneratorClass::begin()
+void GPIOStream::begin()
 {
   m_DMAStarted = false;
   m_DMABuffer  = nullptr;
@@ -55,7 +55,7 @@ void SquareWaveGeneratorClass::begin()
 }
 
 
-void SquareWaveGeneratorClass::begin(bool div1_onGPIO0, gpio_num_t div2, gpio_num_t div4, gpio_num_t div8, gpio_num_t div16, gpio_num_t div32, gpio_num_t div64, gpio_num_t div128, gpio_num_t div256)
+void GPIOStream::begin(bool div1_onGPIO0, gpio_num_t div2, gpio_num_t div4, gpio_num_t div8, gpio_num_t div16, gpio_num_t div32, gpio_num_t div64, gpio_num_t div128, gpio_num_t div256)
 {
   m_DMAStarted = false;
 
@@ -86,7 +86,7 @@ void SquareWaveGeneratorClass::begin(bool div1_onGPIO0, gpio_num_t div2, gpio_nu
 }
 
 
-void SquareWaveGeneratorClass::end()
+void GPIOStream::end()
 {
   stop();
 }
@@ -95,7 +95,7 @@ void SquareWaveGeneratorClass::end()
 
 // if bit is -1 = clock signal
 // gpio = GPIO_NUM_39 means not set
-void SquareWaveGeneratorClass::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
+void GPIOStream::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
   if (gpio != GPIO_NUM_39) {
 
@@ -112,7 +112,7 @@ void SquareWaveGeneratorClass::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t m
 }
 
 
-void SquareWaveGeneratorClass::play(int freq, lldesc_t volatile * dmaBuffers)
+void GPIOStream::play(int freq, lldesc_t volatile * dmaBuffers)
 {
   if (!m_DMAStarted) {
 
@@ -178,7 +178,7 @@ void SquareWaveGeneratorClass::play(int freq, lldesc_t volatile * dmaBuffers)
 }
 
 
-void SquareWaveGeneratorClass::stop()
+void GPIOStream::stop()
 {
   if (m_DMAStarted) {
     rtc_clk_apll_enable(false, 0, 0, 0, 0);
@@ -423,7 +423,7 @@ static void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_
 }
 
 
-void SquareWaveGeneratorClass::setupClock(int freq)
+void GPIOStream::setupClock(int freq)
 {
   APLLParams p = {0, 0, 0, 0};
   double error, out_freq;

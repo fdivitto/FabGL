@@ -43,6 +43,7 @@
 
 #include "fabglconf.h"
 #include "fabutils.h"
+#include "swgenerator.h"
 
 
 
@@ -1051,6 +1052,8 @@ private:
 
 
   static VGAController * s_instance;
+
+  GPIOStream             m_GPIOStream;
 
   int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
   Timings                m_timings;

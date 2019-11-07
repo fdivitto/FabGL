@@ -235,7 +235,6 @@
  * @example NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
  * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
- * @example SquareWaveGenerator/SquareWaveGenerator.ino Show usage of fabgl::SquareWaveGeneratorClass to generate square waves at various frequencies
  * @example GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
  * @example Audio/Audio.ino Audio demo
  */

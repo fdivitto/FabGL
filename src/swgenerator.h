@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::SquareWaveGeneratorClass definition and the SquareWaveGenerator instance.
+ * @brief This file contains fabgl::GPIOStream definition.
  */
 
 
@@ -46,8 +46,8 @@ namespace fabgl {
 
 
 
-/**
- * @brief This is a square wave generator that uses APLL internal Audio PLL clock.
+/*
+ * This is a square wave generator or DMA->GPIO stream generator that uses APLL internal Audio PLL clock.
  *
  * When FABGLIB_USE_APLL_AB_COEF = 0 (the default) the frequency range is 2651514 Hz to 62500000 Hz.<br>
  * Average error is 21 Hz, Minimum error is 0, Maximum error is 1000 Hz except for range 41666667 Hz to 42708333 Hz while
@@ -57,58 +57,58 @@ namespace fabgl {
  * When FABGLIB_USE_APLL_AB_COEF = 1 the frequency range is 82500 Hz to 62500000 Hz. Unfortunately the output has lot of frequency jittering.<br>
  * Average error is about 7 Hz, Minimum error is 0, Maximum error is 6349 Hz.
  */
-class SquareWaveGeneratorClass {
+class GPIOStream {
 
 public:
 
   void begin();
 
-  /**
-   * @brief Initializes SquareWaveGeneratorClass and associate GPIOs to the outputs.
+  /*
+   * Initializes GPIOStream and associate GPIOs to the outputs.
    *
-   * @param div1_onGPIO0 If true the undivided frequency is delivered on GPIO0.
-   * @param div2 Specifies the GPIO where to send frequency / 2 (set GPIO_NUM_39 to disable output).
-   * @param div4 Specifies the GPIO where to send frequency / 4 (set GPIO_NUM_39 to disable output).
-   * @param div8 Specifies the GPIO where to send frequency / 8 (set GPIO_NUM_39 to disable output).
-   * @param div16 Specifies the GPIO where to send frequency / 16 (set GPIO_NUM_39 to disable output).
-   * @param div32 Specifies the GPIO where to send frequency / 32 (set GPIO_NUM_39 to disable output).
-   * @param div64 Specifies the GPIO where to send frequency / 64 (set GPIO_NUM_39 to disable output).
-   * @param div128 Specifies the GPIO where to send frequency / 128 (set GPIO_NUM_39 to disable output).
-   * @param div256 Specifies the GPIO where to send frequency / 256 (set GPIO_NUM_39 to disable output).
+   * div1_onGPIO0 If true the undivided frequency is delivered on GPIO0.
+   * div2 Specifies the GPIO where to send frequency / 2 (set GPIO_NUM_39 to disable output).
+   * div4 Specifies the GPIO where to send frequency / 4 (set GPIO_NUM_39 to disable output).
+   * div8 Specifies the GPIO where to send frequency / 8 (set GPIO_NUM_39 to disable output).
+   * div16 Specifies the GPIO where to send frequency / 16 (set GPIO_NUM_39 to disable output).
+   * div32 Specifies the GPIO where to send frequency / 32 (set GPIO_NUM_39 to disable output).
+   * div64 Specifies the GPIO where to send frequency / 64 (set GPIO_NUM_39 to disable output).
+   * div128 Specifies the GPIO where to send frequency / 128 (set GPIO_NUM_39 to disable output).
+   * div256 Specifies the GPIO where to send frequency / 256 (set GPIO_NUM_39 to disable output).
    *
    * Example:
    *
    *     // Outputs 25Mhz on GPIO0 and 6.25Mhz on GPIO5, for 5 seconds
-   *     SquareWaveGenerator.begin(true, GPIO_NUM_39, GPIO_NUM_5);
-   *     SquareWaveGenerator.play(25000000);
+   *     GPIOStream.begin(true, GPIO_NUM_39, GPIO_NUM_5);
+   *     GPIOStream.play(25000000);
    *     delay(5000);
    *     // Outputs 20Mhz on GPIO and 5Mhz on GPIO5, for 10 seconds
-   *     SquareWaveGenerator.play(20000000);
+   *     GPIOStream.play(20000000);
    *     delay(10000);
-   *     SquareWaveGenerator.stop();
+   *     GPIOStream.stop();
    */
   void begin(bool div1_onGPIO0, gpio_num_t div2 = GPIO_NUM_39, gpio_num_t div4 = GPIO_NUM_39, gpio_num_t div8 = GPIO_NUM_39, gpio_num_t div16 = GPIO_NUM_39, gpio_num_t div32 = GPIO_NUM_39, gpio_num_t div64 = GPIO_NUM_39, gpio_num_t div128 = GPIO_NUM_39, gpio_num_t div256 = GPIO_NUM_39);
 
-  /**
-   * @brief Disables all outputs.
+  /*
+   * Disables all outputs.
    */
   void end();
 
-  /**
-   * @brief Sets the main frequency.
+  /*
+   * Sets the main frequency.
    *
-   * @param freq Frequency in Hertz.
-   * @param dmaBuffers Use only to provide custom DMA buffers.
+   * freq Frequency in Hertz.
+   * dmaBuffers Use only to provide custom DMA buffers.
    *
    * Example:
    *
    *     // Set 25MHz as main frequency
-   *     SquareWaveGenerator.play(25000000);
+   *     GPIOStream.play(25000000);
    */
   void play(int freq, lldesc_t volatile * dmaBuffers = nullptr);
 
-  /**
-   * @brief Disables all outputs.
+  /*
+   * Disables all outputs.
    */
   void stop();
 
@@ -131,7 +131,7 @@ private:
 
 
 
-extern fabgl::SquareWaveGeneratorClass SquareWaveGenerator;
+
 
 
 

@@ -116,7 +116,7 @@ void VGAController::init(gpio_num_t VSyncGPIO)
   m_mouseCursor.visible = false;
   m_backgroundPrimitiveTimeoutEnabled = true;
 
-  SquareWaveGenerator.begin();
+  m_GPIOStream.begin();
 }
 
 
@@ -353,7 +353,7 @@ void VGAController::setResolution(Timings const& timings, int viewPortWidth, int
 {
   if (m_DMABuffers) {
     suspendBackgroundPrimitiveExecution();
-    SquareWaveGenerator.stop();
+    m_GPIOStream.stop();
     freeBuffers();
   }
 
@@ -411,7 +411,7 @@ void VGAController::setResolution(Timings const& timings, int viewPortWidth, int
   // number of microseconds usable in VSynch ISR
   m_maxVSyncISRTime = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VSyncPulse + m_timings.VBackPorch + m_viewPortRow));
 
-  SquareWaveGenerator.play(m_timings.frequency, m_DMABuffers);
+  m_GPIOStream.play(m_timings.frequency, m_DMABuffers);
   resumeBackgroundPrimitiveExecution();
 }
 
