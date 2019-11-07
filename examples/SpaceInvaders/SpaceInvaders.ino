@@ -296,7 +296,7 @@ struct GameScene : public Scene {
       // setup mouse controller
       auto mouse = PS2Controller.mouse();
       mouse->setSampleRate(40);  // reduce number of samples from mouse to reduce delays
-      mouse->setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false, false, nullptr); // take advantage of mouse acceleration
+      mouse->setupAbsolutePositioner(getWidth() - player_->getWidth(), 0, false); // take advantage of mouse acceleration
     }
 
     showLives();

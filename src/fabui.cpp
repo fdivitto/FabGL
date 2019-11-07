@@ -200,7 +200,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
-  m_mouse->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, true, this);
+  m_mouse->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, VGAController::instance(), this);
 
   // setup keyboard
   m_keyboard->setUIApp(this);

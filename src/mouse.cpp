@@ -44,7 +44,7 @@ Mouse::Mouse()
     m_wheelAcceleration(60000),
     m_absoluteUpdateTimer(nullptr),
     m_absoluteQueue(nullptr),
-    m_updateVGAController(false),
+    m_updateDisplayController(nullptr),
     m_uiApp(nullptr)
 {
 }
@@ -146,7 +146,7 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
 }
 
 
-void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, bool updateVGAController, uiApp * app)
+void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, VGAController * updateDisplayController, uiApp * app)
 {
   m_area                  = Size(width, height);
   m_status.X              = width >> 1;
@@ -157,7 +157,7 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
   m_status.buttons.right  = 0;
   m_prevStatus            = m_status;
 
-  m_updateVGAController = updateVGAController;
+  m_updateDisplayController = updateDisplayController;
 
   m_uiApp = app;
 
@@ -165,12 +165,12 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
     m_absoluteQueue = xQueueCreate(FABGLIB_MOUSE_EVENTS_QUEUE_SIZE, sizeof(MouseStatus));
   }
 
-  if (m_updateVGAController) {
+  if (m_updateDisplayController) {
     // setup initial position
-    VGAController::instance()->setMouseCursorPos(m_status.X, m_status.Y);
+    m_updateDisplayController->setMouseCursorPos(m_status.X, m_status.Y);
   }
 
-  if (m_updateVGAController || createAbsolutePositionsQueue || m_uiApp) {
+  if (m_updateDisplayController || createAbsolutePositionsQueue || m_uiApp) {
     // create and start the timer
     m_absoluteUpdateTimer = xTimerCreate("", pdMS_TO_TICKS(10), pdTRUE, this, absoluteUpdateTimerFunc);
     xTimerStart(m_absoluteUpdateTimer, portMAX_DELAY);
@@ -180,7 +180,7 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
 
 void Mouse::terminateAbsolutePositioner()
 {
-  m_updateVGAController = false;
+  m_updateDisplayController = nullptr;
   m_uiApp = nullptr;
   if (m_absoluteQueue) {
     vQueueDelete(m_absoluteQueue);
@@ -242,8 +242,8 @@ void Mouse::absoluteUpdateTimerFunc(TimerHandle_t xTimer)
     mouse->updateAbsolutePosition(&delta);
 
     // VGA Controller
-    if (mouse->m_updateVGAController)
-      VGAController::instance()->setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
+    if (mouse->m_updateDisplayController)
+      mouse->m_updateDisplayController->setMouseCursorPos(mouse->m_status.X, mouse->m_status.Y);
 
     // queue (if you need availableStatus() or getNextStatus())
     if (mouse->m_absoluteQueue) {
