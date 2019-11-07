@@ -2255,11 +2255,13 @@ public:
   /**
    * @brief Initializes application and executes the main event loop
    *
-   * This is the last method that should be called: it never returns.
+   * @param displayController Specifies the display controller where to run the UI
+   * @param keyboard The keyboard device. The default (nullptr) gets it from the PS2Controller
+   * @param nouse The mouse device. The default (nullptr) gets it from the PS2Controller
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  int run(VGAController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2613,6 +2615,8 @@ public:
 
   Mouse * mouse() { return m_mouse; }
 
+  VGAController * displayController() { return m_displayController; }
+
 
 protected:
 
@@ -2633,35 +2637,37 @@ private:
   void suspendCaret(bool value);
 
 
-  Keyboard *    m_keyboard;
+  VGAController * m_displayController;
 
-  Mouse *       m_mouse;
+  Keyboard *      m_keyboard;
 
-  uiAppProps    m_appProps;
+  Mouse *         m_mouse;
 
-  QueueHandle_t m_eventsQueue;
+  uiAppProps      m_appProps;
 
-  uiFrame *     m_rootWindow;
+  QueueHandle_t   m_eventsQueue;
 
-  uiWindow *    m_activeWindow;        // foreground window. Also gets keyboard events (other than focused window)
+  uiFrame *       m_rootWindow;
 
-  uiWindow *    m_focusedWindow;       // window that captures keyboard events (other than active window)
+  uiWindow *      m_activeWindow;        // foreground window. Also gets keyboard events (other than focused window)
 
-  uiWindow *    m_capturedMouseWindow; // window that has captured mouse
+  uiWindow *      m_focusedWindow;       // window that captures keyboard events (other than active window)
 
-  uiWindow *    m_freeMouseWindow;     // window where mouse is over
+  uiWindow *      m_capturedMouseWindow; // window that has captured mouse
 
-  uiWindow *    m_modalWindow;         // current modal window
+  uiWindow *      m_freeMouseWindow;     // window where mouse is over
 
-  bool          m_combineMouseMoveEvents;
+  uiWindow *      m_modalWindow;         // current modal window
 
-  uiWindow *    m_caretWindow;         // nullptr = caret is not visible
-  Rect          m_caretRect;           // caret rect relative to m_caretWindow
-  uiTimerHandle m_caretTimer;
-  int           m_caretInvertState;    // -1 = suspended, 1 = rect reversed (cat visible), 0 = rect not reversed (caret invisible)
+  bool            m_combineMouseMoveEvents;
 
-  int           m_lastMouseUpTimeMS;   // time (MS) at mouse up. Used to measure double clicks
-  Point         m_lastMouseUpPos;      // screen position of last mouse up
+  uiWindow *      m_caretWindow;         // nullptr = caret is not visible
+  Rect            m_caretRect;           // caret rect relative to m_caretWindow
+  uiTimerHandle   m_caretTimer;
+  int             m_caretInvertState;    // -1 = suspended, 1 = rect reversed (cat visible), 0 = rect not reversed (caret invisible)
+
+  int             m_lastMouseUpTimeMS;   // time (MS) at mouse up. Used to measure double clicks
+  Point           m_lastMouseUpPos;      // screen position of last mouse up
 };
 
 

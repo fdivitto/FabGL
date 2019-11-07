@@ -412,6 +412,6 @@ void loop()
   altair.setRealSpeed(preferences.getBool("realSpeed", false));
 
   CPU cpu = (preferences.getInt("CPU", DefaultCPU) == 1 ? Z80 : i8080);
-  altair.run(cpu, Altair88DiskBootROMRun);
+  altair.run(&VGAController, cpu, Altair88DiskBootROMRun);
 }
 

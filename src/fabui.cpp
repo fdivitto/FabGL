@@ -185,8 +185,10 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run(Keyboard * keyboard, Mouse * mouse)
+int uiApp::run(VGAController * displayController, Keyboard * keyboard, Mouse * mouse)
 {
+  m_displayController = displayController;
+
   m_keyboard = keyboard;
   m_mouse    = mouse;
   if (PS2Controller::instance()) {
@@ -200,7 +202,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
-  m_mouse->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, VGAController::instance(), this);
+  m_mouse->setupAbsolutePositioner(Canvas.getWidth(), Canvas.getHeight(), false, m_displayController, this);
 
   // setup keyboard
   m_keyboard->setUIApp(this);
@@ -216,7 +218,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
   m_rootWindow->frameProps().moveable   = false;
 
   // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
-  VGAController::instance()->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+  m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
   showWindow(m_rootWindow, true);
 
@@ -250,7 +252,7 @@ int uiApp::run(Keyboard * keyboard, Mouse * mouse)
 
   showCaret(nullptr);
 
-  VGAController::instance()->setMouseCursor(nullptr);
+  m_displayController->setMouseCursor(nullptr);
 
   Canvas.setBrushColor(m_rootWindow->frameStyle().backgroundColor);
   Canvas.clear();
@@ -346,7 +348,7 @@ void uiApp::filterModalEvent(uiEvent * event)
         event->dest = nullptr;
         if (event->id == UIEVT_MOUSEENTER) {
           // a little hack to set the right mouse pointer exiting from modal window
-          VGAController::instance()->setMouseCursor(m_modalWindow->windowStyle().defaultCursor);
+          m_displayController->setMouseCursor(m_modalWindow->windowStyle().defaultCursor);
         }
         break;
 
@@ -1098,11 +1100,11 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
   if (value) {
     m_keyboard->setUIApp(this);
     m_mouse->setUIApp(this);
-    VGAController::instance()->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+    m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
   } else {
     m_keyboard->setUIApp(nullptr);
     m_mouse->setUIApp(nullptr);
-    VGAController::instance()->setMouseCursor(nullptr);
+    m_displayController->setMouseCursor(nullptr);
   }
 }
 
@@ -1443,7 +1445,7 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEENTER:
       m_isMouseOver = true;
-      VGAController::instance()->setMouseCursor(m_windowStyle.defaultCursor);
+      app()->displayController()->setMouseCursor(m_windowStyle.defaultCursor);
       break;
 
     case UIEVT_MOUSELEAVE:
@@ -2157,7 +2159,7 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
       break;
   }
 
-  VGAController::instance()->setMouseCursor(cur);
+  app()->displayController()->setMouseCursor(cur);
 }
 
 

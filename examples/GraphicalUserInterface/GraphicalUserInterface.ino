@@ -46,7 +46,7 @@ void setup()
 
 void loop()
 {
-  MyApp().run();
+  MyApp().run(&VGAController);
 }
 
 

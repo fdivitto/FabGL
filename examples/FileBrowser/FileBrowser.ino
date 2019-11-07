@@ -278,7 +278,7 @@ void setup()
 
 void loop()
 {
-  app.run();
+  app.run(&VGAController);
 }
 
 

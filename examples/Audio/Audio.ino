@@ -244,7 +244,7 @@ class MyApp : public uiApp {
 
 void loop()
 {
-  app.run();
+  app.run(&VGAController);
 }
 
 

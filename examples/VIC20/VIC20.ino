@@ -801,6 +801,6 @@ void loop()
   #endif
 
   auto menu = new Menu;
-  menu->run();
+  menu->run(&VGAController);
 }
 
