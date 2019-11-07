@@ -509,7 +509,7 @@ public:
    *
    * A Glyph is a monochrome bitmap (1 bit per pixel) that can be painted using pen (foreground) and brush (background) colors.<br>
    * Various drawing options can be set using Canvas.setGlyphOptions() method.<br>
-   * Glyphs are used by TerminalClass to render characters.
+   * Glyphs are used by Terminal to render characters.
    *
    * @param X Horizontal coordinate where to draw the glyph.
    * @param Y Vertical coordinate where to draw the glyph.

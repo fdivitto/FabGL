@@ -82,19 +82,19 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 
 
-TerminalClass::TerminalClass()
+Terminal::Terminal()
   : m_canvas(nullptr)
 {
 }
 
 
-TerminalClass::~TerminalClass()
+Terminal::~Terminal()
 {
   delete m_canvas;
 }
 
 
-void TerminalClass::begin(VGAController * displayController, Keyboard * keyboard)
+void Terminal::begin(VGAController * displayController, Keyboard * keyboard)
 {
   m_displayController = displayController;
 
@@ -154,7 +154,7 @@ void TerminalClass::begin(VGAController * displayController, Keyboard * keyboard
 }
 
 
-void TerminalClass::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
+void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
 {
   if (m_serialPort)
     vTaskDelete(m_keyboardReaderTaskHandle);
@@ -172,7 +172,7 @@ void TerminalClass::connectSerialPort(HardwareSerial & serialPort, bool autoXONX
 }
 
 
-void TerminalClass::connectLocally()
+void Terminal::connectLocally()
 {
   m_outputQueue = xQueueCreate(FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE, sizeof(uint8_t));
   if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
@@ -180,7 +180,7 @@ void TerminalClass::connectLocally()
 }
 
 
-void TerminalClass::logFmt(const char * format, ...)
+void Terminal::logFmt(const char * format, ...)
 {
   if (m_logStream) {
     va_list ap;
@@ -196,21 +196,21 @@ void TerminalClass::logFmt(const char * format, ...)
 }
 
 
-void TerminalClass::log(const char * txt)
+void Terminal::log(const char * txt)
 {
   if (m_logStream)
     m_logStream->write(txt);
 }
 
 
-void TerminalClass::log(char c)
+void Terminal::log(char c)
 {
   if (m_logStream)
     m_logStream->write(c);
 }
 
 
-void TerminalClass::freeFont()
+void Terminal::freeFont()
 {
   #if FABGLIB_CACHE_FONT_IN_RAM
   if (m_font.data) {
@@ -221,7 +221,7 @@ void TerminalClass::freeFont()
 }
 
 
-void TerminalClass::freeTabStops()
+void Terminal::freeTabStops()
 {
   if (m_emuState.tabStop) {
     free(m_emuState.tabStop);
@@ -230,7 +230,7 @@ void TerminalClass::freeTabStops()
 }
 
 
-void TerminalClass::freeGlyphsMap()
+void Terminal::freeGlyphsMap()
 {
   if (m_glyphsBuffer.map) {
     free((void*) m_glyphsBuffer.map);
@@ -243,7 +243,7 @@ void TerminalClass::freeGlyphsMap()
 }
 
 
-void TerminalClass::end()
+void Terminal::end()
 {
   vTaskDelete(m_keyboardReaderTaskHandle);
 
@@ -263,7 +263,7 @@ void TerminalClass::end()
 }
 
 
-void TerminalClass::reset()
+void Terminal::reset()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("reset()\n");
@@ -335,7 +335,7 @@ void TerminalClass::reset()
 }
 
 
-void TerminalClass::loadFont(FontInfo const * font)
+void Terminal::loadFont(FontInfo const * font)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("loadFont()\n");
@@ -371,7 +371,7 @@ void TerminalClass::loadFont(FontInfo const * font)
 }
 
 
-void TerminalClass::flush(bool waitVSync)
+void Terminal::flush(bool waitVSync)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("flush()\n");
@@ -385,7 +385,7 @@ void TerminalClass::flush(bool waitVSync)
 
 // false = setup for 80 columns mode
 // true = setup for 132 columns mode
-void TerminalClass::set132ColumnMode(bool value)
+void Terminal::set132ColumnMode(bool value)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("set132ColumnMode()\n");
@@ -396,7 +396,7 @@ void TerminalClass::set132ColumnMode(bool value)
 }
 
 
-void TerminalClass::setBackgroundColor(Color color, bool setAsDefault)
+void Terminal::setBackgroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultBackgroundColor = color;
@@ -404,14 +404,14 @@ void TerminalClass::setBackgroundColor(Color color, bool setAsDefault)
 }
 
 
-void TerminalClass::int_setBackgroundColor(Color color)
+void Terminal::int_setBackgroundColor(Color color)
 {
   m_emuState.backgroundColor = color;
   m_canvas->setBrushColor(color);
 }
 
 
-void TerminalClass::setForegroundColor(Color color, bool setAsDefault)
+void Terminal::setForegroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultForegroundColor = color;
@@ -419,14 +419,14 @@ void TerminalClass::setForegroundColor(Color color, bool setAsDefault)
 }
 
 
-void TerminalClass::int_setForegroundColor(Color color)
+void Terminal::int_setForegroundColor(Color color)
 {
   m_emuState.foregroundColor = color;
   m_canvas->setPenColor(color);
 }
 
 
-void TerminalClass::reverseVideo(bool value)
+void Terminal::reverseVideo(bool value)
 {
   if (m_paintOptions.swapFGBG != value) {
     m_paintOptions.swapFGBG = value;
@@ -437,13 +437,13 @@ void TerminalClass::reverseVideo(bool value)
 }
 
 
-void TerminalClass::clear()
+void Terminal::clear()
 {
   Print::write("\e[2J");
 }
 
 
-void TerminalClass::int_clear()
+void Terminal::int_clear()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("int_clear()\n");
@@ -454,7 +454,7 @@ void TerminalClass::int_clear()
 }
 
 
-void TerminalClass::clearMap(uint32_t * map)
+void Terminal::clearMap(uint32_t * map)
 {
   uint32_t itemValue = GLYPHMAP_ITEM_MAKE(ASCII_SPC, m_emuState.backgroundColor, m_emuState.foregroundColor, m_glyphOptions);
   uint32_t * mapItemPtr = map;
@@ -465,7 +465,7 @@ void TerminalClass::clearMap(uint32_t * map)
 
 
 // return True if scroll down required
-bool TerminalClass::moveUp()
+bool Terminal::moveUp()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("moveUp()\n");
@@ -479,7 +479,7 @@ bool TerminalClass::moveUp()
 
 
 // return True if scroll up required
-bool TerminalClass::moveDown()
+bool Terminal::moveDown()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("moveDown()\n");
@@ -492,7 +492,7 @@ bool TerminalClass::moveDown()
 }
 
 
-void TerminalClass::setCursorPos(int X, int Y)
+void Terminal::setCursorPos(int X, int Y)
 {
   m_emuState.cursorX = tclamp(X, 1, (int)m_columns);
   m_emuState.cursorY = tclamp(Y, 1, (int)m_rows);
@@ -504,7 +504,7 @@ void TerminalClass::setCursorPos(int X, int Y)
 }
 
 
-int TerminalClass::getAbsoluteRow(int Y)
+int Terminal::getAbsoluteRow(int Y)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("getAbsoluteRow(%d)\n", Y);
@@ -518,14 +518,14 @@ int TerminalClass::getAbsoluteRow(int Y)
 }
 
 
-void TerminalClass::enableCursor(bool value)
+void Terminal::enableCursor(bool value)
 {
   Print::write("\e[?25");
   Print::write(value ? "h" : "l");
 }
 
 
-bool TerminalClass::int_enableCursor(bool value)
+bool Terminal::int_enableCursor(bool value)
 {
   bool prev = m_emuState.cursorEnabled;
   if (m_emuState.cursorEnabled != value) {
@@ -542,7 +542,7 @@ bool TerminalClass::int_enableCursor(bool value)
 }
 
 
-bool TerminalClass::enableBlinkingText(bool value)
+bool Terminal::enableBlinkingText(bool value)
 {
   bool prev = m_blinkingTextEnabled;
   m_blinkingTextEnabled = value;
@@ -551,9 +551,9 @@ bool TerminalClass::enableBlinkingText(bool value)
 
 
 // callback for blink timer
-void TerminalClass::blinkTimerFunc(TimerHandle_t xTimer)
+void Terminal::blinkTimerFunc(TimerHandle_t xTimer)
 {
-  TerminalClass * term = (TerminalClass*) pvTimerGetTimerID(xTimer);
+  Terminal * term = (Terminal*) pvTimerGetTimerID(xTimer);
 
   if (xSemaphoreTake(term->m_blinkTimerMutex, 0) == pdTRUE) {
 
@@ -571,7 +571,7 @@ void TerminalClass::blinkTimerFunc(TimerHandle_t xTimer)
 }
 
 
-void TerminalClass::blinkCursor()
+void Terminal::blinkCursor()
 {
   m_cursorState = !m_cursorState;
   int X = (m_emuState.cursorX - 1) * m_font.width;
@@ -593,7 +593,7 @@ void TerminalClass::blinkCursor()
 }
 
 
-void TerminalClass::blinkText()
+void Terminal::blinkText()
 {
   m_blinkingTextVisible = !m_blinkingTextVisible;
   bool keepEnabled = false;
@@ -620,7 +620,7 @@ void TerminalClass::blinkText()
 }
 
 
-void TerminalClass::nextTabStop()
+void Terminal::nextTabStop()
 {
   int actualColumns = m_columns;
 
@@ -639,7 +639,7 @@ void TerminalClass::nextTabStop()
 
 
 // setup tab stops. One every 8.
-void TerminalClass::resetTabStops()
+void Terminal::resetTabStops()
 {
   for (int i = 0; i < m_columns; ++i)
     m_emuState.tabStop[i] = (i > 0 && (i % 8) == 0 ? 1 : 0);
@@ -647,7 +647,7 @@ void TerminalClass::resetTabStops()
 
 
 // if column = 0 then clear all tab stops
-void TerminalClass::setTabStop(int column, bool set)
+void Terminal::setTabStop(int column, bool set)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("setTabStop %d %d\n", column, (int)set);
@@ -660,7 +660,7 @@ void TerminalClass::setTabStop(int column, bool set)
 }
 
 
-void TerminalClass::scrollDown()
+void Terminal::scrollDown()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("scrollDown\n");
@@ -687,7 +687,7 @@ void TerminalClass::scrollDown()
 
 
 // startingRow: represents an absolute value, not related to the scrolling region
-void TerminalClass::scrollDownAt(int startingRow)
+void Terminal::scrollDownAt(int startingRow)
 {
   int prevScrollingRegionTop = m_emuState.scrollingRegionTop;
   setScrollingRegion(startingRow, m_emuState.scrollingRegionDown, false);
@@ -698,7 +698,7 @@ void TerminalClass::scrollDownAt(int startingRow)
 }
 
 
-void TerminalClass::scrollUp()
+void Terminal::scrollUp()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("scrollUp\n");
@@ -723,7 +723,7 @@ void TerminalClass::scrollUp()
 }
 
 
-void TerminalClass::scrollUpAt(int startingRow)
+void Terminal::scrollUpAt(int startingRow)
 {
   int prevScrollingRegionTop = m_emuState.scrollingRegionTop;
   setScrollingRegion(startingRow, m_emuState.scrollingRegionDown, false);
@@ -734,7 +734,7 @@ void TerminalClass::scrollUpAt(int startingRow)
 }
 
 
-void TerminalClass::setScrollingRegion(int top, int down, bool resetCursorPos)
+void Terminal::setScrollingRegion(int top, int down, bool resetCursorPos)
 {
   m_emuState.scrollingRegionTop  = tclamp(top, 1, (int)m_rows);
   m_emuState.scrollingRegionDown = tclamp(down, 1, (int)m_rows);
@@ -749,14 +749,14 @@ void TerminalClass::setScrollingRegion(int top, int down, bool resetCursorPos)
 }
 
 
-void TerminalClass::updateCanvasScrollingRegion()
+void Terminal::updateCanvasScrollingRegion()
 {
   m_canvas->setScrollingRegion(0, (m_emuState.scrollingRegionTop - 1) * m_font.height, m_canvas->getWidth() - 1, m_emuState.scrollingRegionDown * m_font.height - 1);
 }
 
 
 // inserts specified number of blank spaces at the specified row and column. Characters moved past the right border are lost.
-void TerminalClass::insertAt(int column, int row, int count)
+void Terminal::insertAt(int column, int row, int count)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("insertAt(%d, %d, %d)\n", column, row, count);
@@ -785,7 +785,7 @@ void TerminalClass::insertAt(int column, int row, int count)
 
 
 // deletes "count" characters from specified "row", starting from "column", scrolling left remaining characters
-void TerminalClass::deleteAt(int column, int row, int count)
+void Terminal::deleteAt(int column, int row, int count)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("deleteAt(%d, %d, %d)\n", column, row, count);
@@ -819,7 +819,7 @@ void TerminalClass::deleteAt(int column, int row, int count)
 // Coordinates are cursor coordinates (1,1  = top left)
 // maintainDoubleWidth = true: Maintains line attributes (double width)
 // selective = true: erase only characters with userOpt1 = 0
-void TerminalClass::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainDoubleWidth, bool selective)
+void Terminal::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainDoubleWidth, bool selective)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("erase(%d, %d, %d, %d, %d, %d)\n", X1, Y1, X2, Y2, (int)c, (int)maintainDoubleWidth);
@@ -852,7 +852,7 @@ void TerminalClass::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainD
 }
 
 
-void TerminalClass::clearSavedCursorStates()
+void Terminal::clearSavedCursorStates()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("clearSavedCursorStates()\n");
@@ -867,7 +867,7 @@ void TerminalClass::clearSavedCursorStates()
 }
 
 
-void TerminalClass::saveCursorState()
+void Terminal::saveCursorState()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("saveCursorState()\n");
@@ -893,7 +893,7 @@ void TerminalClass::saveCursorState()
 }
 
 
-void TerminalClass::restoreCursorState()
+void Terminal::restoreCursorState()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("restoreCursorState()\n");
@@ -920,7 +920,7 @@ void TerminalClass::restoreCursorState()
 }
 
 
-void TerminalClass::useAlternateScreenBuffer(bool value)
+void Terminal::useAlternateScreenBuffer(bool value)
 {
   if (m_alternateScreenBuffer != value) {
     m_alternateScreenBuffer = value;
@@ -940,14 +940,14 @@ void TerminalClass::useAlternateScreenBuffer(bool value)
 }
 
 
-void TerminalClass::localWrite(uint8_t c)
+void Terminal::localWrite(uint8_t c)
 {
   if (m_outputQueue)
     xQueueSendToBack(m_outputQueue, &c, portMAX_DELAY);
 }
 
 
-void TerminalClass::localWrite(char const * str)
+void Terminal::localWrite(char const * str)
 {
   if (m_outputQueue) {
     while (*str) {
@@ -963,13 +963,13 @@ void TerminalClass::localWrite(char const * str)
 }
 
 
-int TerminalClass::available()
+int Terminal::available()
 {
   return m_outputQueue ? uxQueueMessagesWaiting(m_outputQueue) : 0;
 }
 
 
-int TerminalClass::read()
+int Terminal::read()
 {
   if (m_outputQueue) {
     char c;
@@ -981,19 +981,19 @@ int TerminalClass::read()
 
 
 // not implemented
-int TerminalClass::peek()
+int Terminal::peek()
 {
   return -1;
 }
 
 
-void TerminalClass::flush()
+void Terminal::flush()
 {
   flush(true);
 }
 
 
-void TerminalClass::pollSerialPort()
+void Terminal::pollSerialPort()
 {
   while (true) {
     int avail = m_serialPort->available();
@@ -1023,7 +1023,7 @@ void TerminalClass::pollSerialPort()
 
 
 // send a character to m_serialPort or m_outputQueue
-void TerminalClass::send(char c)
+void Terminal::send(char c)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES
   logFmt("=> %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
@@ -1040,7 +1040,7 @@ void TerminalClass::send(char c)
 
 
 // send a string to m_serialPort or m_outputQueue
-void TerminalClass::send(char const * str)
+void Terminal::send(char const * str)
 {
   if (m_serialPort) {
     while (*str) {
@@ -1060,31 +1060,31 @@ void TerminalClass::send(char const * str)
 }
 
 
-void TerminalClass::sendCSI()
+void Terminal::sendCSI()
 {
   send(m_emuState.ctrlBits == 7 ? CSI_7BIT : CSI_8BIT);
 }
 
 
-void TerminalClass::sendDCS()
+void Terminal::sendDCS()
 {
   send(m_emuState.ctrlBits == 7 ? DCS_7BIT : DCS_8BIT);
 }
 
 
-void TerminalClass::sendSS3()
+void Terminal::sendSS3()
 {
   send(m_emuState.ctrlBits == 7 ? SS3_7BIT : SS3_8BIT);
 }
 
 
-int TerminalClass::availableForWrite()
+int Terminal::availableForWrite()
 {
   return uxQueueSpacesAvailable(m_inputQueue);
 }
 
 
-size_t TerminalClass::write(uint8_t c)
+size_t Terminal::write(uint8_t c)
 {
   if (m_termInfo == nullptr)
     xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);  // send unprocessed
@@ -1099,7 +1099,7 @@ size_t TerminalClass::write(uint8_t c)
 }
 
 
-int TerminalClass::write(const uint8_t * buffer, int size)
+int Terminal::write(const uint8_t * buffer, int size)
 {
   for (int i = 0; i < size; ++i)
     write(*(buffer++));
@@ -1107,7 +1107,7 @@ int TerminalClass::write(const uint8_t * buffer, int size)
 }
 
 
-void TerminalClass::setTerminalType(TermInfo const * value)
+void Terminal::setTerminalType(TermInfo const * value)
 {
   m_termInfo = nullptr;
   write("\e[?2h");  // disable VT52 mode
@@ -1117,7 +1117,7 @@ void TerminalClass::setTerminalType(TermInfo const * value)
 }
 
 
-void TerminalClass::setTerminalType(TermType value)
+void Terminal::setTerminalType(TermType value)
 {
   switch (value) {
     case TermType::ANSI_VT:
@@ -1145,7 +1145,7 @@ void TerminalClass::setTerminalType(TermType value)
 }
 
 
-void TerminalClass::convHandleTranslation(uint8_t c)
+void Terminal::convHandleTranslation(uint8_t c)
 {
   if (m_convMatchedCount > 0 || c < 32 || c == 0x7f || c == '~') {
 
@@ -1182,7 +1182,7 @@ void TerminalClass::convHandleTranslation(uint8_t c)
 }
 
 
-void TerminalClass::convSendCtrl(ConvCtrl ctrl)
+void Terminal::convSendCtrl(ConvCtrl ctrl)
 {
   switch (ctrl) {
     case ConvCtrl::CarriageReturn:
@@ -1281,7 +1281,7 @@ void TerminalClass::convSendCtrl(ConvCtrl ctrl)
 
 
 // queue m_termMatchedChars[] or specified string
-void TerminalClass::convQueue(const char * str)
+void Terminal::convQueue(const char * str)
 {
   if (str) {
     for (; *str; ++str)
@@ -1301,7 +1301,7 @@ void TerminalClass::convQueue(const char * str)
 
 
 // set specified character at current cursor position
-void TerminalClass::setChar(char c)
+void Terminal::setChar(char c)
 {
   if (m_emuState.cursorPastLastCol) {
     if (m_emuState.wraparound) {
@@ -1343,7 +1343,7 @@ void TerminalClass::setChar(char c)
 }
 
 
-void TerminalClass::refresh()
+void Terminal::refresh()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("refresh()\n");
@@ -1354,7 +1354,7 @@ void TerminalClass::refresh()
 
 
 // do not call waitCompletion!!
-void TerminalClass::refresh(int X, int Y)
+void Terminal::refresh(int X, int Y)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("refresh(%d, %d)\n", X, Y);
@@ -1364,7 +1364,7 @@ void TerminalClass::refresh(int X, int Y)
 }
 
 
-void TerminalClass::refresh(int X1, int Y1, int X2, int Y2)
+void Terminal::refresh(int X1, int Y1, int X2, int Y2)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("refresh(%d, %d, %d, %d)\n", X1, Y1, X2, Y2);
@@ -1379,7 +1379,7 @@ void TerminalClass::refresh(int X1, int Y1, int X2, int Y2)
 
 
 // value: 0 = normal, 1 = double width, 2 = double width - double height top, 3 = double width - double height bottom
-void TerminalClass::setLineDoubleWidth(int row, int value)
+void Terminal::setLineDoubleWidth(int row, int value)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("setLineDoubleWidth(%d, %d)\n", row, value);
@@ -1396,26 +1396,26 @@ void TerminalClass::setLineDoubleWidth(int row, int value)
 }
 
 
-int TerminalClass::getCharWidthAt(int row)
+int Terminal::getCharWidthAt(int row)
 {
   return glyphMapItem_getOptions(m_glyphsBuffer.map + (row - 1) * m_columns).doubleWidth ? m_font.width * 2 : m_font.width;
 }
 
 
-int TerminalClass::getColumnsAt(int row)
+int Terminal::getColumnsAt(int row)
 {
   return glyphMapItem_getOptions(m_glyphsBuffer.map + (row - 1) * m_columns).doubleWidth ? m_columns / 2 : m_columns;
 }
 
 
-GlyphOptions TerminalClass::getGlyphOptionsAt(int X, int Y)
+GlyphOptions Terminal::getGlyphOptionsAt(int X, int Y)
 {
   return glyphMapItem_getOptions(m_glyphsBuffer.map + (X - 1) + (Y - 1) * m_columns);
 }
 
 
 // blocking operation
-char TerminalClass::getNextCode(bool processCtrlCodes)
+char Terminal::getNextCode(bool processCtrlCodes)
 {
   while (true) {
     char c;
@@ -1430,16 +1430,16 @@ char TerminalClass::getNextCode(bool processCtrlCodes)
 }
 
 
-void TerminalClass::charsConsumerTask(void * pvParameters)
+void Terminal::charsConsumerTask(void * pvParameters)
 {
-  TerminalClass * term = (TerminalClass*) pvParameters;
+  Terminal * term = (Terminal*) pvParameters;
 
   while (true)
     term->consumeInputQueue();
 }
 
 
-void TerminalClass::consumeInputQueue()
+void Terminal::consumeInputQueue()
 {
   char c = getNextCode(false);  // blocking call. false: do not process ctrl chars
 
@@ -1472,7 +1472,7 @@ void TerminalClass::consumeInputQueue()
 }
 
 
-void TerminalClass::execCtrlCode(char c)
+void Terminal::execCtrlCode(char c)
 {
   switch (c) {
 
@@ -1545,7 +1545,7 @@ void TerminalClass::execCtrlCode(char c)
 
 
 // consume non-CSI and CSI (ESC is already consumed)
-void TerminalClass::consumeESC()
+void Terminal::consumeESC()
 {
 
   if (!m_emuState.ANSIMode) {
@@ -1710,7 +1710,7 @@ void TerminalClass::consumeESC()
 // a parameter is a number. Parameters are separated by ';'. Example: "5;27;3"
 // first parameter has index 0
 // params array must have up to FABGLIB_MAX_CSI_PARAMS
-char TerminalClass::consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound)
+char Terminal::consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound)
 {
   // get parameters until maximum size reached or a command character has been found
   *paramsCount = 1; // one parameter is always assumed (even if not exists)
@@ -1758,7 +1758,7 @@ char TerminalClass::consumeParamsAndGetCode(int * params, int * paramsCount, boo
 
 
 // consume CSI sequence (ESC + '[' already consumed)
-void TerminalClass::consumeCSI()
+void Terminal::consumeCSI()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
   log("ESC[");
@@ -2045,7 +2045,7 @@ void TerminalClass::consumeCSI()
 
 
 // consume CSI " sequences
-void TerminalClass::consumeCSIQUOT(int * params, int paramsCount)
+void Terminal::consumeCSIQUOT(int * params, int paramsCount)
 {
   char c = getNextCode(true);  // true: process ctrl chars
 
@@ -2071,7 +2071,7 @@ void TerminalClass::consumeCSIQUOT(int * params, int paramsCount)
 
 
 // consume CSI SPC sequences
-void TerminalClass::consumeCSISPC(int * params, int paramsCount)
+void Terminal::consumeCSISPC(int * params, int paramsCount)
 {
   char c = getNextCode(true);  // true: process ctrl chars
 
@@ -2100,7 +2100,7 @@ void TerminalClass::consumeCSISPC(int * params, int paramsCount)
 // ESC [ ? # h     <- set
 // ESC [ ? # l     <- reset
 // "c" can be "h" or "l"
-void TerminalClass::consumeDECPrivateModes(int const * params, int paramsCount, char c)
+void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, char c)
 {
   bool set = (c == 'h');
   switch (params[0]) {
@@ -2247,7 +2247,7 @@ void TerminalClass::consumeDECPrivateModes(int const * params, int paramsCount, 
 
 // exec SGR: Select Graphic Rendition
 // ESC [ ...params... m
-void TerminalClass::execSGRParameters(int const * params, int paramsCount)
+void Terminal::execSGRParameters(int const * params, int paramsCount)
 {
   for (; paramsCount; ++params, --paramsCount) {
     switch (*params) {
@@ -2374,7 +2374,7 @@ void TerminalClass::execSGRParameters(int const * params, int paramsCount)
 
 // "ESC P" (DCS) already consumed
 // consume from parameters to ST (that is ESC "\")
-void TerminalClass::consumeDCS()
+void Terminal::consumeDCS()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
   log("ESC P");
@@ -2437,7 +2437,7 @@ void TerminalClass::consumeDCS()
 }
 
 
-void TerminalClass::consumeESCVT52()
+void Terminal::consumeESCVT52()
 {
   char c = getNextCode(false);
 
@@ -2547,9 +2547,9 @@ void TerminalClass::consumeESCVT52()
 }
 
 
-void TerminalClass::keyboardReaderTask(void * pvParameters)
+void Terminal::keyboardReaderTask(void * pvParameters)
 {
-  TerminalClass * term = (TerminalClass*) pvParameters;
+  Terminal * term = (Terminal*) pvParameters;
 
   while (true) {
 
@@ -2579,7 +2579,7 @@ void TerminalClass::keyboardReaderTask(void * pvParameters)
 }
 
 
-void TerminalClass::sendCursorKeyCode(char c)
+void Terminal::sendCursorKeyCode(char c)
 {
   if (m_emuState.cursorKeysMode)
     sendSS3();
@@ -2589,7 +2589,7 @@ void TerminalClass::sendCursorKeyCode(char c)
 }
 
 
-void TerminalClass::sendKeypadCursorKeyCode(char applicationCode, const char * numericCode)
+void Terminal::sendKeypadCursorKeyCode(char applicationCode, const char * numericCode)
 {
   if (m_emuState.keypadMode == KeypadMode::Application) {
     sendSS3();
@@ -2601,7 +2601,7 @@ void TerminalClass::sendKeypadCursorKeyCode(char applicationCode, const char * n
 }
 
 
-void TerminalClass::ANSIDecodeVirtualKey(VirtualKey vk)
+void Terminal::ANSIDecodeVirtualKey(VirtualKey vk)
 {
   switch (vk) {
 
@@ -2794,7 +2794,7 @@ void TerminalClass::ANSIDecodeVirtualKey(VirtualKey vk)
 }
 
 
-void TerminalClass::VT52DecodeVirtualKey(VirtualKey vk)
+void Terminal::VT52DecodeVirtualKey(VirtualKey vk)
 {
   switch (vk) {
 
@@ -2892,7 +2892,7 @@ void TerminalClass::VT52DecodeVirtualKey(VirtualKey vk)
 }
 
 
-void TerminalClass::TermDecodeVirtualKey(VirtualKey vk)
+void Terminal::TermDecodeVirtualKey(VirtualKey vk)
 {
   for (auto item = m_termInfo->kbdCtrlSet; item->vk != VK_NONE; ++item) {
     if (item->vk == vk) {

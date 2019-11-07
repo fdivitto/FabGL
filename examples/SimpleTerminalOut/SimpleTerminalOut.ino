@@ -27,7 +27,7 @@
 
 
 fabgl::VGAController VGAController;
-TerminalClass        Terminal;
+fabgl::Terminal      Terminal;
 
 
 void setup()

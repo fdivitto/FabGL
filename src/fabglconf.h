@@ -67,11 +67,11 @@
 #define FABGLIB_CHARS_CONSUMER_TASK_PRIORITY 5
 
 
-/** Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in TerminalClass */
+/** Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal */
 #define FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE 2048
 
 
-/** Priority of the task that reads keys from keyboard and send ANSI/VT codes to output stream in TerminalClass */
+/** Priority of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal */
 #define FABGLIB_KEYBOARD_READER_TASK_PRIORITY 5
 
 

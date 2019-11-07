@@ -150,7 +150,7 @@ void VGAController::begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t g
 
   m_bitsPerChannel = 2;
 
-  // change color conversion map (COLOR2RGB) to work well with TerminalClass
+  // change color conversion map (COLOR2RGB) to work well with Terminal
   COLOR2RGB[1] = (RGB){2, 0, 0}; // Red
   COLOR2RGB[2] = (RGB){0, 2, 0}; // Green
   COLOR2RGB[3] = (RGB){2, 2, 0}; // Yellow

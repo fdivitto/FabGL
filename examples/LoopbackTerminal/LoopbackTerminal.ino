@@ -32,7 +32,7 @@
 
 fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
-TerminalClass Terminal;
+fabgl::Terminal      Terminal;
 
 
 void print_info()

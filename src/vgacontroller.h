@@ -281,7 +281,7 @@ inline bool operator!=(RGB const& lhs, RGB const& rhs)
 /**
  * @brief Represents a glyph position, size and binary data.
  *
- * A glyph is a bitmap (1 bit per pixel). The fabgl::TerminalClass uses glyphs to render characters.
+ * A glyph is a bitmap (1 bit per pixel). The fabgl::Terminal uses glyphs to render characters.
  */
 struct Glyph {
   int16_t         X;      /**< Horizontal glyph coordinate */

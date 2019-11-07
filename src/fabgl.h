@@ -70,7 +70,7 @@
  * The main classes of FabGL library are:
  *    * fabgl::VGAController, that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.
  *    * fabgl::Canvas, that provides a set of drawing primitives (lines, rectangles, text...).
- *    * fabgl::TerminalClass, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
+ *    * fabgl::Terminal, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
  *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
  *    * fabgl::Mouse (instanced as \b Mouse), that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
@@ -273,7 +273,6 @@ using fabgl::Rect;
 using fabgl::MouseDelta;
 using fabgl::MouseStatus;
 using fabgl::CursorName;
-using fabgl::TerminalClass;
 using fabgl::uiButtonKind;
 using fabgl::uiTimerHandle;
 using fabgl::uiTextEdit;

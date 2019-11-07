@@ -27,13 +27,13 @@
 
 
 fabgl::VGAController VGAController;
-TerminalClass        Terminal;
+fabgl::Terminal      Terminal;
 
 
 void setup()
 {
   VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  VGAController.setResolution(VGA_640x350_70HzAlt1);
   //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
   Terminal.begin(&VGAController);

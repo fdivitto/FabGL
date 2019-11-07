@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::TerminalClass definition.
+ * @brief This file contains fabgl::Terminal definition.
  */
 
 
@@ -324,17 +324,17 @@ struct EmuState {
  * like CSI codes (private modes, CUP, TBC, etc..), like CSI-SGR codes (bold, italic, blinking, etc...) and like DCS codes (DECRQSS, etc..).<br>
  * Supports convertion from PS/2 keyboard virtual keys to ANSI or VT codes (keypad, cursor keys, function keys, etc..).<br>
  *
- * TerminalClass can receive codes to display from Serial Port or it can be controlled directly from the application. In the same way
- * TerminalClass can send keyboard codes to a Serial Port or directly to the application.<br>
+ * Terminal can receive codes to display from Serial Port or it can be controlled directly from the application. In the same way
+ * Terminal can send keyboard codes to a Serial Port or directly to the application.<br>
  *
  * For default it supports 80x25 or 132x25 characters at 640x350. However any custom resolution and text buffer size is supported
  * specifying a custom font.<br>
  *
  * There are three cursors styles (block, underlined and bar), blinking or not blinking.
  *
- * TerminalClass inherits from Stream so applications can use all Stream and Print input and output methods.
+ * Terminal inherits from Stream so applications can use all Stream and Print input and output methods.
  *
- * TerminalClass passes 95/110 of VTTEST VT100/VT102 Compatibility Test Score Sheet.
+ * Terminal passes 95/110 of VTTEST VT100/VT102 Compatibility Test Score Sheet.
  *
  *
  *
@@ -342,7 +342,7 @@ struct EmuState {
  *
  *     fabgl::VGAController VGAController;
  *     fabgl::PS2Controller PS2Controller;
- *     TerminalClass Terminal;
+ *     fabgl::Terminal      Terminal;
  *
  *     // Setup 80x25 columns loop-back terminal (send what you type on keyboard to the display)
  *     void setup() {
@@ -378,7 +378,7 @@ struct EmuState {
  *
  *     fabgl::VGAController VGAController;
  *     fabgl::PS2Controller PS2Controller;
- *     TerminalClass Terminal;
+ *     fabgl::Terminal      Terminal;
  *
  *     // Setup 80x25 columns terminal using UART2 to communicate with the server,
  *     // VGA to display output and PS2 device as keyboard input
@@ -399,13 +399,13 @@ struct EmuState {
  *       Terminal.pollSerialPort();
  *     }
  */
-class TerminalClass : public Stream {
+class Terminal : public Stream {
 
 public:
 
-  TerminalClass();
+  Terminal();
 
-  ~TerminalClass();
+  ~Terminal();
 
   /**
    * @brief Initializes the terminal.
@@ -431,7 +431,7 @@ public:
    * as ANSI/VT100 codes and then sent to the specified serial port.<br>
    * Also replies to terminal queries like terminal identification, cursor position, etc.. will be
    * sent to the serial port.<br>
-   * Call TerminalClass.pollSerialPort() to send codes from serial port to the display.
+   * Call Terminal.pollSerialPort() to send codes from serial port to the display.
    *
    * @param serialPort The serial port to use.
    * @param autoXONXOFF If true uses software flow control (XON/XOFF).
@@ -447,7 +447,7 @@ public:
    * @brief Pools the serial port for incoming data.
    *
    * Tnis method needs to be called in the application main loop to check if new data
-   * is coming from the current serial port (specified using TerminalClass.connectSerialPort).
+   * is coming from the current serial port (specified using Terminal.connectSerialPort).
    *
    * Example:
    *
@@ -515,7 +515,7 @@ public:
    *
    * Terminal automatically choises the best font considering screen resolution and required
    * number of columns and rows.<br>
-   * Particular cases require setting custom fonts, so applications can use TerminalClass.loadFont().
+   * Particular cases require setting custom fonts, so applications can use Terminal.loadFont().
    *
    * @param font Specifies font info for the font to set.
    */
@@ -632,7 +632,7 @@ public:
   /**
    * @brief Gets the number of codes available in the keyboard queue.
    *
-   * Keyboard queue is available only after TerminalClass.connectLocally() call.
+   * Keyboard queue is available only after Terminal.connectLocally() call.
    *
    * @return The number of codes available to read.
    */
@@ -641,7 +641,7 @@ public:
   /**
    * @brief Reads codes from keyboard.
    *
-   * Keyboard queue is available only after TerminalClass.connectLocally() call.
+   * Keyboard queue is available only after Terminal.connectLocally() call.
    *
    * @return The first code of incoming data available (or -1 if no data is available).
    */
@@ -650,7 +650,7 @@ public:
   /**
    * @brief Reads a code from the keyboard without advancing to the next one.
    *
-   * Keyboard queue is available only after TerminalClass.connectLocally() call.
+   * Keyboard queue is available only after Terminal.connectLocally() call.
    *
    * @return The next code, or -1 if none is available.
    */
