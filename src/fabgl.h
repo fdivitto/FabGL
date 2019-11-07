@@ -309,6 +309,7 @@ using fabgl::uiCustomListBox;
 using fabgl::uiFileBrowser;
 using fabgl::FileBrowser;
 using fabgl::ModalWindowState;
+using fabgl::Canvas;
 
 
 
