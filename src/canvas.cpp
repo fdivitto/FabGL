@@ -50,8 +50,9 @@ namespace fabgl {
 #define INVALIDRECT Rect(-32768, -32768, -32768, -32768)
 
 
-Canvas::Canvas()
-  : m_fontInfo(nullptr),
+Canvas::Canvas(VGAController * displayController)
+  : m_displayController(displayController),
+    m_fontInfo(nullptr),
     m_textHorizRate(1),
     m_origin(Point(0, 0)),
     m_clippingRect(INVALIDRECT)
@@ -70,7 +71,7 @@ void Canvas::setOrigin(Point const & origin)
   Primitive p;
   p.cmd      = PrimitiveCmd::SetOrigin;
   p.position = m_origin = origin;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -79,7 +80,7 @@ void Canvas::setClippingRect(Rect const & rect)
   Primitive p;
   p.cmd  = PrimitiveCmd::SetClippingRect;
   p.rect = m_clippingRect = rect;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -94,9 +95,9 @@ Rect Canvas::getClippingRect()
 void Canvas::waitCompletion(bool waitVSync)
 {
   if (waitVSync)
-    VGAController::instance()->primitivesExecutionWait();   // wait on VSync normal processing
+    m_displayController->primitivesExecutionWait();   // wait on VSync normal processing
   else
-    VGAController::instance()->processPrimitives();         // process right now!
+    m_displayController->processPrimitives();         // process right now!
 }
 
 
@@ -106,13 +107,13 @@ void Canvas::waitCompletion(bool waitVSync)
 // should be performed very often.
 void Canvas::beginUpdate()
 {
-  VGAController::instance()->suspendBackgroundPrimitiveExecution();
+  m_displayController->suspendBackgroundPrimitiveExecution();
 }
 
 
 void Canvas::endUpdate()
 {
-  VGAController::instance()->resumeBackgroundPrimitiveExecution();
+  m_displayController->resumeBackgroundPrimitiveExecution();
 }
 
 
@@ -121,7 +122,7 @@ void Canvas::clear()
   Primitive p;
   p.cmd = PrimitiveCmd::Clear;
   p.ivalue = 0;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -131,12 +132,12 @@ void Canvas::scroll(int offsetX, int offsetY)
   if (offsetY != 0) {
     p.cmd    = PrimitiveCmd::VScroll;
     p.ivalue = offsetY;
-    VGAController::instance()->addPrimitive(p);
+    m_displayController->addPrimitive(p);
   }
   if (offsetX != 0) {
     p.cmd    = PrimitiveCmd::HScroll;
     p.ivalue = offsetX;
-    VGAController::instance()->addPrimitive(p);
+    m_displayController->addPrimitive(p);
   }
 }
 
@@ -146,7 +147,7 @@ void Canvas::setScrollingRegion(int X1, int Y1, int X2, int Y2)
   Primitive p;
   p.cmd  = PrimitiveCmd::SetScrollingRegion;
   p.rect = Rect(X1, Y1, X2, Y2);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -155,7 +156,7 @@ void Canvas::setPixel(int X, int Y)
   Primitive p;
   p.cmd      = PrimitiveCmd::SetPixel;
   p.position = Point(X, Y);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -170,7 +171,7 @@ void Canvas::setPixel(Point const & pos, RGB const & color)
   Primitive p;
   p.cmd       = PrimitiveCmd::SetPixelAt;
   p.pixelDesc = { pos, color };
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -179,7 +180,7 @@ void Canvas::moveTo(int X, int Y)
   Primitive p;
   p.cmd      = PrimitiveCmd::MoveTo;
   p.position = Point(X, Y);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -200,7 +201,7 @@ void Canvas::setPenColor(RGB const & color)
   Primitive p;
   p.cmd = PrimitiveCmd::SetPenColor;
   p.color = color;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -221,7 +222,7 @@ void Canvas::setBrushColor(RGB const & color)
   Primitive p;
   p.cmd = PrimitiveCmd::SetBrushColor;
   p.color = color;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -230,7 +231,7 @@ void Canvas::lineTo(int X, int Y)
   Primitive p;
   p.cmd      = PrimitiveCmd::LineTo;
   p.position = Point(X, Y);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -246,7 +247,7 @@ void Canvas::drawRectangle(int X1, int Y1, int X2, int Y2)
   Primitive p;
   p.cmd  = PrimitiveCmd::DrawRect;
   p.rect = Rect(X1, Y1, X2, Y2);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -261,7 +262,7 @@ void Canvas::fillRectangle(int X1, int Y1, int X2, int Y2)
   Primitive p;
   p.cmd  = PrimitiveCmd::FillRect;
   p.rect = Rect(X1, Y1, X2, Y2);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -270,7 +271,7 @@ void Canvas::fillRectangle(Rect const & rect)
   Primitive p;
   p.cmd  = PrimitiveCmd::FillRect;
   p.rect = rect;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -285,7 +286,7 @@ void Canvas::invertRectangle(Rect const & rect)
   Primitive p;
   p.cmd  = PrimitiveCmd::InvertRect;
   p.rect = rect;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -294,7 +295,7 @@ void Canvas::swapRectangle(int X1, int Y1, int X2, int Y2)
   Primitive p;
   p.cmd  = PrimitiveCmd::SwapFGBG;
   p.rect = Rect(X1, Y1, X2, Y2);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -304,7 +305,7 @@ void Canvas::fillEllipse(int X, int Y, int width, int height)
   Primitive p;
   p.cmd  = PrimitiveCmd::FillEllipse;
   p.size = Size(width, height);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -314,7 +315,7 @@ void Canvas::drawEllipse(int X, int Y, int width, int height)
   Primitive p;
   p.cmd  = PrimitiveCmd::DrawEllipse;
   p.size = Size(width, height);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -323,7 +324,7 @@ void Canvas::drawGlyph(int X, int Y, int width, int height, uint8_t const * data
   Primitive p;
   p.cmd   = PrimitiveCmd::DrawGlyph;
   p.glyph = Glyph(X, Y, width, height, data + index * height * ((width + 7) / 8));
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -332,7 +333,7 @@ void Canvas::renderGlyphsBuffer(int itemX, int itemY, GlyphsBuffer const * glyph
   Primitive p;
   p.cmd                    = PrimitiveCmd::RenderGlyphsBuffer;
   p.glyphsBufferRenderInfo = GlyphsBufferRenderInfo(itemX, itemY, glyphsBuffer);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -341,7 +342,7 @@ void Canvas::setGlyphOptions(GlyphOptions options)
   Primitive p;
   p.cmd = PrimitiveCmd::SetGlyphOptions;
   p.glyphOptions = options;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
   m_textHorizRate = options.doubleWidth > 0 ? 2 : 1;
 }
 
@@ -357,7 +358,7 @@ void Canvas::setPaintOptions(PaintOptions options)
   Primitive p;
   p.cmd = PrimitiveCmd::SetPaintOptions;
   p.paintOptions = options;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -474,7 +475,7 @@ void Canvas::copyRect(int sourceX, int sourceY, int destX, int destY, int width,
   Primitive p;
   p.cmd  = PrimitiveCmd::CopyRect;
   p.rect = Rect(sourceX, sourceY, sourceX2, sourceY2);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -533,7 +534,7 @@ void Canvas::drawBitmap(int X, int Y, Bitmap const * bitmap)
   Primitive p;
   p.cmd               = PrimitiveCmd::DrawBitmap;
   p.bitmapDrawingInfo = BitmapDrawingInfo(X, Y, bitmap);
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
@@ -541,8 +542,8 @@ void Canvas::swapBuffers()
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SwapBuffers;
-  VGAController::instance()->addPrimitive(p);
-  VGAController::instance()->primitivesExecutionWait();
+  m_displayController->addPrimitive(p);
+  m_displayController->primitivesExecutionWait();
 }
 
 
@@ -553,7 +554,7 @@ void Canvas::drawPath(Point const * points, int pointsCount)
   p.cmd = PrimitiveCmd::DrawPath;
   p.path.points = points;
   p.path.pointsCount = pointsCount;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 // warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
@@ -563,14 +564,14 @@ void Canvas::fillPath(Point const * points, int pointsCount)
   p.cmd = PrimitiveCmd::FillPath;
   p.path.points = points;
   p.path.pointsCount = pointsCount;
-  VGAController::instance()->addPrimitive(p);
+  m_displayController->addPrimitive(p);
 }
 
 
 RGB Canvas::getPixel(int X, int Y)
 {
   RGB rgb;
-  VGAController::instance()->readScreen(Rect(X, Y, X, Y), &rgb);
+  m_displayController->readScreen(Rect(X, Y, X, Y), &rgb);
   return rgb;
 }
 

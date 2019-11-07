@@ -71,7 +71,7 @@ struct FontInfo {
 /**
 * @brief A class with a set of drawing methods.
 *
-* This class interfaces directly to the VGA controller and provides
+* This class interfaces directly to the display controller and provides
 * a set of primitives to paint lines, circles, etc. and to scroll regions, copy
 * rectangles and draw glyphs.<br>
 * For default origin is at the top left, starting from (0, 0) up to (Canvas Width - 1, Canvas Height - 1).
@@ -83,17 +83,18 @@ struct FontInfo {
 *     VGAController.setResolution(VGA_640x350_70Hz);
 *
 *     // Paint a green rectangle with red border
-*     Canvas.setPenColor(Color::BrightRed);
-*     Canvas.setBrushColor(Color::BrightGreen);
-*     Canvas.fillRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
-*     Canvas.drawRectangle(0, 0, Canvas.getWidth() - 1, Canvas.getHeight() - 1);
+*     fabgl::Canvas cv(&VGAController);
+*     cv.setPenColor(Color::BrightRed);
+*     cv.setBrushColor(Color::BrightGreen);
+*     cv.fillRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
+*     cv.drawRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
 *
 */
 class Canvas {
 
 public:
 
-  Canvas();
+  Canvas(VGAController * displayController);
 
   /**
    * @brief Determines the canvas width in pixels.
@@ -102,7 +103,7 @@ public:
    *
    * @return The canvas width in pixels.
    */
-  int getWidth() { return VGAController::instance()->getViewPortWidth(); }
+  int getWidth() { return m_displayController->getViewPortWidth(); }
 
   /**
    * @brief Determines the canvas height in pixels.
@@ -111,7 +112,7 @@ public:
    *
    * @return The canvas height in pixels.
    */
-  int getHeight() { return VGAController::instance()->getViewPortHeight(); }
+  int getHeight() { return m_displayController->getViewPortHeight(); }
 
   /**
    * @brief Waits for drawing queue to become empty.
@@ -785,6 +786,8 @@ public:
   RGB getPixel(int X, int Y);
 
 private:
+
+  VGAController *  m_displayController;
 
   FontInfo const * m_fontInfo;
   uint8_t          m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
