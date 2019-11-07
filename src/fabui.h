@@ -2262,13 +2262,12 @@ public:
    * @brief Initializes application and executes the main event loop
    *
    * @param displayController Specifies the display controller where to run the UI
-   * @param canvas Specifies the canvas where to draw the UI
    * @param keyboard The keyboard device. The default (nullptr) gets it from the PS2Controller
    * @param nouse The mouse device. The default (nullptr) gets it from the PS2Controller
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(VGAController * displayController, Canvas * canvas, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  int run(VGAController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources

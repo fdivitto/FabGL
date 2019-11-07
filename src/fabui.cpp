@@ -185,10 +185,11 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run(VGAController * displayController, Canvas * canvas, Keyboard * keyboard, Mouse * mouse)
+int uiApp::run(VGAController * displayController, Keyboard * keyboard, Mouse * mouse)
 {
   m_displayController = displayController;
-  m_canvas            = canvas;
+
+  m_canvas            = new Canvas(m_displayController);
 
   m_keyboard = keyboard;
   m_mouse    = mouse;
@@ -268,6 +269,8 @@ int uiApp::run(VGAController * displayController, Canvas * canvas, Keyboard * ke
 
   vQueueDelete(m_eventsQueue);
   m_eventsQueue = nullptr;
+
+  delete m_canvas;
 
   return exitCode;
 }
