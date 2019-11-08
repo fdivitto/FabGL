@@ -553,6 +553,13 @@ struct PaintState {
 *
 * Use this class to set screen resolution and to associate VGA signals to ESP32 GPIO outputs.
 *
+* This example initializes VGA Controller with 64 colors at 640x350:
+*
+*     fabgl::VGAController VGAController;
+*     // the default assigns GPIO22 and GPIO21 to Red, GPIO19 and GPIO18 to Green, GPIO5 and GPIO4 to Blue, GPIO23 to HSync and GPIO15 to VSync
+*     VGAController.begin();
+*     VGAController.setResolution(VGA_640x350_70Hz);
+*
 * This example initializes VGA Controller with 8 colors (5 GPIOs used) and 640x350 resolution:
 *
 *     // Assign GPIO22 to Red, GPIO21 to Green, GPIO19 to Blue, GPIO18 to HSync and GPIO5 to VSync
@@ -563,7 +570,7 @@ struct PaintState {
 *
 * This example initializes VGA Controller with 64 colors (8 GPIOs used) and 640x350 resolution:
 *
-*     // Assign GPIO22 and GPIO_NUM_21 to Red, GPIO_NUM_19 and GPIO_NUM_18 to Green, GPIO_NUM_5 and GPIO_NUM_4 to Blue, GPIO_NUM_23 to HSync and GPIO_NUM_15 to VSync
+*     // Assign GPIO22 and GPIO21 to Red, GPIO19 and GPIO18 to Green, GPIO5 and GPIO4 to Blue, GPIO23 to HSync and GPIO15 to VSync
 *     VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
 *
 *     // Set 640x350@70Hz resolution
