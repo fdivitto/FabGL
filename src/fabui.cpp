@@ -215,7 +215,7 @@ int uiApp::run(VGAController * displayController, Keyboard * keyboard, Mouse * m
   m_rootWindow->setCanvas(m_canvas);
 
   m_rootWindow->windowStyle().borderSize     = 0;
-  m_rootWindow->frameStyle().backgroundColor = RGB(3, 3, 3);
+  m_rootWindow->frameStyle().backgroundColor = RGB222(3, 3, 3);
 
   m_rootWindow->frameProps().resizeable = false;
   m_rootWindow->frameProps().moveable   = false;
@@ -962,7 +962,7 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
 
   y += textHeight + titleHeight;
   auto panel = new uiPanel(mainFrame, Point(0, y), Size(mainFrame->size().width, mainFrame->size().height - y));
-  panel->windowStyle().borderColor = RGB(2, 2, 2);
+  panel->windowStyle().borderColor = RGB222(2, 2, 2);
   panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
 
   // setup buttons
@@ -1054,7 +1054,7 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
 
   y += textHeight + titleHeight;
   auto panel = new uiPanel(mainFrame, Point(0, y), Size(mainFrame->size().width, mainFrame->size().height - y));
-  panel->windowStyle().borderColor = RGB(2, 2, 2);
+  panel->windowStyle().borderColor = RGB222(2, 2, 2);
   panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
 
   // setup buttons
@@ -1773,7 +1773,7 @@ void uiFrame::paintFrame()
   if (m_titleLength > 0) {
     int barHeight = titleBarHeight();
     // title bar background
-    RGB titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
+    RGB222 titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
     canvas()->setBrushColor(titleBarBrushColor);
     canvas()->fillRectangle(titleBarRect());
     // close, maximize and minimze buttons
@@ -2245,8 +2245,8 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
 
   windowStyle().borderSize         = 1;
   windowStyle().focusedBorderSize  = 2;
-  windowStyle().borderColor        = RGB(1, 1, 1);
-  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+  windowStyle().borderColor        = RGB222(1, 1, 1);
+  windowStyle().focusedBorderColor = RGB222(0, 0, 3);
 
   setText(text);
 }
@@ -2272,7 +2272,7 @@ void uiButton::paintButton()
 {
   Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
   // background
-  RGB bkColor = m_down ? m_buttonStyle.downBackgroundColor : m_buttonStyle.backgroundColor;
+  RGB222 bkColor = m_down ? m_buttonStyle.downBackgroundColor : m_buttonStyle.backgroundColor;
   if (app()->capturedMouseWindow() == this)
     bkColor = m_buttonStyle.mouseDownBackgroundColor;
   else if (isMouseOver())
@@ -2392,7 +2392,7 @@ uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, 
   windowProps().focusable = true;
 
   windowStyle().defaultCursor = CursorName::CursorTextInput;
-  windowStyle().borderColor   = RGB(1, 1, 1);
+  windowStyle().borderColor   = RGB222(1, 1, 1);
   windowStyle().borderSize    = 1;
 
   setText(text);
@@ -2583,7 +2583,7 @@ void uiTextEdit::paintTextEdit()
 {
   m_contentRect = getEditRect();
   // background
-  RGB bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
+  RGB222 bkColor = hasFocus() ? m_textEditStyle.focusedBackgroundColor : (isMouseOver() ? m_textEditStyle.mouseOverBackgroundColor : m_textEditStyle.backgroundColor);
   canvas()->setBrushColor(bkColor);
   canvas()->fillRectangle(m_contentRect);
   // content
@@ -2981,7 +2981,7 @@ uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool v
 
   windowProps().focusable = false;
   windowStyle().borderSize = 1;
-  windowStyle().borderColor = RGB(1, 1, 1);
+  windowStyle().borderColor = RGB222(1, 1, 1);
 }
 
 
@@ -3032,7 +3032,7 @@ uiPaintBox::uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, 
 
   windowProps().focusable = false;
   windowStyle().borderSize  = 1;
-  windowStyle().borderColor = RGB(1, 1, 1);
+  windowStyle().borderColor = RGB222(1, 1, 1);
 }
 
 
@@ -3351,8 +3351,8 @@ Rect uiScrollableControl::getHScrollBarRects(Rect * leftButton, Rect * rightButt
 
 void uiScrollableControl::paintScrollableControl()
 {
-  RGB FColor          = m_scrollableControlStyle.scrollBarForegroundColor;
-  RGB mouseOverFColor = m_scrollableControlStyle.mouseOverScrollBarForegroundColor;
+  RGB222 FColor          = m_scrollableControlStyle.scrollBarForegroundColor;
+  RGB222 mouseOverFColor = m_scrollableControlStyle.mouseOverScrollBarForegroundColor;
   if (m_HScrollBarRange) {
     //// paint horizontal scroll bar (at bottom side of the window)
     Rect lbtn, rbtn, bar;
@@ -3431,7 +3431,7 @@ uiCustomListBox::uiCustomListBox(uiWindow * parent, const Point & pos, const Siz
   windowProps().focusable = true;
 
   windowStyle().borderSize  = 1;
-  windowStyle().borderColor = RGB(1, 1, 1);
+  windowStyle().borderColor = RGB222(1, 1, 1);
 }
 
 
@@ -3595,7 +3595,7 @@ void uiCustomListBox::paintListBox()
       break;
 
     // background
-    RGB bkColor = hasFocus() ? m_listBoxStyle.focusedBackgroundColor : m_listBoxStyle.backgroundColor;
+    RGB222 bkColor = hasFocus() ? m_listBoxStyle.focusedBackgroundColor : m_listBoxStyle.backgroundColor;
     if (index < items_getCount() && items_selected(index))
       bkColor = (hasFocus() ? m_listBoxStyle.focusedSelectedBackgroundColor : m_listBoxStyle.selectedBackgroundColor);
     canvas()->setBrushColor(bkColor);
@@ -4004,8 +4004,8 @@ uiCheckBox::uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, 
 
   windowStyle().borderSize         = 1;
   windowStyle().focusedBorderSize  = 2;
-  windowStyle().borderColor        = RGB(1, 1, 1);
-  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+  windowStyle().borderColor        = RGB222(1, 1, 1);
+  windowStyle().focusedBorderColor = RGB222(0, 0, 3);
 }
 
 
@@ -4018,7 +4018,7 @@ void uiCheckBox::paintCheckBox()
 {
   Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
   // background
-  RGB bkColor = m_checked ? m_checkBoxStyle.checkedBackgroundColor : m_checkBoxStyle.backgroundColor;
+  RGB222 bkColor = m_checked ? m_checkBoxStyle.checkedBackgroundColor : m_checkBoxStyle.backgroundColor;
   if (isMouseOver())
     bkColor = m_checkBoxStyle.mouseOverBackgroundColor;
   canvas()->setBrushColor(bkColor);
@@ -4146,8 +4146,8 @@ uiSlider::uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOr
   objectType().uiSlider = true;
 
   windowStyle().borderSize         = 1;
-  windowStyle().borderColor        = RGB(3, 3, 3);
-  windowStyle().focusedBorderColor = RGB(0, 0, 3);
+  windowStyle().borderColor        = RGB222(3, 3, 3);
+  windowStyle().focusedBorderColor = RGB222(0, 0, 3);
 
   windowProps().focusable = true;
 }

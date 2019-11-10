@@ -460,7 +460,7 @@ public:
    * Example:
    *
    *     // paint a red rectangle
-   *     Canvas.setBrushColor(RGB(3, 0, 0));
+   *     Canvas.setBrushColor(Color::BrightRed);
    *     Rect rect = Rect(10, 10, 100, 100);
    *     Canvas.fillRectangle(rect);
    *
@@ -468,14 +468,14 @@ public:
    *     VGAController.processPrimitives();
    *
    *     // read rectangle pixels into "buf"
-   *     auto buf = new RGB[rect.width() * rect.height()];
+   *     auto buf = new RGB222[rect.width() * rect.height()];
    *     VGAController.readScreen(rect, buf);
    *
    *     // write buf 110 pixels to the reight
    *     VGAController.writeScreen(rect.translate(110, 0), buf);
    *     delete buf;
    */
-  void readScreen(Rect const & rect, RGB * destBuf);
+  void readScreen(Rect const & rect, RGB222 * destBuf);
 
   /**
    * @brief Writes pixels inside the specified rectangle.
@@ -488,7 +488,7 @@ public:
    * Example:
    *
    *     // paint a red rectangle
-   *     Canvas.setBrushColor(RGB(3, 0, 0));
+   *     Canvas.setBrushColor(Color::BrightRed);
    *     Rect rect = Rect(10, 10, 100, 100);
    *     Canvas.fillRectangle(rect);
    *
@@ -496,28 +496,28 @@ public:
    *     VGAController.processPrimitives();
    *
    *     // read rectangle pixels into "buf"
-   *     auto buf = new RGB[rect.width() * rect.height()];
+   *     auto buf = new RGB222[rect.width() * rect.height()];
    *     VGAController.readScreen(rect, buf);
    *
    *     // write buf 110 pixels to the reight
    *     VGAController.writeScreen(rect.translate(110, 0), buf);
    *     delete buf;
    */
-  void writeScreen(Rect const & rect, RGB * srcBuf);
+  void writeScreen(Rect const & rect, RGB222 * srcBuf);
 
   /**
    * @brief Creates a raw pixel to use with VGAController.setRawPixel
    *
    * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
    *
-   * @param rgb Pixel RGB color
+   * @param rgb Pixel RGB222 color
    *
    * Example:
    *
    *     // Set color of pixel at 100, 100
-   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB(3, 0, 0));
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
    */
-  uint8_t createRawPixel(RGB rgb)             { return preparePixel(rgb); }
+  uint8_t createRawPixel(RGB222 rgb)             { return preparePixel(rgb); }
 
   /**
    * @brief Sets a raw pixel prepared using VGAController.createRawPixel.
@@ -531,7 +531,7 @@ public:
    * Example:
    *
    *     // Set color of pixel at 100, 100
-   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB(3, 0, 0));
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
    */
   void setRawPixel(int x, int y, uint8_t rgb) { PIXEL(x, y) = rgb; }
 
@@ -555,7 +555,7 @@ private:
   void init(gpio_num_t VSyncGPIO);
 
   uint8_t packHVSync(bool HSync = false, bool VSync = false);
-  uint8_t preparePixel(RGB rgb, bool HSync = false, bool VSync = false);
+  uint8_t preparePixel(RGB222 rgb, bool HSync = false, bool VSync = false);
 
   void freeBuffers();
   void fillHorizBuffers(int offsetX);
@@ -577,9 +577,9 @@ private:
   void execClear();
   void execVScroll(int scroll);
   void execHScroll(int scroll);
-  void execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor);
-  void execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor);
-  void execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB penColor, RGB brushColor);
+  void execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
+  void execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
+  void execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
   void execInvertRect(Rect const & rect);
   void execCopyRect(Rect const & source);
   void execSwapFGBG(Rect const & rect);

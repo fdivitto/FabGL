@@ -160,13 +160,13 @@ void Canvas::setPixel(int X, int Y)
 }
 
 
-void Canvas::setPixel(int X, int Y, RGB const & color)
+void Canvas::setPixel(int X, int Y, RGB222 const & color)
 {
   setPixel(Point(X, Y), color);
 }
 
 
-void Canvas::setPixel(Point const & pos, RGB const & color)
+void Canvas::setPixel(Point const & pos, RGB222 const & color)
 {
   Primitive p;
   p.cmd       = PrimitiveCmd::SetPixelAt;
@@ -186,17 +186,17 @@ void Canvas::moveTo(int X, int Y)
 
 void Canvas::setPenColor(Color color)
 {
-  setPenColor(RGB(color));
+  setPenColor(RGB222(color));
 }
 
 
 void Canvas::setPenColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-  setPenColor(RGB(red, green, blue));
+  setPenColor(RGB222(red, green, blue));
 }
 
 
-void Canvas::setPenColor(RGB const & color)
+void Canvas::setPenColor(RGB222 const & color)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetPenColor;
@@ -207,17 +207,17 @@ void Canvas::setPenColor(RGB const & color)
 
 void Canvas::setBrushColor(Color color)
 {
-  setBrushColor(RGB(color));
+  setBrushColor(RGB222(color));
 }
 
 
 void Canvas::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-  setBrushColor(RGB(red, green, blue));
+  setBrushColor(RGB222(red, green, blue));
 }
 
 
-void Canvas::setBrushColor(RGB const & color)
+void Canvas::setBrushColor(RGB222 const & color)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SetBrushColor;
@@ -568,9 +568,9 @@ void Canvas::fillPath(Point const * points, int pointsCount)
 }
 
 
-RGB Canvas::getPixel(int X, int Y)
+RGB222 Canvas::getPixel(int X, int Y)
 {
-  RGB rgb;
+  RGB222 rgb;
   m_displayController->readScreen(Rect(X, Y, X, Y), &rgb);
   return rgb;
 }

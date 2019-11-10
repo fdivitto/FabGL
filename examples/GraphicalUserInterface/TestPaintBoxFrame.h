@@ -41,18 +41,18 @@ struct TestPaintBoxFrame : public uiFrame {
     // paint occurs even on resize, so we need to make sure it has the right "width" (w)
     paintBox->setScrollBar(uiOrientation::Horizontal, paintBox->HScrollBarPos(), w, count, true);
 
-    cv->setPenColor(RGB(3, 3, 0));
+    cv->setPenColor(Color::BrightYellow);
     cv->selectFont(cv->getPresetFontInfoFromHeight(12, false));
     for (int i = paintBox->HScrollBarPos(), x = 1; i < paintBox->HScrollBarPos() + paintBox->HScrollBarVisible(); ++i, ++x) {
       cv->drawLine(x, midY, x, midY + values[i]);
       if (i % 50 == 0) {
-        cv->setPenColor(RGB(0, 0, 3));
+        cv->setPenColor(Color::BrightBlue);
         cv->drawLine(x, midY - 15, x, midY + 15);
         cv->drawTextFmt(x, h - 25, "%d", i);
-        cv->setPenColor(RGB(3, 3, 0));
+        cv->setPenColor(Color::BrightYellow);
       }
     }
-    cv->setPenColor(RGB(0, 0, 3));
+    cv->setPenColor(Color::BrightBlue);
     cv->drawLine(0, midY, w - 1, midY);
   }
 

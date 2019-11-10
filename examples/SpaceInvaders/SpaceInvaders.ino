@@ -206,10 +206,10 @@ struct GameScene : public Scene {
   bool updateScore_        = true;
   int64_t pauseStart_;
 
-  Bitmap bmpShield[4] = { Bitmap(22, 16, shield_data, 1, RGB(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB(0, 3, 0), true), };
+  Bitmap bmpShield[4] = { Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
+                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
+                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
+                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true), };
 
   GameScene()
     : Scene(SPRITESCOUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())

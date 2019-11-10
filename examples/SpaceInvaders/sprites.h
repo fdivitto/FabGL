@@ -17,8 +17,8 @@ const uint8_t enemy_fire_data[][7] = {
     0b01000000,
     0b10000000 },
 };
-const Bitmap bmpEnemiesFire[2] = { Bitmap(3, 7, &enemy_fire_data[0], 1, RGB(3, 3, 3)),
-                                   Bitmap(3, 7, &enemy_fire_data[1], 1, RGB(3, 3, 3)), };
+const Bitmap bmpEnemiesFire[2] = { Bitmap(3, 7, &enemy_fire_data[0], 1, RGB222(3, 3, 3)),
+                                   Bitmap(3, 7, &enemy_fire_data[1], 1, RGB222(3, 3, 3)), };
 
 
 // player_fire: 1x6
@@ -30,7 +30,7 @@ const uint8_t player_fire_data[][6] = {
   0b10000000,
   0b10000000,
 };
-const Bitmap bmpPlayerFire = Bitmap(1, 6, player_fire_data, 1, RGB(0, 3, 3));
+const Bitmap bmpPlayerFire = Bitmap(1, 6, player_fire_data, 1, RGB222(0, 3, 3));
 
 
 // player_explosion: 2x 16x8
@@ -54,8 +54,8 @@ const uint8_t player_explosion_data[][16] = {
     0b00111111, 0b11001000,
     0b01111111, 0b11101000 },
 };
-const Bitmap bmpPlayerExplosion[2] = { Bitmap(16, 8, &player_explosion_data[0], 1, RGB(0, 3, 3)),
-                                       Bitmap(16, 8, &player_explosion_data[1], 1, RGB(0, 3, 3)), };
+const Bitmap bmpPlayerExplosion[2] = { Bitmap(16, 8, &player_explosion_data[0], 1, RGB222(0, 3, 3)),
+                                       Bitmap(16, 8, &player_explosion_data[1], 1, RGB222(0, 3, 3)), };
 
 
 // player: 14x8
@@ -69,7 +69,7 @@ const uint8_t player_data[] = {
   0b01111111, 0b11111100,
   0b01111111, 0b11111100,
 };
-const Bitmap bmpPlayer = Bitmap(14, 8, player_data, 1, RGB(0, 3, 3));
+const Bitmap bmpPlayer = Bitmap(14, 8, player_data, 1, RGB222(0, 3, 3));
 
 
 // shield: 22x16
@@ -91,8 +91,8 @@ const uint8_t enemy_explosion_data[] = {
   0b00100101, 0b00100000,
   0b01001000, 0b10010000,
 };
-const Bitmap bmpEnemyExplosion = Bitmap(12, 8, enemy_explosion_data, 1, RGB(3, 0, 0));
-const Bitmap bmpEnemyExplosionRed = Bitmap(12, 8, enemy_explosion_data, 1, RGB(3, 0, 0));
+const Bitmap bmpEnemyExplosion = Bitmap(12, 8, enemy_explosion_data, 1, RGB222(3, 0, 0));
+const Bitmap bmpEnemyExplosionRed = Bitmap(12, 8, enemy_explosion_data, 1, RGB222(3, 0, 0));
 
 
 // enemyA: 2x 12x8
@@ -116,8 +116,8 @@ const uint8_t enemyA_data[][16] = {
     0b00100000, 0b01000000,
     0b00010000, 0b10000000, },
 };
-const Bitmap bmpEnemyA[2] = { Bitmap(12, 8, enemyA_data[0], 1, RGB(0, 3, 0)),
-                              Bitmap(12, 8, enemyA_data[1], 1, RGB(0, 3, 0)) };
+const Bitmap bmpEnemyA[2] = { Bitmap(12, 8, enemyA_data[0], 1, RGB222(0, 3, 0)),
+                              Bitmap(12, 8, enemyA_data[1], 1, RGB222(0, 3, 0)) };
 
 
 // enemyB: 2x 12x8
@@ -141,8 +141,8 @@ const uint8_t enemyB_data[][16] = {
     0b01010000, 0b01010000,
     0b00001101, 0b10000000, },
 };
-const Bitmap bmpEnemyB[2] = { Bitmap(12, 8, enemyB_data[0], 1, RGB(3, 3, 0)),
-                              Bitmap(12, 8, enemyB_data[1], 1, RGB(3, 3, 0)) };
+const Bitmap bmpEnemyB[2] = { Bitmap(12, 8, enemyB_data[0], 1, RGB222(3, 3, 0)),
+                              Bitmap(12, 8, enemyB_data[1], 1, RGB222(3, 3, 0)) };
 
 
 // enemyC: 2x 12x8
@@ -166,13 +166,13 @@ const uint8_t enemyC_data[][16] = {
     0b00110110, 0b11000000,
     0b11000000, 0b00110000 },
 };
-const Bitmap bmpEnemyC[2] = { Bitmap(12, 8, enemyC_data[0], 1, RGB(3, 0, 0)),
-                              Bitmap(12, 8, enemyC_data[1], 1, RGB(3, 0, 0)) };
+const Bitmap bmpEnemyC[2] = { Bitmap(12, 8, enemyC_data[0], 1, RGB222(3, 0, 0)),
+                              Bitmap(12, 8, enemyC_data[1], 1, RGB222(3, 0, 0)) };
 
 
 // enemyD: 16x7
 const uint8_t enemyD_data[] = {
   0x07, 0xe0, 0x1f, 0xf8, 0x3f, 0xfc, 0x6d, 0xb6, 0xff, 0xff, 0x39, 0x9c, 0x10, 0x08,
 };
-const Bitmap bmpEnemyD = Bitmap(16, 7, enemyD_data, 1, RGB(3, 3, 3));
+const Bitmap bmpEnemyD = Bitmap(16, 7, enemyD_data, 1, RGB222(3, 3, 3));
 

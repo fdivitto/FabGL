@@ -51,7 +51,6 @@
  *
  * Three fixed width fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts are embedded, even with variable width.
  *
- * Sprites can have up to 64 colors (RGB, 2 bits per channel + transparency).<br>
  * A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.<br>
  * Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.
  *
@@ -262,7 +261,7 @@ using fabgl::Color;
 using fabgl::ScreenBlock;
 using fabgl::GlyphOptions;
 using fabgl::Scene;
-using fabgl::RGB;
+using fabgl::RGB222;
 using fabgl::Bitmap;
 using fabgl::Sprite;
 using fabgl::CollisionDetector;

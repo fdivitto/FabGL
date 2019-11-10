@@ -21,7 +21,7 @@ class MyApp : public uiApp {
   void init() {
 
     // set root window background color to dark green
-    rootWindow()->frameStyle().backgroundColor = RGB(0, 1, 0);
+    rootWindow()->frameStyle().backgroundColor = RGB222(0, 1, 0);
 
     // setup a timer to show updated free memory every 2s
     setTimer(this, 2000);
@@ -29,13 +29,13 @@ class MyApp : public uiApp {
 
     // author label
     authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(376, 324));
-    authorLabel->labelStyle().backgroundColor = RGB(3, 3, 0);
+    authorLabel->labelStyle().backgroundColor = RGB222(3, 3, 0);
     authorLabel->labelStyle().textFont = canvas()->getPresetFontInfoFromHeight(22, false);
     authorLabel->update();
 
     // frame where to put test buttons
     testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(115, 330));
-    testsFrame->frameStyle().backgroundColor = RGB(3, 3, 0);
+    testsFrame->frameStyle().backgroundColor = RGB222(3, 3, 0);
     testsFrame->windowStyle().borderSize     = 0;
 
     // label where to show free memory
@@ -89,12 +89,12 @@ class MyApp : public uiApp {
   void onCreateFrameButtonClick() {
     uiFrame * newFrame = new uiFrame(rootWindow(), "", Point(110 + random(400), random(300)), Size(175, 80));
     newFrame->setTitleFmt("Frame #%d", dynamicFrames.count());
-    newFrame->frameStyle().backgroundColor = RGB(random(4), random(4), random(4));
+    newFrame->frameStyle().backgroundColor = RGB222(random(4), random(4), random(4));
     auto label = new uiLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30), Size(160, 35));
     label->anchors().left = false;
     label->anchors().top = false;
     label->labelStyle().textFont  = canvas()->getPresetFontInfoFromHeight(24, false);
-    label->labelStyle().textColor = RGB(random(4), random(4), random(4));
+    label->labelStyle().textColor = RGB222(random(4), random(4), random(4));
     label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
     dynamicFrames.push(newFrame);
   }

@@ -31,6 +31,16 @@
  */
 
 
+
+#include <stdint.h>
+#include <stddef.h>
+
+#include "fabglconf.h"
+#include "fabutils.h"
+
+
+
+
 namespace fabgl {
 
 
@@ -160,53 +170,85 @@ enum PrimitiveCmd {
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
  */
 enum Color {
-  Black,          /**< Equivalent to R = 0, G = 0, B = 0 */
-  Red,            /**< Equivalent to R = 1, G = 0, B = 0 */
-  Green,          /**< Equivalent to R = 0, G = 1, B = 0 */
-  Yellow,         /**< Equivalent to R = 1, G = 1, B = 0 */
-  Blue,           /**< Equivalent to R = 0, G = 0, B = 1 */
-  Magenta,        /**< Equivalent to R = 1, G = 0, B = 1 */
-  Cyan,           /**< Equivalent to R = 0, G = 1, B = 1 */
-  White,          /**< Equivalent to R = 1, G = 1, B = 1 */
-  BrightBlack,    /**< Equivalent to R = 1, G = 1, B = 1 */
-  BrightRed,      /**< Equivalent to R = 3, G = 0, B = 0 */
-  BrightGreen,    /**< Equivalent to R = 0, G = 3, B = 0 */
-  BrightYellow,   /**< Equivalent to R = 3, G = 3, B = 0 */
-  BrightBlue,     /**< Equivalent to R = 0, G = 0, B = 3 */
-  BrightMagenta,  /**< Equivalent to R = 3, G = 0, B = 3 */
-  BrightCyan,     /**< Equivalent to R = 0, G = 3, B = 3 */
-  BrightWhite,    /**< Equivalent to R = 3, G = 3, B = 3 */
+  Black,          /**< Equivalent to RGB222(0,0,0) */
+  Red,            /**< Equivalent to RGB222(2,0,0) */
+  Green,          /**< Equivalent to RGB222(0,2,0) */
+  Yellow,         /**< Equivalent to RGB222(2,2,0) */
+  Blue,           /**< Equivalent to RGB222(0,0,2) */
+  Magenta,        /**< Equivalent to RGB222(2,0,2) */
+  Cyan,           /**< Equivalent to RGB222(0,2,2) */
+  White,          /**< Equivalent to RGB222(2,2,2) */
+  BrightBlack,    /**< Equivalent to RGB222(1,1,1) */
+  BrightRed,      /**< Equivalent to RGB222(3,0,0) */
+  BrightGreen,    /**< Equivalent to RGB222(0,3,0) */
+  BrightYellow,   /**< Equivalent to RGB222(3,3,0) */
+  BrightBlue,     /**< Equivalent to RGB222(0,0,3) */
+  BrightMagenta,  /**< Equivalent to RGB222(3,0,3) */
+  BrightCyan,     /**< Equivalent to RGB222(0,3,3) */
+  BrightWhite,    /**< Equivalent to RGB222(3,3,3) */
 };
 
 
 
 /**
- * @brief Represents an RGB color.
+ * @brief Represents a 6 bit RGB color.
  *
  * When 1 bit per channel (8 colors) is used then the maximum value (white) is 1 (R = 1, G = 1, B = 1).
  * When 2 bits per channel (64 colors) are used then the maximum value (white) is 3 (R = 3, G = 3, B = 3).
  */
-struct RGB {
-  uint8_t R : 2;  /**< The Red channel */
+struct RGB222 {
+  uint8_t R : 2;  /**< The Red channel   */
   uint8_t G : 2;  /**< The Green channel */
-  uint8_t B : 2;  /**< The Blue channel */
+  uint8_t B : 2;  /**< The Blue channel  */
 
-  RGB() : R(0), G(0), B(0) { }
-  RGB(Color color);
-  RGB(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
+  RGB222() : R(0), G(0), B(0) { }
+  RGB222(Color color);
+  RGB222(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
+
+  static void optimizeFor64Colors();
 };
 
 
-inline bool operator==(RGB const& lhs, RGB const& rhs)
+inline bool operator==(RGB222 const& lhs, RGB222 const& rhs)
 {
   return lhs.R == rhs.R && lhs.G == rhs.G && lhs.B == rhs.B;
 }
 
 
-inline bool operator!=(RGB const& lhs, RGB const& rhs)
+inline bool operator!=(RGB222 const& lhs, RGB222 const& rhs)
 {
   return lhs.R != rhs.R || lhs.G != rhs.G || lhs.B == rhs.B;
 }
+
+
+
+/**
+ * @brief Represents a 24 bit RGB color.
+ *
+ * For each channel minimum value is 0, maximum value is 255.
+ */
+struct RGB888 {
+  uint8_t R;  /**< The Red channel   */
+  uint8_t G;  /**< The Green channel */
+  uint8_t B;  /**< The Blue channel  */
+
+  RGB888() : R(0), G(0), B(0) { }
+  RGB888(Color color);
+  RGB888(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
+};
+
+
+inline bool operator==(RGB888 const& lhs, RGB888 const& rhs)
+{
+  return lhs.R == rhs.R && lhs.G == rhs.G && lhs.B == rhs.B;
+}
+
+
+inline bool operator!=(RGB888 const& lhs, RGB888 const& rhs)
+{
+  return lhs.R != rhs.R || lhs.G != rhs.G || lhs.B == rhs.B;
+}
+
 
 
 
@@ -322,7 +364,7 @@ struct Bitmap {
 
   Bitmap() : width(0), height(0), data(nullptr), dataAllocated(false) { }
   Bitmap(int width_, int height_, void const * data_, bool copy = false);
-  Bitmap(int width_, int height_, void const * data_, int bitsPerPixel, RGB foregroundColor, bool copy = false);
+  Bitmap(int width_, int height_, void const * data_, int bitsPerPixel, RGB222 foregroundColor, bool copy = false);
   ~Bitmap();
 };
 
@@ -440,8 +482,8 @@ struct PaintOptions {
 
 
 struct PixelDesc {
-  Point pos;
-  RGB   color;
+  Point  pos;
+  RGB222 color;
 };
 
 
@@ -449,7 +491,7 @@ struct Primitive {
   PrimitiveCmd cmd;
   union {
     int16_t                ivalue;
-    RGB                    color;
+    RGB222                 color;
     Point                  position;
     Size                   size;
     Glyph                  glyph;
@@ -467,8 +509,8 @@ struct Primitive {
 
 
 struct PaintState {
-  RGB          penColor;
-  RGB          brushColor;
+  RGB222       penColor;
+  RGB222       brushColor;
   Point        position;        // value already traslated to "origin"
   GlyphOptions glyphOptions;
   PaintOptions paintOptions;

@@ -1375,22 +1375,22 @@ int VICNoiseGenerator::getSample()
 // VIC (6561 - Video Interface Chip)
 
 
-static const RGB COLORS[16] = { {0, 0, 0},   // black
-                                {3, 3, 3},   // white
-                                {3, 0, 0},   // red
-                                {0, 2, 2},   // cyan
-                                {2, 0, 2},   // magenta
-                                {0, 2, 0},   // green
-                                {0, 0, 2},   // blue
-                                {2, 2, 0},   // yellow
-                                {2, 1, 0},   // orange
-                                {3, 2, 0},   // light orange
-                                {3, 2, 2},   // pink
-                                {0, 3, 3},   // light cyan
-                                {3, 0, 3},   // light magenta
-                                {0, 3, 0},   // light green
-                                {0, 0, 3},   // light blue
-                                {3, 3, 0} }; // light yellow
+static const RGB222 COLORS[16] = { {0, 0, 0},   // black
+                                   {3, 3, 3},   // white
+                                   {3, 0, 0},   // red
+                                   {0, 2, 2},   // cyan
+                                   {2, 0, 2},   // magenta
+                                   {0, 2, 0},   // green
+                                   {0, 0, 2},   // blue
+                                   {2, 2, 0},   // yellow
+                                   {2, 1, 0},   // orange
+                                   {3, 2, 0},   // light orange
+                                   {3, 2, 2},   // pink
+                                   {0, 3, 3},   // light cyan
+                                   {3, 0, 3},   // light magenta
+                                   {0, 3, 0},   // light green
+                                   {0, 0, 3},   // light blue
+                                   {3, 3, 0} }; // light yellow
 
 static uint8_t RAWCOLORS[16];
 
