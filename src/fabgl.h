@@ -258,7 +258,7 @@
 
 
 using fabgl::Color;
-using fabgl::ScreenBlock;
+using fabgl::VGAScanStart;
 using fabgl::GlyphOptions;
 using fabgl::Scene;
 using fabgl::RGB222;

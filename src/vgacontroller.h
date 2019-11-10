@@ -52,13 +52,13 @@
 namespace fabgl {
 
 
-#define RED_BIT   0
-#define GREEN_BIT 2
-#define BLUE_BIT  4
-#define HSYNC_BIT 6
-#define VSYNC_BIT 7
+#define VGA_RED_BIT   0
+#define VGA_GREEN_BIT 2
+#define VGA_BLUE_BIT  4
+#define VGA_HSYNC_BIT 6
+#define VGA_VSYNC_BIT 7
 
-#define SYNC_MASK ((1 << HSYNC_BIT) | (1 << VSYNC_BIT))
+#define VGA_SYNC_MASK ((1 << VGA_HSYNC_BIT) | (1 << VGA_VSYNC_BIT))
 
 
 // pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 :
@@ -66,17 +66,17 @@ namespace fabgl {
 // byte  : 2  3  0  1  6  7  4  5 10 11  8  9 ...etc...
 // dword : 0           1           2          ...etc...
 // Thanks to https://github.com/paulscottrobson for the new macro. Before was: (row[((X) & 0xFFFC) + ((2 + (X)) & 3)])
-#define PIXELINROW(row, X) (row[(X) ^ 2])
+#define VGA_PIXELINROW(row, X) (row[(X) ^ 2])
 
 // requires variables: m_viewPort
-#define PIXEL(X, Y) PIXELINROW(m_viewPort[(Y)], X)
+#define VGA_PIXEL(X, Y) VGA_PIXELINROW(m_viewPort[(Y)], X)
 
 
 
 /** \ingroup Enumerations
  * @brief Represents one of the four blocks of horizontal or vertical line
  */
-enum ScreenBlock {
+enum VGAScanStart {
   FrontPorch,   /**< Horizontal line sequence is: FRONTPORCH -> SYNC -> BACKPORCH -> VISIBLEAREA */
   Sync,         /**< Horizontal line sequence is: SYNC -> BACKPORCH -> VISIBLEAREA -> FRONTPORCH */
   BackPorch,    /**< Horizontal line sequence is: BACKPORCH -> VISIBLEAREA -> FRONTPORCH -> SYNC */
@@ -85,7 +85,7 @@ enum ScreenBlock {
 
 
 /** @brief Specifies the VGA timings. This is a modeline decoded. */
-struct Timings {
+struct VGATimings {
   char          label[22];       /**< Resolution text description */
   int           frequency;       /**< Pixel frequency (in Hz) */
   int16_t       HVisibleArea;    /**< Horizontal visible area length in pixels */
@@ -100,8 +100,22 @@ struct Timings {
   char          VSyncLogic;      /**< Vertical Sync polarity '+' or '-' */
   uint8_t       scanCount;       /**< Scan count. 1 = single scan, 2 = double scan (allowing low resolutions like 320x240...) */
   uint8_t       multiScanBlack;  /**< 0 = Additional rows are the repetition of the first. 1 = Additional rows are blank. */
-  ScreenBlock   HStartingBlock;  /**< Horizontal starting block. DetermineshHorizontal order of signals */
+  VGAScanStart  HStartingBlock;  /**< Horizontal starting block. DetermineshHorizontal order of signals */
 };
+
+
+struct VGAPaintState {
+  RGB222       penColor;
+  RGB222       brushColor;
+  Point        position;        // value already traslated to "origin"
+  GlyphOptions glyphOptions;
+  PaintOptions paintOptions;
+  Rect         scrollingRegion;
+  Point        origin;
+  Rect         clippingRect;    // relative clipping rectangle
+  Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
+};
+
 
 
 
@@ -241,9 +255,9 @@ public:
    */
   void setResolution(char const * modeline, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
-  void setResolution(Timings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
+  void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
-  Timings * getResolutionTimings() { return &m_timings; }
+  VGATimings * getResolutionTimings() { return &m_timings; }
 
   /**
    * @brief Determines the screen width in pixels.
@@ -533,7 +547,7 @@ public:
    *     // Set color of pixel at 100, 100
    *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
    */
-  void setRawPixel(int x, int y, uint8_t rgb) { PIXEL(x, y) = rgb; }
+  void setRawPixel(int x, int y, uint8_t rgb) { VGA_PIXEL(x, y) = rgb; }
 
   /**
    * @brief Gets a raw scanline pointer.
@@ -620,7 +634,7 @@ private:
   GPIOStream             m_GPIOStream;
 
   int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
-  Timings                m_timings;
+  VGATimings             m_timings;
   int16_t                m_linesCount;
   volatile int16_t       m_maxVSyncISRTime; // Maximum us VSync interrupt routine can run
 
@@ -645,7 +659,7 @@ private:
   uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
 
   volatile QueueHandle_t m_execQueue;
-  PaintState             m_paintState;
+  VGAPaintState          m_paintState;
 
   // when double buffer is enabled the running DMA buffer is always m_DMABuffersRunning
   // when double buffer is not enabled then m_DMABuffers = m_DMABuffersRunning

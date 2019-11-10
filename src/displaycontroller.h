@@ -279,7 +279,7 @@ union GlyphOptions {
     uint16_t bold             : 1;  /**< If enabled produces a bold-like style. */
     uint16_t reduceLuminosity : 1;  /**< If enabled reduces luminosity. To implement characters faint. */
     uint16_t italic           : 1;  /**< If enabled skews the glyph on the right. To implement characters italic. */
-    uint16_t invert           : 1;  /**< If enabled swaps foreground and background colors. To implement characters inverse (XORed with PaintState.paintOptions.swapFGBG) */
+    uint16_t invert           : 1;  /**< If enabled swaps foreground and background colors. To implement characters inverse (XORed with PaintOptions.swapFGBG) */
     uint16_t blank            : 1;  /**< If enabled the glyph is filled with the background color. To implement characters invisible or blink. */
     uint16_t underline        : 1;  /**< If enabled the glyph is underlined. To implement characters underline. */
     uint16_t doubleWidth      : 2;  /**< If enabled the glyph is doubled. To implement characters double width. 0 = normal, 1 = double width, 2 = double width - double height top, 3 = double width - double height bottom. */
@@ -508,17 +508,6 @@ struct Primitive {
 };
 
 
-struct PaintState {
-  RGB222       penColor;
-  RGB222       brushColor;
-  Point        position;        // value already traslated to "origin"
-  GlyphOptions glyphOptions;
-  PaintOptions paintOptions;
-  Rect         scrollingRegion;
-  Point        origin;
-  Rect         clippingRect;    // relative clipping rectangle
-  Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
-};
 
 
 

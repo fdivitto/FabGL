@@ -110,9 +110,9 @@ void printInfo()
                 t->VVisibleArea + t->VFrontPorch + t->VSyncPulse + t->VBackPorch,
                 t->HSyncLogic, t->VSyncLogic,
                 t->scanCount == 2 ? "DoubleScan" : "",
-                t->HStartingBlock == ScreenBlock::FrontPorch ? "FrontPorchBegins" :
-                (t->HStartingBlock == ScreenBlock::Sync ? "SyncBegins" :
-                (t->HStartingBlock == ScreenBlock::BackPorch ? "BackPorchBegins" : "VisibleBegins")));
+                t->HStartingBlock == VGAScanStart::FrontPorch ? "FrontPorchBegins" :
+                (t->HStartingBlock == VGAScanStart::Sync ? "SyncBegins" :
+                (t->HStartingBlock == VGAScanStart::BackPorch ? "BackPorchBegins" : "VisibleBegins")));
 
   //Serial.printf("VFront = %d, VSync = %d, VBack = %d\n", t->VFrontPorch, t->VSyncPulse, t->VBackPorch);
 
@@ -175,7 +175,7 @@ void setup()
 
 void loop()
 {
-  fabgl::Timings t;
+  fabgl::VGATimings t;
 
   if (Serial.available() > 0) {
     char c = Serial.read();
@@ -288,17 +288,17 @@ void loop()
       case '.':
         t = *VGAController.getResolutionTimings();
         switch (t.HStartingBlock) {
-          case ScreenBlock::FrontPorch:
-            t.HStartingBlock = ScreenBlock::Sync;
+          case VGAScanStart::FrontPorch:
+            t.HStartingBlock = VGAScanStart::Sync;
             break;
-          case ScreenBlock::Sync:
-            t.HStartingBlock = ScreenBlock::BackPorch;
+          case VGAScanStart::Sync:
+            t.HStartingBlock = VGAScanStart::BackPorch;
             break;
-          case ScreenBlock::BackPorch:
-            t.HStartingBlock = ScreenBlock::VisibleArea;
+          case VGAScanStart::BackPorch:
+            t.HStartingBlock = VGAScanStart::VisibleArea;
             break;
-          case ScreenBlock::VisibleArea:
-            t.HStartingBlock = ScreenBlock::FrontPorch;
+          case VGAScanStart::VisibleArea:
+            t.HStartingBlock = VGAScanStart::FrontPorch;
             break;
         }
         VGAController.setResolution(t);
