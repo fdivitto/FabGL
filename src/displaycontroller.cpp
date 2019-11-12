@@ -274,13 +274,13 @@ void Bitmap::setPixel(int x, int y, int value)
 
 void Bitmap::setPixel(int x, int y, ABGR2222 value)
 {
-  ((ABGR2222*)data)[y * height + x] = value;
+  ((RGBA2222*)data)[y * width + x] = value;
 }
 
 
 void Bitmap::setPixel(int x, int y, RGBA8888 value)
 {
-  ((RGBA8888*)data)[y * height + x] = value;
+  ((RGBA8888*)data)[y * width + x] = value;
 }
 
 
