@@ -282,7 +282,7 @@ bool QuadTree::checkMaskCollision(QuadTreeObject * objectA, QuadTreeObject * obj
   // look for matching non trasparent pixels inside the intersection area
   Bitmap * bitmapA = objectA->sprite->getFrame();
   Bitmap * bitmapB = objectB->sprite->getFrame();
-  if (bitmapA->format == PixelFormat::ABGR2222 && bitmapB->format == PixelFormat::ABGR2222) {
+  if (bitmapA->format == PixelFormat::RGBA2222 && bitmapB->format == PixelFormat::RGBA2222) {
     // bitmaps have same pixel format, quick compare
     for (int y = y1; y <= y2; ++y) {
       uint8_t const * rowA = bitmapA->data + bitmapA->width * (y - objectA->sprite->y);

@@ -309,7 +309,9 @@ using fabgl::ModalWindowState;
 using fabgl::Canvas;
 using fabgl::PixelFormat;
 using fabgl::RGB222;
+using fabgl::RGBA2222;
 using fabgl::RGB888;
+using fabgl::RGBA8888;
 
 
 

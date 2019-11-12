@@ -232,7 +232,7 @@ void Bitmap::allocate()
     case PixelFormat::Mask:
       data = (uint8_t*) malloc((width + 7) * height / 8);
       break;
-    case PixelFormat::ABGR2222:
+    case PixelFormat::RGBA2222:
       data = (uint8_t*) malloc(width * height);
       break;
     case PixelFormat::RGBA8888:
@@ -251,7 +251,7 @@ void Bitmap::copyFrom(void const * srcData)
     case PixelFormat::Mask:
       memcpy(data, srcData, (width + 7) * height / 8);
       break;
-    case PixelFormat::ABGR2222:
+    case PixelFormat::RGBA2222:
       memcpy(data, srcData, width * height);
       break;
     case PixelFormat::RGBA8888:
@@ -272,7 +272,7 @@ void Bitmap::setPixel(int x, int y, int value)
 }
 
 
-void Bitmap::setPixel(int x, int y, ABGR2222 value)
+void Bitmap::setPixel(int x, int y, RGBA2222 value)
 {
   ((RGBA2222*)data)[y * width + x] = value;
 }
@@ -297,8 +297,8 @@ int Bitmap::getAlpha(int x, int y)
       r = (rowptr[x >> 3] >> (7 - (x & 7))) & 1;
       break;
     }
-    case PixelFormat::ABGR2222:
-      r = ((ABGR2222*)data)[y * height + x].A;
+    case PixelFormat::RGBA2222:
+      r = ((RGBA2222*)data)[y * height + x].A;
       break;
     case PixelFormat::RGBA8888:
       r = ((RGBA8888*)data)[y * height + x].A;

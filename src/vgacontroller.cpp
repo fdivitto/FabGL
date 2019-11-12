@@ -1975,7 +1975,7 @@ void IRAM_ATTR VGAController::drawBitmap_Mask(int destX, int destY, Bitmap const
 }
 
 
-void IRAM_ATTR VGAController::drawBitmap_ABGR2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void IRAM_ATTR VGAController::drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int     width  = bitmap->width;
   const uint8_t HVSync = packHVSync();
@@ -2112,8 +2112,8 @@ void IRAM_ATTR VGAController::drawBitmap(int destX, int destY, Bitmap const * bi
       drawBitmap_Mask(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
       break;
 
-    case PixelFormat::ABGR2222:
-      drawBitmap_ABGR2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+    case PixelFormat::RGBA2222:
+      drawBitmap_RGBA2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
       break;
 
     case PixelFormat::RGBA8888:
@@ -2145,7 +2145,7 @@ void IRAM_ATTR VGAController::hideSprites()
       for (int i = 0; i < m_spritesCount; ++i, spritePtr -= m_spriteSize) {
         Sprite * sprite = (Sprite*) spritePtr;
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
-          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, PixelFormat::ABGR2222);
+          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, PixelFormat::RGBA2222);
           drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
         }
@@ -2154,7 +2154,7 @@ void IRAM_ATTR VGAController::hideSprites()
 
     // mouse cursor sprite
     if (m_mouseCursor.savedBackgroundWidth > 0) {
-      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground, PixelFormat::ABGR2222);
+      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground, PixelFormat::RGBA2222);
       drawBitmap(m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap, nullptr, true);
       m_mouseCursor.savedBackgroundWidth = m_mouseCursor.savedBackgroundHeight = 0;
     }

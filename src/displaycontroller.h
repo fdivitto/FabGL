@@ -229,6 +229,8 @@ struct RGBA8888 {
   uint8_t G;  /**< The Green channel */
   uint8_t B;  /**< The Blue channel  */
   uint8_t A;  /**< The Alpha channel */
+
+  RGBA8888(int red, int green, int blue, int alpha) : R(red), G(green), B(blue), A(alpha) { }
 };
 
 
@@ -271,11 +273,13 @@ inline bool operator!=(RGB222 const& lhs, RGB222 const& rhs)
  *
  * For each channel minimum value is 0, maximum value is 3.
  */
-struct ABGR2222 {
-  uint8_t A : 2;  /**< The Alpha channel  */
-  uint8_t B : 2;  /**< The Blue channel  */
+struct RGBA2222 {
+  uint8_t R : 2;  /**< The Red channel (LSB) */
   uint8_t G : 2;  /**< The Green channel */
-  uint8_t R : 2;  /**< The Red channel   */
+  uint8_t B : 2;  /**< The Blue channel  */
+  uint8_t A : 2;  /**< The Alpha channel (MSB) */
+
+  RGBA2222(int red, int green, int blue, int alpha) : R(red), G(green), B(blue), A(alpha) { }
 };
 
 
@@ -379,7 +383,7 @@ struct GlyphsBufferRenderInfo {
 enum class PixelFormat : uint8_t {
   Undefined,  /**< Undefined pixel format */
   Mask,       /**< 1 bit per pixel. 0 = transparent, 1 = opaque (color must be specified apart) */
-  ABGR2222,   /**< 8 bit per pixel: AABBGGRR (7=A 6=A 5=B 4=B 3=G 2=G 1=R 0=R). AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). */
+  RGBA2222,   /**< 8 bit per pixel: AABBGGRR (bit 7=A 6=A 5=B 4=B 3=G 2=G 1=R 0=R). AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). */
   RGBA8888    /**< 32 bits per pixel: RGBA (R=byte 0, G=byte1, B=byte2, A=byte3). Minimum value for each channel is 0, maximum is 255. */
 };
 
@@ -401,7 +405,7 @@ struct Bitmap {
   ~Bitmap();
 
   void setPixel(int x, int y, int value);       // use with PixelFormat::Mask. value can be 0 or not 0
-  void setPixel(int x, int y, ABGR2222 value);  // use with PixelFormat::ABGR2222
+  void setPixel(int x, int y, RGBA2222 value);  // use with PixelFormat::RGBA2222
   void setPixel(int x, int y, RGBA8888 value);  // use with PixelFormat::RGBA8888
 
   int getAlpha(int x, int y);

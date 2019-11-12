@@ -24,7 +24,7 @@ from PIL import Image
 transpColorPos = None
 newSize = None
 dithering = False
-format = 0  # ABGR2222
+format = 0  # RGBA2222
 
 if len(sys.argv) < 2:
   print "Converts an image (png, jpeg, ....) to FabGL Bitmap structure"
@@ -33,7 +33,7 @@ if len(sys.argv) < 2:
   print "  -t  = pixel where to take transparent color"
   print "  -s  = resize to specified values\n"
   print "  -d  = enable dithering\n"
-  print "  -f0 = format is ABGR2222 (default)\n"
+  print "  -f0 = format is RGBA2222 (default)\n"
   print "  -f1 = format is RGBA8888\n"
   print "Example:"
   print "  python img2bitmap.py input.png -s 64 64 >out.c"
@@ -101,7 +101,7 @@ pix = im.load()
 print "const uint8_t {}_data[] = {{".format(name)
 
 if format == 0:
-  formatstr = "PixelFormat::ABGR2222"
+  formatstr = "PixelFormat::RGBA2222"
   for y in range(0, im.height):
     print "\t",
     for x in range(0, im.width):
