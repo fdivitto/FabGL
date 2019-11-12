@@ -2035,7 +2035,7 @@ void IRAM_ATTR VGAController::drawBitmap_RGBA8888(int destX, int destY, Bitmap c
         if (src->A) {
           uint8_t * dstPx = &VGA_PIXELINROW(dstrow, adestX);
           *savePx = *dstPx;
-          *dstPx = HVSync | (src->R >> 6 << 4) | (src->G >> 6 << 2) | (src->B >> 6);
+          *dstPx = HVSync | (src->R >> 6) | (src->G >> 6 << 2) | (src->B >> 6 << 4);
         } else {
           *savePx = 0;
         }
@@ -2051,7 +2051,7 @@ void IRAM_ATTR VGAController::drawBitmap_RGBA8888(int destX, int destY, Bitmap c
       RGBA8888 const * src = data + y * width + X1;
       for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
         if (src->A)
-          VGA_PIXELINROW(dstrow, adestX) = HVSync | (src->R >> 6 << 4) | (src->G >> 6 << 2) | (src->B >> 6);
+          VGA_PIXELINROW(dstrow, adestX) = HVSync | (src->R >> 6) | (src->G >> 6 << 2) | (src->B >> 6 << 4);
       }
     }
 
