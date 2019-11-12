@@ -206,10 +206,10 @@ struct GameScene : public Scene {
   bool updateScore_        = true;
   int64_t pauseStart_;
 
-  Bitmap bmpShield[4] = { Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true),
-                          Bitmap(22, 16, shield_data, 1, RGB222(0, 3, 0), true), };
+  Bitmap bmpShield[4] = { Bitmap(22, 16, shield_data, PixelFormat::Mask, RGB888(0, 255, 0), true),
+                          Bitmap(22, 16, shield_data, PixelFormat::Mask, RGB888(0, 255, 0), true),
+                          Bitmap(22, 16, shield_data, PixelFormat::Mask, RGB888(0, 255, 0), true),
+                          Bitmap(22, 16, shield_data, PixelFormat::Mask, RGB888(0, 255, 0), true), };
 
   GameScene()
     : Scene(SPRITESCOUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
@@ -533,13 +533,14 @@ struct GameScene : public Scene {
 
   void damageShield(SISprite * shield, Point collisionPoint)
   {
-    uint8_t * data = (uint8_t*) shield->getFrame()->data;
+    Bitmap * shieldBitmap = shield->getFrame();
     int x = collisionPoint.X - shield->x;
     int y = collisionPoint.Y - shield->y;
-    for (int i = 0; i < 64; ++i) {
+    shieldBitmap->setPixel(x, y, 0);
+    for (int i = 0; i < 32; ++i) {
       int px = iclamp(x + random(-4, 5), 0, shield->getWidth() - 1);
       int py = iclamp(y + random(-4, 5), 0, shield->getHeight() - 1);
-      *(data + px + shield->getWidth() * py) = 0;
+      shieldBitmap->setPixel(px, py, 0);
     }
   }
 
