@@ -191,38 +191,6 @@ enum Color {
 
 
 /**
- * @brief Represents a 6 bit RGB color.
- *
- * When 1 bit per channel (8 colors) is used then the maximum value (white) is 1 (R = 1, G = 1, B = 1).
- * When 2 bits per channel (64 colors) are used then the maximum value (white) is 3 (R = 3, G = 3, B = 3).
- */
-struct RGB222 {
-  uint8_t R : 2;  /**< The Red channel   */
-  uint8_t G : 2;  /**< The Green channel */
-  uint8_t B : 2;  /**< The Blue channel  */
-
-  RGB222() : R(0), G(0), B(0) { }
-  RGB222(Color color);
-  RGB222(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
-
-  static void optimizeFor64Colors();
-};
-
-
-inline bool operator==(RGB222 const& lhs, RGB222 const& rhs)
-{
-  return lhs.R == rhs.R && lhs.G == rhs.G && lhs.B == rhs.B;
-}
-
-
-inline bool operator!=(RGB222 const& lhs, RGB222 const& rhs)
-{
-  return lhs.R != rhs.R || lhs.G != rhs.G || lhs.B == rhs.B;
-}
-
-
-
-/**
  * @brief Represents a 24 bit RGB color.
  *
  * For each channel minimum value is 0, maximum value is 255.
@@ -250,6 +218,65 @@ inline bool operator!=(RGB888 const& lhs, RGB888 const& rhs)
 }
 
 
+
+/**
+ * @brief Represents a 32 bit RGBA color.
+ *
+ * For each channel minimum value is 0, maximum value is 255.
+ */
+struct RGBA8888 {
+  uint8_t R;  /**< The Red channel   */
+  uint8_t G;  /**< The Green channel */
+  uint8_t B;  /**< The Blue channel  */
+  uint8_t A;  /**< The Alpha channel */
+};
+
+
+
+/**
+ * @brief Represents a 6 bit RGB color.
+ *
+ * When 1 bit per channel (8 colors) is used then the maximum value (white) is 1 (R = 1, G = 1, B = 1).
+ * When 2 bits per channel (64 colors) are used then the maximum value (white) is 3 (R = 3, G = 3, B = 3).
+ */
+struct RGB222 {
+  uint8_t R : 2;  /**< The Red channel   */
+  uint8_t G : 2;  /**< The Green channel */
+  uint8_t B : 2;  /**< The Blue channel  */
+
+  RGB222() : R(0), G(0), B(0) { }
+  RGB222(Color color);
+  RGB222(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
+  RGB222(RGB888 const & value);
+
+  static void optimizeFor64Colors();
+  uint8_t pack() { return R | (G << 2) | (B << 4); }
+};
+
+
+inline bool operator==(RGB222 const& lhs, RGB222 const& rhs)
+{
+  return lhs.R == rhs.R && lhs.G == rhs.G && lhs.B == rhs.B;
+}
+
+
+inline bool operator!=(RGB222 const& lhs, RGB222 const& rhs)
+{
+  return lhs.R != rhs.R || lhs.G != rhs.G || lhs.B == rhs.B;
+}
+
+
+/**
+ * @brief Represents an 8 bit ABGR color
+ *
+ * For each channel minimum value is 0, maximum value is 3.
+ */
+struct ABGR2222 {
+  uint8_t A : 2;  /**< The Alpha channel  */
+  uint8_t B : 2;  /**< The Blue channel  */
+  uint8_t G : 2;  /**< The Green channel */
+  uint8_t R : 2;  /**< The Red channel   */
+};
 
 
 /**
@@ -345,27 +372,43 @@ struct GlyphsBufferRenderInfo {
 };
 
 
+
+/** \ingroup Enumerations
+ * @brief This enum defines a pixel format
+ */
+enum class PixelFormat : uint8_t {
+  Undefined,  /**< Undefined pixel format */
+  Mask,       /**< 1 bit per pixel. 0 = transparent, 1 = opaque (color must be specified apart) */
+  ABGR2222,   /**< 8 bit per pixel: AABBGGRR (7=A 6=A 5=B 4=B 3=G 2=G 1=R 0=R). AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). */
+  RGBA8888    /**< 32 bits per pixel: RGBA (R=byte 0, G=byte1, B=byte2, A=byte3). Minimum value for each channel is 0, maximum is 255. */
+};
+
+
 /**
- * @brief Represents an image with 64 colors image and transparency.
- *
- * Each pixel uses 8 bits (one byte), 2 bits per channel - RGBA, with following disposition:
- *
- * 7 6 5 4 3 2 1 0
- * A A B B G G R R
- *
- * AA = 0 fully transparent, AA = 3 fully opaque.
- * Each color channel can have values from 0 to 3 (maxmum intensity).
+ * @brief Represents an image
  */
 struct Bitmap {
-  int16_t         width;          /**< Bitmap horizontal size */
-  int16_t         height;         /**< Bitmap vertical size */
-  uint8_t const * data;           /**< Bitmap binary data */
-  bool            dataAllocated;  /**< If true data is released when bitmap is destroyed */
+  int16_t         width;           /**< Bitmap horizontal size */
+  int16_t         height;          /**< Bitmap vertical size */
+  PixelFormat     format;          /**< Bitmap pixel format */
+  RGB888          foregroundColor; /**< Foreground color when format is PixelFormat::Mask */
+  uint8_t *       data;            /**< Bitmap binary data */
+  bool            dataAllocated;   /**< If true data is released when bitmap is destroyed */
 
-  Bitmap() : width(0), height(0), data(nullptr), dataAllocated(false) { }
-  Bitmap(int width_, int height_, void const * data_, bool copy = false);
-  Bitmap(int width_, int height_, void const * data_, int bitsPerPixel, RGB222 foregroundColor, bool copy = false);
+  Bitmap() : width(0), height(0), format(PixelFormat::Undefined), foregroundColor(RGB888(255, 255, 255)), data(nullptr), dataAllocated(false) { }
+  Bitmap(int width_, int height_, void const * data_, PixelFormat format_, bool copy = false);
+  Bitmap(int width_, int height_, void const * data_, PixelFormat format_, RGB888 foregroundColor_, bool copy = false);
   ~Bitmap();
+
+  void setPixel(int x, int y, int value);       // use with PixelFormat::Mask. value can be 0 or not 0
+  void setPixel(int x, int y, ABGR2222 value);  // use with PixelFormat::ABGR2222
+  void setPixel(int x, int y, RGBA8888 value);  // use with PixelFormat::RGBA8888
+
+  int getAlpha(int x, int y);
+
+private:
+  void allocate();
+  void copyFrom(void const * srcData);
 };
 
 
@@ -428,7 +471,7 @@ struct QuadTreeObject;
 struct Sprite {
   volatile int16_t   x;
   volatile int16_t   y;
-  Bitmap const * *   frames;  // array of pointer to Bitmap
+  Bitmap * *         frames;  // array of pointer to Bitmap
   int16_t            framesCount;
   int16_t            currentFrame;
   int16_t            savedX;
@@ -448,12 +491,12 @@ struct Sprite {
 
   Sprite();
   ~Sprite();
-  Bitmap const * getFrame() { return frames ? frames[currentFrame] : nullptr; }
+  Bitmap * getFrame() { return frames ? frames[currentFrame] : nullptr; }
   int getFrameIndex() { return currentFrame; }
   void nextFrame() { ++currentFrame; if (currentFrame >= framesCount) currentFrame = 0; }
   Sprite * setFrame(int frame) { currentFrame = frame; return this; }
-  Sprite * addBitmap(Bitmap const * bitmap);
-  Sprite * addBitmap(Bitmap const * bitmap[], int count);
+  Sprite * addBitmap(Bitmap * bitmap);
+  Sprite * addBitmap(Bitmap * bitmap[], int count);
   void clearBitmaps();
   int getWidth()  { return frames[currentFrame]->width; }
   int getHeight() { return frames[currentFrame]->height; }

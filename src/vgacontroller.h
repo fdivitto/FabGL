@@ -442,7 +442,7 @@ public:
    *
    * @param cursor Cursor to use when mouse pointer need to be painted. nullptr = disable mouse pointer.
    */
-  void setMouseCursor(Cursor const * cursor);
+  void setMouseCursor(Cursor * cursor);
 
   /**
    * @brief Sets mouse cursor from a set of predefined cursors.
@@ -606,6 +606,9 @@ private:
   void updateAbsoluteClippingRect();
 
   void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
+  void drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
+  void drawBitmap_ABGR2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
+  void drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
 
   void fillRow(int y, int x1, int x2, uint8_t pattern);
   void swapRows(int yA, int yB, int x1, int x2);

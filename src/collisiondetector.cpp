@@ -280,15 +280,32 @@ bool QuadTree::checkMaskCollision(QuadTreeObject * objectA, QuadTreeObject * obj
   int y2 = tmin(objectA->sprite->y + objectA->sprite->getHeight() - 1, objectB->sprite->y + objectB->sprite->getHeight() - 1);
 
   // look for matching non trasparent pixels inside the intersection area
-  for (int y = y1; y <= y2; ++y) {
-    uint8_t const * rowA = objectA->sprite->getFrame()->data + objectA->sprite->getWidth() * (y - objectA->sprite->y);
-    uint8_t const * rowB = objectB->sprite->getFrame()->data + objectB->sprite->getWidth() * (y - objectB->sprite->y);
-    for (int x = x1; x <= x2; ++x) {
-      int alphaA = rowA[x - objectA->sprite->x] >> 6;
-      int alphaB = rowB[x - objectB->sprite->x] >> 6;
-      if (alphaA && alphaB) {
-        *collisionPoint = (Point){(int16_t)x, (int16_t)y};
-        return true;  // collision
+  Bitmap * bitmapA = objectA->sprite->getFrame();
+  Bitmap * bitmapB = objectB->sprite->getFrame();
+  if (bitmapA->format == PixelFormat::ABGR2222 && bitmapB->format == PixelFormat::ABGR2222) {
+    // bitmaps have same pixel format, quick compare
+    for (int y = y1; y <= y2; ++y) {
+      uint8_t const * rowA = bitmapA->data + bitmapA->width * (y - objectA->sprite->y);
+      uint8_t const * rowB = bitmapB->data + bitmapB->width * (y - objectB->sprite->y);
+      for (int x = x1; x <= x2; ++x) {
+        int alphaA = rowA[x - objectA->sprite->x] >> 6;
+        int alphaB = rowB[x - objectB->sprite->x] >> 6;
+        if (alphaA && alphaB) {
+          *collisionPoint = (Point){(int16_t)x, (int16_t)y};
+          return true;  // collision
+        }
+      }
+    }
+  } else {
+    // different pixel formats, slow compare
+    for (int y = y1; y <= y2; ++y) {
+      for (int x = x1; x <= x2; ++x) {
+        int alphaA = bitmapA->getAlpha(x - objectA->sprite->x, y - objectA->sprite->y);
+        int alphaB = bitmapB->getAlpha(x - objectB->sprite->x, y - objectB->sprite->y);
+        if (alphaA && alphaB) {
+          *collisionPoint = (Point){(int16_t)x, (int16_t)y};
+          return true;  // collision
+        }
       }
     }
   }

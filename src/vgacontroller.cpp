@@ -1930,6 +1930,135 @@ void IRAM_ATTR VGAController::execDrawBitmap(BitmapDrawingInfo const & bitmapDra
 }
 
 
+void IRAM_ATTR VGAController::drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+{
+  const int     width  = bitmap->width;
+  const uint8_t HVSync = packHVSync();
+
+  if (saveBackground) {
+
+    // save background and draw the bitmap
+    uint8_t foregroundColor = RGB222(bitmap->foregroundColor).pack();
+    uint8_t const * data = bitmap->data;
+    int rowlen = (bitmap->width + 7) / 8;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      uint8_t * savePx = saveBackground + y * width + X1;
+      uint8_t const * src = data + y * rowlen;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx) {
+        if ((src[x >> 3] << (x & 7)) & 0x80) {
+          uint8_t * dstPx = &VGA_PIXELINROW(dstrow, adestX);
+          *savePx = *dstPx;
+          *dstPx = HVSync | foregroundColor;
+        } else {
+          *savePx = 0;
+        }
+      }
+    }
+
+  } else {
+
+    // just draw the bitmap
+    uint8_t foregroundColor = RGB222(bitmap->foregroundColor).pack();
+    uint8_t const * data = bitmap->data;
+    int rowlen = (bitmap->width + 7) / 8;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      uint8_t const * src = data + y * rowlen;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX) {
+        if ((src[x >> 3] << (x & 7)) & 0x80)
+          VGA_PIXELINROW(dstrow, adestX) = HVSync | foregroundColor;
+      }
+    }
+
+  }
+}
+
+
+void IRAM_ATTR VGAController::drawBitmap_ABGR2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+{
+  const int     width  = bitmap->width;
+  const uint8_t HVSync = packHVSync();
+
+  if (saveBackground) {
+
+    // save background and draw the bitmap
+    uint8_t const * data = bitmap->data;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      uint8_t * savePx = saveBackground + y * width + X1;
+      uint8_t const * src = data + y * width + X1;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
+        int alpha = *src >> 6;  // TODO?, alpha blending
+        if (alpha) {
+          uint8_t * dstPx = &VGA_PIXELINROW(dstrow, adestX);
+          *savePx = *dstPx;
+          *dstPx = HVSync | *src;
+        } else {
+          *savePx = 0;
+        }
+      }
+    }
+
+  } else {
+
+    // just draw the bitmap
+    uint8_t const * data = bitmap->data;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      uint8_t const * src = data + y * width + X1;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
+        int alpha = *src >> 6;  // TODO?, alpha blending
+        if (alpha)
+          VGA_PIXELINROW(dstrow, adestX) = HVSync | *src;
+      }
+    }
+
+  }
+}
+
+
+void IRAM_ATTR VGAController::drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+{
+  const int     width  = bitmap->width;
+  const uint8_t HVSync = packHVSync();
+
+  if (saveBackground) {
+
+    // save background and draw the bitmap
+    RGBA8888 const * data = (RGBA8888 const *) bitmap->data;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      uint8_t * savePx = saveBackground + y * width + X1;
+      RGBA8888 const * src = data + y * width + X1;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
+        if (src->A) {
+          uint8_t * dstPx = &VGA_PIXELINROW(dstrow, adestX);
+          *savePx = *dstPx;
+          *dstPx = HVSync | (src->R >> 6 << 4) | (src->G >> 6 << 2) | (src->B >> 6);
+        } else {
+          *savePx = 0;
+        }
+      }
+    }
+
+  } else {
+
+    // just draw the bitmap
+    RGBA8888 const * data = (RGBA8888 const *) bitmap->data;
+    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
+      RGBA8888 const * src = data + y * width + X1;
+      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
+        if (src->A)
+          VGA_PIXELINROW(dstrow, adestX) = HVSync | (src->R >> 6 << 4) | (src->G >> 6 << 2) | (src->B >> 6);
+      }
+    }
+
+  }
+}
+
+
 void IRAM_ATTR VGAController::drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect)
 {
   const int clipX1 = ignoreClippingRect ? 0 : m_paintState.absClippingRect.X1;
@@ -1973,45 +2102,26 @@ void IRAM_ATTR VGAController::drawBitmap(int destX, int destY, Bitmap const * bi
   if (Y1 + YCount > height)
     YCount = height - Y1;
 
-  const uint8_t HVSync = packHVSync();
 
-  if (saveBackground) {
+  switch (bitmap->format) {
 
-    // save background and draw the bitmap
-    uint8_t const * data = bitmap->data;
-    for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-      uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
-      uint8_t * savePx = saveBackground + y * width + X1;
-      uint8_t const * src = data + y * width + X1;
-      for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
-        int alpha = *src >> 6;  // TODO?, alpha blending
-        if (alpha) {
-          uint8_t * dstPx = &VGA_PIXELINROW(dstrow, adestX);
-          *savePx = *dstPx;
-          *dstPx = HVSync | *src;
-        } else {
-          *savePx = 0;
-        }
-      }
-    }
+    case PixelFormat::Undefined:
+      break;
 
-  } else {
+    case PixelFormat::Mask:
+      drawBitmap_Mask(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      break;
 
-    // draw just the bitmap
-    if (bitmap) {
-      uint8_t const * data = bitmap->data;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        uint8_t * dstrow = (uint8_t*) m_viewPort[adestY];
-        uint8_t const * src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
-          int alpha = *src >> 6;  // TODO?, alpha blending
-          if (alpha)
-            VGA_PIXELINROW(dstrow, adestX) = HVSync | *src;
-        }
-      }
-    }
+    case PixelFormat::ABGR2222:
+      drawBitmap_ABGR2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      break;
+
+    case PixelFormat::RGBA8888:
+      drawBitmap_RGBA8888(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      break;
 
   }
+
 }
 
 
@@ -2035,7 +2145,7 @@ void IRAM_ATTR VGAController::hideSprites()
       for (int i = 0; i < m_spritesCount; ++i, spritePtr -= m_spriteSize) {
         Sprite * sprite = (Sprite*) spritePtr;
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
-          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground);
+          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, PixelFormat::ABGR2222);
           drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
         }
@@ -2044,7 +2154,7 @@ void IRAM_ATTR VGAController::hideSprites()
 
     // mouse cursor sprite
     if (m_mouseCursor.savedBackgroundWidth > 0) {
-      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground);
+      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground, PixelFormat::ABGR2222);
       drawBitmap(m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap, nullptr, true);
       m_mouseCursor.savedBackgroundWidth = m_mouseCursor.savedBackgroundHeight = 0;
     }
@@ -2194,7 +2304,7 @@ void IRAM_ATTR VGAController::execFillPath(Path const & path)
 
 
 // cursor = nullptr -> disable mouse
-void VGAController::setMouseCursor(Cursor const * cursor)
+void VGAController::setMouseCursor(Cursor * cursor)
 {
   if (cursor == nullptr || &cursor->bitmap != m_mouseCursor.getFrame()) {
     m_mouseCursor.visible = false;

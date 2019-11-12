@@ -307,6 +307,9 @@ using fabgl::uiFileBrowser;
 using fabgl::FileBrowser;
 using fabgl::ModalWindowState;
 using fabgl::Canvas;
+using fabgl::PixelFormat;
+using fabgl::RGB222;
+using fabgl::RGB888;
 
 
 

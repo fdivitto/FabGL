@@ -79,6 +79,18 @@ void RGB222::optimizeFor64Colors()
 }
 
 
+//   0 ..  63 => 0
+//  64 .. 127 => 1
+// 128 .. 191 => 2
+// 192 .. 255 => 3
+RGB222::RGB222(RGB888 const & value)
+{
+  R = value.R >> 6;
+  G = value.G >> 6;
+  B = value.B >> 6;
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,18 +140,18 @@ void Sprite::clearBitmaps()
 }
 
 
-Sprite * Sprite::addBitmap(Bitmap const * bitmap)
+Sprite * Sprite::addBitmap(Bitmap * bitmap)
 {
   ++framesCount;
-  frames = (Bitmap const **) realloc(frames, sizeof(Bitmap*) * framesCount);
+  frames = (Bitmap**) realloc(frames, sizeof(Bitmap*) * framesCount);
   frames[framesCount - 1] = bitmap;
   return this;
 }
 
 
-Sprite * Sprite::addBitmap(Bitmap const * bitmap[], int count)
+Sprite * Sprite::addBitmap(Bitmap * bitmap[], int count)
 {
-  frames = (Bitmap const **) realloc(frames, sizeof(Bitmap*) * (framesCount + count));
+  frames = (Bitmap**) realloc(frames, sizeof(Bitmap*) * (framesCount + count));
   for (int i = 0; i < count; ++i)
     frames[framesCount + i] = bitmap[i];
   framesCount += count;
@@ -186,66 +198,120 @@ Sprite * Sprite::moveTo(int x, int y)
 
 
 
-Bitmap::Bitmap(int width_, int height_, void const * data_, bool copy)
-  : width(width_), height(height_), data((uint8_t const*)data_), dataAllocated(false)
+Bitmap::Bitmap(int width_, int height_, void const * data_, PixelFormat format_, RGB888 foregroundColor_, bool copy)
+  : width(width_),
+    height(height_),
+    format(format_),
+    foregroundColor(foregroundColor_),
+    data((uint8_t*)data_),
+    dataAllocated(false)
 {
   if (copy) {
-    dataAllocated = true;
-    data = (uint8_t const*) malloc(width * height);
-    memcpy((void*)data, data_, width * height);
+    allocate();
+    copyFrom(data_);
   }
 }
 
-// bitsPerPixel:
-//    1 : 1 bit per pixel, 0 = transparent, 1 = foregroundColor
-//    8 : 8 bits per pixel: AABBGGRR
-Bitmap::Bitmap(int width_, int height_, void const * data_, int bitsPerPixel, RGB222 foregroundColor, bool copy)
-  : width(width_), height(height_)
+
+Bitmap::Bitmap(int width_, int height_, void const * data_, PixelFormat format_, bool copy)
+  : Bitmap(width_, height_, data_, format_, RGB888(255, 255, 255), copy)
 {
-  width  = width_;
-  height = height_;
+}
 
-  switch (bitsPerPixel) {
 
-    case 1:
+void Bitmap::allocate()
+{
+  if (dataAllocated) {
+    free((void*)data);
+    data = nullptr;
+  }
+  dataAllocated = true;
+  switch (format) {
+    case PixelFormat::Undefined:
+      break;
+    case PixelFormat::Mask:
+      data = (uint8_t*) malloc((width + 7) * height / 8);
+      break;
+    case PixelFormat::ABGR2222:
+      data = (uint8_t*) malloc(width * height);
+      break;
+    case PixelFormat::RGBA8888:
+      data = (uint8_t*) malloc(width * height * 4);
+      break;
+  }
+}
+
+
+// data must have the same pixel format
+void Bitmap::copyFrom(void const * srcData)
+{
+  switch (format) {
+    case PixelFormat::Undefined:
+      break;
+    case PixelFormat::Mask:
+      memcpy(data, srcData, (width + 7) * height / 8);
+      break;
+    case PixelFormat::ABGR2222:
+      memcpy(data, srcData, width * height);
+      break;
+    case PixelFormat::RGBA8888:
+      memcpy(data, srcData, width * height * 4);
+      break;
+  }
+}
+
+
+void Bitmap::setPixel(int x, int y, int value)
+{
+  int rowlen = (width + 7) / 8;
+  uint8_t * rowptr = data + y * rowlen;
+  if (value)
+    rowptr[x >> 3] |= 0x80 >> (x & 7);
+  else
+    rowptr[x >> 3] &= ~(0x80 >> (x & 7));
+}
+
+
+void Bitmap::setPixel(int x, int y, ABGR2222 value)
+{
+  ((ABGR2222*)data)[y * height + x] = value;
+}
+
+
+void Bitmap::setPixel(int x, int y, RGBA8888 value)
+{
+  ((RGBA8888*)data)[y * height + x] = value;
+}
+
+
+int Bitmap::getAlpha(int x, int y)
+{
+  int r = 0;
+  switch (format) {
+    case PixelFormat::Undefined:
+      break;
+    case PixelFormat::Mask:
     {
-      // convert to 8 bit
-      uint8_t * dstdata = (uint8_t*) malloc(width * height);
-      data = dstdata;
       int rowlen = (width + 7) / 8;
-      for (int y = 0; y < height; ++y) {
-        uint8_t const * srcrow = (uint8_t const*)data_ + y * rowlen;
-        uint8_t * dstrow = dstdata + y * width;
-        for (int x = 0; x < width; ++x) {
-          if ((srcrow[x >> 3] << (x & 7)) & 0x80)
-            dstrow[x] = foregroundColor.R | (foregroundColor.G << 2) | (foregroundColor.B << 4) | (3 << 6);
-          else
-            dstrow[x] = 0;
-        }
-      }
-      dataAllocated = true;
+      uint8_t * rowptr = data + y * rowlen;
+      r = (rowptr[x >> 3] >> (7 - (x & 7))) & 1;
       break;
     }
-
-    case 8:
-      if (copy) {
-        data = (uint8_t const*) malloc(width * height);
-        memcpy((void*)data, data_, width * height);
-        dataAllocated = true;
-      } else {
-        data = (uint8_t const*) data_;
-        dataAllocated = false;
-      }
+    case PixelFormat::ABGR2222:
+      r = ((ABGR2222*)data)[y * height + x].A;
       break;
-
+    case PixelFormat::RGBA8888:
+      r = ((RGBA8888*)data)[y * height + x].A;
+      break;
   }
+  return r;
 }
 
 
 Bitmap::~Bitmap()
 {
   if (dataAllocated)
-    free((void*) data);
+    free((void*)data);
 }
 
 
