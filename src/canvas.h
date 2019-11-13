@@ -263,14 +263,14 @@ public:
   /**
    * @brief Sets pen (foreground) color specifying color components.
    *
-   * @param color Color RGB222 components.
+   * @param color Color RGB888 components.
    *
    * Example:
    *
    *      // Set white pen
    *      Canvas.setPenColor(Color::BrightWhite);
    */
-  void setPenColor(RGB222 const & color);
+  void setPenColor(RGB888 const & color);
 
   /**
    * @brief Sets brush (background) color specifying color components.
@@ -304,14 +304,14 @@ public:
   /**
    * @brief Sets brush (background) color specifying color components.
    *
-   * @param color The color RGB222 components.
+   * @param color The color RGB888 components.
    *
    * Example:
    *
    *      // Set blue brush
    *      Canvas.setBrushColor(Color::BrightBlue);
    */
-  void setBrushColor(RGB222 const & color);
+  void setBrushColor(RGB888 const & color);
 
   /**
    * @brief Fills a single pixel with the pen color.
@@ -328,7 +328,7 @@ public:
    * @param Y Vertical pixel position.
    * @param color Pixe color.
    */
-  void setPixel(int X, int Y, RGB222 const & color);
+  void setPixel(int X, int Y, RGB888 const & color);
 
   /**
    * @brief Fills a single pixel with the specified color.
@@ -336,7 +336,7 @@ public:
    * @param pos Pixel position.
    * @param color Pixe color.
    */
-  void setPixel(Point const & pos, RGB222 const & color);
+  void setPixel(Point const & pos, RGB888 const & color);
 
   /**
    * @brief Draws a line starting from current pen position.
@@ -781,9 +781,9 @@ public:
    * @param X Horizontal coordinate.
    * @param Y Vertical coordinate.
    *
-   * @return Pixel color as RGB222 structure.
+   * @return Pixel color as RGB888 structure.
    */
-  RGB222 getPixel(int X, int Y);
+  RGB888 getPixel(int X, int Y);
 
 private:
 

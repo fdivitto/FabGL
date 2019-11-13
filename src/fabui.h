@@ -321,9 +321,9 @@ struct uiWindowProps {
 /** @brief Contains the window style */
 struct uiWindowStyle {
   CursorName    defaultCursor      = CursorName::CursorPointerSimpleReduced;  /**< Default window mouse cursor */
-  RGB222        borderColor        = RGB222(2, 2, 2);                         /**< Border color */
-  RGB222        activeBorderColor  = RGB222(2, 2, 3);                         /**< Border color when active */
-  RGB222        focusedBorderColor = RGB222(0, 0, 3);                         /**< Border color when focused */
+  RGB888        borderColor        = RGB888(128, 128, 128);                         /**< Border color */
+  RGB888        activeBorderColor  = RGB888(128, 128, 255);                         /**< Border color when active */
+  RGB888        focusedBorderColor = RGB888(0, 0, 255);                         /**< Border color when focused */
   uint8_t       borderSize         = 3;                                       /**< Border size in pixels. This determines also the resize grips area. */
   uint8_t       focusedBorderSize  = 1;                                       /**< Border size when focused */
 };
@@ -668,16 +668,16 @@ private:
  * Specifies frame style (colors, title font, etc...)
  */
 struct uiFrameStyle {
-  RGB222              backgroundColor                = RGB222(3, 3, 3);  /**< Frame background color */
-  RGB222              titleBackgroundColor           = RGB222(2, 2, 2);  /**< Title background color */
-  RGB222              activeTitleBackgroundColor     = RGB222(2, 2, 3);  /**< Title background color when active */
-  RGB222              titleColor                     = RGB222(0, 0, 0);  /**< Title color */
-  RGB222              activeTitleColor               = RGB222(0, 0, 0);  /**< Title color when active */
+  RGB888              backgroundColor                = RGB888(255, 255, 255);  /**< Frame background color */
+  RGB888              titleBackgroundColor           = RGB888(128, 128, 128);  /**< Title background color */
+  RGB888              activeTitleBackgroundColor     = RGB888(128, 128, 255);  /**< Title background color when active */
+  RGB888              titleColor                     = RGB888(0, 0, 0);  /**< Title color */
+  RGB888              activeTitleColor               = RGB888(0, 0, 0);  /**< Title color when active */
   FontInfo const *    titleFont                      = Canvas::getPresetFontInfoFromHeight(12, false);  /**< Title font */
-  RGB222              buttonColor                    = RGB222(1, 1, 1);  /**< Color used to draw Close, Maximize and Minimize buttons */
-  RGB222              activeButtonColor              = RGB222(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
-  RGB222              mouseOverBackgroundButtonColor = RGB222(0, 0, 3);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
-  RGB222              mouseOverButtonColor           = RGB222(3, 3, 3);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
+  RGB888              buttonColor                    = RGB888(64, 64, 64);  /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB888              activeButtonColor              = RGB888(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
+  RGB888              mouseOverButtonColor           = RGB888(255, 255, 255);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
 };
 
 
@@ -901,9 +901,9 @@ public:
 
 /** @brief Contains the scrollable control style */
 struct uiScrollableControlStyle {
-  RGB222  scrollBarBackgroundColor          = RGB222(1, 1, 1);  /**< Background color of the scrollbar */
-  RGB222  scrollBarForegroundColor          = RGB222(2, 2, 2);  /**< Foreground color of the scrollbar */
-  RGB222  mouseOverScrollBarForegroundColor = RGB222(3, 3, 3);  /**< Foreground color of the scrollbar when mouse is over it */
+  RGB888  scrollBarBackgroundColor          = RGB888(64, 64, 64);  /**< Background color of the scrollbar */
+  RGB888  scrollBarForegroundColor          = RGB888(128, 128, 128);  /**< Foreground color of the scrollbar */
+  RGB888  mouseOverScrollBarForegroundColor = RGB888(255, 255, 255);  /**< Foreground color of the scrollbar when mouse is over it */
   uint8_t scrollBarSize                     = 11;            /**< Width of vertical scrollbar, height of vertical scroll bar */
 };
 
@@ -1082,11 +1082,11 @@ private:
 
 /** @brief Contains the button style */
 struct uiButtonStyle {
-  RGB222           backgroundColor          = RGB222(2, 2, 2); /**< Background color */
-  RGB222           downBackgroundColor      = RGB222(2, 2, 3); /**< Background color when button is down */
-  RGB222           mouseOverBackgroundColor = RGB222(2, 2, 3); /**< Background color when mouse is over */
-  RGB222           mouseDownBackgroundColor = RGB222(3, 3, 3); /**< Background color when mouse is down */
-  RGB222           textColor                = RGB222(0, 0, 0); /**< Text color */
+  RGB888           backgroundColor          = RGB888(128, 128, 128); /**< Background color */
+  RGB888           downBackgroundColor      = RGB888(128, 128, 255); /**< Background color when button is down */
+  RGB888           mouseOverBackgroundColor = RGB888(128, 128, 255); /**< Background color when mouse is over */
+  RGB888           mouseDownBackgroundColor = RGB888(255, 255, 255); /**< Background color when mouse is down */
+  RGB888           textColor                = RGB888(0, 0, 0); /**< Text color */
   FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
   uint8_t          bitmapTextSpace          = 4;            /**< Spaces between image and text */
   Bitmap const *   bitmap                   = nullptr;      /**< Bitmap to display */
@@ -1208,10 +1208,10 @@ private:
  * @return L-value representing frame style (colors, font, etc...)
  */
 struct uiTextEditStyle {
-  RGB222           backgroundColor            = RGB222(2, 2, 2);                                   /**< Background color */
-  RGB222           mouseOverBackgroundColor   = RGB222(2, 2, 3);                                   /**< Background color when mouse is over */
-  RGB222           focusedBackgroundColor     = RGB222(3, 3, 3);                                   /**< Background color when focused */
-  RGB222           textColor                  = RGB222(0, 0, 0);                                   /**< Text color */
+  RGB888           backgroundColor            = RGB888(128, 128, 128);                                   /**< Background color */
+  RGB888           mouseOverBackgroundColor   = RGB888(128, 128, 255);                                   /**< Background color when mouse is over */
+  RGB888           focusedBackgroundColor     = RGB888(255, 255, 255);                                   /**< Background color when focused */
+  RGB888           textColor                  = RGB888(0, 0, 0);                                   /**< Text color */
   FontInfo const * textFont                   = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
 };
 
@@ -1347,8 +1347,8 @@ private:
 /** @brief Contains the label style */
 struct uiLabelStyle {
   FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
-  RGB222           backgroundColor          = RGB222(3, 3, 3);                                   /**< Background color */
-  RGB222           textColor                = RGB222(0, 0, 0);                                   /**< Text color */
+  RGB888           backgroundColor          = RGB888(255, 255, 255);                                   /**< Background color */
+  RGB888           textColor                = RGB888(0, 0, 0);                                   /**< Text color */
 };
 
 
@@ -1435,7 +1435,7 @@ private:
 
 /** @brief Contains the image style */
 struct uiImageStyle {
-  RGB222 backgroundColor = RGB222(3, 3, 3);   /**< Background color */
+  RGB888 backgroundColor = RGB888(255, 255, 255);   /**< Background color */
 };
 
 
@@ -1504,7 +1504,7 @@ private:
 
 /** @brief Contains the panel style */
 struct uiPanelStyle {
-  RGB222 backgroundColor = RGB222(2, 2, 2);    /**< Panel background color */
+  RGB888 backgroundColor = RGB888(128, 128, 128);    /**< Panel background color */
 };
 
 
@@ -1551,7 +1551,7 @@ private:
 
 /** @brief Contains the paintbox style */
 struct uiPaintBoxStyle {
-  RGB222 backgroundColor = RGB222(2, 2, 2);   /**< Paintbox background color */
+  RGB888 backgroundColor = RGB888(128, 128, 128);   /**< Paintbox background color */
 };
 
 
@@ -1609,14 +1609,14 @@ private:
 
 /** @brief Contains the listbox style */
 struct uiListBoxStyle {
-  RGB222           backgroundColor                = RGB222(2, 2, 2);                                   /**< Background color */
-  RGB222           focusedBackgroundColor         = RGB222(3, 3, 3);                                   /**< Background color when focused */
-  RGB222           selectedBackgroundColor        = RGB222(0, 0, 2);                                   /**< Background color when selected */
-  RGB222           focusedSelectedBackgroundColor = RGB222(0, 0, 3);                                   /**< Background color when selected and focused */
+  RGB888           backgroundColor                = RGB888(128, 128, 128);                                   /**< Background color */
+  RGB888           focusedBackgroundColor         = RGB888(255, 255, 255);                                   /**< Background color when focused */
+  RGB888           selectedBackgroundColor        = RGB888(0, 0, 128);                                   /**< Background color when selected */
+  RGB888           focusedSelectedBackgroundColor = RGB888(0, 0, 255);                                   /**< Background color when selected and focused */
   int              itemHeight                     = 16;                                             /**< Item height in pixels */
   FontInfo const * textFont                       = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
-  RGB222           textColor                      = RGB222(0, 0, 0);                                   /**< Text foreground color */
-  RGB222           selectedTextColor              = RGB222(3, 3, 3);                                   /**< Text foreground color when selected */
+  RGB888           textColor                      = RGB888(0, 0, 0);                                   /**< Text foreground color */
+  RGB888           selectedTextColor              = RGB888(255, 255, 255);                                   /**< Text foreground color when selected */
 };
 
 
@@ -1859,8 +1859,8 @@ private:
 
 /** @brief Contains the listbox style */
 struct uiComboBoxStyle {
-  RGB222 buttonBackgroundColor = RGB222(1, 1, 1);  /**< Background color of open/close button */
-  RGB222 buttonColor           = RGB222(2, 2, 2);  /**< Foreground color of open/close button */
+  RGB888 buttonBackgroundColor = RGB888(64, 64, 64);  /**< Background color of open/close button */
+  RGB888 buttonColor           = RGB888(128, 128, 128);  /**< Foreground color of open/close button */
 };
 
 
@@ -1983,10 +1983,10 @@ private:
 
 /** @brief Contains the checkbox style */
 struct uiCheckBoxStyle {
-  RGB222              backgroundColor          = RGB222(2, 2, 2);  /**< Background color */
-  RGB222              checkedBackgroundColor   = RGB222(2, 2, 3);  /**< Background color when checked */
-  RGB222              mouseOverBackgroundColor = RGB222(2, 2, 3);  /**< Background color when mouse is over */
-  RGB222              foregroundColor          = RGB222(0, 0, 0);  /**< Foreground color */
+  RGB888              backgroundColor          = RGB888(128, 128, 128);  /**< Background color */
+  RGB888              checkedBackgroundColor   = RGB888(128, 128, 255);  /**< Background color when checked */
+  RGB888              mouseOverBackgroundColor = RGB888(128, 128, 255);  /**< Background color when mouse is over */
+  RGB888              foregroundColor          = RGB888(0, 0, 0);  /**< Foreground color */
 };
 
 
@@ -2094,11 +2094,11 @@ private:
 
 /** @brief Contains the slider style */
 struct uiSliderStyle {
-  RGB222 backgroundColor = RGB222(3, 3, 3);    /**< Slider background color */
-  RGB222 slideColor      = RGB222(0, 2, 2);    /**< Color of internal slide */
-  RGB222 rangeColor      = RGB222(0, 2, 3);    /**< Color of slide before the grip */
-  RGB222 gripColor       = RGB222(0, 0, 3);    /**< Color of slider grip */
-  RGB222 ticksColor      = RGB222(3, 3, 3);    /**> Ticks color */
+  RGB888 backgroundColor = RGB888(255, 255, 255);    /**< Slider background color */
+  RGB888 slideColor      = RGB888(0, 128, 128);    /**< Color of internal slide */
+  RGB888 rangeColor      = RGB888(0, 128, 255);    /**< Color of slide before the grip */
+  RGB888 gripColor       = RGB888(0, 0, 255);    /**< Color of slider grip */
+  RGB888 ticksColor      = RGB888(255, 255, 255);    /**> Ticks color */
 };
 
 

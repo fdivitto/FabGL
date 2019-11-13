@@ -261,7 +261,6 @@ using fabgl::Color;
 using fabgl::VGAScanStart;
 using fabgl::GlyphOptions;
 using fabgl::Scene;
-using fabgl::RGB222;
 using fabgl::Bitmap;
 using fabgl::Sprite;
 using fabgl::CollisionDetector;

@@ -530,7 +530,7 @@ struct PaintOptions {
 
 struct PixelDesc {
   Point  pos;
-  RGB222 color;
+  RGB888 color;
 };
 
 
@@ -538,7 +538,7 @@ struct Primitive {
   PrimitiveCmd cmd;
   union {
     int16_t                ivalue;
-    RGB222                 color;
+    RGB888                 color;
     Point                  position;
     Size                   size;
     Glyph                  glyph;

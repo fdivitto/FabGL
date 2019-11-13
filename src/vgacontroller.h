@@ -491,6 +491,8 @@ public:
    */
   void readScreen(Rect const & rect, RGB222 * destBuf);
 
+  void readScreen(Rect const & rect, RGB888 * destBuf);
+
   /**
    * @brief Writes pixels inside the specified rectangle.
    *
