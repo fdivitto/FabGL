@@ -145,29 +145,29 @@ void demo4()
   slowPrintf("\nMixed text and graphics:\r\n");
   slowPrintf("Points...\r\n");
   for (int i = 0; i < 500; ++i) {
-    cv.setPenColor(random(4), random(4), random(4));
-    cv.setPixel(random(640), random(350));
+    cv.setPenColor(random(256), random(256), random(256));
+    cv.setPixel(random(cv.getWidth()), random(cv.getHeight()));
     delay(15);
   }
   delay(500);
   slowPrintf("\e[40;32mLines...\r\n");
   for (int i = 0; i < 50; ++i) {
-    cv.setPenColor(random(4), random(4), random(4));
-    cv.drawLine(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(256), random(256), random(256));
+    cv.drawLine(random(cv.getWidth()), random(cv.getHeight()), random(cv.getWidth()), random(cv.getHeight()));
     delay(50);
   }
   delay(500);
   slowPrintf("\e[40;32mRectangles...\r\n");
   for (int i = 0; i < 50; ++i) {
-    cv.setPenColor(random(4), random(4), random(4));
-    cv.drawRectangle(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(256), random(256), random(256));
+    cv.drawRectangle(random(cv.getWidth()), random(cv.getHeight()), random(cv.getWidth()), random(cv.getHeight()));
     delay(50);
   }
   delay(500);
   slowPrintf("\e[40;32mEllipses...\r\n");
   for (int i = 0; i < 50; ++i) {
-    cv.setPenColor(random(4), random(4), random(4));
-    cv.drawEllipse(random(640), random(350), random(640), random(350));
+    cv.setPenColor(random(256), random(256), random(256));
+    cv.drawEllipse(random(cv.getWidth()), random(cv.getHeight()), random(cv.getWidth()), random(cv.getHeight()));
     delay(50);
   }
   for (int i = 0; i < 30; ++i) {

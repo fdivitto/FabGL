@@ -16,7 +16,7 @@ struct TestModalDialog : public uiFrame {
     new uiLabel(this, "This is a Modal Window: click on Close to continue", Point(5, 30));
 
     panel = new uiPanel(this, Point(5, 50), Size(290, 125));
-    panel->panelStyle().backgroundColor = RGB222(3, 3, 3);
+    panel->panelStyle().backgroundColor = RGB888(255, 255, 255);
 
     new uiLabel(panel, "First Name:",     Point(10,  5), Size( 80, 20));
     textEdit1 = new uiTextEdit(panel, "", Point(80,  5), Size(200, 20));

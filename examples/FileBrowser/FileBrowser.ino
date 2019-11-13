@@ -66,7 +66,7 @@ class MyApp : public uiApp {
   uiLabel *       freeSpaceLbl;
 
   void init() {
-    rootWindow()->frameStyle().backgroundColor = RGB222(0, 0, 1);
+    rootWindow()->frameStyle().backgroundColor = RGB888(0, 0, 64);
 
     auto frame = new uiFrame(rootWindow(), "FileBrowser Example", Point(15, 10), Size(375, 275));
     frame->frameProps().hasCloseButton = false;
@@ -180,7 +180,7 @@ class MyApp : public uiApp {
   void connectWiFi()
   {
     WiFiStatusLbl->setText("WiFi Not Connected");
-    WiFiStatusLbl->labelStyle().textColor = RGB222(3, 0, 0);
+    WiFiStatusLbl->labelStyle().textColor = RGB888(255, 0, 0);
     char SSID[32], psw[32];
     fabgl::suspendInterrupts();
     if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
@@ -191,7 +191,7 @@ class MyApp : public uiApp {
       }
       if (WiFi.status() == WL_CONNECTED) {
         WiFiStatusLbl->setTextFmt("Connected to %s, IP is %s", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
-        WiFiStatusLbl->labelStyle().textColor = RGB222(0, 2, 0);
+        WiFiStatusLbl->labelStyle().textColor = RGB888(0, 128, 0);
       }
     }
     fabgl::resumeInterrupts();

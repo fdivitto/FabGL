@@ -241,29 +241,29 @@ class Menu : public uiApp {
   uiLabel *       freeSpaceLbl;
 
   void init() {
-    rootWindow()->frameStyle().backgroundColor = RGB222(3, 3, 3);
+    rootWindow()->frameStyle().backgroundColor = RGB888(255, 255, 255);
 
     // some static text
     rootWindow()->onPaint = [&]() {
       auto cv = canvas();
       cv->selectFont(Canvas::getPresetFontInfoFromHeight(12, false));
-      cv->setPenColor(RGB222(3, 1, 1));
+      cv->setPenColor(RGB888(255, 64, 64));
       cv->drawText(155, 345, "V I C 2 0  Emulator");
-      cv->setPenColor(RGB222(2, 1, 1));
+      cv->setPenColor(RGB888(128, 64, 64));
       cv->drawText(167, 357, "www.fabgl.com");
       cv->drawText(141, 369, "2019 by Fabrizio Di Vittorio");
     };
 
     // programs list
     fileBrowser = new uiFileBrowser(rootWindow(), Point(5, 10), Size(140, 290));
-    fileBrowser->listBoxStyle().backgroundColor = RGB222(0, 3, 0);
+    fileBrowser->listBoxStyle().backgroundColor = RGB888(0, 255, 0);
 
-    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB222(3, 0, 0);
-    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB222(2, 0, 0);
-    fileBrowser->listBoxStyle().focusedSelectedBackgroundColor = RGB222(3, 0, 0);
-    fileBrowser->windowStyle().focusedBorderColor = RGB222(3, 0, 0);
+    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB888(255, 0, 0);
+    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB888(128, 0, 0);
+    fileBrowser->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 0, 0);
+    fileBrowser->windowStyle().focusedBorderColor = RGB888(255, 0, 0);
 
-    fileBrowser->listBoxStyle().focusedBackgroundColor = RGB222(0, 3, 0);
+    fileBrowser->listBoxStyle().focusedBackgroundColor = RGB888(0, 255, 0);
     fileBrowser->setDirectory(ROOTDIR);
     fileBrowser->onChange = [&]() {
       setSelectedProgramConf();
@@ -332,7 +332,7 @@ class Menu : public uiApp {
     // RAM expansion options
     int y = 120;
     auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y));
-    lbl->labelStyle().textColor = RGB222(1, 1, 3);
+    lbl->labelStyle().textColor = RGB888(64, 64, 255);
     RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(85, 19), 130);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
@@ -345,7 +345,7 @@ class Menu : public uiApp {
     // joystick emulation options
     y += 50;
     lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y));
-    lbl->labelStyle().textColor = RGB222(1, 1, 3);
+    lbl->labelStyle().textColor = RGB888(64, 64, 255);
     new uiLabel(rootWindow(), "None", Point(180, y + 20));
     auto radioJNone = new uiCheckBox(rootWindow(), Point(160, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton);
     new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 40));
@@ -388,11 +388,11 @@ class Menu : public uiApp {
 
     // WiFi Status label
     WiFiStatusLbl = new uiLabel(rootWindow(), "WiFi", Point(5, 332));
-    WiFiStatusLbl->labelStyle().textColor = RGB222(2, 2, 2);
+    WiFiStatusLbl->labelStyle().textColor = RGB888(128, 128, 128);
 
     // "Download From" label
     auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 354));
-    downloadFromLbl->labelStyle().textColor = RGB222(1, 1, 3);
+    downloadFromLbl->labelStyle().textColor = RGB888(64, 64, 255);
     downloadFromLbl->labelStyle().textFont = Canvas::getPresetFontInfoFromHeight(12, false);
 
     // Download List button (download programs listed and linked in LIST_URL)
@@ -624,7 +624,7 @@ class Menu : public uiApp {
         delay(1000);
       }
     }
-    WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB222(0, 2, 0) : RGB222(2, 2, 2));
+    WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB888(0, 255, 0) : RGB888(128, 128, 128));
     WiFiStatusLbl->update();
     fabgl::resumeInterrupts();
     if (WiFi.status() != WL_CONNECTED)

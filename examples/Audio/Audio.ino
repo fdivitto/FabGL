@@ -219,7 +219,7 @@ class MyApp : public uiApp {
 
   void init() {
 
-    rootWindow()->frameStyle().backgroundColor = RGB222(0, 0, 1);
+    rootWindow()->frameStyle().backgroundColor = RGB888(0, 0, 64);
 
     /*
     setTimer(this, 1000);

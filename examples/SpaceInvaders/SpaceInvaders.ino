@@ -113,7 +113,7 @@ struct IntroScene : public Scene {
       }
 
       if (updateCount % 20 == 0) {
-        canvas.setPenColor(random(4), random(4), random(4));
+        canvas.setPenColor(random(256), random(256), random(256));
         if (keyboard->isKeyboardAvailable() && mouse->isMouseAvailable())
           canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
         else if (keyboard->isKeyboardAvailable())

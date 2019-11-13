@@ -94,9 +94,9 @@ void setup()
 
   // draw background
   Canvas cv(&VGAController);
-  cv.setBrushColor(RGB222(0, 0, 1));
+  cv.setBrushColor(RGB888(0, 0, 64));
   cv.clear();
-  cv.setPenColor(RGB222(1, 1, 0));
+  cv.setPenColor(RGB888(64, 64, 0));
   for (int i = 0; i < cv.getWidth(); i += 10)
     cv.drawLine(i, 0, i, cv.getHeight() - 1);
   for (int i = 0; i < cv.getHeight(); i += 10)
