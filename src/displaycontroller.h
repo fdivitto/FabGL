@@ -170,22 +170,22 @@ enum PrimitiveCmd {
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
  */
 enum Color {
-  Black,          /**< Equivalent to RGB222(0,0,0) */
-  Red,            /**< Equivalent to RGB222(2,0,0) */
-  Green,          /**< Equivalent to RGB222(0,2,0) */
-  Yellow,         /**< Equivalent to RGB222(2,2,0) */
-  Blue,           /**< Equivalent to RGB222(0,0,2) */
-  Magenta,        /**< Equivalent to RGB222(2,0,2) */
-  Cyan,           /**< Equivalent to RGB222(0,2,2) */
-  White,          /**< Equivalent to RGB222(2,2,2) */
-  BrightBlack,    /**< Equivalent to RGB222(1,1,1) */
-  BrightRed,      /**< Equivalent to RGB222(3,0,0) */
-  BrightGreen,    /**< Equivalent to RGB222(0,3,0) */
-  BrightYellow,   /**< Equivalent to RGB222(3,3,0) */
-  BrightBlue,     /**< Equivalent to RGB222(0,0,3) */
-  BrightMagenta,  /**< Equivalent to RGB222(3,0,3) */
-  BrightCyan,     /**< Equivalent to RGB222(0,3,3) */
-  BrightWhite,    /**< Equivalent to RGB222(3,3,3) */
+  Black,          /**< Equivalent to RGB222(0,0,0) and RGB888(0,0,0) */
+  Red,            /**< Equivalent to RGB222(2,0,0) and RGB888(128,0,0) */
+  Green,          /**< Equivalent to RGB222(0,2,0) and RGB888(0,128,0) */
+  Yellow,         /**< Equivalent to RGB222(2,2,0) and RGB888(128,128,0) */
+  Blue,           /**< Equivalent to RGB222(0,0,2) and RGB888(0,0,128) */
+  Magenta,        /**< Equivalent to RGB222(2,0,2) and RGB888(128,0,128) */
+  Cyan,           /**< Equivalent to RGB222(0,2,2) and RGB888(0,128,128) */
+  White,          /**< Equivalent to RGB222(2,2,2) and RGB888(128,128,128) */
+  BrightBlack,    /**< Equivalent to RGB222(1,1,1) and RGB888(64,64,64) */
+  BrightRed,      /**< Equivalent to RGB222(3,0,0) and RGB888(255,0,0) */
+  BrightGreen,    /**< Equivalent to RGB222(0,3,0) and RGB888(0,255,0) */
+  BrightYellow,   /**< Equivalent to RGB222(3,3,0) and RGB888(255,255,0) */
+  BrightBlue,     /**< Equivalent to RGB222(0,0,3) and RGB888(0,0,255) */
+  BrightMagenta,  /**< Equivalent to RGB222(3,0,3) and RGB888(255,0,255) */
+  BrightCyan,     /**< Equivalent to RGB222(0,3,3) and RGB888(0,255,255) */
+  BrightWhite,    /**< Equivalent to RGB222(3,3,3) and RGB888(255,255,255) */
 };
 
 

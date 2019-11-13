@@ -36,22 +36,43 @@ namespace fabgl {
 // First eight maximum value is '1' to make them visible also when 8 colors are used.
 // From Red to Cyan are changed (1=>2) when 64 color mode is used.
 RGB222 COLOR2RGB222[16] = {
-  {0, 0, 0}, // Black
-  {1, 0, 0}, // Red
-  {0, 1, 0}, // Green
-  {1, 1, 0}, // Yellow
-  {0, 0, 1}, // Blue
-  {1, 0, 1}, // Magenta
-  {0, 1, 1}, // Cyan
-  {1, 1, 1}, // White
-  {1, 1, 1}, // BrightBlack
-  {3, 0, 0}, // BrightRed
-  {0, 3, 0}, // BrightGreen
-  {3, 3, 0}, // BrightYellow
-  {0, 0, 3}, // BrightBlue
-  {3, 0, 3}, // BrightMagenta
-  {0, 3, 3}, // BrightCyan
-  {3, 3, 3}, // BrightWhite
+  { 0, 0, 0 }, // Black
+  { 1, 0, 0 }, // Red
+  { 0, 1, 0 }, // Green
+  { 1, 1, 0 }, // Yellow
+  { 0, 0, 1 }, // Blue
+  { 1, 0, 1 }, // Magenta
+  { 0, 1, 1 }, // Cyan
+  { 1, 1, 1 }, // White
+  { 1, 1, 1 }, // BrightBlack
+  { 3, 0, 0 }, // BrightRed
+  { 0, 3, 0 }, // BrightGreen
+  { 3, 3, 0 }, // BrightYellow
+  { 0, 0, 3 }, // BrightBlue
+  { 3, 0, 3 }, // BrightMagenta
+  { 0, 3, 3 }, // BrightCyan
+  { 3, 3, 3 }, // BrightWhite
+};
+
+
+// Array to convert Color enum to RGB888 struct
+const RGB888 COLOR2RGB888[16] = {
+  {   0,   0,   0 }, // Black
+  { 128,   0,   0 }, // Red
+  {   0, 128,   0 }, // Green
+  { 128, 128,   0 }, // Yellow
+  {   0,   0, 128 }, // Blue
+  { 128,   0, 128 }, // Magenta
+  {   0, 128, 128 }, // Cyan
+  { 128, 128, 128 }, // White
+  {  64,  64,  64 }, // BrightBlack
+  { 255,   0,   0 }, // BrightRed
+  {   0, 255,   0 }, // BrightGreen
+  { 255, 255,   0 }, // BrightYellow
+  {   0,   0, 255 }, // BrightBlue
+  { 255,   0, 255 }, // BrightMagenta
+  {   0, 255, 255 }, // BrightCyan
+  { 255, 255, 255 }, // BrightWhite
 };
 
 
@@ -59,6 +80,7 @@ RGB222 COLOR2RGB222[16] = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // RGB222 implementation
+
 
 RGB222::RGB222(Color color)
 {
@@ -88,6 +110,18 @@ RGB222::RGB222(RGB888 const & value)
   R = value.R >> 6;
   G = value.G >> 6;
   B = value.B >> 6;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// RGB888 implementation
+
+
+RGB888::RGB888(Color color)
+{
+  *this = COLOR2RGB888[(int)color];
 }
 
 
