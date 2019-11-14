@@ -376,6 +376,14 @@ struct GlyphsBufferRenderInfo {
 };
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines the display controller native pixel format
+ */
+enum class NativePixelFormat : uint8_t {
+  Mono,       /**< 1 bit per pixel. 0 = black, 1 = white */
+  SBGR2222,   /**< 8 bit per pixel: VHBBGGRR (bit 7=VSync 6=HSync 5=B 4=B 3=G 2=G 1=R 0=R). Each color channel can have values from 0 to 3 (maxmum intensity). */
+};
+
 
 /** \ingroup Enumerations
  * @brief This enum defines a pixel format
@@ -565,8 +573,26 @@ class DisplayController {
 
 public:
 
+  /**
+   * @brief Determines horizontal size of the viewport.
+   *
+   * @return Horizontal size of the viewport.
+   */
   virtual int getViewPortWidth() = 0;
+
+  /**
+   * @brief Determines vertical size of the viewport.
+   *
+   * @return Vertical size of the viewport.
+   */
   virtual int getViewPortHeight() = 0;
+
+  /**
+   * @brief Represents the native pixel format used by this display.
+   *
+   * @return Display native pixel format
+   */
+  virtual NativePixelFormat nativePixelFormat() = 0;
 
 
 };

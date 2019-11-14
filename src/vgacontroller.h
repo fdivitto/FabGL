@@ -226,6 +226,9 @@ public:
    */
   uint8_t getBitsPerChannel() { return m_bitsPerChannel; }
 
+  // abstract method of DisplayController
+  NativePixelFormat nativePixelFormat() { return NativePixelFormat::SBGR2222; }
+
   /**
    * @brief Sets current resolution using linux-like modeline.
    *
@@ -287,18 +290,10 @@ public:
    */
   int getViewPortRow()    { return m_viewPortRow; }
 
-  /**
-   * @brief Determines horizontal size of the viewport.
-   *
-   * @return Horizontal size of the viewport.
-   */
+  // abstract method of DisplayController
   int getViewPortWidth()  { return m_viewPortWidth; }
 
-  /**
-   * @brief Determines vertical size of the viewport.
-   *
-   * @return Vertical size of the viewport.
-   */
+  // abstract method of DisplayController
   int getViewPortHeight() { return m_viewPortHeight; }
 
   void addPrimitive(Primitive const & primitive);
