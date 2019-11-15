@@ -223,6 +223,9 @@ int uiApp::run(VGAController * displayController, Keyboard * keyboard, Mouse * m
   // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
   m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
+  // avoid slow paint on low resolutions
+  m_displayController->enableBackgroundPrimitiveTimeout(false);
+
   showWindow(m_rootWindow, true);
 
   m_activeWindow = m_rootWindow;

@@ -779,7 +779,6 @@ void setup()
 
   VGAController.begin();
   VGAController.setResolution(VGA_256x384_60Hz);
-  VGAController.enableBackgroundPrimitiveTimeout(false);
 
   // adjust this to center screen in your monitor
   //VGAController.moveScreen(20, -2);
