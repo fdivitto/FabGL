@@ -734,6 +734,8 @@ public:
 
   virtual void execPrimitive(Primitive const & prim) = 0;
 
+  virtual void readScreen(Rect const & rect, RGB888 * destBuf) = 0;
+
 protected:
 
   void setSprites(Sprite * sprites, int count, int spriteSize);
