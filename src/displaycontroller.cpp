@@ -25,6 +25,9 @@
 
 #include <string.h>
 
+#include "fabutils.h"
+#include "images/cursors.h"
+
 
 
 namespace fabgl {
@@ -350,9 +353,159 @@ Bitmap::~Bitmap()
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// DisplayController implementation
 
 
+DisplayController::DisplayController()
+{
+  m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
+  m_backgroundPrimitiveExecutionEnabled = true;
+  m_sprites = nullptr;
+  m_spritesCount = 0;
+  m_doubleBuffered = false;
+  m_mouseCursor.visible = false;
+  m_backgroundPrimitiveTimeoutEnabled = true;
+}
 
+
+DisplayController::~DisplayController()
+{
+  vQueueDelete(m_execQueue);
+}
+
+
+void DisplayController::addPrimitive(Primitive const & primitive)
+{
+  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers)
+    xQueueSendToBack(m_execQueue, &primitive, portMAX_DELAY);
+  else {
+    execPrimitive(primitive);
+    showSprites();
+  }
+}
+
+
+// call this only inside an ISR
+bool IRAM_ATTR DisplayController::getPrimitiveISR(Primitive * primitive)
+{
+  return xQueueReceiveFromISR(m_execQueue, primitive, nullptr);
+}
+
+
+// call this only inside an ISR
+void IRAM_ATTR DisplayController::insertPrimitiveISR(Primitive * primitive)
+{
+  xQueueSendToFrontFromISR(m_execQueue, primitive, nullptr);
+}
+
+
+void DisplayController::primitivesExecutionWait()
+{
+  while (uxQueueMessagesWaiting(m_execQueue) > 0)
+    ;
+}
+
+
+// When false primitives are executed immediately, otherwise they are added to the primitive queue
+// When set to false the queue is emptied executing all pending primitives
+// Cannot be nested
+void DisplayController::enableBackgroundPrimitiveExecution(bool value)
+{
+  if (value != m_backgroundPrimitiveExecutionEnabled) {
+    if (value) {
+      resumeBackgroundPrimitiveExecution();
+    } else {
+      suspendBackgroundPrimitiveExecution();
+      processPrimitives();
+    }
+    m_backgroundPrimitiveExecutionEnabled = value;
+  }
+}
+
+
+// Use for fast queue processing. Warning, may generate flickering because don't care of vertical sync
+// Do not call inside ISR
+void IRAM_ATTR DisplayController::processPrimitives()
+{
+  suspendBackgroundPrimitiveExecution();
+  Primitive prim;
+  while (xQueueReceive(m_execQueue, &prim, 0) == pdTRUE)
+    execPrimitive(prim);
+  showSprites();
+  resumeBackgroundPrimitiveExecution();
+}
+
+
+void DisplayController::setSprites(Sprite * sprites, int count, int spriteSize)
+{
+  processPrimitives();
+  primitivesExecutionWait();
+  m_sprites      = sprites;
+  m_spriteSize   = spriteSize;
+  m_spritesCount = count;
+  if (!isDoubleBuffered()) {
+    uint8_t * spritePtr = (uint8_t*)m_sprites;
+    for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
+      Sprite * sprite = (Sprite*) spritePtr;
+      sprite->allocRequiredBackgroundBuffer();
+    }
+  }
+}
+
+
+Sprite * IRAM_ATTR DisplayController::getSprite(int index)
+{
+  return (Sprite*) ((uint8_t*)m_sprites + index * m_spriteSize);
+}
+
+
+void DisplayController::refreshSprites()
+{
+  Primitive p;
+  p.cmd = PrimitiveCmd::RefreshSprites;
+  addPrimitive(p);
+}
+
+
+// cursor = nullptr -> disable mouse
+void DisplayController::setMouseCursor(Cursor * cursor)
+{
+  if (cursor == nullptr || &cursor->bitmap != m_mouseCursor.getFrame()) {
+    m_mouseCursor.visible = false;
+    m_mouseCursor.clearBitmaps();
+
+    refreshSprites();
+    processPrimitives();
+    primitivesExecutionWait();
+
+    if (cursor) {
+      m_mouseCursor.moveBy(+m_mouseHotspotX, +m_mouseHotspotY);
+      m_mouseHotspotX = cursor->hotspotX;
+      m_mouseHotspotY = cursor->hotspotY;
+      m_mouseCursor.addBitmap(&cursor->bitmap);
+      m_mouseCursor.visible = true;
+      m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
+      if (!isDoubleBuffered())
+        m_mouseCursor.allocRequiredBackgroundBuffer();
+    }
+    refreshSprites();
+  }
+}
+
+
+void DisplayController::setMouseCursor(CursorName cursorName)
+{
+  setMouseCursor(&CURSORS[(int)cursorName]);
+}
+
+
+void DisplayController::setMouseCursorPos(int X, int Y)
+{
+  m_mouseCursor.moveTo(X - m_mouseHotspotX, Y - m_mouseHotspotY);
+  refreshSprites();
+}
 
 
 

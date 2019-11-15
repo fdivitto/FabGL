@@ -40,7 +40,6 @@
 #include "fabutils.h"
 #include "vgacontroller.h"
 #include "swgenerator.h"
-#include "images/cursors.h"
 
 
 
@@ -69,21 +68,13 @@ VGAController::VGAController()
 
 void VGAController::init(gpio_num_t VSyncGPIO)
 {
-  m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
-
-  m_DMABuffersHead = nullptr;
-  m_DMABuffers = nullptr;
-  m_DMABuffersVisible = nullptr;
-  m_DMABuffersCount = 0;
+  m_DMABuffersHead          = nullptr;
+  m_DMABuffers              = nullptr;
+  m_DMABuffersVisible       = nullptr;
+  m_DMABuffersCount         = 0;
+  m_VSyncGPIO               = VSyncGPIO;
+  m_spritesHidden           = true;
   m_VSyncInterruptSuspended = 1; // >0 suspended
-  m_backgroundPrimitiveExecutionEnabled = true;
-  m_VSyncGPIO = VSyncGPIO;
-  m_sprites = nullptr;
-  m_spritesCount = 0;
-  m_spritesHidden = true;
-  m_doubleBuffered = false;
-  m_mouseCursor.visible = false;
-  m_backgroundPrimitiveTimeoutEnabled = true;
 
   m_GPIOStream.begin();
 }
@@ -139,20 +130,25 @@ void VGAController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 }
 
 
-void VGAController::setSprites(Sprite * sprites, int count, int spriteSize)
+// Suspend vertical sync interrupt
+// Warning: After call to suspendBackgroundPrimitiveExecution() adding primitives may cause a deadlock.
+// To avoid this a call to "processPrimitives()" should be performed very often.
+// Can be nested
+void VGAController::suspendBackgroundPrimitiveExecution()
 {
-  processPrimitives();
-  primitivesExecutionWait();
-  m_sprites      = sprites;
-  m_spriteSize   = spriteSize;
-  m_spritesCount = count;
-  if (!isDoubleBuffered()) {
-    uint8_t * spritePtr = (uint8_t*)m_sprites;
-    for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
-      Sprite * sprite = (Sprite*) spritePtr;
-      sprite->allocRequiredBackgroundBuffer();
-    }
-  }
+  ++m_VSyncInterruptSuspended;
+  if (m_VSyncInterruptSuspended == 1)
+    detachInterrupt(digitalPinToInterrupt(m_VSyncGPIO));
+}
+
+
+// Resume vertical sync interrupt after suspendBackgroundPrimitiveExecution()
+// Can be nested
+void VGAController::resumeBackgroundPrimitiveExecution()
+{
+  m_VSyncInterruptSuspended = tmax(0, m_VSyncInterruptSuspended - 1);
+  if (m_VSyncInterruptSuspended == 0)
+    attachInterrupt(digitalPinToInterrupt(m_VSyncGPIO), VSyncInterrupt, m_timings.VSyncLogic == '-' ? FALLING : RISING);
 }
 
 
@@ -264,7 +260,7 @@ void VGAController::allocateViewPort()
   int remainingLines = m_viewPortHeight;
   m_viewPortHeight = 0; // m_viewPortHeight needs to be recalculated
 
-  if (m_doubleBuffered)
+  if (isDoubleBuffered())
     remainingLines *= 2;
 
   // allocate pools
@@ -281,7 +277,7 @@ void VGAController::allocateViewPort()
   m_viewPortMemoryPool[poolsCount] = nullptr;
 
   // fill m_viewPort[] with line pointers
-  if (m_doubleBuffered) {
+  if (isDoubleBuffered()) {
     m_viewPortHeight /= 2;
     m_viewPortVisible = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT);
   }
@@ -307,7 +303,7 @@ void VGAController::freeViewPort()
     *poolPtr = nullptr;
   }
   heap_caps_free(m_viewPort);
-  if (m_doubleBuffered)
+  if (isDoubleBuffered())
     heap_caps_free(m_viewPortVisible);
 }
 
@@ -321,7 +317,7 @@ void VGAController::setResolution(VGATimings const& timings, int viewPortWidth, 
   }
 
   m_timings = timings;
-  m_doubleBuffered = doubleBuffered;
+  setDoubleBuffered(doubleBuffered);
 
   m_HLineSize = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
 
@@ -571,7 +567,7 @@ void VGAController::shrinkScreen(int shrinkX, int shrinkY)
   currTimings->VBackPorch  = tmax(currTimings->VBackPorch + shrinkY, 1);
   currTimings->VFrontPorch = tmax(currTimings->VFrontPorch + shrinkY, 1);
 
-  setResolution(*currTimings, m_viewPortWidth, m_viewPortHeight, m_doubleBuffered);
+  setResolution(*currTimings, m_viewPortWidth, m_viewPortHeight, isDoubleBuffered());
 }
 
 
@@ -580,7 +576,7 @@ bool VGAController::setDMABuffersCount(int buffersCount)
 {
   if (buffersCount == 0) {
     heap_caps_free( (void*) m_DMABuffers );
-    if (m_doubleBuffered)
+    if (isDoubleBuffered())
       heap_caps_free( (void*) m_DMABuffersVisible );
     m_DMABuffers = nullptr;
     m_DMABuffersVisible = nullptr;
@@ -603,7 +599,7 @@ bool VGAController::setDMABuffersCount(int buffersCount)
 
     // (re)allocate and initialize DMA descs
     m_DMABuffers = (lldesc_t*) heap_caps_realloc((void*)m_DMABuffers, buffersCount * sizeof(lldesc_t), MALLOC_CAP_DMA);
-    if (m_doubleBuffered)
+    if (isDoubleBuffered())
       m_DMABuffersVisible = (lldesc_t*) heap_caps_realloc((void*)m_DMABuffersVisible, buffersCount * sizeof(lldesc_t), MALLOC_CAP_DMA);
     else
       m_DMABuffersVisible = m_DMABuffers;
@@ -614,7 +610,7 @@ bool VGAController::setDMABuffersCount(int buffersCount)
       m_DMABuffers[i].eof          = m_DMABuffers[i].sosf = m_DMABuffers[i].offset = 0;
       m_DMABuffers[i].owner        = 1;
       m_DMABuffers[i].qe.stqe_next = (lldesc_t*) (i == buffersCount - 1 ? m_DMABuffersHead : &m_DMABuffers[i + 1]);
-      if (m_doubleBuffered) {
+      if (isDoubleBuffered()) {
         m_DMABuffersVisible[i].eof          = m_DMABuffersVisible[i].sosf = m_DMABuffersVisible[i].offset = 0;
         m_DMABuffersVisible[i].owner        = 1;
         m_DMABuffersVisible[i].qe.stqe_next = (lldesc_t*) (i == buffersCount - 1 ? m_DMABuffersHead : &m_DMABuffersVisible[i + 1]);
@@ -637,7 +633,7 @@ void VGAController::setDMABufferBlank(int index, void volatile * address, int le
   m_DMABuffers[index].size   = size;
   m_DMABuffers[index].length = length;
   m_DMABuffers[index].buf    = (uint8_t*) address;
-  if (m_doubleBuffered) {
+  if (isDoubleBuffered()) {
     m_DMABuffersVisible[index].size   = size;
     m_DMABuffersVisible[index].length = length;
     m_DMABuffersVisible[index].buf    = (uint8_t*) address;
@@ -668,7 +664,7 @@ void VGAController::setDMABufferView(int index, int row, int scan, volatile uint
 void VGAController::setDMABufferView(int index, int row, int scan)
 {
   setDMABufferView(index, row, scan, m_viewPort, false);
-  if (m_doubleBuffered)
+  if (isDoubleBuffered())
     setDMABufferView(index, row, scan, m_viewPortVisible, true);
 }
 
@@ -709,76 +705,6 @@ int VGAController::fill(uint8_t volatile * buffer, int startPos, int length, uin
 }
 
 
-// When false primitives are executed immediately, otherwise they are added to the primitive queue
-// When set to false the queue is emptied executing all pending primitives
-// Cannot be nested
-void VGAController::enableBackgroundPrimitiveExecution(bool value)
-{
-  if (value != m_backgroundPrimitiveExecutionEnabled) {
-    if (value) {
-      resumeBackgroundPrimitiveExecution();
-    } else {
-      suspendBackgroundPrimitiveExecution();
-      processPrimitives();
-    }
-    m_backgroundPrimitiveExecutionEnabled = value;
-  }
-}
-
-
-// Suspend vertical sync interrupt
-// Warning: After call to suspendBackgroundPrimitiveExecution() adding primitives may cause a deadlock.
-// To avoid this a call to "processPrimitives()" should be performed very often.
-// Can be nested
-void VGAController::suspendBackgroundPrimitiveExecution()
-{
-  ++m_VSyncInterruptSuspended;
-  if (m_VSyncInterruptSuspended == 1)
-    detachInterrupt(digitalPinToInterrupt(m_VSyncGPIO));
-}
-
-
-// Resume vertical sync interrupt after suspendBackgroundPrimitiveExecution()
-// Can be nested
-void VGAController::resumeBackgroundPrimitiveExecution()
-{
-  m_VSyncInterruptSuspended = tmax(0, m_VSyncInterruptSuspended - 1);
-  if (m_VSyncInterruptSuspended == 0)
-    attachInterrupt(digitalPinToInterrupt(m_VSyncGPIO), VSyncInterrupt, m_timings.VSyncLogic == '-' ? FALLING : RISING);
-}
-
-
-void VGAController::addPrimitive(Primitive const & primitive)
-{
-  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers)
-    xQueueSendToBack(m_execQueue, &primitive, portMAX_DELAY);
-  else {
-    execPrimitive(primitive);
-    showSprites();
-  }
-}
-
-
-void VGAController::primitivesExecutionWait()
-{
-  while (uxQueueMessagesWaiting(m_execQueue) > 0)
-    ;
-}
-
-
-// Use for fast queue processing. Warning, may generate flickering because don't care of vertical sync
-// Do not call inside ISR
-void IRAM_ATTR VGAController::processPrimitives()
-{
-  suspendBackgroundPrimitiveExecution();
-  Primitive prim;
-  while (xQueueReceive(m_execQueue, &prim, 0) == pdTRUE)
-    execPrimitive(prim);
-  showSprites();
-  resumeBackgroundPrimitiveExecution();
-}
-
-
 void IRAM_ATTR VGAController::VSyncInterrupt()
 {
   auto VGACtrl = VGAController::instance();
@@ -786,12 +712,12 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
   bool isFirst = true;
   do {
     Primitive prim;
-    if (xQueueReceiveFromISR(VGACtrl->m_execQueue, &prim, nullptr) == pdFALSE)
+    if (VGACtrl->getPrimitiveISR(&prim) == false)
       break;
 
     if (prim.cmd == PrimitiveCmd::SwapBuffers && !isFirst) {
       // SwapBuffers must be the first primitive executed at VSync. If not reinsert it and break execution to wait for next VSync.
-      xQueueSendToFrontFromISR(VGACtrl->m_execQueue, &prim, nullptr);
+      VGACtrl->insertPrimitiveISR(&prim);
       break;
     }
 
@@ -2138,25 +2064,16 @@ void IRAM_ATTR VGAController::drawBitmap(int destX, int destY, Bitmap const * bi
 }
 
 
-void VGAController::refreshSprites()
-{
-  Primitive p;
-  p.cmd = PrimitiveCmd::RefreshSprites;
-  addPrimitive(p);
-}
-
-
 void IRAM_ATTR VGAController::hideSprites()
 {
   if (!m_spritesHidden) {
     m_spritesHidden = true;
 
     // normal sprites
-    if (m_sprites && !m_doubleBuffered) {
+    if (spritesCount() > 0 && !isDoubleBuffered()) {
       // restore saved backgrounds
-      uint8_t * spritePtr = (uint8_t*)m_sprites + (m_spritesCount - 1) * m_spriteSize;
-      for (int i = 0; i < m_spritesCount; ++i, spritePtr -= m_spriteSize) {
-        Sprite * sprite = (Sprite*) spritePtr;
+      for (int i = spritesCount() - 1; i >= 0; --i) {
+        Sprite * sprite = getSprite(i);
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
           Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, PixelFormat::RGBA2222);
           drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
@@ -2166,10 +2083,11 @@ void IRAM_ATTR VGAController::hideSprites()
     }
 
     // mouse cursor sprite
-    if (m_mouseCursor.savedBackgroundWidth > 0) {
-      Bitmap bitmap(m_mouseCursor.savedBackgroundWidth, m_mouseCursor.savedBackgroundHeight, m_mouseCursor.savedBackground, PixelFormat::RGBA2222);
-      drawBitmap(m_mouseCursor.savedX, m_mouseCursor.savedY, &bitmap, nullptr, true);
-      m_mouseCursor.savedBackgroundWidth = m_mouseCursor.savedBackgroundHeight = 0;
+    Sprite * mouseSprite = mouseCursor();
+    if (mouseSprite->savedBackgroundWidth > 0) {
+      Bitmap bitmap(mouseSprite->savedBackgroundWidth, mouseSprite->savedBackgroundHeight, mouseSprite->savedBackground, PixelFormat::RGBA2222);
+      drawBitmap(mouseSprite->savedX, mouseSprite->savedY, &bitmap, nullptr, true);
+      mouseSprite->savedBackgroundWidth = mouseSprite->savedBackgroundHeight = 0;
     }
 
   }
@@ -2183,9 +2101,8 @@ void IRAM_ATTR VGAController::showSprites()
 
     // normal sprites
     // save backgrounds and draw sprites
-    uint8_t * spritePtr = (uint8_t*)m_sprites;
-    for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
-      Sprite * sprite = (Sprite*) spritePtr;
+    for (int i = 0; i < spritesCount(); ++i) {
+      Sprite * sprite = getSprite(i);
       if (sprite->visible && sprite->allowDraw && sprite->getFrame()) {
         // save sprite X and Y so other threads can change them without interferring
         int16_t spriteX = sprite->x;
@@ -2203,16 +2120,17 @@ void IRAM_ATTR VGAController::showSprites()
 
     // mouse cursor sprite
     // save backgrounds and draw mouse cursor
-    if (m_mouseCursor.visible && m_mouseCursor.getFrame()) {
+    Sprite * mouseSprite = mouseCursor();
+    if (mouseSprite->visible && mouseSprite->getFrame()) {
       // save sprite X and Y so other threads can change them without interferring
-      int16_t spriteX = m_mouseCursor.x;
-      int16_t spriteY = m_mouseCursor.y;
-      Bitmap const * bitmap = m_mouseCursor.getFrame();
-      drawBitmap(spriteX, spriteY, bitmap, m_mouseCursor.savedBackground, true);
-      m_mouseCursor.savedX = spriteX;
-      m_mouseCursor.savedY = spriteY;
-      m_mouseCursor.savedBackgroundWidth  = bitmap->width;
-      m_mouseCursor.savedBackgroundHeight = bitmap->height;
+      int16_t spriteX = mouseSprite->x;
+      int16_t spriteY = mouseSprite->y;
+      Bitmap const * bitmap = mouseSprite->getFrame();
+      drawBitmap(spriteX, spriteY, bitmap, mouseSprite->savedBackground, true);
+      mouseSprite->savedX = spriteX;
+      mouseSprite->savedY = spriteY;
+      mouseSprite->savedBackgroundWidth  = bitmap->width;
+      mouseSprite->savedBackgroundHeight = bitmap->height;
     }
 
   }
@@ -2316,43 +2234,6 @@ void IRAM_ATTR VGAController::execFillPath(Path const & path)
 }
 
 
-// cursor = nullptr -> disable mouse
-void VGAController::setMouseCursor(Cursor * cursor)
-{
-  if (cursor == nullptr || &cursor->bitmap != m_mouseCursor.getFrame()) {
-    m_mouseCursor.visible = false;
-    m_mouseCursor.clearBitmaps();
-
-    refreshSprites();
-    processPrimitives();
-    primitivesExecutionWait();
-
-    if (cursor) {
-      m_mouseCursor.moveBy(+m_mouseHotspotX, +m_mouseHotspotY);
-      m_mouseHotspotX = cursor->hotspotX;
-      m_mouseHotspotY = cursor->hotspotY;
-      m_mouseCursor.addBitmap(&cursor->bitmap);
-      m_mouseCursor.visible = true;
-      m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
-      if (!isDoubleBuffered())
-        m_mouseCursor.allocRequiredBackgroundBuffer();
-    }
-    refreshSprites();
-  }
-}
-
-
-void VGAController::setMouseCursor(CursorName cursorName)
-{
-  setMouseCursor(&CURSORS[(int)cursorName]);
-}
-
-
-void VGAController::setMouseCursorPos(int X, int Y)
-{
-  m_mouseCursor.moveTo(X - m_mouseHotspotX, Y - m_mouseHotspotY);
-  refreshSprites();
-}
 
 
 

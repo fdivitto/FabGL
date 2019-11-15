@@ -35,6 +35,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+
 #include "fabglconf.h"
 #include "fabutils.h"
 
@@ -573,6 +576,10 @@ class DisplayController {
 
 public:
 
+  DisplayController();
+
+  ~DisplayController();
+
   /**
    * @brief Determines horizontal size of the viewport.
    *
@@ -594,6 +601,175 @@ public:
    */
   virtual NativePixelFormat nativePixelFormat() = 0;
 
+  void addPrimitive(Primitive const & primitive);
+
+  void primitivesExecutionWait();
+
+  /**
+   * @brief Enables or disables drawings inside vertical retracing time.
+   *
+   * When vertical retracing occurs (on Vertical Sync) an interrupt is trigged. Inside this interrupt primitives
+   * like line, circles, glyphs, etc.. are painted.<br>
+   * This method can disable (or reenable) this behavior, making drawing instantaneous. Flickering may occur when
+   * drawings are executed out of retracing time.<br>
+   * When background executing is disabled the queue is emptied executing all pending primitives.
+   *
+   * @param value When true drawings are done during vertical retracing, when false drawings are executed instantly.
+   */
+  void enableBackgroundPrimitiveExecution(bool value);
+
+  /**
+   * @brief Enables or disables execution time limitation inside vertical retracing interrupt
+   *
+   * Disabling interrupt execution timeout may generate flickering but speedup drawing operations.
+   *
+   * @param value True enables timeout (default), False disables timeout
+   */
+  void enableBackgroundPrimitiveTimeout(bool value) { m_backgroundPrimitiveTimeoutEnabled = value; }
+
+  bool backgroundPrimitiveTimeoutEnabled()          { return m_backgroundPrimitiveTimeoutEnabled; }
+
+  /**
+   * @brief Suspends drawings.
+   *
+   * Suspends drawings disabling vertical sync interrupt.<br>
+   * After call to suspendBackgroundPrimitiveExecution() adding new primitives may cause a deadlock.<br>
+   * To avoid it a call to "processPrimitives()" should be performed very often.<br>
+   * This method maintains a counter so can be nested.
+   */
+  virtual void suspendBackgroundPrimitiveExecution() = 0;
+
+  /**
+   * @brief Resumes drawings after suspendBackgroundPrimitiveExecution().
+   *
+   * Resumes drawings enabling vertical sync interrupt.
+   */
+  virtual void resumeBackgroundPrimitiveExecution() = 0;
+
+  /**
+   * @brief Draws immediately all primitives in the queue.
+   *
+   * Draws all primitives before they are processed in the vertical sync interrupt.<br>
+   * May generate flickering because don't care of vertical sync.
+   */
+  void processPrimitives();
+
+  /**
+   * @brief Sets the list of active sprites.
+   *
+   * A sprite is an image that keeps background unchanged.<br>
+   * There is no limit to the number of active sprites, but flickering and slow
+   * refresh happens when a lot of sprites (or large sprites) are visible.<br>
+   * To empty the list of active sprites call DisplayController.removeSprites().
+   *
+   * @param sprites The list of sprites to make currently active.
+   * @param count Number of sprites in the list.
+   *
+   * Example:
+   *
+   *     // define a sprite with user data (velX and velY)
+   *     struct MySprite : Sprite {
+   *       int  velX;
+   *       int  velY;
+   *     };
+   *
+   *     static MySprite sprites[10];
+   *
+   *     VGAController.setSprites(sprites, 10);
+   */
+  template <typename T>
+  void setSprites(T * sprites, int count) {
+    setSprites(sprites, count, sizeof(T));
+  }
+
+  /**
+   * @brief Empties the list of active sprites.
+   *
+   * Call this method when you don't need active sprites anymore.
+   */
+  void removeSprites() { setSprites(nullptr, 0, 0); }
+
+  /**
+   * @brief Forces the sprites to be updated.
+   *
+   * Screen is automatically updated whenever a primitive is painted (look at Canvas).<br>
+   * When a sprite updates its image or its position (or any other property) it is required
+   * to force a refresh using this method.<br>
+   * DisplayController.refreshSprites() is required also when using the double buffered mode, to paint sprites.
+   */
+  void refreshSprites();
+
+  /**
+   * @brief Determines whether DisplayController is on double buffered mode.
+   *
+   * @return True if DisplayController is on double buffered mode.
+   */
+  bool isDoubleBuffered() { return m_doubleBuffered; }
+
+  /**
+   * @brief Sets mouse cursor and make it visible.
+   *
+   * @param cursor Cursor to use when mouse pointer need to be painted. nullptr = disable mouse pointer.
+   */
+  void setMouseCursor(Cursor * cursor);
+
+  /**
+   * @brief Sets mouse cursor from a set of predefined cursors.
+   *
+   * @param cursorName Name (enum) of predefined cursor.
+   *
+   * Example:
+   *
+   *     VGAController.setMouseCursor(CursorName::CursorPointerShadowed);
+   */
+  void setMouseCursor(CursorName cursorName);
+
+  /**
+   * @brief Sets mouse cursor position.
+   *
+   * @param X Mouse cursor horizontal position.
+   * @param Y Mouse cursor vertical position.
+   */
+  void setMouseCursorPos(int X, int Y);
+
+  virtual void execPrimitive(Primitive const & prim) = 0;
+
+protected:
+
+  void setSprites(Sprite * sprites, int count, int spriteSize);
+
+  Sprite * getSprite(int index);
+
+  int spritesCount() { return m_spritesCount; }
+
+  virtual void hideSprites() = 0;
+
+  virtual void showSprites() = 0;
+
+  void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
+
+  bool getPrimitiveISR(Primitive * primitive);
+
+  void insertPrimitiveISR(Primitive * primitive);
+
+  Sprite * mouseCursor() { return &m_mouseCursor; }
+
+private:
+
+  bool                   m_doubleBuffered;
+  volatile QueueHandle_t m_execQueue;
+
+  bool                   m_backgroundPrimitiveExecutionEnabled; // when False primitives are execute immediately
+  volatile bool          m_backgroundPrimitiveTimeoutEnabled;   // when False VSyncInterrupt() has not timeout
+
+  void *                 m_sprites;       // pointer to array of sprite structures
+  int                    m_spriteSize;    // size of sprite structure
+  int                    m_spritesCount;  // number of sprites in m_sprites array
+
+  // mouse cursor (mouse pointer) support
+  Sprite                 m_mouseCursor;
+  int16_t                m_mouseHotspotX;
+  int16_t                m_mouseHotspotY;
 
 };
 
