@@ -185,7 +185,7 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run(VGAController * displayController, Keyboard * keyboard, Mouse * mouse)
+int uiApp::run(DisplayController * displayController, Keyboard * keyboard, Mouse * mouse)
 {
   m_displayController = displayController;
 

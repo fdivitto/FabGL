@@ -247,6 +247,7 @@
 
 #include "fabutils.h"
 #include "terminal.h"
+#include "displaycontroller.h"
 #include "vgacontroller.h"
 #include "ps2controller.h"
 #include "keyboard.h"

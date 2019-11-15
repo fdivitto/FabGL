@@ -94,7 +94,7 @@ Terminal::~Terminal()
 }
 
 
-void Terminal::begin(VGAController * displayController, Keyboard * keyboard)
+void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
 {
   m_displayController = displayController;
 

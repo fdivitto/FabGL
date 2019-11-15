@@ -35,7 +35,7 @@
 #include <stddef.h>
 
 #include "fabglconf.h"
-#include "vgacontroller.h"
+#include "displaycontroller.h"
 
 
 

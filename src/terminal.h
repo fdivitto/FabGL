@@ -282,7 +282,7 @@ struct EmuState {
 
   // DECSCLM (Smooth scroll)
   // Smooth scroll is effective only when vertical sync refresh is enabled,
-  // hence must be VGAController.enableBackgroundPrimitiveExecution(true),
+  // hence must be DisplayController.enableBackgroundPrimitiveExecution(true),
   // that is the default.
   bool         smoothScroll;
 
@@ -415,7 +415,7 @@ public:
    * @param displayController The output display controller
    * @param keyboard Keyboard device. nullptr = gets from PS2Controller
    */
-  void begin(VGAController * displayController, Keyboard * keyboard = nullptr);
+  void begin(DisplayController * displayController, Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -797,7 +797,7 @@ private:
   void convQueue(const char * str = nullptr);
   void TermDecodeVirtualKey(VirtualKey vk);
 
-  VGAController *    m_displayController;
+  DisplayController * m_displayController;
   Canvas *           m_canvas;
 
   Keyboard *         m_keyboard;

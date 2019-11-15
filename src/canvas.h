@@ -34,7 +34,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "vgacontroller.h"
+#include "displaycontroller.h"
 
 
 namespace fabgl {
@@ -94,7 +94,7 @@ class Canvas {
 
 public:
 
-  Canvas(VGAController * displayController);
+  Canvas(DisplayController * displayController);
 
   /**
    * @brief Determines the canvas width in pixels.
@@ -787,13 +787,13 @@ public:
 
 private:
 
-  VGAController *  m_displayController;
+  DisplayController * m_displayController;
 
-  FontInfo const * m_fontInfo;
-  uint8_t          m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
+  FontInfo const *    m_fontInfo;
+  uint8_t             m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
 
-  Point            m_origin;
-  Rect             m_clippingRect;
+  Point               m_origin;
+  Rect                m_clippingRect;
 };
 
 

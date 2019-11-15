@@ -40,7 +40,7 @@
 
 #include "fabglconf.h"
 #include "fabutils.h"
-#include "vgacontroller.h"
+#include "displaycontroller.h"
 #include "canvas.h"
 
 
@@ -2267,7 +2267,7 @@ public:
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(VGAController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  int run(DisplayController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2621,7 +2621,7 @@ public:
 
   Mouse * mouse() { return m_mouse; }
 
-  VGAController * displayController() { return m_displayController; }
+  DisplayController * displayController() { return m_displayController; }
 
   Canvas * canvas() { return m_canvas; }
 
@@ -2645,7 +2645,7 @@ private:
   void suspendCaret(bool value);
 
 
-  VGAController * m_displayController;
+  DisplayController * m_displayController;
 
   Canvas *        m_canvas;
 

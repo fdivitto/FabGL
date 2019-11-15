@@ -26,7 +26,7 @@
 
 #include "mouse.h"
 #include "ps2controller.h"
-#include "vgacontroller.h"
+#include "displaycontroller.h"
 
 
 
@@ -146,7 +146,7 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
 }
 
 
-void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, VGAController * updateDisplayController, uiApp * app)
+void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, DisplayController * updateDisplayController, uiApp * app)
 {
   m_area                  = Size(width, height);
   m_status.X              = width >> 1;
