@@ -1082,9 +1082,7 @@ void IRAM_ATTR VGAController::execFillEllipse(Size const & size)
     if (col1 <= clipX2 && col2 >= clipX1) {
       col1 = iclamp(col1, clipX1, clipX2);
       col2 = iclamp(col2, clipX1, clipX2);
-      uint8_t volatile * row = m_viewPort[centerY];
-      for (int x = col1; x <= col2; ++x)
-        VGA_PIXELINROW(row, x) = pattern;
+      fillRow(centerY, col1, col2, pattern);
     }
   }
 
