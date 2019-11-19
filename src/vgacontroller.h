@@ -494,6 +494,9 @@ private:
   // abstract method of DisplayController
   void showSprites();
 
+  // abstract method of DisplayController
+  int getBackgroundSaveBufferSize(int width, int height);
+
   static void VSyncInterrupt();
 
   static void setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode);

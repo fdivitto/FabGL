@@ -2062,6 +2062,13 @@ void IRAM_ATTR VGAController::drawBitmap(int destX, int destY, Bitmap const * bi
 }
 
 
+// sprites saved background pixel format is the same of the screen buffer, except for when it is "0" meaning pixel "not saved"
+int VGAController::getBackgroundSaveBufferSize(int width, int height)
+{
+  return width * height;
+}
+
+
 void IRAM_ATTR VGAController::hideSprites()
 {
   if (!m_spritesHidden) {
