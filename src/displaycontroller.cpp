@@ -158,17 +158,6 @@ Sprite::~Sprite()
 }
 
 
-// calc and alloc required save-background space
-// Display controller requires to call using Single Buffering display (Double Buffering doesn't require this)
-void Sprite::allocRequiredBackgroundBuffer()
-{
-  int reqBackBufferSize = 0;
-  for (int i = 0; i < framesCount; ++i)
-    reqBackBufferSize = tmax(reqBackBufferSize, frames[i]->width * frames[i]->height);
-  savedBackground = (uint8_t*) realloc(savedBackground, reqBackBufferSize);
-}
-
-
 void Sprite::clearBitmaps()
 {
   free(frames);
@@ -445,11 +434,16 @@ void DisplayController::setSprites(Sprite * sprites, int count, int spriteSize)
   m_sprites      = sprites;
   m_spriteSize   = spriteSize;
   m_spritesCount = count;
+
+  // allocates background buffer
   if (!isDoubleBuffered()) {
     uint8_t * spritePtr = (uint8_t*)m_sprites;
     for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
       Sprite * sprite = (Sprite*) spritePtr;
-      sprite->allocRequiredBackgroundBuffer();
+      int reqBackBufferSize = 0;
+      for (int i = 0; i < sprite->framesCount; ++i)
+        reqBackBufferSize = tmax(reqBackBufferSize, getBackgroundSaveBufferSize(sprite->frames[i]->width, sprite->frames[i]->height));
+      sprite->savedBackground = (uint8_t*) realloc(sprite->savedBackground, reqBackBufferSize);
     }
   }
 }
@@ -488,7 +482,7 @@ void DisplayController::setMouseCursor(Cursor * cursor)
       m_mouseCursor.visible = true;
       m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
       if (!isDoubleBuffered())
-        m_mouseCursor.allocRequiredBackgroundBuffer();
+        m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, getBackgroundSaveBufferSize(cursor->bitmap.width, cursor->bitmap.height));
     }
     refreshSprites();
   }

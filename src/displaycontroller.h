@@ -518,7 +518,6 @@ struct Sprite {
   Sprite * moveBy(int offsetX, int offsetY);
   Sprite * moveBy(int offsetX, int offsetY, int wrapAroundWidth, int wrapAroundHeight);
   Sprite * moveTo(int x, int y);
-  void allocRequiredBackgroundBuffer();
 };
 
 
@@ -747,6 +746,8 @@ protected:
   virtual void hideSprites() = 0;
 
   virtual void showSprites() = 0;
+
+  virtual int getBackgroundSaveBufferSize(int width, int height) = 0;
 
   void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
 
