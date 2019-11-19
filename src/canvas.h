@@ -611,7 +611,7 @@ public:
    *     Canvas.selectFont(Canvas.getPresetFontInfo(40, 14));
    *
    *     // Set the 8x8 predefined font (FONT_8x8 defined in font_8x8.h)
-   *     Canvas.selectFont(&FONT_8x8);
+   *     Canvas.selectFont(&fabgl::FONT_8x8);
    */
   void selectFont(FontInfo const * fontInfo);
 
