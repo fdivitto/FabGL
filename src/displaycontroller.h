@@ -751,9 +751,13 @@ protected:
 
   void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
 
+  bool getPrimitive(Primitive * primitive, int timeOutMS = 0);
   bool getPrimitiveISR(Primitive * primitive);
 
+  void waitForPrimitives();
+
   void insertPrimitiveISR(Primitive * primitive);
+  void insertPrimitive(Primitive * primitive, int timeOutMS = -1);
 
   Sprite * mouseCursor() { return &m_mouseCursor; }
 
