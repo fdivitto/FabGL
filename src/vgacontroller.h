@@ -478,7 +478,9 @@ private:
 
   void updateAbsoluteClippingRect();
 
+  // abstract method of DisplayController
   void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
+
   void drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
   void drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
   void drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
@@ -489,11 +491,6 @@ private:
   void drawLine(int X1, int Y1, int X2, int Y2, uint8_t pattern);
 
   // abstract method of DisplayController
-  void hideSprites();
-
-  // abstract method of DisplayController
-  void showSprites();
-
   PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }
 
   static void VSyncInterrupt();
@@ -548,8 +545,6 @@ private:
   int                    m_DMABuffersCount;
 
   gpio_num_t             m_VSyncGPIO;
-
-  bool                   m_spritesHidden; // true between hideSprites() and showSprites()
 
 };
 

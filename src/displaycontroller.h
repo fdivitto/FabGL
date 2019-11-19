@@ -747,9 +747,9 @@ protected:
 
   int spritesCount() { return m_spritesCount; }
 
-  virtual void hideSprites() = 0;
+  void hideSprites();
 
-  virtual void showSprites() = 0;
+  void showSprites();
 
   virtual PixelFormat getBitmapSavePixelFormat() = 0;
 
@@ -778,6 +778,7 @@ private:
   void *                 m_sprites;       // pointer to array of sprite structures
   int                    m_spriteSize;    // size of sprite structure
   int                    m_spritesCount;  // number of sprites in m_sprites array
+  bool                   m_spritesHidden; // true between hideSprites() and showSprites()
 
   // mouse cursor (mouse pointer) support
   Sprite                 m_mouseCursor;

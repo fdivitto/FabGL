@@ -367,12 +367,14 @@ Bitmap::~Bitmap()
 DisplayController::DisplayController()
 {
   m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
+
   m_backgroundPrimitiveExecutionEnabled = true;
-  m_sprites = nullptr;
-  m_spritesCount = 0;
-  m_doubleBuffered = false;
-  m_mouseCursor.visible = false;
-  m_backgroundPrimitiveTimeoutEnabled = true;
+  m_sprites                             = nullptr;
+  m_spritesCount                        = 0;
+  m_doubleBuffered                      = false;
+  m_mouseCursor.visible                 = false;
+  m_backgroundPrimitiveTimeoutEnabled   = true;
+  m_spritesHidden                       = true;
 }
 
 
@@ -497,6 +499,79 @@ void DisplayController::refreshSprites()
   Primitive p;
   p.cmd = PrimitiveCmd::RefreshSprites;
   addPrimitive(p);
+}
+
+
+void IRAM_ATTR DisplayController::hideSprites()
+{
+  if (!m_spritesHidden) {
+    m_spritesHidden = true;
+
+    // normal sprites
+    if (spritesCount() > 0 && !isDoubleBuffered()) {
+      // restore saved backgrounds
+      for (int i = spritesCount() - 1; i >= 0; --i) {
+        Sprite * sprite = getSprite(i);
+        if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
+          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, getBitmapSavePixelFormat());
+          drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
+          sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
+        }
+      }
+    }
+
+    // mouse cursor sprite
+    Sprite * mouseSprite = mouseCursor();
+    if (mouseSprite->savedBackgroundWidth > 0) {
+      Bitmap bitmap(mouseSprite->savedBackgroundWidth, mouseSprite->savedBackgroundHeight, mouseSprite->savedBackground, getBitmapSavePixelFormat());
+      drawBitmap(mouseSprite->savedX, mouseSprite->savedY, &bitmap, nullptr, true);
+      mouseSprite->savedBackgroundWidth = mouseSprite->savedBackgroundHeight = 0;
+    }
+
+  }
+}
+
+
+void IRAM_ATTR DisplayController::showSprites()
+{
+  if (m_spritesHidden) {
+    m_spritesHidden = false;
+
+    // normal sprites
+    // save backgrounds and draw sprites
+    for (int i = 0; i < spritesCount(); ++i) {
+      Sprite * sprite = getSprite(i);
+      if (sprite->visible && sprite->allowDraw && sprite->getFrame()) {
+        // save sprite X and Y so other threads can change them without interferring
+        int16_t spriteX = sprite->x;
+        int16_t spriteY = sprite->y;
+        Bitmap const * bitmap = sprite->getFrame();
+        drawBitmap(spriteX, spriteY, bitmap, sprite->savedBackground, true);
+        sprite->savedX = spriteX;
+        sprite->savedY = spriteY;
+        sprite->savedBackgroundWidth  = bitmap->width;
+        sprite->savedBackgroundHeight = bitmap->height;
+        if (sprite->isStatic)
+          sprite->allowDraw = false;
+      }
+    }
+
+    // mouse cursor sprite
+    // save backgrounds and draw mouse cursor
+    Sprite * mouseSprite = mouseCursor();
+    if (mouseSprite->visible && mouseSprite->getFrame()) {
+      // save sprite X and Y so other threads can change them without interferring
+      int16_t spriteX = mouseSprite->x;
+      int16_t spriteY = mouseSprite->y;
+      Bitmap const * bitmap = mouseSprite->getFrame();
+      drawBitmap(spriteX, spriteY, bitmap, mouseSprite->savedBackground, true);
+      mouseSprite->savedX = spriteX;
+      mouseSprite->savedY = spriteY;
+      mouseSprite->savedBackgroundWidth  = bitmap->width;
+      mouseSprite->savedBackgroundHeight = bitmap->height;
+    }
+
+  }
 }
 
 
