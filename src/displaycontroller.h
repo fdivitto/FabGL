@@ -751,7 +751,7 @@ protected:
 
   virtual void showSprites() = 0;
 
-  virtual int getBackgroundSaveBufferSize(int width, int height) = 0;
+  virtual PixelFormat getBitmapSavePixelFormat() = 0;
 
   void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
 

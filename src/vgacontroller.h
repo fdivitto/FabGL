@@ -494,8 +494,7 @@ private:
   // abstract method of DisplayController
   void showSprites();
 
-  // abstract method of DisplayController
-  int getBackgroundSaveBufferSize(int width, int height);
+  PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }
 
   static void VSyncInterrupt();
 

@@ -479,7 +479,7 @@ void DisplayController::setSprites(Sprite * sprites, int count, int spriteSize)
       Sprite * sprite = (Sprite*) spritePtr;
       int reqBackBufferSize = 0;
       for (int i = 0; i < sprite->framesCount; ++i)
-        reqBackBufferSize = tmax(reqBackBufferSize, getBackgroundSaveBufferSize(sprite->frames[i]->width, sprite->frames[i]->height));
+        reqBackBufferSize = tmax(reqBackBufferSize, getRowLength(sprite->frames[i]->width, getBitmapSavePixelFormat()) * sprite->frames[i]->height);
       sprite->savedBackground = (uint8_t*) realloc(sprite->savedBackground, reqBackBufferSize);
     }
   }
@@ -519,7 +519,7 @@ void DisplayController::setMouseCursor(Cursor * cursor)
       m_mouseCursor.visible = true;
       m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
       if (!isDoubleBuffered())
-        m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, getBackgroundSaveBufferSize(cursor->bitmap.width, cursor->bitmap.height));
+        m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, getRowLength(cursor->bitmap.width, getBitmapSavePixelFormat()) * cursor->bitmap.height);
     }
     refreshSprites();
   }
