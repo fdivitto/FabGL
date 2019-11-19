@@ -753,6 +753,8 @@ protected:
 
   virtual PixelFormat getBitmapSavePixelFormat() = 0;
 
+  virtual void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect) = 0;
+
   void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
 
   bool getPrimitive(Primitive * primitive, int timeOutMS = 0);
