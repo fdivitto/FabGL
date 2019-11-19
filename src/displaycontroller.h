@@ -399,6 +399,10 @@ enum class PixelFormat : uint8_t {
 };
 
 
+// returns row length using the specified pixel format, in bytes
+int getRowLength(int width, PixelFormat format);
+
+
 /**
  * @brief Represents an image
  */

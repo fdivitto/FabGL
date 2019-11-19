@@ -80,6 +80,23 @@ const RGB888 COLOR2RGB888[16] = {
 
 
 
+int getRowLength(int width, PixelFormat format)
+{
+  switch (format) {
+    case PixelFormat::Mask:
+      return (width + 7) / 8;
+    case PixelFormat::RGBA2222:
+      return width * sizeof(RGBA2222);
+    case PixelFormat::RGBA8888:
+      return width * sizeof(RGBA8888);
+    case PixelFormat::Undefined:
+      return 0;
+  }
+  return 0; // just to avoid compiler complaint
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // RGB222 implementation
