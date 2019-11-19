@@ -471,7 +471,6 @@ private:
   void execCopyRect(Rect const & source);
   void execSwapFGBG(Rect const & rect);
   void execRenderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
-  void execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo);
   void execSwapBuffers();
   void execDrawPath(Path const & path);
   void execFillPath(Path const & path);

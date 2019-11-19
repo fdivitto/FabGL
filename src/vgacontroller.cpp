@@ -795,7 +795,8 @@ void IRAM_ATTR VGAController::execPrimitive(Primitive const & prim)
       execRenderGlyphsBuffer(prim.glyphsBufferRenderInfo);
       break;
     case PrimitiveCmd::DrawBitmap:
-      execDrawBitmap(prim.bitmapDrawingInfo);
+      hideSprites();
+      drawBitmap(prim.bitmapDrawingInfo.X + m_paintState.origin.X, prim.bitmapDrawingInfo.Y + m_paintState.origin.Y, prim.bitmapDrawingInfo.bitmap, nullptr, false);
       break;
     case PrimitiveCmd::RefreshSprites:
       hideSprites();
@@ -1856,13 +1857,6 @@ void VGAController::writeScreen(Rect const & rect, RGB222 * srcBuf)
     for (int x = rect.X1; x <= rect.X2; ++x, ++sbuf)
       VGA_PIXELINROW(row, x) = *sbuf | HVSync;
   }
-}
-
-
-void IRAM_ATTR VGAController::execDrawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo)
-{
-  hideSprites();
-  drawBitmap(bitmapDrawingInfo.X + m_paintState.origin.X, bitmapDrawingInfo.Y + m_paintState.origin.Y, bitmapDrawingInfo.bitmap, nullptr, false);
 }
 
 
