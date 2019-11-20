@@ -24,6 +24,7 @@
 #include "displaycontroller.h"
 
 #include <string.h>
+#include <limits.h>
 
 #include "fabutils.h"
 #include "images/cursors.h"
@@ -627,6 +628,346 @@ void DisplayController::setMouseCursorPos(int X, int Y)
   refreshSprites();
 }
 
+
+void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
+{
+  switch (prim.cmd) {
+    case PrimitiveCmd::SetPenColor:
+      paintState().penColor = prim.color;
+      break;
+    case PrimitiveCmd::SetBrushColor:
+      paintState().brushColor = prim.color;
+      break;
+    case PrimitiveCmd::SetPixel:
+      setPixel(prim.position);
+      break;
+    case PrimitiveCmd::SetPixelAt:
+      setPixelAt(prim.pixelDesc);
+      break;
+    case PrimitiveCmd::MoveTo:
+      paintState().position = Point(prim.position.X + paintState().origin.X, prim.position.Y + paintState().origin.Y);
+      break;
+    case PrimitiveCmd::LineTo:
+      lineTo(prim.position);
+      break;
+    case PrimitiveCmd::FillRect:
+      fillRect(prim.rect);
+      break;
+    case PrimitiveCmd::DrawRect:
+      drawRect(prim.rect);
+      break;
+    case PrimitiveCmd::FillEllipse:
+      fillEllipse(prim.size);
+      break;
+    case PrimitiveCmd::DrawEllipse:
+      drawEllipse(prim.size);
+      break;
+    case PrimitiveCmd::Clear:
+      clear();
+      break;
+    case PrimitiveCmd::VScroll:
+      VScroll(prim.ivalue);
+      break;
+    case PrimitiveCmd::HScroll:
+      HScroll(prim.ivalue);
+      break;
+    case PrimitiveCmd::DrawGlyph:
+      drawGlyph(prim.glyph, paintState().glyphOptions, paintState().penColor, paintState().brushColor);
+      break;
+    case PrimitiveCmd::SetGlyphOptions:
+      paintState().glyphOptions = prim.glyphOptions;
+      break;
+    case PrimitiveCmd::SetPaintOptions:
+      paintState().paintOptions = prim.paintOptions;
+      break;
+    case PrimitiveCmd::InvertRect:
+      invertRect(prim.rect);
+      break;
+    case PrimitiveCmd::CopyRect:
+      copyRect(prim.rect);
+      break;
+    case PrimitiveCmd::SetScrollingRegion:
+      paintState().scrollingRegion = prim.rect;
+      break;
+    case PrimitiveCmd::SwapFGBG:
+      swapFGBG(prim.rect);
+      break;
+    case PrimitiveCmd::RenderGlyphsBuffer:
+      renderGlyphsBuffer(prim.glyphsBufferRenderInfo);
+      break;
+    case PrimitiveCmd::DrawBitmap:
+      hideSprites();
+      drawBitmap(prim.bitmapDrawingInfo.X + paintState().origin.X, prim.bitmapDrawingInfo.Y + paintState().origin.Y, prim.bitmapDrawingInfo.bitmap, nullptr, false);
+      break;
+    case PrimitiveCmd::RefreshSprites:
+      hideSprites();
+      showSprites();
+      break;
+    case PrimitiveCmd::SwapBuffers:
+      swapBuffers();
+      break;
+    case PrimitiveCmd::DrawPath:
+      drawPath(prim.path);
+      break;
+    case PrimitiveCmd::FillPath:
+      fillPath(prim.path);
+      break;
+    case PrimitiveCmd::SetOrigin:
+      paintState().origin = prim.position;
+      updateAbsoluteClippingRect();
+      break;
+    case PrimitiveCmd::SetClippingRect:
+      paintState().clippingRect = prim.rect;
+      updateAbsoluteClippingRect();
+      break;
+  }
+}
+
+
+void IRAM_ATTR DisplayController::lineTo(Point const & position)
+{
+  hideSprites();
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+
+  int origX = paintState().origin.X;
+  int origY = paintState().origin.Y;
+
+  drawLine(paintState().position.X, paintState().position.Y, position.X + origX, position.Y + origY, color);
+
+  paintState().position = Point(position.X + origX, position.Y + origY);
+}
+
+
+void IRAM_ATTR DisplayController::updateAbsoluteClippingRect()
+{
+  int X1 = iclamp(paintState().origin.X + paintState().clippingRect.X1, 0, getViewPortWidth() - 1);
+  int Y1 = iclamp(paintState().origin.Y + paintState().clippingRect.Y1, 0, getViewPortHeight() - 1);
+  int X2 = iclamp(paintState().origin.X + paintState().clippingRect.X2, 0, getViewPortWidth() - 1);
+  int Y2 = iclamp(paintState().origin.Y + paintState().clippingRect.Y2, 0, getViewPortHeight() - 1);
+  paintState().absClippingRect = Rect(X1, Y1, X2, Y2);
+}
+
+
+void IRAM_ATTR DisplayController::drawRect(Rect const & rect)
+{
+  int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + paintState().origin.X;
+  int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + paintState().origin.Y;
+  int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + paintState().origin.X;
+  int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + paintState().origin.Y;
+
+  hideSprites();
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+
+  drawLine(x1 + 1, y1,     x2, y1, color);
+  drawLine(x2,     y1 + 1, x2, y2, color);
+  drawLine(x2 - 1, y2,     x1, y2, color);
+  drawLine(x1,     y2 - 1, x1, y1, color);
+}
+
+
+void IRAM_ATTR DisplayController::fillRect(Rect const & rect)
+{
+  int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + paintState().origin.X;
+  int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + paintState().origin.Y;
+  int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + paintState().origin.X;
+  int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + paintState().origin.Y;
+
+  const int clipX1 = paintState().absClippingRect.X1;
+  const int clipY1 = paintState().absClippingRect.Y1;
+  const int clipX2 = paintState().absClippingRect.X2;
+  const int clipY2 = paintState().absClippingRect.Y2;
+
+  if (x1 > clipX2 || x2 < clipX1 || y1 > clipY2 || y2 < clipY1)
+    return;
+
+  x1 = iclamp(x1, clipX1, clipX2);
+  y1 = iclamp(y1, clipY1, clipY2);
+  x2 = iclamp(x2, clipX1, clipX2);
+  y2 = iclamp(y2, clipY1, clipY2);
+
+  hideSprites();
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+
+  for (int y = y1; y <= y2; ++y)
+    fillRow(y, x1, x2, color);
+}
+
+
+void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
+{
+  hideSprites();
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+
+  const int clipX1 = paintState().absClippingRect.X1;
+  const int clipY1 = paintState().absClippingRect.Y1;
+  const int clipX2 = paintState().absClippingRect.X2;
+  const int clipY2 = paintState().absClippingRect.Y2;
+
+  const int halfWidth  = size.width / 2;
+  const int halfHeight = size.height / 2;
+  const int hh = halfHeight * halfHeight;
+  const int ww = halfWidth * halfWidth;
+  const int hhww = hh * ww;
+
+  int x0 = halfWidth;
+  int dx = 0;
+
+  int centerX = paintState().position.X;
+  int centerY = paintState().position.Y;
+
+  if (centerY >= clipY1 && centerY <= clipY2) {
+    int col1 = centerX - halfWidth;
+    int col2 = centerX + halfWidth;
+    if (col1 <= clipX2 && col2 >= clipX1) {
+      col1 = iclamp(col1, clipX1, clipX2);
+      col2 = iclamp(col2, clipX1, clipX2);
+      fillRow(centerY, col1, col2, color);
+    }
+  }
+
+  for (int y = 1; y <= halfHeight; ++y)
+  {
+    int x1 = x0 - (dx - 1);
+    for ( ; x1 > 0; x1--)
+      if (x1 * x1 * hh + y * y * ww <= hhww)
+        break;
+    dx = x0 - x1;
+    x0 = x1;
+
+    int col1 = centerX - x0;
+    int col2 = centerX + x0;
+
+    if (col1 <= clipX2 && col2 >= clipX1) {
+
+      col1 = iclamp(col1, clipX1, clipX2);
+      col2 = iclamp(col2, clipX1, clipX2);
+
+      int y1 = centerY - y;
+      if (y1 >= clipY1 && y1 <= clipY2)
+        fillRow(y1, col1, col2, color);
+
+      int y2 = centerY + y;
+      if (y2 >= clipY1 && y2 <= clipY2)
+        fillRow(y2, col1, col2, color);
+
+    }
+  }
+}
+
+
+void IRAM_ATTR DisplayController::renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo)
+{
+  hideSprites();
+  int itemX = glyphsBufferRenderInfo.itemX;
+  int itemY = glyphsBufferRenderInfo.itemY;
+
+  int glyphsWidth  = glyphsBufferRenderInfo.glyphsBuffer->glyphsWidth;
+  int glyphsHeight = glyphsBufferRenderInfo.glyphsBuffer->glyphsHeight;
+
+  uint32_t const * mapItem = glyphsBufferRenderInfo.glyphsBuffer->map + itemX + itemY * glyphsBufferRenderInfo.glyphsBuffer->columns;
+
+  GlyphOptions glyphOptions = glyphMapItem_getOptions(mapItem);
+  auto fgColor = glyphMapItem_getFGColor(mapItem);
+  auto bgColor = glyphMapItem_getBGColor(mapItem);
+
+  Glyph glyph;
+  glyph.X      = (int16_t) (itemX * glyphsWidth * (glyphOptions.doubleWidth ? 2 : 1));
+  glyph.Y      = (int16_t) (itemY * glyphsHeight);
+  glyph.width  = glyphsWidth;
+  glyph.height = glyphsHeight;
+  glyph.data   = glyphsBufferRenderInfo.glyphsBuffer->glyphsData + glyphMapItem_getIndex(mapItem) * glyphsHeight * ((glyphsWidth + 7) / 8);;
+
+  drawGlyph(glyph, glyphOptions, fgColor, bgColor);
+}
+
+
+void IRAM_ATTR DisplayController::drawPath(Path const & path)
+{
+  hideSprites();
+
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+
+  int origX = paintState().origin.X;
+  int origY = paintState().origin.Y;
+
+  int i = 0;
+  for (; i < path.pointsCount - 1; ++i)
+    drawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[i + 1].X + origX, path.points[i + 1].Y + origY, color);
+  drawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[0].X + origX, path.points[0].Y + origY, color);
+}
+
+
+void IRAM_ATTR DisplayController::fillPath(Path const & path)
+{
+  hideSprites();
+
+  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+
+  const int clipX1 = paintState().absClippingRect.X1;
+  const int clipY1 = paintState().absClippingRect.Y1;
+  const int clipX2 = paintState().absClippingRect.X2;
+  const int clipY2 = paintState().absClippingRect.Y2;
+
+  const int origX = paintState().origin.X;
+  const int origY = paintState().origin.Y;
+
+  int minX = clipX1;
+  int maxX = clipX2 + 1;
+
+  int minY = INT_MAX;
+  int maxY = 0;
+  for (int i = 0; i < path.pointsCount; ++i) {
+    int py = path.points[i].Y + origY;
+    if (py < minY)
+      minY = py;
+    if (py > maxY)
+      maxY = py;
+  }
+  minY = tmax(clipY1, minY);
+  maxY = tmin(clipY2, maxY);
+
+  int16_t nodeX[path.pointsCount];
+
+  for (int pixelY = minY; pixelY <= maxY; ++pixelY) {
+
+    int nodes = 0;
+    int j = path.pointsCount - 1;
+    for (int i = 0; i < path.pointsCount; ++i) {
+      int piy = path.points[i].Y + origY;
+      int pjy = path.points[j].Y + origY;
+      if ((piy < pixelY && pjy >= pixelY) || (pjy < pixelY && piy >= pixelY)) {
+        int pjx = path.points[j].X + origX;
+        int pix = path.points[i].X + origX;
+        int a = (pixelY - piy) * (pjx - pix);
+        int b = (pjy - piy);
+        nodeX[nodes++] = pix + a / b + (((a < 0) ^ (b > 0)) && (a % b));
+      }
+      j = i;
+    }
+
+    int i = 0;
+    while (i < nodes - 1) {
+      if (nodeX[i] > nodeX[i + 1]) {
+        tswap(nodeX[i], nodeX[i + 1]);
+        if (i)
+          --i;
+      } else
+        ++i;
+    }
+
+    for (int i = 0; i < nodes; i += 2) {
+      if (nodeX[i] >= maxX)
+        break;
+      if (nodeX[i + 1] > minX) {
+        if (nodeX[i] < minX)
+          nodeX[i] = minX;
+        if (nodeX[i + 1] > maxX)
+          nodeX[i + 1] = maxX;
+        fillRow(pixelY, nodeX[i], nodeX[i + 1] - 1, color);
+      }
+    }
+  }
+}
 
 
 

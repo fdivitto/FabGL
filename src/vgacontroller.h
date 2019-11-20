@@ -435,33 +435,44 @@ private:
   int fill(uint8_t volatile * buffer, int startPos, int length, uint8_t red, uint8_t green, uint8_t blue, bool hsync, bool vsync);
   void allocateViewPort();
   void freeViewPort();
-  int calcRequiredDMABuffersCount(int viewPortHeight);
+  int calcRequiredDMABuffersCount(int viewPortHeight);  
 
   // abstract method of DisplayController
-  void execPrimitive(Primitive const & prim);
+  void setPixel(Point const & position);
 
-  void execSetPixel(Point const & position);
-  void execSetPixelAt(PixelDesc const & pixelDesc);
-  void execLineTo(Point const & position);
-  void execFillRect(Rect const & rect);
-  void execDrawRect(Rect const & rect);
-  void execFillEllipse(Size const & size);
-  void execDrawEllipse(Size const & size);
-  void execClear();
-  void execVScroll(int scroll);
-  void execHScroll(int scroll);
-  void execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-  void execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-  void execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-  void execInvertRect(Rect const & rect);
-  void execCopyRect(Rect const & source);
-  void execSwapFGBG(Rect const & rect);
-  void execRenderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
-  void execSwapBuffers();
-  void execDrawPath(Path const & path);
-  void execFillPath(Path const & path);
+  // abstract method of DisplayController
+  void setPixelAt(PixelDesc const & pixelDesc);
 
-  void updateAbsoluteClippingRect();
+  // abstract method of DisplayController
+  void drawEllipse(Size const & size);
+
+  // abstract method of DisplayController
+  void clear();
+
+  // abstract method of DisplayController
+  void VScroll(int scroll);
+
+  // abstract method of DisplayController
+  void HScroll(int scroll);
+
+  // abstract method of DisplayController
+  void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+
+  void drawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+
+  void drawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+
+  // abstract method of DisplayController
+  void invertRect(Rect const & rect);
+
+  // abstract method of DisplayController
+  void copyRect(Rect const & source);
+
+  // abstract method of DisplayController
+  void swapFGBG(Rect const & rect);
+
+  // abstract method of DisplayController
+  void swapBuffers();
 
   // abstract method of DisplayController
   void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
@@ -470,10 +481,13 @@ private:
   void drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
   void drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
 
-  void fillRow(int y, int x1, int x2, uint8_t pattern);
+  // abstract method of DisplayController
+  void fillRow(int y, int x1, int x2, RGB888 color);
+
   void swapRows(int yA, int yB, int x1, int x2);
 
-  void drawLine(int X1, int Y1, int X2, int Y2, uint8_t pattern);
+  // abstract method of DisplayController
+  void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
 
   // abstract method of DisplayController
   PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }

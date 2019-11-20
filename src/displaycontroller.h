@@ -749,11 +749,53 @@ public:
    */
   void setMouseCursorPos(int X, int Y);
 
-  virtual void execPrimitive(Primitive const & prim) = 0;
-
   virtual void readScreen(Rect const & rect, RGB888 * destBuf) = 0;
 
 protected:
+
+  void execPrimitive(Primitive const & prim);
+
+  void updateAbsoluteClippingRect();
+
+  virtual void setPixel(Point const & position) = 0;
+
+  virtual void setPixelAt(PixelDesc const & pixelDesc) = 0;
+
+  virtual void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;
+
+  virtual void fillRow(int y, int x1, int x2, RGB888 color) = 0;
+
+  virtual void drawEllipse(Size const & size) = 0;
+
+  virtual void clear() = 0;
+
+  virtual void VScroll(int scroll) = 0;
+
+  virtual void HScroll(int scroll) = 0;
+
+  virtual void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor) = 0;
+
+  virtual void invertRect(Rect const & rect) = 0;
+
+  virtual void swapFGBG(Rect const & rect) = 0;
+
+  virtual void copyRect(Rect const & source) = 0;
+
+  virtual void swapBuffers() = 0;
+
+  void lineTo(Point const & position);
+
+  void drawRect(Rect const & rect);
+
+  void drawPath(Path const & path);
+
+  void fillRect(Rect const & rect);
+
+  void fillEllipse(Size const & size);
+
+  void fillPath(Path const & path);
+
+  void renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
 
   void setSprites(Sprite * sprites, int count, int spriteSize);
 
