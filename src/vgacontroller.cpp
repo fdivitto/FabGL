@@ -718,24 +718,6 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
 }
 
 
-void IRAM_ATTR VGAController::setPixel(Point const & position)
-{
-  hideSprites();
-  uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().brushColor) : preparePixel(paintState().penColor);
-
-  const int x = position.X + paintState().origin.X;
-  const int y = position.Y + paintState().origin.Y;
-
-  const int clipX1 = paintState().absClippingRect.X1;
-  const int clipY1 = paintState().absClippingRect.Y1;
-  const int clipX2 = paintState().absClippingRect.X2;
-  const int clipY2 = paintState().absClippingRect.Y2;
-
-  if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
-    VGA_PIXEL(x, y) = pattern;
-}
-
-
 void IRAM_ATTR VGAController::setPixelAt(PixelDesc const & pixelDesc)
 {
   hideSprites();

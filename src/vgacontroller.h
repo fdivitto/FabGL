@@ -438,9 +438,6 @@ private:
   int calcRequiredDMABuffersCount(int viewPortHeight);  
 
   // abstract method of DisplayController
-  void setPixel(Point const & position);
-
-  // abstract method of DisplayController
   void setPixelAt(PixelDesc const & pixelDesc);
 
   // abstract method of DisplayController

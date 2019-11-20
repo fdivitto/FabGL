@@ -757,8 +757,6 @@ protected:
 
   void updateAbsoluteClippingRect();
 
-  virtual void setPixel(Point const & position) = 0;
-
   virtual void setPixelAt(PixelDesc const & pixelDesc) = 0;
 
   virtual void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;

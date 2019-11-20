@@ -639,7 +639,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
       paintState().brushColor = prim.color;
       break;
     case PrimitiveCmd::SetPixel:
-      setPixel(prim.position);
+      setPixelAt( (PixelDesc) { prim.position, paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor } );
       break;
     case PrimitiveCmd::SetPixelAt:
       setPixelAt(prim.pixelDesc);
