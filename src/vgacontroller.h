@@ -104,20 +104,6 @@ struct VGATimings {
 };
 
 
-struct VGAPaintState {
-  RGB222       penColor;
-  RGB222       brushColor;
-  Point        position;        // value already traslated to "origin"
-  GlyphOptions glyphOptions;
-  PaintOptions paintOptions;
-  Rect         scrollingRegion;
-  Point        origin;
-  Rect         clippingRect;    // relative clipping rectangle
-  Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
-};
-
-
-
 
 /**
 * @brief Represents the VGA controller
@@ -464,9 +450,9 @@ private:
   void execClear();
   void execVScroll(int scroll);
   void execHScroll(int scroll);
-  void execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
-  void execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
-  void execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB222 penColor, RGB222 brushColor);
+  void execDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+  void execDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+  void execDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
   void execInvertRect(Rect const & rect);
   void execCopyRect(Rect const & source);
   void execSwapFGBG(Rect const & rect);
@@ -532,8 +518,6 @@ private:
   volatile uint8_t * *   m_viewPortVisible;
 
   uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
-
-  VGAPaintState          m_paintState;
 
   // when double buffer is enabled the running DMA buffer is always m_DMABuffersRunning
   // when double buffer is not enabled then m_DMABuffers = m_DMABuffersRunning

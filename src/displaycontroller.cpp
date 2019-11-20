@@ -384,6 +384,20 @@ DisplayController::~DisplayController()
 }
 
 
+void DisplayController::resetPaintState()
+{
+  m_paintState.penColor              = RGB888(255, 255, 255);
+  m_paintState.brushColor            = RGB888(0, 0, 0);
+  m_paintState.position              = Point(0, 0);
+  m_paintState.glyphOptions.value    = 0;  // all options: 0
+  m_paintState.paintOptions          = PaintOptions();
+  m_paintState.scrollingRegion       = Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1);
+  m_paintState.origin                = Point(0, 0);
+  m_paintState.clippingRect          = Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1);
+  m_paintState.absClippingRect       = m_paintState.clippingRect;
+}
+
+
 void DisplayController::addPrimitive(Primitive const & primitive)
 {
   if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers)

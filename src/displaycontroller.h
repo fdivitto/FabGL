@@ -569,6 +569,18 @@ struct Primitive {
 };
 
 
+struct PaintState {
+  RGB888       penColor;
+  RGB888       brushColor;
+  Point        position;        // value already traslated to "origin"
+  GlyphOptions glyphOptions;
+  PaintOptions paintOptions;
+  Rect         scrollingRegion;
+  Point        origin;
+  Rect         clippingRect;    // relative clipping rectangle
+  Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
+};
+
 
 
 
@@ -603,6 +615,8 @@ public:
    * @return Display native pixel format
    */
   virtual NativePixelFormat nativePixelFormat() = 0;
+
+  PaintState & paintState() { return m_paintState; }
 
   void addPrimitive(Primitive const & primitive);
 
@@ -767,7 +781,11 @@ protected:
 
   Sprite * mouseCursor() { return &m_mouseCursor; }
 
+  void resetPaintState();
+
 private:
+
+  PaintState             m_paintState;
 
   bool                   m_doubleBuffered;
   volatile QueueHandle_t m_execQueue;
