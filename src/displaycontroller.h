@@ -753,9 +753,7 @@ public:
 
 protected:
 
-  void execPrimitive(Primitive const & prim);
-
-  void updateAbsoluteClippingRect();
+  //// abstract methods
 
   virtual void setPixelAt(PixelDesc const & pixelDesc) = 0;
 
@@ -781,6 +779,20 @@ protected:
 
   virtual void swapBuffers() = 0;
 
+  virtual PixelFormat getBitmapSavePixelFormat() = 0;
+
+  virtual void drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount) = 0;
+
+  virtual void drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount) = 0;
+
+  virtual void drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount) = 0;
+
+  //// implemented methods
+
+  void execPrimitive(Primitive const & prim);
+
+  void updateAbsoluteClippingRect();
+
   void lineTo(Point const & position);
 
   void drawRect(Rect const & rect);
@@ -805,18 +817,18 @@ protected:
 
   void showSprites();
 
-  virtual PixelFormat getBitmapSavePixelFormat() = 0;
-
-  virtual void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect) = 0;
+  void drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
 
   void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
 
   bool getPrimitive(Primitive * primitive, int timeOutMS = 0);
+
   bool getPrimitiveISR(Primitive * primitive);
 
   void waitForPrimitives();
 
   void insertPrimitiveISR(Primitive * primitive);
+
   void insertPrimitive(Primitive * primitive, int timeOutMS = -1);
 
   Sprite * mouseCursor() { return &m_mouseCursor; }
