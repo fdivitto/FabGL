@@ -632,6 +632,8 @@ void DisplayController::setMouseCursorPos(int X, int Y)
 void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
 {
   switch (prim.cmd) {
+    case PrimitiveCmd::Refresh:
+      break;
     case PrimitiveCmd::SetPenColor:
       paintState().penColor = prim.color;
       break;

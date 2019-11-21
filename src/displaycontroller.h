@@ -53,6 +53,11 @@ namespace fabgl {
     - all positions can have negative and outofbound coordinates. Shapes are always clipped correctly.
 */
 enum PrimitiveCmd {
+
+  // Refresh display. Some displays (ie SSD1306) aren't repainted if there aren't primitives
+  // so posting Refresh allows to resend the screenbuffer
+  Refresh,
+
   // Set current pen color
   // params: color
   SetPenColor,
@@ -566,6 +571,7 @@ struct Primitive {
   };
 
   Primitive() { }
+  Primitive(PrimitiveCmd cmd_) : cmd(cmd_) { }
 };
 
 
