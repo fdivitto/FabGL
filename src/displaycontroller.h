@@ -610,6 +610,20 @@ public:
   virtual int getViewPortHeight() = 0;
 
   /**
+   * @brief Determines the screen width in pixels.
+   *
+   * @return Screen width in pixels.
+   */
+  virtual int getScreenWidth() = 0;
+
+  /**
+   * @brief Determines the screen height in pixels.
+   *
+   * @return Screen height in pixels.
+   */
+  virtual int getScreenHeight() = 0;
+
+  /**
    * @brief Represents the native pixel format used by this display.
    *
    * @return Display native pixel format

@@ -254,18 +254,10 @@ public:
 
   VGATimings * getResolutionTimings() { return &m_timings; }
 
-  /**
-   * @brief Determines the screen width in pixels.
-   *
-   * @return Screen width in pixels.
-   */
+  // abstract method of DisplayController
   int getScreenWidth()    { return m_timings.HVisibleArea; }
 
-  /**
-   * @brief Determines the screen height in pixels.
-   *
-   * @return Screen height in pixels.
-   */
+  // abstract method of DisplayController
   int getScreenHeight()   { return m_timings.VVisibleArea; }
 
   /**
