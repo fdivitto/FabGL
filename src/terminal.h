@@ -516,6 +516,7 @@ public:
    * Terminal automatically choises the best font considering screen resolution and required
    * number of columns and rows.<br>
    * Particular cases require setting custom fonts, so applications can use Terminal.loadFont().
+   * Only fixed width fonts are supported for terminals.
    *
    * @param font Specifies font info for the font to set.
    */
