@@ -368,6 +368,8 @@ void Terminal::loadFont(FontInfo const * font)
   m_glyphsBuffer.map          = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_32BIT);
   m_alternateMap = nullptr;
   m_alternateScreenBuffer = false;
+
+  setScrollingRegion(1, m_rows);
 }
 
 
@@ -392,7 +394,6 @@ void Terminal::set132ColumnMode(bool value)
   #endif
 
   loadFont(m_canvas->getPresetFontInfo(value ? 132 : 80, 25));
-  setScrollingRegion(1, m_rows);
 }
 
 
