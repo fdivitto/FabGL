@@ -182,10 +182,9 @@ public:
    */
   static PS2Controller * instance() { return s_instance; }
 
+  void warmInit();
 
 private:
-
-  void warmInit();
 
   static void IRAM_ATTR rtc_isr(void * arg);
 

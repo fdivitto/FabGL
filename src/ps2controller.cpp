@@ -962,8 +962,8 @@ int PS2Controller::getData(int PS2Port)
     // check parity
     if ((data16 >> 9 & 1) != !calcParity(data)) {
       // parity error
-      sendData(0xFE, PS2Port);  // request to resend last byte
       warmInit();
+      sendData(0xFE, PS2Port);  // request to resend last byte
       data = -1;
     } else {
       // parity OK
@@ -995,6 +995,9 @@ void PS2Controller::warmInit()
   RTC_SLOW_MEM[RTCMEM_PORT1_WORD_SENT_FLAG] = 0;
   RTC_SLOW_MEM[RTCMEM_PORT0_WORD_RX_READY]  = 0;
   RTC_SLOW_MEM[RTCMEM_PORT1_WORD_RX_READY]  = 0;
+
+  // delay required to take ULP time to resume
+  vTaskDelay(20 / portTICK_PERIOD_MS);
 }
 
 
