@@ -197,7 +197,7 @@ private:
   Mouse *               m_mouse;
 
   // address of next word to read in the circular buffer
-  int                   m_readPos[2];
+  volatile int          m_readPos[2];
 
   // task that is waiting for TX ends
   volatile TaskHandle_t m_TXWaitTask[2];
