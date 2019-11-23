@@ -196,6 +196,8 @@ struct MouseButtons {
   uint8_t left   : 1;   /**< Contains 1 when left button is pressed. */
   uint8_t middle : 1;   /**< Contains 1 when middle button is pressed. */
   uint8_t right  : 1;   /**< Contains 1 when right button is pressed. */
+
+  MouseButtons() : left(0), middle(0), right(0) { }
 };
 
 
@@ -208,6 +210,8 @@ struct MouseStatus {
   int16_t      Y;           /**< Absolute vertical mouse position. */
   int8_t       wheelDelta;  /**< Scroll wheel delta. */
   MouseButtons buttons;     /**< Mouse buttons status. */
+
+  MouseStatus() : X(0), Y(0), wheelDelta(0) { }
 };
 
 
