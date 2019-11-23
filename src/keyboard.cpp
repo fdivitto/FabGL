@@ -401,11 +401,12 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
 {
   PS2DeviceClass::begin(PS2Port);
 
-  m_CTRL     = false;
-  m_ALT      = false;
-  m_SHIFT    = false;
-  m_CAPSLOCK = false;
-  m_NUMLOCK  = false;
+  m_CTRL       = false;
+  m_ALT        = false;
+  m_SHIFT      = false;
+  m_CAPSLOCK   = false;
+  m_NUMLOCK    = false;
+  m_SCROLLLOCK = false;
 
   m_numLockLED     = false;
   m_capsLockLED    = false;

@@ -141,7 +141,7 @@ bool PS2DeviceClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SETLEDS, PS2_REPLY_ACK))
     return false;
-  bool ret = sendCommand((scrollLock ? 1 : 0) | (numLock ? 2 : 0) | (capsLock ? 4 : 0), PS2_REPLY_ACK);
+  bool ret = sendCommand((scrollLock << 0) | (numLock << 1) | (capsLock << 2), PS2_REPLY_ACK);
   return ret;
 }
 
