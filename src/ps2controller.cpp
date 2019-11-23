@@ -839,7 +839,8 @@ PS2Controller * PS2Controller::s_instance = nullptr;
 
 PS2Controller::PS2Controller()
   : m_keyboard(nullptr),
-    m_mouse(nullptr)
+    m_mouse(nullptr),
+    m_suspendCount(0)
 {
   s_instance = this;
 }
@@ -879,10 +880,8 @@ void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gp
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
 
   // install RTC interrupt handler (on ULP Wake() instruction)
-  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, nullptr, &m_isrHandle);
+  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, 0, rtc_isr, this, &m_isrHandle);
   SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
-
-  m_suspendCount = 0;
 }
 
 
@@ -901,13 +900,13 @@ void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
       break;
     case PS2Preset::KeyboardPort0:
       // only keyboard configured on port 0
-      setKeyboard(new Keyboard);
-      keyboard()->begin(GPIO_NUM_33, GPIO_NUM_32, generateVirtualKeys, createVKQueue);
+      // this will call setKeyboard and begin()
+      (new Keyboard)->begin(GPIO_NUM_33, GPIO_NUM_32, generateVirtualKeys, createVKQueue);
       break;
     case PS2Preset::MousePort0:
       // only mouse configured on port 0
-      setMouse(new Mouse);
-      mouse()->begin(GPIO_NUM_33, GPIO_NUM_32);
+      // this will call setMouse and begin()
+      (new Mouse)->begin(GPIO_NUM_33, GPIO_NUM_32);
       break;
   };
 }
@@ -1037,6 +1036,7 @@ void PS2Controller::sendData(uint8_t data, int PS2Port)
 
 void IRAM_ATTR PS2Controller::rtc_isr(void * arg)
 {
+  PS2Controller * ctrl = (PS2Controller*) arg;
   for (int PS2Port = 0; PS2Port < 2; ++PS2Port) {
 
     uint32_t RTCMEM_PORTX_WORD_SENT_FLAG = (PS2Port == 0 ? RTCMEM_PORT0_WORD_SENT_FLAG : RTCMEM_PORT1_WORD_SENT_FLAG);
@@ -1047,10 +1047,10 @@ void IRAM_ATTR PS2Controller::rtc_isr(void * arg)
     if (RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG]) {
       // reset flag and awake waiting task
       RTC_SLOW_MEM[RTCMEM_PORTX_WORD_SENT_FLAG] = 0;
-      s_instance->m_readPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
-      if (s_instance->m_TXWaitTask[PS2Port]) {
-        vTaskNotifyGiveFromISR(s_instance->m_TXWaitTask[PS2Port], nullptr);
-        s_instance->m_TXWaitTask[PS2Port] = nullptr;
+      ctrl->m_readPos[PS2Port] = RTC_SLOW_MEM[RTCMEM_PORTX_WRITE_POS] & 0xFFFF;
+      if (ctrl->m_TXWaitTask[PS2Port]) {
+        vTaskNotifyGiveFromISR(ctrl->m_TXWaitTask[PS2Port], nullptr);
+        ctrl->m_TXWaitTask[PS2Port] = nullptr;
       }
     }
 
@@ -1058,9 +1058,9 @@ void IRAM_ATTR PS2Controller::rtc_isr(void * arg)
     if (RTC_SLOW_MEM[RTCMEM_PORTX_WORD_RX_READY]) {
       // reset flag and awake waiting task
       RTC_SLOW_MEM[RTCMEM_PORTX_WORD_RX_READY] = 0;
-      if (s_instance->m_RXWaitTask[PS2Port]) {
-        vTaskNotifyGiveFromISR(s_instance->m_RXWaitTask[PS2Port], nullptr);
-        s_instance->m_RXWaitTask[PS2Port] = nullptr;
+      if (ctrl->m_RXWaitTask[PS2Port]) {
+        vTaskNotifyGiveFromISR(ctrl->m_RXWaitTask[PS2Port], nullptr);
+        ctrl->m_RXWaitTask[PS2Port] = nullptr;
       }
     }
 
