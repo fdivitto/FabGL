@@ -20,7 +20,8 @@
  */
 
 
-#include "Arduino.h"
+
+#include <string.h>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -449,7 +450,7 @@ bool Keyboard::reset()
     m_keyboardAvailable = send_cmdReset() && send_cmdSetScancodeSet(2);
     if (m_keyboardAvailable)
       break;
-    delay(500);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
   }
 
   return m_keyboardAvailable;

@@ -1032,7 +1032,7 @@ void Terminal::send(char c)
 
   if (m_serialPort) {
     while (m_serialPort->availableForWrite() == 0)
-      delay(1);
+      vTaskDelay(1 / portTICK_PERIOD_MS);
     m_serialPort->write(c);
   }
 
@@ -1046,7 +1046,7 @@ void Terminal::send(char const * str)
   if (m_serialPort) {
     while (*str) {
       while (m_serialPort->availableForWrite() == 0)
-        delay(1);
+        vTaskDelay(1 / portTICK_PERIOD_MS);
       m_serialPort->write(*str);
 
       #if FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES

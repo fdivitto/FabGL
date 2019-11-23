@@ -20,8 +20,6 @@
  */
 
 
-#include "Arduino.h"
-
 #include "freertos/FreeRTOS.h"
 
 #include "mouse.h"
@@ -79,7 +77,7 @@ bool Mouse::reset()
     m_mouseAvailable = send_cmdReset();
     if (m_mouseAvailable)
       break;
-    delay(500);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
   }
 
   // negotiate compatibility and default parameters

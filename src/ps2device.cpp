@@ -20,8 +20,6 @@
  */
 
 
-#include "Arduino.h"
-
 #include "freertos/FreeRTOS.h"
 
 #include "ps2device.h"
@@ -112,7 +110,7 @@ int PS2DeviceClass::getData(int timeOutMS)
     lock(-1);
     PS2Controller::instance()->waitData((timeOutMS > -1 ? timeOutMS : PS2_CMD_GETDATA_SUBTIMEOUT), m_PS2Port);
     unlock();
-    delay(10);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
   }
   return ret;
 }
