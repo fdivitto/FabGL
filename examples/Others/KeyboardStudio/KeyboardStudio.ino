@@ -50,22 +50,22 @@ void printInfo()
   if (keyboard->isKeyboardAvailable()) {
     Serial.write("Device Id = ");
     switch (keyboard->identify()) {
-      case fabgl::OldATKeyboard:
+      case PS2DeviceType::OldATKeyboard:
         Serial.write("\"Old AT Keyboard\"");
         break;
-      case fabgl::MouseStandard:
+      case PS2DeviceType::MouseStandard:
         Serial.write("\"Standard Mouse\"");
         break;
-      case fabgl::MouseWithScrollWheel:
+      case PS2DeviceType::MouseWithScrollWheel:
         Serial.write("\"Mouse with scroll wheel\"");
         break;
-      case fabgl::Mouse5Buttons:
+      case PS2DeviceType::Mouse5Buttons:
         Serial.write("\"5 Buttons Mouse\"");
         break;
-      case fabgl::MF2KeyboardWithTranslation:
+      case PS2DeviceType::MF2KeyboardWithTranslation:
         Serial.write("\"MF2 Keyboard with translation\"");
         break;
-      case fabgl::M2Keyboard:
+      case PS2DeviceType::M2Keyboard:
         Serial.write("\"MF2 keyboard\"");
         break;
       default:
