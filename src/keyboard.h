@@ -157,7 +157,7 @@ extern const KeyboardLayout ItalianLayout;
  *       Serial.printf("VirtualKey = %s\n", Keyboard.virtualKeyToString(Keyboard.getNextVirtualKey()));
  *
  */
-class Keyboard : public PS2DeviceClass {
+class Keyboard : public PS2Device {
 
 public:
 

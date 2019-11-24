@@ -400,7 +400,7 @@ Keyboard::Keyboard()
 
 void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
 {
-  PS2DeviceClass::begin(PS2Port);
+  PS2Device::begin(PS2Port);
 
   m_CTRL       = false;
   m_ALT        = false;

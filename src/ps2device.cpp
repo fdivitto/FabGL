@@ -61,43 +61,43 @@ namespace fabgl {
 #define PS2_CMD_GETDATA_SUBTIMEOUT            (PS2_CMD_TIMEOUT / 2)
 
 
-PS2DeviceClass::PS2DeviceClass()
+PS2Device::PS2Device()
 {
   m_deviceLock = xSemaphoreCreateRecursiveMutex();
 }
 
 
-PS2DeviceClass::~PS2DeviceClass()
+PS2Device::~PS2Device()
 {
   vSemaphoreDelete(m_deviceLock);
 }
 
 
-bool PS2DeviceClass::lock(int timeOutMS)
+bool PS2Device::lock(int timeOutMS)
 {
   return xSemaphoreTakeRecursive(m_deviceLock, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
 }
 
 
-void PS2DeviceClass::unlock()
+void PS2Device::unlock()
 {
   xSemaphoreGiveRecursive(m_deviceLock);
 }
 
 
-void PS2DeviceClass::begin(int PS2Port)
+void PS2Device::begin(int PS2Port)
 {
   m_PS2Port = PS2Port;
 }
 
 
-int PS2DeviceClass::dataAvailable()
+int PS2Device::dataAvailable()
 {
   return PS2Controller::instance()->dataAvailable(m_PS2Port);
 }
 
 
-int PS2DeviceClass::getData(int timeOutMS)
+int PS2Device::getData(int timeOutMS)
 {
   TimeOut timeout;
   int ret = -1;
@@ -116,7 +116,7 @@ int PS2DeviceClass::getData(int timeOutMS)
 }
 
 
-bool PS2DeviceClass::sendCommand(uint8_t cmd, uint8_t expectedReply)
+bool PS2Device::sendCommand(uint8_t cmd, uint8_t expectedReply)
 {
   for (int i = 0; i < PS2_CMD_RETRY_COUNT; ++i) {
     PS2Controller::instance()->sendData(cmd, m_PS2Port);
@@ -128,13 +128,13 @@ bool PS2DeviceClass::sendCommand(uint8_t cmd, uint8_t expectedReply)
 }
 
 
-void PS2DeviceClass::requestToResendLastByte()
+void PS2Device::requestToResendLastByte()
 {
   PS2Controller::instance()->sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);
 }
 
 
-bool PS2DeviceClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
+bool PS2Device::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SETLEDS, PS2_REPLY_ACK))
@@ -144,14 +144,14 @@ bool PS2DeviceClass::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
 }
 
 
-bool PS2DeviceClass::send_cmdEcho()
+bool PS2Device::send_cmdEcho()
 {
   PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_ECHO, PS2_REPLY_ECHO);
 }
 
 
-bool PS2DeviceClass::send_cmdGetScancodeSet(uint8_t * result)
+bool PS2Device::send_cmdGetScancodeSet(uint8_t * result)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_GETSET_CURRENT_SCANCODE_SET, PS2_REPLY_ACK))
@@ -163,7 +163,7 @@ bool PS2DeviceClass::send_cmdGetScancodeSet(uint8_t * result)
 }
 
 
-bool PS2DeviceClass::send_cmdSetScancodeSet(uint8_t scancodeSet)
+bool PS2Device::send_cmdSetScancodeSet(uint8_t scancodeSet)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_GETSET_CURRENT_SCANCODE_SET, PS2_REPLY_ACK))
@@ -173,10 +173,10 @@ bool PS2DeviceClass::send_cmdSetScancodeSet(uint8_t scancodeSet)
 
 
 // return value is always valid
-bool PS2DeviceClass::send_cmdIdentify(PS2Device * result)
+bool PS2Device::send_cmdIdentify(PS2DeviceType * result)
 {
   PS2DeviceLock deviceLock(this);
-  *result = PS2Device::UnknownPS2Device;
+  *result = PS2DeviceType::UnknownPS2Device;
   if (!send_cmdDisableScanning())
     return false;
   if (!sendCommand(PS2_CMD_IDENTIFY, PS2_REPLY_ACK))
@@ -184,29 +184,29 @@ bool PS2DeviceClass::send_cmdIdentify(PS2Device * result)
   int b1 = getData(PS2_CMD_TIMEOUT);
   int b2 = getData(PS2_CMD_TIMEOUT);
   if (b1 == -1 && b2 == -1)
-    *result = PS2Device::OldATKeyboard;
+    *result = PS2DeviceType::OldATKeyboard;
   else if (b1 == 0x00 && b2 == -1)
-    *result = PS2Device::MouseStandard;
+    *result = PS2DeviceType::MouseStandard;
   else if (b1 == 0x03 && b2 == -1)
-    *result = PS2Device::MouseWithScrollWheel;
+    *result = PS2DeviceType::MouseWithScrollWheel;
   else if (b1 == 0x04 && b2 == -1)
-    *result = PS2Device::Mouse5Buttons;
+    *result = PS2DeviceType::Mouse5Buttons;
   else if ((b1 == 0xAB && b2 == 0x41) || (b1 == 0xAB && b2 == 0xC1))
-    *result = PS2Device::MF2KeyboardWithTranslation;
+    *result = PS2DeviceType::MF2KeyboardWithTranslation;
   else if (b1 == 0xAB && b2 == 0x83)
-    *result = PS2Device::M2Keyboard;
+    *result = PS2DeviceType::M2Keyboard;
   return send_cmdEnableScanning();
 }
 
 
-bool PS2DeviceClass::send_cmdDisableScanning()
+bool PS2Device::send_cmdDisableScanning()
 {
   PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_DISABLE_SCANNING, PS2_REPLY_ACK);
 }
 
 
-bool PS2DeviceClass::send_cmdEnableScanning()
+bool PS2Device::send_cmdEnableScanning()
 {
   PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_ENABLE_SCANNING, PS2_REPLY_ACK);
@@ -220,7 +220,7 @@ const int16_t REPEATRATES[32] = { 33,  37,  41,  45,  50,  54,  58,  62,  66,  7
 
 // repeatRateMS  :  33 ms ...  500 ms (in steps as above REPEATRATES table)
 // repeatDelayMS : 250 ms ... 1000 ms (in steps of 250 ms)
-bool PS2DeviceClass::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS)
+bool PS2Device::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_TYPEMATIC_RATE_AND_DELAY, PS2_REPLY_ACK))
@@ -237,7 +237,7 @@ bool PS2DeviceClass::send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatD
 
 
 // sampleRate: valid values are 10, 20, 40, 60, 80, 100, and 200 (samples/sec)
-bool PS2DeviceClass::send_cmdSetSampleRate(int sampleRate)
+bool PS2Device::send_cmdSetSampleRate(int sampleRate)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_SAMPLE_RATE, PS2_REPLY_ACK))
@@ -251,7 +251,7 @@ bool PS2DeviceClass::send_cmdSetSampleRate(int sampleRate)
 //   1 = 2 count/mm
 //   2 = 4 count/mm
 //   3 = 8 count/mm
-bool PS2DeviceClass::send_cmdSetResolution(int resolution)
+bool PS2Device::send_cmdSetResolution(int resolution)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_RESOLUTION, PS2_REPLY_ACK))
@@ -263,7 +263,7 @@ bool PS2DeviceClass::send_cmdSetResolution(int resolution)
 // scaling:
 //   1 -> 1:1
 //   2 -> 1:2
-bool PS2DeviceClass::send_cmdSetScaling(int scaling)
+bool PS2Device::send_cmdSetScaling(int scaling)
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_SET_SCALING, PS2_REPLY_ACK))
@@ -272,14 +272,14 @@ bool PS2DeviceClass::send_cmdSetScaling(int scaling)
 }
 
 
-bool PS2DeviceClass::send_cmdSetDefaultParams()
+bool PS2Device::send_cmdSetDefaultParams()
 {
   PS2DeviceLock deviceLock(this);
   return sendCommand(PS2_CMD_SET_DEFAULT_PARAMS, PS2_REPLY_ACK);
 }
 
 
-bool PS2DeviceClass::send_cmdReset()
+bool PS2Device::send_cmdReset()
 {
   PS2DeviceLock deviceLock(this);
   if (!sendCommand(PS2_CMD_RESET, PS2_REPLY_ACK))

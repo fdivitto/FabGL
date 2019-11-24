@@ -56,7 +56,7 @@ Mouse::~Mouse()
 
 void Mouse::begin(int PS2Port)
 {
-  PS2DeviceClass::begin(PS2Port);
+  PS2Device::begin(PS2Port);
   reset();
 }
 
@@ -83,7 +83,7 @@ bool Mouse::reset()
   // negotiate compatibility and default parameters
   if (m_mouseAvailable) {
     // try Intellimouse (three buttons + scroll wheel, 4 bytes packet)
-    if (send_cmdSetSampleRate(200) && send_cmdSetSampleRate(100) && send_cmdSetSampleRate(80) && identify() == PS2Device::MouseWithScrollWheel) {
+    if (send_cmdSetSampleRate(200) && send_cmdSetSampleRate(100) && send_cmdSetSampleRate(80) && identify() == PS2DeviceType::MouseWithScrollWheel) {
       // Intellimouse ok!
       m_mouseType = Intellimouse;
     }

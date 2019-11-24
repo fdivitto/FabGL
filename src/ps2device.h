@@ -34,7 +34,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::PS2DeviceClass definition.
+ * @brief This file contains fabgl::PS2Device definition.
  */
 
 
@@ -45,7 +45,7 @@ namespace fabgl {
 /** \ingroup Enumerations
  * @brief Represents the type of device attached to PS/2 port.
  */
-enum PS2Device {
+enum class PS2DeviceType {
   UnknownPS2Device,             /**< Unknown device or unable to connect to the device */
   OldATKeyboard,                /**< Old AT keyboard */
   MouseStandard,                /**< Standard mouse */
@@ -60,10 +60,10 @@ enum PS2Device {
 /**
  * @brief Base class for PS2 devices (like mouse or keyboard).
  *
- * PS2DeviceClass connects to one port of the PS2 Controller class (fabgl::PS2Controller).<br>
+ * PS2Device connects to one port of the PS2 Controller class (fabgl::PS2Controller).<br>
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
  */
-class PS2DeviceClass {
+class PS2Device {
 
 public:
 
@@ -72,7 +72,7 @@ public:
    *
    * @return The identification ID sent by keyboard.
    */
-  PS2Device identify() { PS2Device result; send_cmdIdentify(&result); return result; };
+  PS2DeviceType identify() { PS2DeviceType result; send_cmdIdentify(&result); return result; };
 
   /**
    * @brief Gets exclusive access to the device.
@@ -90,8 +90,8 @@ public:
 
 protected:
 
-  PS2DeviceClass();
-  ~PS2DeviceClass();
+  PS2Device();
+  ~PS2Device();
 
   void begin(int PS2Port);
 
@@ -106,7 +106,7 @@ protected:
   bool send_cmdEcho();
   bool send_cmdGetScancodeSet(uint8_t * result);
   bool send_cmdSetScancodeSet(uint8_t scancodeSet);
-  bool send_cmdIdentify(PS2Device * result);
+  bool send_cmdIdentify(PS2DeviceType * result);
   bool send_cmdDisableScanning();
   bool send_cmdEnableScanning();
   bool send_cmdTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS);
@@ -125,10 +125,10 @@ private:
 
 
 struct PS2DeviceLock {
-  PS2DeviceLock(PS2DeviceClass * PS2Device) : m_PS2Device(PS2Device) { m_PS2Device->lock(-1); }
+  PS2DeviceLock(PS2Device * PS2Device) : m_PS2Device(PS2Device) { m_PS2Device->lock(-1); }
   ~PS2DeviceLock() { m_PS2Device->unlock(); }
 
-  PS2DeviceClass * m_PS2Device;
+  PS2Device * m_PS2Device;
 };
 
 

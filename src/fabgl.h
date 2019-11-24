@@ -299,6 +299,7 @@ using fabgl::SamplesGenerator;
 using fabgl::WaveformGenerator;
 using fabgl::TermType;
 using fabgl::PS2Preset;
+using fabgl::PS2DeviceType;
 using fabgl::KbdMode;
 using fabgl::VirtualKey;
 using fabgl::uiKeyEventInfo;

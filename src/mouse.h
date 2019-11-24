@@ -96,7 +96,7 @@ enum MouseType {
  *     }
  *
  */
-class Mouse : public PS2DeviceClass {
+class Mouse : public PS2Device {
 
 public:
 
