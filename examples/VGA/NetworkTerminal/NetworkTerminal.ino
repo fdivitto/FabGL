@@ -339,9 +339,6 @@ void setup()
   //VGAController.shrinkScreen(5, 0);
   //VGAController.moveScreen(-1, 0);
 
-  // this speed-up display but may generate flickering
-  VGAController.enableBackgroundPrimitiveExecution(false);
-
   Terminal.begin(&VGAController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
   Terminal.setLogStream(Serial);  // DEBUG ONLY

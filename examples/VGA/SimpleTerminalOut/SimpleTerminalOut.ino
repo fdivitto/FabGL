@@ -38,9 +38,6 @@ void setup()
   VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
   //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
-  // this speed-up display but may generate flickering
-  VGAController.enableBackgroundPrimitiveExecution(false);
-
   Terminal.begin(&VGAController);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
 
