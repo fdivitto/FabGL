@@ -23,7 +23,7 @@
 #include "freertos/FreeRTOS.h"
 
 #include "mouse.h"
-#include "ps2controller.h"
+#include "comdrivers/ps2controller.h"
 #include "displaycontroller.h"
 
 

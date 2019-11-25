@@ -28,7 +28,7 @@
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
-#include "ps2controller.h"
+#include "comdrivers/ps2controller.h"
 
 
 

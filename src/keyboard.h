@@ -34,7 +34,7 @@
 #include "freertos/FreeRTOS.h"
 
 #include "fabglconf.h"
-#include "ps2device.h"
+#include "comdrivers/ps2device.h"
 #include "fabui.h"
 
 

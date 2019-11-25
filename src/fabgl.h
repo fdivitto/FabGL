@@ -249,7 +249,7 @@
 #include "terminal.h"
 #include "displaycontroller.h"
 #include "dispdrivers/vgacontroller.h"
-#include "ps2controller.h"
+#include "comdrivers/ps2controller.h"
 #include "keyboard.h"
 #include "mouse.h"
 #include "scene.h"

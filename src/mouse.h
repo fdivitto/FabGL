@@ -36,7 +36,7 @@
 
 #include "fabglconf.h"
 #include "fabutils.h"
-#include "ps2device.h"
+#include "comdrivers/ps2device.h"
 #include "fabui.h"
 
 
