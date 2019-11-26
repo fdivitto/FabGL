@@ -249,12 +249,14 @@
 #include "terminal.h"
 #include "displaycontroller.h"
 #include "dispdrivers/vgacontroller.h"
+#include "dispdrivers/SSD1306Controller.h"
 #include "comdrivers/ps2controller.h"
-#include "keyboard.h"
-#include "mouse.h"
+#include "comdrivers/tsi2c.h"
+#include "devdrivers/keyboard.h"
+#include "devdrivers/mouse.h"
 #include "scene.h"
 #include "collisiondetector.h"
-#include "soundgen.h"
+#include "devdrivers/soundgen.h"
 
 
 

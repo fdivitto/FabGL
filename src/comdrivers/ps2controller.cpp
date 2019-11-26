@@ -31,8 +31,8 @@
 #include "ps2controller.h"
 #include "fabutils.h"
 #include "ulp_macro_ex.h"
-#include "keyboard.h"
-#include "mouse.h"
+#include "devdrivers/keyboard.h"
+#include "devdrivers/mouse.h"
 
 
 

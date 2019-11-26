@@ -30,7 +30,7 @@
  */
 
 
-#include "keyboard.h"
+#include "devdrivers/keyboard.h"
 
 
 namespace fabgl {

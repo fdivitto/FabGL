@@ -43,7 +43,7 @@
 
 #include "fabglconf.h"
 #include "fabutils.h"
-#include "swgenerator.h"
+#include "devdrivers/swgenerator.h"
 #include "displaycontroller.h"
 
 

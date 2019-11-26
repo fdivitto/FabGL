@@ -41,7 +41,7 @@
 
 #include "fabglconf.h"
 #include "canvas.h"
-#include "keyboard.h"
+#include "devdrivers/keyboard.h"
 #include "terminfo.h"
 
 #include "Stream.h"

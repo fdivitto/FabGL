@@ -30,8 +30,8 @@
 #include "fabutils.h"
 #include "fabui.h"
 #include "canvas.h"
-#include "mouse.h"
-#include "keyboard.h"
+#include "devdrivers/mouse.h"
+#include "devdrivers/keyboard.h"
 #include "images/bitmaps.h"
 
 

@@ -39,7 +39,7 @@
 
 #include "fabutils.h"
 #include "vgacontroller.h"
-#include "swgenerator.h"
+#include "devdrivers/swgenerator.h"
 
 
 
