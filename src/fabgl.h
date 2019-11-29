@@ -254,6 +254,7 @@
 #include "comdrivers/tsi2c.h"
 #include "devdrivers/keyboard.h"
 #include "devdrivers/mouse.h"
+#include "devdrivers/DS3231.h"
 #include "scene.h"
 #include "collisiondetector.h"
 #include "devdrivers/soundgen.h"
@@ -315,6 +316,7 @@ using fabgl::RGB222;
 using fabgl::RGBA2222;
 using fabgl::RGB888;
 using fabgl::RGBA8888;
+
 
 
 
