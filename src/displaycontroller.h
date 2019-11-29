@@ -645,13 +645,13 @@ public:
   /**
    * @brief Enables or disables drawings inside vertical retracing time.
    *
-   * When vertical retracing occurs (on Vertical Sync) an interrupt is trigged. Inside this interrupt primitives
-   * like line, circles, glyphs, etc.. are painted.<br>
+   * Primitives are processed in background (for example in vertical retracing for VGA or in a separated task for SPI/I2C displays).
    * This method can disable (or reenable) this behavior, making drawing instantaneous. Flickering may occur when
    * drawings are executed out of retracing time.<br>
    * When background executing is disabled the queue is emptied executing all pending primitives.
+   * Some displays (SPI/I2C) may be not updated at all when enableBackgroundPrimitiveExecution is False.
    *
-   * @param value When true drawings are done during vertical retracing, when false drawings are executed instantly.
+   * @param value When true drawings are done on background, when false drawings are executed instantly.
    */
   void enableBackgroundPrimitiveExecution(bool value);
 
