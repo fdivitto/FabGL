@@ -228,6 +228,11 @@
 /** Modeline for 800x600@60Hz resolution */
 #define SVGA_800x600_60Hz "\"800x600@60Hz\" 40 800 840 968 1056 600 601 605 628 -HSync -VSync"
 
+/** Modeline for OLED 128x64 */
+#define OLED_128x64 "\"OLED_128x64\" 128 64"
+
+/** Modeline for OLED 128x32 */
+#define OLED_128x32 "\"OLED_128x32\" 128 32"
 
 // Thanks to Paul Rickards (http://biosrhythm.com)
 
