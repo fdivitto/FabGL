@@ -33,7 +33,6 @@
 
 
 #define SSD1306_I2C_TIMEOUT         100  // ms
-#define SSD1306_I2C_BUFFERLENGTH    128
 #define SSD1306_I2C_FREQUENCY       400000
 
 #define SSD1306_UPDATETIME          40   // ms, with 40ms we have 25 frames per second
@@ -188,10 +187,11 @@ void SSD1306Controller::setScreenRow(int value)
 
 bool SSD1306Controller::SSD1306_sendData(uint8_t * buf, int count, uint8_t ctrl)
 {
-  uint8_t sbuf[SSD1306_I2C_BUFFERLENGTH];
+  int bufSize = m_i2c->getMaxBufferLength();
+  uint8_t sbuf[bufSize];
   sbuf[0] = ctrl;
   while (count > 0) {
-    int bToSend = imin(SSD1306_I2C_BUFFERLENGTH - 1, count);
+    int bToSend = imin(bufSize - 1, count);
     memcpy(&sbuf[1], buf, bToSend);
     if (!m_i2c->write(m_i2cAddress, sbuf, bToSend + 1, SSD1306_I2C_FREQUENCY, SSD1306_I2C_TIMEOUT))
       return false;
