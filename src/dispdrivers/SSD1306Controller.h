@@ -51,6 +51,26 @@ namespace fabgl {
 
 
 
+/**
+ * @brief Display driver for SSD1306 based OLED display, with I2C connection.
+ *
+ * Example:
+ *
+ *     fabgl::I2C               I2C;
+ *     fabgl::SSD1306Controller SSD1306Controller;
+ *
+ *     void setup() {
+ *       // SDA = gpio-4, SCL = gpio-15
+ *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);
+ *
+ *       // reset = gpio-16, OLED address is 0x3C
+ *       SSD1306Controller.begin(&I2C, GPIO_NUM_16, 0x3C);
+ *       SSD1306Controller.setResolution(OLED_128x64);
+ *
+ *       Canvas cv(&SSD1306Controller);
+ *       cv.drawText(0, 0, "Hello World!");
+ *
+ */
 class SSD1306Controller : public DisplayController {
 
 public:
