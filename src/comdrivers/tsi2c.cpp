@@ -30,7 +30,7 @@
 namespace fabgl {
 
 
-#define I2C_COMMTASK_STACK    1024
+#define I2C_COMMTASK_STACK    1000
 #define I2C_COMMTASK_PRIORITY 5
 #define I2C_DEFAULT_FREQUENCY 100000
 
@@ -104,13 +104,8 @@ bool I2C::write(int address, uint8_t * buffer, int size, int frequency, int time
   m_jobInfo.size      = size;
   m_jobInfo.timeout   = timeOutMS;
 
-  /*
   // unlock comm task for writing
-  xEventGroupSetBits(m_eventGroup, EVTGROUP_WRITE);
-
   // wait for comm task to finish job
-  xEventGroupWaitBits(m_eventGroup, EVTGROUP_DONE, true, false, portMAX_DELAY);
-  */
   xEventGroupSync(m_eventGroup, EVTGROUP_WRITE, EVTGROUP_DONE, portMAX_DELAY);
 
 
@@ -134,13 +129,8 @@ int I2C::read(int address, uint8_t * buffer, int size, int frequency, int timeOu
   m_jobInfo.size      = size;
   m_jobInfo.timeout   = timeOutMS;
 
-  /*
   // unlock comm task for reading
-  xEventGroupSetBits(m_eventGroup, EVTGROUP_READ);
-
   // wait for comm task to finish job
-  xEventGroupWaitBits(m_eventGroup, EVTGROUP_DONE, true, false, portMAX_DELAY);
-  */
   xEventGroupSync(m_eventGroup, EVTGROUP_READ, EVTGROUP_DONE, portMAX_DELAY);
 
   int ret = m_jobInfo.readCount;
