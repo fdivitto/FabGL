@@ -104,8 +104,8 @@ public:
    * This is a thread-safe operation. Multiple tasks can call this method concurrently.
    *
    * @param address I2C address of the destination slave device
-   * @param buffer Buffer to send
-   * @param size Number of bytes to send
+   * @param buffer Buffer to send.
+   * @param size Number of bytes to send. Maximum size is the return value of getMaxBufferLength().
    * @param frequency Clock frequency
    * @param timeOutMS Operation timeout in milliseconds
    *
@@ -120,13 +120,20 @@ public:
    *
    * @param address I2C address of the source slave device
    * @param buffer Buffer where to put received data (must have space for at least "size" bytes)
-   * @param size Number of bytes to receive
+   * @param size Number of bytes to receive. Maximum size is the return value of getMaxBufferLength().
    * @param frequency Clock frequency
    * @param timeOutMS Operation timeout in milliseconds
    *
    * @return Number of actually read bytes
    */
   int read(int address, uint8_t * buffer, int size, int frequency = 100000, int timeOutMS = 50);
+
+  /**
+   * @brief Returns maximum size of read and write buffers
+   *
+   * @return Maximum size in bytes
+   */
+  int getMaxBufferLength() { return 128; }
 
 
 private:
