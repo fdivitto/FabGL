@@ -84,6 +84,13 @@ public:
 
   ~SSD1306Controller();
 
+  /**
+   * @brief Initializes SSD1306 assigning I2C bus, reset pin and address.
+   *
+   * @param i2c I2C pointer
+   * @param resetGPIO Reset pin (use GPIO_NUM_39 to disable)
+   * @param address Device address
+   */
   void begin(I2C * i2c, gpio_num_t resetGPIO, int address);
 
   void end();

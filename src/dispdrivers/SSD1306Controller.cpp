@@ -226,13 +226,15 @@ bool SSD1306Controller::SSD1306_sendCmd(uint8_t c1, uint8_t c2, uint8_t c3)
 // hard reset SSD1306
 void SSD1306Controller::SSD1306_hardReset()
 {
-  PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_resetGPIO], PIN_FUNC_GPIO);
-  gpio_set_direction(m_resetGPIO, GPIO_MODE_OUTPUT);
-  gpio_set_level(m_resetGPIO, 1);
-  vTaskDelay(1 / portTICK_PERIOD_MS);
-  gpio_set_level(m_resetGPIO, 0);
-  vTaskDelay(10 / portTICK_PERIOD_MS);
-  gpio_set_level(m_resetGPIO, 1);
+  if (m_ResetGPIO != GPIO_NUM_39) {
+    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_resetGPIO], PIN_FUNC_GPIO);
+    gpio_set_direction(m_resetGPIO, GPIO_MODE_OUTPUT);
+    gpio_set_level(m_resetGPIO, 1);
+    vTaskDelay(1 / portTICK_PERIOD_MS);
+    gpio_set_level(m_resetGPIO, 0);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+    gpio_set_level(m_resetGPIO, 1);
+  }
 }
 
 
