@@ -208,6 +208,7 @@ private:
   gpio_num_t         m_resetGPIO;
 
   uint8_t *          m_screenBuffer;
+  uint8_t *          m_altScreenBuffer; // used to implement double buffer
 
   int16_t            m_screenWidth;
   int16_t            m_screenHeight;

@@ -107,6 +107,7 @@ inline uint8_t RGBA8888toMono(RGBA8888 const & rgba)
 SSD1306Controller::SSD1306Controller()
   : m_i2c(nullptr),
     m_screenBuffer(nullptr),
+    m_altScreenBuffer(nullptr),
     m_updateTaskHandle(nullptr)
 {
 }
@@ -120,9 +121,9 @@ SSD1306Controller::~SSD1306Controller()
 
 void SSD1306Controller::begin(I2C * i2c, gpio_num_t resetGPIO, int address)
 {
-  m_i2c            = i2c;
-  m_i2cAddress     = address;
-  m_resetGPIO      = resetGPIO;
+  m_i2c        = i2c;
+  m_i2cAddress = address;
+  m_resetGPIO  = resetGPIO;
 }
 
 
@@ -134,6 +135,9 @@ void SSD1306Controller::end()
 
   free(m_screenBuffer);
   m_screenBuffer = nullptr;
+
+  free(m_altScreenBuffer);
+  m_altScreenBuffer = nullptr;
 }
 
 
@@ -149,6 +153,8 @@ void SSD1306Controller::setResolution(char const * modeline, int viewPortWidth, 
   m_screenHeight = sheight;
   m_screenCol    = 0;
   m_screenRow    = 0;
+
+  setDoubleBuffered(doubleBuffered);
 
   m_viewPortWidth  = viewPortWidth < 0 ? m_screenWidth : viewPortWidth;
   m_viewPortHeight = viewPortHeight < 0 ? m_screenHeight : viewPortHeight;
@@ -226,7 +232,7 @@ bool SSD1306Controller::SSD1306_sendCmd(uint8_t c1, uint8_t c2, uint8_t c3)
 // hard reset SSD1306
 void SSD1306Controller::SSD1306_hardReset()
 {
-  if (m_ResetGPIO != GPIO_NUM_39) {
+  if (m_resetGPIO != GPIO_NUM_39) {
     PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_resetGPIO], PIN_FUNC_GPIO);
     gpio_set_direction(m_resetGPIO, GPIO_MODE_OUTPUT);
     gpio_set_level(m_resetGPIO, 1);
@@ -282,6 +288,11 @@ void SSD1306Controller::allocScreenBuffer()
 {
   m_screenBuffer = (uint8_t*) malloc(m_viewPortWidth * m_viewPortHeight / 8);
   memset(m_screenBuffer, 0, m_viewPortWidth * m_viewPortHeight / 8);
+
+  if (isDoubleBuffered()) {
+    m_altScreenBuffer = (uint8_t*) malloc(m_viewPortWidth * m_viewPortHeight / 8);
+    memset(m_altScreenBuffer, 0, m_viewPortWidth * m_viewPortHeight / 8);
+  }
 }
 
 
@@ -299,10 +310,13 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 
     int64_t startTime = ctrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
     do {
+
       Primitive prim;
       if (ctrl->getPrimitive(&prim) == false)
         break;
+
       ctrl->execPrimitive(prim);
+
     } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startTime + SSD1306_BACKGROUND_PRIMITIVE_TIMEOUT > esp_timer_get_time()));
 
     ctrl->showSprites();
@@ -1107,7 +1121,7 @@ void SSD1306Controller::drawBitmap_RGBA8888(int destX, int destY, Bitmap const *
 
 void SSD1306Controller::swapBuffers()
 {
-  // TODO
+  tswap(m_screenBuffer, m_altScreenBuffer);
 }
 
 
