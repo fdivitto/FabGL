@@ -95,8 +95,23 @@ public:
 
   void end();
 
+  /**
+   * @brief Sets SSD1306 resolution and viewport size
+   *
+   * Viewport size can be larger than display size. You can pan the view using SSD1306Controller.setScreenCol() and SSD1306Controller.setScreenRow().
+   *
+   * @param modeline Native display reoslution. Possible values: OLED_128x64 and OLED_128x32.
+   * @param viewPortWidth Virtual viewport width. Should be larger or equal to display native width.
+   * @param viewPortHeight Virtual viewport height. Should be larger or equal to display native height.
+   * @param doubleBuffered if True allocates another viewport of the same size to use as back buffer.
+   */
   void setResolution(char const * modeline, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
+  /**
+   * @brief Checks the SSD1306 device availability
+   *
+   * @return True is SSD1306 OLED device has been found and initialized.
+   */
   bool available() { return m_screenBuffer != nullptr; }
 
   // abstract method of DisplayController
@@ -120,12 +135,36 @@ public:
   // abstract method of DisplayController
   int getScreenHeight()   { return m_screenHeight; }
 
+  /**
+   * @brief Set initial left column of the viewport
+   *
+   * Use this method only when viewport is larger than display size.
+   *
+   * @param value First column to display
+   */
   void setScreenCol(int value);
 
+  /**
+   * @brief Set initial top row of the viewport
+   *
+   * Use this method only when viewport is larger than display size.
+   *
+   * @param value First row to display
+   */
   void setScreenRow(int value);
 
+  /**
+   * @brief Gets initial left column of the viewport
+   *
+   * @return First column displayed
+   */
   int screenCol() { return m_screenCol; }
 
+  /**
+   * @brief Gets initial top row of the viewport
+   *
+   * @return First row displayed
+   */
   int screenRow() { return m_screenRow; }
 
   void readScreen(Rect const & rect, RGB888 * destBuf);

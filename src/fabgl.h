@@ -67,7 +67,8 @@
  * - - -
  *
  * The main classes of FabGL library are:
- *    * fabgl::VGAController, that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.
+ *    * fabgl::VGAController, the device driver for VGA output.
+ *    * fabgl::SSD1306Controller, the device driver for SSD1306 based OLED displays.
  *    * fabgl::Canvas, that provides a set of drawing primitives (lines, rectangles, text...).
  *    * fabgl::Terminal, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
  *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
