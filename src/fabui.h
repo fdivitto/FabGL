@@ -674,7 +674,7 @@ struct uiFrameStyle {
   RGB888              activeTitleBackgroundColor     = RGB888(128, 128, 255);  /**< Title background color when active */
   RGB888              titleColor                     = RGB888(0, 0, 0);  /**< Title color */
   RGB888              activeTitleColor               = RGB888(0, 0, 0);  /**< Title color when active */
-  FontInfo const *    titleFont                      = Canvas::getPresetFontInfoFromHeight(12, false);  /**< Title font */
+  FontInfo const *    titleFont                      = &FONT_std_12;  /**< Title font */
   RGB888              buttonColor                    = RGB888(64, 64, 64);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB888              activeButtonColor              = RGB888(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
@@ -1087,11 +1087,11 @@ struct uiButtonStyle {
   RGB888           downBackgroundColor      = RGB888(128, 128, 255); /**< Background color when button is down */
   RGB888           mouseOverBackgroundColor = RGB888(128, 128, 255); /**< Background color when mouse is over */
   RGB888           mouseDownBackgroundColor = RGB888(255, 255, 255); /**< Background color when mouse is down */
-  RGB888           textColor                = RGB888(0, 0, 0); /**< Text color */
-  FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
-  uint8_t          bitmapTextSpace          = 4;            /**< Spaces between image and text */
-  Bitmap const *   bitmap                   = nullptr;      /**< Bitmap to display */
-  Bitmap const *   downBitmap               = nullptr;      /**< Bitmap to display when button is down */
+  RGB888           textColor                = RGB888(0, 0, 0);       /**< Text color */
+  FontInfo const * textFont                 = &FONT_std_14;          /**< Text font */
+  uint8_t          bitmapTextSpace          = 4;                     /**< Spaces between image and text */
+  Bitmap const *   bitmap                   = nullptr;               /**< Bitmap to display */
+  Bitmap const *   downBitmap               = nullptr;               /**< Bitmap to display when button is down */
 };
 
 
@@ -1209,11 +1209,11 @@ private:
  * @return L-value representing frame style (colors, font, etc...)
  */
 struct uiTextEditStyle {
-  RGB888           backgroundColor            = RGB888(128, 128, 128);                                   /**< Background color */
-  RGB888           mouseOverBackgroundColor   = RGB888(128, 128, 255);                                   /**< Background color when mouse is over */
-  RGB888           focusedBackgroundColor     = RGB888(255, 255, 255);                                   /**< Background color when focused */
-  RGB888           textColor                  = RGB888(0, 0, 0);                                   /**< Text color */
-  FontInfo const * textFont                   = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
+  RGB888           backgroundColor            = RGB888(128, 128, 128);     /**< Background color */
+  RGB888           mouseOverBackgroundColor   = RGB888(128, 128, 255);     /**< Background color when mouse is over */
+  RGB888           focusedBackgroundColor     = RGB888(255, 255, 255);     /**< Background color when focused */
+  RGB888           textColor                  = RGB888(0, 0, 0);           /**< Text color */
+  FontInfo const * textFont                   = &FONT_std_14;              /**< Text font */
 };
 
 
@@ -1347,9 +1347,9 @@ private:
 
 /** @brief Contains the label style */
 struct uiLabelStyle {
-  FontInfo const * textFont                 = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
-  RGB888           backgroundColor          = RGB888(255, 255, 255);                                   /**< Background color */
-  RGB888           textColor                = RGB888(0, 0, 0);                                   /**< Text color */
+  FontInfo const * textFont                 = &FONT_std_14;              /**< Text font */
+  RGB888           backgroundColor          = RGB888(255, 255, 255);     /**< Background color */
+  RGB888           textColor                = RGB888(0, 0, 0);           /**< Text color */
 };
 
 
@@ -1610,14 +1610,14 @@ private:
 
 /** @brief Contains the listbox style */
 struct uiListBoxStyle {
-  RGB888           backgroundColor                = RGB888(128, 128, 128);                                   /**< Background color */
-  RGB888           focusedBackgroundColor         = RGB888(255, 255, 255);                                   /**< Background color when focused */
-  RGB888           selectedBackgroundColor        = RGB888(0, 0, 128);                                   /**< Background color when selected */
-  RGB888           focusedSelectedBackgroundColor = RGB888(0, 0, 255);                                   /**< Background color when selected and focused */
-  int              itemHeight                     = 16;                                             /**< Item height in pixels */
-  FontInfo const * textFont                       = Canvas::getPresetFontInfoFromHeight(14, false); /**< Text font */
-  RGB888           textColor                      = RGB888(0, 0, 0);                                   /**< Text foreground color */
-  RGB888           selectedTextColor              = RGB888(255, 255, 255);                                   /**< Text foreground color when selected */
+  RGB888           backgroundColor                = RGB888(128, 128, 128);   /**< Background color */
+  RGB888           focusedBackgroundColor         = RGB888(255, 255, 255);   /**< Background color when focused */
+  RGB888           selectedBackgroundColor        = RGB888(0, 0, 128);       /**< Background color when selected */
+  RGB888           focusedSelectedBackgroundColor = RGB888(0, 0, 255);       /**< Background color when selected and focused */
+  int              itemHeight                     = 16;                      /**< Item height in pixels */
+  FontInfo const * textFont                       = &FONT_std_14;            /**< Text font */
+  RGB888           textColor                      = RGB888(0, 0, 0);         /**< Text foreground color */
+  RGB888           selectedTextColor              = RGB888(255, 255, 255);   /**< Text foreground color when selected */
 };
 
 

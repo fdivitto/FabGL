@@ -917,7 +917,7 @@ void uiApp::cleanWindowReferences(uiWindow * window)
 
 uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char const * button1Text, char const * button2Text, char const * button3Text, uiMessageBoxIcon icon)
 {
-  auto font = Canvas::getPresetFontInfoFromHeight(14, false);
+  auto font = &FONT_std_14;
   const int titleHeight = title && strlen(title) ? font->height : 0;
   const int textExtent = m_canvas->textExtent(font, text);
   const int button1Extent = button1Text ? m_canvas->textExtent(font, button1Text) + 10 : 0;
@@ -1016,7 +1016,7 @@ uiMessageBoxResult uiApp::messageBox(char const * title, char const * text, char
 
 uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char * inOutString, int maxLength, char const * button1Text, char const * button2Text)
 {
-  auto font = Canvas::getPresetFontInfoFromHeight(14, false);
+  auto font = &FONT_std_14;
   const int titleHeight   = title && strlen(title) ? font->height : 0;
   const int textExtent    = m_canvas->textExtent(font, text);
   const int editExtent    = imin(maxLength * m_canvas->textExtent(font, "M"), m_rootWindow->clientSize().width / 2 - textExtent);
