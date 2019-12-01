@@ -81,6 +81,7 @@ def savefont_h(f, file):
   file.write("// Font Copyright " + f.copyright + "\n\n")
   file.write("#pragma once\n\n")
   file.write("namespace fabgl {\n\n")
+  file.write("#ifdef FABGL_FONT_INCLUDE_DEFINITION\n\n")
 
   if next((x for x in f.chars if x.width != 0 and f.chars[0].width != x.width), None) == None:
     savefontFixed_h(f, file, fname)
@@ -117,7 +118,7 @@ def savefontFixed_h(f, file, fname):
     file.write("\n")
   file.write("};\n\n\n")
 
-  file.write("static const FontInfo FONT_{} = {{\n".format(fname))
+  file.write("extern const FontInfo FONT_{} = {{\n".format(fname))
   file.write("  .pointSize = {},\n".format(f.pointsize))
   file.write("  .width     = {},\n".format(width))
   file.write("  .height    = {},\n".format(f.height))
@@ -133,7 +134,10 @@ def savefontFixed_h(f, file, fname):
   file.write("  .charset   = {},\n".format(f.charset))
   file.write("  .data      = FONT_{}_DATA,\n".format(fname))
   file.write("  .chptr     = NULL,\n");
-  file.write("};\n\n");
+  file.write("};\n\n")
+  file.write("#else\n\n")
+  file.write("extern const FontInfo FONT_{};\n\n".format(fname))
+  file.write("#endif\n\n")
   file.write("}\n");
 
 
