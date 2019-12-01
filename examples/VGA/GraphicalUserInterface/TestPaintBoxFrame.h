@@ -42,7 +42,7 @@ struct TestPaintBoxFrame : public uiFrame {
     paintBox->setScrollBar(uiOrientation::Horizontal, paintBox->HScrollBarPos(), w, count, true);
 
     cv->setPenColor(Color::BrightYellow);
-    cv->selectFont(cv->getPresetFontInfoFromHeight(12, false));
+    cv->selectFont(&fabgl::FONT_std_12);
     for (int i = paintBox->HScrollBarPos(), x = 1; i < paintBox->HScrollBarPos() + paintBox->HScrollBarVisible(); ++i, ++x) {
       cv->drawLine(x, midY, x, midY + values[i]);
       if (i % 50 == 0) {

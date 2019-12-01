@@ -62,7 +62,7 @@ struct IntroScene : public Scene {
     canvas.setBrushColor(Color::Black);
     canvas.clear();
     canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
-    canvas.selectFont(canvas.getPresetFontInfo(40, 14));
+    canvas.selectFont(&fabgl::FONT_8x8);
     canvas.setPenColor(Color::BrightWhite);
     canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
     canvas.drawText(50, 15, "SPACE INVADERS");
@@ -282,15 +282,15 @@ struct GameScene : public Scene {
     //canvas.drawRectangle(0, 0, getWidth() - 1, getHeight() - 1);
 
     canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
-    canvas.selectFont(canvas.getPresetFontInfo(80, 33));
+    canvas.selectFont(&fabgl::FONT_4x6);
     canvas.setPenColor(Color::White);
     canvas.drawText(125, 20, "WE COME IN PEACE");
-    canvas.selectFont(canvas.getPresetFontInfo(40, 14));
-    canvas.setPenColor(0, 3, 3);
+    canvas.selectFont(&fabgl::FONT_8x8);
+    canvas.setPenColor(0, 255, 255);
     canvas.drawText(2, 2, "SCORE");
-    canvas.setPenColor(0, 0, 3);
+    canvas.setPenColor(0, 0, 255);
     canvas.drawText(254, 2, "HI-SCORE");
-    canvas.setPenColor(3, 3, 3);
+    canvas.setPenColor(255, 255, 255);
     canvas.drawTextFmt(254, 181, "Level %02d", level_);
 
     if (IntroScene::controller_ == 2) {
@@ -305,11 +305,11 @@ struct GameScene : public Scene {
 
   void drawScore()
   {
-    canvas.setPenColor(3, 3, 3);
+    canvas.setPenColor(255, 255, 255);
     canvas.drawTextFmt(2, 14, "%05d", score_);
     if (score_ > hiScore_)
       hiScore_ = score_;
-    canvas.setPenColor(3, 3, 3);
+    canvas.setPenColor(255, 255, 255);
     canvas.drawTextFmt(266, 14, "%05d", hiScore_);
   }
 
@@ -332,15 +332,15 @@ struct GameScene : public Scene {
     for (int i = 0; i < ROWENEMIESCOUNT * 5; ++i)
       enemies_[i].allowDraw = false;
     // show game over
-    canvas.setPenColor(0, 3, 0);
+    canvas.setPenColor(0, 255, 0);
     canvas.setBrushColor(0, 0, 0);
     canvas.fillRectangle(80, 60, 240, 130);
     canvas.drawRectangle(80, 60, 240, 130);
     canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
-    canvas.setPenColor(3, 3, 3);
+    canvas.setPenColor(255, 255, 255);
     canvas.drawText(90, 80, "GAME OVER");
     canvas.setGlyphOptions(GlyphOptions().DoubleWidth(0));
-    canvas.setPenColor(0, 3, 0);
+    canvas.setPenColor(0, 255, 0);
     if (IntroScene::controller_ == 1)
       canvas.drawText(110, 100, "Press [SPACE]");
     else if (IntroScene::controller_ == 2)
@@ -356,7 +356,7 @@ struct GameScene : public Scene {
   {
     ++level_;
     // show game over
-    canvas.setPenColor(0, 3, 0);
+    canvas.setPenColor(0, 255, 0);
     canvas.drawRectangle(80, 80, 240, 110);
     canvas.setGlyphOptions(GlyphOptions().DoubleWidth(1));
     canvas.drawTextFmt(105, 88, "LEVEL %d", level_);

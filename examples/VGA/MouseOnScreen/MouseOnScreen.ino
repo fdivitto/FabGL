@@ -54,7 +54,7 @@ void setup()
 
   canvas.setBrushColor(Color::Blue);
   canvas.clear();
-  canvas.selectFont(canvas.getPresetFontInfo(80, 25));
+  canvas.selectFont(&fabgl::FONT_8x8);
   canvas.setGlyphOptions(GlyphOptions().FillBackground(true));
 
   showCursorPos(PS2Controller.mouse()->status());

@@ -154,11 +154,11 @@ struct MyScene : public Scene {
     cv.setPenColor(Color::White);
     cv.setBrushColor(Color::White);
     // far stars
-    cv.setPenColor(1, 1, 1);
+    cv.setPenColor(64, 64, 64);
     for (int i = 0; i < 400; ++i)
       cv.setPixel(random(getWidth()), random(getHeight()));
     // near stars
-    cv.setPenColor(2, 2, 2);
+    cv.setPenColor(128, 128, 128);
     for (int i = 0; i < 50; ++i)
       cv.setPixel(random(getWidth()), random(getHeight()));
     // galaxy

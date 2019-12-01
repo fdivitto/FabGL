@@ -207,7 +207,7 @@ struct HelpFame : public uiFrame {
 
     onPaint = [&]() {
       auto cv = canvas();
-      cv->selectFont(Canvas::getPresetFontInfoFromHeight(12, false));
+      cv->selectFont(&fabgl::FONT_std_12);
       int x = 10;
       int y = 10;
       cv->setPenColor(Color::Green);
@@ -246,7 +246,7 @@ class Menu : public uiApp {
     // some static text
     rootWindow()->onPaint = [&]() {
       auto cv = canvas();
-      cv->selectFont(Canvas::getPresetFontInfoFromHeight(12, false));
+      cv->selectFont(&fabgl::FONT_std_12);
       cv->setPenColor(RGB888(255, 64, 64));
       cv->drawText(155, 345, "V I C 2 0  Emulator");
       cv->setPenColor(RGB888(128, 64, 64));
@@ -393,7 +393,7 @@ class Menu : public uiApp {
     // "Download From" label
     auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 354));
     downloadFromLbl->labelStyle().textColor = RGB888(64, 64, 255);
-    downloadFromLbl->labelStyle().textFont = Canvas::getPresetFontInfoFromHeight(12, false);
+    downloadFromLbl->labelStyle().textFont = &fabgl::FONT_std_12;
 
     // Download List button (download programs listed and linked in LIST_URL)
     auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19));
@@ -784,7 +784,7 @@ void setup()
   //VGAController.moveScreen(20, -2);
 
   Canvas cv(&VGAController);
-  cv.selectFont(cv.getPresetFontInfo(32, 48));
+  cv.selectFont(&fabgl::FONT_8x8);
 
   cv.clear();
   cv.drawText(25, 10, "Initializing SPIFFS...");

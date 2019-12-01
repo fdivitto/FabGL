@@ -139,7 +139,7 @@ void updateScreen()
 
   cv.setPenColor(Color::Black);
   cv.setBrushColor(Color::BrightYellow);
-  cv.selectFont(cv.getPresetFontInfo(40, 14));
+  cv.selectFont(&fabgl::FONT_8x8);
   cv.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(1));
   cv.drawText(40, 20, VGAController.getResolutionTimings()->label);
 
