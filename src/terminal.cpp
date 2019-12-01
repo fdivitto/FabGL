@@ -393,7 +393,7 @@ void Terminal::set132ColumnMode(bool value)
   log("set132ColumnMode()\n");
   #endif
 
-  loadFont(m_canvas->getPresetFontInfo(value ? 132 : 80, 25));
+  loadFont(getPresetFontInfo(m_canvas->getWidth(), m_canvas->getHeight(), (value ? 132 : 80), 25));
 }
 
 
