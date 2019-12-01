@@ -41,33 +41,6 @@ namespace fabgl {
 
 
 
-#define FONTINFOFLAGS_ITALIC    1
-#define FONTINFOFLAGS_UNDERLINE 2
-#define FONTINFODLAFS_STRIKEOUT 4
-#define FONTINFOFLAGS_VARWIDTH  8
-
-
-struct FontInfo {
-  uint8_t  pointSize;
-  uint8_t  width;   // used only for fixed width fonts (FONTINFOFLAGS_VARWIDTH = 0)
-  uint8_t  height;
-  uint8_t  ascent;
-  uint8_t  inleading;
-  uint8_t  exleading;
-  uint8_t  flags;
-  uint16_t weight;
-  uint16_t charset;
-  // when FONTINFOFLAGS_VARWIDTH = 0:
-  //   data[] contains 256 items each one representing a single character
-  // when FONTINFOFLAGS_VARWIDTH = 1:
-  //   data[] contains 256 items each one representing a single character. First byte contains the
-  //   character width. "chptr" is filled with an array of pointers to the single characters.
-  uint8_t const *  data;
-  uint32_t const * chptr;  // used only for variable width fonts (FONTINFOFLAGS_VARWIDTH = 1)
-};
-
-
-
 /**
 * @brief A class with a set of drawing methods.
 *
@@ -240,11 +213,8 @@ public:
    *
    * Example:
    *
-   *     // Set white pen with 8 colors setup
-   *     Canvas.setPenColor(1, 1, 1);
-   *
-   *     // Set white pen with 64 colors setup
-   *     Canvas.setPenColor(3, 3, 3);
+   *     // Set white pen
+   *     Canvas.setPenColor(255, 255, 255);
    */
   void setPenColor(uint8_t red, uint8_t green, uint8_t blue);
 
@@ -520,9 +490,9 @@ public:
    *
    * Example:
    *
-   *     // draw an 'A' using the predefined font to fit 80x25 screen text
+   *     // draw an 'A' using the predefined 8x8 font
    *     Canvas.setPenColor(Color::BrightGreen);
-   *     const fabgl::FontInfo * f = Canvas.getPresetFontInfo(80, 25);
+   *     const fabgl::FontInfo * f = &fabgl::FONT_8x8;
    *     Canvas.drawGlyph(0, 0, f->width, f->height, f->data, 0x41);
    *
    *     // draw a 12x8 sprite
@@ -572,28 +542,6 @@ public:
   void resetPaintOptions();
 
   /**
-   * @brief Gets the font info that best fits the specified number of columns and rows.
-   *
-   * This method returns only fixed width fonts.
-   *
-   * @param columns Minimum number of required columns.
-   * @param rows Minimum number of required rows.
-   *
-   * @return The font info found.
-   */
-  FontInfo const * getPresetFontInfo(int columns, int rows);
-
-  /**
-   * @brief Gets the font info that best fits the specified height.
-   *
-   * @param height Required font height in pixels.
-   * @param fixedWidth If True returns only fixed width fonts, if False returns only variable width fonts.
-   *
-   * @return The font info found.
-   */
-  static FontInfo const * getPresetFontInfoFromHeight(int height, bool fixedWidth);
-
-  /**
    * @brief Gets info about currently selected font.
    *
    * @return FontInfo structure representing font info and data.
@@ -608,9 +556,9 @@ public:
    * Examples:
    *
    *     // Set a font for about 40x14 text screen
-   *     Canvas.selectFont(Canvas.getPresetFontInfo(40, 14));
+   *     Canvas.selectFont(fabgl::getPresetFontInfo(Canvas.getWidth(), Canvas.getHeight(), 40, 14));
    *
-   *     // Set the 8x8 predefined font (FONT_8x8 defined in font_8x8.h)
+   *     // Set the 8x8 predefined font
    *     Canvas.selectFont(&fabgl::FONT_8x8);
    */
   void selectFont(FontInfo const * fontInfo);
@@ -662,7 +610,7 @@ public:
    * Example:
    *
    *     // Draw a 'Hello World!' at position 100, 100
-   *     Canvas.drawText(&FONT_8x8, 100, 100, "Hellow World!");
+   *     Canvas.drawText(&fabgl::FONT_8x8, 100, 100, "Hellow World!");
    */
   void drawText(FontInfo const * fontInfo, int X, int Y, char const * text, bool wrap = false);
 

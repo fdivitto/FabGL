@@ -3,6 +3,7 @@
 
 namespace fabgl {
 
+#ifdef FABGL_FONT_INCLUDE_DEFINITION
 
 static const uint8_t FONT_8x9_DATA[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -264,7 +265,7 @@ static const uint8_t FONT_8x9_DATA[] = {
  };
 
 
-static const FontInfo FONT_8x9 = {
+extern const FontInfo FONT_8x9 = {
   .pointSize = 7,
   .width     = 8,
   .height    = 9,
@@ -278,6 +279,11 @@ static const FontInfo FONT_8x9 = {
   .chptr     = nullptr,
 };
 
+#else
+
+extern const FontInfo FONT_8x9;
+
+#endif
 
 }
 

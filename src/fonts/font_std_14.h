@@ -4,6 +4,8 @@
 
 namespace fabgl {
 
+#ifdef FABGL_FONT_INCLUDE_DEFINITION
+
 static const uint8_t FONT_std_14_DATA[] = {
    8,   0x00, 0x00, 0x00, 0x00, 0x7e, 0x42, 0x42, 0x42, 0x42, 0x42, 0x7e, 0x00, 0x00, 0x00,  //   0 15
    8,   0x00, 0x00, 0x00, 0x00, 0x7e, 0x42, 0x42, 0x42, 0x42, 0x42, 0x7e, 0x00, 0x00, 0x00,  //   1 15
@@ -285,7 +287,7 @@ static const uint32_t FONT_std_14_CHPTR[] = {
   3951, };
 
 
-static const FontInfo FONT_std_14 = {
+extern const FontInfo FONT_std_14 = {
   .pointSize = 10,
   .width     = 0,
   .height    = 14,
@@ -298,5 +300,11 @@ static const FontInfo FONT_std_14 = {
   .data      = FONT_std_14_DATA,
   .chptr     = FONT_std_14_CHPTR,
 };
+
+#else
+
+extern const FontInfo FONT_std_14;
+
+#endif
 
 }

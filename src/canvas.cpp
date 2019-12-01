@@ -23,23 +23,7 @@
 #include <stdarg.h>
 
 #include "canvas.h"
-
-// Embedded fonts
-#include "fonts/font_4x6.h"
-#include "fonts/font_8x8.h"
-#include "fonts/font_8x9.h"
-#include "fonts/font_8x14.h"
-#include "fonts/font_std_12.h"
-#include "fonts/font_std_14.h"
-#include "fonts/font_std_15.h"
-#include "fonts/font_std_16.h"
-#include "fonts/font_std_17.h"
-#if FABGLIB_EMBEDS_ADDITIONAL_FONTS
-#include "fonts/font_std_18.h"
-#include "fonts/font_std_22.h"
-#include "fonts/font_std_24.h"
-#endif
-
+#include "fabfonts.h"
 
 
 
@@ -383,7 +367,7 @@ void Canvas::drawChar(int X, int Y, char c)
 void Canvas::drawText(int X, int Y, char const * text, bool wrap)
 {
   if (m_fontInfo == nullptr)
-    selectFont(getPresetFontInfo(80, 25));
+    selectFont(&FONT_8x8);
   drawText(m_fontInfo, X, Y, text, wrap);
 }
 
@@ -476,56 +460,6 @@ void Canvas::copyRect(int sourceX, int sourceY, int destX, int destY, int width,
   p.cmd  = PrimitiveCmd::CopyRect;
   p.rect = Rect(sourceX, sourceY, sourceX2, sourceY2);
   m_displayController->addPrimitive(p);
-}
-
-
-
-static const FontInfo * FIXED_WIDTH_EMBEDDED_FONTS[] = {
-  // please, bigger fonts first!
-  &FONT_8x14,
-  &FONT_8x8,
-  &FONT_8x9,
-  &FONT_4x6,
-};
-
-
-static const FontInfo * VAR_WIDTH_EMBEDDED_FONTS[] = {
-  // please, bigger fonts first!
-#if FABGLIB_EMBEDS_ADDITIONAL_FONTS
-  &FONT_std_24,
-  &FONT_std_22,
-  &FONT_std_18,
-#endif
-  &FONT_std_17,
-  &FONT_std_16,
-  &FONT_std_15,
-  &FONT_std_14,
-  &FONT_std_12,
-};
-
-
-FontInfo const * Canvas::getPresetFontInfo(int columns, int rows)
-{
-  FontInfo const * * fontInfo = &FIXED_WIDTH_EMBEDDED_FONTS[0];
-
-  for (int i = 0; i < sizeof(FIXED_WIDTH_EMBEDDED_FONTS) / sizeof(FontInfo*) - 1; ++i, ++fontInfo)  // -1, so the smallest is always selected
-    if (getWidth() / (*fontInfo)->width >= columns && getHeight() / (*fontInfo)->height >= rows)
-      break;
-
-  return *fontInfo;
-}
-
-
-FontInfo const * Canvas::getPresetFontInfoFromHeight(int height, bool fixedWidth)
-{
-  FontInfo const * * fontInfo = fixedWidth ? &FIXED_WIDTH_EMBEDDED_FONTS[0] : &VAR_WIDTH_EMBEDDED_FONTS[0];
-  int count = (fixedWidth ? sizeof(FIXED_WIDTH_EMBEDDED_FONTS) : sizeof(VAR_WIDTH_EMBEDDED_FONTS)) / sizeof(FontInfo*);
-
-  for (int i = 0; i < count - 1; ++i, ++fontInfo) // -1, so the smallest is always selected
-    if (height >= (*fontInfo)->height)
-      break;
-
-  return *fontInfo;
 }
 
 

@@ -42,6 +42,7 @@
 #include "fabutils.h"
 #include "displaycontroller.h"
 #include "canvas.h"
+#include "fabfonts.h"
 
 
 

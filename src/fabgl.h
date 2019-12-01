@@ -247,6 +247,7 @@
 
 
 #include "fabutils.h"
+#include "fabfonts.h"
 #include "terminal.h"
 #include "displaycontroller.h"
 #include "dispdrivers/vgacontroller.h"
