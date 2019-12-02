@@ -19,7 +19,6 @@
   along with FabGL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Arduino.h"  // REMOVE
 
 #include <string.h>
 
@@ -35,8 +34,7 @@
 #define SSD1306_I2C_TIMEOUT         100  // ms
 #define SSD1306_I2C_FREQUENCY       400000
 
-#define SSD1306_UPDATETIME          40   // ms, with 40ms we have 25 frames per second
-#define SSD1306_UPDATETASK_STACK    2048
+#define SSD1306_UPDATETASK_STACK    1024
 #define SSD1306_UPDATETASK_PRIORITY 5
 
 #define SSD1306_BACKGROUND_PRIMITIVE_TIMEOUT 10000  // uS
@@ -173,7 +171,6 @@ void SSD1306Controller::setResolution(char const * modeline, int viewPortWidth, 
 
   // allows updateTaskFunc() to run
   m_updateTaskFuncSuspended = 0;
-
 }
 
 
@@ -252,13 +249,18 @@ bool SSD1306Controller::SSD1306_softReset()
   SSD1306_sendCmd(SSD1306_SETMULTIPLEX, m_screenHeight - 1);
   SSD1306_sendCmd(SSD1306_SETDISPLAYOFFSET, 0);
   SSD1306_sendCmd(SSD1306_SETSTARTLINE);
-  SSD1306_sendCmd(SSD1306_CHARGEPUMP, 0x14);    // 0x14 = SWITCHCAPVCC,  0x10 = EXTERNALVCC
+  SSD1306_sendCmd(SSD1306_CHARGEPUMP, 0x14);      // 0x14 = SWITCHCAPVCC,  0x10 = EXTERNALVCC
   SSD1306_sendCmd(SSD1306_MEMORYMODE, 0);
   SSD1306_sendCmd(SSD1306_SEGREMAP | 0x1);
   SSD1306_sendCmd(SSD1306_COMSCANDEC);
-  SSD1306_sendCmd(SSD1306_SETCOMPINS, 0x12);
-  SSD1306_sendCmd(SSD1306_SETCONTRAST, 0xCF);   // max: 0xCF = SWITCHCAPVCC,  0x9F = EXTERNALVCC
-  SSD1306_sendCmd(SSD1306_SETPRECHARGE, 0xF1);  // 0xF1 = SWITCHCAPVCC,  0x22 = EXTERNALVCC
+  if (m_screenHeight == 64) {
+    SSD1306_sendCmd(SSD1306_SETCOMPINS, 0x12);
+    SSD1306_sendCmd(SSD1306_SETCONTRAST, 0xCF);   // max: 0xCF = SWITCHCAPVCC,  0x9F = EXTERNALVCC
+  } else if (m_screenHeight == 32) {
+    SSD1306_sendCmd(SSD1306_SETCOMPINS, 0x02);
+    SSD1306_sendCmd(SSD1306_SETCONTRAST, 0x8F);
+  }
+  SSD1306_sendCmd(SSD1306_SETPRECHARGE, 0xF1);    // 0xF1 = SWITCHCAPVCC,  0x22 = EXTERNALVCC
   SSD1306_sendCmd(SSD1306_SETVCOMDETECT, 0x40);
   SSD1306_sendCmd(SSD1306_DISPLAYALLON_RESUME);
   SSD1306_sendCmd(SSD1306_NORMALDISPLAY);
