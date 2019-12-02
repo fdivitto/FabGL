@@ -117,7 +117,7 @@ SSD1306Controller::~SSD1306Controller()
 }
 
 
-void SSD1306Controller::begin(I2C * i2c, gpio_num_t resetGPIO, int address)
+void SSD1306Controller::begin(I2C * i2c, int address, gpio_num_t resetGPIO)
 {
   m_i2c        = i2c;
   m_i2cAddress = address;

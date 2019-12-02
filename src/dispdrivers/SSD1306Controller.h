@@ -63,8 +63,8 @@ namespace fabgl {
  *       // SDA = gpio-4, SCL = gpio-15
  *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);
  *
- *       // reset = gpio-16, OLED address is 0x3C
- *       SSD1306Controller.begin(&I2C, GPIO_NUM_16, 0x3C);
+ *       // default OLED address is 0x3C
+ *       SSD1306Controller.begin(&I2C);
  *       SSD1306Controller.setResolution(OLED_128x64);
  *
  *       Canvas cv(&SSD1306Controller);
@@ -88,10 +88,10 @@ public:
    * @brief Initializes SSD1306 assigning I2C bus, reset pin and address.
    *
    * @param i2c I2C pointer
-   * @param resetGPIO Reset pin (use GPIO_NUM_39 to disable)
-   * @param address Device address
+   * @param address Device address. Default is 0x3C.
+   * @param resetGPIO Reset pin (use GPIO_NUM_39 to disable). Default if disabled.
    */
-  void begin(I2C * i2c, gpio_num_t resetGPIO, int address);
+  void begin(I2C * i2c, int address = 0x3C, gpio_num_t resetGPIO = GPIO_NUM_39);
 
   void end();
 

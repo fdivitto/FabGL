@@ -25,7 +25,6 @@
 #include "bitmaps.h"
 
 
-#define OLED_RESET     GPIO_NUM_16
 #define OLED_SDA       GPIO_NUM_4
 #define OLED_SCL       GPIO_NUM_15
 #define OLED_ADDR      0x3C
@@ -171,7 +170,7 @@ void setup()
 
   I2C.begin(OLED_SDA, OLED_SCL);
 
-  DisplayController.begin(&I2C, OLED_RESET, OLED_ADDR);
+  DisplayController.begin(&I2C, OLED_ADDR);
   DisplayController.setResolution(OLED_128x32);
 
   while (DisplayController.available() == false) {
