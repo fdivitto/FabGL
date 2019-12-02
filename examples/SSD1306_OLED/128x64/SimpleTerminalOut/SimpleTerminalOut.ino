@@ -142,7 +142,7 @@ void setup()
 
   Terminal.begin(&DisplayController);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
-  Terminal.loadFont(&fabgl::FONT_5x7);
+  Terminal.loadFont(&fabgl::FONT_6x8);
   Terminal.enableCursor(true);
 }
 
