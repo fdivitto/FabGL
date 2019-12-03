@@ -20,7 +20,7 @@
  */
 
 
-/** @example LoopbackTerminal/LoopbackTerminal.ino
+/** @example VGA/LoopbackTerminal/LoopbackTerminal.ino
  * Loopback VT/ANSI Terminal
  */
 

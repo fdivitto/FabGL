@@ -2264,7 +2264,7 @@ public:
    *
    * @param displayController Specifies the display controller where to run the UI
    * @param keyboard The keyboard device. The default (nullptr) gets it from the PS2Controller
-   * @param nouse The mouse device. The default (nullptr) gets it from the PS2Controller
+   * @param mouse The mouse device. The default (nullptr) gets it from the PS2Controller
    *
    * @return exitCode specified calling uiApp.quit().
    */

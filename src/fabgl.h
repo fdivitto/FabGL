@@ -44,20 +44,21 @@
  *
  * - - -
  *
- * This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Audio Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br>
- * This library works with ESP32 revision 1 or upper.
+ * FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br>
+ * FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br>
+ *
+ * This library works with ESP32 revision 1 and upper.
  *
  * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
  *
- * Three fixed width fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts are embedded, even with variable width.
+ * There are several fixed and variable width fonts embedded.
  *
- * A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.<br>
  * Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.
  *
  * When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.<br>
- * In this case drawing primitives always draw on the back buffer.
+ * In this case primitives are always drawn on the back buffer.
  *
- * Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing, so no flickering is visible.<br>
+ * Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing (using VGA driver), so no flickering is visible.<br>
  * If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.
  *
  * There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).
@@ -77,6 +78,10 @@
  *    * fabgl::uiApp base class to build Graphical User Interface applications
  *    * fabgl::SoundGenerator to generate sound and music.
  *
+ * Other classes are:
+ *    * fabgl::I2C, thread safe I2C (Wire) class
+ *    * fabgl::DS3231, Real Time Clock driver which uses the thread safe fabgl::I2C library
+ *
  * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
  *
  * See @ref confPS2 "Configuring PS/2 port" for PS/2 connection sample schema.
@@ -89,37 +94,37 @@
  * <CENTER> Installation Tutorial </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
+ * <CENTER> @link VGA/SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI Example @endlink </CENTER>
+ * <CENTER> @link VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link Audio/Audio.ino Audio output demo @endlink </CENTER>
+ * <CENTER> @link VGA/Audio/Audio.ino Audio output demo @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
+ * <CENTER> @link VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link Altair8800/Altair8800.ino Altair 8800 Emulator @endlink </CENTER>
+ * <CENTER> @link VGA/Altair8800/Altair8800.ino Altair 8800 Emulator @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link VIC20/VIC20.ino Commodore VIC20 Emulator @endlink </CENTER>
+ * <CENTER> @link VGA/VIC20/VIC20.ino Commodore VIC20 Emulator @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
+ * <CENTER> @link VGA/NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link ModelineStudio/ModelineStudio.ino Modeline Studio Example @endlink </CENTER>
+ * <CENTER> @link VGA/ModelineStudio/ModelineStudio.ino Modeline Studio Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link LoopbackTerminal/LoopbackTerminal.ino Loopback Terminal Example @endlink </CENTER>
+ * <CENTER> @link VGA/LoopbackTerminal/LoopbackTerminal.ino Loopback Terminal Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link DoubleBuffer/DoubleBuffer.ino Double Buffering Example @endlink </CENTER>
+ * <CENTER> @link VGA/DoubleBuffer/DoubleBuffer.ino Double Buffering Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
- * <CENTER> @link CollisionDetection/CollisionDetection.ino Collision Detection Example @endlink </CENTER>
+ * <CENTER> @link VGA/CollisionDetection/CollisionDetection.ino Collision Detection Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  *
@@ -222,21 +227,26 @@
 
 
 /**
- * @example AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
- * @example CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
- * @example DoubleBuffer/DoubleBuffer.ino Show double buffering usage
- * @example Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
- * @example VIC20/VIC20.ino Commodore VIC20 Emulator
- * @example KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
- * @example LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
- * @example ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
- * @example MouseStudio/MouseStudio.ino PS/2 mouse events
- * @example MouseOnScreen/MouseOnScreen.ino PS/2 mouse and mouse pointer on screen
- * @example NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
- * @example SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
- * @example SpaceInvaders/SpaceInvaders.ino Space invaders full game
- * @example GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
- * @example Audio/Audio.ino Audio demo
+ * @example VGA/AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
+ * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
+ * @example VGA/Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
+ * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
+ * @example VGA/LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
+ * @example VGA/ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
+ * @example VGA/MouseOnScreen/MouseOnScreen.ino PS/2 mouse and mouse pointer on screen
+ * @example VGA/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example VGA/SpaceInvaders/SpaceInvaders.ino Space invaders full game
+ * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
+ * @example VGA/Audio/Audio.ino Audio demo
+ * @example SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example Others/KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
+ * @example Others/MouseStudio/MouseStudio.ino PS/2 mouse events
  */
 
 
