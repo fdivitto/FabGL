@@ -271,17 +271,12 @@ bool SSD1306Controller::SSD1306_softReset()
 
 void SSD1306Controller::SSD1306_sendScreenBuffer()
 {
-  if (m_screenWidth == m_viewPortWidth && m_screenHeight == m_viewPortHeight) {
-    // screen size is the same of view port size, just send an unique block of data
-    SSD1306_sendCmd(SSD1306_PAGEADDR,   0, m_screenHeight / 8 - 1);
-    SSD1306_sendCmd(SSD1306_COLUMNADDR, 0, m_screenWidth - 1);
-    SSD1306_sendData(m_screenBuffer, m_screenWidth * m_screenHeight / 8, 0x40);
-  } else {
-    for (int y = 0; y < m_screenHeight; y += 8) {
-      SSD1306_sendCmd(SSD1306_PAGEADDR, y >> 3, y >> 3);
-      SSD1306_sendCmd(SSD1306_COLUMNADDR, 0, m_screenWidth - 1);
-      SSD1306_sendData(m_screenBuffer + m_screenCol + ((y + m_screenRow) >> 3) * m_viewPortWidth, m_screenWidth, 0x40);
-    }
+  // sending a row at the time reduces sending errors on wifi interrupt (when wifi is enabled)
+  for (int y = 0; y < m_screenHeight; y += 8) {
+    bool r = SSD1306_sendCmd(SSD1306_PAGEADDR, y >> 3, y >> 3) && SSD1306_sendCmd(SSD1306_COLUMNADDR, 0, m_screenWidth - 1);
+    if (!r)
+      break;
+    SSD1306_sendData(m_screenBuffer + m_screenCol + ((y + m_screenRow) >> 3) * m_viewPortWidth, m_screenWidth, 0x40);
   }
 }
 
