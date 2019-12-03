@@ -1,13 +1,13 @@
 var structfabgl_1_1ui_frame_style =
 [
-    [ "activeButtonColor", "structfabgl_1_1ui_frame_style.html#a5848b5a5540245c8eea3e70f22b59e50", null ],
-    [ "activeTitleBackgroundColor", "structfabgl_1_1ui_frame_style.html#aab1bf06d7fbdb3e2cc4a20ec9d00cba4", null ],
-    [ "activeTitleColor", "structfabgl_1_1ui_frame_style.html#ace2d8d6427139fce8b277d1ff9da3083", null ],
-    [ "backgroundColor", "structfabgl_1_1ui_frame_style.html#a843b5ff78a296a3f8c3202d9e36f7072", null ],
-    [ "buttonColor", "structfabgl_1_1ui_frame_style.html#adb3f444026d6629e6d3d9d82405aca10", null ],
-    [ "mouseOverBackgroundButtonColor", "structfabgl_1_1ui_frame_style.html#a67645d5d4f22bfc82de7b939fb2054c8", null ],
-    [ "mouseOverButtonColor", "structfabgl_1_1ui_frame_style.html#a3e4eadb258cb381170c2e6c7f1dae908", null ],
-    [ "titleBackgroundColor", "structfabgl_1_1ui_frame_style.html#a8123f2e57769efcb99e61fb9ad3df4eb", null ],
-    [ "titleColor", "structfabgl_1_1ui_frame_style.html#ad06a39ffcdeadc1dcf1095a6920cf68f", null ],
+    [ "activeButtonColor", "structfabgl_1_1ui_frame_style.html#aa762f723bf985116b960b3eeea0dc997", null ],
+    [ "activeTitleBackgroundColor", "structfabgl_1_1ui_frame_style.html#a3421d68d5fc4d694c0747594841fe354", null ],
+    [ "activeTitleColor", "structfabgl_1_1ui_frame_style.html#a7268f5f27ffbc818dbe36e0f4bba220e", null ],
+    [ "backgroundColor", "structfabgl_1_1ui_frame_style.html#a18bea7841be19cf5d0a4f62ede0dba2f", null ],
+    [ "buttonColor", "structfabgl_1_1ui_frame_style.html#a375a020e1fdc27e6c2b2a467852caf0e", null ],
+    [ "mouseOverBackgroundButtonColor", "structfabgl_1_1ui_frame_style.html#a62a3ddb5d83f1f5f3a88c9d92af4dce7", null ],
+    [ "mouseOverButtonColor", "structfabgl_1_1ui_frame_style.html#a547e3f447fd892f3cdd0ea3b3a9e4ed1", null ],
+    [ "titleBackgroundColor", "structfabgl_1_1ui_frame_style.html#a4cd6d05766e056b06a2bf4e4f74772ba", null ],
+    [ "titleColor", "structfabgl_1_1ui_frame_style.html#abcb17b064109ed166bbfbd616cc6c2b3", null ],
     [ "titleFont", "structfabgl_1_1ui_frame_style.html#ac37195d5c6079b553bc65ab622775ae6", null ]
 ];

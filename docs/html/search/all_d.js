@@ -1,7 +1,9 @@
 var searchData=
 [
   ['objecttype',['objectType',['../classfabgl_1_1ui_object.html#a93618eccc73d66e981f8c02170875226',1,'fabgl::uiObject']]],
-  ['oldatkeyboard',['OldATKeyboard',['../group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa',1,'fabgl']]],
+  ['oldatkeyboard',['OldATKeyboard',['../group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1',1,'fabgl']]],
+  ['oled_5f128x32',['OLED_128x32',['../fabglconf_8h.html#aa82a94204721377d7b3c0f6fc615c1d0',1,'fabglconf.h']]],
+  ['oled_5f128x64',['OLED_128x64',['../fabglconf_8h.html#a48a7b2c95a1f0546c72310844fa6fc74',1,'fabglconf.h']]],
   ['onchange',['onChange',['../classfabgl_1_1ui_button.html#a07502831b1868e591781c24316570ea0',1,'fabgl::uiButton::onChange()'],['../classfabgl_1_1ui_text_edit.html#ae87082d600902ac0ab2b0650c3e36278',1,'fabgl::uiTextEdit::onChange()'],['../classfabgl_1_1ui_custom_list_box.html#a6f0c19c8ed551d8206da46e59de8ffb9',1,'fabgl::uiCustomListBox::onChange()'],['../classfabgl_1_1ui_combo_box.html#aaf7ffe945be6c192d2761dfb5a0432d9',1,'fabgl::uiComboBox::onChange()'],['../classfabgl_1_1ui_check_box.html#ad7f3084c4430175cbe9274e5fe3e7740',1,'fabgl::uiCheckBox::onChange()'],['../classfabgl_1_1ui_slider.html#a4b85e8d7fa59b19afa4d4cea68db184b',1,'fabgl::uiSlider::onChange()']]],
   ['onchangehscrollbar',['onChangeHScrollBar',['../classfabgl_1_1ui_scrollable_control.html#a6a70e7084544b556a484866953f31ea1',1,'fabgl::uiScrollableControl']]],
   ['onchangevscrollbar',['onChangeVScrollBar',['../classfabgl_1_1ui_scrollable_control.html#acd3b5eb00a440510de5e1811c2436443',1,'fabgl::uiScrollableControl']]],

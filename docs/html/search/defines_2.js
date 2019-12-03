@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qvga_5f320x240_5f60hz',['QVGA_320x240_60Hz',['../fabglconf_8h.html#a9321d0294fbf5e167be1627b5660d933',1,'fabglconf.h']]]
+  ['pal_5f720x576_5f50hz',['PAL_720x576_50Hz',['../fabglconf_8h.html#a78928748f0005d2888c16c0d562f6ca8',1,'fabglconf.h']]]
 ];

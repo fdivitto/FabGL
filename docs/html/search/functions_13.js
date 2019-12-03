@@ -17,9 +17,9 @@ var searchData=
   ['uitextedit',['uiTextEdit',['../classfabgl_1_1ui_text_edit.html#a9dfa9ef2d8d7a0653c81ef4964fb03e8',1,'fabgl::uiTextEdit']]],
   ['uiwindow',['uiWindow',['../classfabgl_1_1ui_window.html#aa28216e28543842d5d3a96c66a5c3e27',1,'fabgl::uiWindow']]],
   ['underline',['Underline',['../unionfabgl_1_1_glyph_options.html#a4f1724b11c19a26631ed12f302f61db7',1,'fabgl::GlyphOptions']]],
-  ['unlock',['unlock',['../classfabgl_1_1_p_s2_device_class.html#aed4e98813779c2d51bd304aef5aed7e9',1,'fabgl::PS2DeviceClass']]],
+  ['unlock',['unlock',['../classfabgl_1_1_p_s2_device.html#a8f89f02a4a2684bce07ed264bbbf6773',1,'fabgl::PS2Device']]],
   ['update',['update',['../classfabgl_1_1_collision_detector.html#a55d2fe2c8857aeb4f3c8cf86be6d409e',1,'fabgl::CollisionDetector::update()'],['../classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915',1,'fabgl::uiLabel::update()'],['../classfabgl_1_1ui_file_browser.html#a5a660405a8b4b86d2ec8e651206d4a88',1,'fabgl::uiFileBrowser::update()'],['../classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e',1,'fabgl::Scene::update()']]],
-  ['updateabsoluteposition',['updateAbsolutePosition',['../classfabgl_1_1_mouse_class.html#adf10d5722e7ac0eb3962bde2ba458bc5',1,'fabgl::MouseClass']]],
+  ['updateabsoluteposition',['updateAbsolutePosition',['../classfabgl_1_1_mouse.html#a5a64bba846867e29857302fc8fa1c818',1,'fabgl::Mouse']]],
   ['updateanddetectcollision',['updateAndDetectCollision',['../classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#accd92470e9aefba528dd72213475b995',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['updatesprite',['updateSprite',['../classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7',1,'fabgl::Scene']]],
   ['updatespriteanddetectcollisions',['updateSpriteAndDetectCollisions',['../classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae',1,'fabgl::Scene']]]

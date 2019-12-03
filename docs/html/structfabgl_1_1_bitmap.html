@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -94,40 +94,49 @@ $(document).ready(function(){initNavTree('structfabgl_1_1_bitmap.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Represents an image with 64 colors image and transparency.  
+<p>Represents an image.  
  <a href="structfabgl_1_1_bitmap.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for fabgl::Bitmap:</div>
+<div class="dyncontent">
+<div class="center"><img src="structfabgl_1_1_bitmap__coll__graph.png" border="0" usemap="#fabgl_1_1_bitmap_coll__map" alt="Collaboration graph"/></div>
+<map name="fabgl_1_1_bitmap_coll__map" id="fabgl_1_1_bitmap_coll__map">
+<area shape="rect" id="node2" href="structfabgl_1_1_r_g_b888.html" title="Represents a 24 bit RGB color. " alt="" coords="5,5,114,31"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab617972ddb5a6fbb352c7a92b98d7f4a"><td class="memItemLeft" align="right" valign="top">uint8_t const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#ab617972ddb5a6fbb352c7a92b98d7f4a">data</a></td></tr>
-<tr class="separator:ab617972ddb5a6fbb352c7a92b98d7f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac314d4af777bc333a5908c3d745a39e6"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#ac314d4af777bc333a5908c3d745a39e6">data</a></td></tr>
+<tr class="separator:ac314d4af777bc333a5908c3d745a39e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d3361bf7c9c63efae5d024694aa725"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#ac5d3361bf7c9c63efae5d024694aa725">dataAllocated</a></td></tr>
 <tr class="separator:ac5d3361bf7c9c63efae5d024694aa725"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4763ea757e0b5aed45f0642a4fe67e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_r_g_b888.html">RGB888</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#a4d4763ea757e0b5aed45f0642a4fe67e">foregroundColor</a></td></tr>
+<tr class="separator:a4d4763ea757e0b5aed45f0642a4fe67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a115b182099955683528e1c35c586ced1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">PixelFormat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#a115b182099955683528e1c35c586ced1">format</a></td></tr>
+<tr class="separator:a115b182099955683528e1c35c586ced1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a836fbdf0e47b513858c9f369aedaa076"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#a836fbdf0e47b513858c9f369aedaa076">height</a></td></tr>
 <tr class="separator:a836fbdf0e47b513858c9f369aedaa076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80670a11199056962db988c4b2e5dde1"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html#a80670a11199056962db988c4b2e5dde1">width</a></td></tr>
 <tr class="separator:a80670a11199056962db988c4b2e5dde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Represents an image with 64 colors image and transparency. </p>
-<p>Each pixel uses 8 bits (one byte), 2 bits per channel - RGBA, with following disposition:</p>
-<p>7 6 5 4 3 2 1 0 A A B B G G R R</p>
-<p>AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). </p>
+<div class="textblock"><p>Represents an image. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab617972ddb5a6fbb352c7a92b98d7f4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab617972ddb5a6fbb352c7a92b98d7f4a">&#9670;&nbsp;</a></span>data</h2>
+<a id="ac314d4af777bc333a5908c3d745a39e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac314d4af777bc333a5908c3d745a39e6">&#9670;&nbsp;</a></span>data</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t const* fabgl::Bitmap::data</td>
+          <td class="memname">uint8_t* fabgl::Bitmap::data</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image with 64 colors image and transparency. ">Bitmap</a> binary data </p>
+<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image. ">Bitmap</a> binary data </p>
 
 </div>
 </div>
@@ -146,6 +155,36 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4d4763ea757e0b5aed45f0642a4fe67e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d4763ea757e0b5aed45f0642a4fe67e">&#9670;&nbsp;</a></span>foregroundColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structfabgl_1_1_r_g_b888.html">RGB888</a> fabgl::Bitmap::foregroundColor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Foreground color when format is <a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf">PixelFormat::Mask</a> </p>
+
+</div>
+</div>
+<a id="a115b182099955683528e1c35c586ced1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a115b182099955683528e1c35c586ced1">&#9670;&nbsp;</a></span>format</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">PixelFormat</a> fabgl::Bitmap::format</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image. ">Bitmap</a> pixel format </p>
+
+</div>
+</div>
 <a id="a836fbdf0e47b513858c9f369aedaa076"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a836fbdf0e47b513858c9f369aedaa076">&#9670;&nbsp;</a></span>height</h2>
 
@@ -157,7 +196,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image with 64 colors image and transparency. ">Bitmap</a> vertical size </p>
+<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image. ">Bitmap</a> vertical size </p>
 
 </div>
 </div>
@@ -172,13 +211,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image with 64 colors image and transparency. ">Bitmap</a> horizontal size </p>
+<p><a class="el" href="structfabgl_1_1_bitmap.html" title="Represents an image. ">Bitmap</a> horizontal size </p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li><a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a></li>
-<li>vgacontroller.cpp</li>
+<li><a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a></li>
+<li>displaycontroller.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

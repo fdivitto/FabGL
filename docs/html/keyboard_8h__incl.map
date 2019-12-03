@@ -1,9 +1,10 @@
 <map id="keyboard.h" name="keyboard.h">
-<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="235,299,322,324"/>
-<area shape="rect" id="node4" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="182,152,274,177"/>
-<area shape="rect" id="node8" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="745,79,806,104"/>
-<area shape="rect" id="node6" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="174,225,282,251"/>
-<area shape="rect" id="node13" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="345,299,420,324"/>
-<area shape="rect" id="node14" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="592,225,700,251"/>
-<area shape="rect" id="node18" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="776,152,850,177"/>
+<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="395,299,482,324"/>
+<area shape="rect" id="node4" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="207,152,369,177"/>
+<area shape="rect" id="node8" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="813,79,875,104"/>
+<area shape="rect" id="node6" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="94,225,202,251"/>
+<area shape="rect" id="node13" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="880,299,955,324"/>
+<area shape="rect" id="node14" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="628,225,756,251"/>
+<area shape="rect" id="node15" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="731,152,805,177"/>
+<area shape="rect" id="node16" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2557,225,2637,251"/>
 </map>

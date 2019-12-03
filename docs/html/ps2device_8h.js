@@ -1,13 +1,13 @@
 var ps2device_8h =
 [
-    [ "PS2DeviceClass", "classfabgl_1_1_p_s2_device_class.html", "classfabgl_1_1_p_s2_device_class" ],
-    [ "PS2Device", "ps2device_8h.html#ga209a520f6108c21bd313cb2c98fde74a", [
-      [ "UnknownPS2Device", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aaf0ec84c588b61b87bda9ae20097acb38", null ],
-      [ "OldATKeyboard", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa", null ],
-      [ "MouseStandard", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa4ff15555542ae9bfb6d8540324603608", null ],
-      [ "MouseWithScrollWheel", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa21c07e6edcf197ea7673afac2bdb6f08", null ],
-      [ "Mouse5Buttons", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa3229d4013ec812e9aeb09bba83568a84", null ],
-      [ "MF2KeyboardWithTranslation", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c", null ],
-      [ "M2Keyboard", "ps2device_8h.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2", null ]
+    [ "PS2Device", "classfabgl_1_1_p_s2_device.html", "classfabgl_1_1_p_s2_device" ],
+    [ "PS2DeviceType", "ps2device_8h.html#gace9317dbf2d52e8ca5436590be2b97ed", [
+      [ "UnknownPS2Device", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0", null ],
+      [ "OldATKeyboard", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1", null ],
+      [ "MouseStandard", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97eda587da6d8dc703c1519c5f5878034d791", null ],
+      [ "MouseWithScrollWheel", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97eda7b1bf224080b249a7253c8c26f56b13f", null ],
+      [ "Mouse5Buttons", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5", null ],
+      [ "MF2KeyboardWithTranslation", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97edaf538f76f49a8e36da8fc9c30ded61260", null ],
+      [ "M2Keyboard", "ps2device_8h.html#ggace9317dbf2d52e8ca5436590be2b97edacd84073eb44e25384b4dfab30e81d441", null ]
     ] ]
 ];

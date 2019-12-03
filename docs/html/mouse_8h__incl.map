@@ -1,9 +1,10 @@
 <map id="mouse.h" name="mouse.h">
-<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="357,299,444,324"/>
-<area shape="rect" id="node5" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="521,299,595,324"/>
-<area shape="rect" id="node6" href="$ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="246,152,339,177"/>
-<area shape="rect" id="node10" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="715,79,777,104"/>
-<area shape="rect" id="node8" href="$ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="5,225,113,251"/>
-<area shape="rect" id="node14" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="809,225,917,251"/>
-<area shape="rect" id="node18" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="915,152,990,177"/>
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="395,299,482,324"/>
+<area shape="rect" id="node5" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="880,299,955,324"/>
+<area shape="rect" id="node6" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="149,152,310,177"/>
+<area shape="rect" id="node10" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="736,79,797,104"/>
+<area shape="rect" id="node8" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="242,225,350,251"/>
+<area shape="rect" id="node14" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="628,225,756,251"/>
+<area shape="rect" id="node15" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="729,152,804,177"/>
+<area shape="rect" id="node16" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2653,225,2733,251"/>
 </map>

@@ -1,11 +1,12 @@
 var searchData=
 [
+  ['a',['A',['../structfabgl_1_1_r_g_b_a8888.html#aaded41e4bb3ae3458712b6b75b0e691f',1,'fabgl::RGBA8888::A()'],['../structfabgl_1_1_r_g_b_a2222.html#a1791712b60e2a1ca212e70cf74a04c65',1,'fabgl::RGBA2222::A()']]],
   ['activable',['activable',['../structfabgl_1_1ui_window_props.html#ac6e1de46e51f00f0be806b07ff9ada83',1,'fabgl::uiWindowProps']]],
   ['active',['active',['../structfabgl_1_1ui_window_state.html#abdb53708ba30bc52f9ee182b228508b2',1,'fabgl::uiWindowState']]],
-  ['activebordercolor',['activeBorderColor',['../structfabgl_1_1ui_window_style.html#a302fef13779a3a5caa55cb9228d07cbd',1,'fabgl::uiWindowStyle']]],
-  ['activebuttoncolor',['activeButtonColor',['../structfabgl_1_1ui_frame_style.html#a5848b5a5540245c8eea3e70f22b59e50',1,'fabgl::uiFrameStyle']]],
-  ['activetitlebackgroundcolor',['activeTitleBackgroundColor',['../structfabgl_1_1ui_frame_style.html#aab1bf06d7fbdb3e2cc4a20ec9d00cba4',1,'fabgl::uiFrameStyle']]],
-  ['activetitlecolor',['activeTitleColor',['../structfabgl_1_1ui_frame_style.html#ace2d8d6427139fce8b277d1ff9da3083',1,'fabgl::uiFrameStyle']]],
+  ['activebordercolor',['activeBorderColor',['../structfabgl_1_1ui_window_style.html#a867722907e76a525522eba16646c9645',1,'fabgl::uiWindowStyle']]],
+  ['activebuttoncolor',['activeButtonColor',['../structfabgl_1_1ui_frame_style.html#aa762f723bf985116b960b3eeea0dc997',1,'fabgl::uiFrameStyle']]],
+  ['activetitlebackgroundcolor',['activeTitleBackgroundColor',['../structfabgl_1_1ui_frame_style.html#a3421d68d5fc4d694c0747594841fe354',1,'fabgl::uiFrameStyle']]],
+  ['activetitlecolor',['activeTitleColor',['../structfabgl_1_1ui_frame_style.html#a7268f5f27ffbc818dbe36e0f4bba220e',1,'fabgl::uiFrameStyle']]],
   ['activewindow',['activeWindow',['../classfabgl_1_1ui_app.html#a93a96823b4a884c8cb4141383197837f',1,'fabgl::uiApp']]],
   ['addsprite',['addSprite',['../classfabgl_1_1_collision_detector.html#a90308afcec5448c888d4117842f0757a',1,'fabgl::CollisionDetector::addSprite()'],['../classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f',1,'fabgl::Scene::addSprite()']]],
   ['adm31',['ADM31',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda8ac06e0429ea3a6cd71f46c7d4525b95',1,'fabgl']]],
@@ -19,7 +20,7 @@ var searchData=
   ['app',['app',['../classfabgl_1_1ui_evt_handler.html#a96d17d0396113602bd2367a7f0c09492',1,'fabgl::uiEvtHandler']]],
   ['appprops',['appProps',['../classfabgl_1_1ui_app.html#ac462bde3e4a0084396e727e2c3a85004',1,'fabgl::uiApp']]],
   ['attach',['attach',['../classfabgl_1_1_sound_generator.html#aa479e1bbd4b8978025fddfa8ea398770',1,'fabgl::SoundGenerator']]],
-  ['available',['available',['../classfabgl_1_1_terminal_class.html#ac74f4efc74b2a878bb976e9668579875',1,'fabgl::TerminalClass']]],
-  ['availableforwrite',['availableForWrite',['../classfabgl_1_1_terminal_class.html#af7a99734a314d86a403038edc9d1a0ac',1,'fabgl::TerminalClass']]],
-  ['availablestatus',['availableStatus',['../classfabgl_1_1_mouse_class.html#a878bf60d657dac3cd8be49da5b3671fc',1,'fabgl::MouseClass']]]
+  ['available',['available',['../classfabgl_1_1_terminal.html#a3ff1dcb46fc8ea9ab239bf39cffe490f',1,'fabgl::Terminal::available()'],['../classfabgl_1_1_d_s3231.html#ae27b539070f9e446ed050b23db52597f',1,'fabgl::DS3231::available()'],['../classfabgl_1_1_s_s_d1306_controller.html#a66a8b078f8daa503e5202fa057976b40',1,'fabgl::SSD1306Controller::available()']]],
+  ['availableforwrite',['availableForWrite',['../classfabgl_1_1_terminal.html#aa1a9b01111b52a0a45ec5d0b85e1239a',1,'fabgl::Terminal']]],
+  ['availablestatus',['availableStatus',['../classfabgl_1_1_mouse.html#a495abafc7d4238ab98a99fd757c1f361',1,'fabgl::Mouse']]]
 ];

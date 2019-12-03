@@ -4,7 +4,6 @@ var searchData=
   ['fabglib_5fchars_5fconsumer_5ftask_5fpriority',['FABGLIB_CHARS_CONSUMER_TASK_PRIORITY',['../fabglconf_8h.html#ae5c5db52013c30acb1ef5cdef6dcc9ea',1,'fabglconf.h']]],
   ['fabglib_5fchars_5fconsumer_5ftask_5fstack_5fsize',['FABGLIB_CHARS_CONSUMER_TASK_STACK_SIZE',['../fabglconf_8h.html#a7f59888867989aa6dbaab6705991f765',1,'fabglconf.h']]],
   ['fabglib_5fdefault_5fblink_5fperiod_5fms',['FABGLIB_DEFAULT_BLINK_PERIOD_MS',['../fabglconf_8h.html#a4b200384a3c85e55416a5e7aeb9dfd2c',1,'fabglconf.h']]],
-  ['fabglib_5fembeds_5fadditional_5ffonts',['FABGLIB_EMBEDS_ADDITIONAL_FONTS',['../fabglconf_8h.html#a9cb2b07d8e77bb5f2279e6bd1fcef3c9',1,'fabglconf.h']]],
   ['fabglib_5fexec_5fqueue_5fsize',['FABGLIB_EXEC_QUEUE_SIZE',['../fabglconf_8h.html#a0de03a4c89840b9d8775b6f6f97c961e',1,'fabglconf.h']]],
   ['fabglib_5fhas_5fvirtualkeyo_5fstring',['FABGLIB_HAS_VirtualKeyO_STRING',['../fabglconf_8h.html#af63d7f6c2c7a6d7beb99052cb0b01434',1,'fabglconf.h']]],
   ['fabglib_5fkeyboard_5freader_5ftask_5fpriority',['FABGLIB_KEYBOARD_READER_TASK_PRIORITY',['../fabglconf_8h.html#ab67fe681c8f9ab3ff369e0989a769259',1,'fabglconf.h']]],

@@ -38,7 +38,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "Variables", "functions_vars.html", "functions_vars" ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -55,13 +55,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classfabgl_1_1_terminal_class.html#aea444850463fdbec78fe099c822d7478",
-"classfabgl_1_1ui_custom_list_box.html#a205442303d62c106943db8fadacc0e9f",
-"classfabgl_1_1ui_list_box.html#a8723fdee4c289c10af882284d4f6c191",
-"classfabgl_1_1ui_window.html#a96d17d0396113602bd2367a7f0c09492",
-"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381ac5964b3eb15efe531c0a46b1c994b12f",
-"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381a7eab3811d03cedb434663dbd415199b8",
-"structfabgl_1_1ui_button_style.html#a3f9d843e30cd210708f269b8aa8a348a"
+"classfabgl_1_1_scene.html#a0a047709070bfc20546ee0a293ca36a1",
+"classfabgl_1_1ui_combo_box.html#a770f88193b45a54df6f944efe1fc25d5",
+"classfabgl_1_1ui_image.html#ae16282f1881ec8ded65ad239f3d17735",
+"classfabgl_1_1ui_slider.html#acc966ed4cd8d335139580fcf9995db21",
+"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a266133bf3fdc32cd087049484afbcc63",
+"group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda73e8beb31d6b2ea5697866df7dd578e2",
+"group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18",
+"structfabgl_1_1ui_text_edit_style.html#a2d515d507e5d7ceef2b30ec569c231c9"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

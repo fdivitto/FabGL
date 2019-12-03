@@ -1,7 +1,7 @@
 <map id="fabui.h" name="fabui.h">
-<area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="53,79,140,104"/>
-<area shape="rect" id="node6" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="176,152,249,177"/>
-<area shape="rect" id="node3" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="22,225,102,251"/>
+<area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="53,79,140,104"/>
+<area shape="rect" id="node6" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="176,152,249,177"/>
+<area shape="rect" id="node3" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="22,225,102,251"/>
 <area shape="rect" id="node4" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="108,299,170,324"/>
 <area shape="rect" id="node5" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,152,102,177"/>
 </map>

@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['r',['R',['../structfabgl_1_1_r_g_b.html#aa6556ab6d7dc37ab004dcba0a2b174d8',1,'fabgl::RGB']]],
+  ['r',['R',['../structfabgl_1_1_r_g_b888.html#ae30e060e6464a8f44f1ab1cbb641d848',1,'fabgl::RGB888::R()'],['../structfabgl_1_1_r_g_b_a8888.html#a9ec97e9eeaf6e04ef3cd5fc7fdb62f1c',1,'fabgl::RGBA8888::R()'],['../structfabgl_1_1_r_g_b222.html#acf084add92ccf194d8be633ac4be28ff',1,'fabgl::RGB222::R()'],['../structfabgl_1_1_r_g_b_a2222.html#aa331d47ac869b021d3351aee4b01de36',1,'fabgl::RGBA2222::R()']]],
   ['ralt',['RALT',['../structfabgl_1_1ui_key_event_info.html#a7d40d59376d1c3f0423d066995186453',1,'fabgl::uiKeyEventInfo']]],
-  ['rangecolor',['rangeColor',['../structfabgl_1_1ui_slider_style.html#af9c73a8b1970d8efd6a1ed0b2c31121a',1,'fabgl::uiSliderStyle']]],
+  ['rangecolor',['rangeColor',['../structfabgl_1_1ui_slider_style.html#a79e02ade6b762e3c0af739a5ccbbfc8b',1,'fabgl::uiSliderStyle']]],
   ['realtimereshaping',['realtimeReshaping',['../structfabgl_1_1ui_app_props.html#a8cdd820da137d3f5338e4b5129da1b2f',1,'fabgl::uiAppProps']]],
   ['reduceluminosity',['reduceLuminosity',['../unionfabgl_1_1_glyph_options.html#adef7ccf23f62fbe65bd098a3454a5712',1,'fabgl::GlyphOptions']]],
   ['reqvirtualkey',['reqVirtualKey',['../structfabgl_1_1_alt_virtual_key_def.html#a172ed979c81dce88b125a1de47306261',1,'fabgl::AltVirtualKeyDef']]],

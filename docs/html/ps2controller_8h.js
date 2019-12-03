@@ -1,6 +1,6 @@
 var ps2controller_8h =
 [
-    [ "PS2ControllerClass", "classfabgl_1_1_p_s2_controller_class.html", "classfabgl_1_1_p_s2_controller_class" ],
+    [ "PS2Controller", "classfabgl_1_1_p_s2_controller.html", "classfabgl_1_1_p_s2_controller" ],
     [ "KbdMode", "ps2controller_8h.html#ga0eff89ccbe1087e0390e5cae305ef06d", [
       [ "NoVirtualKeys", "ps2controller_8h.html#gga0eff89ccbe1087e0390e5cae305ef06dadaa64f7602ad3caa98f09799e3e683b1", null ],
       [ "GenerateVirtualKeys", "ps2controller_8h.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4", null ],

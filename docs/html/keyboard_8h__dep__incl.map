@@ -1,5 +1,5 @@
 <map id="keyboard.h" name="keyboard.h">
-<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="20,152,100,177"/>
+<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="20,152,100,177"/>
 <area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="68,225,129,251"/>
 <area shape="rect" id="node4" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="20,79,100,104"/>
 </map>

@@ -1,4 +1,6 @@
 <map id="vgacontroller.h" name="vgacontroller.h">
-<area shape="rect" id="node9" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="701,79,787,104"/>
-<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="811,79,886,104"/>
+<area shape="rect" id="node9" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="504,152,591,177"/>
+<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="665,152,739,177"/>
+<area shape="rect" id="node11" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="289,79,459,104"/>
+<area shape="rect" id="node12" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="585,79,713,104"/>
 </map>

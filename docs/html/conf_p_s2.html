@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -95,13 +95,18 @@ $(document).ready(function(){initNavTree('conf_p_s2.html','');});
 <img src="schema_PS2.png" alt="schema_PS2.png" width="500cm"/>
 </div>
 <p>Using above GPIOs the PS2 Mouse Controller may be initialized in this way: </p><pre class="fragment">Mouse.begin(GPIO_NUM_26, GPIO_NUM_27);  // clk, dat
-</pre><p>When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way: </p><pre class="fragment">// port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
+</pre><p>When both a mouse and a keyboard are connected initialization must be done directly on PS2Controller, in this way: </p><pre class="fragment">fabgl::PS2Controller PS2Controller;
+fabgl::Keyboard Keyboard;
+fabgl::Mouse Mouse;
+
+// port 0 (keyboard) CLK and DAT, port 1 (mouse) CLK and DAT
 PS2Controller.begin(GPIO_NUM_33, GPIO_NUM_32, GPIO_NUM_26, GPIO_NUM_27);
 // initialize keyboard on port 0 (GPIO33=CLK, GPIO32=DAT)
 Keyboard.begin(true, true, 0);
 // initialize mouse on port 1 (GPIO26=CLK, GPIO27=DAT)
 Mouse.begin(1);
-</pre><p>A simplified way to configure Mouse and Keyboard, when you have all GPIOs as before is: </p><pre class="fragment">PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);</pre> </div></div><!-- contents -->
+</pre><p>A simplified way to configure Mouse and Keyboard, when you have all GPIOs as before is: </p><pre class="fragment">fabgl::PS2Controller PS2Controller;
+PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);</pre> </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

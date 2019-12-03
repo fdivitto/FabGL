@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('ps2controller_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">fabgl::PS2ControllerClass</a> definition and the PS2Controller instance.  
+<p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">fabgl::PS2Controller</a> definition.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/task.h&quot;</code><br />
@@ -112,12 +112,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="ps2controller_8h__dep__incl.png" border="0" usemap="#ps2controller_8hdep" alt=""/></div>
 <map name="ps2controller_8hdep" id="ps2controller_8hdep">
-<area shape="rect" id="node2" href="ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="155,79,248,104"/>
-<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="144,372,206,397"/>
-<area shape="rect" id="node3" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="50,152,137,177"/>
-<area shape="rect" id="node7" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="176,225,248,251"/>
-<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="22,299,102,324"/>
-<area shape="rect" id="node6" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,225,102,251"/>
+<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="67,372,129,397"/>
+<area shape="rect" id="node3" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="64,79,156,104"/>
+<area shape="rect" id="node4" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="66,152,154,177"/>
+<area shape="rect" id="node7" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="251,225,324,251"/>
+<area shape="rect" id="node5" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="97,299,177,324"/>
+<area shape="rect" id="node6" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="147,225,228,251"/>
 </map>
 </div>
 </div>
@@ -125,8 +125,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller_class.html">fabgl::PS2ControllerClass</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PS2 device controller class.  <a href="classfabgl_1_1_p_s2_controller_class.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PS2 device controller class.  <a href="classfabgl_1_1_p_s2_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -145,13 +145,13 @@ Enumerations</h2></td></tr>
 <tr class="separator:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller_class.html" title="The PS2 device controller class. ">fabgl::PS2ControllerClass</a> definition and the PS2Controller instance. </p>
+<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">fabgl::PS2Controller</a> definition. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="ps2controller_8h.html">ps2controller.h</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b741fed86bf5fa30eab98075f2fe4281.html">comdrivers</a></li><li class="navelem"><a class="el" href="ps2controller_8h.html">ps2controller.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

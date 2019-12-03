@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -103,17 +103,19 @@ $(document).ready(function(){initNavTree('fabui_8h.html','');});
 <code>#include &quot;freertos/timers.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="canvas_8h_source.html">canvas.h</a>&quot;</code><br />
+<code>#include &quot;fabfonts.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fabui.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabui_8h__incl.png" border="0" usemap="#fabui_8h" alt=""/></div>
 <map name="fabui_8h" id="fabui_8h">
-<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="798,225,884,251"/>
-<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="557,225,632,251"/>
-<area shape="rect" id="node9" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="398,152,506,177"/>
-<area shape="rect" id="node13" href="canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="348,79,422,104"/>
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="528,225,614,251"/>
+<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="379,225,454,251"/>
+<area shape="rect" id="node9" href="displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="220,152,348,177"/>
+<area shape="rect" id="node10" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="71,79,146,104"/>
+<area shape="rect" id="node11" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2216,152,2296,177"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -121,9 +123,9 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabui_8h__dep__incl.png" border="0" usemap="#fabui_8hdep" alt=""/></div>
 <map name="fabui_8hdep" id="fabui_8hdep">
-<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="53,79,140,104"/>
-<area shape="rect" id="node6" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="176,152,249,177"/>
-<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="22,225,102,251"/>
+<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="53,79,140,104"/>
+<area shape="rect" id="node6" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="176,152,249,177"/>
+<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="22,225,102,251"/>
 <area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="108,299,170,324"/>
 <area shape="rect" id="node5" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,152,102,177"/>
 </map>

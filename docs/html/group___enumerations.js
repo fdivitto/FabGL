@@ -48,25 +48,29 @@ var group___enumerations =
       [ "LegacyMouse", "group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5", null ],
       [ "Intellimouse", "group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca", null ]
     ] ],
-    [ "PS2Device", "group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a", [
-      [ "UnknownPS2Device", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aaf0ec84c588b61b87bda9ae20097acb38", null ],
-      [ "OldATKeyboard", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa", null ],
-      [ "MouseStandard", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa4ff15555542ae9bfb6d8540324603608", null ],
-      [ "MouseWithScrollWheel", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa21c07e6edcf197ea7673afac2bdb6f08", null ],
-      [ "Mouse5Buttons", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa3229d4013ec812e9aeb09bba83568a84", null ],
-      [ "MF2KeyboardWithTranslation", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c", null ],
-      [ "M2Keyboard", "group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2", null ]
+    [ "NativePixelFormat", "group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9", [
+      [ "Mono", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
+      [ "SBGR2222", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ]
+    ] ],
+    [ "PixelFormat", "group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
+      [ "Undefined", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360", null ],
+      [ "Mask", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf", null ],
+      [ "RGBA2222", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7", null ],
+      [ "RGBA8888", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619", null ]
+    ] ],
+    [ "PS2DeviceType", "group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed", [
+      [ "UnknownPS2Device", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0", null ],
+      [ "OldATKeyboard", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1", null ],
+      [ "MouseStandard", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda587da6d8dc703c1519c5f5878034d791", null ],
+      [ "MouseWithScrollWheel", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda7b1bf224080b249a7253c8c26f56b13f", null ],
+      [ "Mouse5Buttons", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5", null ],
+      [ "MF2KeyboardWithTranslation", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf538f76f49a8e36da8fc9c30ded61260", null ],
+      [ "M2Keyboard", "group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edacd84073eb44e25384b4dfab30e81d441", null ]
     ] ],
     [ "PS2Preset", "group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017", [
       [ "KeyboardPort0_MousePort1", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74", null ],
       [ "KeyboardPort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7", null ],
       [ "MousePort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4", null ]
-    ] ],
-    [ "ScreenBlock", "group___enumerations.html#gac9fa12697d1785c744af01bb0800d652", [
-      [ "FrontPorch", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a8a10612c141004c5f2986050c23a349d", null ],
-      [ "Sync", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a3883a8f6a8d0924e5083674b04d162e1", null ],
-      [ "BackPorch", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652aa2e3d51a4bdf436297de5d18f0fc7fc2", null ],
-      [ "VisibleArea", "group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a9eb43f64e3e327a4e68f4537db8e0582", null ]
     ] ],
     [ "TermType", "group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd", [
       [ "ANSI_VT", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2", null ],
@@ -106,6 +110,12 @@ var group___enumerations =
       [ "Screen", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca2fc3359e12b2a9104121dcf04246f6a0", null ],
       [ "Parent", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7", null ],
       [ "Window", "group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b", null ]
+    ] ],
+    [ "VGAScanStart", "group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463", [
+      [ "FrontPorch", "group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a8a10612c141004c5f2986050c23a349d", null ],
+      [ "Sync", "group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a3883a8f6a8d0924e5083674b04d162e1", null ],
+      [ "BackPorch", "group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463aa2e3d51a4bdf436297de5d18f0fc7fc2", null ],
+      [ "VisibleArea", "group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a9eb43f64e3e327a4e68f4537db8e0582", null ]
     ] ],
     [ "VirtualKey", "group___enumerations.html#gae12c31a33f64281cba424d993a8a4381", [
       [ "VK_NONE", "group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381afed697c6504b385257870e50df5b034e", null ],

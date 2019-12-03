@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mouse_2eh',['mouse.h',['../mouse_8h.html',1,'']]]
+  ['keyboard_2eh',['keyboard.h',['../keyboard_8h.html',1,'']]]
 ];

@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -92,20 +92,20 @@ $(document).ready(function(){initNavTree('functions_f.html','');});
 <li>filename()
 : <a class="el" href="classfabgl_1_1ui_file_browser.html#a8c7b7961acb24095bacee49868d20443">fabgl::uiFileBrowser</a>
 </li>
-<li>FillBackground()
-: <a class="el" href="unionfabgl_1_1_glyph_options.html#ac24367a7567a01a2f42941e7444a56b7">fabgl::GlyphOptions</a>
-</li>
 <li>fillBackground
 : <a class="el" href="unionfabgl_1_1_glyph_options.html#ae0cfedecb238fdbf5310a8e512702a3a">fabgl::GlyphOptions</a>
 </li>
+<li>FillBackground()
+: <a class="el" href="unionfabgl_1_1_glyph_options.html#ac24367a7567a01a2f42941e7444a56b7">fabgl::GlyphOptions</a>
+</li>
 <li>fillEllipse()
-: <a class="el" href="classfabgl_1_1_canvas_class.html#aeeaccac47e099a8b20fae352b9f6766b">fabgl::CanvasClass</a>
+: <a class="el" href="classfabgl_1_1_canvas.html#a6e27dfa23f59ea92609945addcfd4ebb">fabgl::Canvas</a>
 </li>
 <li>fillPath()
-: <a class="el" href="classfabgl_1_1_canvas_class.html#ac74e3c84ed8ec93165b937a7188fca3e">fabgl::CanvasClass</a>
+: <a class="el" href="classfabgl_1_1_canvas.html#ad3fd9968381866706560eafbaac0656c">fabgl::Canvas</a>
 </li>
 <li>fillRectangle()
-: <a class="el" href="classfabgl_1_1_canvas_class.html#a003aeb0b8e58b5e0e658e2f18c106fef">fabgl::CanvasClass</a>
+: <a class="el" href="classfabgl_1_1_canvas.html#a4dafca762c89094c1079e3eb00b7c8bd">fabgl::Canvas</a>
 </li>
 <li>firstChild()
 : <a class="el" href="classfabgl_1_1ui_window.html#a28c8bf12d13b6eadbc05bc64a65c33c0">fabgl::uiWindow</a>
@@ -114,23 +114,23 @@ $(document).ready(function(){initNavTree('functions_f.html','');});
 : <a class="el" href="classfabgl_1_1ui_custom_list_box.html#aea933f77b604c5ea8825bedabfd0c283">fabgl::uiCustomListBox</a>
 </li>
 <li>flush()
-: <a class="el" href="classfabgl_1_1_terminal_class.html#a29f95f4e068b2a51ba729b8d71f94c92">fabgl::TerminalClass</a>
+: <a class="el" href="classfabgl_1_1_terminal.html#ae0f5882488bc3d8b81f1641513a70a0a">fabgl::Terminal</a>
 </li>
 <li>focusable
 : <a class="el" href="structfabgl_1_1ui_window_props.html#aedbde68c8708b871ca88a29c200bbd1c">fabgl::uiWindowProps</a>
 </li>
 <li>focusedBackgroundColor
-: <a class="el" href="structfabgl_1_1ui_list_box_style.html#a297ba42a078f39f34cbb332a8a5a7f5f">fabgl::uiListBoxStyle</a>
-, <a class="el" href="structfabgl_1_1ui_text_edit_style.html#a7f106a701cb5f4ec08465f987ae83c4b">fabgl::uiTextEditStyle</a>
+: <a class="el" href="structfabgl_1_1ui_list_box_style.html#a0733cf0970e5ec9d54dea283ecb44138">fabgl::uiListBoxStyle</a>
+, <a class="el" href="structfabgl_1_1ui_text_edit_style.html#a2d515d507e5d7ceef2b30ec569c231c9">fabgl::uiTextEditStyle</a>
 </li>
 <li>focusedBorderColor
-: <a class="el" href="structfabgl_1_1ui_window_style.html#a15edfee551b1430de7947109dc7b60c3">fabgl::uiWindowStyle</a>
+: <a class="el" href="structfabgl_1_1ui_window_style.html#a7cb190690e2ad9c1d31f862ec7e55232">fabgl::uiWindowStyle</a>
 </li>
 <li>focusedBorderSize
 : <a class="el" href="structfabgl_1_1ui_window_style.html#a59eb0532534d8b5bec0b476ca57a8606">fabgl::uiWindowStyle</a>
 </li>
 <li>focusedSelectedBackgroundColor
-: <a class="el" href="structfabgl_1_1ui_list_box_style.html#a04b28e49b734b27bd9cb53428c98f5ef">fabgl::uiListBoxStyle</a>
+: <a class="el" href="structfabgl_1_1ui_list_box_style.html#a7ff3a868973db2d2953041c2ef3fec02">fabgl::uiListBoxStyle</a>
 </li>
 <li>focusedWindow()
 : <a class="el" href="classfabgl_1_1ui_app.html#ae4ee677b3ec3ee727ede27010cae8798">fabgl::uiApp</a>
@@ -139,7 +139,11 @@ $(document).ready(function(){initNavTree('functions_f.html','');});
 : <a class="el" href="classfabgl_1_1ui_window.html#affd6f6e94bee7b5e370a3f772173d895">fabgl::uiWindow</a>
 </li>
 <li>foregroundColor
-: <a class="el" href="structfabgl_1_1ui_check_box_style.html#a9f888b24e3fae3c2fd63cbaa0d221f85">fabgl::uiCheckBoxStyle</a>
+: <a class="el" href="structfabgl_1_1_bitmap.html#a4d4763ea757e0b5aed45f0642a4fe67e">fabgl::Bitmap</a>
+, <a class="el" href="structfabgl_1_1ui_check_box_style.html#abc672fa617b42cb9d89bfdc7b52ae6d3">fabgl::uiCheckBoxStyle</a>
+</li>
+<li>format
+: <a class="el" href="structfabgl_1_1_bitmap.html#a115b182099955683528e1c35c586ced1">fabgl::Bitmap</a>
 </li>
 <li>frameProps()
 : <a class="el" href="classfabgl_1_1ui_frame.html#a93fb3c0e7a4cca7e9333540116bc58c7">fabgl::uiFrame</a>
@@ -148,7 +152,7 @@ $(document).ready(function(){initNavTree('functions_f.html','');});
 : <a class="el" href="classfabgl_1_1ui_frame.html#a178f4833d3d093cf9c6e6dbeec788ab7">fabgl::uiFrame</a>
 </li>
 <li>frequency
-: <a class="el" href="structfabgl_1_1_timings.html#ab5a1e083cc181419b327dca5508c5b65">fabgl::Timings</a>
+: <a class="el" href="structfabgl_1_1_v_g_a_timings.html#a0e0492d0765a6bf64f6b4843d41e3977">fabgl::VGATimings</a>
 </li>
 </ul>
 </div><!-- contents -->

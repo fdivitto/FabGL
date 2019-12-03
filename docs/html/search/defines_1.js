@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pal_5f720x576_5f50hz',['PAL_720x576_50Hz',['../fabglconf_8h.html#a78928748f0005d2888c16c0d562f6ca8',1,'fabglconf.h']]]
+  ['oled_5f128x32',['OLED_128x32',['../fabglconf_8h.html#aa82a94204721377d7b3c0f6fc615c1d0',1,'fabglconf.h']]],
+  ['oled_5f128x64',['OLED_128x64',['../fabglconf_8h.html#a48a7b2c95a1f0546c72310844fa6fc74',1,'fabglconf.h']]]
 ];

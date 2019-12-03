@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -95,29 +95,34 @@ $(document).ready(function(){initNavTree('index.html','');});
 </p>
 <p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
 <hr/>
-<p>This is a VGA Controller, PS/2 Keyboard and Mouse Controller, Graphics Library, Audio Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the ESP32.<br />
- This library works with ESP32 revision 1 or upper.</p>
+<p>FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br />
+ FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br />
+</p>
+<p>This library works with ESP32 revision 1 and upper.</p>
 <p>VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.</p>
-<p>Three fixed width fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts are embedded, even with variable width.</p>
-<p>Sprites can have up to 64 colors (RGB, 2 bits per channel + transparency).<br />
- A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.<br />
- Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.</p>
+<p>There are several fixed and variable width fonts embedded.</p>
+<p>Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.</p>
 <p>When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.<br />
- In this case drawing primitives always draw on the back buffer.</p>
-<p>Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing, so no flickering is visible.<br />
+ In this case primitives are always drawn on the back buffer.</p>
+<p>Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing (using VGA driver), so no flickering is visible.<br />
  If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.</p>
 <p>There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).</p>
 <p>Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.</p>
 <hr/>
 <p>The main classes of FabGL library are:</p><ul>
-<li><a class="el" href="classfabgl_1_1_v_g_a_controller_class.html" title="Represents the VGA controller. ">fabgl::VGAControllerClass</a> (instanced as <b>VGAController</b>), that controls the hardware. Use to setup GPIOs, screen resolution and adjust the screen position.</li>
-<li><a class="el" href="classfabgl_1_1_canvas_class.html" title="A class with a set of drawing methods. ">fabgl::CanvasClass</a> (instanced as <b>Canvas</b>), that provides a set of drawing primitives (lines, rectangles, text...).</li>
-<li><a class="el" href="classfabgl_1_1_terminal_class.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::TerminalClass</a>, that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
-<li><a class="el" href="classfabgl_1_1_keyboard_class.html" title="The PS2 Keyboard controller class. ">fabgl::KeyboardClass</a> (instanced as <b>Keyboard</b>), that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
-<li><a class="el" href="classfabgl_1_1_mouse_class.html" title="The PS2 Mouse controller class. ">fabgl::MouseClass</a> (instanced as <b>Mouse</b>), that controls a PS2 mouse.</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA controller. ">fabgl::VGAController</a>, the device driver for VGA output.</li>
+<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, the device driver for SSD1306 based OLED displays.</li>
+<li><a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a>, that provides a set of drawing primitives (lines, rectangles, text...).</li>
+<li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
+<li><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a>, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
+<li><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a> (instanced as <b>Mouse</b>), that controls a PS2 mouse.</li>
 <li><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">fabgl::Scene</a> abstract class that handles sprites, timings and collision detection.</li>
 <li><a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">fabgl::uiApp</a> base class to build Graphical User Interface applications</li>
 <li><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output. ">fabgl::SoundGenerator</a> to generate sound and music.</li>
+</ul>
+<p>Other classes are:</p><ul>
+<li><a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a>, thread safe I2C (Wire) class</li>
+<li><a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">fabgl::DS3231</a>, Real Time Clock driver which uses the thread safe <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a> library</li>
 </ul>
 <p>See <a class="el" href="conf_v_g_a.html">Configuring VGA outputs</a> for VGA connection sample schema.</p>
 <p>See <a class="el" href="conf_p_s2.html">Configuring PS/2 port</a> for PS/2 connection sample schema.</p>
@@ -125,17 +130,17 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>See <a class="el" href="gen_schema.html">Generic Circuit Diagram</a> for a generic complete circuit diagram.</p>
 <hr/>
  <center> Installation Tutorial </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html">Space Invaders Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html">Graphical User Interface - GUI Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_audio_2_audio_8ino-example.html">Audio output demo </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html">Simple Terminal Out Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_altair8800_2_altair8800_8ino-example.html">Altair 8800 Emulator </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_v_i_c20_2_v_i_c20_8ino-example.html">Commodore VIC20 Emulator </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html">Network Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html">Modeline Studio Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html">Loopback Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html">Double Buffering Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
- <center> <a class="el" href="_collision_detection_2_collision_detection_8ino-example.html">Collision Detection Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html">Space Invaders Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html">Graphical User Interface - GUI Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html">Audio output demo </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html">Simple Terminal Out Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html">Altair 8800 Emulator </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html">Commodore VIC20 Emulator </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_network_terminal_2_network_terminal_8ino-example.html">Network Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html">Modeline Studio Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html">Loopback Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html">Double Buffering Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html">Collision Detection Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
 <p>Created by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>) - <a href="http://www.fabgl.com">http://www.fabgl.com</a> <br />
  Copyright (c) 2019 Fabrizio Di Vittorio. <br />
  All rights reserved. <br />

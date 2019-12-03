@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -100,20 +100,25 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabglconf_8h__dep__incl.png" border="0" usemap="#fabglconf_8hdep" alt=""/></div>
 <map name="fabglconf_8hdep" id="fabglconf_8hdep">
-<area shape="rect" id="node2" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="224,79,332,104"/>
-<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="361,445,441,471"/>
-<area shape="rect" id="node6" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="388,225,449,251"/>
-<area shape="rect" id="node7" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="439,299,526,324"/>
-<area shape="rect" id="node9" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="562,299,635,324"/>
-<area shape="rect" id="node10" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="115,225,183,251"/>
-<area shape="rect" id="node11" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="5,152,133,177"/>
-<area shape="rect" id="node12" href="ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="535,225,627,251"/>
-<area shape="rect" id="node13" href="ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="611,152,719,177"/>
-<area shape="rect" id="node14" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="762,372,853,397"/>
-<area shape="rect" id="node15" href="swgenerator_8h.html" title="This file contains fabgl::SquareWaveGeneratorClass definition and the SquareWaveGenerator instance..." alt="" coords="844,79,950,104"/>
-<area shape="rect" id="node3" href="canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="258,152,333,177"/>
-<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="448,519,509,544"/>
-<area shape="rect" id="node8" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="438,372,519,397"/>
+<area shape="rect" id="node2" href="displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="379,79,507,104"/>
+<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="702,445,781,471"/>
+<area shape="rect" id="node6" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="827,225,888,251"/>
+<area shape="rect" id="node7" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="789,299,876,324"/>
+<area shape="rect" id="node9" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="968,299,1040,324"/>
+<area shape="rect" id="node10" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="203,152,331,177"/>
+<area shape="rect" id="node11" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="212,225,280,251"/>
+<area shape="rect" id="node12" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="20,152,128,177"/>
+<area shape="rect" id="node13" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="555,152,702,177"/>
+<area shape="rect" id="node14" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="878,152,957,177"/>
+<area shape="rect" id="node15" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="1033,152,1141,177"/>
+<area shape="rect" id="node16" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="963,225,1056,251"/>
+<area shape="rect" id="node17" href="tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="1210,79,1270,104"/>
+<area shape="rect" id="node18" href="_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="1267,152,1347,177"/>
+<area shape="rect" id="node19" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="1333,372,1424,397"/>
+<area shape="rect" id="node20" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="24,79,129,104"/>
+<area shape="rect" id="node3" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="406,152,480,177"/>
+<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="866,519,927,544"/>
+<area shape="rect" id="node8" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="779,372,859,397"/>
 </map>
 </div>
 </div>
@@ -129,8 +134,6 @@ Macros</h2></td></tr>
 <tr class="separator:a7f59888867989aa6dbaab6705991f765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b200384a3c85e55416a5e7aeb9dfd2c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a4b200384a3c85e55416a5e7aeb9dfd2c">FABGLIB_DEFAULT_BLINK_PERIOD_MS</a>&#160;&#160;&#160;500</td></tr>
 <tr class="separator:a4b200384a3c85e55416a5e7aeb9dfd2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cb2b07d8e77bb5f2279e6bd1fcef3c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a9cb2b07d8e77bb5f2279e6bd1fcef3c9">FABGLIB_EMBEDS_ADDITIONAL_FONTS</a>&#160;&#160;&#160;0</td></tr>
-<tr class="separator:a9cb2b07d8e77bb5f2279e6bd1fcef3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0de03a4c89840b9d8775b6f6f97c961e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a0de03a4c89840b9d8775b6f6f97c961e">FABGLIB_EXEC_QUEUE_SIZE</a>&#160;&#160;&#160;1024</td></tr>
 <tr class="separator:a0de03a4c89840b9d8775b6f6f97c961e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af63d7f6c2c7a6d7beb99052cb0b01434"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#af63d7f6c2c7a6d7beb99052cb0b01434">FABGLIB_HAS_VirtualKeyO_STRING</a>&#160;&#160;&#160;1</td></tr>
@@ -163,6 +166,10 @@ Macros</h2></td></tr>
 <tr class="separator:a1ab4da26b781d3790348f83fe5c88f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa53fb2fcd9e8b5430c83a58928892f2c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#aa53fb2fcd9e8b5430c83a58928892f2c">FABGLIB_XTAL</a>&#160;&#160;&#160;40000000</td></tr>
 <tr class="separator:aa53fb2fcd9e8b5430c83a58928892f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82a94204721377d7b3c0f6fc615c1d0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#aa82a94204721377d7b3c0f6fc615c1d0">OLED_128x32</a>&#160;&#160;&#160;&quot;\&quot;OLED_128x32\&quot; 128 32&quot;</td></tr>
+<tr class="separator:aa82a94204721377d7b3c0f6fc615c1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48a7b2c95a1f0546c72310844fa6fc74"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a48a7b2c95a1f0546c72310844fa6fc74">OLED_128x64</a>&#160;&#160;&#160;&quot;\&quot;OLED_128x64\&quot; 128 64&quot;</td></tr>
+<tr class="separator:a48a7b2c95a1f0546c72310844fa6fc74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78928748f0005d2888c16c0d562f6ca8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a78928748f0005d2888c16c0d562f6ca8">PAL_720x576_50Hz</a>&#160;&#160;&#160;&quot;\&quot;720x576@50Hz\&quot; 27 720 732 795 864 576 581 586 625 -HSync -VSync&quot;</td></tr>
 <tr class="separator:a78928748f0005d2888c16c0d562f6ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9321d0294fbf5e167be1627b5660d933"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a9321d0294fbf5e167be1627b5660d933">QVGA_320x240_60Hz</a>&#160;&#160;&#160;&quot;\&quot;320x240@60Hz\&quot; 12.6 320 328 376 400 240 245 246 262 -HSync -VSync DoubleScan&quot;</td></tr>
@@ -193,6 +200,8 @@ Macros</h2></td></tr>
 <tr class="separator:a8052201f91850dfc935be639a91da6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e68e4a75777e8962beec2fb37a4b1e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a6e68e4a75777e8962beec2fb37a4b1e0">VGA_480x300_75Hz</a>&#160;&#160;&#160;&quot;\&quot;480x300@75Hz\&quot; 31.22 480 504 584 624 300 319 322 333 -HSync -VSync DoubleScan&quot;</td></tr>
 <tr class="separator:a6e68e4a75777e8962beec2fb37a4b1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb88bbc49bcbf318cd6310ce46975c13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#afb88bbc49bcbf318cd6310ce46975c13">VGA_512x192_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x192@60Hz\&quot; 32.5 512 524 592 672 192 193 194 202 -HSync -VSync QuadScan&quot;</td></tr>
+<tr class="separator:afb88bbc49bcbf318cd6310ce46975c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d89ffdbe287a195d0f62d4e12a31f36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#a8d89ffdbe287a195d0f62d4e12a31f36">VGA_512x384_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x384@60Hz\&quot; 32.5 512 524 592 672 384 385 388 403 -HSync -VSync DoubleScan&quot;</td></tr>
 <tr class="separator:a8d89ffdbe287a195d0f62d4e12a31f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad8f98eb11654d95f40f8b0f8ac1bf62"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h.html#aad8f98eb11654d95f40f8b0f8ac1bf62">VGA_512x448_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x448@60Hz\&quot; 21.21 512 542 598 672 448 469 472 527 -HSync -VSync&quot;</td></tr>
@@ -287,21 +296,6 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a id="a9cb2b07d8e77bb5f2279e6bd1fcef3c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cb2b07d8e77bb5f2279e6bd1fcef3c9">&#9670;&nbsp;</a></span>FABGLIB_EMBEDS_ADDITIONAL_FONTS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FABGLIB_EMBEDS_ADDITIONAL_FONTS&#160;&#160;&#160;0</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Embeds additional fonts </p>
-
-</div>
-</div>
 <a id="a0de03a4c89840b9d8775b6f6f97c961e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0de03a4c89840b9d8775b6f6f97c961e">&#9670;&nbsp;</a></span>FABGLIB_EXEC_QUEUE_SIZE</h2>
 
@@ -328,7 +322,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Optional feature. Enables KeyboardClass.virtualKeyToString() method </p>
+<p>Optional feature. Enables Keyboard.virtualKeyToString() method </p>
 
 </div>
 </div>
@@ -343,7 +337,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Priority of the task that reads keys from keyboard and send ANSI/VT codes to output stream in TerminalClass </p>
+<p>Priority of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal </p>
 
 </div>
 </div>
@@ -358,7 +352,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in TerminalClass </p>
+<p>Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal </p>
 
 </div>
 </div>
@@ -433,7 +427,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Priority of the task that converts scancodes to virtualkeys KeyboardClass </p>
+<p>Priority of the task that converts scancodes to virtualkeys Keyboard </p>
 
 </div>
 </div>
@@ -448,7 +442,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Stack size of the task that converts scancodes to virtualkeys KeyboardClass </p>
+<p>Stack size of the task that converts scancodes to virtualkeys Keyboard </p>
 
 </div>
 </div>
@@ -542,6 +536,38 @@ Macros</h2></td></tr>
 
 </div>
 </div>
+<a id="aa82a94204721377d7b3c0f6fc615c1d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa82a94204721377d7b3c0f6fc615c1d0">&#9670;&nbsp;</a></span>OLED_128x32</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OLED_128x32&#160;&#160;&#160;&quot;\&quot;OLED_128x32\&quot; 128 32&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Modeline for OLED 128x32 </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a11">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a11">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="a48a7b2c95a1f0546c72310844fa6fc74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48a7b2c95a1f0546c72310844fa6fc74">&#9670;&nbsp;</a></span>OLED_128x64</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OLED_128x64&#160;&#160;&#160;&quot;\&quot;OLED_128x64\&quot; 128 64&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Modeline for OLED 128x64 </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a11">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#a15">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a11">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+</dl>
+</div>
+</div>
 <a id="a78928748f0005d2888c16c0d562f6ca8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a78928748f0005d2888c16c0d562f6ca8">&#9670;&nbsp;</a></span>PAL_720x576_50Hz</h2>
 
@@ -554,7 +580,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 720x576@50Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a22">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a22">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -570,7 +596,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 320x240@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a2">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a2">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -586,7 +612,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 800x300@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a24">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a24">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -602,7 +628,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 800x600@56Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a25">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a25">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -618,7 +644,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 800x600@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a26">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a26">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -634,7 +660,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x350@85Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a12">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a12">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -650,7 +676,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x480@75Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a20">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a20">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -666,7 +692,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 720x400@85Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a21">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a21">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -682,7 +708,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 768x576@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a23">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a23">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -713,7 +739,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 256x384@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a0">ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_i_c20_2_v_i_c20_8ino-example.html#a18">VIC20/VIC20.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a0">VGA/ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a16">VGA/VIC20/VIC20.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -729,7 +755,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 320x200@75Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_collision_detection_2_collision_detection_8ino-example.html#a11">CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_double_buffer_2_double_buffer_8ino-example.html#a2">DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a1">ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_space_invaders_2_space_invaders_8ino-example.html#a40">SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a9">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a4">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a1">VGA/ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a20">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -760,7 +786,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 400x300@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a3">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a3">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -776,8 +802,23 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 480x300@75Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a4">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a4">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
+</div>
+</div>
+<a id="afb88bbc49bcbf318cd6310ce46975c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb88bbc49bcbf318cd6310ce46975c13">&#9670;&nbsp;</a></span>VGA_512x192_60Hz</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VGA_512x192_60Hz&#160;&#160;&#160;&quot;\&quot;512x192@60Hz\&quot; 32.5 512 524 592 672 192 193 194 202 -HSync -VSync QuadScan&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Modeline for 512x192@60Hz resolution </p>
+
 </div>
 </div>
 <a id="a8d89ffdbe287a195d0f62d4e12a31f36"></a>
@@ -792,7 +833,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 512x384@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a5">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a5">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -808,7 +849,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 512x448@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a6">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a6">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -824,7 +865,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 512x512@58Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a7">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a7">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -840,7 +881,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x200@70Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a11">Altair8800/Altair8800.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a8">ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_network_terminal_2_network_terminal_8ino-example.html#a6">NetworkTerminal/NetworkTerminal.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a23">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a8">VGA/ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_g_a_2_network_terminal_2_network_terminal_8ino-example.html#a15">VGA/NetworkTerminal/NetworkTerminal.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -856,7 +897,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x200@70Hz retro resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a10">Altair8800/Altair8800.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a22">VGA/Altair8800/Altair8800.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -872,7 +913,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x240@60Hz (DoubleScan) resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a9">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a9">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -888,7 +929,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x350@70Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a10">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a10">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -904,7 +945,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x350@70HzAlt1 resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_ansi_terminal_2_ansi_terminal_8ino-example.html#a3">AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_audio_2_audio_8ino-example.html#a3">Audio/Audio.ino</a>, <a class="el" href="_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a3">GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_loopback_terminal_2_loopback_terminal_8ino-example.html#a6">LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a11">ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a7">MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a2">SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_ansi_terminal_2_ansi_terminal_8ino-example.html#a7">VGA/AnsiTerminal/AnsiTerminal.ino</a>, <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a5">VGA/Audio/Audio.ino</a>, <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a5">VGA/GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html#a13">VGA/LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a11">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a7">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a5">VGA/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -920,7 +961,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x382@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a13">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a13">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -936,7 +977,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x384@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a14">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a14">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -952,7 +993,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x400@70Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a15">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a15">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -968,7 +1009,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x480@60Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a16">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a16">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -984,7 +1025,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x480@60HzAlt1 resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a17">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a17">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1000,7 +1041,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x480@60Hz doublescan resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a18">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a18">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1016,7 +1057,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Modeline for 640x480@73Hz resolution </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_modeline_studio_2_modeline_studio_8ino-example.html#a19">ModelineStudio/ModelineStudio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a19">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
 </dl>
 </div>
 </div>

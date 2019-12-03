@@ -1,7 +1,7 @@
 var structfabgl_1_1ui_check_box_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_check_box_style.html#a57410690183c551ab7e2edf347ce9100", null ],
-    [ "checkedBackgroundColor", "structfabgl_1_1ui_check_box_style.html#ae6ff29090075b11d2daa7a9a28108e22", null ],
-    [ "foregroundColor", "structfabgl_1_1ui_check_box_style.html#a9f888b24e3fae3c2fd63cbaa0d221f85", null ],
-    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_check_box_style.html#a2dcdf45ea4c1b36aaf080aa92b7b2aaa", null ]
+    [ "backgroundColor", "structfabgl_1_1ui_check_box_style.html#a917aedcd2adebf4f3b8f72afd65a47cd", null ],
+    [ "checkedBackgroundColor", "structfabgl_1_1ui_check_box_style.html#ac705850d6fd0e04aa7737fded0f18fea", null ],
+    [ "foregroundColor", "structfabgl_1_1ui_check_box_style.html#abc672fa617b42cb9d89bfdc7b52ae6d3", null ],
+    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_check_box_style.html#a30edbff567b1e6134b8f990b12cd8410", null ]
 ];

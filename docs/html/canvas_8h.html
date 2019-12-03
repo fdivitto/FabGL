@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -93,19 +93,19 @@ $(document).ready(function(){initNavTree('canvas_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>This file contains <a class="el" href="classfabgl_1_1_canvas_class.html" title="A class with a set of drawing methods. ">fabgl::CanvasClass</a> definition and the related Canvas instance.  
+<p>This file contains <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a> definition.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for canvas.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="canvas_8h__incl.png" border="0" usemap="#canvas_8h" alt=""/></div>
 <map name="canvas_8h" id="canvas_8h">
-<area shape="rect" id="node4" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="323,79,432,104"/>
-<area shape="rect" id="node10" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="186,152,273,177"/>
-<area shape="rect" id="node11" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="617,152,692,177"/>
+<area shape="rect" id="node4" href="displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="181,79,310,104"/>
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="329,152,415,177"/>
+<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="489,152,564,177"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -113,13 +113,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="canvas_8h__dep__incl.png" border="0" usemap="#canvas_8hdep" alt=""/></div>
 <map name="canvas_8hdep" id="canvas_8hdep">
-<area shape="rect" id="node2" href="terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="5,299,85,324"/>
-<area shape="rect" id="node4" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="109,79,171,104"/>
-<area shape="rect" id="node8" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="265,152,333,177"/>
-<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="161,372,223,397"/>
-<area shape="rect" id="node5" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="50,152,137,177"/>
-<area shape="rect" id="node7" href="mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="198,225,271,251"/>
-<area shape="rect" id="node6" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="44,225,124,251"/>
+<area shape="rect" id="node2" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="28,299,108,324"/>
+<area shape="rect" id="node4" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="76,79,137,104"/>
+<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="153,372,215,397"/>
+<area shape="rect" id="node5" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="63,152,150,177"/>
+<area shape="rect" id="node7" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="221,225,294,251"/>
+<area shape="rect" id="node6" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="66,225,147,251"/>
 </map>
 </div>
 </div>
@@ -127,12 +126,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_canvas_class.html">fabgl::CanvasClass</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class with a set of drawing methods.  <a href="classfabgl_1_1_canvas_class.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_canvas.html">fabgl::Canvas</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class with a set of drawing methods.  <a href="classfabgl_1_1_canvas.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_canvas_class.html" title="A class with a set of drawing methods. ">fabgl::CanvasClass</a> definition and the related Canvas instance. </p>
+<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a> definition. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,13 +1,17 @@
 <map id="fabutils.h" name="fabutils.h">
-<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="271,79,379,104"/>
-<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="295,519,356,544"/>
-<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="293,225,355,251"/>
-<area shape="rect" id="node9" href="$mouse_8h.html" title="This file contains fabgl::MouseClass definition and the Mouse instance. " alt="" coords="429,299,502,324"/>
-<area shape="rect" id="node12" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="502,372,594,397"/>
-<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="213,152,288,177"/>
-<area shape="rect" id="node11" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="62,152,189,177"/>
-<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::TerminalClass definition. " alt="" coords="208,445,288,471"/>
-<area shape="rect" id="node10" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="94,225,162,251"/>
-<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="255,299,342,324"/>
-<area shape="rect" id="node8" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="246,372,327,397"/>
+<area shape="rect" id="node2" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="247,79,375,104"/>
+<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="538,519,599,544"/>
+<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="418,225,479,251"/>
+<area shape="rect" id="node9" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="602,299,674,324"/>
+<area shape="rect" id="node12" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="5,152,113,177"/>
+<area shape="rect" id="node13" href="$_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="474,152,621,177"/>
+<area shape="rect" id="node14" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="645,152,725,177"/>
+<area shape="rect" id="node15" href="$_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="850,225,930,251"/>
+<area shape="rect" id="node16" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="917,79,1008,104"/>
+<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="274,152,349,177"/>
+<area shape="rect" id="node10" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="173,372,300,397"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="401,445,481,471"/>
+<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="417,299,504,324"/>
+<area shape="rect" id="node8" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="375,372,456,397"/>
+<area shape="rect" id="node11" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="223,445,291,471"/>
 </map>

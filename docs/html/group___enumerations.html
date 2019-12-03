@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -158,32 +158,37 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:gaa42dc1b02d34a4a2a3a831fcf3b5ba2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes mouse type.  <a href="group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c">More...</a><br /></td></tr>
 <tr class="separator:gaa42dc1b02d34a4a2a3a831fcf3b5ba2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga209a520f6108c21bd313cb2c98fde74a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">fabgl::PS2Device</a> { <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aaf0ec84c588b61b87bda9ae20097acb38">fabgl::UnknownPS2Device</a>, 
-<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa">fabgl::OldATKeyboard</a>, 
-<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa4ff15555542ae9bfb6d8540324603608">fabgl::MouseStandard</a>, 
-<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa21c07e6edcf197ea7673afac2bdb6f08">fabgl::MouseWithScrollWheel</a>, 
+<tr class="memitem:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">fabgl::NativePixelFormat</a> : uint8_t { <a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086">fabgl::NativePixelFormat::Mono</a>, 
+<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184">fabgl::NativePixelFormat::SBGR2222</a>
+ }</td></tr>
+<tr class="memdesc:gacafd29e9adc4dc4055558e61fd4599c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines the display controller native pixel format.  <a href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">More...</a><br /></td></tr>
+<tr class="separator:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">fabgl::PixelFormat</a> : uint8_t { <a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360">fabgl::PixelFormat::Undefined</a>, 
+<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf">fabgl::PixelFormat::Mask</a>, 
+<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7">fabgl::PixelFormat::RGBA2222</a>, 
+<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619">fabgl::PixelFormat::RGBA8888</a>
+ }</td></tr>
+<tr class="memdesc:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a pixel format.  <a href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">More...</a><br /></td></tr>
+<tr class="separator:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gace9317dbf2d52e8ca5436590be2b97ed"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed">fabgl::PS2DeviceType</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0">fabgl::PS2DeviceType::UnknownPS2Device</a>, 
+<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1">fabgl::PS2DeviceType::OldATKeyboard</a>, 
+<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda587da6d8dc703c1519c5f5878034d791">fabgl::PS2DeviceType::MouseStandard</a>, 
+<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda7b1bf224080b249a7253c8c26f56b13f">fabgl::PS2DeviceType::MouseWithScrollWheel</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa3229d4013ec812e9aeb09bba83568a84">fabgl::Mouse5Buttons</a>, 
-<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c">fabgl::MF2KeyboardWithTranslation</a>, 
-<a class="el" href="group___enumerations.html#gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2">fabgl::M2Keyboard</a>
+&#160;&#160;<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5">fabgl::PS2DeviceType::Mouse5Buttons</a>, 
+<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf538f76f49a8e36da8fc9c30ded61260">fabgl::PS2DeviceType::MF2KeyboardWithTranslation</a>, 
+<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edacd84073eb44e25384b4dfab30e81d441">fabgl::PS2DeviceType::M2Keyboard</a>
 <br />
  }</td></tr>
-<tr class="memdesc:ga209a520f6108c21bd313cb2c98fde74a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the type of device attached to PS/2 port.  <a href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">More...</a><br /></td></tr>
-<tr class="separator:ga209a520f6108c21bd313cb2c98fde74a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:gace9317dbf2d52e8ca5436590be2b97ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the type of device attached to PS/2 port.  <a href="group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed">More...</a><br /></td></tr>
+<tr class="separator:gace9317dbf2d52e8ca5436590be2b97ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">fabgl::PS2Preset</a> { <a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74">fabgl::PS2Preset::KeyboardPort0_MousePort1</a>, 
 <a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7">fabgl::PS2Preset::KeyboardPort0</a>, 
 <a class="el" href="group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4">fabgl::PS2Preset::MousePort0</a>
  }</td></tr>
 <tr class="memdesc:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines what is connected to PS/2 ports.  <a href="group___enumerations.html#ga8c7bd5a9bf2e9dfc8871892efcc80017">More...</a><br /></td></tr>
 <tr class="separator:ga8c7bd5a9bf2e9dfc8871892efcc80017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac9fa12697d1785c744af01bb0800d652"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gac9fa12697d1785c744af01bb0800d652">fabgl::ScreenBlock</a> { <a class="el" href="group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a8a10612c141004c5f2986050c23a349d">fabgl::FrontPorch</a>, 
-<a class="el" href="group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a3883a8f6a8d0924e5083674b04d162e1">fabgl::Sync</a>, 
-<a class="el" href="group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652aa2e3d51a4bdf436297de5d18f0fc7fc2">fabgl::BackPorch</a>, 
-<a class="el" href="group___enumerations.html#ggac9fa12697d1785c744af01bb0800d652a9eb43f64e3e327a4e68f4537db8e0582">fabgl::VisibleArea</a>
- }</td></tr>
-<tr class="memdesc:gac9fa12697d1785c744af01bb0800d652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents one of the four blocks of horizontal or vertical line.  <a href="group___enumerations.html#gac9fa12697d1785c744af01bb0800d652">More...</a><br /></td></tr>
-<tr class="separator:gac9fa12697d1785c744af01bb0800d652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2d726f689f0c7c127a9327262181bbbd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd">fabgl::TermType</a> { <br />
 &#160;&#160;<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2">fabgl::ANSI_VT</a>, 
 <a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be">fabgl::ADM3A</a>, 
@@ -236,6 +241,13 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:gaddf4af7208ffb7af1f5674e9bfb58fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies window rectangle origin.  <a href="group___enumerations.html#gaddf4af7208ffb7af1f5674e9bfb58fdc">More...</a><br /></td></tr>
 <tr class="separator:gaddf4af7208ffb7af1f5674e9bfb58fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463">fabgl::VGAScanStart</a> { <a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a8a10612c141004c5f2986050c23a349d">fabgl::FrontPorch</a>, 
+<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a3883a8f6a8d0924e5083674b04d162e1">fabgl::Sync</a>, 
+<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463aa2e3d51a4bdf436297de5d18f0fc7fc2">fabgl::BackPorch</a>, 
+<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a9eb43f64e3e327a4e68f4537db8e0582">fabgl::VisibleArea</a>
+ }</td></tr>
+<tr class="memdesc:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents one of the four blocks of horizontal or vertical line.  <a href="group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463">More...</a><br /></td></tr>
+<tr class="separator:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae12c31a33f64281cba424d993a8a4381"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gae12c31a33f64281cba424d993a8a4381">fabgl::VirtualKey</a> { <br />
 &#160;&#160;<a class="el" href="group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381afed697c6504b385257870e50df5b034e">fabgl::VK_NONE</a>, 
 <a class="el" href="group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381a155d18f360246cf18117c0371f7ce716">fabgl::VK_SPACE</a>, 
@@ -488,40 +500,40 @@ Enumerations</h2></td></tr>
 <p>This enum defines named colors. </p>
 <p>First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors). </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0"></a>Black&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 0, B = 0 </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0"></a>Black&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,0,0) and RGB888(0,0,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba484f8e53a97d2d8402fb3d7789833235"></a>Red&#160;</td><td class="fielddoc"><p>Equivalent to R = 1, G = 0, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba484f8e53a97d2d8402fb3d7789833235"></a>Red&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(2,0,0) and RGB888(128,0,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba7edd15d591a436caaec5785a75b1cd80"></a>Green&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 1, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba7edd15d591a436caaec5785a75b1cd80"></a>Green&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,2,0) and RGB888(0,128,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bacc98be810fb05ecb9fc7ea69a8e251c8"></a>Yellow&#160;</td><td class="fielddoc"><p>Equivalent to R = 1, G = 1, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bacc98be810fb05ecb9fc7ea69a8e251c8"></a>Yellow&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(2,2,0) and RGB888(128,128,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bab269b90a1d510bf6861b4584f7aa9720"></a>Blue&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 0, B = 1 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3bab269b90a1d510bf6861b4584f7aa9720"></a>Blue&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,0,2) and RGB888(0,0,128) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba6aac28bb501aedeefc7356a6a5c96745"></a>Magenta&#160;</td><td class="fielddoc"><p>Equivalent to R = 1, G = 0, B = 1 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba6aac28bb501aedeefc7356a6a5c96745"></a>Magenta&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(2,0,2) and RGB888(128,0,128) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba3a80c537a99914e5b7f425c93f0b6f31"></a>Cyan&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 1, B = 1 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba3a80c537a99914e5b7f425c93f0b6f31"></a>Cyan&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,2,2) and RGB888(0,128,128) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba3ec0db5c25f72a209e6460d47e226cb7"></a>White&#160;</td><td class="fielddoc"><p>Equivalent to R = 1, G = 1, B = 1 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba3ec0db5c25f72a209e6460d47e226cb7"></a>White&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(2,2,2) and RGB888(128,128,128) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba513021507e1e0ce9c952b4c3ebe40c8a"></a>BrightBlack&#160;</td><td class="fielddoc"><p>Equivalent to R = 1, G = 1, B = 1 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba513021507e1e0ce9c952b4c3ebe40c8a"></a>BrightBlack&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(1,1,1) and RGB888(64,64,64) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba810c94a5121684c7ef87d3ad25921ae2"></a>BrightRed&#160;</td><td class="fielddoc"><p>Equivalent to R = 3, G = 0, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba810c94a5121684c7ef87d3ad25921ae2"></a>BrightRed&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(3,0,0) and RGB888(255,0,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3baf09d081210f708ef088785200c5c616e"></a>BrightGreen&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 3, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3baf09d081210f708ef088785200c5c616e"></a>BrightGreen&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,3,0) and RGB888(0,255,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3baa598524eec0f8d9ba493f37390a48d12"></a>BrightYellow&#160;</td><td class="fielddoc"><p>Equivalent to R = 3, G = 3, B = 0 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3baa598524eec0f8d9ba493f37390a48d12"></a>BrightYellow&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(3,3,0) and RGB888(255,255,0) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba5e8c133693ddc8c4fea104605f2154b8"></a>BrightBlue&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 0, B = 3 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba5e8c133693ddc8c4fea104605f2154b8"></a>BrightBlue&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,0,3) and RGB888(0,0,255) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba8b4aa84a26b73510aee3b4e1ade819ed"></a>BrightMagenta&#160;</td><td class="fielddoc"><p>Equivalent to R = 3, G = 0, B = 3 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba8b4aa84a26b73510aee3b4e1ade819ed"></a>BrightMagenta&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(3,0,3) and RGB888(255,0,255) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba1f4b29f56c50d016d9575b3be2976935"></a>BrightCyan&#160;</td><td class="fielddoc"><p>Equivalent to R = 0, G = 3, B = 3 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3ba1f4b29f56c50d016d9575b3be2976935"></a>BrightCyan&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(0,3,3) and RGB888(0,255,255) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3babd066cc7f08ecfdd34e59e9d5348ae67"></a>BrightWhite&#160;</td><td class="fielddoc"><p>Equivalent to R = 3, G = 3, B = 3 </p>
+<tr><td class="fieldname"><a id="gga843f6f6094fb6666d0e726d7b0e06f3babd066cc7f08ecfdd34e59e9d5348ae67"></a>BrightWhite&#160;</td><td class="fielddoc"><p>Equivalent to RGB222(3,3,3) and RGB888(255,255,255) </p>
 </td></tr>
 </table>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a1">Altair8800/Altair8800.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a1">VGA/Altair8800/Altair8800.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -578,7 +590,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18"></a>CursorTextInput&#160;</td><td class="fielddoc"><p>7x15 text input </p>
 </td></tr>
 </table>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a13">MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a12">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -606,9 +618,9 @@ Enumerations</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga0eff89ccbe1087e0390e5cae305ef06dadaa64f7602ad3caa98f09799e3e683b1"></a>NoVirtualKeys&#160;</td><td class="fielddoc"><p>No virtual keys are generated </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4"></a>GenerateVirtualKeys&#160;</td><td class="fielddoc"><p>Virtual keys are generated. You can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a> only. </p>
+<tr><td class="fieldname"><a id="gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4"></a>GenerateVirtualKeys&#160;</td><td class="fielddoc"><p>Virtual keys are generated. You can call <a class="el" href="classfabgl_1_1_keyboard.html#aa551a4f1d2d86833ebc5e6dc467dc83d" title="Gets the virtual keys status. ">Keyboard.isVKDown()</a> only. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97"></a>CreateVirtualKeysQueue&#160;</td><td class="fielddoc"><p>Virtual keys are generated and put on a queue. You can call <a class="el" href="classfabgl_1_1_keyboard_class.html#abff01a859f8069a8ecb12c519c9df008" title="Gets the virtual keys status. ">KeyboardClass.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard_class.html#aa93820f1c8f447a37c01376a8d6dbba0" title="Gets the number of virtual keys available in the queue. ">KeyboardClass.virtualKeyAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard_class.html#ae5bcb0c200a35ece54ecdf4cd47e49d6" title="Gets a virtual key from the queue. ">KeyboardClass.getNextVirtualKey()</a> </p>
+<tr><td class="fieldname"><a id="gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97"></a>CreateVirtualKeysQueue&#160;</td><td class="fielddoc"><p>Virtual keys are generated and put on a queue. You can call <a class="el" href="classfabgl_1_1_keyboard.html#aa551a4f1d2d86833ebc5e6dc467dc83d" title="Gets the virtual keys status. ">Keyboard.isVKDown()</a>, <a class="el" href="classfabgl_1_1_keyboard.html#a0ff3a7ca455a076c8ae80da3d1806518" title="Gets the number of virtual keys available in the queue. ">Keyboard.virtualKeyAvailable()</a> and <a class="el" href="classfabgl_1_1_keyboard.html#a9ba5171323a675524420ea40ab3acdf1" title="Gets a virtual key from the queue. ">Keyboard.getNextVirtualKey()</a> </p>
 </td></tr>
 </table>
 
@@ -636,33 +648,105 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a id="ga209a520f6108c21bd313cb2c98fde74a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga209a520f6108c21bd313cb2c98fde74a">&#9670;&nbsp;</a></span>PS2Device</h2>
+<a id="gacafd29e9adc4dc4055558e61fd4599c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacafd29e9adc4dc4055558e61fd4599c9">&#9670;&nbsp;</a></span>NativePixelFormat</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="group___enumerations.html#ga209a520f6108c21bd313cb2c98fde74a">fabgl::PS2Device</a></td>
+          <td class="memname">enum <a class="el" href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">fabgl::NativePixelFormat</a> : uint8_t</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This enum defines the display controller native pixel format. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086"></a>Mono&#160;</td><td class="fielddoc"><p>1 bit per pixel. 0 = black, 1 = white </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184"></a>SBGR2222&#160;</td><td class="fielddoc"><p>8 bit per pixel: VHBBGGRR (bit 7=VSync 6=HSync 5=B 4=B 3=G 2=G 1=R 0=R). Each color channel can have values from 0 to 3 (maxmum intensity). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ga9bb815bb6f1169481ef8ad44f351e1c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9bb815bb6f1169481ef8ad44f351e1c1">&#9670;&nbsp;</a></span>PixelFormat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">fabgl::PixelFormat</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This enum defines a pixel format. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360"></a>Undefined&#160;</td><td class="fielddoc"><p>Undefined pixel format </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf"></a>Mask&#160;</td><td class="fielddoc"><p>1 bit per pixel. 0 = transparent, 1 = opaque (color must be specified apart) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7"></a>RGBA2222&#160;</td><td class="fielddoc"><p>8 bit per pixel: AABBGGRR (bit 7=A 6=A 5=B 4=B 3=G 2=G 1=R 0=R). AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619"></a>RGBA8888&#160;</td><td class="fielddoc"><p>32 bits per pixel: RGBA (R=byte 0, G=byte1, B=byte2, A=byte3). Minimum value for each channel is 0, maximum is 255. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="gace9317dbf2d52e8ca5436590be2b97ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gace9317dbf2d52e8ca5436590be2b97ed">&#9670;&nbsp;</a></span>PS2DeviceType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed">fabgl::PS2DeviceType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Represents the type of device attached to PS/2 port. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aaf0ec84c588b61b87bda9ae20097acb38"></a>UnknownPS2Device&#160;</td><td class="fielddoc"><p>Unknown device or unable to connect to the device </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0"></a>UnknownPS2Device&#160;</td><td class="fielddoc"><p>Unknown device or unable to connect to the device </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aae40a3cdddbf5b1afcf9b75940cb000aa"></a>OldATKeyboard&#160;</td><td class="fielddoc"><p>Old AT keyboard </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1"></a>OldATKeyboard&#160;</td><td class="fielddoc"><p>Old AT keyboard </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aa4ff15555542ae9bfb6d8540324603608"></a>MouseStandard&#160;</td><td class="fielddoc"><p>Standard mouse </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97eda587da6d8dc703c1519c5f5878034d791"></a>MouseStandard&#160;</td><td class="fielddoc"><p>Standard mouse </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aa21c07e6edcf197ea7673afac2bdb6f08"></a>MouseWithScrollWheel&#160;</td><td class="fielddoc"><p>Mouse with Scroll Wheel </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97eda7b1bf224080b249a7253c8c26f56b13f"></a>MouseWithScrollWheel&#160;</td><td class="fielddoc"><p><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> with Scroll Wheel </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aa3229d4013ec812e9aeb09bba83568a84"></a>Mouse5Buttons&#160;</td><td class="fielddoc"><p>Mouse with 5 buttons </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5"></a>Mouse5Buttons&#160;</td><td class="fielddoc"><p><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> with 5 buttons </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aa543587ae0352ed1783753c5f24a7f33c"></a>MF2KeyboardWithTranslation&#160;</td><td class="fielddoc"><p>Standard MF2 keyboard with translation </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97edaf538f76f49a8e36da8fc9c30ded61260"></a>MF2KeyboardWithTranslation&#160;</td><td class="fielddoc"><p>Standard MF2 keyboard with translation </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga209a520f6108c21bd313cb2c98fde74aa483120b2f1f56b472fe7752a0a5048a2"></a>M2Keyboard&#160;</td><td class="fielddoc"><p>Standard MF2 keyboard. This is the most common value returned by USB/PS2 modern keyboards </p>
+<tr><td class="fieldname"><a id="ggace9317dbf2d52e8ca5436590be2b97edacd84073eb44e25384b4dfab30e81d441"></a>M2Keyboard&#160;</td><td class="fielddoc"><p>Standard MF2 keyboard. This is the most common value returned by USB/PS2 modern keyboards </p>
 </td></tr>
 </table>
 
@@ -690,37 +774,11 @@ Enumerations</h2></td></tr>
 
 <p>This enum defines what is connected to PS/2 ports. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74"></a>KeyboardPort0_MousePort1&#160;</td><td class="fielddoc"><p>Keyboard on Port 0 and Mouse on Port 1 </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74"></a>KeyboardPort0_MousePort1&#160;</td><td class="fielddoc"><p><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">Keyboard</a> on Port 0 and <a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> on Port 1 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7"></a>KeyboardPort0&#160;</td><td class="fielddoc"><p>Keyboard on Port 0 (no mouse) </p>
+<tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7"></a>KeyboardPort0&#160;</td><td class="fielddoc"><p><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">Keyboard</a> on Port 0 (no mouse) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4"></a>MousePort0&#160;</td><td class="fielddoc"><p>Mouse on port 0 (no keyboard) </p>
-</td></tr>
-</table>
-
-</div>
-</div>
-<a id="gac9fa12697d1785c744af01bb0800d652"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac9fa12697d1785c744af01bb0800d652">&#9670;&nbsp;</a></span>ScreenBlock</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="group___enumerations.html#gac9fa12697d1785c744af01bb0800d652">fabgl::ScreenBlock</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Represents one of the four blocks of horizontal or vertical line. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggac9fa12697d1785c744af01bb0800d652a8a10612c141004c5f2986050c23a349d"></a>FrontPorch&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: FRONTPORCH -&gt; SYNC -&gt; BACKPORCH -&gt; VISIBLEAREA </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ggac9fa12697d1785c744af01bb0800d652a3883a8f6a8d0924e5083674b04d162e1"></a>Sync&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: SYNC -&gt; BACKPORCH -&gt; VISIBLEAREA -&gt; FRONTPORCH </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ggac9fa12697d1785c744af01bb0800d652aa2e3d51a4bdf436297de5d18f0fc7fc2"></a>BackPorch&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: BACKPORCH -&gt; VISIBLEAREA -&gt; FRONTPORCH -&gt; SYNC </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ggac9fa12697d1785c744af01bb0800d652a9eb43f64e3e327a4e68f4537db8e0582"></a>VisibleArea&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: VISIBLEAREA -&gt; FRONTPORCH -&gt; SYNC -&gt; BACKPORCH </p>
+<tr><td class="fieldname"><a id="gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4"></a>MousePort0&#160;</td><td class="fielddoc"><p><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> on port 0 (no keyboard) </p>
 </td></tr>
 </table>
 
@@ -755,7 +813,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80"></a>VT52&#160;</td><td class="fielddoc"><p>Emulated VT52 terminal </p>
 </td></tr>
 </table>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_altair8800_2_altair8800_8ino-example.html#a13">Altair8800/Altair8800.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a15">VGA/Altair8800/Altair8800.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -946,6 +1004,32 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7"></a>Parent&#160;</td><td class="fielddoc"><p>Rectangle coordiantes relative to parent window </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b"></a>Window&#160;</td><td class="fielddoc"><p>Rectangle coordinates relative to the window itself </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="gab8d4ce9d78f7f7068101e6eb5b231463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab8d4ce9d78f7f7068101e6eb5b231463">&#9670;&nbsp;</a></span>VGAScanStart</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463">fabgl::VGAScanStart</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Represents one of the four blocks of horizontal or vertical line. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ggab8d4ce9d78f7f7068101e6eb5b231463a8a10612c141004c5f2986050c23a349d"></a>FrontPorch&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: FRONTPORCH -&gt; SYNC -&gt; BACKPORCH -&gt; VISIBLEAREA </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab8d4ce9d78f7f7068101e6eb5b231463a3883a8f6a8d0924e5083674b04d162e1"></a>Sync&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: SYNC -&gt; BACKPORCH -&gt; VISIBLEAREA -&gt; FRONTPORCH </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab8d4ce9d78f7f7068101e6eb5b231463aa2e3d51a4bdf436297de5d18f0fc7fc2"></a>BackPorch&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: BACKPORCH -&gt; VISIBLEAREA -&gt; FRONTPORCH -&gt; SYNC </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ggab8d4ce9d78f7f7068101e6eb5b231463a9eb43f64e3e327a4e68f4537db8e0582"></a>VisibleArea&#160;</td><td class="fielddoc"><p>Horizontal line sequence is: VISIBLEAREA -&gt; FRONTPORCH -&gt; SYNC -&gt; BACKPORCH </p>
 </td></tr>
 </table>
 
@@ -1332,7 +1416,7 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ggae12c31a33f64281cba424d993a8a4381a21e014abe301e34be97c162af672fcfc"></a>VK_UMLAUT_a&#160;</td><td class="fielddoc"><p>Umlaut 'a': ä </p>
 </td></tr>
 </table>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_i_c20_2_v_i_c20_8ino-example.html#a12">VIC20/VIC20.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a11">VGA/VIC20/VIC20.ino</a>.</dd>
 </dl>
 </div>
 </div>

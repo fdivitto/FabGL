@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('terminal_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>This file contains <a class="el" href="classfabgl_1_1_terminal_class.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::TerminalClass</a> definition.  
+<p>This file contains <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a> definition.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;Arduino.h&quot;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('terminal_8h.html','');});
 <code>#include &quot;freertos/semphr.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="canvas_8h_source.html">canvas.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="keyboard_8h_source.html">keyboard.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="keyboard_8h_source.html">devdrivers/keyboard.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="terminfo_8h_source.html">terminfo.h</a>&quot;</code><br />
 <code>#include &quot;Stream.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -110,15 +110,16 @@ Include dependency graph for terminal.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="terminal_8h__incl.png" border="0" usemap="#terminal_8h" alt=""/></div>
 <map name="terminal_8h" id="terminal_8h">
-<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="921,445,1007,471"/>
-<area shape="rect" id="node8" href="canvas_8h.html" title="This file contains fabgl::CanvasClass definition and the related Canvas instance. ..." alt="" coords="389,299,464,324"/>
-<area shape="rect" id="node17" href="keyboard_8h.html" title="This file contains fabgl::KeyboardClass definition and the Keyboard instance. " alt="" coords="984,152,1072,177"/>
-<area shape="rect" id="node21" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="984,79,1064,104"/>
-<area shape="rect" id="node11" href="vgacontroller_8h.html" title="This file contains fabgl::VGAControllerClass definition and the VGAController instance. " alt="" coords="355,372,463,397"/>
-<area shape="rect" id="node16" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="597,445,672,471"/>
-<area shape="rect" id="node18" href="ps2device_8h.html" title="This file contains fabgl::PS2DeviceClass definition. " alt="" coords="1127,299,1220,324"/>
-<area shape="rect" id="node20" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="623,225,684,251"/>
-<area shape="rect" id="node19" href="ps2controller_8h.html" title="This file contains fabgl::PS2ControllerClass definition and the PS2Controller instance. " alt="" coords="1119,372,1227,397"/>
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="4388,445,4475,471"/>
+<area shape="rect" id="node8" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="3875,299,3950,324"/>
+<area shape="rect" id="node14" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4307,152,4460,177"/>
+<area shape="rect" id="node44" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="4348,79,4429,104"/>
+<area shape="rect" id="node11" href="displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="4013,372,4141,397"/>
+<area shape="rect" id="node13" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="3743,445,3818,471"/>
+<area shape="rect" id="node15" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4560,299,4721,324"/>
+<area shape="rect" id="node17" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="4097,225,4158,251"/>
+<area shape="rect" id="node16" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4571,372,4679,397"/>
+<area shape="rect" id="node18" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="1987,372,2067,397"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -134,12 +135,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_class.html">fabgl::TerminalClass</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An ANSI-VT100 compatible display terminal.  <a href="classfabgl_1_1_terminal_class.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An ANSI-VT100 compatible display terminal.  <a href="classfabgl_1_1_terminal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_terminal_class.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::TerminalClass</a> definition. </p>
+<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a> definition. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

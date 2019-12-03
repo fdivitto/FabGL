@@ -1,11 +1,11 @@
 var structfabgl_1_1ui_list_box_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_list_box_style.html#a3fb6cd6e53633b2ef34422bf6da8d1fb", null ],
-    [ "focusedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a297ba42a078f39f34cbb332a8a5a7f5f", null ],
-    [ "focusedSelectedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a04b28e49b734b27bd9cb53428c98f5ef", null ],
+    [ "backgroundColor", "structfabgl_1_1ui_list_box_style.html#a7b2a40817c0c1d0f86d094dd15287a15", null ],
+    [ "focusedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a0733cf0970e5ec9d54dea283ecb44138", null ],
+    [ "focusedSelectedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a7ff3a868973db2d2953041c2ef3fec02", null ],
     [ "itemHeight", "structfabgl_1_1ui_list_box_style.html#ab7c49f2800f58d9792ab1d46a185e03b", null ],
-    [ "selectedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a2a55f15583daaae9df696b6b74be2d45", null ],
-    [ "selectedTextColor", "structfabgl_1_1ui_list_box_style.html#a97854eb78d81a58b1a565caf4c3ffc0f", null ],
-    [ "textColor", "structfabgl_1_1ui_list_box_style.html#a94ab1bbc59c481dd8a476abe49905c98", null ],
+    [ "selectedBackgroundColor", "structfabgl_1_1ui_list_box_style.html#a7a44c2027a2f782388e32a65bdea0d2b", null ],
+    [ "selectedTextColor", "structfabgl_1_1ui_list_box_style.html#ada2e6f1abb67ada4cfcfc429bc37bc2f", null ],
+    [ "textColor", "structfabgl_1_1ui_list_box_style.html#ab1e61a484fcdefae2eb87766744aca6b", null ],
     [ "textFont", "structfabgl_1_1ui_list_box_style.html#ae4bb5ff0c168cb0a96d995d38f75d856", null ]
 ];

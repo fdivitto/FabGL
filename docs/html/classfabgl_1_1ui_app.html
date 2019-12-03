@@ -31,7 +31,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FabGL
    </div>
-   <div id="projectbrief">ESP32 VGA Controller and Graphics Library</div>
+   <div id="projectbrief">ESP32 Display Controller and Graphics Library</div>
   </td>
  </tr>
  </tbody>
@@ -207,9 +207,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abd745cf2c678274d91003403433b5a40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_frame.html">uiFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40">rootWindow</a> ()</td></tr>
 <tr class="memdesc:abd745cf2c678274d91003403433b5a40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the root window.  <a href="#abd745cf2c678274d91003403433b5a40">More...</a><br /></td></tr>
 <tr class="separator:abd745cf2c678274d91003403433b5a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a9f31828a3997124020256e11e9ade8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a0a9f31828a3997124020256e11e9ade8">run</a> ()</td></tr>
-<tr class="memdesc:a0a9f31828a3997124020256e11e9ade8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes the main event loop.  <a href="#a0a9f31828a3997124020256e11e9ade8">More...</a><br /></td></tr>
-<tr class="separator:a0a9f31828a3997124020256e11e9ade8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a318f23a1a4674557eeba218f360f784f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a318f23a1a4674557eeba218f360f784f">run</a> (<a class="el" href="classfabgl_1_1_display_controller.html">DisplayController</a> *displayController, <a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *keyboard=nullptr, <a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *mouse=nullptr)</td></tr>
+<tr class="memdesc:a318f23a1a4674557eeba218f360f784f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes the main event loop.  <a href="#a318f23a1a4674557eeba218f360f784f">More...</a><br /></td></tr>
+<tr class="separator:a318f23a1a4674557eeba218f360f784f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55fabea8349dd5282b80ace47dd5fda1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1">screenToWindow</a> (<a class="el" href="structfabgl_1_1_point.html">Point</a> &amp;point)</td></tr>
 <tr class="memdesc:a55fabea8349dd5282b80ace47dd5fda1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which window a point belongs to.  <a href="#a55fabea8349dd5282b80ace47dd5fda1">More...</a><br /></td></tr>
 <tr class="separator:a55fabea8349dd5282b80ace47dd5fda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -237,7 +237,7 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the whole application base class. </p>
-<p>FabGL UI apps must inherit from <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a>, create UI elements in <a class="el" href="classfabgl_1_1ui_app.html#a77aa2e78b40ecf2f29e8180b30272d84" title="Method to inherit to implement an application. ">uiApp.init()</a> method, and finally call <a class="el" href="classfabgl_1_1ui_app.html#a0a9f31828a3997124020256e11e9ade8" title="Initializes application and executes the main event loop. ">uiApp.run()</a> to start the application. <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a> is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management. </p>
+<p>FabGL UI apps must inherit from <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a>, create UI elements in <a class="el" href="classfabgl_1_1ui_app.html#a77aa2e78b40ecf2f29e8180b30272d84" title="Method to inherit to implement an application. ">uiApp.init()</a> method, and finally call <a class="el" href="classfabgl_1_1ui_app.html#a318f23a1a4674557eeba218f360f784f" title="Initializes application and executes the main event loop. ">uiApp.run()</a> to start the application. <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a> is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a93a96823b4a884c8cb4141383197837f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93a96823b4a884c8cb4141383197837f">&#9670;&nbsp;</a></span>activeWindow()</h2>
@@ -348,7 +348,7 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Determines which window is capturing mouse. </p>
-<p>Mouse is captured by a window when mouse is dragged (left button down while moving mouse) starting from window area.</p>
+<p><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> is captured by a window when mouse is dragged (left button down while moving mouse) starting from window area.</p>
 <dl class="section return"><dt>Returns</dt><dd>Window that captured mouse </dd></dl>
 
 </div>
@@ -985,7 +985,7 @@ Public Attributes</h2></td></tr>
 <p>Terminates application and free resources. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">exitCode</td><td>Value returned by <a class="el" href="classfabgl_1_1ui_app.html#a0a9f31828a3997124020256e11e9ade8" title="Initializes application and executes the main event loop. ">uiApp.run()</a>. </td></tr>
+    <tr><td class="paramname">exitCode</td><td>Value returned by <a class="el" href="classfabgl_1_1ui_app.html#a318f23a1a4674557eeba218f360f784f" title="Initializes application and executes the main event loop. ">uiApp.run()</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1191,8 +1191,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0a9f31828a3997124020256e11e9ade8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a9f31828a3997124020256e11e9ade8">&#9670;&nbsp;</a></span>run()</h2>
+<a id="a318f23a1a4674557eeba218f360f784f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a318f23a1a4674557eeba218f360f784f">&#9670;&nbsp;</a></span>run()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1200,14 +1200,38 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">int fabgl::uiApp::run </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1_display_controller.html">DisplayController</a> *&#160;</td>
+          <td class="paramname"><em>displayController</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *&#160;</td>
+          <td class="paramname"><em>keyboard</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *&#160;</td>
+          <td class="paramname"><em>mouse</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Initializes application and executes the main event loop. </p>
-<p>This is the last method that should be called: it never returns.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">displayController</td><td>Specifies the display controller where to run the UI </td></tr>
+    <tr><td class="paramname">keyboard</td><td>The keyboard device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a> </td></tr>
+    <tr><td class="paramname">mouse</td><td>The mouse device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a></td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>exitCode specified calling <a class="el" href="classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. ">uiApp.quit()</a>. </dd></dl>
 
 </div>
