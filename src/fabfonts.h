@@ -33,10 +33,21 @@
 // fixed width
 #include "fonts/font_4x6.h"
 #include "fonts/font_5x7.h"
+#include "fonts/font_5x8.h"
 #include "fonts/font_6x8.h"
+#include "fonts/font_6x9.h"
+#include "fonts/font_6x10.h"
+#include "fonts/font_6x12.h"
+#include "fonts/font_6x13.h"
+#include "fonts/font_7x13.h"
+#include "fonts/font_7x14.h"
+#include "fonts/font_8x13.h"
 #include "fonts/font_8x8.h"
 #include "fonts/font_8x9.h"
 #include "fonts/font_8x14.h"
+#include "fonts/font_9x15.h"
+#include "fonts/font_9x18.h"
+#include "fonts/font_10x20.h"
 
 // variable width
 #include "fonts/font_std_12.h"

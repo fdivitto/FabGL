@@ -30,6 +30,9 @@
 namespace fabgl {
 
 
+// do not include all fonts in "font" folder to avoid waste of flash
+// for apps that uses getPresetFontInfo() (used in Terminal class), getPresetFontInfoFromHeight()
+// and getPresetFixedFont().
 static const FontInfo * FIXED_WIDTH_EMBEDDED_FONTS[] = {
   // please, bigger fonts first!
   &FONT_8x14,
