@@ -1,5 +1,5 @@
 # FabGL
-### VGA Controller, PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the **ESP32**
+### Display Controller, PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game Engine and ANSI/VT Terminal for the **ESP32**
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
@@ -8,18 +8,21 @@ If you would like to **support FabGL's development**, please see the [**Donation
 
 This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
+FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).
+FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.
+
+This library works with ESP32 revision 1 and upper.
+
 VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
 
-Three fixed width fonts are embedded to best represents 80x25 or 132x25 text screen, at 640x350 resolution. However other fonts are embedded, even with variable width.
+There are several fixed and variable width fonts embedded.
 
-Sprites can have up to 64 colors (RGB, 2 bits per channel + transparency).
-A sprite has associated one o more bitmaps, even of different size. Bitmaps (frames) can be selected in sequence to create animations.
 Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.
 
 When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.
-In this case drawing primitives always draw on the back buffer.
+In this case primitives are always drawn on the back buffer.
 
-Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing, so no flickering is visible.
+Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing (using VGA driver), so no flickering is visible.
 If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.
 
 There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).
