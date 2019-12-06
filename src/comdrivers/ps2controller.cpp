@@ -780,54 +780,67 @@ M_LABEL(PORT1_SEND_WAIT_FOR_CLK_HIGH),
 // Not allowed from GPIO_NUM_34 to GPIO_NUM_39
 // prg_start in 32 bit words
 // size in 32 bit words
-void replace_placeholders(uint32_t prg_start, int size, gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
+void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, bool port1Enabled, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  uint32_t CLK_rtc_gpio_num[2] = { (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num, (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num };
-  uint32_t DAT_rtc_gpio_num[2] = { (uint32_t) rtc_gpio_desc[port0_datGPIO].rtc_num, (uint32_t) rtc_gpio_desc[port1_datGPIO].rtc_num };
+  uint32_t CLK_rtc_gpio_num[2], CLK_rtc_gpio_reg[2], CLK_rtc_gpio_ie_s[2];
+  uint32_t DAT_rtc_gpio_num[2], DAT_rtc_gpio_reg[2], DAT_rtc_gpio_ie_s[2];
 
-  uint32_t CLK_rtc_gpio_reg[2] = { rtc_gpio_desc[port0_clkGPIO].reg, rtc_gpio_desc[port1_clkGPIO].reg };
-  uint32_t DAT_rtc_gpio_reg[2] = { rtc_gpio_desc[port0_datGPIO].reg, rtc_gpio_desc[port1_datGPIO].reg };
+  if (port0Enabled) {
+    CLK_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num;
+    CLK_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_clkGPIO].reg;
+    CLK_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1;
+    DAT_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_datGPIO].rtc_num;
+    DAT_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_datGPIO].reg;
+    DAT_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_datGPIO].ie) - 1;
+  }
 
-  // just to remember, ffs() finds first set bit in an integer!
-  uint32_t CLK_rtc_gpio_ie_s[2] = { (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1, (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1 };
-  uint32_t DAT_rtc_gpio_ie_s[2] = { (uint32_t) ffs(rtc_gpio_desc[port0_datGPIO].ie) - 1, (uint32_t) ffs(rtc_gpio_desc[port1_datGPIO].ie) - 1 };
+  if (port1Enabled) {
+    CLK_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num;
+    CLK_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_clkGPIO].reg;
+    CLK_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1;
+    DAT_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_datGPIO].rtc_num;
+    DAT_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_datGPIO].reg;
+    DAT_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_datGPIO].ie) - 1;
+  }
 
   for (uint32_t i = 0; i < size; ++i) {
     ulp_insn_t * ins = (ulp_insn_t *) RTC_SLOW_MEM + i;
     if (ins->macro.opcode == OPCODE_PLACEHOLDER) {
       int ps2port = ins->macro.unused;
-      ins->macro.unused = 0;
-      switch (ins->macro.sub_opcode) {
-        case SUB_OPCODE_DAT_ENABLE_OUTPUT:
-          if (ins->macro.label)
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
-          else
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
-          break;
-        case SUB_OPCODE_DAT_ENABLE_INPUT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(DAT_rtc_gpio_reg[ps2port], DAT_rtc_gpio_ie_s[ps2port], ins->macro.label);
-          break;
-        case SUB_OPCODE_CLK_ENABLE_OUTPUT:
-          if (ins->macro.label)
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
-          else
-            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
-          break;
-        case SUB_OPCODE_CLK_ENABLE_INPUT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(CLK_rtc_gpio_reg[ps2port], CLK_rtc_gpio_ie_s[ps2port], ins->macro.label);
-          break;
-        case SUB_OPCODE_READ_CLK:
-          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
-          break;
-        case SUB_OPCODE_READ_DAT:
-          *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
-          break;
-        case SUB_OPCODE_WRITE_CLK:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
-          break;
-        case SUB_OPCODE_WRITE_DAT:
-          *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
-          break;
+      if ((port0Enabled && ps2port == 0) || (port1Enabled && ps2port == 1)) {
+        ins->macro.unused = 0;
+        switch (ins->macro.sub_opcode) {
+          case SUB_OPCODE_DAT_ENABLE_OUTPUT:
+            if (ins->macro.label)
+              *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
+            else
+              *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
+            break;
+          case SUB_OPCODE_DAT_ENABLE_INPUT:
+            *ins = (ulp_insn_t) I_WR_REG_BIT(DAT_rtc_gpio_reg[ps2port], DAT_rtc_gpio_ie_s[ps2port], ins->macro.label);
+            break;
+          case SUB_OPCODE_CLK_ENABLE_OUTPUT:
+            if (ins->macro.label)
+              *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TS_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TS_S, 1);
+            else
+              *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_ENABLE_W1TC_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_ENABLE_W1TC_S, 1);
+            break;
+          case SUB_OPCODE_CLK_ENABLE_INPUT:
+            *ins = (ulp_insn_t) I_WR_REG_BIT(CLK_rtc_gpio_reg[ps2port], CLK_rtc_gpio_ie_s[ps2port], ins->macro.label);
+            break;
+          case SUB_OPCODE_READ_CLK:
+            *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
+            break;
+          case SUB_OPCODE_READ_DAT:
+            *ins = (ulp_insn_t) I_RD_REG(RTC_GPIO_IN_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S);
+            break;
+          case SUB_OPCODE_WRITE_CLK:
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, CLK_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
+            break;
+          case SUB_OPCODE_WRITE_DAT:
+            *ins = (ulp_insn_t) I_WR_REG_BIT(RTC_GPIO_OUT_REG, DAT_rtc_gpio_num[ps2port] + RTC_GPIO_IN_NEXT_S, ins->macro.label);
+            break;
+        }
       }
     }
   }
@@ -846,16 +859,21 @@ PS2Controller::PS2Controller()
 }
 
 
-// Note: GPIO_NUM_39 is a placeholder used to disable PS/2 port 1.
+// Note: GPIO_UNUSED is a placeholder used to disable PS/2 port 1.
 void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
+  bool port0Enabled = (port0_clkGPIO != GPIO_UNUSED && port0_datGPIO != GPIO_UNUSED);
+  bool port1Enabled = (port1_clkGPIO != GPIO_UNUSED && port1_datGPIO != GPIO_UNUSED);
+
   m_TXWaitTask[0] = m_TXWaitTask[1] = nullptr;
   m_RXWaitTask[0] = m_RXWaitTask[1] = nullptr;
 
-  rtc_gpio_init(port0_clkGPIO);
-  rtc_gpio_init(port0_datGPIO);
+  if (port0Enabled) {
+    rtc_gpio_init(port0_clkGPIO);
+    rtc_gpio_init(port0_datGPIO);
+  }
 
-  if (port1_clkGPIO != GPIO_NUM_39) {
+  if (port1Enabled) {
     rtc_gpio_init(port1_clkGPIO);
     rtc_gpio_init(port1_datGPIO);
   }
@@ -865,15 +883,15 @@ void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gp
     RTC_SLOW_MEM[i] = 0x0000;
 
   // PS/2 port 1 enabled?
-  RTC_SLOW_MEM[RTCMEM_PORT0_ENABLED] = (port0_clkGPIO != GPIO_NUM_39 ? 1 : 0);
-  RTC_SLOW_MEM[RTCMEM_PORT1_ENABLED] = (port1_clkGPIO != GPIO_NUM_39 ? 1 : 0);
+  RTC_SLOW_MEM[RTCMEM_PORT0_ENABLED] = port0Enabled;
+  RTC_SLOW_MEM[RTCMEM_PORT1_ENABLED] = port1Enabled;
 
   warmInit();
 
   // process, load and execute ULP program
   size_t size = sizeof(ULP_code) / sizeof(ulp_insn_t);
   ulp_process_macros_and_load_ex(RTCMEM_PROG_START, ULP_code, &size);         // convert macros to ULP code
-  replace_placeholders(RTCMEM_PROG_START, size, port0_clkGPIO, port0_datGPIO, port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
+  replace_placeholders(RTCMEM_PROG_START, size, port0Enabled, port0_clkGPIO, port0_datGPIO, port1Enabled, port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
   assert(size < RTCMEM_VARS_START && "ULP Program too long, increase RTCMEM_VARS_START");
   REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTCMEM_PROG_START);   // set entry point
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START

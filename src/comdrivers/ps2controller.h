@@ -34,6 +34,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#include "fabutils.h"
 #include "fabglconf.h"
 
 
@@ -87,10 +88,10 @@ public:
   *
   * @param port0_clkGPIO The GPIO number of Clock line for PS/2 port 0.
   * @param port0_datGPIO The GPIO number of Data line for PS/2 port 0.
-  * @param port1_clkGPIO The GPIO number of Clock line for PS/2 port 1 (GPIO_NUM_39 to disable).
-  * @param port1_datGPIO The GPIO number of Data line for PS/2 port 1 (GPIO_NUM_39 to disable).
+  * @param port1_clkGPIO The GPIO number of Clock line for PS/2 port 1 (GPIO_UNUSED to disable).
+  * @param port1_datGPIO The GPIO number of Data line for PS/2 port 1 (GPIO_UNUSED to disable).
   */
-  void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_NUM_39, gpio_num_t port1_datGPIO = GPIO_NUM_39);
+  void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_UNUSED, gpio_num_t port1_datGPIO = GPIO_UNUSED);
 
   /**
   * @brief Initializes PS2 device controller using default GPIOs.

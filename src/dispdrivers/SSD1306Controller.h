@@ -54,6 +54,8 @@ namespace fabgl {
 /**
  * @brief Display driver for SSD1306 based OLED display, with I2C connection.
  *
+ * This driver should also work with SH1106 (untested).
+ *
  * Example:
  *
  *     fabgl::I2C               I2C;
@@ -89,9 +91,9 @@ public:
    *
    * @param i2c I2C pointer
    * @param address Device address. Default is 0x3C.
-   * @param resetGPIO Reset pin (use GPIO_NUM_39 to disable). Default if disabled.
+   * @param resetGPIO Reset pin (use GPIO_UNUSED to disable). Default if disabled.
    */
-  void begin(I2C * i2c, int address = 0x3C, gpio_num_t resetGPIO = GPIO_NUM_39);
+  void begin(I2C * i2c, int address = 0x3C, gpio_num_t resetGPIO = GPIO_UNUSED);
 
   void end();
 

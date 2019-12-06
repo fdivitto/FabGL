@@ -67,19 +67,19 @@ public:
    * Initializes GPIOStream and associate GPIOs to the outputs.
    *
    * div1_onGPIO0 If true the undivided frequency is delivered on GPIO0.
-   * div2 Specifies the GPIO where to send frequency / 2 (set GPIO_NUM_39 to disable output).
-   * div4 Specifies the GPIO where to send frequency / 4 (set GPIO_NUM_39 to disable output).
-   * div8 Specifies the GPIO where to send frequency / 8 (set GPIO_NUM_39 to disable output).
-   * div16 Specifies the GPIO where to send frequency / 16 (set GPIO_NUM_39 to disable output).
-   * div32 Specifies the GPIO where to send frequency / 32 (set GPIO_NUM_39 to disable output).
-   * div64 Specifies the GPIO where to send frequency / 64 (set GPIO_NUM_39 to disable output).
-   * div128 Specifies the GPIO where to send frequency / 128 (set GPIO_NUM_39 to disable output).
-   * div256 Specifies the GPIO where to send frequency / 256 (set GPIO_NUM_39 to disable output).
+   * div2 Specifies the GPIO where to send frequency / 2 (set GPIO_UNUSED to disable output).
+   * div4 Specifies the GPIO where to send frequency / 4 (set GPIO_UNUSED to disable output).
+   * div8 Specifies the GPIO where to send frequency / 8 (set GPIO_UNUSED to disable output).
+   * div16 Specifies the GPIO where to send frequency / 16 (set GPIO_UNUSED to disable output).
+   * div32 Specifies the GPIO where to send frequency / 32 (set GPIO_UNUSED to disable output).
+   * div64 Specifies the GPIO where to send frequency / 64 (set GPIO_UNUSED to disable output).
+   * div128 Specifies the GPIO where to send frequency / 128 (set GPIO_UNUSED to disable output).
+   * div256 Specifies the GPIO where to send frequency / 256 (set GPIO_UNUSED to disable output).
    *
    * Example:
    *
    *     // Outputs 25Mhz on GPIO0 and 6.25Mhz on GPIO5, for 5 seconds
-   *     GPIOStream.begin(true, GPIO_NUM_39, GPIO_NUM_5);
+   *     GPIOStream.begin(true, GPIO_UNUSED, GPIO_NUM_5);
    *     GPIOStream.play(25000000);
    *     delay(5000);
    *     // Outputs 20Mhz on GPIO and 5Mhz on GPIO5, for 10 seconds
@@ -87,7 +87,7 @@ public:
    *     delay(10000);
    *     GPIOStream.stop();
    */
-  void begin(bool div1_onGPIO0, gpio_num_t div2 = GPIO_NUM_39, gpio_num_t div4 = GPIO_NUM_39, gpio_num_t div8 = GPIO_NUM_39, gpio_num_t div16 = GPIO_NUM_39, gpio_num_t div32 = GPIO_NUM_39, gpio_num_t div64 = GPIO_NUM_39, gpio_num_t div128 = GPIO_NUM_39, gpio_num_t div256 = GPIO_NUM_39);
+  void begin(bool div1_onGPIO0, gpio_num_t div2 = GPIO_UNUSED, gpio_num_t div4 = GPIO_UNUSED, gpio_num_t div8 = GPIO_UNUSED, gpio_num_t div16 = GPIO_UNUSED, gpio_num_t div32 = GPIO_UNUSED, gpio_num_t div64 = GPIO_UNUSED, gpio_num_t div128 = GPIO_UNUSED, gpio_num_t div256 = GPIO_UNUSED);
 
   /*
    * Disables all outputs.

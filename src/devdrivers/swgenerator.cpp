@@ -94,10 +94,10 @@ void GPIOStream::end()
 
 
 // if bit is -1 = clock signal
-// gpio = GPIO_NUM_39 means not set
+// gpio = GPIO_UNUSED means not set
 void GPIOStream::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
-  if (gpio != GPIO_NUM_39) {
+  if (gpio != GPIO_UNUSED) {
 
     if (bit == -1) {
       // I2S1 clock out to CLK_OUT1 (fixed to GPIO0)
@@ -108,6 +108,7 @@ void GPIOStream::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
       gpio_set_direction(gpio, mode);
       gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
     }
+    
   }
 }
 
