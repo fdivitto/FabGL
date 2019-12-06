@@ -306,16 +306,17 @@ void Machine::writeIO(int address, int value)
 
 
 SIO::SIO(Machine * machine, int address)
-  : Device(machine), m_address(address), m_getCharPreprocessor(nullptr), m_stream(nullptr)
+  : Device(machine),
+    m_address(address),
+    m_stream(nullptr)
 {
   machine->attachDevice(this);
 }
 
 
-void SIO::attachStream(Stream * value, GetCharPreprocessor getCharPreprocessor)
+void SIO::attachStream(Stream * value)
 {
   m_stream = value;
-  m_getCharPreprocessor = getCharPreprocessor;
 }
 
 
@@ -331,11 +332,8 @@ bool SIO::read(int address, int * result)
   } else if (address == m_address + 1) {
     // DATA
     int ch = 0;
-    if (m_stream && m_stream->available()) {
+    if (m_stream && m_stream->available())
       ch = m_stream->read();
-      if (m_getCharPreprocessor)
-        ch = m_getCharPreprocessor(ch);
-    }
     *result = ch;
     return true;
   }
@@ -369,7 +367,11 @@ bool SIO::write(int address, int value)
 
 
 Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
-  : Device(machine), m_tick(0), m_diskFormat(diskFormat), m_drive(-1), m_enabled(false)
+  : Device(machine),
+    m_tick(0),
+    m_diskFormat(diskFormat),
+    m_drive(-1),
+    m_enabled(false)
 {
   switch (diskFormat) {
     // 88-Disk 8'' inches has 77 tracks and 32 sectors

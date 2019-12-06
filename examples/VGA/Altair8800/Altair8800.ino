@@ -139,9 +139,12 @@ fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
-Machine       altair;
-Mits88Disk    diskDrive(&altair, DISKFORMAT);
-Preferences   preferences;
+Machine              altair;
+Mits88Disk           diskDrive(&altair, DISKFORMAT);
+SIO                  SIO0(&altair, 0x00);
+SIO                  SIO1(&altair, 0x10);
+SIO                  SIO2(&altair, 0x12);
+Preferences          preferences;
 
 
 
@@ -308,6 +311,7 @@ void setup()
   else
     VGAController.setResolution(VGA_640x200_70Hz);
 
+  // uncomment to adjust screen alignment and size
   //VGAController.shrinkScreen(5, 0);
   //VGAController.moveScreen(-1, 0);
 
@@ -328,13 +332,14 @@ void loop()
 
   // setup SPIFFS
   esp_vfs_spiffs_conf_t conf = {
-      .base_path = "/spiffs",
-      .partition_label = NULL,
-      .max_files = 4,
+      .base_path              = "/spiffs",
+      .partition_label        = NULL,
+      .max_files              = 4,
       .format_if_mount_failed = true
   };
   fabgl::suspendInterrupts();
   esp_vfs_spiffs_register(&conf);
+  delay(500);
   fabgl::resumeInterrupts();
 
   // setup disk drives
@@ -351,15 +356,12 @@ void loop()
   // setup SIOs (Serial I/O)
 
   // TTY
-  SIO SIO0(&altair, 0x00);
   SIO0.attachStream(&Terminal);
 
   // CRT/Keyboard
-  SIO SIO1(&altair, 0x10);
   SIO1.attachStream(&Terminal);
 
   // Serial
-  SIO SIO2(&altair, 0x12);
   SIO2.attachStream(&Serial);
 
   // RAM
