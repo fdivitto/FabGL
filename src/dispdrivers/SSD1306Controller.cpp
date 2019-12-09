@@ -102,6 +102,13 @@ inline uint8_t RGBA8888toMono(RGBA8888 const & rgba)
 }
 
 
+inline uint8_t preparePixel(RGB888 const & rgb)
+{
+  return RGB888toMono(rgb);
+}
+
+
+
 SSD1306Controller::SSD1306Controller()
   : m_i2c(nullptr),
     m_screenBuffer(nullptr),
@@ -335,12 +342,6 @@ void SSD1306Controller::resumeBackgroundPrimitiveExecution()
   m_updateTaskFuncSuspended = tmax(0, m_updateTaskFuncSuspended - 1);
   if (m_updateTaskFuncSuspended == 0)
     xTaskNotifyGive(m_updateTaskHandle);  // resume updateTaskFunc()
-}
-
-
-uint8_t SSD1306Controller::preparePixel(RGB888 const & rgb)
-{
-  return RGB888toMono(rgb);
 }
 
 

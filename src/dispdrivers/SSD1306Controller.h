@@ -241,8 +241,6 @@ private:
 
   void copyRow(int x1, int x2, int srcY, int dstY);
 
-  uint8_t preparePixel(RGB888 const & rgb);
-
 
   I2C *              m_i2c;
   uint8_t            m_i2cAddress;
