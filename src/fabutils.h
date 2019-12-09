@@ -529,6 +529,12 @@ void suspendInterrupts();
 void resumeInterrupts();
 
 
+inline gpio_num_t int2gpio(int gpio)
+{
+  return gpio == -1 ? GPIO_UNUSED : (gpio_num_t)gpio;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 
