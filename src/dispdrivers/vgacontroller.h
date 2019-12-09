@@ -478,7 +478,7 @@ private:
   void swapRows(int yA, int yB, int x1, int x2);
 
   // abstract method of DisplayController
-  void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
+  void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
 
   // abstract method of DisplayController
   PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }

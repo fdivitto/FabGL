@@ -734,7 +734,7 @@ void IRAM_ATTR DisplayController::lineTo(Point const & position)
   int origX = paintState().origin.X;
   int origY = paintState().origin.Y;
 
-  drawLine(paintState().position.X, paintState().position.Y, position.X + origX, position.Y + origY, color);
+  absDrawLine(paintState().position.X, paintState().position.Y, position.X + origX, position.Y + origY, color);
 
   paintState().position = Point(position.X + origX, position.Y + origY);
 }
@@ -760,10 +760,10 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect)
   hideSprites();
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
 
-  drawLine(x1 + 1, y1,     x2, y1, color);
-  drawLine(x2,     y1 + 1, x2, y2, color);
-  drawLine(x2 - 1, y2,     x1, y2, color);
-  drawLine(x1,     y2 - 1, x1, y1, color);
+  absDrawLine(x1 + 1, y1,     x2, y1, color);
+  absDrawLine(x2,     y1 + 1, x2, y2, color);
+  absDrawLine(x2 - 1, y2,     x1, y2, color);
+  absDrawLine(x1,     y2 - 1, x1, y1, color);
 }
 
 
@@ -894,8 +894,8 @@ void IRAM_ATTR DisplayController::drawPath(Path const & path)
 
   int i = 0;
   for (; i < path.pointsCount - 1; ++i)
-    drawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[i + 1].X + origX, path.points[i + 1].Y + origY, color);
-  drawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[0].X + origX, path.points[0].Y + origY, color);
+    absDrawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[i + 1].X + origX, path.points[i + 1].Y + origY, color);
+  absDrawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[0].X + origX, path.points[0].Y + origY, color);
 }
 
 

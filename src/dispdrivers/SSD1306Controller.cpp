@@ -364,7 +364,7 @@ void SSD1306Controller::setPixelAt(PixelDesc const & pixelDesc)
 
 // coordinates are absolute values (not relative to origin)
 // line clipped on current absolute clipping rectangle
-void SSD1306Controller::drawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
+void SSD1306Controller::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
 {
   uint8_t pattern = preparePixel(color);
 

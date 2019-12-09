@@ -738,7 +738,7 @@ void IRAM_ATTR VGAController::setPixelAt(PixelDesc const & pixelDesc)
 
 // coordinates are absolute values (not relative to origin)
 // line clipped on current absolute clipping rectangle
-void IRAM_ATTR VGAController::drawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
+void IRAM_ATTR VGAController::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
 {
   uint8_t pattern = preparePixel(color);
 

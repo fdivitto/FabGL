@@ -777,7 +777,7 @@ protected:
 
   virtual void setPixelAt(PixelDesc const & pixelDesc) = 0;
 
-  virtual void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;
+  virtual void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;
 
   virtual void fillRow(int y, int x1, int x2, RGB888 color) = 0;
 

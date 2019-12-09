@@ -225,7 +225,7 @@ private:
   void swapFGBG(Rect const & rect);
 
   // abstract method of DisplayController
-  void drawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
+  void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
 
   // abstract method of DisplayController
   void fillRow(int y, int x1, int x2, RGB888 color);
