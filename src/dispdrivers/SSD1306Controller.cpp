@@ -455,9 +455,8 @@ void SSD1306Controller::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color
 
 
 // parameters not checked
-void SSD1306Controller::fillRow(int y, int x1, int x2, RGB888 color)
+void SSD1306Controller::rawFillRow(int y, int x1, int x2, uint8_t pattern)
 {
-  uint8_t pattern = preparePixel(color);
   if (pattern) {
     for (; x1 <= x2; ++x1)
       SSD1306_SETPIXEL(x1, y);
@@ -465,6 +464,21 @@ void SSD1306Controller::fillRow(int y, int x1, int x2, RGB888 color)
     for (; x1 <= x2; ++x1)
       SSD1306_CLEARPIXEL(x1, y);
   }
+}
+
+
+// parameters not checked
+void SSD1306Controller::rawFillRow(int y, int x1, int x2, RGB888 color)
+{
+  rawFillRow(y, x1, x2, preparePixel(color));
+}
+
+
+// parameters not checked
+void SSD1306Controller::rawInvertRow(int y, int x1, int x2)
+{
+  for (; x1 <= x2; ++x1)
+    SSD1306_INVERTPIXEL(x1, y);
 }
 
 
@@ -585,7 +599,7 @@ void SSD1306Controller::VScroll(int scroll)
     }
     // fill lower area with brush color
     for (int i = height + scroll; i < height; ++i)
-      fillRow(Y1 + i, X1, X2, color);
+      rawFillRow(Y1 + i, X1, X2, color);
 
   } else if (scroll > 0) {
 
@@ -597,7 +611,7 @@ void SSD1306Controller::VScroll(int scroll)
 
     // fill upper area with brush color
     for (int i = 0; i < scroll; ++i)
-      fillRow(Y1 + i, X1, X2, color);
+      rawFillRow(Y1 + i, X1, X2, color);
 
   }
 }

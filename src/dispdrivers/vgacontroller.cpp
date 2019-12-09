@@ -822,11 +822,16 @@ void IRAM_ATTR VGAController::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888
 
 
 // parameters not checked
-void IRAM_ATTR VGAController::fillRow(int y, int x1, int x2, RGB888 color)
+void IRAM_ATTR VGAController::rawFillRow(int y, int x1, int x2, RGB888 color)
 {
-  uint8_t pattern = preparePixel(color);
+  rawFillRow(y, x1, x2, preparePixel(color));
+}
 
-  uint8_t * row = (uint8_t*) m_viewPort[y];
+
+// parameters not checked
+void IRAM_ATTR VGAController::rawFillRow(int y, int x1, int x2, uint8_t pattern)
+{
+  auto row = m_viewPort[y];
   // fill first bytes before full 32 bits word
   int x = x1;
   for (; x <= x2 && (x & 3) != 0; ++x) {
@@ -835,12 +840,24 @@ void IRAM_ATTR VGAController::fillRow(int y, int x1, int x2, RGB888 color)
   // fill whole 32 bits words (don't care about VGA_PIXELINROW adjusted alignment)
   if (x <= x2) {
     int sz = (x2 & ~3) - x;
-    memset(row + x, pattern, sz);
+    memset((void*)(row + x), pattern, sz);
     x += sz;
   }
   // fill last unaligned bytes
   for (; x <= x2; ++x) {
     VGA_PIXELINROW(row, x) = pattern;
+  }
+}
+
+
+// parameters not checked
+void IRAM_ATTR VGAController::rawInvertRow(int y, int x1, int x2)
+{
+  auto row = m_viewPort[y];
+  const uint8_t HVSync = packHVSync();
+  for (int x = x1; x <= x2; ++x) {
+    uint8_t * px = (uint8_t*) &VGA_PIXELINROW(row, x);
+    *px = HVSync | ~(*px);
   }
 }
 
@@ -993,7 +1010,7 @@ void IRAM_ATTR VGAController::VScroll(int scroll)
 
     // fill lower area with brush color
     for (int i = height + scroll; i < height; ++i)
-      fillRow(Y1 + i, X1, X2, color);
+      rawFillRow(Y1 + i, X1, X2, color);
 
   } else if (scroll > 0) {
 
@@ -1012,7 +1029,7 @@ void IRAM_ATTR VGAController::VScroll(int scroll)
 
     // fill upper area with brush color
     for (int i = 0; i < scroll; ++i)
-      fillRow(Y1 + i, X1, X2, color);
+      rawFillRow(Y1 + i, X1, X2, color);
 
   }
 

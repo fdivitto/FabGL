@@ -473,7 +473,11 @@ private:
   void drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
 
   // abstract method of DisplayController
-  void fillRow(int y, int x1, int x2, RGB888 color);
+  void rawFillRow(int y, int x1, int x2, RGB888 color);
+
+  void rawFillRow(int y, int x1, int x2, uint8_t pattern);
+
+  void rawInvertRow(int y, int x1, int x2);
 
   void swapRows(int yA, int yB, int x1, int x2);
 

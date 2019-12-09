@@ -791,7 +791,7 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect)
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
 
   for (int y = y1; y <= y2; ++y)
-    fillRow(y, x1, x2, color);
+    rawFillRow(y, x1, x2, color);
 }
 
 
@@ -823,7 +823,7 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
     if (col1 <= clipX2 && col2 >= clipX1) {
       col1 = iclamp(col1, clipX1, clipX2);
       col2 = iclamp(col2, clipX1, clipX2);
-      fillRow(centerY, col1, col2, color);
+      rawFillRow(centerY, col1, col2, color);
     }
   }
 
@@ -846,11 +846,11 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
 
       int y1 = centerY - y;
       if (y1 >= clipY1 && y1 <= clipY2)
-        fillRow(y1, col1, col2, color);
+        rawFillRow(y1, col1, col2, color);
 
       int y2 = centerY + y;
       if (y2 >= clipY1 && y2 <= clipY2)
-        fillRow(y2, col1, col2, color);
+        rawFillRow(y2, col1, col2, color);
 
     }
   }
@@ -965,7 +965,7 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path)
           nodeX[i] = minX;
         if (nodeX[i + 1] > maxX)
           nodeX[i + 1] = maxX;
-        fillRow(pixelY, nodeX[i], nodeX[i + 1] - 1, color);
+        rawFillRow(pixelY, nodeX[i], nodeX[i + 1] - 1, color);
       }
     }
   }

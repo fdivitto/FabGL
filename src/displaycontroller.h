@@ -779,7 +779,7 @@ protected:
 
   virtual void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;
 
-  virtual void fillRow(int y, int x1, int x2, RGB888 color) = 0;
+  virtual void rawFillRow(int y, int x1, int x2, RGB888 color) = 0;
 
   virtual void drawEllipse(Size const & size) = 0;
 
