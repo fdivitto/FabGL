@@ -69,7 +69,8 @@ namespace fabgl {
 #define VGA_PIXELINROW(row, X) (row[(X) ^ 2])
 
 // requires variables: m_viewPort
-#define VGA_PIXEL(X, Y) VGA_PIXELINROW(m_viewPort[(Y)], X)
+#define VGA_PIXEL(X, Y)    VGA_PIXELINROW(m_viewPort[(Y)], X)
+#define VGA_INVERT_PIXEL(X, Y) { auto px = &VGA_PIXEL((X), (Y)); *px = ~(*px ^ VGA_SYNC_MASK); }
 
 
 
