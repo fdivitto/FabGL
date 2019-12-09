@@ -595,7 +595,7 @@ void SSD1306Controller::VScroll(int scroll)
 
     for (int i = 0; i < height + scroll; ++i) {
       // copy X1..X2 of (Y1 + i - scroll) to (Y1 + i)
-      copyRow(X1, X2, (Y1 + i - scroll), (Y1 + i));
+      rawCopyRow(X1, X2, (Y1 + i - scroll), (Y1 + i));
     }
     // fill lower area with brush color
     for (int i = height + scroll; i < height; ++i)
@@ -606,7 +606,7 @@ void SSD1306Controller::VScroll(int scroll)
     // scroll DOWN
     for (int i = height - scroll - 1; i >= 0; --i) {
       // copy X1..X2 of (Y1 + i) to (Y1 + i + scroll)
-      copyRow(X1, X2, (Y1 + i), (Y1 + i + scroll));
+      rawCopyRow(X1, X2, (Y1 + i), (Y1 + i + scroll));
     }
 
     // fill upper area with brush color
@@ -914,7 +914,7 @@ void SSD1306Controller::drawGlyph_light(Glyph const & glyph, GlyphOptions glyphO
 }
 
 
-void SSD1306Controller::copyRow(int x1, int x2, int srcY, int dstY)
+void SSD1306Controller::rawCopyRow(int x1, int x2, int srcY, int dstY)
 {
   for (; x1 <= x2; ++x1) {
     uint8_t c = SSD1306_GETPIXEL(x1, srcY);
