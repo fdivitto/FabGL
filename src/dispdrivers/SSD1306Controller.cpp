@@ -1002,7 +1002,7 @@ void SSD1306Controller::readScreen(Rect const & rect, RGB888 * destBuf)
 }
 
 
-void SSD1306Controller::drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int width = bitmap->width;
 
@@ -1047,7 +1047,7 @@ void SSD1306Controller::drawBitmap_Mask(int destX, int destY, Bitmap const * bit
 }
 
 
-void SSD1306Controller::drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int width = bitmap->width;
 
@@ -1090,7 +1090,7 @@ void SSD1306Controller::drawBitmap_RGBA2222(int destX, int destY, Bitmap const *
 }
 
 
-void SSD1306Controller::drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int width = bitmap->width;
 

@@ -1601,7 +1601,7 @@ void VGAController::writeScreen(Rect const & rect, RGB222 * srcBuf)
 }
 
 
-void IRAM_ATTR VGAController::drawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void IRAM_ATTR VGAController::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int     width  = bitmap->width;
   const uint8_t HVSync = packHVSync();
@@ -1646,7 +1646,7 @@ void IRAM_ATTR VGAController::drawBitmap_Mask(int destX, int destY, Bitmap const
 }
 
 
-void IRAM_ATTR VGAController::drawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void IRAM_ATTR VGAController::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int     width  = bitmap->width;
   const uint8_t HVSync = packHVSync();
@@ -1689,7 +1689,7 @@ void IRAM_ATTR VGAController::drawBitmap_RGBA2222(int destX, int destY, Bitmap c
 }
 
 
-void IRAM_ATTR VGAController::drawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void IRAM_ATTR VGAController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   const int     width  = bitmap->width;
   const uint8_t HVSync = packHVSync();

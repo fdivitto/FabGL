@@ -529,7 +529,7 @@ void IRAM_ATTR DisplayController::hideSprites()
         Sprite * sprite = getSprite(i);
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
           Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, getBitmapSavePixelFormat());
-          drawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
+          absDrawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
         }
       }
@@ -539,7 +539,7 @@ void IRAM_ATTR DisplayController::hideSprites()
     Sprite * mouseSprite = mouseCursor();
     if (mouseSprite->savedBackgroundWidth > 0) {
       Bitmap bitmap(mouseSprite->savedBackgroundWidth, mouseSprite->savedBackgroundHeight, mouseSprite->savedBackground, getBitmapSavePixelFormat());
-      drawBitmap(mouseSprite->savedX, mouseSprite->savedY, &bitmap, nullptr, true);
+      absDrawBitmap(mouseSprite->savedX, mouseSprite->savedY, &bitmap, nullptr, true);
       mouseSprite->savedBackgroundWidth = mouseSprite->savedBackgroundHeight = 0;
     }
 
@@ -561,7 +561,7 @@ void IRAM_ATTR DisplayController::showSprites()
         int16_t spriteX = sprite->x;
         int16_t spriteY = sprite->y;
         Bitmap const * bitmap = sprite->getFrame();
-        drawBitmap(spriteX, spriteY, bitmap, sprite->savedBackground, true);
+        absDrawBitmap(spriteX, spriteY, bitmap, sprite->savedBackground, true);
         sprite->savedX = spriteX;
         sprite->savedY = spriteY;
         sprite->savedBackgroundWidth  = bitmap->width;
@@ -579,7 +579,7 @@ void IRAM_ATTR DisplayController::showSprites()
       int16_t spriteX = mouseSprite->x;
       int16_t spriteY = mouseSprite->y;
       Bitmap const * bitmap = mouseSprite->getFrame();
-      drawBitmap(spriteX, spriteY, bitmap, mouseSprite->savedBackground, true);
+      absDrawBitmap(spriteX, spriteY, bitmap, mouseSprite->savedBackground, true);
       mouseSprite->savedX = spriteX;
       mouseSprite->savedY = spriteY;
       mouseSprite->savedBackgroundWidth  = bitmap->width;
@@ -699,7 +699,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
       break;
     case PrimitiveCmd::DrawBitmap:
       hideSprites();
-      drawBitmap(prim.bitmapDrawingInfo.X + paintState().origin.X, prim.bitmapDrawingInfo.Y + paintState().origin.Y, prim.bitmapDrawingInfo.bitmap, nullptr, false);
+      absDrawBitmap(prim.bitmapDrawingInfo.X + paintState().origin.X, prim.bitmapDrawingInfo.Y + paintState().origin.Y, prim.bitmapDrawingInfo.bitmap, nullptr, false);
       break;
     case PrimitiveCmd::RefreshSprites:
       hideSprites();
@@ -972,7 +972,7 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path)
 }
 
 
-void IRAM_ATTR DisplayController::drawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect)
+void IRAM_ATTR DisplayController::absDrawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect)
 {
   const int clipX1 = ignoreClippingRect ? 0 : paintState().absClippingRect.X1;
   const int clipY1 = ignoreClippingRect ? 0 : paintState().absClippingRect.Y1;
@@ -1021,15 +1021,15 @@ void IRAM_ATTR DisplayController::drawBitmap(int destX, int destY, Bitmap const 
       break;
 
     case PixelFormat::Mask:
-      drawBitmap_Mask(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      rawDrawBitmap_Mask(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
       break;
 
     case PixelFormat::RGBA2222:
-      drawBitmap_RGBA2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      rawDrawBitmap_RGBA2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
       break;
 
     case PixelFormat::RGBA8888:
-      drawBitmap_RGBA8888(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
+      rawDrawBitmap_RGBA8888(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount);
       break;
 
   }
