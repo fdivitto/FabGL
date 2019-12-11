@@ -73,7 +73,7 @@ namespace fabgl {
  *       cv.drawText(0, 0, "Hello World!");
  *
  */
-class SSD1306Controller : public DisplayController {
+class SSD1306Controller : public GenericDisplayController {
 
 public:
 
@@ -207,10 +207,6 @@ private:
 
   // abstract method of DisplayController
   void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-
-  void drawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-
-  void drawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
 
   // abstract method of DisplayController
   void swapBuffers();

@@ -880,6 +880,690 @@ private:
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GenericDisplayController
+
+
+class GenericDisplayController : public DisplayController {
+
+protected:
+
+
+  template <typename TPreparePixel, typename TRawSetPixel>
+  void genericSetPixelAt(PixelDesc const & pixelDesc, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
+  {
+    hideSprites();
+
+    const int x = pixelDesc.pos.X + paintState().origin.X;
+    const int y = pixelDesc.pos.Y + paintState().origin.Y;
+
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+      rawSetPixel(x, y, preparePixel(pixelDesc.color));
+  }
+
+
+  // coordinates are absolute values (not relative to origin)
+  // line clipped on current absolute clipping rectangle
+  template <typename TPreparePixel, typename TRawFillRow, typename TRawInvertRow, typename TRawSetPixel, typename TRawInvertPixel>
+  void genericAbsDrawLine(int X1, int Y1, int X2, int Y2, RGB888 const & color, TPreparePixel preparePixel, TRawFillRow rawFillRow, TRawInvertRow rawInvertRow, TRawSetPixel rawSetPixel, TRawInvertPixel rawInvertPixel)
+  {
+    auto pattern = preparePixel(color);
+    if (Y1 == Y2) {
+      // horizontal line
+      if (Y1 < paintState().absClippingRect.Y1 || Y1 > paintState().absClippingRect.Y2)
+        return;
+      if (X1 > X2)
+        tswap(X1, X2);
+      if (X1 > paintState().absClippingRect.X2 || X2 < paintState().absClippingRect.X1)
+        return;
+      X1 = iclamp(X1, paintState().absClippingRect.X1, paintState().absClippingRect.X2);
+      X2 = iclamp(X2, paintState().absClippingRect.X1, paintState().absClippingRect.X2);
+      if (paintState().paintOptions.NOT)
+        rawInvertRow(Y1, X1, X2);
+      else
+        rawFillRow(Y1, X1, X2, pattern);
+    } else if (X1 == X2) {
+      // vertical line
+      if (X1 < paintState().absClippingRect.X1 || X1 > paintState().absClippingRect.X2)
+        return;
+      if (Y1 > Y2)
+        tswap(Y1, Y2);
+      if (Y1 > paintState().absClippingRect.Y2 || Y2 < paintState().absClippingRect.Y1)
+        return;
+      Y1 = iclamp(Y1, paintState().absClippingRect.Y1, paintState().absClippingRect.Y2);
+      Y2 = iclamp(Y2, paintState().absClippingRect.Y1, paintState().absClippingRect.Y2);
+      if (paintState().paintOptions.NOT) {
+        for (int y = Y1; y <= Y2; ++y)
+          rawInvertPixel(X1, y);
+      } else {
+        for (int y = Y1; y <= Y2; ++y)
+          rawSetPixel(X1, y, pattern);
+      }
+    } else {
+      // other cases (Bresenham's algorithm)
+      // TODO: to optimize
+      //   Unfortunately here we cannot clip exactly using Sutherland-Cohen algorithm (as done before)
+      //   because the starting line (got from clipping algorithm) may not be the same of Bresenham's
+      //   line (think to continuing an existing line).
+      //   Possible solutions:
+      //      - "Yevgeny P. Kuzmin" algorithm:
+      //               https://stackoverflow.com/questions/40884680/how-to-use-bresenhams-line-drawing-algorithm-with-clipping
+      //               https://github.com/ktfh/ClippedLine/blob/master/clip.hpp
+      // For now Sutherland-Cohen algorithm is only used to check the line is actually visible,
+      // then test for every point inside the main Bresenham's loop.
+      if (!clipLine(X1, Y1, X2, Y2, paintState().absClippingRect, true))  // true = do not change line coordinates!
+        return;
+      const int dx = abs(X2 - X1);
+      const int dy = abs(Y2 - Y1);
+      const int sx = X1 < X2 ? 1 : -1;
+      const int sy = Y1 < Y2 ? 1 : -1;
+      int err = (dx > dy ? dx : -dy) / 2;
+      while (true) {
+        if (paintState().absClippingRect.contains(X1, Y1)) {
+          if (paintState().paintOptions.NOT)
+            rawInvertPixel(X1, Y1);
+          else
+            rawSetPixel(X1, Y1, pattern);
+        }
+        if (X1 == X2 && Y1 == Y2)
+          break;
+        int e2 = err;
+        if (e2 > -dx) {
+          err -= dy;
+          X1 += sx;
+        }
+        if (e2 < dy) {
+          err += dx;
+          Y1 += sy;
+        }
+      }
+    }
+  }
+
+
+  template <typename TPreparePixel, typename TRawSetPixel>
+  void genericDrawEllipse(Size const & size, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
+  {
+    hideSprites();
+    auto pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().brushColor) : preparePixel(paintState().penColor);
+
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    int x0 = paintState().position.X - size.width / 2;
+    int y0 = paintState().position.Y - size.height / 2;
+    int x1 = paintState().position.X + size.width / 2;
+    int y1 = paintState().position.Y + size.height / 2;
+
+    int a = abs (x1 - x0), b = abs (y1 - y0), b1 = b & 1;
+    int dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a;
+    int err = dx + dy + b1 * a * a, e2;
+
+    if (x0 > x1) {
+      x0 = x1;
+      x1 += a;
+    }
+    if (y0 > y1)
+      y0 = y1;
+    y0 += (b + 1) / 2;
+    y1 = y0 - b1;
+    a *= 8 * a;
+    b1 = 8 * b * b;
+    do {
+      if (y0 >= clipY1 && y0 <= clipY2) {
+        if (x1 >= clipX1 && x1 <= clipX2) {
+          // bottom-right semicircle
+          rawSetPixel(x1, y0, pattern);
+        }
+        if (x0 >= clipX1 && x0 <= clipX2) {
+          // bottom-left semicircle
+          rawSetPixel(x0, y0, pattern);
+        }
+      }
+      if (y1 >= clipY1 && y1 <= clipY2) {
+        if (x0 >= clipX1 && x0 <= clipX2) {
+          // top-left semicircle
+          rawSetPixel(x0, y1, pattern);
+        }
+        if (x1 >= clipX1 && x1 <= clipX2) {
+          // top-right semicircle
+          rawSetPixel(x1, y1, pattern);
+        }
+      }
+      e2 = 2 * err;
+      if (e2 >= dx) {
+        ++x0;
+        --x1;
+        err += dx += b1;
+      }
+      if (e2 <= dy) {
+        ++y0;
+        --y1;
+        err += dy += a;
+      }
+    } while (x0 <= x1);
+
+    while (y0 - y1 < b) {
+      int x = x0 - 1;
+      int y = y0;
+      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+        rawSetPixel(x, y, pattern);
+
+      x = x1 + 1;
+      y = y0++;
+      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+        rawSetPixel(x, y, pattern);
+
+      x = x0 - 1;
+      y = y1;
+      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+        rawSetPixel(x, y, pattern);
+
+      x = x1 + 1;
+      y = y1--;
+      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+        rawSetPixel(x, y, pattern);
+    }
+  }
+
+
+  template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
+  void genericDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    hideSprites();
+    if (!glyphOptions.bold && !glyphOptions.italic && !glyphOptions.blank && !glyphOptions.underline && !glyphOptions.doubleWidth && glyph.width <= 32)
+      genericDrawGlyph_light(glyph, glyphOptions, penColor, brushColor, preparePixel, rawGetRow, rawSetPixelInRow);
+    else
+      genericDrawGlyph_full(glyph, glyphOptions, penColor, brushColor, preparePixel, rawGetRow, rawSetPixelInRow);
+  }
+
+
+  // TODO: Italic doesn't work well when clipping rect is specified
+  template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
+  void genericDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    const int origX = paintState().origin.X;
+    const int origY = paintState().origin.Y;
+
+    const int glyphX = glyph.X + origX;
+    const int glyphY = glyph.Y + origY;
+
+    if (glyphX > clipX2 || glyphY > clipY2)
+      return;
+
+    int16_t glyphWidth        = glyph.width;
+    int16_t glyphHeight       = glyph.height;
+    uint8_t const * glyphData = glyph.data;
+    int16_t glyphWidthByte    = (glyphWidth + 7) / 8;
+    int16_t glyphSize         = glyphHeight * glyphWidthByte;
+
+    bool fillBackground = glyphOptions.fillBackground;
+    bool bold           = glyphOptions.bold;
+    bool italic         = glyphOptions.italic;
+    bool blank          = glyphOptions.blank;
+    bool underline      = glyphOptions.underline;
+    int doubleWidth     = glyphOptions.doubleWidth;
+
+    // modify glyph to handle top half and bottom half double height
+    // doubleWidth = 1 is handled directly inside drawing routine
+    if (doubleWidth > 1) {
+      uint8_t * newGlyphData = (uint8_t*) alloca(glyphSize);
+      // doubling top-half or doubling bottom-half?
+      int offset = (doubleWidth == 2 ? 0 : (glyphHeight >> 1));
+      for (int y = 0; y < glyphHeight ; ++y)
+        for (int x = 0; x < glyphWidthByte; ++x)
+          newGlyphData[x + y * glyphWidthByte] = glyphData[x + (offset + (y >> 1)) * glyphWidthByte];
+      glyphData = newGlyphData;
+    }
+
+    // a very simple and ugly skew (italic) implementation!
+    int skewAdder = 0, skewH1 = 0, skewH2 = 0;
+    if (italic) {
+      skewAdder = 2;
+      skewH1 = glyphHeight / 3;
+      skewH2 = skewH1 * 2;
+    }
+
+    int16_t X1 = 0;
+    int16_t XCount = glyphWidth;
+    int16_t destX = glyphX;
+
+    if (destX < clipX1) {
+      X1 = (clipX1 - destX) / (doubleWidth ? 2 : 1);
+      destX = clipX1;
+    }
+    if (X1 >= glyphWidth)
+      return;
+
+    if (destX + XCount + skewAdder > clipX2 + 1)
+      XCount = clipX2 + 1 - destX - skewAdder;
+    if (X1 + XCount > glyphWidth)
+      XCount = glyphWidth - X1;
+
+    int16_t Y1 = 0;
+    int16_t YCount = glyphHeight;
+    int destY = glyphY;
+
+    if (destY < clipY1) {
+      Y1 = clipY1 - destY;
+      destY = clipY1;
+    }
+    if (Y1 >= glyphHeight)
+      return;
+
+    if (destY + YCount > clipY2 + 1)
+      YCount = clipY2 + 1 - destY;
+    if (Y1 + YCount > glyphHeight)
+      YCount = glyphHeight - Y1;
+
+    if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
+      tswap(penColor, brushColor);
+
+    // a very simple and ugly reduce luminosity (faint) implementation!
+    if (glyphOptions.reduceLuminosity) {
+      if (penColor.R > 128) penColor.R = 128;
+      if (penColor.G > 128) penColor.G = 128;
+      if (penColor.B > 128) penColor.B = 128;
+    }
+
+    auto penPattern   = preparePixel(penColor);
+    auto brushPattern = preparePixel(brushColor);
+
+    for (int y = Y1; y < Y1 + YCount; ++y, ++destY) {
+
+      // true if previous pixel has been set
+      bool prevSet = false;
+
+      auto dstrow = rawGetRow(destY);
+      auto srcrow = glyphData + y * glyphWidthByte;
+
+      if (underline && y == glyphHeight - FABGLIB_UNDERLINE_POSITION - 1) {
+
+        for (int x = X1, adestX = destX + skewAdder; x < X1 + XCount && adestX <= clipX2; ++x, ++adestX) {
+          rawSetPixelInRow(dstrow, adestX, blank ? brushPattern : penPattern);
+          if (doubleWidth) {
+            ++adestX;
+            if (adestX > clipX2)
+              break;
+            rawSetPixelInRow(dstrow, adestX, blank ? brushPattern : penPattern);
+          }
+        }
+
+      } else {
+
+        for (int x = X1, adestX = destX + skewAdder; x < X1 + XCount && adestX <= clipX2; ++x, ++adestX) {
+          if ((srcrow[x >> 3] << (x & 7)) & 0x80 && !blank) {
+            rawSetPixelInRow(dstrow, adestX, penPattern);
+            prevSet = true;
+          } else if (bold && prevSet) {
+            rawSetPixelInRow(dstrow, adestX, penPattern);
+            prevSet = false;
+          } else if (fillBackground) {
+            rawSetPixelInRow(dstrow, adestX, brushPattern);
+            prevSet = false;
+          } else {
+            prevSet = false;
+          }
+          if (doubleWidth) {
+            ++adestX;
+            if (adestX > clipX2)
+              break;
+            if (fillBackground)
+              rawSetPixelInRow(dstrow, adestX, prevSet ? penPattern : brushPattern);
+            else if (prevSet)
+              rawSetPixelInRow(dstrow, adestX, penPattern);
+          }
+        }
+
+      }
+
+      if (italic && (y == skewH1 || y == skewH2))
+        --skewAdder;
+
+    }
+  }
+
+
+  // assume:
+  //   glyph.width <= 32
+  //   glyphOptions.fillBackground = 0 or 1
+  //   glyphOptions.invert : 0 or 1
+  //   glyphOptions.reduceLuminosity: 0 or 1
+  //   glyphOptions.... others = 0
+  //   paintState().paintOptions.swapFGBG: 0 or 1
+  template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
+  void genericDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    const int origX = paintState().origin.X;
+    const int origY = paintState().origin.Y;
+
+    const int glyphX = glyph.X + origX;
+    const int glyphY = glyph.Y + origY;
+
+    if (glyphX > clipX2 || glyphY > clipY2)
+      return;
+
+    int16_t glyphWidth        = glyph.width;
+    int16_t glyphHeight       = glyph.height;
+    uint8_t const * glyphData = glyph.data;
+    int16_t glyphWidthByte    = (glyphWidth + 7) / 8;
+
+    int16_t X1 = 0;
+    int16_t XCount = glyphWidth;
+    int16_t destX = glyphX;
+
+    int16_t Y1 = 0;
+    int16_t YCount = glyphHeight;
+    int destY = glyphY;
+
+    if (destX < clipX1) {
+      X1 = clipX1 - destX;
+      destX = clipX1;
+    }
+    if (X1 >= glyphWidth)
+      return;
+
+    if (destX + XCount > clipX2 + 1)
+      XCount = clipX2 + 1 - destX;
+    if (X1 + XCount > glyphWidth)
+      XCount = glyphWidth - X1;
+
+    if (destY < clipY1) {
+      Y1 = clipY1 - destY;
+      destY = clipY1;
+    }
+    if (Y1 >= glyphHeight)
+      return;
+
+    if (destY + YCount > clipY2 + 1)
+      YCount = clipY2 + 1 - destY;
+    if (Y1 + YCount > glyphHeight)
+      YCount = glyphHeight - Y1;
+
+    if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
+      tswap(penColor, brushColor);
+
+    // a very simple and ugly reduce luminosity (faint) implementation!
+    if (glyphOptions.reduceLuminosity) {
+      if (penColor.R > 128) penColor.R = 128;
+      if (penColor.G > 128) penColor.G = 128;
+      if (penColor.B > 128) penColor.B = 128;
+    }
+
+    bool fillBackground = glyphOptions.fillBackground;
+
+    auto penPattern   = preparePixel(penColor);
+    auto brushPattern = preparePixel(brushColor);
+
+    for (int y = Y1; y < Y1 + YCount; ++y, ++destY) {
+      auto dstrow = rawGetRow(destY);
+      uint8_t const * srcrow = glyphData + y * glyphWidthByte;
+
+      uint32_t src = (srcrow[0] << 24) | (srcrow[1] << 16) | (srcrow[2] << 8) | (srcrow[3]);
+      src <<= X1;
+      if (fillBackground) {
+        // filled background
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
+          rawSetPixelInRow(dstrow, adestX, src & 0x80000000 ? penPattern : brushPattern);
+      } else {
+        // transparent background
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, src <<= 1)
+          if (src & 0x80000000)
+            rawSetPixelInRow(dstrow, adestX, penPattern);
+      }
+    }
+  }
+
+
+  template <typename TRawInvertRow>
+  void genericInvertRect(Rect const & rect, TRawInvertRow rawInvertRow)
+  {
+    hideSprites();
+
+    const int origX = paintState().origin.X;
+    const int origY = paintState().origin.Y;
+
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    const int x1 = iclamp(rect.X1 + origX, clipX1, clipX2);
+    const int y1 = iclamp(rect.Y1 + origY, clipY1, clipY2);
+    const int x2 = iclamp(rect.X2 + origX, clipX1, clipX2);
+    const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
+
+    for (int y = y1; y <= y2; ++y)
+      rawInvertRow(y, x1, x2);
+  }
+
+
+  template <typename TPreparePixel, typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow>
+  void genericSwapFGBG(Rect const & rect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    hideSprites();
+
+    auto penPattern   = preparePixel(paintState().penColor);
+    auto brushPattern = preparePixel(paintState().brushColor);
+
+    int origX = paintState().origin.X;
+    int origY = paintState().origin.Y;
+
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    const int x1 = iclamp(rect.X1 + origX, clipX1, clipX2);
+    const int y1 = iclamp(rect.Y1 + origY, clipY1, clipY2);
+    const int x2 = iclamp(rect.X2 + origX, clipX1, clipX2);
+    const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
+
+    for (int y = y1; y <= y2; ++y) {
+      auto row = rawGetRow(y);
+      for (int x = x1; x <= x2; ++x) {
+        auto px = rawGetPixelInRow(row, x);
+        if (px == penPattern)
+          rawSetPixelInRow(row, x, brushPattern);
+        else if (px == brushPattern)
+          rawSetPixelInRow(row, x, penPattern);
+      }
+    }
+  }
+
+
+  template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow>
+  void genericCopyRect(Rect const & source, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    hideSprites();
+
+    const int clipX1 = paintState().absClippingRect.X1;
+    const int clipY1 = paintState().absClippingRect.Y1;
+    const int clipX2 = paintState().absClippingRect.X2;
+    const int clipY2 = paintState().absClippingRect.Y2;
+
+    int origX = paintState().origin.X;
+    int origY = paintState().origin.Y;
+
+    int srcX = source.X1 + origX;
+    int srcY = source.Y1 + origY;
+    int width  = source.X2 - source.X1 + 1;
+    int height = source.Y2 - source.Y1 + 1;
+    int destX = paintState().position.X;
+    int destY = paintState().position.Y;
+    int deltaX = destX - srcX;
+    int deltaY = destY - srcY;
+
+    int incX = deltaX < 0 ? 1 : -1;
+    int incY = deltaY < 0 ? 1 : -1;
+
+    int startX = deltaX < 0 ? destX : destX + width - 1;
+    int startY = deltaY < 0 ? destY : destY + height - 1;
+
+    for (int y = startY, i = 0; i < height; y += incY, ++i) {
+      if (y >= clipY1 && y <= clipY2) {
+        auto srcRow = rawGetRow(y - deltaY);
+        auto dstRow = rawGetRow(y);
+        for (int x = startX, j = 0; j < width; x += incX, ++j) {
+          if (x >= clipX1 && x <= clipX2)
+            rawSetPixelInRow(dstRow, x, rawGetPixelInRow(srcRow, x - deltaX));
+        }
+      }
+    }
+  }
+
+
+  template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow, typename TBackground>
+  void genericRawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, TBackground * saveBackground, int X1, int Y1, int XCount, int YCount,
+                                 TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int width  = bitmap->width;
+
+    if (saveBackground) {
+
+      // save background and draw the bitmap
+      auto data = bitmap->data;
+      int rowlen = (bitmap->width + 7) / 8;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto savePx = saveBackground + y * width + X1;
+        auto src = data + y * rowlen;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx) {
+          if ((src[x >> 3] << (x & 7)) & 0x80) {
+            auto dstPx = rawGetPixelInRow(dstrow, adestX);
+            *savePx = dstPx;
+            rawSetPixelInRow(dstrow, adestX);
+          } else {
+            *savePx = 0;
+          }
+        }
+      }
+
+    } else {
+
+      // just draw the bitmap
+      auto data = bitmap->data;
+      int rowlen = (bitmap->width + 7) / 8;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto src = data + y * rowlen;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX) {
+          if ((src[x >> 3] << (x & 7)) & 0x80)
+            rawSetPixelInRow(dstrow, adestX);
+        }
+      }
+
+    }
+  }
+
+
+  template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow, typename TBackground>
+  void genericRawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, TBackground * saveBackground, int X1, int Y1, int XCount, int YCount,
+                                     TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int width  = bitmap->width;
+
+    if (saveBackground) {
+
+      // save background and draw the bitmap
+      auto data = bitmap->data;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto savePx = saveBackground + y * width + X1;
+        auto src = data + y * width + X1;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
+          int alpha = *src >> 6;  // TODO?, alpha blending
+          if (alpha) {
+            auto dstPx = rawGetPixelInRow(dstrow, adestX);
+            *savePx = dstPx;
+            rawSetPixelInRow(dstrow, adestX, *src);
+          } else {
+            *savePx = 0;
+          }
+        }
+      }
+
+    } else {
+
+      // just draw the bitmap
+      auto data = bitmap->data;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto src = data + y * width + X1;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
+          int alpha = *src >> 6;  // TODO?, alpha blending
+          if (alpha)
+            rawSetPixelInRow(dstrow, adestX, *src);
+        }
+      }
+
+    }
+  }
+
+
+  template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow, typename TBackground>
+  void genericRawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, TBackground * saveBackground, int X1, int Y1, int XCount, int YCount,
+                                     TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int width  = bitmap->width;
+
+    if (saveBackground) {
+
+      // save background and draw the bitmap
+      auto data = (RGBA8888 const *) bitmap->data;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto savePx = saveBackground + y * width + X1;
+        auto src = data + y * width + X1;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
+          if (src->A) {
+            auto dstPx = rawGetPixelInRow(dstrow, adestX);
+            *savePx = dstPx;
+            rawSetPixelInRow(dstrow, adestX, *src);
+          } else {
+            *savePx = 0;
+          }
+        }
+      }
+
+    } else {
+
+      // just draw the bitmap
+      auto data = (RGBA8888 const *) bitmap->data;
+      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
+        auto dstrow = rawGetRow(adestY);
+        auto src = data + y * width + X1;
+        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
+          if (src->A)
+            rawSetPixelInRow(dstrow, adestX, *src);
+        }
+      }
+
+    }
+  }
+
+
+
+};
+
 
 
 } // end of namespace

@@ -134,7 +134,7 @@ struct VGATimings {
 *     // Set 640x350@70Hz resolution
 *     VGAController.setResolution(VGA_640x350_70Hz);
 */
-class VGAController : public DisplayController {
+class VGAController : public GenericDisplayController {
 
 public:
 
@@ -447,10 +447,6 @@ private:
 
   // abstract method of DisplayController
   void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-
-  void drawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
-
-  void drawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
 
   // abstract method of DisplayController
   void invertRect(Rect const & rect);
