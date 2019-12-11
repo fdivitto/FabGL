@@ -31,6 +31,9 @@
 #define OLED_SCL       GPIO_NUM_15
 #define OLED_ADDR      0x3C
 
+// if your display hasn't RESET set to GPIO_UNUSED
+#define OLED_RESET     GPIO_NUM_16
+
 
 
 char const * AUTOEXEC = "info\r";
@@ -344,7 +347,7 @@ void setup()
 
   I2C.begin(OLED_SDA, OLED_SCL);
 
-  DisplayController.begin(&I2C, OLED_ADDR);
+  DisplayController.begin(&I2C, OLED_ADDR, OLED_RESET);
   DisplayController.setResolution(OLED_128x64);
 
   Terminal.begin(&DisplayController);

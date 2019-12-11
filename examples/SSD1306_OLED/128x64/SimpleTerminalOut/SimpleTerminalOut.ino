@@ -29,6 +29,10 @@
 #define OLED_SCL       GPIO_NUM_15
 #define OLED_ADDR      0x3C
 
+// if your display hasn't RESET set to GPIO_UNUSED
+#define OLED_RESET     GPIO_NUM_16
+
+
 
 fabgl::I2C               I2C;
 fabgl::SSD1306Controller DisplayController;
@@ -131,7 +135,7 @@ void setup()
 
   I2C.begin(OLED_SDA, OLED_SCL);
 
-  DisplayController.begin(&I2C, OLED_ADDR);
+  DisplayController.begin(&I2C, OLED_ADDR, OLED_RESET);
   DisplayController.setResolution(OLED_128x64);
 
   while (DisplayController.available() == false) {
