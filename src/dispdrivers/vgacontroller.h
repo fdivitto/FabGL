@@ -431,10 +431,10 @@ private:
   int calcRequiredDMABuffersCount(int viewPortHeight);  
 
   // abstract method of DisplayController
-  void setPixelAt(PixelDesc const & pixelDesc);
+  void setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect);
 
   // abstract method of DisplayController
-  void drawEllipse(Size const & size);
+  void drawEllipse(Size const & size, Rect & updateRect);
 
   // abstract method of DisplayController
   void clear();
@@ -446,16 +446,16 @@ private:
   void HScroll(int scroll);
 
   // abstract method of DisplayController
-  void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+  void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect);
 
   // abstract method of DisplayController
-  void invertRect(Rect const & rect);
+  void invertRect(Rect const & rect, Rect & updateRect);
 
   // abstract method of DisplayController
-  void copyRect(Rect const & source);
+  void copyRect(Rect const & source, Rect & updateRect);
 
   // abstract method of DisplayController
-  void swapFGBG(Rect const & rect);
+  void swapFGBG(Rect const & rect, Rect & updateRect);
 
   // abstract method of DisplayController
   void swapBuffers();

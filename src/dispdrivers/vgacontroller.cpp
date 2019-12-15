@@ -698,6 +698,7 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
 {
   auto VGACtrl = VGAController::instance();
   int64_t startTime = VGACtrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
+  Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
   bool isFirst = true;
   do {
     Primitive prim;
@@ -710,7 +711,7 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
       break;
     }
 
-    VGACtrl->execPrimitive(prim);
+    VGACtrl->execPrimitive(prim, updateRect);
 
     isFirst = false;
   } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
@@ -718,9 +719,9 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
 }
 
 
-void IRAM_ATTR VGAController::setPixelAt(PixelDesc const & pixelDesc)
+void IRAM_ATTR VGAController::setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect)
 {
-  genericSetPixelAt(pixelDesc,
+  genericSetPixelAt(pixelDesc, updateRect,
                     [&] (RGB888 const & color)          { return preparePixel(color); },
                     [&] (int X, int Y, uint8_t pattern) { VGA_PIXEL(X, Y) = pattern; }
                    );
@@ -803,9 +804,9 @@ void IRAM_ATTR VGAController::swapRows(int yA, int yB, int x1, int x2)
 }
 
 
-void IRAM_ATTR VGAController::drawEllipse(Size const & size)
+void IRAM_ATTR VGAController::drawEllipse(Size const & size, Rect & updateRect)
 {
-  genericDrawEllipse(size,
+  genericDrawEllipse(size, updateRect,
                      [&] (RGB888 const & color)          { return preparePixel(color); },
                      [&] (int X, int Y, uint8_t pattern) { VGA_PIXEL(X, Y) = pattern; }
                     );
@@ -1052,9 +1053,9 @@ void IRAM_ATTR VGAController::HScroll(int scroll)
 }
 
 
-void IRAM_ATTR VGAController::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor)
+void IRAM_ATTR VGAController::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect)
 {
-  genericDrawGlyph(glyph, glyphOptions, penColor, brushColor,
+  genericDrawGlyph(glyph, glyphOptions, penColor, brushColor, updateRect,
                    [&] (RGB888 const & color) { return preparePixel(color); },
                    [&] (int y)                { return (uint8_t*) m_viewPort[y]; },
                    [&] (uint8_t * row, int x, uint8_t pattern) { VGA_PIXELINROW(row, x) = pattern; }
@@ -1062,17 +1063,17 @@ void IRAM_ATTR VGAController::drawGlyph(Glyph const & glyph, GlyphOptions glyphO
 }
 
 
-void IRAM_ATTR VGAController::invertRect(Rect const & rect)
+void IRAM_ATTR VGAController::invertRect(Rect const & rect, Rect & updateRect)
 {
-  genericInvertRect(rect,
+  genericInvertRect(rect, updateRect,
                     [&] (int Y, int X1, int X2) { rawInvertRow(Y, X1, X2); }
                    );
 }
 
 
-void IRAM_ATTR VGAController::swapFGBG(Rect const & rect)
+void IRAM_ATTR VGAController::swapFGBG(Rect const & rect, Rect & updateRect)
 {
-  genericSwapFGBG(rect,
+  genericSwapFGBG(rect, updateRect,
                   [&] (RGB888 const & color)                  { return preparePixel(color); },
                   [&] (int y)                                 { return (uint8_t*) m_viewPort[y]; },
                   [&] (uint8_t * row, int x)                  { return VGA_PIXELINROW(row, x); },
@@ -1083,9 +1084,9 @@ void IRAM_ATTR VGAController::swapFGBG(Rect const & rect)
 
 // Slow operation!
 // supports overlapping of source and dest rectangles
-void IRAM_ATTR VGAController::copyRect(Rect const & source)
+void IRAM_ATTR VGAController::copyRect(Rect const & source, Rect & updateRect)
 {
-  genericCopyRect(source,
+  genericCopyRect(source, updateRect,
                   [&] (int y)                                 { return (uint8_t*) m_viewPort[y]; },
                   [&] (uint8_t * row, int x)                  { return VGA_PIXELINROW(row, x); },
                   [&] (uint8_t * row, int x, uint8_t pattern) { VGA_PIXELINROW(row, x) = pattern; }
