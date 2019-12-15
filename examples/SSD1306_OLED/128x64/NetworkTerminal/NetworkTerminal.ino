@@ -32,7 +32,7 @@
 #define OLED_ADDR      0x3C
 
 // if your display hasn't RESET set to GPIO_UNUSED
-#define OLED_RESET     GPIO_NUM_16
+#define OLED_RESET     GPIO_UNUSED  // ie Heltec has GPIO_NUM_16 for reset
 
 
 
