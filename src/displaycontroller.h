@@ -54,8 +54,12 @@ namespace fabgl {
 */
 enum PrimitiveCmd {
 
+  // Needed to send the updated area of screen buffer on some displays (ie SSD1306)
+  Flush,
+
   // Refresh display. Some displays (ie SSD1306) aren't repainted if there aren't primitives
   // so posting Refresh allows to resend the screenbuffer
+  // params: rect (rectangle to refresh)
   Refresh,
 
   // Set current pen color
@@ -572,6 +576,7 @@ struct Primitive {
 
   Primitive() { }
   Primitive(PrimitiveCmd cmd_) : cmd(cmd_) { }
+  Primitive(PrimitiveCmd cmd_, Rect const & rect_) : cmd(cmd_), rect(rect_) { }
 };
 
 
@@ -775,13 +780,13 @@ protected:
 
   //// abstract methods
 
-  virtual void setPixelAt(PixelDesc const & pixelDesc) = 0;
+  virtual void setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect) = 0;
 
   virtual void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color) = 0;
 
   virtual void rawFillRow(int y, int x1, int x2, RGB888 color) = 0;
 
-  virtual void drawEllipse(Size const & size) = 0;
+  virtual void drawEllipse(Size const & size, Rect & updateRect) = 0;
 
   virtual void clear() = 0;
 
@@ -789,13 +794,13 @@ protected:
 
   virtual void HScroll(int scroll) = 0;
 
-  virtual void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor) = 0;
+  virtual void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect) = 0;
 
-  virtual void invertRect(Rect const & rect) = 0;
+  virtual void invertRect(Rect const & rect, Rect & updateRect) = 0;
 
-  virtual void swapFGBG(Rect const & rect) = 0;
+  virtual void swapFGBG(Rect const & rect, Rect & updateRect) = 0;
 
-  virtual void copyRect(Rect const & source) = 0;
+  virtual void copyRect(Rect const & source, Rect & updateRect) = 0;
 
   virtual void swapBuffers() = 0;
 
@@ -809,23 +814,23 @@ protected:
 
   //// implemented methods
 
-  void execPrimitive(Primitive const & prim);
+  void execPrimitive(Primitive const & prim, Rect & updateRect);
 
   void updateAbsoluteClippingRect();
 
-  void lineTo(Point const & position);
+  void lineTo(Point const & position, Rect & updateRect);
 
-  void drawRect(Rect const & rect);
+  void drawRect(Rect const & rect, Rect & updateRect);
 
-  void drawPath(Path const & path);
+  void drawPath(Path const & path, Rect & updateRect);
 
-  void fillRect(Rect const & rect);
+  void fillRect(Rect const & rect, Rect & updateRect);
 
-  void fillEllipse(Size const & size);
+  void fillEllipse(Size const & size, Rect & updateRect);
 
-  void fillPath(Path const & path);
+  void fillPath(Path const & path, Rect & updateRect);
 
-  void renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo);
+  void renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo, Rect & updateRect);
 
   void setSprites(Sprite * sprites, int count, int spriteSize);
 
@@ -836,6 +841,8 @@ protected:
   void hideSprites();
 
   void showSprites();
+
+  void drawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo, Rect & updateRect);
 
   void absDrawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect);
 
@@ -891,10 +898,8 @@ protected:
 
 
   template <typename TPreparePixel, typename TRawSetPixel>
-  void genericSetPixelAt(PixelDesc const & pixelDesc, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
+  void genericSetPixelAt(PixelDesc const & pixelDesc, Rect & updateRect, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
   {
-    hideSprites();
-
     const int x = pixelDesc.pos.X + paintState().origin.X;
     const int y = pixelDesc.pos.Y + paintState().origin.Y;
 
@@ -903,8 +908,11 @@ protected:
     const int clipX2 = paintState().absClippingRect.X2;
     const int clipY2 = paintState().absClippingRect.Y2;
 
-    if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
+    if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2) {
+      updateRect = updateRect.merge(Rect(x, y, x, y));
+      hideSprites();
       rawSetPixel(x, y, preparePixel(pixelDesc.color));
+    }
   }
 
 
@@ -988,9 +996,8 @@ protected:
 
 
   template <typename TPreparePixel, typename TRawSetPixel>
-  void genericDrawEllipse(Size const & size, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
+  void genericDrawEllipse(Size const & size, Rect & updateRect, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
   {
-    hideSprites();
     auto pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().brushColor) : preparePixel(paintState().penColor);
 
     const int clipX1 = paintState().absClippingRect.X1;
@@ -1002,6 +1009,9 @@ protected:
     int y0 = paintState().position.Y - size.height / 2;
     int x1 = paintState().position.X + size.width / 2;
     int y1 = paintState().position.Y + size.height / 2;
+
+    updateRect = updateRect.merge(Rect(x0, y0, x1, y1));
+    hideSprites();
 
     int a = abs (x1 - x0), b = abs (y1 - y0), b1 = b & 1;
     int dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a;
@@ -1076,19 +1086,18 @@ protected:
 
 
   template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
-  void genericDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  void genericDrawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
   {
-    hideSprites();
     if (!glyphOptions.bold && !glyphOptions.italic && !glyphOptions.blank && !glyphOptions.underline && !glyphOptions.doubleWidth && glyph.width <= 32)
-      genericDrawGlyph_light(glyph, glyphOptions, penColor, brushColor, preparePixel, rawGetRow, rawSetPixelInRow);
+      genericDrawGlyph_light(glyph, glyphOptions, penColor, brushColor, updateRect, preparePixel, rawGetRow, rawSetPixelInRow);
     else
-      genericDrawGlyph_full(glyph, glyphOptions, penColor, brushColor, preparePixel, rawGetRow, rawSetPixelInRow);
+      genericDrawGlyph_full(glyph, glyphOptions, penColor, brushColor, updateRect, preparePixel, rawGetRow, rawSetPixelInRow);
   }
 
 
   // TODO: Italic doesn't work well when clipping rect is specified
   template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
-  void genericDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  void genericDrawGlyph_full(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
   {
     const int clipX1 = paintState().absClippingRect.X1;
     const int clipY1 = paintState().absClippingRect.Y1;
@@ -1169,6 +1178,9 @@ protected:
     if (Y1 + YCount > glyphHeight)
       YCount = glyphHeight - Y1;
 
+    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount + skewAdder, destY + YCount));
+    hideSprites();
+
     if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
       tswap(penColor, brushColor);
 
@@ -1245,7 +1257,7 @@ protected:
   //   glyphOptions.... others = 0
   //   paintState().paintOptions.swapFGBG: 0 or 1
   template <typename TPreparePixel, typename TRawGetRow, typename TRawSetPixelInRow>
-  void genericDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  void genericDrawGlyph_light(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
   {
     const int clipX1 = paintState().absClippingRect.X1;
     const int clipY1 = paintState().absClippingRect.Y1;
@@ -1298,6 +1310,9 @@ protected:
     if (Y1 + YCount > glyphHeight)
       YCount = glyphHeight - Y1;
 
+    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount, destY + YCount));
+    hideSprites();
+
     if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
       tswap(penColor, brushColor);
 
@@ -1334,10 +1349,8 @@ protected:
 
 
   template <typename TRawInvertRow>
-  void genericInvertRect(Rect const & rect, TRawInvertRow rawInvertRow)
+  void genericInvertRect(Rect const & rect, Rect & updateRect, TRawInvertRow rawInvertRow)
   {
-    hideSprites();
-
     const int origX = paintState().origin.X;
     const int origY = paintState().origin.Y;
 
@@ -1351,16 +1364,17 @@ protected:
     const int x2 = iclamp(rect.X2 + origX, clipX1, clipX2);
     const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
 
+    updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
+    hideSprites();
+
     for (int y = y1; y <= y2; ++y)
       rawInvertRow(y, x1, x2);
   }
 
 
   template <typename TPreparePixel, typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow>
-  void genericSwapFGBG(Rect const & rect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  void genericSwapFGBG(Rect const & rect, Rect & updateRect, TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
-    hideSprites();
-
     auto penPattern   = preparePixel(paintState().penColor);
     auto brushPattern = preparePixel(paintState().brushColor);
 
@@ -1377,6 +1391,9 @@ protected:
     const int x2 = iclamp(rect.X2 + origX, clipX1, clipX2);
     const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
 
+    updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
+    hideSprites();
+
     for (int y = y1; y <= y2; ++y) {
       auto row = rawGetRow(y);
       for (int x = x1; x <= x2; ++x) {
@@ -1391,10 +1408,8 @@ protected:
 
 
   template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow>
-  void genericCopyRect(Rect const & source, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  void genericCopyRect(Rect const & source, Rect & updateRect, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
-    hideSprites();
-
     const int clipX1 = paintState().absClippingRect.X1;
     const int clipY1 = paintState().absClippingRect.Y1;
     const int clipX2 = paintState().absClippingRect.X2;
@@ -1417,6 +1432,10 @@ protected:
 
     int startX = deltaX < 0 ? destX : destX + width - 1;
     int startY = deltaY < 0 ? destY : destY + height - 1;
+
+    updateRect = updateRect.merge(Rect(srcX, srcY, srcX + width - 1, srcY + height - 1));
+    updateRect = updateRect.merge(Rect(destX, destY, destX + width - 1, destY + height - 1));
+    hideSprites();
 
     for (int y = startY, i = 0; i < height; y += incY, ++i) {
       if (y >= clipY1 && y <= clipY2) {

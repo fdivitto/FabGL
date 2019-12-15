@@ -404,7 +404,8 @@ void DisplayController::addPrimitive(Primitive const & primitive)
   if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers)
     xQueueSendToBack(m_execQueue, &primitive, portMAX_DELAY);
   else {
-    execPrimitive(primitive);
+    Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
+    execPrimitive(primitive, updateRect);
     showSprites();
   }
 }
@@ -446,8 +447,10 @@ void DisplayController::insertPrimitive(Primitive * primitive, int timeOutMS)
 
 void DisplayController::primitivesExecutionWait()
 {
-  while (uxQueueMessagesWaiting(m_execQueue) > 0)
-    ;
+  if (m_backgroundPrimitiveExecutionEnabled) {
+    while (uxQueueMessagesWaiting(m_execQueue) > 0)
+      ;
+  }
 }
 
 
@@ -473,11 +476,13 @@ void DisplayController::enableBackgroundPrimitiveExecution(bool value)
 void IRAM_ATTR DisplayController::processPrimitives()
 {
   suspendBackgroundPrimitiveExecution();
+  Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
   Primitive prim;
   while (xQueueReceive(m_execQueue, &prim, 0) == pdTRUE)
-    execPrimitive(prim);
+    execPrimitive(prim, updateRect);
   showSprites();
   resumeBackgroundPrimitiveExecution();
+  addPrimitive(Primitive(PrimitiveCmd::Refresh, updateRect));
 }
 
 
@@ -629,10 +634,13 @@ void DisplayController::setMouseCursorPos(int X, int Y)
 }
 
 
-void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
+void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & updateRect)
 {
   switch (prim.cmd) {
+    case PrimitiveCmd::Flush:
+      break;
     case PrimitiveCmd::Refresh:
+      updateRect = updateRect.merge(prim.rect);
       break;
     case PrimitiveCmd::SetPenColor:
       paintState().penColor = prim.color;
@@ -641,40 +649,43 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
       paintState().brushColor = prim.color;
       break;
     case PrimitiveCmd::SetPixel:
-      setPixelAt( (PixelDesc) { prim.position, paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor } );
+      setPixelAt( (PixelDesc) { prim.position, paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor }, updateRect );
       break;
     case PrimitiveCmd::SetPixelAt:
-      setPixelAt(prim.pixelDesc);
+      setPixelAt(prim.pixelDesc, updateRect);
       break;
     case PrimitiveCmd::MoveTo:
       paintState().position = Point(prim.position.X + paintState().origin.X, prim.position.Y + paintState().origin.Y);
       break;
     case PrimitiveCmd::LineTo:
-      lineTo(prim.position);
+      lineTo(prim.position, updateRect);
       break;
     case PrimitiveCmd::FillRect:
-      fillRect(prim.rect);
+      fillRect(prim.rect, updateRect);
       break;
     case PrimitiveCmd::DrawRect:
-      drawRect(prim.rect);
+      drawRect(prim.rect, updateRect);
       break;
     case PrimitiveCmd::FillEllipse:
-      fillEllipse(prim.size);
+      fillEllipse(prim.size, updateRect);
       break;
     case PrimitiveCmd::DrawEllipse:
-      drawEllipse(prim.size);
+      drawEllipse(prim.size, updateRect);
       break;
     case PrimitiveCmd::Clear:
+      updateRect = updateRect.merge(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
       clear();
       break;
     case PrimitiveCmd::VScroll:
+      updateRect = updateRect.merge(Rect(paintState().scrollingRegion.X1, paintState().scrollingRegion.Y1, paintState().scrollingRegion.X2, paintState().scrollingRegion.Y2));
       VScroll(prim.ivalue);
       break;
     case PrimitiveCmd::HScroll:
+      updateRect = updateRect.merge(Rect(paintState().scrollingRegion.X1, paintState().scrollingRegion.Y1, paintState().scrollingRegion.X2, paintState().scrollingRegion.Y2));
       HScroll(prim.ivalue);
       break;
     case PrimitiveCmd::DrawGlyph:
-      drawGlyph(prim.glyph, paintState().glyphOptions, paintState().penColor, paintState().brushColor);
+      drawGlyph(prim.glyph, paintState().glyphOptions, paintState().penColor, paintState().brushColor, updateRect);
       break;
     case PrimitiveCmd::SetGlyphOptions:
       paintState().glyphOptions = prim.glyphOptions;
@@ -683,23 +694,22 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
       paintState().paintOptions = prim.paintOptions;
       break;
     case PrimitiveCmd::InvertRect:
-      invertRect(prim.rect);
+      invertRect(prim.rect, updateRect);
       break;
     case PrimitiveCmd::CopyRect:
-      copyRect(prim.rect);
+      copyRect(prim.rect, updateRect);
       break;
     case PrimitiveCmd::SetScrollingRegion:
       paintState().scrollingRegion = prim.rect;
       break;
     case PrimitiveCmd::SwapFGBG:
-      swapFGBG(prim.rect);
+      swapFGBG(prim.rect, updateRect);
       break;
     case PrimitiveCmd::RenderGlyphsBuffer:
-      renderGlyphsBuffer(prim.glyphsBufferRenderInfo);
+      renderGlyphsBuffer(prim.glyphsBufferRenderInfo, updateRect);
       break;
     case PrimitiveCmd::DrawBitmap:
-      hideSprites();
-      absDrawBitmap(prim.bitmapDrawingInfo.X + paintState().origin.X, prim.bitmapDrawingInfo.Y + paintState().origin.Y, prim.bitmapDrawingInfo.bitmap, nullptr, false);
+      drawBitmap(prim.bitmapDrawingInfo, updateRect);
       break;
     case PrimitiveCmd::RefreshSprites:
       hideSprites();
@@ -709,10 +719,10 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
       swapBuffers();
       break;
     case PrimitiveCmd::DrawPath:
-      drawPath(prim.path);
+      drawPath(prim.path, updateRect);
       break;
     case PrimitiveCmd::FillPath:
-      fillPath(prim.path);
+      fillPath(prim.path, updateRect);
       break;
     case PrimitiveCmd::SetOrigin:
       paintState().origin = prim.position;
@@ -726,17 +736,22 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim)
 }
 
 
-void IRAM_ATTR DisplayController::lineTo(Point const & position)
+void IRAM_ATTR DisplayController::lineTo(Point const & position, Rect & updateRect)
 {
-  hideSprites();
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
 
   int origX = paintState().origin.X;
   int origY = paintState().origin.Y;
+  int x1 = paintState().position.X;
+  int y1 = paintState().position.Y;
+  int x2 = position.X + origX;
+  int y2 = position.Y + origY;
 
-  absDrawLine(paintState().position.X, paintState().position.Y, position.X + origX, position.Y + origY, color);
+  updateRect = updateRect.merge(Rect(imin(x1, x2), imin(y1, y2), imax(x1, x2), imax(y1, y2)));
+  hideSprites();
+  absDrawLine(x1, y1, x2, y2, color);
 
-  paintState().position = Point(position.X + origX, position.Y + origY);
+  paintState().position = Point(x2, y2);
 }
 
 
@@ -750,13 +765,14 @@ void IRAM_ATTR DisplayController::updateAbsoluteClippingRect()
 }
 
 
-void IRAM_ATTR DisplayController::drawRect(Rect const & rect)
+void IRAM_ATTR DisplayController::drawRect(Rect const & rect, Rect & updateRect)
 {
   int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + paintState().origin.X;
   int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + paintState().origin.Y;
   int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + paintState().origin.X;
   int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + paintState().origin.Y;
 
+  updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
   hideSprites();
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
 
@@ -767,7 +783,7 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect)
 }
 
 
-void IRAM_ATTR DisplayController::fillRect(Rect const & rect)
+void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
 {
   int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + paintState().origin.X;
   int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + paintState().origin.Y;
@@ -787,6 +803,7 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect)
   x2 = iclamp(x2, clipX1, clipX2);
   y2 = iclamp(y2, clipY1, clipY2);
 
+  updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
   hideSprites();
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
 
@@ -795,9 +812,8 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect)
 }
 
 
-void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
+void IRAM_ATTR DisplayController::fillEllipse(Size const & size, Rect & updateRect)
 {
-  hideSprites();
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
 
   const int clipX1 = paintState().absClippingRect.X1;
@@ -816,6 +832,9 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
 
   int centerX = paintState().position.X;
   int centerY = paintState().position.Y;
+
+  updateRect = updateRect.merge(Rect(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight));
+  hideSprites();
 
   if (centerY >= clipY1 && centerY <= clipY2) {
     int col1 = centerX - halfWidth;
@@ -857,9 +876,8 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size)
 }
 
 
-void IRAM_ATTR DisplayController::renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo)
+void IRAM_ATTR DisplayController::renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo, Rect & updateRect)
 {
-  hideSprites();
   int itemX = glyphsBufferRenderInfo.itemX;
   int itemY = glyphsBufferRenderInfo.itemY;
 
@@ -879,30 +897,57 @@ void IRAM_ATTR DisplayController::renderGlyphsBuffer(GlyphsBufferRenderInfo cons
   glyph.height = glyphsHeight;
   glyph.data   = glyphsBufferRenderInfo.glyphsBuffer->glyphsData + glyphMapItem_getIndex(mapItem) * glyphsHeight * ((glyphsWidth + 7) / 8);;
 
-  drawGlyph(glyph, glyphOptions, fgColor, bgColor);
+  drawGlyph(glyph, glyphOptions, fgColor, bgColor, updateRect);
 }
 
 
-void IRAM_ATTR DisplayController::drawPath(Path const & path)
+void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
 {
-  hideSprites();
-
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+
+  const int clipX1 = paintState().absClippingRect.X1;
+  const int clipY1 = paintState().absClippingRect.Y1;
+  const int clipX2 = paintState().absClippingRect.X2;
+  const int clipY2 = paintState().absClippingRect.Y2;
 
   int origX = paintState().origin.X;
   int origY = paintState().origin.Y;
 
+  int minX = clipX1;
+  int maxX = clipX2 + 1;
+  int minY = INT_MAX;
+  int maxY = 0;
+  for (int i = 0; i < path.pointsCount; ++i) {
+    int py = path.points[i].Y + origY;
+    if (py < minY)
+      minY = py;
+    if (py > maxY)
+      maxY = py;
+  }
+  minY = tmax(clipY1, minY);
+  maxY = tmin(clipY2, maxY);
+
+  updateRect = updateRect.merge(Rect(minX, minY, maxX, maxY));
+  hideSprites();
+
   int i = 0;
-  for (; i < path.pointsCount - 1; ++i)
-    absDrawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[i + 1].X + origX, path.points[i + 1].Y + origY, color);
-  absDrawLine(path.points[i].X + origX, path.points[i].Y + origY, path.points[0].X + origX, path.points[0].Y + origY, color);
+  for (; i < path.pointsCount - 1; ++i) {
+    const int x1 = path.points[i].X + origX;
+    const int y1 = path.points[i].Y + origY;
+    const int x2 = path.points[i + 1].X + origX;
+    const int y2 = path.points[i + 1].Y + origY;
+    absDrawLine(x1, y1, x2, y2, color);
+  }
+  const int x1 = path.points[i].X + origX;
+  const int y1 = path.points[i].Y + origY;
+  const int x2 = path.points[0].X + origX;
+  const int y2 = path.points[0].Y + origY;
+  absDrawLine(x1, y1, x2, y2, color);
 }
 
 
-void IRAM_ATTR DisplayController::fillPath(Path const & path)
+void IRAM_ATTR DisplayController::fillPath(Path const & path, Rect & updateRect)
 {
-  hideSprites();
-
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
 
   const int clipX1 = paintState().absClippingRect.X1;
@@ -915,7 +960,6 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path)
 
   int minX = clipX1;
   int maxX = clipX2 + 1;
-
   int minY = INT_MAX;
   int maxY = 0;
   for (int i = 0; i < path.pointsCount; ++i) {
@@ -927,6 +971,9 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path)
   }
   minY = tmax(clipY1, minY);
   maxY = tmin(clipY2, maxY);
+
+  updateRect = updateRect.merge(Rect(minX, minY, maxX, maxY));
+  hideSprites();
 
   int16_t nodeX[path.pointsCount];
 
@@ -969,6 +1016,16 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path)
       }
     }
   }
+}
+
+
+void IRAM_ATTR DisplayController::drawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo, Rect & updateRect)
+{
+  int x = bitmapDrawingInfo.X + paintState().origin.X;
+  int y = bitmapDrawingInfo.Y + paintState().origin.Y;
+  updateRect = updateRect.merge(Rect(x, y, x + bitmapDrawingInfo.bitmap->width - 1, y + bitmapDrawingInfo.bitmap->height - 1));
+  hideSprites();
+  absDrawBitmap(x, y, bitmapDrawingInfo.bitmap, nullptr, false);
 }
 
 
