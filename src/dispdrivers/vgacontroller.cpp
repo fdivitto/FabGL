@@ -827,59 +827,14 @@ void IRAM_ATTR VGAController::clear(Rect & updateRect)
 // Speciying horizontal scrolling region slow-down scrolling!
 void IRAM_ATTR VGAController::VScroll(int scroll, Rect & updateRect)
 {
-  hideSprites(updateRect);
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
-  int Y1 = paintState().scrollingRegion.Y1;
-  int Y2 = paintState().scrollingRegion.Y2;
-  int X1 = paintState().scrollingRegion.X1;
-  int X2 = paintState().scrollingRegion.X2;
-  int height = Y2 - Y1 + 1;
-
-  if (scroll < 0) {
-
-    // scroll UP
-
-    for (int i = 0; i < height + scroll; ++i) {
-
-      // these are necessary to maintain invariate out of scrolling regions
-      if (X1 > 0)
-        swapRows(Y1 + i, Y1 + i - scroll, 0, X1 - 1);
-      if (X2 < m_viewPortWidth - 1)
-        swapRows(Y1 + i, Y1 + i - scroll, X2 + 1, m_viewPortWidth - 1);
-
-      // swap scan lines
-      tswap(m_viewPort[Y1 + i], m_viewPort[Y1 + i - scroll]);
-    }
-
-    // fill lower area with brush color
-    for (int i = height + scroll; i < height; ++i)
-      rawFillRow(Y1 + i, X1, X2, color);
-
-  } else if (scroll > 0) {
-
-    // scroll DOWN
-    for (int i = height - scroll - 1; i >= 0; --i) {
-
-      // these are necessary to maintain invariate out of scrolling regions
-      if (X1 > 0)
-        swapRows(Y1 + i, Y1 + i + scroll, 0, X1 - 1);
-      if (X2 < m_viewPortWidth - 1)
-        swapRows(Y1 + i, Y1 + i + scroll, X2 + 1, m_viewPortWidth - 1);
-
-      // swap scan lines
-      tswap(m_viewPort[Y1 + i], m_viewPort[Y1 + i + scroll]);
-    }
-
-    // fill upper area with brush color
-    for (int i = 0; i < scroll; ++i)
-      rawFillRow(Y1 + i, X1, X2, color);
-
-  }
+  genericVScroll(scroll, updateRect,
+                 [&] (int yA, int yB, int x1, int x2)        { swapRows(yA, yB, x1, x2); },              // swapRowsCopying
+                 [&] (int yA, int yB)                        { tswap(m_viewPort[yA], m_viewPort[yB]); }, // swapRowsPointers
+                 [&] (int y, int x1, int x2, RGB888 pattern) { rawFillRow(y, x1, x2, pattern); }         // rawFillRow
+                );
 
   if (scroll != 0) {
-
     // reassign DMA pointers
-
     int viewPortBuffersPerLine = 0;
     int linePos = 1;
     switch (m_timings.HStartingBlock) {
@@ -901,6 +856,8 @@ void IRAM_ATTR VGAController::VScroll(int scroll, Rect & updateRect)
         linePos = m_viewPortCol > 0 ? 1 : 0;
         break;
     }
+    const int Y1 = paintState().scrollingRegion.Y1;
+    const int Y2 = paintState().scrollingRegion.Y2;
     for (int i = Y1, idx = Y1 * m_timings.scanCount; i <= Y2; ++i)
       for (int scan = 0; scan < m_timings.scanCount; ++scan, ++idx)
         setDMABufferView(m_viewPortRow * m_timings.scanCount + idx * viewPortBuffersPerLine + linePos, i, scan, m_viewPort, false);
