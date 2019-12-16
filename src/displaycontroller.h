@@ -1580,6 +1580,154 @@ protected:
   }
 
 
+  // Scroll is done copying and filling rows
+  // scroll < 0 -> scroll UP
+  // scroll > 0 -> scroll DOWN
+  template <typename TRawCopyRow, typename TRawFillRow>
+  void genericVScroll(int scroll, Rect & updateRect,
+                      TRawCopyRow rawCopyRow, TRawFillRow rawFillRow)
+  {
+    hideSprites(updateRect);
+    RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+    int Y1 = paintState().scrollingRegion.Y1;
+    int Y2 = paintState().scrollingRegion.Y2;
+    int X1 = paintState().scrollingRegion.X1;
+    int X2 = paintState().scrollingRegion.X2;
+    int height = Y2 - Y1 + 1;
+
+    if (scroll < 0) {
+
+      // scroll UP
+
+      for (int i = 0; i < height + scroll; ++i) {
+        // copy X1..X2 of (Y1 + i - scroll) to (Y1 + i)
+        rawCopyRow(X1, X2, (Y1 + i - scroll), (Y1 + i));
+      }
+      // fill lower area with brush color
+      for (int i = height + scroll; i < height; ++i)
+        rawFillRow(Y1 + i, X1, X2, color);
+
+    } else if (scroll > 0) {
+
+      // scroll DOWN
+      for (int i = height - scroll - 1; i >= 0; --i) {
+        // copy X1..X2 of (Y1 + i) to (Y1 + i + scroll)
+        rawCopyRow(X1, X2, (Y1 + i), (Y1 + i + scroll));
+      }
+
+      // fill upper area with brush color
+      for (int i = 0; i < scroll; ++i)
+        rawFillRow(Y1 + i, X1, X2, color);
+
+    }
+  }
+
+
+  // scroll is done swapping rows and rows pointers
+  // scroll < 0 -> scroll UP
+  // scroll > 0 -> scroll DOWN
+  template <typename TSwapRowsCopying, typename TSwapRowsPointers, typename TRawFillRow>
+  void genericVScroll(int scroll, Rect & updateRect,
+                      TSwapRowsCopying swapRowsCopying, TSwapRowsPointers swapRowsPointers, TRawFillRow rawFillRow)
+  {
+    hideSprites(updateRect);
+    RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+    const int Y1 = paintState().scrollingRegion.Y1;
+    const int Y2 = paintState().scrollingRegion.Y2;
+    const int X1 = paintState().scrollingRegion.X1;
+    const int X2 = paintState().scrollingRegion.X2;
+    const int height = Y2 - Y1 + 1;
+
+    const int viewPortWidth = getViewPortWidth();
+
+    if (scroll < 0) {
+
+      // scroll UP
+
+      for (int i = 0; i < height + scroll; ++i) {
+
+        // these are necessary to maintain invariate out of scrolling regions
+        if (X1 > 0)
+          swapRowsCopying(Y1 + i, Y1 + i - scroll, 0, X1 - 1);
+        if (X2 < viewPortWidth - 1)
+          swapRowsCopying(Y1 + i, Y1 + i - scroll, X2 + 1, viewPortWidth - 1);
+
+        // swap scan lines
+        swapRowsPointers(Y1 + i, Y1 + i - scroll);
+      }
+
+      // fill lower area with brush color
+      for (int i = height + scroll; i < height; ++i)
+        rawFillRow(Y1 + i, X1, X2, color);
+
+    } else if (scroll > 0) {
+
+      // scroll DOWN
+      for (int i = height - scroll - 1; i >= 0; --i) {
+
+        // these are necessary to maintain invariate out of scrolling regions
+        if (X1 > 0)
+          swapRowsCopying(Y1 + i, Y1 + i + scroll, 0, X1 - 1);
+        if (X2 < viewPortWidth - 1)
+          swapRowsCopying(Y1 + i, Y1 + i + scroll, X2 + 1, viewPortWidth - 1);
+
+        // swap scan lines
+        swapRowsPointers(Y1 + i, Y1 + i + scroll);
+      }
+
+      // fill upper area with brush color
+      for (int i = 0; i < scroll; ++i)
+        rawFillRow(Y1 + i, X1, X2, color);
+
+    }
+  }
+
+
+
+  // Scroll is done copying and filling columns
+  // scroll < 0 -> scroll LEFT
+  // scroll > 0 -> scroll RIGHT
+  template <typename TPreparePixel, typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow>
+  void genericHScroll(int scroll, Rect & updateRect,
+                      TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    hideSprites(updateRect);
+    auto pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
+
+    int Y1 = paintState().scrollingRegion.Y1;
+    int Y2 = paintState().scrollingRegion.Y2;
+    int X1 = paintState().scrollingRegion.X1;
+    int X2 = paintState().scrollingRegion.X2;
+
+    if (scroll < 0) {
+      // scroll left
+      for (int y = Y1; y <= Y2; ++y) {
+        auto row = rawGetRow(y);
+        for (int x = X1; x <= X2 + scroll; ++x) {
+          auto c = rawGetPixelInRow(row, x - scroll);
+          rawSetPixelInRow(row, x, c);
+        }
+        // fill right area with brush color
+        for (int x = X2 + 1 + scroll; x <= X2; ++x)
+          rawSetPixelInRow(row, x, pattern);
+      }
+    } else if (scroll > 0) {
+      // scroll right
+      for (int y = Y1; y <= Y2; ++y) {
+        auto row = rawGetRow(y);
+        for (int x = X2 - scroll; x >= X1; --x) {
+          auto c = rawGetPixelInRow(row, x);
+          rawSetPixelInRow(row, x + scroll, c);
+        }
+        // fill left area with brush color
+        for (int x = X1; x < X1 + scroll; ++x)
+          rawSetPixelInRow(row, x, pattern);
+      }
+    }
+  }
+
+
+
 
 };
 
