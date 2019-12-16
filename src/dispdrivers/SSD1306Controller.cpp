@@ -444,82 +444,23 @@ void SSD1306Controller::clear(Rect & updateRect)
 }
 
 
-// scroll < 0 -> scroll UP
-// scroll > 0 -> scroll DOWN
 void SSD1306Controller::VScroll(int scroll, Rect & updateRect)
 {
-  hideSprites(updateRect);
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
-  int Y1 = paintState().scrollingRegion.Y1;
-  int Y2 = paintState().scrollingRegion.Y2;
-  int X1 = paintState().scrollingRegion.X1;
-  int X2 = paintState().scrollingRegion.X2;
-  int height = Y2 - Y1 + 1;
-
-  if (scroll < 0) {
-
-    // scroll UP
-
-    for (int i = 0; i < height + scroll; ++i) {
-      // copy X1..X2 of (Y1 + i - scroll) to (Y1 + i)
-      rawCopyRow(X1, X2, (Y1 + i - scroll), (Y1 + i));
-    }
-    // fill lower area with brush color
-    for (int i = height + scroll; i < height; ++i)
-      rawFillRow(Y1 + i, X1, X2, color);
-
-  } else if (scroll > 0) {
-
-    // scroll DOWN
-    for (int i = height - scroll - 1; i >= 0; --i) {
-      // copy X1..X2 of (Y1 + i) to (Y1 + i + scroll)
-      rawCopyRow(X1, X2, (Y1 + i), (Y1 + i + scroll));
-    }
-
-    // fill upper area with brush color
-    for (int i = 0; i < scroll; ++i)
-      rawFillRow(Y1 + i, X1, X2, color);
-
-  }
+  genericVScroll(scroll, updateRect,
+                 [&] (int x1, int x2, int srcY, int dstY)  { rawCopyRow(x1, x2, srcY, dstY); }, // rawCopyRow
+                 [&] (int y, int x1, int x2, RGB888 color) { rawFillRow(y, x1, x2, color);   }  // rawFillRow
+                );
 }
 
 
-// scroll < 0 -> scroll LEFT
-// scroll > 0 -> scroll RIGHT
 void SSD1306Controller::HScroll(int scroll, Rect & updateRect)
 {
-  hideSprites(updateRect);
-  uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
-
-  int Y1 = paintState().scrollingRegion.Y1;
-  int Y2 = paintState().scrollingRegion.Y2;
-  int X1 = paintState().scrollingRegion.X1;
-  int X2 = paintState().scrollingRegion.X2;
-
-  if (scroll < 0) {
-    // scroll left
-    for (int y = Y1; y <= Y2; ++y) {
-      for (int x = X1; x <= X2 + scroll; ++x) {
-        uint8_t c = SSD1306_GETPIXEL(x - scroll, y);
-        SSD1306_SETPIXELCOLOR(x, y, c);
-      }
-      // fill right area with brush color
-      for (int x = X2 + 1 + scroll; x <= X2; ++x)
-        SSD1306_SETPIXELCOLOR(x, y, pattern);
-    }
-  } else if (scroll > 0) {
-    // scroll right
-    for (int y = Y1; y <= Y2; ++y) {
-      for (int x = X2 - scroll; x >= X1; --x) {
-        uint8_t c = SSD1306_GETPIXEL(x, y);
-        SSD1306_SETPIXELCOLOR(x + scroll, y, c);
-      }
-      // fill left area with brush color
-      for (int x = X1; x < X1 + scroll; ++x)
-        SSD1306_SETPIXELCOLOR(x, y, pattern);
-    }
-
-  }
+  genericHScroll(scroll, updateRect,
+                 [&] (RGB888 const & color)      { return preparePixel(color); },           // preparePixel
+                 [&] (int y)                     { return y; },                             // rawGetRow
+                 [&] (int y, int x)              { return SSD1306_GETPIXEL(x, y); },        // rawGetPixelInRow
+                 [&] (int y, int x, int pattern) { SSD1306_SETPIXELCOLOR(x, y, pattern); }  // rawSetPixelInRow
+                );
 }
 
 
