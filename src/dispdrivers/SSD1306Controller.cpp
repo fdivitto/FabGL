@@ -280,14 +280,39 @@ bool SSD1306Controller::SSD1306_softReset()
 }
 
 
-void SSD1306Controller::SSD1306_sendScreenBuffer()
+void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
 {
-  // sending a row at the time reduces sending errors on wifi interrupt (when wifi is enabled)
-  for (int y = 0; y < m_screenHeight; y += 8) {
-    bool r = SSD1306_sendCmd(SSD1306_PAGEADDR, y >> 3, y >> 3) && SSD1306_sendCmd(SSD1306_COLUMNADDR, 0, m_screenWidth - 1);
-    if (!r)
-      break;
-    SSD1306_sendData(m_screenBuffer + m_screenCol + ((y + m_screenRow) >> 3) * m_viewPortWidth, m_screenWidth, 0x40);
+  // align visible screen row to page (steps of 8 rows)
+  const int screenRow = m_screenRow & ~7;
+
+  // visible area
+  const Rect scrRect = Rect(m_screenCol, screenRow, m_screenCol + m_screenWidth - 1, screenRow + m_screenHeight - 1);
+
+  // align rectangle to update to pages (0, 8, 16...)
+  updateRect.Y1 &= ~7;
+  updateRect.Y2  = (updateRect.Y2 + 7) & ~7;
+
+  // does the visible area intersect with area to update?
+  if (scrRect.intersects(updateRect)) {
+
+    // intersection between visible area and rectangle to update
+    Rect r = updateRect.intersection(scrRect);
+
+    // horizontal screen update limits
+    const int screenX1 = r.X1 - m_screenCol;
+    const int screenX2 = r.X2 - m_screenCol;
+
+    // send one page (8 rows) at the time
+    for (int y = r.Y1; y <= r.Y2; y += 8) {
+      int screenY = y - screenRow;
+      if (screenY >= 0) {
+        int page = screenY >> 3;
+        if (!(SSD1306_sendCmd(SSD1306_PAGEADDR, page, page) && SSD1306_sendCmd(SSD1306_COLUMNADDR, screenX1, screenX2)))
+          break;  // address selection failed, try with next page
+        SSD1306_sendData(m_screenBuffer + r.X1 + (y >> 3) * m_viewPortWidth, r.width(), 0x40);
+      }
+    }
+
   }
 }
 
