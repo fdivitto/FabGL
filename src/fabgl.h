@@ -245,6 +245,7 @@
  * @example SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example SSD1306_OLED/128x64/UI/UI.ino Graphic User Interface - GUI demo
  * @example Others/KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
  * @example Others/MouseStudio/MouseStudio.ino PS/2 mouse events
  */
