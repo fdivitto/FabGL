@@ -437,13 +437,13 @@ private:
   void drawEllipse(Size const & size, Rect & updateRect);
 
   // abstract method of DisplayController
-  void clear();
+  void clear(Rect & updateRect);
 
   // abstract method of DisplayController
-  void VScroll(int scroll);
+  void VScroll(int scroll, Rect & updateRect);
 
   // abstract method of DisplayController
-  void HScroll(int scroll);
+  void HScroll(int scroll, Rect & updateRect);
 
   // abstract method of DisplayController
   void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect);

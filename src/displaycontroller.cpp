@@ -406,7 +406,7 @@ void DisplayController::addPrimitive(Primitive const & primitive)
   else {
     Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
     execPrimitive(primitive, updateRect);
-    showSprites();
+    showSprites(updateRect);
   }
 }
 
@@ -480,7 +480,7 @@ void IRAM_ATTR DisplayController::processPrimitives()
   Primitive prim;
   while (xQueueReceive(m_execQueue, &prim, 0) == pdTRUE)
     execPrimitive(prim, updateRect);
-  showSprites();
+  showSprites(updateRect);
   resumeBackgroundPrimitiveExecution();
   addPrimitive(Primitive(PrimitiveCmd::Refresh, updateRect));
 }
@@ -522,7 +522,7 @@ void DisplayController::refreshSprites()
 }
 
 
-void IRAM_ATTR DisplayController::hideSprites()
+void IRAM_ATTR DisplayController::hideSprites(Rect & updateRect)
 {
   if (!m_spritesHidden) {
     m_spritesHidden = true;
@@ -533,8 +533,13 @@ void IRAM_ATTR DisplayController::hideSprites()
       for (int i = spritesCount() - 1; i >= 0; --i) {
         Sprite * sprite = getSprite(i);
         if (sprite->allowDraw && sprite->savedBackgroundWidth > 0) {
-          Bitmap bitmap(sprite->savedBackgroundWidth, sprite->savedBackgroundHeight, sprite->savedBackground, getBitmapSavePixelFormat());
-          absDrawBitmap(sprite->savedX, sprite->savedY, &bitmap, nullptr, true);
+          int savedX = sprite->savedX;
+          int savedY = sprite->savedY;
+          int savedWidth  = sprite->savedBackgroundWidth;
+          int savedHeight = sprite->savedBackgroundHeight;
+          Bitmap bitmap(savedWidth, savedHeight, sprite->savedBackground, getBitmapSavePixelFormat());
+          absDrawBitmap(savedX, savedY, &bitmap, nullptr, true);
+          updateRect = updateRect.merge(Rect(savedX, savedY, savedX + savedWidth - 1, savedY + savedHeight - 1));
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
         }
       }
@@ -543,8 +548,13 @@ void IRAM_ATTR DisplayController::hideSprites()
     // mouse cursor sprite
     Sprite * mouseSprite = mouseCursor();
     if (mouseSprite->savedBackgroundWidth > 0) {
-      Bitmap bitmap(mouseSprite->savedBackgroundWidth, mouseSprite->savedBackgroundHeight, mouseSprite->savedBackground, getBitmapSavePixelFormat());
-      absDrawBitmap(mouseSprite->savedX, mouseSprite->savedY, &bitmap, nullptr, true);
+      int savedX = mouseSprite->savedX;
+      int savedY = mouseSprite->savedY;
+      int savedWidth  = mouseSprite->savedBackgroundWidth;
+      int savedHeight = mouseSprite->savedBackgroundHeight;
+      Bitmap bitmap(savedWidth, savedHeight, mouseSprite->savedBackground, getBitmapSavePixelFormat());
+      absDrawBitmap(savedX, savedY, &bitmap, nullptr, true);
+      updateRect = updateRect.merge(Rect(savedX, savedY, savedX + savedWidth - 1, savedY + savedHeight - 1));
       mouseSprite->savedBackgroundWidth = mouseSprite->savedBackgroundHeight = 0;
     }
 
@@ -552,7 +562,7 @@ void IRAM_ATTR DisplayController::hideSprites()
 }
 
 
-void IRAM_ATTR DisplayController::showSprites()
+void IRAM_ATTR DisplayController::showSprites(Rect & updateRect)
 {
   if (m_spritesHidden) {
     m_spritesHidden = false;
@@ -563,16 +573,19 @@ void IRAM_ATTR DisplayController::showSprites()
       Sprite * sprite = getSprite(i);
       if (sprite->visible && sprite->allowDraw && sprite->getFrame()) {
         // save sprite X and Y so other threads can change them without interferring
-        int16_t spriteX = sprite->x;
-        int16_t spriteY = sprite->y;
+        int spriteX = sprite->x;
+        int spriteY = sprite->y;
         Bitmap const * bitmap = sprite->getFrame();
+        int bitmapWidth  = bitmap->width;
+        int bitmapHeight = bitmap->height;
         absDrawBitmap(spriteX, spriteY, bitmap, sprite->savedBackground, true);
         sprite->savedX = spriteX;
         sprite->savedY = spriteY;
-        sprite->savedBackgroundWidth  = bitmap->width;
-        sprite->savedBackgroundHeight = bitmap->height;
+        sprite->savedBackgroundWidth  = bitmapWidth;
+        sprite->savedBackgroundHeight = bitmapHeight;
         if (sprite->isStatic)
           sprite->allowDraw = false;
+        updateRect = updateRect.merge(Rect(spriteX, spriteY, spriteX + bitmapWidth - 1, spriteY + bitmapHeight - 1));
       }
     }
 
@@ -581,14 +594,17 @@ void IRAM_ATTR DisplayController::showSprites()
     Sprite * mouseSprite = mouseCursor();
     if (mouseSprite->visible && mouseSprite->getFrame()) {
       // save sprite X and Y so other threads can change them without interferring
-      int16_t spriteX = mouseSprite->x;
-      int16_t spriteY = mouseSprite->y;
+      int spriteX = mouseSprite->x;
+      int spriteY = mouseSprite->y;
       Bitmap const * bitmap = mouseSprite->getFrame();
+      int bitmapWidth  = bitmap->width;
+      int bitmapHeight = bitmap->height;
       absDrawBitmap(spriteX, spriteY, bitmap, mouseSprite->savedBackground, true);
       mouseSprite->savedX = spriteX;
       mouseSprite->savedY = spriteY;
-      mouseSprite->savedBackgroundWidth  = bitmap->width;
-      mouseSprite->savedBackgroundHeight = bitmap->height;
+      mouseSprite->savedBackgroundWidth  = bitmapWidth;
+      mouseSprite->savedBackgroundHeight = bitmapHeight;
+      updateRect = updateRect.merge(Rect(spriteX, spriteY, spriteX + bitmapWidth - 1, spriteY + bitmapHeight - 1));
     }
 
   }
@@ -674,15 +690,15 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       break;
     case PrimitiveCmd::Clear:
       updateRect = updateRect.merge(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
-      clear();
+      clear(updateRect);
       break;
     case PrimitiveCmd::VScroll:
       updateRect = updateRect.merge(Rect(paintState().scrollingRegion.X1, paintState().scrollingRegion.Y1, paintState().scrollingRegion.X2, paintState().scrollingRegion.Y2));
-      VScroll(prim.ivalue);
+      VScroll(prim.ivalue, updateRect);
       break;
     case PrimitiveCmd::HScroll:
       updateRect = updateRect.merge(Rect(paintState().scrollingRegion.X1, paintState().scrollingRegion.Y1, paintState().scrollingRegion.X2, paintState().scrollingRegion.Y2));
-      HScroll(prim.ivalue);
+      HScroll(prim.ivalue, updateRect);
       break;
     case PrimitiveCmd::DrawGlyph:
       drawGlyph(prim.glyph, paintState().glyphOptions, paintState().penColor, paintState().brushColor, updateRect);
@@ -712,8 +728,8 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       drawBitmap(prim.bitmapDrawingInfo, updateRect);
       break;
     case PrimitiveCmd::RefreshSprites:
-      hideSprites();
-      showSprites();
+      hideSprites(updateRect);
+      showSprites(updateRect);
       break;
     case PrimitiveCmd::SwapBuffers:
       swapBuffers();
@@ -748,7 +764,7 @@ void IRAM_ATTR DisplayController::lineTo(Point const & position, Rect & updateRe
   int y2 = position.Y + origY;
 
   updateRect = updateRect.merge(Rect(imin(x1, x2), imin(y1, y2), imax(x1, x2), imax(y1, y2)));
-  hideSprites();
+  hideSprites(updateRect);
   absDrawLine(x1, y1, x2, y2, color);
 
   paintState().position = Point(x2, y2);
@@ -773,7 +789,7 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect, Rect & updateRect)
   int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + paintState().origin.Y;
 
   updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
-  hideSprites();
+  hideSprites(updateRect);
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
 
   absDrawLine(x1 + 1, y1,     x2, y1, color);
@@ -804,7 +820,7 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
   y2 = iclamp(y2, clipY1, clipY2);
 
   updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
-  hideSprites();
+  hideSprites(updateRect);
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
 
   for (int y = y1; y <= y2; ++y)
@@ -834,7 +850,7 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size, Rect & updateRe
   int centerY = paintState().position.Y;
 
   updateRect = updateRect.merge(Rect(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight));
-  hideSprites();
+  hideSprites(updateRect);
 
   if (centerY >= clipY1 && centerY <= clipY2) {
     int col1 = centerX - halfWidth;
@@ -928,7 +944,7 @@ void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
   maxY = tmin(clipY2, maxY);
 
   updateRect = updateRect.merge(Rect(minX, minY, maxX, maxY));
-  hideSprites();
+  hideSprites(updateRect);
 
   int i = 0;
   for (; i < path.pointsCount - 1; ++i) {
@@ -973,7 +989,7 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path, Rect & updateRect)
   maxY = tmin(clipY2, maxY);
 
   updateRect = updateRect.merge(Rect(minX, minY, maxX, maxY));
-  hideSprites();
+  hideSprites(updateRect);
 
   int16_t nodeX[path.pointsCount];
 
@@ -1024,7 +1040,7 @@ void IRAM_ATTR DisplayController::drawBitmap(BitmapDrawingInfo const & bitmapDra
   int x = bitmapDrawingInfo.X + paintState().origin.X;
   int y = bitmapDrawingInfo.Y + paintState().origin.Y;
   updateRect = updateRect.merge(Rect(x, y, x + bitmapDrawingInfo.bitmap->width - 1, y + bitmapDrawingInfo.bitmap->height - 1));
-  hideSprites();
+  hideSprites(updateRect);
   absDrawBitmap(x, y, bitmapDrawingInfo.bitmap, nullptr, false);
 }
 

@@ -183,15 +183,19 @@ void SSD1306Controller::setResolution(char const * modeline, int viewPortWidth, 
 
 void SSD1306Controller::setScreenCol(int value)
 {
-  m_screenCol = iclamp(value, 0, m_viewPortWidth - m_screenWidth);
-  addPrimitive(Primitive(PrimitiveCmd::Refresh));
+  if (value != m_screenCol) {
+    m_screenCol = iclamp(value, 0, m_viewPortWidth - m_screenWidth);
+    addPrimitive(Primitive(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1)));
+  }
 }
 
 
 void SSD1306Controller::setScreenRow(int value)
 {
-  m_screenRow = iclamp(value, 0, m_viewPortHeight - m_screenHeight);
-  addPrimitive(Primitive(PrimitiveCmd::Refresh));
+  if (value != m_screenRow) {
+    m_screenRow = iclamp(value, 0, m_viewPortHeight - m_screenHeight);
+    addPrimitive(Primitive(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1)));
+  }
 }
 
 
@@ -306,11 +310,13 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 
   while (true) {
 
+    ctrl->waitForPrimitives();
+
     // primitive processing blocked?
     if (ctrl->m_updateTaskFuncSuspended > 0)
       ulTaskNotifyTake(true, portMAX_DELAY); // yes, wait for a notify
 
-    ctrl->waitForPrimitives();
+    Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
 
     int64_t startTime = ctrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
     do {
@@ -319,13 +325,13 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
       if (ctrl->getPrimitive(&prim) == false)
         break;
 
-      ctrl->execPrimitive(prim);
+      ctrl->execPrimitive(prim, updateRect);
 
     } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startTime + SSD1306_BACKGROUND_PRIMITIVE_TIMEOUT > esp_timer_get_time()));
 
-    ctrl->showSprites();
+    ctrl->showSprites(updateRect);
 
-    ctrl->SSD1306_sendScreenBuffer();
+    ctrl->SSD1306_sendScreenBuffer(updateRect);
   }
 }
 
@@ -345,9 +351,9 @@ void SSD1306Controller::resumeBackgroundPrimitiveExecution()
 }
 
 
-void SSD1306Controller::setPixelAt(PixelDesc const & pixelDesc)
+void SSD1306Controller::setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect)
 {
-  genericSetPixelAt(pixelDesc,
+  genericSetPixelAt(pixelDesc, updateRect,
                     [&] (RGB888 const & color)          { return preparePixel(color); },
                     [&] (int X, int Y, uint8_t pattern) { SSD1306_SETPIXELCOLOR(X, Y, pattern); }
                    );
@@ -396,18 +402,18 @@ void SSD1306Controller::rawInvertRow(int y, int x1, int x2)
 }
 
 
-void SSD1306Controller::drawEllipse(Size const & size)
+void SSD1306Controller::drawEllipse(Size const & size, Rect & updateRect)
 {
-  genericDrawEllipse(size,
+  genericDrawEllipse(size, updateRect,
                      [&] (RGB888 const & color)          { return preparePixel(color); },
                      [&] (int X, int Y, uint8_t pattern) { SSD1306_SETPIXELCOLOR(X, Y, pattern); }
                     );
 }
 
 
-void SSD1306Controller::clear()
+void SSD1306Controller::clear(Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
   memset(m_screenBuffer, (pattern ? 255 : 0), m_viewPortWidth * m_viewPortHeight / 8);
 }
@@ -415,9 +421,9 @@ void SSD1306Controller::clear()
 
 // scroll < 0 -> scroll UP
 // scroll > 0 -> scroll DOWN
-void SSD1306Controller::VScroll(int scroll)
+void SSD1306Controller::VScroll(int scroll, Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
   int Y1 = paintState().scrollingRegion.Y1;
   int Y2 = paintState().scrollingRegion.Y2;
@@ -455,9 +461,9 @@ void SSD1306Controller::VScroll(int scroll)
 
 // scroll < 0 -> scroll LEFT
 // scroll > 0 -> scroll RIGHT
-void SSD1306Controller::HScroll(int scroll)
+void SSD1306Controller::HScroll(int scroll, Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
 
   int Y1 = paintState().scrollingRegion.Y1;
@@ -492,9 +498,9 @@ void SSD1306Controller::HScroll(int scroll)
 }
 
 
-void SSD1306Controller::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor)
+void SSD1306Controller::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect)
 {
-  genericDrawGlyph(glyph, glyphOptions, penColor, brushColor,
+  genericDrawGlyph(glyph, glyphOptions, penColor, brushColor, updateRect,
                    [&] (RGB888 const & color)          { return preparePixel(color); },
                    [&] (int y)                         { return y; },
                    [&] (int y, int x, uint8_t pattern) { SSD1306_SETPIXELCOLOR(x, y, pattern); }
@@ -511,24 +517,24 @@ void SSD1306Controller::rawCopyRow(int x1, int x2, int srcY, int dstY)
 }
 
 
-void SSD1306Controller::invertRect(Rect const & rect)
+void SSD1306Controller::invertRect(Rect const & rect, Rect & updateRect)
 {
-  genericInvertRect(rect,
+  genericInvertRect(rect, updateRect,
                     [&] (int Y, int X1, int X2) { rawInvertRow(Y, X1, X2); }
                    );
 }
 
 
-void SSD1306Controller::swapFGBG(Rect const & rect)
+void SSD1306Controller::swapFGBG(Rect const & rect, Rect & updateRect)
 {
-  invertRect(rect);
+  invertRect(rect, updateRect);
 }
 
 
 // supports overlapping of source and dest rectangles
-void SSD1306Controller::copyRect(Rect const & source)
+void SSD1306Controller::copyRect(Rect const & source, Rect & updateRect)
 {
-  genericCopyRect(source,
+  genericCopyRect(source, updateRect,
                   [&] (int y)                         { return y; },
                   [&] (int y, int x)                  { return SSD1306_GETPIXEL(x, y); },
                   [&] (int y, int x, uint8_t pattern) { SSD1306_SETPIXELCOLOR(x, y, pattern); }

@@ -186,39 +186,39 @@ private:
   void SSD1306_hardReset();
   bool SSD1306_softReset();
 
-  void SSD1306_sendScreenBuffer();
+  void SSD1306_sendScreenBuffer(Rect updateRect);
 
   void allocScreenBuffer();
 
   static void updateTaskFunc(void * pvParameters);
 
   // abstract method of DisplayController
-  void setPixelAt(PixelDesc const & pixelDesc);
+  void setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect);
 
   // abstract method of DisplayController
-  void clear();
+  void clear(Rect & updateRect);
 
   // abstract method of DisplayController
-  void drawEllipse(Size const & size);
+  void drawEllipse(Size const & size, Rect & updateRect);
 
-  void VScroll(int scroll);
+  void VScroll(int scroll, Rect & updateRect);
   
-  void HScroll(int scroll);
+  void HScroll(int scroll, Rect & updateRect);
 
   // abstract method of DisplayController
-  void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor);
+  void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect);
 
   // abstract method of DisplayController
   void swapBuffers();
 
   // abstract method of DisplayController
-  void invertRect(Rect const & rect);
+  void invertRect(Rect const & rect, Rect & updateRect);
 
   // abstract method of DisplayController
-  void copyRect(Rect const & source);
+  void copyRect(Rect const & source, Rect & updateRect);
 
   // abstract method of DisplayController
-  void swapFGBG(Rect const & rect);
+  void swapFGBG(Rect const & rect, Rect & updateRect);
 
   // abstract method of DisplayController
   void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
@@ -259,7 +259,7 @@ private:
 
   TaskHandle_t       m_updateTaskHandle;
 
-  int                m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
+  volatile int       m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
 
 };
 

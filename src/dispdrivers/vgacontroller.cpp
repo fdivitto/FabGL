@@ -715,7 +715,7 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
 
     isFirst = false;
   } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
-  VGACtrl->showSprites();
+  VGACtrl->showSprites(updateRect);
 }
 
 
@@ -813,9 +813,9 @@ void IRAM_ATTR VGAController::drawEllipse(Size const & size, Rect & updateRect)
 }
 
 
-void IRAM_ATTR VGAController::clear()
+void IRAM_ATTR VGAController::clear(Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
   for (int y = 0; y < m_viewPortHeight; ++y)
     memset((uint8_t*) m_viewPort[y], pattern, m_viewPortWidth);
@@ -825,9 +825,9 @@ void IRAM_ATTR VGAController::clear()
 // scroll < 0 -> scroll UP
 // scroll > 0 -> scroll DOWN
 // Speciying horizontal scrolling region slow-down scrolling!
-void IRAM_ATTR VGAController::VScroll(int scroll)
+void IRAM_ATTR VGAController::VScroll(int scroll, Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
   int Y1 = paintState().scrollingRegion.Y1;
   int Y2 = paintState().scrollingRegion.Y2;
@@ -912,9 +912,9 @@ void IRAM_ATTR VGAController::VScroll(int scroll)
 // Scrolling by other values requires up to three steps (scopose scrolling by 1, 2, 3 or 4): for example scrolling by 5 is scomposed to 4 and 1, scrolling
 // by 6 is 4 + 2, etc.
 // Horizontal scrolling region start and size (X2-X1+1) must be aligned to 32 bits, otherwise the unoptimized (very slow) version is used.
-void IRAM_ATTR VGAController::HScroll(int scroll)
+void IRAM_ATTR VGAController::HScroll(int scroll, Rect & updateRect)
 {
-  hideSprites();
+  hideSprites(updateRect);
   uint8_t pattern8   = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
   uint16_t pattern16 = pattern8 << 8 | pattern8;
   uint32_t pattern32 = pattern16 << 16 | pattern16;

@@ -788,11 +788,11 @@ protected:
 
   virtual void drawEllipse(Size const & size, Rect & updateRect) = 0;
 
-  virtual void clear() = 0;
+  virtual void clear(Rect & updateRect) = 0;
 
-  virtual void VScroll(int scroll) = 0;
+  virtual void VScroll(int scroll, Rect & updateRect) = 0;
 
-  virtual void HScroll(int scroll) = 0;
+  virtual void HScroll(int scroll, Rect & updateRect) = 0;
 
   virtual void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect) = 0;
 
@@ -838,9 +838,9 @@ protected:
 
   int spritesCount() { return m_spritesCount; }
 
-  void hideSprites();
+  void hideSprites(Rect & updateRect);
 
-  void showSprites();
+  void showSprites(Rect & updateRect);
 
   void drawBitmap(BitmapDrawingInfo const & bitmapDrawingInfo, Rect & updateRect);
 
@@ -910,7 +910,7 @@ protected:
 
     if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2) {
       updateRect = updateRect.merge(Rect(x, y, x, y));
-      hideSprites();
+      hideSprites(updateRect);
       rawSetPixel(x, y, preparePixel(pixelDesc.color));
     }
   }
@@ -1011,7 +1011,7 @@ protected:
     int y1 = paintState().position.Y + size.height / 2;
 
     updateRect = updateRect.merge(Rect(x0, y0, x1, y1));
-    hideSprites();
+    hideSprites(updateRect);
 
     int a = abs (x1 - x0), b = abs (y1 - y0), b1 = b & 1;
     int dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a;
@@ -1178,8 +1178,8 @@ protected:
     if (Y1 + YCount > glyphHeight)
       YCount = glyphHeight - Y1;
 
-    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount + skewAdder, destY + YCount));
-    hideSprites();
+    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount + skewAdder - 1, destY + YCount - 1));
+    hideSprites(updateRect);
 
     if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
       tswap(penColor, brushColor);
@@ -1310,8 +1310,8 @@ protected:
     if (Y1 + YCount > glyphHeight)
       YCount = glyphHeight - Y1;
 
-    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount, destY + YCount));
-    hideSprites();
+    updateRect = updateRect.merge(Rect(destX, destY, destX + XCount - 1, destY + YCount - 1));
+    hideSprites(updateRect);
 
     if (glyphOptions.invert ^ paintState().paintOptions.swapFGBG)
       tswap(penColor, brushColor);
@@ -1365,7 +1365,7 @@ protected:
     const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
 
     updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
-    hideSprites();
+    hideSprites(updateRect);
 
     for (int y = y1; y <= y2; ++y)
       rawInvertRow(y, x1, x2);
@@ -1392,7 +1392,7 @@ protected:
     const int y2 = iclamp(rect.Y2 + origY, clipY1, clipY2);
 
     updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
-    hideSprites();
+    hideSprites(updateRect);
 
     for (int y = y1; y <= y2; ++y) {
       auto row = rawGetRow(y);
@@ -1435,7 +1435,7 @@ protected:
 
     updateRect = updateRect.merge(Rect(srcX, srcY, srcX + width - 1, srcY + height - 1));
     updateRect = updateRect.merge(Rect(destX, destY, destX + width - 1, destY + height - 1));
-    hideSprites();
+    hideSprites(updateRect);
 
     for (int y = startY, i = 0; i < height; y += incY, ++i) {
       if (y >= clipY1 && y <= clipY2) {
