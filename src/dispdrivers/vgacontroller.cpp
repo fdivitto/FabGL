@@ -713,6 +713,9 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
 
     VGACtrl->execPrimitive(prim, updateRect);
 
+    if (VGACtrl->m_VSyncInterruptSuspended)
+      break;
+
     isFirst = false;
   } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
   VGACtrl->showSprites(updateRect);

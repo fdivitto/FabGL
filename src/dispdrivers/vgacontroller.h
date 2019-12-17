@@ -498,7 +498,7 @@ private:
 
   static VGAController * s_instance;
 
-  int                    m_VSyncInterruptSuspended;             // 0 = enabled, >0 suspended
+  volatile int           m_VSyncInterruptSuspended;             // 0 = enabled, >0 suspended
 
   GPIOStream             m_GPIOStream;
 
