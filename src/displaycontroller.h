@@ -242,6 +242,7 @@ struct RGBA8888 {
   uint8_t B;  /**< The Blue channel  */
   uint8_t A;  /**< The Alpha channel */
 
+  RGBA8888() : R(0), G(0), B(0), A(0) { }
   RGBA8888(int red, int green, int blue, int alpha) : R(red), G(green), B(blue), A(alpha) { }
 };
 
@@ -264,7 +265,6 @@ struct RGB222 {
   RGB222(RGB888 const & value);
 
   static void optimizeFor64Colors();
-  uint8_t pack() { return R | (G << 2) | (B << 4); }
 };
 
 
@@ -394,6 +394,7 @@ struct GlyphsBufferRenderInfo {
 enum class NativePixelFormat : uint8_t {
   Mono,       /**< 1 bit per pixel. 0 = black, 1 = white */
   SBGR2222,   /**< 8 bit per pixel: VHBBGGRR (bit 7=VSync 6=HSync 5=B 4=B 3=G 2=G 1=R 0=R). Each color channel can have values from 0 to 3 (maxmum intensity). */
+  RGB565BE,   /**< 16 bit per pixel: RGB565 big endian. */
 };
 
 
@@ -1467,11 +1468,10 @@ protected:
         auto src = data + y * rowlen;
         for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx) {
           if ((src[x >> 3] << (x & 7)) & 0x80) {
-            auto dstPx = rawGetPixelInRow(dstrow, adestX);
-            *savePx = dstPx;
+            *savePx = rawGetPixelInRow(dstrow, adestX);
             rawSetPixelInRow(dstrow, adestX);
           } else {
-            *savePx = 0;
+            *savePx = TBackground();
           }
         }
       }
@@ -1511,11 +1511,10 @@ protected:
         for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
           int alpha = *src >> 6;  // TODO?, alpha blending
           if (alpha) {
-            auto dstPx = rawGetPixelInRow(dstrow, adestX);
-            *savePx = dstPx;
+            *savePx = rawGetPixelInRow(dstrow, adestX);
             rawSetPixelInRow(dstrow, adestX, *src);
           } else {
-            *savePx = 0;
+            *savePx = TBackground();
           }
         }
       }
@@ -1554,11 +1553,10 @@ protected:
         auto src = data + y * width + X1;
         for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
           if (src->A) {
-            auto dstPx = rawGetPixelInRow(dstrow, adestX);
-            *savePx = dstPx;
+            *savePx = rawGetPixelInRow(dstrow, adestX);
             rawSetPixelInRow(dstrow, adestX, *src);
           } else {
-            *savePx = 0;
+            *savePx = TBackground();
           }
         }
       }
