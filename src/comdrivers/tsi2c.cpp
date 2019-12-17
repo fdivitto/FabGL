@@ -148,8 +148,10 @@ void I2C::commTaskFunc(void * pvParameters)
   I2C * ths = (I2C*) pvParameters;
 
   i2c_t * i2c = i2cInit(ths->m_bus, ths->m_SDAGPIO, ths->m_SCLGPIO, I2C_DEFAULT_FREQUENCY);
-  if (!i2c)
-    return;
+  if (!i2c) {
+    ESP_LOGE("unable to init I2C");
+    abort();
+  }
 
   i2cFlush(i2c);
 
