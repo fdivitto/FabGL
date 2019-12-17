@@ -25,7 +25,6 @@
 #include <math.h>
 
 
-fabgl::PS2Controller PS2Controller;
 fabgl::VGAController VGAController;
 
 
@@ -86,8 +85,6 @@ Sprite sprites[3];
 void setup()
 {
   Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
-
-  PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
   VGAController.begin();
   VGAController.setResolution(VGA_320x200_75Hz);
