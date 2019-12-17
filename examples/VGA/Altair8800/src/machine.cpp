@@ -425,7 +425,9 @@ void Mits88Disk::detach(int drive)
   if (m_readOnlyBuffer[drive]) {
     m_readOnlyBuffer[drive] = nullptr;
   } else if (m_file[drive]) {
+    fabgl::suspendInterrupts();
     fclose(m_file[drive]);
+    fabgl::resumeInterrupts();
     m_file[drive] = nullptr;
     delete [] m_fileSectorBuffer[drive];
     m_fileSectorBuffer[drive] = nullptr;
@@ -446,6 +448,8 @@ void Mits88Disk::attachFile(int drive, char const * filename)
 
   m_fileSectorBuffer[drive] = new uint8_t[SECTOR_SIZE];
 
+  fabgl::suspendInterrupts();
+
   // file exists?
   struct stat st;
   if (stat(filename, &st) != 0) {
@@ -458,6 +462,8 @@ void Mits88Disk::attachFile(int drive, char const * filename)
     // file already exists, just open for read/write
     m_file[drive] = fopen(filename, "r+");
   }
+
+  fabgl::resumeInterrupts();
 
   flush();
 }

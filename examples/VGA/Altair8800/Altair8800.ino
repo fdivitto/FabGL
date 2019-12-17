@@ -329,6 +329,7 @@ void setup()
 void loop()
 {
   Terminal.write("Formatting SPIFFS...\r");
+  Terminal.flush();
 
   // setup SPIFFS
   esp_vfs_spiffs_conf_t conf = {
@@ -339,7 +340,7 @@ void loop()
   };
   fabgl::suspendInterrupts();
   esp_vfs_spiffs_register(&conf);
-  delay(500);
+  //esp_spiffs_format(nullptr);   // uncomment to force SPIFFS format
   fabgl::resumeInterrupts();
 
   // setup disk drives
@@ -348,9 +349,11 @@ void loop()
   diskDrive.attachReadOnlyBuffer(1, DRIVE_B);
 
   Terminal.write("Creating Disk C...  \r");
+  Terminal.flush();
   diskDrive.attachFile(2, DRIVE_C);
 
   Terminal.write("Creating Disk D...  \r");
+  Terminal.flush();
   diskDrive.attachFile(3, DRIVE_D);
 
   // setup SIOs (Serial I/O)
