@@ -260,6 +260,7 @@ private:
   TaskHandle_t       m_updateTaskHandle;
 
   volatile int       m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
+  volatile bool      m_updateTaskRunning;
 
 };
 

@@ -113,7 +113,8 @@ SSD1306Controller::SSD1306Controller()
   : m_i2c(nullptr),
     m_screenBuffer(nullptr),
     m_altScreenBuffer(nullptr),
-    m_updateTaskHandle(nullptr)
+    m_updateTaskHandle(nullptr),
+    m_updateTaskRunning(false)
 {
 }
 
@@ -341,6 +342,8 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
     if (ctrl->m_updateTaskFuncSuspended > 0)
       ulTaskNotifyTake(true, portMAX_DELAY); // yes, wait for a notify
 
+    ctrl->m_updateTaskRunning = true;
+
     Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
 
     int64_t startTime = ctrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
@@ -352,9 +355,14 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 
       ctrl->execPrimitive(prim, updateRect);
 
+      if (ctrl->m_updateTaskFuncSuspended > 0)
+        break;
+
     } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startTime + SSD1306_BACKGROUND_PRIMITIVE_TIMEOUT > esp_timer_get_time()));
 
     ctrl->showSprites(updateRect);
+
+    ctrl->m_updateTaskRunning = false;
 
     ctrl->SSD1306_sendScreenBuffer(updateRect);
   }
@@ -365,6 +373,8 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 void SSD1306Controller::suspendBackgroundPrimitiveExecution()
 {
   ++m_updateTaskFuncSuspended;
+  while (m_updateTaskRunning)
+    taskYIELD();
 }
 
 
