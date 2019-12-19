@@ -485,7 +485,7 @@ private:
   void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
 
   // abstract method of DisplayController
-  PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }
+  int getBitmapSavePixelSize() { return 1; }
 
   static void VSyncInterrupt();
 

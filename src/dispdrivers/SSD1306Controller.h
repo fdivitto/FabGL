@@ -175,7 +175,7 @@ public:
 private:
 
   // abstract method of DisplayController
-  PixelFormat getBitmapSavePixelFormat() { return PixelFormat::RGBA2222; }
+  int getBitmapSavePixelSize() { return 1; }
 
 
   bool SSD1306_sendData(uint8_t * buf, int count, uint8_t ctrl);

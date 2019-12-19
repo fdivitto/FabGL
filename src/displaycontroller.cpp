@@ -81,23 +81,6 @@ const RGB888 COLOR2RGB888[16] = {
 
 
 
-int getRowLength(int width, PixelFormat format)
-{
-  switch (format) {
-    case PixelFormat::Mask:
-      return (width + 7) / 8;
-    case PixelFormat::RGBA2222:
-      return width * sizeof(RGBA2222);
-    case PixelFormat::RGBA8888:
-      return width * sizeof(RGBA8888);
-    case PixelFormat::Undefined:
-      return 0;
-  }
-  return 0; // just to avoid compiler complaint
-}
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // RGB222 implementation
@@ -506,7 +489,7 @@ void DisplayController::setSprites(Sprite * sprites, int count, int spriteSize)
       Sprite * sprite = (Sprite*) spritePtr;
       int reqBackBufferSize = 0;
       for (int i = 0; i < sprite->framesCount; ++i)
-        reqBackBufferSize = tmax(reqBackBufferSize, getRowLength(sprite->frames[i]->width, getBitmapSavePixelFormat()) * sprite->frames[i]->height);
+        reqBackBufferSize = tmax(reqBackBufferSize, sprite->frames[i]->width * getBitmapSavePixelSize() * sprite->frames[i]->height);
       sprite->savedBackground = (uint8_t*) realloc(sprite->savedBackground, reqBackBufferSize);
     }
   }
@@ -542,7 +525,7 @@ void IRAM_ATTR DisplayController::hideSprites(Rect & updateRect)
           int savedY = sprite->savedY;
           int savedWidth  = sprite->savedBackgroundWidth;
           int savedHeight = sprite->savedBackgroundHeight;
-          Bitmap bitmap(savedWidth, savedHeight, sprite->savedBackground, getBitmapSavePixelFormat());
+          Bitmap bitmap(savedWidth, savedHeight, sprite->savedBackground, PixelFormat::Native);
           absDrawBitmap(savedX, savedY, &bitmap, nullptr, true);
           updateRect = updateRect.merge(Rect(savedX, savedY, savedX + savedWidth - 1, savedY + savedHeight - 1));
           sprite->savedBackgroundWidth = sprite->savedBackgroundHeight = 0;
@@ -557,7 +540,7 @@ void IRAM_ATTR DisplayController::hideSprites(Rect & updateRect)
       int savedY = mouseSprite->savedY;
       int savedWidth  = mouseSprite->savedBackgroundWidth;
       int savedHeight = mouseSprite->savedBackgroundHeight;
-      Bitmap bitmap(savedWidth, savedHeight, mouseSprite->savedBackground, getBitmapSavePixelFormat());
+      Bitmap bitmap(savedWidth, savedHeight, mouseSprite->savedBackground, PixelFormat::Native);
       absDrawBitmap(savedX, savedY, &bitmap, nullptr, true);
       updateRect = updateRect.merge(Rect(savedX, savedY, savedX + savedWidth - 1, savedY + savedHeight - 1));
       mouseSprite->savedBackgroundWidth = mouseSprite->savedBackgroundHeight = 0;
@@ -635,7 +618,7 @@ void DisplayController::setMouseCursor(Cursor * cursor)
       m_mouseCursor.visible = true;
       m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
       if (!isDoubleBuffered())
-        m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, getRowLength(cursor->bitmap.width, getBitmapSavePixelFormat()) * cursor->bitmap.height);
+        m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, cursor->bitmap.width * getBitmapSavePixelSize() * cursor->bitmap.height);
     }
     refreshSprites();
   }

@@ -410,10 +410,6 @@ enum class PixelFormat : uint8_t {
 };
 
 
-// returns row length using the specified pixel format, in bytes
-int getRowLength(int width, PixelFormat format);
-
-
 /**
  * @brief Represents an image
  */
@@ -806,7 +802,8 @@ protected:
 
   virtual void swapBuffers() = 0;
 
-  virtual PixelFormat getBitmapSavePixelFormat() = 0;
+  virtual int getBitmapSavePixelSize() = 0;
+
   virtual void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount) = 0;
 
   virtual void rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount) = 0;
@@ -1473,36 +1470,33 @@ protected:
   void genericRawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, TBackground * saveBackground, int X1, int Y1, int XCount, int YCount,
                                  TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
-    const int width  = bitmap->width;
+    const int width = bitmap->width;
+    const int yEnd  = Y1 + YCount;
+    const int xEnd  = X1 + XCount;
+    auto data = bitmap->data;
+    const int rowlen = (bitmap->width + 7) / 8;
 
     if (saveBackground) {
 
       // save background and draw the bitmap
-      auto data = bitmap->data;
-      int rowlen = (bitmap->width + 7) / 8;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto savePx = saveBackground + y * width + X1;
         auto src = data + y * rowlen;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx) {
-          if ((src[x >> 3] << (x & 7)) & 0x80) {
-            *savePx = rawGetPixelInRow(dstrow, adestX);
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++savePx) {
+          *savePx = rawGetPixelInRow(dstrow, adestX);
+          if ((src[x >> 3] << (x & 7)) & 0x80)
             rawSetPixelInRow(dstrow, adestX);
-          } else {
-            *savePx = TBackground();
-          }
         }
       }
 
     } else {
 
       // just draw the bitmap
-      auto data = bitmap->data;
-      int rowlen = (bitmap->width + 7) / 8;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto src = data + y * rowlen;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX) {
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX) {
           if ((src[x >> 3] << (x & 7)) & 0x80)
             rawSetPixelInRow(dstrow, adestX);
         }
@@ -1517,36 +1511,32 @@ protected:
                                      TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
     const int width  = bitmap->width;
+    const int yEnd   = Y1 + YCount;
+    const int xEnd   = X1 + XCount;
+    auto data = bitmap->data;
 
     if (saveBackground) {
 
       // save background and draw the bitmap
-      auto data = bitmap->data;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto savePx = saveBackground + y * width + X1;
         auto src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
-          int alpha = *src >> 6;  // TODO?, alpha blending
-          if (alpha) {
-            *savePx = rawGetPixelInRow(dstrow, adestX);
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++savePx, ++src) {
+          *savePx = rawGetPixelInRow(dstrow, adestX);
+          if (*src & 0xc0)  // alpha > 0 ?
             rawSetPixelInRow(dstrow, adestX, *src);
-          } else {
-            *savePx = TBackground();
-          }
         }
       }
 
     } else {
 
       // just draw the bitmap
-      auto data = bitmap->data;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
-          int alpha = *src >> 6;  // TODO?, alpha blending
-          if (alpha)
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++src) {
+          if (*src & 0xc0)  // alpha > 0 ?
             rawSetPixelInRow(dstrow, adestX, *src);
         }
       }
@@ -1559,34 +1549,32 @@ protected:
   void genericRawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, TBackground * saveBackground, int X1, int Y1, int XCount, int YCount,
                                      TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
-    const int width  = bitmap->width;
+    const int width = bitmap->width;
+    const int yEnd  = Y1 + YCount;
+    const int xEnd  = X1 + XCount;
+    auto data = (RGBA8888 const *) bitmap->data;
 
     if (saveBackground) {
 
       // save background and draw the bitmap
-      auto data = (RGBA8888 const *) bitmap->data;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto savePx = saveBackground + y * width + X1;
         auto src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++savePx, ++src) {
-          if (src->A) {
-            *savePx = rawGetPixelInRow(dstrow, adestX);
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++savePx, ++src) {
+          *savePx = rawGetPixelInRow(dstrow, adestX);
+          if (src->A)
             rawSetPixelInRow(dstrow, adestX, *src);
-          } else {
-            *savePx = TBackground();
-          }
         }
       }
 
     } else {
 
       // just draw the bitmap
-      auto data = (RGBA8888 const *) bitmap->data;
-      for (int y = Y1, adestY = destY; y < Y1 + YCount; ++y, ++adestY) {
-        auto dstrow = rawGetRow(adestY);
+      for (int y = Y1; y < yEnd; ++y, ++destY) {
+        auto dstrow = rawGetRow(destY);
         auto src = data + y * width + X1;
-        for (int x = X1, adestX = destX; x < X1 + XCount; ++x, ++adestX, ++src) {
+        for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++src) {
           if (src->A)
             rawSetPixelInRow(dstrow, adestX, *src);
         }
