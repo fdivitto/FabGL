@@ -231,6 +231,9 @@ private:
   void rawInvertRow(int y, int x1, int x2);
 
   // abstract method of DisplayController
+  void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount);
+
+  // abstract method of DisplayController
   void rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount);
 
   // abstract method of DisplayController

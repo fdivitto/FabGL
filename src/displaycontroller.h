@@ -403,6 +403,7 @@ enum class NativePixelFormat : uint8_t {
  */
 enum class PixelFormat : uint8_t {
   Undefined,  /**< Undefined pixel format */
+  Native,     /**< Native device pixel format */
   Mask,       /**< 1 bit per pixel. 0 = transparent, 1 = opaque (color must be specified apart) */
   RGBA2222,   /**< 8 bit per pixel: AABBGGRR (bit 7=A 6=A 5=B 4=B 3=G 2=G 1=R 0=R). AA = 0 fully transparent, AA = 3 fully opaque. Each color channel can have values from 0 to 3 (maxmum intensity). */
   RGBA8888    /**< 32 bits per pixel: RGBA (R=byte 0, G=byte1, B=byte2, A=byte3). Minimum value for each channel is 0, maximum is 255. */
@@ -806,6 +807,7 @@ protected:
   virtual void swapBuffers() = 0;
 
   virtual PixelFormat getBitmapSavePixelFormat() = 0;
+  virtual void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount) = 0;
 
   virtual void rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount) = 0;
 
@@ -1449,6 +1451,22 @@ protected:
       }
     }
   }
+
+
+  template <typename TRawGetRow, typename TRawSetPixelInRow, typename TDataType>
+  void genericRawDrawBitmap_Native(int destX, int destY, TDataType * data, int width, int X1, int Y1, int XCount, int YCount,
+                                   TRawGetRow rawGetRow, TRawSetPixelInRow rawSetPixelInRow)
+  {
+    const int yEnd = Y1 + YCount;
+    const int xEnd = X1 + XCount;
+    for (int y = Y1; y < yEnd; ++y, ++destY) {
+      auto dstrow = rawGetRow(destY);
+      auto src = data + y * width + X1;
+      for (int x = X1, adestX = destX; x < xEnd; ++x, ++adestX, ++src)
+        rawSetPixelInRow(dstrow, adestX, *src);
+    }
+  }
+
 
 
   template <typename TRawGetRow, typename TRawGetPixelInRow, typename TRawSetPixelInRow, typename TBackground>

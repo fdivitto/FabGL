@@ -527,10 +527,14 @@ void SSD1306Controller::readScreen(Rect const & rect, RGB888 * destBuf)
 }
 
 
-// sprites background is saved using one byte per pixel (to improve performance):
-//    0 = not saved (bitmap is transparent here)
-//    0xc0 = saved, black
-//    0xc1 = saved, white
+void SSD1306Controller::rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount)
+{
+  genericRawDrawBitmap_Native(destX, destY, (uint8_t*) bitmap->data, bitmap->width, X1, Y1, XCount, YCount,
+                                [&] (int y)                     { return y; },                         // rawGetRow
+                                [&] (int y, int x, uint8_t src) { SSD1306_SETPIXELCOLOR(x, y, src); }  // rawSetPixelInRow
+                               );
+}
+
 
 void SSD1306Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
 {

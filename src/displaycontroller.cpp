@@ -272,6 +272,7 @@ void Bitmap::allocate()
   dataAllocated = true;
   switch (format) {
     case PixelFormat::Undefined:
+    case PixelFormat::Native:
       break;
     case PixelFormat::Mask:
       data = (uint8_t*) malloc((width + 7) * height / 8);
@@ -291,6 +292,7 @@ void Bitmap::copyFrom(void const * srcData)
 {
   switch (format) {
     case PixelFormat::Undefined:
+    case PixelFormat::Native:
       break;
     case PixelFormat::Mask:
       memcpy(data, srcData, (width + 7) * height / 8);
@@ -333,6 +335,9 @@ int Bitmap::getAlpha(int x, int y)
   int r = 0;
   switch (format) {
     case PixelFormat::Undefined:
+      break;
+    case PixelFormat::Native:
+      r = 0xff;
       break;
     case PixelFormat::Mask:
     {
@@ -1091,6 +1096,10 @@ void IRAM_ATTR DisplayController::absDrawBitmap(int destX, int destY, Bitmap con
   switch (bitmap->format) {
 
     case PixelFormat::Undefined:
+      break;
+
+    case PixelFormat::Native:
+      rawDrawBitmap_Native(destX, destY, bitmap, X1, Y1, XCount, YCount);
       break;
 
     case PixelFormat::Mask:

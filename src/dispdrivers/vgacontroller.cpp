@@ -453,7 +453,6 @@ void VGAController::fillVertBuffers(int offsetY)
 
         if (isViewport) {
           // visible, this is the viewport
-
           switch (m_timings.HStartingBlock) {
             case VGAScanStart::FrontPorch:
               // FRONTPORCH -> SYNC -> BACKPORCH -> VISIBLEAREA
@@ -1089,6 +1088,16 @@ void VGAController::writeScreen(Rect const & rect, RGB222 * srcBuf)
     for (int x = rect.X1; x <= rect.X2; ++x, ++sbuf)
       VGA_PIXELINROW(row, x) = *sbuf | HVSync;
   }
+}
+
+
+void IRAM_ATTR VGAController::rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount)
+{
+  const uint8_t HVSync = packHVSync();
+  genericRawDrawBitmap_Native(destX, destY, (uint8_t*) bitmap->data, bitmap->width, X1, Y1, XCount, YCount,
+                              [&] (int y)                             { return (uint8_t*) m_viewPort[y]; },       // rawGetRow
+                              [&] (uint8_t * row, int x, uint8_t src) { VGA_PIXELINROW(row, x) = HVSync | src; }  // rawSetPixelInRow
+                             );
 }
 
 
