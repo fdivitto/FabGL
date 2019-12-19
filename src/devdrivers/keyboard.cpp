@@ -916,7 +916,7 @@ VirtualKey Keyboard::getNextVirtualKey(bool * keyDown, int timeOutMS)
   VirtualKey vk = VK_NONE;
   if (m_SCodeToVKConverterTask) {
     uint16_t code;
-    if (xQueueReceive(m_virtualKeyQueue, &code, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS)) == pdTRUE) {
+    if (xQueueReceive(m_virtualKeyQueue, &code, msToTicks(timeOutMS)) == pdTRUE) {
       vk = (VirtualKey) (code & 0x7FFF);
       if (keyDown)
         *keyDown = code & 0x8000;

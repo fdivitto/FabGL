@@ -536,6 +536,11 @@ inline gpio_num_t int2gpio(int gpio)
 }
 
 
+// milliseconds to FreeRTOS ticks.
+// ms = -1 => maximum delay (portMAX_DELAY)
+uint32_t msToTicks(int ms);
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 

@@ -408,7 +408,7 @@ bool IRAM_ATTR DisplayController::getPrimitiveISR(Primitive * primitive)
 
 bool DisplayController::getPrimitive(Primitive * primitive, int timeOutMS)
 {
-  return xQueueReceive(m_execQueue, primitive, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+  return xQueueReceive(m_execQueue, primitive, msToTicks(timeOutMS));
 }
 
 
@@ -429,7 +429,7 @@ void IRAM_ATTR DisplayController::insertPrimitiveISR(Primitive * primitive)
 
 void DisplayController::insertPrimitive(Primitive * primitive, int timeOutMS)
 {
-  xQueueSendToFront(m_execQueue, primitive, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+  xQueueSendToFront(m_execQueue, primitive, msToTicks(timeOutMS));
 }
 
 

@@ -507,13 +507,13 @@ void uiApp::postDebugMsg(char const * msg)
 
 bool uiApp::getEvent(uiEvent * event, int timeOutMS)
 {
-  return xQueueReceive(m_eventsQueue, event,  timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS)) == pdTRUE;
+  return xQueueReceive(m_eventsQueue, event,  msToTicks(timeOutMS)) == pdTRUE;
 }
 
 
 bool uiApp::peekEvent(uiEvent * event, int timeOutMS)
 {
-  return xQueuePeek(m_eventsQueue, event,  timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS)) == pdTRUE;
+  return xQueuePeek(m_eventsQueue, event,  msToTicks(timeOutMS)) == pdTRUE;
 }
 
 

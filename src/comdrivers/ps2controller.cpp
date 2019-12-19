@@ -1037,7 +1037,7 @@ void PS2Controller::injectInRXBuffer(int value, int PS2Port)
 bool PS2Controller::waitData(int timeOutMS, int PS2Port)
 {
   m_RXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
-  return ulTaskNotifyTake(pdTRUE, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+  return ulTaskNotifyTake(pdTRUE, msToTicks(timeOutMS));
 }
 
 

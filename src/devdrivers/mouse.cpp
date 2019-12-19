@@ -307,7 +307,7 @@ MouseStatus Mouse::getNextStatus(int timeOutMS)
 {
   MouseStatus status;
   if (m_absoluteQueue)
-    xQueueReceive(m_absoluteQueue, &status, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+    xQueueReceive(m_absoluteQueue, &status, msToTicks(timeOutMS));
   return status;
 }
 

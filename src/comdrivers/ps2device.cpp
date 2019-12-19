@@ -75,7 +75,7 @@ PS2Device::~PS2Device()
 
 bool PS2Device::lock(int timeOutMS)
 {
-  return xSemaphoreTakeRecursive(m_deviceLock, timeOutMS < 0 ? portMAX_DELAY : pdMS_TO_TICKS(timeOutMS));
+  return xSemaphoreTakeRecursive(m_deviceLock, msToTicks(timeOutMS));
 }
 
 
