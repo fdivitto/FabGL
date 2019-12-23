@@ -1918,7 +1918,7 @@ void Terminal::consumeCSI()
       int newX = m_emuState.cursorX - tmax(1, params[0]);
       if (m_emuState.reverseWraparoundMode && newX < 1) {
         newX = -newX;
-        int newY = m_emuState.cursorY - newX / 80 - 1;
+        int newY = m_emuState.cursorY - newX / m_columns - 1;
         if (newY < 1)
           newY = m_rows + newY;
         newX = m_columns - (newX % m_columns);
