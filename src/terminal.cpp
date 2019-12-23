@@ -2561,6 +2561,9 @@ void Terminal::keyboardReaderTask(void * pvParameters)
         continue; // don't repeat
       term->m_lastPressedKey = vk;
 
+
+      xSemaphoreTake(term->m_mutex, portMAX_DELAY);
+
       if (term->m_termInfo == nullptr) {
         if (term->m_emuState.ANSIMode)
           term->ANSIDecodeVirtualKey(vk);
@@ -2568,6 +2571,8 @@ void Terminal::keyboardReaderTask(void * pvParameters)
           term->VT52DecodeVirtualKey(vk);
       } else
         term->TermDecodeVirtualKey(vk);
+
+      xSemaphoreGive(term->m_mutex);
 
     } else {
       // !keyDown
