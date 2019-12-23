@@ -131,8 +131,9 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
   m_cursorState   = false;
   m_emuState.cursorEnabled = false;
 
+  m_mutex = xSemaphoreCreateMutex();
+
   // blink support
-  m_blinkTimerMutex = xSemaphoreCreateMutex();
   m_blinkTimer = xTimerCreate("", pdMS_TO_TICKS(FABGLIB_DEFAULT_BLINK_PERIOD_MS), pdTRUE, this, blinkTimerFunc);
   xTimerStart(m_blinkTimer, portMAX_DELAY);
 
@@ -248,7 +249,7 @@ void Terminal::end()
   vTaskDelete(m_keyboardReaderTaskHandle);
 
   xTimerDelete(m_blinkTimer, portMAX_DELAY);
-  vSemaphoreDelete(m_blinkTimerMutex);
+  vSemaphoreDelete(m_mutex);
 
   clearSavedCursorStates();
 
@@ -269,7 +270,7 @@ void Terminal::reset()
   log("reset()\n");
   #endif
 
-  xSemaphoreTake(m_blinkTimerMutex, portMAX_DELAY);
+  xSemaphoreTake(m_mutex, portMAX_DELAY);
   m_resetRequested = false;
 
   m_emuState.originMode            = false;
@@ -331,7 +332,7 @@ void Terminal::reset()
 
   int_clear();
 
-  xSemaphoreGive(m_blinkTimerMutex);
+  xSemaphoreGive(m_mutex);
 }
 
 
@@ -556,7 +557,7 @@ void Terminal::blinkTimerFunc(TimerHandle_t xTimer)
 {
   Terminal * term = (Terminal*) pvTimerGetTimerID(xTimer);
 
-  if (xSemaphoreTake(term->m_blinkTimerMutex, 0) == pdTRUE) {
+  if (xSemaphoreTake(term->m_mutex, 0) == pdTRUE) {
 
     // cursor blink
     if (term->m_emuState.cursorEnabled && term->m_emuState.cursorBlinkingEnabled)
@@ -566,7 +567,7 @@ void Terminal::blinkTimerFunc(TimerHandle_t xTimer)
     if (term->m_blinkingTextEnabled)
       term->blinkText();
 
-    xSemaphoreGive(term->m_blinkTimerMutex);
+    xSemaphoreGive(term->m_mutex);
 
   }
 }
@@ -796,10 +797,7 @@ void Terminal::deleteAt(int column, int row, int count)
 
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
-//logFmt("charWidth=%d\n", charWidth);
-//logFmt("m_canvas->setScrollingRegion(%d, %d, %d, %d)\n", (column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
   m_canvas->setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
-//logFmt("m_canvas->scroll(%d, 0)\n\n", -count * charWidth);
   m_canvas->scroll(-count * charWidth, 0);
   updateCanvasScrollingRegion();  // restore original scrolling region
 
@@ -1444,7 +1442,7 @@ void Terminal::consumeInputQueue()
 {
   char c = getNextCode(false);  // blocking call. false: do not process ctrl chars
 
-  xSemaphoreTake(m_blinkTimerMutex, portMAX_DELAY);
+  xSemaphoreTake(m_mutex, portMAX_DELAY);
 
   m_prevCursorEnabled = int_enableCursor(false);
   m_prevBlinkingTextEnabled = enableBlinkingText(false);
@@ -1466,7 +1464,7 @@ void Terminal::consumeInputQueue()
   enableBlinkingText(m_prevBlinkingTextEnabled);
   int_enableCursor(m_prevCursorEnabled);
 
-  xSemaphoreGive(m_blinkTimerMutex);
+  xSemaphoreGive(m_mutex);
 
   if (m_resetRequested)
     reset();
@@ -2009,7 +2007,7 @@ void Terminal::consumeCSI()
       }
       break;
 
-    // ESC [ Ps n : DSR, Devie Status Report
+    // ESC [ Ps n : DSR, Device Status Report
     case 'n':
       switch (params[0]) {
         // Status Report

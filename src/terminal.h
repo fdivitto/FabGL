@@ -844,7 +844,9 @@ private:
 
   // timer used to blink
   TimerHandle_t              m_blinkTimer;
-  volatile SemaphoreHandle_t m_blinkTimerMutex;
+
+  // main terminal mutex
+  volatile SemaphoreHandle_t m_mutex;
 
   volatile bool      m_blinkingTextVisible;    // true = blinking text is currently visible
   volatile bool      m_blinkingTextEnabled;
