@@ -939,6 +939,13 @@ void Terminal::useAlternateScreenBuffer(bool value)
 }
 
 
+void Terminal::localInsert(uint8_t c)
+{
+  if (m_outputQueue)
+    xQueueSendToFront(m_outputQueue, &c, portMAX_DELAY);
+}
+
+
 void Terminal::localWrite(uint8_t c)
 {
   if (m_outputQueue)
