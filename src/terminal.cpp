@@ -970,9 +970,15 @@ int Terminal::available()
 
 int Terminal::read()
 {
+  return read(-1);
+}
+
+
+int Terminal::read(int timeOutMS)
+{
   if (m_outputQueue) {
     char c;
-    xQueueReceive(m_outputQueue, &c, portMAX_DELAY);
+    xQueueReceive(m_outputQueue, &c, msToTicks(timeOutMS));
     return c;
   } else
     return -1;

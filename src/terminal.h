@@ -649,6 +649,17 @@ public:
   int read();
 
   /**
+   * @brief Reads codes from keyboard specyfing timeout.
+   *
+   * Keyboard queue is available only after Terminal.connectLocally() call.
+   *
+   * @param timeOutMS Timeout in milliseconds. -1 = no timeout (infinite wait).
+   *
+   * @return The first code of incoming data available (or -1 if no data is available after timeout has expired).
+   */
+  int read(int timeOutMS);
+
+  /**
    * @brief Reads a code from the keyboard without advancing to the next one.
    *
    * Keyboard queue is available only after Terminal.connectLocally() call.
