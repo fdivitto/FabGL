@@ -796,7 +796,7 @@ private:
 
   char getNextCode(bool processCtrlCodes);
 
-  void setChar(char c);
+  bool setChar(char c);
   GlyphOptions getGlyphOptionsAt(int X, int Y);
 
   void insertAt(int column, int row, int count);

@@ -1325,13 +1325,18 @@ void Terminal::convQueue(const char * str)
 
 
 // set specified character at current cursor position
-void Terminal::setChar(char c)
+// return true if vertical scroll happened
+bool Terminal::setChar(char c)
 {
+  bool vscroll = false;
+
   if (m_emuState.cursorPastLastCol) {
     if (m_emuState.wraparound) {
       setCursorPos(1, m_emuState.cursorY); // this sets m_emuState.cursorPastLastCol = false
-      if (moveDown())
+      if (moveDown()) {
         scrollUp();
+        vscroll = true;
+      }
     }
   }
 
@@ -1364,6 +1369,8 @@ void Terminal::setChar(char c)
   } else {
     setCursorPos(m_emuState.cursorX + 1, m_emuState.cursorY);
   }
+
+  return vscroll;
 }
 
 
@@ -2585,7 +2592,6 @@ void Terminal::keyboardReaderTask(void * pvParameters)
       if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == vk)
         continue; // don't repeat
       term->m_lastPressedKey = vk;
-
 
       xSemaphoreTake(term->m_mutex, portMAX_DELAY);
 
