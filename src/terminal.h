@@ -731,6 +731,13 @@ public:
 
   using Print::write;
 
+  /**
+   * @brief Gets associated keyboard object.
+   *
+   * @return The Keyboard object.
+   */
+  Keyboard * keyboard() { return m_keyboard; }
+
 
 private:
 
