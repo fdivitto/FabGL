@@ -669,6 +669,18 @@ public:
   int read(int timeOutMS);
 
   /**
+   * @brief Wait for a specific code from keyboard, discarding all previous codes.
+   *
+   * Keyboard queue is available only after Terminal.connectLocally() call.
+   *
+   * @param value Char code to wait for.
+   * @param timeOutMS Timeout in milliseconds. -1 = no timeout (infinite wait).
+   *
+   * @return True if specified value has been received within timeout time.
+   */
+  bool waitFor(int value, int timeOutMS = -1);
+
+  /**
    * @brief Reads a code from the keyboard without advancing to the next one.
    *
    * Keyboard queue is available only after Terminal.connectLocally() call.

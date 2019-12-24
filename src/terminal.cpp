@@ -992,6 +992,18 @@ int Terminal::read(int timeOutMS)
 }
 
 
+bool Terminal::waitFor(int value, int timeOutMS)
+{
+  TimeOut timeout;
+  while (!timeout.expired(timeOutMS)) {
+    int c = read(timeOutMS);
+    if (c == value)
+      return true;
+  }
+  return false;
+}
+
+
 // not implemented
 int Terminal::peek()
 {
