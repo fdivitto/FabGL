@@ -288,6 +288,7 @@ void Terminal::reset()
   m_emuState.backarrowKeyMode      = false;
   m_emuState.ANSIMode              = true;
   m_emuState.VT52GraphicsMode      = false;
+  m_emuState.allowFabGLSequences   = 0;
   m_emuState.characterSetIndex     = 0;  // Select G0
   for (int i = 0; i < 4; ++i)
     m_emuState.characterSet[i] = 1;     // G0, G1, G2 and G3 = USASCII
@@ -491,6 +492,24 @@ bool Terminal::moveDown()
     return true;
   setCursorPos(m_emuState.cursorX, m_emuState.cursorY + 1);
   return false;
+}
+
+
+// Move cursor at left or right, wrapping lines if necessary
+void Terminal::move(int offset)
+{
+  int pos = m_emuState.cursorX - 1 + (m_emuState.cursorY - 1) * m_columns + offset;  // pos is zero based
+  int newY = pos / m_columns + 1;
+  int newX = pos % m_columns + 1;
+  if (newY < m_emuState.scrollingRegionTop) {
+    newX = 1;
+    newY = m_emuState.scrollingRegionTop;
+  }
+  if (newY > m_emuState.scrollingRegionDown) {
+    newX = m_columns;
+    newY = m_emuState.scrollingRegionDown;
+  }
+  setCursorPos(newX, newY);
 }
 
 
@@ -757,6 +776,43 @@ void Terminal::updateCanvasScrollingRegion()
 }
 
 
+// Insert a blank space at current position, moving next "charsToMove" characters to the right (even on multiple lines).
+// Characters after "charsToMove" length are overwritter.
+// Vertical scroll may occurs (in this case returns "True")
+bool Terminal::multilineInsertChar(int charsToMove)
+{
+  bool scrolled = false;
+  int col = m_emuState.cursorX;
+  int row = m_emuState.cursorY;
+  if (m_emuState.cursorPastLastCol) {
+    ++row;
+    col = 1;
+  }
+  uint32_t lastColItem = 0;
+  while (charsToMove > 0) {
+    uint32_t * rowPtr = m_glyphsBuffer.map + (row - 1) * m_columns;
+    uint32_t lItem = rowPtr[m_columns - 1];
+    insertAt(col, row, 1);
+    if (row > m_emuState.cursorY) {
+      rowPtr[0] = lastColItem;
+      refresh(1, row);
+    }
+    lastColItem = lItem;
+    charsToMove -= m_columns - col;
+    col = 1;
+    if (charsToMove > 0 && row == m_emuState.scrollingRegionDown) {
+      scrolled = true;
+      scrollUp();
+      setCursorPos(m_emuState.cursorX, m_emuState.cursorY - 1);
+    } else {
+      ++row;
+    }
+    m_canvas->waitCompletion(false);
+  }
+  return scrolled;
+}
+
+
 // inserts specified number of blank spaces at the specified row and column. Characters moved past the right border are lost.
 void Terminal::insertAt(int column, int row, int count)
 {
@@ -783,6 +839,35 @@ void Terminal::insertAt(int column, int row, int count)
   uint32_t itemValue = GLYPHMAP_ITEM_MAKE(ASCII_SPC, m_emuState.backgroundColor, m_emuState.foregroundColor, glyphOptions);
   for (int i = 0; i < count; ++i)
     rowPtr[column + i - 1] = itemValue;
+}
+
+
+void Terminal::multilineDeleteChar(int charsToMove)
+{
+  int col = m_emuState.cursorX;
+  int row = m_emuState.cursorY;
+  if (m_emuState.cursorPastLastCol) {
+    ++row;
+    col = 1;
+  }
+
+  // at least one char must be deleted
+  if (charsToMove == 0)
+    deleteAt(col, row, 1);
+
+  while (charsToMove > 0) {
+    deleteAt(col, row, 1);
+    charsToMove -= m_columns - col;
+    if (charsToMove > 0) {
+      m_canvas->waitCompletion(false);
+      uint32_t * lastItem  = m_glyphsBuffer.map + (row - 1) * m_columns + (m_columns - 1);
+      lastItem[0] = lastItem[1];
+      refresh(m_columns, row);
+    }
+    col = 1;
+    ++row;
+    m_canvas->waitCompletion(false);
+  }
 }
 
 
@@ -873,6 +958,7 @@ void Terminal::saveCursorState()
   #endif
 
   TerminalCursorState * s = (TerminalCursorState*) malloc(sizeof(TerminalCursorState));
+
   if (s) {
     *s = (TerminalCursorState) {
       .next              = m_savedCursorStateList,
@@ -888,6 +974,10 @@ void Terminal::saveCursorState()
     if (s->tabStop)
       memcpy(s->tabStop, m_emuState.tabStop, m_columns);
     m_savedCursorStateList = s;
+  } else {
+    #if FABGLIB_TERMINAL_DEBUG_REPORT_ERRORS
+    log("ERROR: Unable to alloc TerminalCursorState\n");
+    #endif
   }
 }
 
@@ -1312,10 +1402,6 @@ void Terminal::convQueue(const char * str)
       xQueueSendToBack(m_inputQueue, str, portMAX_DELAY);
   } else {
     for (int i = 0; i <= m_convMatchedCount; ++i) {
-
-      //if (m_convMatchedChars[i] != 0x0d && m_convMatchedChars[i] != 0x0a)
-      //  Serial.printf("0x%x %c\n", m_convMatchedChars[i], m_convMatchedChars[i]);
-
       xQueueSendToBack(m_inputQueue, m_convMatchedChars + i, portMAX_DELAY);
     }
   }
@@ -1589,6 +1675,12 @@ void Terminal::consumeESC()
   if (c == '[') {
     // ESC [ : start of CSI sequence
     consumeCSI();
+    return;
+  }
+
+  if (c == 0xFF && m_emuState.allowFabGLSequences > 0) {
+    // ESC 0xFF : FabGL specific sequence
+    consumeFabGLSeq();
     return;
   }
 
@@ -2089,7 +2181,6 @@ void Terminal::consumeCSIQUOT(int * params, int paramsCount)
         m_emuState.ctrlBits = 7;
       else
         m_emuState.ctrlBits = 8;
-      //Serial.printf("Conf. level = %d, ctrl bits = %d\n", m_emuState.conformanceLevel, m_emuState.ctrlBits);
       break;
 
     // ESC [ Ps " q : DECSCA, Select character protection attribute
@@ -2148,7 +2239,6 @@ void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, char 
     // DECANM (default on): ANSI Mode (off = VT52 Mode)
     case 2:
       m_emuState.ANSIMode = set;
-      //if (!set) Serial.write("VT52 Mode\n");
       break;
 
     // ESC [ ? 3 h
@@ -2265,6 +2355,16 @@ void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, char 
         useAlternateScreenBuffer(false);
         restoreCursorState();
       }
+      break;
+
+    // ESC [ ? 7999 h
+    // ESC [ ? 7999 l
+    // Allows enhanced FabGL sequences (default disabled)
+    // This set is "incremental". This is actually disabled when the counter reach 0.
+    case 7999:
+      m_emuState.allowFabGLSequences += set ? 1 : -1;
+      if (m_emuState.allowFabGLSequences < 0)
+        m_emuState.allowFabGLSequences = 0;
       break;
 
     default:
@@ -2482,7 +2582,6 @@ void Terminal::consumeESCVT52()
     case '<':
       m_emuState.ANSIMode = true;
       m_emuState.conformanceLevel = 1;
-      //Serial.write("ANSI Mode\n");
       break;
 
     // ESC A : Cursor Up
@@ -2576,6 +2675,183 @@ void Terminal::consumeESCVT52()
   }
 
 }
+
+
+// consume FabGL specific sequence (ESC 0xFF ....)
+void Terminal::consumeFabGLSeq()
+{
+  #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
+  log("ESC 0xFF");
+  #endif
+
+  char c = getNextCode(false);   // false: don't process ctrl chars
+
+  // process command in "c"
+  switch (c) {
+
+    // Get cursor horizontal position (1 = leftmost pos)
+    // Seq:
+    //    ESC 0xFF FABGL_ENTERM_GETCURSORCOL
+    // params:
+    //    none
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: column
+    case FABGL_ENTERM_GETCURSORCOL:
+      send(0xFE);
+      send(m_emuState.cursorX);
+      break;
+
+    // Get cursor vertical position (1 = topmost pos)
+    // Seq:
+    //    ESC 0xFF FABGL_ENTERM_GETCURSORROW
+    // params:
+    //    none
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: row
+    case FABGL_ENTERM_GETCURSORROW:
+      send(0xFE);
+      send(m_emuState.cursorY);
+      break;
+
+    // Get cursor position
+    // Seq:
+    //    ESC 0xFF FABGL_ENTERM_GETCURSORPOS
+    // params:
+    //    none
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: column
+    //    byte: row
+    case FABGL_ENTERM_GETCURSORPOS:
+      send(0xFE);
+      send(m_emuState.cursorX);
+      send(m_emuState.cursorY);
+      break;
+
+    // Set cursor position
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_SETCURSORPOS COL ROW
+    // params:
+    //   COL (byte): column (1 = first column)
+    //   ROW (byte): row (1 = first row)
+    case FABGL_ENTERM_SETCURSORPOS:
+    {
+      uint8_t col = getNextCode(false);
+      uint8_t row = getNextCode(false);
+      setCursorPos(col, getAbsoluteRow(row));
+      break;
+    }
+
+    // Insert a blank space at current position, moving next CHARSTOMOVE characters to the right (even on multiple lines).
+    // Advances cursor by one position. Characters after CHARSTOMOVE length are overwritter.
+    // Vertical scroll may occurs.
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_INSERTSPACE CHARSTOMOVE_L CHARSTOMOVE_H
+    // params:
+    //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the right by one position
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
+    case FABGL_ENTERM_INSERTSPACE:
+    {
+      uint8_t charsToMove_L = getNextCode(false);
+      uint8_t charsToMove_H = getNextCode(false);
+      bool scroll = multilineInsertChar(charsToMove_L | charsToMove_H << 8);
+      send(0xFE);
+      send(scroll);
+      break;
+    }
+
+    // Delete character at current position, moving next CHARSTOMOVE characters to the left (even on multiple lines).
+    // Characters after CHARSTOMOVE are filled with spaces.
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_DELETECHAR CHARSTOMOVE_L CHARSTOMOVE_H
+    // params:
+    //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the left by one position
+    case FABGL_ENTERM_DELETECHAR:
+    {
+      uint8_t charsToMove_L = getNextCode(false);
+      uint8_t charsToMove_H = getNextCode(false);
+      multilineDeleteChar(charsToMove_L | charsToMove_H << 8);
+      break;
+    }
+
+    // Move cursor at left, wrapping lines if necessary
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_CURSORLEFT COUNT_L COUNT_H
+    // params:
+    //   COUNT_L, COUNT_H (byte): number of positions to move to the left
+    case FABGL_ENTERM_CURSORLEFT:
+    {
+      uint8_t count_L = getNextCode(false);
+      uint8_t count_H = getNextCode(false);
+      move(-(count_L | count_H << 8));
+      break;
+    }
+
+    // Move cursor at right, wrapping lines if necessary
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_CURSORRIGHT COUNT
+    // params:
+    //   COUNT (byte): number of positions to move to the right
+    case FABGL_ENTERM_CURSORRIGHT:
+    {
+      uint8_t count_L = getNextCode(false);
+      uint8_t count_H = getNextCode(false);
+      move(count_L | count_H << 8);
+      break;
+    }
+
+    // Sets char CHAR at current position and advance one position. Scroll if necessary.
+    // This do not interpret character as a special code, but just sets it.
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_SETCHAR CHAR
+    // params:
+    //   CHAR (byte): character to set
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
+    case FABGL_ENTERM_SETCHAR:
+    {
+      bool scroll = setChar(getNextCode(false));
+      send(0xFE);
+      send(scroll);
+      break;
+    }
+
+    // Sets a sequence of chars starting from current position and advancing the cursor for each character. Scroll if necessary.
+    // This do not interpret character as a special code, but just sets it.
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_SETCHARS COUNT_L COUNT_H ...chars...
+    // params:
+    //   COUNT_L, COUNT_H (byte): number of characters to sets
+    //   ...chars... (bytes): the characters to sets
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: 0 = vertical scroll not occurred, >0 = number of vertical scrolls occurred
+    case FABGL_ENTERM_SETCHARS:
+    {
+      uint8_t count_L = getNextCode(false);
+      uint8_t count_H = getNextCode(false);
+      int count = count_L | count_H << 8;
+      int scrolls = 0;
+      for (int i = 0; i < count; ++i)
+        scrolls += setChar(getNextCode(false));
+      send(0xFE);
+      send(scrolls);
+      break;
+    }
+
+    default:
+      #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
+      logFmt("Unknown: ESC 0xFF %02x\n", c);
+      #endif
+      break;
+  }
+}
+
 
 
 void Terminal::keyboardReaderTask(void * pvParameters)
