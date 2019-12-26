@@ -878,7 +878,7 @@ void Terminal::deleteAt(int column, int row, int count)
   logFmt("deleteAt(%d, %d, %d)\n", column, row, count);
   #endif
 
-  count = tmin((int)m_columns, count);
+  count = imin(m_columns - column + 1, count);
 
   // move characters on the right using canvas
   int charWidth = getCharWidthAt(row);
@@ -888,8 +888,9 @@ void Terminal::deleteAt(int column, int row, int count)
 
   // move characters in the screen buffer
   uint32_t * rowPtr = m_glyphsBuffer.map + (row - 1) * m_columns;
-  for (int i = 0; i < m_columns - count; ++i)
-    rowPtr[column - 1 + i] = rowPtr[column + i + count - 1];
+  int itemsToMove = m_columns - column - count + 1;
+  for (int i = 0; i < itemsToMove; ++i)
+    rowPtr[column - 1 + i] = rowPtr[column - 1 + i + count];
 
   // fill blank characters
   GlyphOptions glyphOptions = m_glyphOptions;
