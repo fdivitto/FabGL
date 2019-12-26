@@ -1004,6 +1004,7 @@ void Terminal::restoreCursorState()
 
     TerminalCursorState * next = m_savedCursorStateList->next;
 
+    free(m_savedCursorStateList->tabStop);
     free(m_savedCursorStateList);
     m_savedCursorStateList = next;
   }
