@@ -331,6 +331,7 @@ using fabgl::RGB888;
 using fabgl::RGBA8888;
 using fabgl::FlowControl;
 
+using fabgl::TerminalController;
 
 
 

@@ -3436,4 +3436,121 @@ void Terminal::TermDecodeVirtualKey(VirtualKey vk)
 }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TerminalController
+
+
+TerminalController::TerminalController(Terminal * terminal)
+  : m_terminal(terminal)
+{
+  // enable fabgl sequences
+  m_terminal->write("\e[?7999h");
+}
+
+
+TerminalController::~TerminalController()
+{
+  // disable (if not enabled before) fabgl sequences
+  m_terminal->write("\e[?7999l");
+}
+
+
+void TerminalController::setCursorPos(int col, int row)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_SETCURSORPOS);
+  m_terminal->write(col);
+  m_terminal->write(row);
+}
+
+
+void TerminalController::cursorLeft(int count)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_CURSORLEFT);
+  m_terminal->write(count & 0xff);
+  m_terminal->write(count >> 8);
+}
+
+
+void TerminalController::cursorRight(int count)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_CURSORRIGHT);
+  m_terminal->write(count & 0xff);
+  m_terminal->write(count >> 8);
+}
+
+
+void TerminalController::getCursorPos(int * col, int * row)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_GETCURSORPOS);
+  m_terminal->waitFor(0xFE);
+  *col = m_terminal->read(-1);
+  *row = m_terminal->read(-1);
+}
+
+
+int TerminalController::getCursorCol()
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_GETCURSORCOL);
+  m_terminal->waitFor(0xFE);
+  return m_terminal->read(-1);
+}
+
+
+int TerminalController::getCursorRow()
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_GETCURSORROW);
+  m_terminal->waitFor(0xFE);
+  return m_terminal->read(-1);
+}
+
+
+bool TerminalController::multilineInsertChar(int charsToMove)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_INSERTSPACE);
+  m_terminal->write(charsToMove & 0xff);
+  m_terminal->write(charsToMove >> 8);
+  m_terminal->waitFor(0xFE);
+  return m_terminal->read(-1);
+}
+
+
+void TerminalController::multilineDeleteChar(int charsToMove)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_DELETECHAR);
+  m_terminal->write(charsToMove & 0xff);
+  m_terminal->write(charsToMove >> 8);
+}
+
+
+bool TerminalController::setChar(char c)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_SETCHAR);
+  m_terminal->write(c);
+  m_terminal->waitFor(0xFE);
+  return m_terminal->read(-1);
+}
+
+
+int TerminalController::setChars(char const * buffer, int count)
+{
+  m_terminal->write(FABGL_ENTERM_CMD);
+  m_terminal->write(FABGL_ENTERM_SETCHARS);
+  m_terminal->write(count & 0xff);
+  m_terminal->write(count >> 8);
+  for (int i = 0; i < count; ++i, ++buffer)
+    m_terminal->write(*buffer);
+  m_terminal->waitFor(0xFE);
+  return m_terminal->read(-1);
+}
 } // end of namespace

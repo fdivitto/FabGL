@@ -999,5 +999,132 @@ private:
 };
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// TerminalController
+
+
+/**
+ * @brief TerminalController allows to directly control the Terminal object without using escape sequences
+ *
+ * Example:
+ *
+ *     // Writes "Hello" at 10, 10
+ *     TerminalController termctrl(&Terminal);
+ *     termctrl.setCursorPos(10, 10);
+ *     Terminal.write("Hello");
+ */
+class TerminalController {
+
+public:
+
+  /**
+   * @brief Object constructor
+   *
+   * @param terminal The Terminal instance to control.
+   */
+  TerminalController(Terminal * terminal);
+
+  ~TerminalController();
+
+  /**
+   * @brief Sets current cursor position
+   *
+   * @param col Cursor column (1 = left-most position).
+   * @param row Cursor row (1 = top-most position).
+   */
+  void setCursorPos(int col, int row);
+
+  /**
+   * @brief Gets current cursor position
+   *
+   * @param col Pointer to a variable where to store current cursor column (1 = left-most position).
+   * @param row Pointer to a variable where to store current cursor row (1 = top-most position).
+   *
+   * Example:
+   *     int col, row;
+   *     termctrl.getCursorPos(&col, &row);
+   */
+  void getCursorPos(int * col, int * row);
+
+  /**
+   * @brief Moves cursor to the left
+   *
+   * Cursor movement may cross lines.
+   *
+   * @param count Amount of positions to move.
+   */
+  void cursorLeft(int count);
+
+  /**
+   * @brief Moves cursor to the right
+   *
+   * Cursor movement may cross lines.
+   *
+   * @param count Amount of positions to move.
+   */
+  void cursorRight(int count);
+
+  /**
+   * @brief Gets current cursor column
+   *
+   * @return Cursor column (1 = left-most position).
+   */
+  int getCursorCol();
+
+  /**
+   * @brief Gets current cursor row
+   *
+   * @return Cursor row (1 = top-most position).
+   */
+  int getCursorRow();
+
+  /**
+   * @brief Inserts a blank character and move specified amount of characters to the right
+   *
+   * Moving characters to the right may cross multiple lines.
+   *
+   * @param charsToMove Amount of characters to move to the right, starting from current cursor position.
+   *
+   * @return True if vertical scroll occurred.
+   */
+  bool multilineInsertChar(int charsToMove);
+
+  /**
+   * @brief Deletes a character moving specified amount of characters to the left
+   *
+   * Moving characters to the left may cross multiple lines.
+   *
+   * @param charsToMove Amount of characters to move to the left, starting from current cursor position.
+   */
+  void multilineDeleteChar(int charsToMove);
+
+  /**
+   * @brief Sets a raw character at current cursor position
+   *
+   * Cursor position is moved by one position to the right.
+   *
+   * @param c Raw character code to set. Raw character is not interpreted as control character or escape.
+   *
+   * @return True if vertical scroll occurred.
+   */
+  bool setChar(char c);
+
+  /**
+   * @brief Sets a sequence of raw characters starting from current cursor position
+   *
+   * Cursor position is moved by the amount of characters set.
+   *
+   * @param buffer The buffer containing raw characters.
+   * @param count Number of characters to set.
+   *
+   * @return Number of vertical scrolls occurred.
+   */
+  int setChars(char const * buffer, int count);
+
+private:
+  Terminal * m_terminal;
+};
 } // end of namespace
 
