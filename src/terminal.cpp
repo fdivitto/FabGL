@@ -3553,4 +3553,242 @@ int TerminalController::setChars(char const * buffer, int count)
   m_terminal->waitFor(0xFE);
   return m_terminal->read(-1);
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LineEditor
+
+
+LineEditor::LineEditor(Terminal * terminal)
+  : m_terminal(terminal),
+    m_termctrl(terminal),
+    m_text(nullptr),
+    m_textLength(0),
+    m_allocated(0),
+    m_state(-1),
+    m_insertMode(true)
+{
+}
+
+
+LineEditor::~LineEditor()
+{
+  free(m_text);
+}
+
+
+void LineEditor::setLength(int newLength)
+{
+  if (m_allocated < newLength) {
+    int allocated = imax(m_allocated * 2, newLength);
+    m_text = (char*) realloc(m_text, allocated + 1);
+    memset(m_text + m_allocated, 0, allocated - m_allocated + 1);
+    m_allocated = allocated;
+  }
+  m_textLength = newLength;
+}
+
+
+void LineEditor::setText(char const * text)
+{
+  int len = strlen(text);
+  setLength(len);
+  strcpy(m_text, text);
+  m_state = -1;
+}
+
+
+void LineEditor::beginInput()
+{
+  m_homeCol = m_termctrl.getCursorCol();
+  m_homeRow = m_termctrl.getCursorRow();
+  m_inputPos = 0;
+  if (m_text) {
+    m_inputPos = strlen(m_text);
+    m_homeRow -= m_termctrl.setChars(m_text, m_inputPos);
+  }
+  m_state = 0;
+}
+
+
+void LineEditor::endInput()
+{
+  m_state = -1;
+}
+
+
+char * LineEditor::get(int maxLength, int timeOutMS)
+{
+
+  // init?
+  if (m_state == -1)
+    beginInput();
+
+  while (true) {
+
+    int c = m_terminal->read(timeOutMS);
+
+    // timeout?
+    if (c < 0)
+      return nullptr;
+
+    if (m_state == 1) {
+
+      // ESC mode
+
+      switch (c) {
+
+        // "ESC [" => switch to CSI mode
+        case '[':
+          m_state = 31;
+          break;
+
+        default:
+          m_state = 0;
+          break;
+
+      }
+
+    } else if (m_state >= 31) {
+
+      // CSI mode
+
+      switch (c) {
+
+        // "ESC [ D" : cursor Left
+        case 'D':
+          if (m_inputPos > 0) {
+            int count = 1;
+            if (m_terminal->keyboard()->isVKDown(VK_LCTRL)) {
+              // CTRL + Cursor Left => start of previous word
+              while (m_inputPos - count > 0 && (m_text[m_inputPos - count] == ASCII_SPC || m_text[m_inputPos - count - 1] != ASCII_SPC))
+                ++count;
+            }
+            m_termctrl.cursorLeft(count);
+            m_inputPos -= count;
+          }
+          m_state = 0;
+          break;
+
+        // "ESC [ C" : cursor right
+        case 'C':
+          if (m_inputPos < m_textLength) {
+            int count = 1;
+            if (m_terminal->keyboard()->isVKDown(VK_LCTRL)) {
+              // CTRL + Cursor Right => start of next word
+              while (m_text[m_inputPos + count] && (m_text[m_inputPos + count] == ASCII_SPC || m_text[m_inputPos + count - 1] != ASCII_SPC))
+                ++count;
+            }
+            m_termctrl.cursorRight(count);
+            m_inputPos += count;
+          }
+          m_state = 0;
+          break;
+
+        // '1'...'6' : special chars (PageUp, Insert, Home...)
+        case '1' ... '6':
+          // requires ending '~'
+          m_state = c;
+          break;
+
+        // '~'
+        case '~':
+          switch (m_state) {
+
+            // Home
+            case '1':
+              m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+              m_inputPos = 0;
+              break;
+
+            // End
+            case '4':
+              m_termctrl.cursorRight(m_textLength - m_inputPos);
+              m_inputPos = m_textLength;
+              break;
+
+            // Delete
+            case '3':
+              if (m_inputPos < m_textLength) {
+                memmove(m_text + m_inputPos, m_text + m_inputPos + 1, m_textLength - m_inputPos);
+                m_termctrl.multilineDeleteChar(m_textLength - m_inputPos - 1);
+                --m_textLength;
+              }
+              break;
+
+            // Insert
+            case '2':
+              m_insertMode = !m_insertMode;
+              break;
+
+          }
+          m_state = 0;
+          break;
+
+        default:
+          m_state = 0;
+          break;
+
+      }
+
+    } else {
+
+      // normal mode
+
+      switch (c) {
+
+        // ESC, switch to ESC mode
+        case 0x1B:
+          m_state = 1;
+          break;
+
+        // DEL, delete character at left
+        case 0x7F:
+          if (m_inputPos > 0) {
+            m_termctrl.cursorLeft(1);
+            m_termctrl.multilineDeleteChar(m_textLength - m_inputPos);
+            memmove(m_text + m_inputPos - 1, m_text + m_inputPos, m_textLength - m_inputPos + 1);
+            --m_inputPos;
+            --m_textLength;
+          }
+          break;
+
+        // CR, newline and return the inserted text
+        case 0x0D:
+          m_termctrl.cursorRight(m_textLength - m_inputPos);
+          m_terminal->write("\r\n");
+          endInput();
+          return m_text;
+
+        // insert printable chars
+        case 32 ... 126:
+        case 128 ... 255:
+          // TODO: should we stop input when text length reach the full screen (minus home pos)?
+          if (maxLength == 0 || m_inputPos < maxLength) {
+            // update internal buffer
+            if (m_insertMode || m_inputPos == m_textLength) {
+              setLength(m_textLength + 1);
+              memmove(m_text + m_inputPos + 1, m_text + m_inputPos, m_textLength - m_inputPos);
+            }
+            m_text[m_inputPos++] = c;
+            // update terminal
+            if (m_insertMode && m_inputPos < m_textLength) {
+              if (m_termctrl.multilineInsertChar(m_textLength - m_inputPos))
+                --m_homeRow;  // scrolled
+            }
+            if (m_termctrl.setChar(c))
+              --m_homeRow;  // scrolled
+          }
+          break;
+
+      }
+    }
+
+  }
+}
+
+
+
 } // end of namespace

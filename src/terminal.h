@@ -1126,5 +1126,100 @@ public:
 private:
   Terminal * m_terminal;
 };
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// LineEditor
+
+
+/**
+ * @brief LineEditor is a single-line / multiple-rows editor which uses the Terminal object as input and output.
+ *
+ * The editor supports following control keys:
+ *
+ * \li <b>Left and Right Arrow keys</b>: Move cursor left and right, even across rows
+ * \li <b>CTRL + Left and Right Arrow keys</b>: Move cursor at the begining of prevous or next word
+ * \li <b>Home key</b>: Move cursor at the beginning of the line
+ * \li <b>End key</b>: Move cursor at the end of the line
+ * \li <b>Delete key</b>: Delete character at cursor
+ * \li <b>Insert key</b>: Enable/disable insert mode
+ * \li <b>Backspace key</b>: Delete character at left of the cursor
+ * \li <b>Enter/Return</b>: Move cursor at the beginning of the next line and exit editor
+ *
+ * Example:
+ *     Terminal.write("> ");  // show prompt
+ *     LineEditor ed(&Terminal);
+ *     char * txt = ed.get();
+ *     Terminal.printf("Your input is: %s\r\n", txt);
+ */
+class LineEditor {
+
+public:
+
+  /**
+   * @brief Object constructor
+   *
+   * @param terminal Pointer to Terminal object
+   */
+  LineEditor(Terminal * terminal);
+
+  ~LineEditor();
+
+  /**
+   * @brief Sets initial text
+   *
+   * Call this method if the input must have some text already inserted.
+   *
+   * @param text Initial text.
+   *
+   * Example:
+   *     LineEditor ed(&Terminal);
+   *     ed.setText("Initial text ");
+   *     char * txt = ed.get();
+   *     Terminal.printf("Your input is: %s\r\n", txt);
+   */
+  void setText(char const * text);
+
+  /**
+   * @brief Reads user input and return the inserted line
+   *
+   * This method returns when user press ENTER/RETURN or when the specified timeout has expired.
+   *
+   * @param maxLength Maximum amount of character the user can type. 0 = unlimited.
+   * @param timeOutMS Timeout in milliseconds. If timeout expires the cursor is not moved from its current position. -1 = no timeout.
+   *
+   * @return Returns what user typed and edited, or NULL on timeout.
+   */
+  char * get(int maxLength = 0, int timeOutMS = -1);
+
+  /**
+   * @brief Sets insert mode state
+   *
+   * @param value If True insert mode is enabled (default), if False insert mode is disabled.
+   */
+  void setInsertMode(bool value) { m_insertMode = value; }
+
+private:
+
+  void beginInput();
+  void endInput();
+  void setLength(int newLength);
+
+  Terminal *          m_terminal;
+  TerminalController  m_termctrl;
+  char *              m_text;
+  int                 m_textLength;
+  int                 m_allocated;
+  int16_t             m_inputPos;
+  int16_t             m_state;     // -1 = begin input, 0 = normal input, 1 = ESC, >=31 = CSI (actual value specified the third char if present)
+  int16_t             m_homeCol;
+  int16_t             m_homeRow;
+  bool                m_insertMode;
+};
+
+
+
 } // end of namespace
 
