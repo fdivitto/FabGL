@@ -467,8 +467,8 @@ public:
    *
    * Example:
    *
-   *       Terminal.begin(&VGAController);
-   *       Terminal.connectSerialPort(Serial);
+   *     Terminal.begin(&VGAController);
+   *     Terminal.connectSerialPort(Serial);
    */
   void connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF = true);
 
@@ -493,8 +493,8 @@ public:
    *
    * Example:
    *
-   *       Terminal.begin(&DisplayController);
-   *       Terminal.connectSerialPort(115200, SERIAL_8N1, 34, 2, FlowControl::Software);
+   *     Terminal.begin(&DisplayController);
+   *     Terminal.connectSerialPort(115200, SERIAL_8N1, 34, 2, FlowControl::Software);
    */
   void connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted = false);
 
@@ -506,10 +506,9 @@ public:
    *
    * Example:
    *
-   *       void loop()
-   *       {
-   *         Terminal.pollSerialPort();
-   *       }
+   *     void loop() {
+   *       Terminal.pollSerialPort();
+   *     }
    */
   void pollSerialPort();
 
@@ -521,10 +520,10 @@ public:
    *
    * Example:
    *
-   *        Terminal.begin(&VGAController);
-   *        Terminal.connectLocally();
-   *        // from here you can use Terminal.read() to receive keys from keyboard
-   *        // and Terminal.write() to control the display.
+   *     Terminal.begin(&VGAController);
+   *     Terminal.connectLocally();
+   *     // from here you can use Terminal.read() to receive keys from keyboard
+   *     // and Terminal.write() to control the display.
    */
   void connectLocally();
 
@@ -564,9 +563,9 @@ public:
    *
    * Example:
    *
-   *        Serial.begin(115200);
-   *        Terminal.begin(&VGAController);
-   *        Terminal.setLogStream(Serial);
+   *     Serial.begin(115200);
+   *     Terminal.begin(&VGAController);
+   *     Terminal.setLogStream(Serial);
    */
   void setLogStream(Stream & stream) { m_logStream = &stream; }
 
@@ -597,7 +596,7 @@ public:
    *
    * Example:
    *
-   *        Terminal.setBackgroundColor(Color::Black);
+   *     Terminal.setBackgroundColor(Color::Black);
    */
   void setBackgroundColor(Color color, bool setAsDefault = true);
 
@@ -612,7 +611,7 @@ public:
    *
    * Example:
    *
-   *        Terminal.setForegroundColor(Color::White);
+   *     Terminal.setForegroundColor(Color::White);
    */
   void setForegroundColor(Color color, bool setAsDefault = true);
 
@@ -623,9 +622,9 @@ public:
    *
    * Example:
    *
-   *        // Fill the screen with blue
-   *        Terminal.setBackgroundColor(Color::Blue);
-   *        Terminal.clear();
+   *     // Fill the screen with blue
+   *     Terminal.setBackgroundColor(Color::Blue);
+   *     Terminal.clear();
    */
   void clear();
 
@@ -763,13 +762,13 @@ public:
    *
    * Example:
    *
-   *        // Clear the screen and print "Hello World!"
-   *        Terminal.write("\e[2J", 4);
-   *        Terminal.write("Hellow World!\r\n", 15);
+   *     // Clear the screen and print "Hello World!"
+   *     Terminal.write("\e[2J", 4);
+   *     Terminal.write("Hellow World!\r\n", 15);
    *
-   *        // The same without size specified
-   *        Terminal.write("\e[2J");
-   *        Terminal.write("Hellow World!\r\n");
+   *     // The same without size specified
+   *     Terminal.write("\e[2J");
+   *     Terminal.write("Hellow World!\r\n");
    */
   int write(const uint8_t * buffer, int size);
 
@@ -1006,7 +1005,7 @@ private:
 
 
 /**
- * @brief TerminalController allows to directly control the Terminal object without using escape sequences
+ * @brief TerminalController allows direct controlling of the Terminal object without using escape sequences
  *
  * Example:
  *
@@ -1149,6 +1148,7 @@ private:
  * \li <b>Enter/Return</b>: Move cursor at the beginning of the next line and exit editor
  *
  * Example:
+ *
  *     Terminal.write("> ");  // show prompt
  *     LineEditor ed(&Terminal);
  *     char * txt = ed.get();
@@ -1175,6 +1175,7 @@ public:
    * @param text Initial text.
    *
    * Example:
+   * 
    *     LineEditor ed(&Terminal);
    *     ed.setText("Initial text ");
    *     char * txt = ed.get();
