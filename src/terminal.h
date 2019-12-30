@@ -232,6 +232,15 @@ namespace fabgl {
 
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines various serial port flow control methods
+ */
+enum class FlowControl {
+  None,              /**< No flow control */
+  Software,          /**< Software flow control. Use XON and XOFF control characters */
+};
+
+
 // used by saveCursorState / restoreCursorState
 struct TerminalCursorState {
   TerminalCursorState *   next;
@@ -329,7 +338,7 @@ struct EmuState {
   bool         VT52GraphicsMode;
 
   // Allow FabGL specific sequences (ESC 0xFF .....)
-  int         allowFabGLSequences;  // >0 allow, 0 = don't allow
+  int          allowFabGLSequences;  // >0 allow, 0 = don't allow
 };
 
 
@@ -442,13 +451,16 @@ public:
   void end();
 
   /**
-   * @brief Connects a remove host using the specified serial port.
+   * @brief Connects a remote host using the specified serial port.
    *
    * When serial port is set, the typed keys on PS/2 keyboard are encoded
    * as ANSI/VT100 codes and then sent to the specified serial port.<br>
    * Also replies to terminal queries like terminal identification, cursor position, etc.. will be
    * sent to the serial port.<br>
    * Call Terminal.pollSerialPort() to send codes from serial port to the display.
+   *
+   * This method requires continous polling of the serial port and is very inefficient. Use the second overload
+   * to directly handle serial port using interrupts.
    *
    * @param serialPort The serial port to use.
    * @param autoXONXOFF If true uses software flow control (XON/XOFF).
@@ -459,6 +471,32 @@ public:
    *       Terminal.connectSerialPort(Serial);
    */
   void connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF = true);
+
+  /**
+   * @brief Connects a remote host using UART
+   *
+   * When serial port is set, the typed keys on PS/2 keyboard are encoded
+   * as ANSI/VT100 codes and then sent to the specified serial port.<br>
+   * Also replies to terminal queries like terminal identification, cursor position, etc.. will be
+   * sent to the serial port.<br>
+   * This method setups the UART2 with specified parameters. Received characters are handlded using interrupts freeing main
+   * loop to do something other.<br>
+   * <br>
+   * This is the preferred way to connect the Terminal with a serial port.<br>
+   *
+   * @param baud Baud rate.
+   * @param config Defines word length, parity and stop bits. Example: SERIAL_8N1.
+   * @param rxPin UART RX pin GPIO number.
+   * @param txPin UART TX pin GPIO number.
+   * @param flowControl Flow control. When set to FlowControl::Software, XON and XOFF characters are automatically sent.
+   * @param inverted If true RX and TX signals are inverted.
+   *
+   * Example:
+   *
+   *       Terminal.begin(&DisplayController);
+   *       Terminal.connectSerialPort(115200, SERIAL_8N1, 34, 2, FlowControl::Software);
+   */
+  void connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted = false);
 
   /**
    * @brief Pools the serial port for incoming data.
@@ -820,6 +858,8 @@ private:
   void blinkCursor();
   bool int_enableCursor(bool value);
 
+  static void IRAM_ATTR uart_isr(void *arg);
+
   char getNextCode(bool processCtrlCodes);
 
   bool setChar(char c);
@@ -854,10 +894,18 @@ private:
   void ANSIDecodeVirtualKey(VirtualKey vk);
   void VT52DecodeVirtualKey(VirtualKey vk);
 
-  void convHandleTranslation(uint8_t c);
-  void convSendCtrl(ConvCtrl ctrl);
-  void convQueue(const char * str = nullptr);
+  void convHandleTranslation(uint8_t c, bool fromISR);
+  void convSendCtrl(ConvCtrl ctrl, bool fromISR);
+  void convQueue(const char * str, bool fromISR);
   void TermDecodeVirtualKey(VirtualKey vk);
+
+  bool addToInputQueue(char c, bool fromISR);
+
+  void write(char c, bool fromISR);
+
+  //static void uart_on_apb_change(void * arg, apb_change_ev_t ev_type, uint32_t old_apb, uint32_t new_apb);
+
+  void uartCheckInputQueueForFlowControl();
 
   DisplayController * m_displayController;
   Canvas *           m_canvas;
@@ -904,7 +952,7 @@ private:
   volatile bool      m_cursorState;
 
   // timer used to blink
-  TimerHandle_t              m_blinkTimer;
+  TimerHandle_t      m_blinkTimer;
 
   // main terminal mutex
   volatile SemaphoreHandle_t m_mutex;
@@ -918,25 +966,30 @@ private:
   // optional serial port
   // data from serial port is processed and displayed
   // keys from keyboard are processed and sent to serial port
-  HardwareSerial *   m_serialPort;
+  HardwareSerial *          m_serialPort;
+
+  // optional serial port (directly handled)
+  // data from serial port is processed and displayed
+  // keys from keyboard are processed and sent to serial port
+  volatile bool             m_uart;
 
   // contains characters to be processed (from write() calls)
-  QueueHandle_t      m_inputQueue;
+  volatile QueueHandle_t    m_inputQueue;
 
   // contains characters received and decoded from keyboard (or as replyes from ANSI-VT queries)
-  QueueHandle_t      m_outputQueue;
+  QueueHandle_t             m_outputQueue;
 
   // linked list that contains saved cursor states (first item is the last added)
-  TerminalCursorState * m_savedCursorStateList;
+  TerminalCursorState *     m_savedCursorStateList;
 
   // a reset has been requested
-  bool               m_resetRequested;
+  bool                      m_resetRequested;
 
-  bool               m_autoXONOFF;
-  bool               m_XOFF;       // true = XOFF sent
+  volatile bool             m_autoXONOFF;
+  volatile bool             m_XOFF;       // true = XOFF sent
 
   // used to implement m_emuState.keyAutorepeat
-  VirtualKey         m_lastPressedKey;
+  VirtualKey                m_lastPressedKey;
 
   uint8_t                   m_convMatchedCount;
   char                      m_convMatchedChars[EmuTerminalMaxChars];

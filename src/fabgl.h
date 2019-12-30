@@ -329,6 +329,7 @@ using fabgl::RGB222;
 using fabgl::RGBA2222;
 using fabgl::RGB888;
 using fabgl::RGBA8888;
+using fabgl::FlowControl;
 
 
 

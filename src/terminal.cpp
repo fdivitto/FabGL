@@ -27,6 +27,19 @@
 #include "freertos/task.h"
 #include "freertos/timers.h"
 
+#include "rom/ets_sys.h"
+#include "esp_attr.h"
+#include "esp_intr.h"
+#include "rom/uart.h"
+#include "soc/uart_reg.h"
+#include "soc/uart_struct.h"
+#include "soc/io_mux_reg.h"
+#include "soc/gpio_sig_map.h"
+#include "soc/dport_reg.h"
+#include "soc/rtc.h"
+#include "esp_intr_alloc.h"
+
+
 #include "fabutils.h"
 #include "terminal.h"
 
@@ -146,6 +159,7 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
 
   m_serialPort = nullptr;
   m_keyboardReaderTaskHandle = nullptr;
+  m_uart = false;
 
   m_outputQueue = nullptr;
 
@@ -170,6 +184,124 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
   // just in case a reset occurred after an XOFF
   if (m_autoXONOFF)
     send(ASCII_XON);
+}
+
+
+// returns number of bytes received (in the UART2 rx fifo buffer)
+inline int uartGetRXFIFOCount()
+{
+  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  return uart->status.rxfifo_cnt | ((int)(uart->mem_cnt_status.rx_cnt) << 8);
+}
+
+
+// flushes TX buffer of UART2
+static void uartFlushTXFIFO()
+{
+  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  while (uart->status.txfifo_cnt || uart->status.st_utx_out)
+    ;
+}
+
+
+// flushes RX buffer of UART2
+static void uartFlushRXFIFO()
+{
+  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  while (uartGetRXFIFOCount() != 0 || uart->mem_rx_status.wr_addr != uart->mem_rx_status.rd_addr)
+    uart->fifo.rw_byte;
+}
+
+
+// look into input queue (m_inputQueue): if there is space for new incoming bytes send XON and reenable uart RX interrupts
+void Terminal::uartCheckInputQueueForFlowControl()
+{
+  if (m_autoXONOFF) {
+    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    if (uxQueueMessagesWaiting(m_inputQueue) == 0 && uart->int_ena.rxfifo_full == 0) {
+      if (m_XOFF) {
+        m_XOFF = false;
+        uart->flow_conf.send_xon = 1; // send XON
+      }
+      uart->int_ena.rxfifo_full = 1;
+    }
+  }
+}
+
+
+// connect to UART2
+void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted)
+{
+  Serial2.end();
+
+  m_uart = true;
+  m_autoXONOFF = (flowControl == FlowControl::Software);
+
+  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+
+  DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_UART2_CLK_EN);
+  DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_UART2_RST);
+
+  // flush
+  uartFlushTXFIFO();
+  uartFlushRXFIFO();
+
+  // set baud rate
+  uint32_t clk_div = (getApbFrequency() << 4) / baud;
+  uart->clk_div.div_int  = clk_div >> 4;
+  uart->clk_div.div_frag = clk_div & 0xf;
+
+  // frame
+  uart->conf0.val = config;
+  if (uart->conf0.stop_bit_num == 0x3) {
+    uart->conf0.stop_bit_num = 1;
+    uart->rs485_conf.dl1_en  = 1;
+  }
+
+  // RX Pin
+  pinMode(rxPin, INPUT);
+  pinMatrixInAttach(rxPin, U2RXD_IN_IDX, inverted);
+
+  // RX interrupt
+  uart->conf1.rxfifo_full_thrhd = 1;  // an interrupt for each character received
+  uart->conf1.rx_tout_thrhd = 2;      // actually not used
+  uart->conf1.rx_tout_en    = 0;      // timeout not enabled
+  uart->int_ena.rxfifo_full = 1;      // interrupt on FIFO full (1 character - see rxfifo_full_thrhd)
+  uart->int_ena.frm_err     = 1;      // interrupt on frame error
+  uart->int_ena.rxfifo_tout = 0;      // no interrupt on rx timeout (see rx_tout_en and rx_tout_thrhd)
+  uart->int_ena.parity_err  = 1;      // interrupt on rx parity error
+  uart->int_ena.rxfifo_ovf  = 1;      // interrupt on rx overflow
+  uart->int_clr.val = 0xffffffff;
+  esp_intr_alloc(ETS_UART2_INTR_SOURCE, 0, uart_isr, this, nullptr);
+
+  // setup FIFOs size
+  uart->mem_conf.rx_size = 3;  // RX: 384 bytes (this is the max for UART2)
+  uart->mem_conf.tx_size = 1;  // TX: 128 bytes
+
+  // TX Pin
+  pinMode(txPin, OUTPUT);
+  pinMatrixOutAttach(txPin, U2TXD_OUT_IDX, inverted, false);
+
+  // Flow Control
+  uart->flow_conf.sw_flow_con_en = 0;
+  uart->flow_conf.xonoff_del     = 0;
+  if (flowControl == FlowControl::Software) {
+    // we actually use manual software control, using send_xon/send_xoff bits to send control characters
+    // because we have to check both RX-FIFO and input queue
+    uart->swfc_conf.xon_threshold  = 0;
+    uart->swfc_conf.xoff_threshold = 0;
+    uart->swfc_conf.xon_char  = ASCII_XON;
+    uart->swfc_conf.xoff_char = ASCII_XOFF;
+    // send an XON right now
+    m_XOFF = true;
+    uart->flow_conf.send_xon = 1;
+  }
+
+  // APB Change callback (TODO?)
+  //addApbChangeCallback(this, uart_on_apb_change);
+
+  if (m_keyboard->isKeyboardAvailable())
+    xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
 
 
@@ -1138,6 +1270,56 @@ void Terminal::pollSerialPort()
 }
 
 
+void IRAM_ATTR Terminal::uart_isr(void *arg)
+{
+  Terminal * term = (Terminal*) arg;
+  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+
+  // look for overflow or RX errors
+  if (uart->int_st.rxfifo_ovf || uart->int_st.frm_err || uart->int_st.parity_err) {
+    // reset RX-FIFO, because hardware bug rxfifo_rst cannot be used, so just flush
+    uartFlushRXFIFO();
+    // reset interrupt flags
+    uart->int_clr.rxfifo_ovf = 1;
+    uart->int_clr.frm_err    = 1;
+    uart->int_clr.parity_err = 1;
+    return;
+  }
+
+  // software flow control?
+  if (term->m_autoXONOFF) {
+    // send XOFF/XON looking at RX FIFO occupation
+    int count = uartGetRXFIFOCount();
+    if (count > 300 && !term->m_XOFF) {
+      uart->flow_conf.send_xoff = 1; // send XOFF
+      term->m_XOFF = true;
+    } else if (count < 20 && term->m_XOFF) {
+      uart->flow_conf.send_xon = 1;  // send XON
+      term->m_XOFF = false;
+    }
+  }
+
+  // main receive loop
+  while (uartGetRXFIFOCount() != 0 || uart->mem_rx_status.wr_addr != uart->mem_rx_status.rd_addr) {
+    // look for enough room in input queue
+    if (term->m_autoXONOFF && xQueueIsQueueFullFromISR(term->m_inputQueue)) {
+      if (!term->m_XOFF) {
+        uart->flow_conf.send_xoff = 1;  // send XOFF
+        term->m_XOFF = true;
+      }
+      // block further interrupts
+      uart->int_ena.rxfifo_full = 0;
+      break;
+    }
+    // add to input queue
+    term->addToInputQueue(uart->fifo.rw_byte, true);
+  }
+
+  // clear interrupt flag
+  uart->int_clr.rxfifo_full = 1;
+}
+
+
 // send a character to m_serialPort or m_outputQueue
 void Terminal::send(char c)
 {
@@ -1149,6 +1331,13 @@ void Terminal::send(char c)
     while (m_serialPort->availableForWrite() == 0)
       vTaskDelay(1 / portTICK_PERIOD_MS);
     m_serialPort->write(c);
+  }
+
+  if (m_uart) {
+    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    while (uart->status.txfifo_cnt == 0x7F)
+      ;
+    uart->fifo.rw_byte = c;
   }
 
   localWrite(c);  // write to m_outputQueue
@@ -1169,6 +1358,15 @@ void Terminal::send(char const * str)
       #endif
 
       ++str;
+    }
+  }
+
+  if (m_uart) {
+    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    while (*str) {
+      while (uart->status.txfifo_cnt == 0x7F)
+        ;
+      uart->fifo.rw_byte = *str++;
     }
   }
 
@@ -1200,17 +1398,31 @@ int Terminal::availableForWrite()
 }
 
 
-size_t Terminal::write(uint8_t c)
+bool Terminal::addToInputQueue(char c, bool fromISR)
+{
+  if (fromISR)
+    return xQueueSendToBackFromISR(m_inputQueue, &c, nullptr);
+  else
+    return xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);
+}
+
+
+void Terminal::write(char c, bool fromISR)
 {
   if (m_termInfo == nullptr)
-    xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);  // send unprocessed
+    addToInputQueue(c, fromISR);  // send unprocessed
   else
-    convHandleTranslation(c);
+    convHandleTranslation(c, fromISR);
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES
   logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
   #endif
+}
 
+
+size_t Terminal::write(uint8_t c)
+{
+  write(c, false);
   return 1;
 }
 
@@ -1261,7 +1473,7 @@ void Terminal::setTerminalType(TermType value)
 }
 
 
-void Terminal::convHandleTranslation(uint8_t c)
+void Terminal::convHandleTranslation(uint8_t c, bool fromISR)
 {
   if (m_convMatchedCount > 0 || c < 32 || c == 0x7f || c == '~') {
 
@@ -1285,99 +1497,99 @@ void Terminal::convHandleTranslation(uint8_t c)
         if (item->termSeqLen == m_convMatchedCount) {
           // full match, send related ANSI sequences (and resets m_convMatchedCount and m_convMatchedItem)
           for (ConvCtrl const * ctrl = item->convCtrl; *ctrl != ConvCtrl::END; ++ctrl)
-            convSendCtrl(*ctrl);
+            convSendCtrl(*ctrl, fromISR);
         }
         return;
       }
     }
 
     // no match, send received stuff as is
-    convQueue();
+    convQueue(nullptr, fromISR);
   } else
-    xQueueSendToBack(m_inputQueue, &c, portMAX_DELAY);
+    addToInputQueue(c, fromISR);
 }
 
 
-void Terminal::convSendCtrl(ConvCtrl ctrl)
+void Terminal::convSendCtrl(ConvCtrl ctrl, bool fromISR)
 {
   switch (ctrl) {
     case ConvCtrl::CarriageReturn:
-      convQueue("\x0d");
+      convQueue("\x0d", fromISR);
       break;
     case ConvCtrl::LineFeed:
-      convQueue("\x0a");
+      convQueue("\x0a", fromISR);
       break;
     case ConvCtrl::CursorLeft:
-      convQueue("\e[D");
+      convQueue("\e[D", fromISR);
       break;
     case ConvCtrl::CursorUp:
-      convQueue("\e[A");
+      convQueue("\e[A", fromISR);
       break;
     case ConvCtrl::CursorRight:
-      convQueue("\e[C");
+      convQueue("\e[C", fromISR);
       break;
     case ConvCtrl::EraseToEndOfScreen:
-      convQueue("\e[J");
+      convQueue("\e[J", fromISR);
       break;
     case ConvCtrl::EraseToEndOfLine:
-      convQueue("\e[K");
+      convQueue("\e[K", fromISR);
       break;
     case ConvCtrl::CursorHome:
-      convQueue("\e[H");
+      convQueue("\e[H", fromISR);
       break;
     case ConvCtrl::AttrNormal:
-      convQueue("\e[0m");
+      convQueue("\e[0m", fromISR);
       break;
     case ConvCtrl::AttrBlank:
-      convQueue("\e[8m");
+      convQueue("\e[8m", fromISR);
       break;
     case ConvCtrl::AttrBlink:
-      convQueue("\e[5m");
+      convQueue("\e[5m", fromISR);
       break;
     case ConvCtrl::AttrBlinkOff:
-      convQueue("\e[25m");
+      convQueue("\e[25m", fromISR);
       break;
     case ConvCtrl::AttrReverse:
-      convQueue("\e[7m");
+      convQueue("\e[7m", fromISR);
       break;
     case ConvCtrl::AttrReverseOff:
-      convQueue("\e[27m");
+      convQueue("\e[27m", fromISR);
       break;
     case ConvCtrl::AttrUnderline:
-      convQueue("\e[4m");
+      convQueue("\e[4m", fromISR);
       break;
     case ConvCtrl::AttrUnderlineOff:
-      convQueue("\e[24m");
+      convQueue("\e[24m", fromISR);
       break;
     case ConvCtrl::AttrReduce:
-      convQueue("\e[2m");
+      convQueue("\e[2m", fromISR);
       break;
     case ConvCtrl::AttrReduceOff:
-      convQueue("\e[22m");
+      convQueue("\e[22m", fromISR);
       break;
     case ConvCtrl::InsertLine:
-      convQueue("\e[L");
+      convQueue("\e[L", fromISR);
       break;
     case ConvCtrl::InsertChar:
-      convQueue("\e[@");
+      convQueue("\e[@", fromISR);
       break;
     case ConvCtrl::DeleteLine:
-      convQueue("\e[M");
+      convQueue("\e[M", fromISR);
       break;
     case ConvCtrl::DeleteCharacter:
-      convQueue("\e[P");
+      convQueue("\e[P", fromISR);
       break;
     case ConvCtrl::CursorOn:
-      convQueue("\e[?25h");
+      convQueue("\e[?25h", fromISR);
       break;
     case ConvCtrl::CursorOff:
-      convQueue("\e[?25l");
+      convQueue("\e[?25l", fromISR);
       break;
     case ConvCtrl::SaveCursor:
-      convQueue("\e[?1048h");
+      convQueue("\e[?1048h", fromISR);
       break;
     case ConvCtrl::RestoreCursor:
-      convQueue("\e[?1048l");
+      convQueue("\e[?1048l", fromISR);
       break;
     case ConvCtrl::CursorPos:
     case ConvCtrl::CursorPos2:
@@ -1386,7 +1598,7 @@ void Terminal::convSendCtrl(ConvCtrl ctrl)
       int y = (ctrl == ConvCtrl::CursorPos ? m_convMatchedChars[2] - 31 : m_convMatchedChars[3] + 1);
       int x = (ctrl == ConvCtrl::CursorPos ? m_convMatchedChars[3] - 31 : m_convMatchedChars[2] + 1);
       sprintf(s, "\e[%d;%dH", y, x);
-      convQueue(s);
+      convQueue(s, fromISR);
       break;
     }
 
@@ -1397,14 +1609,14 @@ void Terminal::convSendCtrl(ConvCtrl ctrl)
 
 
 // queue m_termMatchedChars[] or specified string
-void Terminal::convQueue(const char * str)
+void Terminal::convQueue(const char * str, bool fromISR)
 {
   if (str) {
     for (; *str; ++str)
-      xQueueSendToBack(m_inputQueue, str, portMAX_DELAY);
+      addToInputQueue(*str, fromISR);
   } else {
     for (int i = 0; i <= m_convMatchedCount; ++i) {
-      xQueueSendToBack(m_inputQueue, m_convMatchedChars + i, portMAX_DELAY);
+      addToInputQueue(m_convMatchedChars[i], fromISR);
     }
   }
   m_convMatchedCount = 0;
@@ -1539,6 +1751,9 @@ char Terminal::getNextCode(bool processCtrlCodes)
   while (true) {
     char c;
     xQueueReceive(m_inputQueue, &c, portMAX_DELAY);
+
+    if (m_uart)
+      uartCheckInputQueueForFlowControl();
 
     // inside an ESC sequence we may find control characters!
     if (processCtrlCodes && ISCTRLCHAR(c))
