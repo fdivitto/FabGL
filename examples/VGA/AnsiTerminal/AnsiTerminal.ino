@@ -23,29 +23,32 @@
 #include "fabgl.h"
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
 
+#define UART_RX 34
+#define UART_TX 2
+
+#define UART_BAUD     115200
+#define UART_CONF     SERIAL_8N1
+#define UART_FLOWCTRL FlowControl::Software
+
+
+
 void setup()
 {
-  // for ESP32-PICO-D4 use GPIO 12 (RX) and 2 (TX)
-  Serial2.begin(115200, SERIAL_8N1, 12, 2);
-
-  // other boards
-  //Serial2.begin(115200);
-
-  //Serial.begin(115200); // debug only
+  //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
 
   // only keyboard configured on port 0
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
 
-  Terminal.begin(&VGAController);
-  Terminal.connectSerialPort(Serial2);
+  Terminal.begin(&DisplayController);
+  Terminal.connectSerialPort(UART_BAUD, UART_CONF, UART_RX, UART_TX, UART_FLOWCTRL);
   //Terminal.setLogStream(Serial);  // debug only
 
   Terminal.setBackgroundColor(Color::Black);
@@ -55,8 +58,8 @@ void setup()
 
   Terminal.write("* * FabGL - Serial VT/ANSI Terminal\r\n");
   Terminal.write("* * 2019 by Fabrizio Di Vittorio - www.fabgl.com\r\n\n");
-  Terminal.printf("Screen Size        : %d x %d\r\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
-  Terminal.printf("Viewport Size      : %d x %d\r\n", VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
+  Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+  Terminal.printf("Viewport Size      : %d x %d\r\n", DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
   Terminal.printf("Keyboard           : %s\r\n\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
   Terminal.printf("Free DMA Memory    : %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
@@ -69,5 +72,6 @@ void setup()
 
 void loop()
 {
-  Terminal.pollSerialPort();
+  // the job is done using UART interrupts
+  vTaskSuspend(nullptr);
 }
