@@ -1184,6 +1184,16 @@ public:
   void setText(char const * text);
 
   /**
+   * @brief Sets initial text specifying length
+   *
+   * Call this method if the input must have some text already inserted.
+   *
+   * @param text Initial text.
+   * @param length Text length
+   */
+  void setText(char const * text, int length);
+
+  /**
    * @brief Reads user input and return the inserted line
    *
    * This method returns when user press ENTER/RETURN or when the specified timeout has expired.

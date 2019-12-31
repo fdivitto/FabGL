@@ -3593,9 +3593,15 @@ void LineEditor::setLength(int newLength)
 
 void LineEditor::setText(char const * text)
 {
-  int len = strlen(text);
-  setLength(len);
-  strcpy(m_text, text);
+  setText(text, strlen(text));
+}
+
+
+void LineEditor::setText(char const * text, int length)
+{
+  setLength(length);
+  memcpy(m_text, text, length);
+  m_text[length] = 0;
   m_state = -1;
 }
 
