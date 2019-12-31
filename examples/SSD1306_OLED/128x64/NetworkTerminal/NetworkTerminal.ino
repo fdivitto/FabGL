@@ -194,12 +194,16 @@ void exe_scan()
 {
   static char const * ENC2STR[] = { "Open", "WEP", "WPA-PSK", "WPA2-PSK", "WPA/WPA2-PSK", "WPA-ENTERPRISE" };
   Terminal.write("Scanning...\r\n");
+  Terminal.flush();
+  fabgl::suspendInterrupts();
   int networksCount = WiFi.scanNetworks();
+  fabgl::resumeInterrupts();
   Terminal.printf("%d network(s)\r\n", networksCount);
   if (networksCount) {
     for (int i = 0; i < networksCount; ++i)
       Terminal.printf("#%d %s %ddBm ch%d %s\r\n", i + 1, WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i), ENC2STR[WiFi.encryptionType(i)]);
   }
+  WiFi.scanDelete();
   error = false;
   state = State::Prompt;
 }
@@ -213,19 +217,23 @@ void exe_wifi()
   char psw[MAX_PSW_SIZE + 1] = {0};
   error = true;
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
-    WiFi.begin(ssid, psw);
     Terminal.write("Connecting WiFi...");
-    for (int i = 0; i < 16 && WiFi.status() != WL_CONNECTED; ++i) {
-      Terminal.write('.');
-      WiFi.reconnect();
-      delay(1000);
+    Terminal.flush();
+    fabgl::suspendInterrupts();
+    WiFi.disconnect(true, true);
+    for (int i = 0; i < 2; ++i) {
+      WiFi.begin(ssid, psw);
+      if (WiFi.waitForConnectResult() == WL_CONNECTED)
+        break;
+      WiFi.disconnect(true, true);
     }
-    Terminal.write("\r\n");
+    fabgl::resumeInterrupts();
     if (WiFi.status() == WL_CONNECTED) {
       Terminal.printf("SSID: %s\r\nIP: %s\r\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
       error = false;
-    } else
-      Terminal.write("Failed!\r\n");
+    } else {
+      Terminal.write("failed!\r\n");
+    }
   }
   state = State::Prompt;
 }
