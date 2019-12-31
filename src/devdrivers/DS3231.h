@@ -84,7 +84,7 @@ private:
  *     fabgl::DS3231 DS3231;
  *
  *     void setup() {
- *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL
+ *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL (WARN: disconnect VGA connector!!)
  *       DS3231.begin(&I2C);
  *
  *       auto dt = DS3231.datetime();

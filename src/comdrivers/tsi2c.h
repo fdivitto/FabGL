@@ -67,7 +67,7 @@ struct I2CJobInfo {
  *     fabgl::I2C I2C;
  *
  *     void setup() {
- *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL
+ *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL (WARN: disconnect VGA connector!!)
  *     }
  */
 class I2C {
@@ -91,7 +91,7 @@ public:
    *
    * Example:
    *
-   *     // 4 = SDA, 15 = SCL
+   *     // 4 = SDA, 15 = SCL (WARN: disconnect VGA connector!!)
    *     I2C.begin(GPIO_NUM_4, GPIO_NUM_15);
    */
   bool begin(gpio_num_t SDAGPIO, gpio_num_t SCLGPIO);

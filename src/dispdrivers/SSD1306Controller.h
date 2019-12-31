@@ -62,7 +62,7 @@ namespace fabgl {
  *     fabgl::SSD1306Controller SSD1306Controller;
  *
  *     void setup() {
- *       // SDA = gpio-4, SCL = gpio-15
+ *       // SDA = gpio-4, SCL = gpio-15  (WARN: disconnect VGA connector!!)
  *       I2C.begin(GPIO_NUM_4, GPIO_NUM_15);
  *
  *       // default OLED address is 0x3C
