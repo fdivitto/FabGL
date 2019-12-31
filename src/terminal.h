@@ -1011,6 +1011,7 @@ private:
  *
  *     // Writes "Hello" at 10, 10
  *     TerminalController termctrl(&Terminal);
+ *     termctrl.begin();
  *     termctrl.setCursorPos(10, 10);
  *     Terminal.write("Hello");
  */
