@@ -174,13 +174,17 @@ void exe_scan()
 {
   static char const * ENC2STR[] = { "Open", "WEP", "WPA-PSK", "WPA2-PSK", "WPA/WPA2-PSK", "WPA-ENTERPRISE" };
   Terminal.write("Scanning...");
+  Terminal.flush();
+  fabgl::suspendInterrupts();
   int networksCount = WiFi.scanNetworks();
+  fabgl::resumeInterrupts();
   Terminal.printf("%d network(s) found\r\n", networksCount);
   if (networksCount) {
     Terminal.write   ("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[32m\r\n");
     for (int i = 0; i < networksCount; ++i)
       Terminal.printf("\e[33m %d\e[4G%s\e[33m\e[45G%d dBm\e[55G%d\e[60G%s\e[32m\r\n", i + 1, WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i), ENC2STR[WiFi.encryptionType(i)]);
   }
+  WiFi.scanDelete();
   error = false;
   state = State::Prompt;
 }
@@ -194,18 +198,23 @@ void exe_wifi()
   char psw[MAX_PSW_SIZE + 1] = {0};
   error = true;
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
-    WiFi.begin(ssid, psw);
     Terminal.write("Connecting WiFi...");
-    for (int i = 0; i < 16 && WiFi.status() != WL_CONNECTED; ++i) {
-      Terminal.write('.');
-      WiFi.reconnect();
-      delay(1000);
+    Terminal.flush();
+    fabgl::suspendInterrupts();
+    WiFi.disconnect(true, true);
+    for (int i = 0; i < 2; ++i) {
+      WiFi.begin(ssid, psw);
+      if (WiFi.waitForConnectResult() == WL_CONNECTED)
+        break;
+      WiFi.disconnect(true, true);
     }
+    fabgl::resumeInterrupts();
     if (WiFi.status() == WL_CONNECTED) {
       Terminal.printf("connected to %s, IP is %s\r\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
       error = false;
-    } else
+    } else {
       Terminal.write("failed!\r\n");
+    }
   }
   state = State::Prompt;
 }
@@ -330,7 +339,7 @@ void exe_ping()
 
 void setup()
 {
-  Serial.begin(115200); // DEBUG ONLY
+  //Serial.begin(115200); // DEBUG ONLY
 
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
@@ -341,7 +350,7 @@ void setup()
 
   Terminal.begin(&VGAController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
-  Terminal.setLogStream(Serial);  // DEBUG ONLY
+  //Terminal.setLogStream(Serial);  // DEBUG ONLY
 
   Terminal.setBackgroundColor(Color::Black);
   Terminal.setForegroundColor(Color::BrightGreen);
