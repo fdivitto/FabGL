@@ -1028,6 +1028,16 @@ public:
   ~TerminalController();
 
   /**
+   * @brief Initializes TerminalController operations
+   */
+  void begin();
+
+  /**
+   * @brief Finalizes TerminalController operations
+   */
+  void end();
+
+  /**
    * @brief Sets current cursor position
    *
    * @param col Cursor column (1 = left-most position).
@@ -1203,7 +1213,8 @@ public:
    *
    * @return Returns what user typed and edited, or NULL on timeout.
    */
-  char * get(int maxLength = 0, int timeOutMS = -1);
+  char const * edit(int maxLength = 0, int timeOutMS = -1);
+
   /**
    * @brief Gets current content
    *

@@ -3445,12 +3445,22 @@ void Terminal::TermDecodeVirtualKey(VirtualKey vk)
 TerminalController::TerminalController(Terminal * terminal)
   : m_terminal(terminal)
 {
+}
+
+
+TerminalController::~TerminalController()
+{
+}
+
+
+void TerminalController::begin()
+{
   // enable fabgl sequences
   m_terminal->write("\e[?7999h");
 }
 
 
-TerminalController::~TerminalController()
+void TerminalController::end()
 {
   // disable (if not enabled before) fabgl sequences
   m_terminal->write("\e[?7999l");
@@ -3608,6 +3618,7 @@ void LineEditor::setText(char const * text, int length)
 
 void LineEditor::beginInput()
 {
+  m_termctrl.begin();
   m_homeCol = m_termctrl.getCursorCol();
   m_homeRow = m_termctrl.getCursorRow();
   m_inputPos = 0;
@@ -3621,11 +3632,12 @@ void LineEditor::beginInput()
 
 void LineEditor::endInput()
 {
+  m_termctrl.end();
   m_state = -1;
 }
 
 
-char * LineEditor::get(int maxLength, int timeOutMS)
+char const * LineEditor::edit(int maxLength, int timeOutMS)
 {
 
   // init?
