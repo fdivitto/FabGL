@@ -37,9 +37,6 @@ enum class State { Prompt, PromptInput, UnknownCommand, Help, Info, Wifi, Telnet
 
 
 State        state = State::Prompt;
-const int    INPUTLINESIZE = 80;
-char         inputLine[INPUTLINESIZE + 1];
-int          inputPos = 0;
 WiFiClient   client;
 char const * currentScript = nullptr;
 bool         error = false;
@@ -48,6 +45,7 @@ bool         error = false;
 fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
+fabgl::LineEditor    LineEditor(&Terminal);
 
 
 void exe_info()
@@ -92,8 +90,9 @@ void exe_help()
 }
 
 
-void decode_command(char const * inputLine)
+void decode_command()
 {
+  auto inputLine = LineEditor.get();
   if (*inputLine == 0)
     state = State::Prompt;
   else if (strncmp(inputLine, "help", 4) == 0)
@@ -126,10 +125,9 @@ void exe_prompt()
     } else {
       // execute current line and move to the next one
       int linelen = strchr(currentScript, '\r') - currentScript;
-      memcpy(inputLine, currentScript, linelen);
-      inputLine[linelen] = 0;
+      LineEditor.setText(currentScript, linelen);
       currentScript += linelen + 1;
-      decode_command(inputLine);
+      decode_command();
     }
   } else {
     // process commands from keyboard
@@ -141,32 +139,9 @@ void exe_prompt()
 
 void exe_promptInput()
 {
-  if (Terminal.available()) {
-    char c = Terminal.read();
-    switch (c) {
-      // DEL
-      case 0x7F:
-        if (inputPos) {
-          Terminal.write("\b\e[K"); // backspace + ESC[K
-          --inputPos;
-        }
-        break;
-      // CR, process the line
-      case 0x0D:
-        Terminal.write("\r\n");
-        inputLine[inputPos] = 0;
-        decode_command(inputLine);
-        inputPos = 0;
-        break;
-      // directly printable chars
-      case 32 ... 126:
-        if (inputPos < INPUTLINESIZE) {
-          Terminal.write(c);
-          inputLine[inputPos++] = c;
-        }
-        break;
-    }
-  }
+  LineEditor.setText("");
+  LineEditor.edit();
+  decode_command();
 }
 
 
@@ -197,6 +172,7 @@ void exe_wifi()
   char ssid[MAX_SSID_SIZE + 1];
   char psw[MAX_PSW_SIZE + 1] = {0};
   error = true;
+  auto inputLine = LineEditor.get();
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
     Terminal.write("Connecting WiFi...");
     Terminal.flush();
@@ -226,6 +202,7 @@ void exe_telnetInit()
   char host[MAX_HOST_SIZE + 1];
   int port;
   error = true;
+  auto inputLine = LineEditor.get();
   int pCount = sscanf(inputLine, "telnet %32s %d", host, &port);
   if (pCount > 0) {
     if (pCount == 1)
@@ -304,6 +281,7 @@ void exe_telnet()
 void exe_ping()
 {
   char host[64];
+  auto inputLine = LineEditor.get();
   int pcount = sscanf(inputLine, "ping %s", host);
   if (pcount > 0) {
     int sent = 0, recv = 0;
