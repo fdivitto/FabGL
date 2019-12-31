@@ -1204,6 +1204,12 @@ public:
    * @return Returns what user typed and edited, or NULL on timeout.
    */
   char * get(int maxLength = 0, int timeOutMS = -1);
+  /**
+   * @brief Gets current content
+   *
+   * @return Returns what user typed.
+   */
+  char const * get() { return m_text; }
 
   /**
    * @brief Sets insert mode state
