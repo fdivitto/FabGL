@@ -620,13 +620,15 @@ public:
    *
    * Clears the screen sending "CSI 2 J" command to the screen.
    *
+   * @param moveCursor If True moves cursor at position 1, 1.
+   *
    * Example:
    *
    *     // Fill the screen with blue
    *     Terminal.setBackgroundColor(Color::Blue);
    *     Terminal.clear();
    */
-  void clear();
+  void clear(bool moveCursor = true);
 
   /**
    * @brief Waits for all codes sent to the display has been processed.
@@ -1184,6 +1186,7 @@ public:
    * Call this method if the input must have some text already inserted.
    *
    * @param text Initial text.
+   * @param moveCursor If true the cursor is moved at the end of initial text.
    *
    * Example:
    * 
@@ -1192,7 +1195,7 @@ public:
    *     char * txt = ed.get();
    *     Terminal.printf("Your input is: %s\r\n", txt);
    */
-  void setText(char const * text);
+  void setText(char const * text, bool moveCursor = true);
 
   /**
    * @brief Sets initial text specifying length
@@ -1201,8 +1204,9 @@ public:
    *
    * @param text Initial text.
    * @param length Text length
+   * @param moveCursor If true the cursor is moved at the end of initial text.
    */
-  void setText(char const * text, int length);
+  void setText(char const * text, int length, bool moveCursor = true);
 
   /**
    * @brief Reads user input and return the inserted line

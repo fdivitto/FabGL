@@ -572,9 +572,11 @@ void Terminal::reverseVideo(bool value)
 }
 
 
-void Terminal::clear()
+void Terminal::clear(bool moveCursor)
 {
   Print::write("\e[2J");
+  if (moveCursor)
+    Print::write("\e[1;1H");
 }
 
 
@@ -3601,18 +3603,19 @@ void LineEditor::setLength(int newLength)
 }
 
 
-void LineEditor::setText(char const * text)
+void LineEditor::setText(char const * text, bool moveCursor)
 {
-  setText(text, strlen(text));
+  setText(text, strlen(text), moveCursor);
 }
 
 
-void LineEditor::setText(char const * text, int length)
+void LineEditor::setText(char const * text, int length, bool moveCursor)
 {
   setLength(length);
   memcpy(m_text, text, length);
   m_text[length] = 0;
   m_state = -1;
+  m_inputPos = moveCursor ? length : 0;
 }
 
 
@@ -3621,10 +3624,13 @@ void LineEditor::beginInput()
   m_termctrl.begin();
   m_homeCol = m_termctrl.getCursorCol();
   m_homeRow = m_termctrl.getCursorRow();
-  m_inputPos = 0;
   if (m_text) {
-    m_inputPos = strlen(m_text);
-    m_homeRow -= m_termctrl.setChars(m_text, m_inputPos);
+    // m_inputPos already set by setText()
+    m_homeRow -= m_termctrl.setChars(m_text, strlen(m_text));
+    if (m_inputPos == 0)
+      m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+  } else {
+    m_inputPos = 0;
   }
   m_state = 0;
 }
