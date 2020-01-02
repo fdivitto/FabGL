@@ -138,7 +138,7 @@ struct Point {
   Point neg() const                { return Point(-X, -Y); }
   bool operator==(Point const & r) { return X == r.X && Y == r.Y; }
   bool operator!=(Point const & r) { return X != r.X || Y != r.Y; }
-};
+} __attribute__ ((packed));
 
 
 /**
@@ -150,7 +150,7 @@ struct Size {
 
   Size() : width(0), height(0) { }
   Size(int width_, int height_) : width(width_), height(height_) { }
-};
+} __attribute__ ((packed));
 
 
 
@@ -190,7 +190,7 @@ struct Rect {
   bool contains(Point const & point) const       { return point.X >= X1 && point.Y >= Y1 && point.X <= X2 && point.Y <= Y2; }
   bool contains(int x, int y) const              { return x >= X1 && y >= Y1 && x <= X2 && y <= Y2; }
   Rect merge(Rect const & rect) const            { return Rect(imin(rect.X1, X1), imin(rect.Y1, Y1), imax(rect.X2, X2), imax(rect.Y2, Y2)); }
-};
+} __attribute__ ((packed));
 
 
 

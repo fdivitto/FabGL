@@ -52,7 +52,7 @@ namespace fabgl {
   Notes:
     - all positions can have negative and outofbound coordinates. Shapes are always clipped correctly.
 */
-enum PrimitiveCmd {
+enum PrimitiveCmd : uint8_t {
 
   // Needed to send the updated area of screen buffer on some displays (ie SSD1306)
   Flush,
@@ -215,7 +215,7 @@ struct RGB888 {
   RGB888() : R(0), G(0), B(0) { }
   RGB888(Color color);
   RGB888(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
-};
+} __attribute__ ((packed));
 
 
 inline bool operator==(RGB888 const& lhs, RGB888 const& rhs)
@@ -303,13 +303,13 @@ struct RGBA2222 {
 struct Glyph {
   int16_t         X;      /**< Horizontal glyph coordinate */
   int16_t         Y;      /**< Vertical glyph coordinate */
-  int16_t         width;  /**< Glyph horizontal size */
-  int16_t         height; /**< Glyph vertical size */
+  uint8_t         width;  /**< Glyph horizontal size */
+  uint8_t         height; /**< Glyph vertical size */
   uint8_t const * data;   /**< Byte aligned binary data of the glyph. A 0 represents background or a transparent pixel. A 1 represents foreground. */
 
   Glyph() : X(0), Y(0), width(0), height(0), data(nullptr) { }
   Glyph(int X_, int Y_, int width_, int height_, uint8_t const * data_) : X(X_), Y(Y_), width(width_), height(height_), data(data_) { }
-};
+}  __attribute__ ((packed));
 
 
 
@@ -348,7 +348,7 @@ union GlyphOptions {
 
   /** @brief Helper method to set or reset foreground and background swapping */
   GlyphOptions & Invert(uint8_t value) { invert = value; return *this; }
-};
+} __attribute__ ((packed));
 
 
 
@@ -385,7 +385,7 @@ struct GlyphsBufferRenderInfo {
   GlyphsBuffer const * glyphsBuffer;
 
   GlyphsBufferRenderInfo(int itemX_, int itemY_, GlyphsBuffer const * glyphsBuffer_) : itemX(itemX_), itemY(itemY_), glyphsBuffer(glyphsBuffer_) { }
-};
+} __attribute__ ((packed));
 
 
 /** \ingroup Enumerations
@@ -444,7 +444,7 @@ struct BitmapDrawingInfo {
   Bitmap const * bitmap;
 
   BitmapDrawingInfo(int X_, int Y_, Bitmap const * bitmap_) : X(X_), Y(Y_), bitmap(bitmap_) { }
-};
+} __attribute__ ((packed));
 
 
 /** \ingroup Enumerations
@@ -535,7 +535,7 @@ struct Sprite {
 struct Path {
   Point const * points;
   int           pointsCount;
-};
+} __attribute__ ((packed));
 
 
 /**
@@ -546,13 +546,13 @@ struct PaintOptions {
   uint8_t NOT      : 1;  /**< If enabled performs NOT logical operator on destination. Implemented only for straight lines and non-filled rectangles. */
 
   PaintOptions() : swapFGBG(false), NOT(false) { }
-};
+} __attribute__ ((packed));
 
 
 struct PixelDesc {
   Point  pos;
   RGB888 color;
-};
+} __attribute__ ((packed));
 
 
 struct Primitive {
@@ -570,12 +570,12 @@ struct Primitive {
     BitmapDrawingInfo      bitmapDrawingInfo;
     Path                   path;
     PixelDesc              pixelDesc;
-  };
+  } __attribute__ ((packed));
 
   Primitive() { }
   Primitive(PrimitiveCmd cmd_) : cmd(cmd_) { }
   Primitive(PrimitiveCmd cmd_, Rect const & rect_) : cmd(cmd_), rect(rect_) { }
-};
+} __attribute__ ((packed));
 
 
 struct PaintState {
