@@ -698,24 +698,16 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
   auto VGACtrl = VGAController::instance();
   int64_t startTime = VGACtrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
   Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
-  bool isFirst = true;
   do {
     Primitive prim;
     if (VGACtrl->getPrimitiveISR(&prim) == false)
       break;
-
-    if (prim.cmd == PrimitiveCmd::SwapBuffers && !isFirst) {
-      // SwapBuffers must be the first primitive executed at VSync. If not reinsert it and break execution to wait for next VSync.
-      VGACtrl->insertPrimitiveISR(&prim);
-      break;
-    }
 
     VGACtrl->execPrimitive(prim, updateRect);
 
     if (VGACtrl->m_VSyncInterruptSuspended)
       break;
 
-    isFirst = false;
   } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
   VGACtrl->showSprites(updateRect);
 }
