@@ -43,7 +43,7 @@
 #define FABGLIB_DEFAULT_BLINK_PERIOD_MS 500
 
 
-/** Size of VGA controller primitives queue. */
+/** Size of display controller primitives queue */
 #define FABGLIB_EXEC_QUEUE_SIZE 1024
 
 
