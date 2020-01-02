@@ -854,10 +854,6 @@ protected:
 
   void waitForPrimitives();
 
-  void insertPrimitiveISR(Primitive * primitive);
-
-  void insertPrimitive(Primitive * primitive, int timeOutMS = -1);
-
   Sprite * mouseCursor() { return &m_mouseCursor; }
 
   void resetPaintState();

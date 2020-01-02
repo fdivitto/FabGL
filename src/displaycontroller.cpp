@@ -420,19 +420,6 @@ void DisplayController::waitForPrimitives()
 }
 
 
-// call this only inside an ISR
-void IRAM_ATTR DisplayController::insertPrimitiveISR(Primitive * primitive)
-{
-  xQueueSendToFrontFromISR(m_execQueue, primitive, nullptr);
-}
-
-
-void DisplayController::insertPrimitive(Primitive * primitive, int timeOutMS)
-{
-  xQueueSendToFront(m_execQueue, primitive, msToTicks(timeOutMS));
-}
-
-
 void DisplayController::primitivesExecutionWait()
 {
   if (m_backgroundPrimitiveExecutionEnabled) {
