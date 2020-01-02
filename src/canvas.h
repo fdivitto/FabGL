@@ -687,7 +687,7 @@ public:
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
    * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawing have been completed(calling Canvas.waitCompletion()).
+   * until all the drawings have been completed (calling Canvas.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.
    * @param pointsCount Number of points in the array.
@@ -706,7 +706,7 @@ public:
    *
    * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
    * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawing have been completed(calling Canvas.waitCompletion()).
+   * until all the drawings have been completed (calling Canvas.waitCompletion()).
    *
    * @param points A pointer to an array of Point objects.
    * @param pointsCount Number of points in the array.
