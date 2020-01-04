@@ -376,6 +376,38 @@ private:
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+// LightMemoryPool
+// Each allocated block starts with a two bytes header (int16_t). Bit 15 is allocation flag (0=free, 1=allocated).
+// Bits 14..0 represent the block size.
+// The maximum size of a block is 32767 bytes.
+// free() just marks the block header as free.
+
+class LightMemoryPool {
+public:
+  LightMemoryPool(int poolSize);
+  ~LightMemoryPool();
+  void * alloc(int size);
+  void free(void * mem);
+
+  bool memCheck();
+  int totFree();      // get total free memory
+  int totAllocated(); // get total allocated memory
+  int largestFree();
+
+private:
+
+  void mark(int pos, int16_t size, bool allocated);
+  void markFree(int pos);
+  int16_t getSize(int pos);
+  bool isFree(int pos);
+
+  uint8_t * m_mem;
+  int       m_poolSize;
+};
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
 // FileBrowser
 
 

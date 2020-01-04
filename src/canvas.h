@@ -685,11 +685,7 @@ public:
   /**
    * @brief Draws a sequence of lines.
    *
-   * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
-   * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawings have been completed (calling Canvas.waitCompletion()).
-   *
-   * @param points A pointer to an array of Point objects.
+   * @param points A pointer to an array of Point objects. Points array is copied to a temporary buffer.
    * @param pointsCount Number of points in the array.
    *
    * Example:
@@ -697,18 +693,13 @@ public:
    *     Point points[3] = { {10, 10}, {20, 10}, {15, 20} };
    *     Canvas.setPenColor(Color::Red);
    *     Canvas.drawPath(points, 3);
-   *     Canvas.waitCompletion();
    */
   void drawPath(Point const * points, int pointsCount);
 
   /**
    * @brief Fills the polygon enclosed in a sequence of lines.
    *
-   * Because the path is drawn on VSync (vertical retracing) the provided array of points must survive until the path is completely painted.<br>
-   * To avoid it, application can disable drawing on vsync (calling VGAController.enableBackgroundPrimitiveExecution()) or just wait
-   * until all the drawings have been completed (calling Canvas.waitCompletion()).
-   *
-   * @param points A pointer to an array of Point objects.
+   * @param points A pointer to an array of Point objects. Points array is copied to a temporary buffer.
    * @param pointsCount Number of points in the array.
    *
    * Example:
@@ -716,7 +707,6 @@ public:
    *     Point points[3] = { {10, 10}, {20, 10}, {15, 20} };
    *     Canvas.setBrushColor(Color::Red);
    *     Canvas.fillPath(points, 3);
-   *     Canvas.waitCompletion();
    */
   void fillPath(Point const * points, int pointsCount);
 

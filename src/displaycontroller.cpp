@@ -26,6 +26,8 @@
 #include <string.h>
 #include <limits.h>
 
+#include "freertos/task.h"
+
 #include "fabutils.h"
 #include "images/cursors.h"
 
@@ -354,6 +356,7 @@ Bitmap::~Bitmap()
 
 
 DisplayController::DisplayController()
+  : m_primDynMemPool(FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE)
 {
   m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
 
@@ -387,14 +390,43 @@ void DisplayController::resetPaintState()
 }
 
 
-void DisplayController::addPrimitive(Primitive const & primitive)
+void DisplayController::addPrimitive(Primitive & primitive)
 {
-  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers)
+  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers) {
+    primitiveReplaceDynamicBuffers(primitive);
     xQueueSendToBack(m_execQueue, &primitive, portMAX_DELAY);
-  else {
+  } else {
     Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
     execPrimitive(primitive, updateRect);
     showSprites(updateRect);
+  }
+}
+
+
+// some primitives require additional buffers (like drawPath and fillPath).
+// this function copies primitive data into an allocated buffer (using LightMemoryPool allocator) that
+// will be freed inside primitive drawing code.
+void DisplayController::primitiveReplaceDynamicBuffers(Primitive & primitive)
+{
+  switch (primitive.cmd) {
+    case PrimitiveCmd::DrawPath:
+    case PrimitiveCmd::FillPath:
+    {
+      int sz = primitive.path.pointsCount * sizeof(Point);
+      if (sz < FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE) {
+        void * newbuf = nullptr;
+        // wait until we have enough free space
+        while ((newbuf = m_primDynMemPool.alloc(sz)) == nullptr)
+          taskYIELD();
+        memcpy(newbuf, primitive.path.points, sz);
+        primitive.path.points = (Point*)newbuf;
+        primitive.path.freePoints = true;
+      }
+      break;
+    }
+
+    default:
+      break;
   }
 }
 
@@ -457,7 +489,8 @@ void IRAM_ATTR DisplayController::processPrimitives()
     execPrimitive(prim, updateRect);
   showSprites(updateRect);
   resumeBackgroundPrimitiveExecution();
-  addPrimitive(Primitive(PrimitiveCmd::Refresh, updateRect));
+  Primitive p(PrimitiveCmd::Refresh, updateRect);
+  addPrimitive(p);
 }
 
 
@@ -491,8 +524,7 @@ Sprite * IRAM_ATTR DisplayController::getSprite(int index)
 
 void DisplayController::refreshSprites()
 {
-  Primitive p;
-  p.cmd = PrimitiveCmd::RefreshSprites;
+  Primitive p(PrimitiveCmd::RefreshSprites);
   addPrimitive(p);
 }
 
@@ -934,6 +966,9 @@ void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
   const int x2 = path.points[0].X + origX;
   const int y2 = path.points[0].Y + origY;
   absDrawLine(x1, y1, x2, y2, color);
+
+  if (path.freePoints)
+    m_primDynMemPool.free((void*)path.points);
 }
 
 
@@ -1007,6 +1042,9 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path, Rect & updateRect)
       }
     }
   }
+
+  if (path.freePoints)
+    m_primDynMemPool.free((void*)path.points);
 }
 
 

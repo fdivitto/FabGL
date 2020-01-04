@@ -481,23 +481,24 @@ void Canvas::swapBuffers()
 }
 
 
-// warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
 void Canvas::drawPath(Point const * points, int pointsCount)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::DrawPath;
   p.path.points = points;
   p.path.pointsCount = pointsCount;
+  p.path.freePoints = false;
   m_displayController->addPrimitive(p);
 }
 
-// warn: points memory must survive until next vsync interrupt when primitive is not executed immediately
+
 void Canvas::fillPath(Point const * points, int pointsCount)
 {
   Primitive p;
   p.cmd = PrimitiveCmd::FillPath;
   p.path.points = points;
   p.path.pointsCount = pointsCount;
+  p.path.freePoints = false;
   m_displayController->addPrimitive(p);
 }
 

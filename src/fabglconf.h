@@ -47,6 +47,10 @@
 #define FABGLIB_EXEC_QUEUE_SIZE 1024
 
 
+/** Size (in bytes) of primitives dynamic buffers. Used by primitives like drawPath and fillPath to contain path points. */
+#define FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE 512
+
+
 /** Number of characters the terminal can "write" without pause (increase if you have loss of characters in serial port). */
 #define FABGLIB_TERMINAL_INPUT_QUEUE_SIZE 1024
 

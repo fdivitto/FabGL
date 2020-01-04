@@ -186,7 +186,8 @@ void SSD1306Controller::setScreenCol(int value)
 {
   if (value != m_screenCol) {
     m_screenCol = iclamp(value, 0, m_viewPortWidth - m_screenWidth);
-    addPrimitive(Primitive(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1)));
+    Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
+    addPrimitive(p);
   }
 }
 
@@ -195,7 +196,8 @@ void SSD1306Controller::setScreenRow(int value)
 {
   if (value != m_screenRow) {
     m_screenRow = iclamp(value, 0, m_viewPortHeight - m_screenHeight);
-    addPrimitive(Primitive(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1)));
+    Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
+    addPrimitive(p);
   }
 }
 

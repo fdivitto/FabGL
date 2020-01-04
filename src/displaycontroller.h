@@ -535,6 +535,7 @@ struct Sprite {
 struct Path {
   Point const * points;
   int           pointsCount;
+  bool          freePoints; // deallocate points after drawing
 } __attribute__ ((packed));
 
 
@@ -641,7 +642,7 @@ public:
 
   PaintState & paintState() { return m_paintState; }
 
-  void addPrimitive(Primitive const & primitive);
+  void addPrimitive(Primitive & primitive);
 
   void primitivesExecutionWait();
 
@@ -860,9 +861,12 @@ protected:
 
 private:
 
+  void primitiveReplaceDynamicBuffers(Primitive & primitive);
+
+
   PaintState             m_paintState;
 
-  bool                   m_doubleBuffered;
+  volatile bool          m_doubleBuffered;
   volatile QueueHandle_t m_execQueue;
 
   bool                   m_backgroundPrimitiveExecutionEnabled; // when False primitives are execute immediately
@@ -877,6 +881,9 @@ private:
   Sprite                 m_mouseCursor;
   int16_t                m_mouseHotspotX;
   int16_t                m_mouseHotspotY;
+
+  // memory pool used to allocate buffers of primitives
+  LightMemoryPool        m_primDynMemPool;
 
 };
 

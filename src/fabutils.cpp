@@ -763,5 +763,149 @@ bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int
 
 
 
+
+///////////////////////////////////////////////////////////////////////////////////
+// LightMemoryPool
+
+
+void LightMemoryPool::mark(int pos, int16_t size, bool allocated)
+{
+  m_mem[pos]     = size & 0xff;
+  m_mem[pos + 1] = ((size >> 8) & 0x7f) | (allocated ? 0x80 : 0);
+}
+
+
+void LightMemoryPool::markFree(int pos)
+{
+  m_mem[pos + 1] &= 0x7f;
+}
+
+
+int16_t LightMemoryPool::getSize(int pos)
+{
+  return m_mem[pos] | ((m_mem[pos + 1] & 0x7f) << 8);
+}
+
+
+bool LightMemoryPool::isFree(int pos)
+{
+  return (m_mem[pos + 1] & 0x80) == 0;
+}
+
+
+LightMemoryPool::LightMemoryPool(int poolSize)
+{
+  m_poolSize = poolSize + 2;
+  m_mem = (uint8_t*) malloc(m_poolSize);
+  mark(0, m_poolSize - 2, false);
+}
+
+
+LightMemoryPool::~LightMemoryPool()
+{
+  ::free(m_mem);
+}
+
+
+void * LightMemoryPool::alloc(int size)
+{
+  for (int pos = 0; pos < m_poolSize; ) {
+    int16_t blockSize = getSize(pos);
+    if (isFree(pos)) {
+      if (blockSize == size) {
+        // found a block having the same size
+        mark(pos, size, true);
+        return m_mem + pos + 2;
+      } else if (blockSize > size) {
+        // found a block having larger size
+        int remainingSize = blockSize - size - 2;
+        if (remainingSize > 0)
+          mark(pos + 2 + size, remainingSize, false);  // create new free block at the end of this block
+        else
+          size = blockSize; // to avoid to waste last block
+        mark(pos, size, true);  // reduce size of this block and mark as allocated
+        return m_mem + pos + 2;
+      } else {
+        // this block hasn't enough space
+        // can merge with next block?
+        int nextBlockPos = pos + 2 + blockSize;
+        if (nextBlockPos < m_poolSize && isFree(nextBlockPos)) {
+          // join blocks and stay at this pos
+          mark(pos, blockSize + getSize(nextBlockPos) + 2, false);
+        } else {
+          // move to the next block
+          pos += blockSize + 2;
+        }
+      }
+    } else {
+      // move to the next block
+      pos += blockSize + 2;
+    }
+  }
+  return nullptr;
+}
+
+
+void LightMemoryPool::free(void * mem)
+{
+  if (mem)
+    markFree((uint8_t*)mem - m_mem - 2);
+}
+
+
+bool LightMemoryPool::memCheck()
+{
+  int pos = 0;
+  while (pos < m_poolSize) {
+    int16_t blockSize = getSize(pos);
+    pos += blockSize + 2;
+  }
+  return pos == m_poolSize;
+}
+
+
+int LightMemoryPool::totFree()
+{
+  int r = 0;
+  for (int pos = 0; pos < m_poolSize; ) {
+    int16_t blockSize = getSize(pos);
+    if (isFree(pos))
+      r += blockSize;
+    pos += blockSize + 2;
+  }
+  return r;
+}
+
+
+int LightMemoryPool::totAllocated()
+{
+  int r = 0;
+  for (int pos = 0; pos < m_poolSize; ) {
+    int16_t blockSize = getSize(pos);
+    if (!isFree(pos))
+      r += blockSize;
+    pos += blockSize + 2;
+  }
+  return r;
+}
+
+
+int LightMemoryPool::largestFree()
+{
+  int r = 0;
+  for (int pos = 0; pos < m_poolSize; ) {
+    int16_t blockSize = getSize(pos);
+    if (isFree(pos) && blockSize > r)
+      r = blockSize;
+    pos += blockSize + 2;
+  }
+  return r;
+}
+
+
+// LightMemoryPool
+///////////////////////////////////////////////////////////////////////////////////
+
+
 }
 
