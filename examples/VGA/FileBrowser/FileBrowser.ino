@@ -23,15 +23,17 @@
 #include <Preferences.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include "esp_spiffs.h"
-#include "esp_task_wdt.h"
 #include <stdio.h>
-
-
 
 #include "fabgl.h"
 #include "fabui.h"
 
+
+
+#define FORMAT_ON_FAIL     true
+
+#define SPIFFS_MOUNT_PATH  "/spiffs"
+#define SDCARD_MOUNT_PATH  "/sdcard"
 
 
 Preferences preferences;
@@ -40,22 +42,45 @@ fabgl::VGAController VGAController;
 fabgl::PS2Controller PS2Controller;
 
 
+fabgl::DriveType currentDriveType;
+char const *     currentMountPath;
 
-void initSPIFFS()
+
+void unmountCurrent()
 {
-  static bool initDone = false;
-  if (!initDone) {
-    // setup SPIFFS
-    esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/spiffs",
-        .partition_label = NULL,
-        .max_files = 4,
-        .format_if_mount_failed = true
-    };
-    fabgl::suspendInterrupts();
-    esp_vfs_spiffs_register(&conf);
-    fabgl::resumeInterrupts();
+  if (currentDriveType == fabgl::DriveType::SPIFFS)
+    FileBrowser::unmountSPIFFS();
+  else
+    FileBrowser::unmountSDCard();
+}
+
+
+void remountCurrent()
+{
+  if (currentDriveType == fabgl::DriveType::SPIFFS)
+    FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH);
+  else {
+    if (!FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH))
+      selectFlash();  // fallback to spiflash in case of no SD card
   }
+}
+
+
+void selectFlash()
+{
+  unmountCurrent();
+  currentDriveType = fabgl::DriveType::SPIFFS;
+  currentMountPath = SPIFFS_MOUNT_PATH;
+  remountCurrent();
+}
+
+
+void selectSDCard()
+{
+  unmountCurrent();
+  currentDriveType = fabgl::DriveType::SDCard;
+  currentMountPath = SDCARD_MOUNT_PATH;
+  remountCurrent();
 }
 
 
@@ -71,9 +96,26 @@ class MyApp : public uiApp {
     auto frame = new uiFrame(rootWindow(), "FileBrowser Example", Point(15, 10), Size(375, 275));
     frame->frameProps().hasCloseButton = false;
 
+    // Flash / SDCard selector
+    new uiLabel(frame, "Flash", Point(10, 25));
+    new uiLabel(frame, "SD Card", Point(70, 25));
+    auto flashRadio = new uiCheckBox(frame, Point(40, 25), Size(16, 16), uiCheckBoxKind::RadioButton);
+    auto SDCardRadio = new uiCheckBox(frame, Point(114, 25), Size(16, 16), uiCheckBoxKind::RadioButton);
+    flashRadio->setGroupIndex(1);
+    SDCardRadio->setGroupIndex(1);
+    flashRadio->onChange = [&]() {
+      selectFlash();
+      updateBrowser(true);
+    };
+    SDCardRadio->onChange = [&]() {
+      selectSDCard();
+      updateBrowser(true);
+    };
+    flashRadio->setChecked(true);
+
     // file browser
-    fileBrowser = new uiFileBrowser(frame, Point(10, 25), Size(140, 200));
-    fileBrowser->setDirectory("/spiffs");
+    fileBrowser = new uiFileBrowser(frame, Point(10, 45), Size(140, 180));
+    fileBrowser->setDirectory(currentMountPath);
 
     // create directory button
     auto createDirBtn = new uiButton(frame, "Create Dir", Point(160, 25), Size(90, 20));
@@ -82,8 +124,7 @@ class MyApp : public uiApp {
       char dirname[MAXSTRLEN + 1] = "";
       if (inputBox("Create Directory", "Name", dirname, MAXSTRLEN, "Create", "Cancel") == uiMessageBoxResult::Button1) {
         fileBrowser->content().makeDirectory(dirname);
-        fileBrowser->update();
-        updateFreeSpaceLabel();
+        updateBrowser();
       }
     };
 
@@ -96,12 +137,10 @@ class MyApp : public uiApp {
         int len = fileBrowser->content().getFullPath(filename);
         char fullpath[len];
         fileBrowser->content().getFullPath(filename, fullpath, len);
-        fabgl::suspendInterrupts();
+        AutoSuspendInterrupts autoInt;
         FILE * f = fopen(fullpath, "wb");
         fclose(f);
-        fabgl::resumeInterrupts();
-        fileBrowser->update();
-        updateFreeSpaceLabel();
+        updateBrowser();
       }
     };
 
@@ -113,7 +152,7 @@ class MyApp : public uiApp {
       strcpy(filename, fileBrowser->filename());
       if (inputBox("Rename File", "New name", filename, maxlen, "Rename", "Cancel") == uiMessageBoxResult::Button1) {
         fileBrowser->content().rename(fileBrowser->filename(), filename);
-        fileBrowser->update();
+        updateBrowser();
       }
     };
 
@@ -122,21 +161,18 @@ class MyApp : public uiApp {
     deleteBtn->onClick = [&]() {
       if (messageBox("Delete file/directory", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
         fileBrowser->content().remove( fileBrowser->filename() );
-        fileBrowser->update();
-        updateFreeSpaceLabel();
+        updateBrowser();
       }
     };
 
     // format button
     auto formatBtn = new uiButton(frame, "Format", Point(160, 125), Size(90, 20));
     formatBtn->onClick = [&]() {
-      if (messageBox("Format SPIFFS", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
-        fabgl::suspendInterrupts();
-        esp_task_wdt_init(45, false);
-        esp_spiffs_format(nullptr);
-        fabgl::resumeInterrupts();
-        fileBrowser->update();
-        updateFreeSpaceLabel();
+      if (messageBox("Format sdcard", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
+        FileBrowser::format(currentDriveType, 0);
+        unmountCurrent();
+        remountCurrent();
+        updateBrowser();
       }
     };
 
@@ -147,10 +183,9 @@ class MyApp : public uiApp {
       char psw[32]  = "";
       if (inputBox("WiFi Connect", "Network Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
           inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        fabgl::suspendInterrupts();
+        AutoSuspendInterrupts autoInt;
         preferences.putString("SSID", SSID);
         preferences.putString("WiFiPsw", psw);
-        fabgl::resumeInterrupts();
         connectWiFi();
       }
     };
@@ -176,13 +211,21 @@ class MyApp : public uiApp {
     setFocusedWindow(fileBrowser);
   }
 
+  void updateBrowser(bool goToRootDir = false)
+  {
+    if (goToRootDir)
+      fileBrowser->setDirectory(currentMountPath);
+    fileBrowser->update();
+    updateFreeSpaceLabel();
+  }
+
   // connect to wifi using SSID and PSW from Preferences
   void connectWiFi()
   {
     WiFiStatusLbl->setText("WiFi Not Connected");
     WiFiStatusLbl->labelStyle().textColor = RGB888(255, 0, 0);
     char SSID[32], psw[32];
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
       WiFi.begin(SSID, psw);
       for (int i = 0; i < 16 && WiFi.status() != WL_CONNECTED; ++i) {
@@ -194,7 +237,6 @@ class MyApp : public uiApp {
         WiFiStatusLbl->labelStyle().textColor = RGB888(0, 128, 0);
       }
     }
-    fabgl::resumeInterrupts();
     WiFiStatusLbl->update();
   }
 
@@ -222,28 +264,26 @@ class MyApp : public uiApp {
           size_t size = stream->available();
           if (size) {
             int c = stream->readBytes(buf, fabgl::imin(sizeof(buf), size));
-            fabgl::suspendInterrupts();
+            AutoSuspendInterrupts autoInt;
             fwrite(buf, c, 1, f);
-            fabgl::resumeInterrupts();
             if (len > 0)
               len -= c;
           }
         }
 
-        fabgl::suspendInterrupts();
+        AutoSuspendInterrupts autoInt;
         fclose(f);
-        fabgl::resumeInterrupts();
 
-        fileBrowser->update();
+        updateBrowser();
       }
     }
   }
 
-  // show used and free SPIFFS space
+  // show used and free SD space
   void updateFreeSpaceLabel() {
-    size_t total = 0, used = 0;
-    esp_spiffs_info(NULL, &total, &used);
-    freeSpaceLbl->setTextFmt("%d bytes used, %d bytes free", used, total - used);
+    int64_t total, used;
+    FileBrowser::getFSInfo(currentDriveType, 0, &total, &used);
+    freeSpaceLbl->setTextFmt("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);
     freeSpaceLbl->update();
   }
 
@@ -255,6 +295,7 @@ void setup()
   Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   preferences.begin("FileBrowser", false);
+  preferences.clear();
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
@@ -268,9 +309,9 @@ void setup()
 
   Canvas cv(&VGAController);
   cv.clear();
-  cv.drawText(50, 170, "Initializing SPIFFS...");
+  cv.drawText(50, 170, "Initializing SD/Flash...");
   cv.waitCompletion();
-  initSPIFFS();
+  selectFlash();
   cv.clear();
   cv.drawText(50, 170, "Connecting WiFi...");
   cv.waitCompletion();
