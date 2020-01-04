@@ -542,6 +542,27 @@ uint32_t msToTicks(int ms);
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+// AutoSuspendInterrupts
+
+
+/**
+ * @brief Helper class to disable fabgl interrupts and automatically resume them on scope exit
+ *
+ * Example:
+ *
+ *     void func() {
+ *       AutoSuspendInterrupts autoInt; // now fabgl interrupts are suspended
+ *       ...do something...
+ *     }  // on exit interrupts are resumed
+ */
+struct AutoSuspendInterrupts {
+  AutoSuspendInterrupts() { suspendInterrupts(); }
+  ~AutoSuspendInterrupts() { resumeInterrupts(); }
+};
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
 
 
 /** \ingroup Enumerations

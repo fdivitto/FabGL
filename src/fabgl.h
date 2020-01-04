@@ -332,6 +332,7 @@ using fabgl::RGBA8888;
 using fabgl::FlowControl;
 using fabgl::LineEditor;
 using fabgl::TerminalController;
+using fabgl::AutoSuspendInterrupts;
 
 
 
