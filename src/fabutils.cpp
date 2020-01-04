@@ -26,6 +26,14 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
+#include "diskio.h"
+#include "ff.h"
+#include "esp_vfs_fat.h"
+#include "esp_task_wdt.h"
+#include "driver/sdspi_host.h"
+#include "sdmmc_cmd.h"
+#include "esp_spiffs.h"
+
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
 #include "comdrivers/ps2controller.h"
@@ -632,6 +640,121 @@ void FileBrowser::rename(char const * oldName, char const * newName)
 int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 {
   return outPath ? snprintf(outPath, maxlen, "%s/%s", m_dir, name) : snprintf(nullptr, 0, "%s/%s", m_dir, name) + 1;
+}
+
+
+bool FileBrowser::format(DriveType driveType, int drive)
+{
+  AutoSuspendInterrupts autoSuspendInt;
+
+  esp_task_wdt_init(45, false);
+
+  if (driveType == DriveType::SDCard) {
+
+    // unmount filesystem
+    char drv[3] = {(char)('0' + drive), ':', 0};
+    f_mount(0, drv, 0);
+
+    void * buffer = malloc(FF_MAX_SS);
+    if (!buffer)
+      return false;
+
+    // create partition
+    DWORD plist[] = { 100, 0, 0, 0 };
+    if (f_fdisk(drive, plist, buffer) != FR_OK) {
+      free(buffer);
+      return false;
+    }
+
+    // make filesystem
+    if (f_mkfs(drv, FM_ANY, 16 * 1024, buffer, FF_MAX_SS) != FR_OK) {
+      free(buffer);
+      return false;
+    }
+
+    free(buffer);
+
+    return true;
+
+  } else {
+
+    // driveType == DriveType::SPIFFS
+    return esp_spiffs_format(nullptr) == ESP_OK;
+
+  }
+}
+
+
+bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
+{
+  sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+  sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
+  slot_config.gpio_miso = int2gpio(MISO);
+  slot_config.gpio_mosi = int2gpio(MOSI);
+  slot_config.gpio_sck  = int2gpio(CLK);
+  slot_config.gpio_cs   = int2gpio(CS);
+  esp_vfs_fat_sdmmc_mount_config_t mount_config;
+  mount_config.format_if_mount_failed = formatOnFail;
+  mount_config.max_files = maxFiles;
+  mount_config.allocation_unit_size = allocationUnitSize;
+  sdmmc_card_t* card;
+  return esp_vfs_fat_sdmmc_mount(mountPath, &host, &slot_config, &mount_config, &card) == ESP_OK;
+}
+
+
+void FileBrowser::unmountSDCard()
+{
+  esp_vfs_fat_sdmmc_unmount();
+}
+
+
+bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles)
+{
+  esp_vfs_spiffs_conf_t conf = {
+      .base_path = "/spiffs",
+      .partition_label = nullptr,
+      .max_files = 4,
+      .format_if_mount_failed = true
+  };
+  AutoSuspendInterrupts autoSuspendInt;
+  return esp_vfs_spiffs_register(&conf) == ESP_OK;
+}
+
+
+void FileBrowser::unmountSPIFFS()
+{
+  esp_vfs_spiffs_unregister(nullptr);
+}
+
+
+bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int64_t * used)
+{
+  if (driveType == DriveType::SDCard) {
+
+    FATFS * fs;
+    DWORD free_clusters;
+    char drv[3] = {(char)('0' + drive), ':', 0};
+    if (f_getfree(drv, &free_clusters, &fs) != FR_OK)
+      return false;
+    int64_t total_sectors = (fs->n_fatent - 2) * fs->csize;
+    int64_t free_sectors = free_clusters * fs->csize;
+    *total = total_sectors * fs->ssize;
+    *used = *total - free_sectors * fs->ssize;
+
+    return true;
+
+  } else {
+
+    // driveType == DriveType::SPIFFS
+    *total = *used = 0;
+    size_t stotal = 0, sused = 0;
+    if (esp_spiffs_info(NULL, &stotal, &sused) != ESP_OK)
+      return false;
+    *total = stotal;
+    *used  = sused;
+    return true;
+
+  }
 }
 
 

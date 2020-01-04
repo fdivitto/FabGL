@@ -388,6 +388,15 @@ struct DirItem {
 };
 
 
+/** \ingroup Enumerations
+* @brief This enum defines drive types (SPIFFS or SD Card)
+*/
+enum class DriveType {
+  SPIFFS,  /**< SPIFFS (Flash) */
+  SDCard,  /**< SD Card */
+};
+
+
 /**
  * @brief FileBrowser allows basic file system operations (dir, mkdir, remove and rename)
  */
@@ -488,9 +497,99 @@ public:
    * @param outPath Where to place the full path. This can be NULL (used to calculate required buffer size).
    * @param maxlen Maximum size of outPath string. This can be 0 when outPath is NULL.
    *
-   * @return Required outPath size
+   * @return Required outPath size.
    */
   int getFullPath(char const * name, char * outPath = nullptr, int maxlen = 0);
+
+  /**
+   * @brief Formats SPIFFS or SD Card
+   *
+   * The filesystem must be already mounted before calling Format().
+   * The formatted filesystem results unmounted at the end of formatting, so remount is necessary.
+   *
+   * @param driveType Type of support (SPI-Flash or SD Card).
+   * @param drive Drive number (Can be 0 when only one filesystem is mounted at the time)
+   *
+   * @return Returns True on success.
+   *
+   * Example:
+   *
+   *     // Format SPIFFS and remount it
+   *     FileBrowser::format(fabgl::DriveType::SPIFFS, 0);
+   *     FileBrowser::mountSPIFFS(false, "/spiffs");
+   */
+  static bool format(DriveType driveType, int drive);
+
+  /**
+   * @brief Mounts filesystem on SD Card
+   *
+   * @param formatOnFail Formats SD Card when it cannot be mounted.
+   * @param mountPath Mount directory (ex. "/sdcard").
+   * @param maxFiles Number of files that can be open at the time (default 4).
+   * @param allocationUnitSize Allocation unit size (default 16K).
+   * @param MISO Pin for MISO signal (default 16).
+   * @param MOSI Pin for MOSI signal (default 17).
+   * @param CLK Pin for CLK signal (default 14).
+   * @param CS Pin for CS signal (default 13).
+   *
+   * @return Returns True on success.
+   *
+   * Example:
+   *
+   *     // Mount SD Card
+   *     FileBrowser::mountSDCard(false, "/sdcard");
+   */
+  static bool mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles = 4, int allocationUnitSize = 16 * 1024, int MISO = 16, int MOSI = 17, int CLK = 14, int CS = 13);
+
+  /**
+   * @brief Unmounts filesystem on SD Card
+   */
+  static void unmountSDCard();
+
+  /**
+   * @brief Mounts filesystem on SPIFFS (Flash)
+   *
+   * @param formatOnFail Formats SD Card when it cannot be mounted.
+   * @param mountPath Mount directory (ex. "/spiffs").
+   * @param maxFiles Number of files that can be open at the time (default 4).
+   *
+   * @return Returns True on success.
+   *
+   * Example:
+   *
+   *     // Mount SD Card
+   *     FileBrowser::mountSPIFFS(false, "/spiffs");
+   */
+  static bool mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles = 4);
+
+  /**
+   * @brief Unmounts filesystem on SPIFFS (Flash)
+   */
+  static void unmountSPIFFS();
+
+  /**
+   * @brief Gets total and free space on a filesystem
+   *
+   * @param driveType Type of support (SPI-Flash or SD Card).
+   * @param drive Drive number (Can be 0 when only one filesystem is mounted at the time).
+   * @param total Total space on the filesystem in bytes.
+   * @param used Used space on the filesystem in bytes.
+   *
+   * @return Returns True on success.
+   *
+   * Example:
+   *
+   *     // print used and free space on SPIFFS (Flash)
+   *     int64_t total, used;
+   *     FileBrowser::getFSInfo(fabgl::DriveType::SPIFFS, 0, &total, &used);
+   *     Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);
+   *
+   *     // print used and free space on SD Card
+   *     int64_t total, used;
+   *     FileBrowser::getFSInfo(fabgl::DriveType::SDCard, 0, &total, &used);
+   *     Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);
+   */
+  static bool getFSInfo(DriveType driveType, int drive, int64_t * total, int64_t * used);
 
 private:
 
