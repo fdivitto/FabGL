@@ -819,6 +819,10 @@ protected:
 
   void updateAbsoluteClippingRect();
 
+  RGB888 getActualPenColor();
+
+  RGB888 getActualBrushColor();
+
   void lineTo(Point const & position, Rect & updateRect);
 
   void drawRect(Rect const & rect, Rect & updateRect);
@@ -827,9 +831,9 @@ protected:
 
   void fillRect(Rect const & rect, Rect & updateRect);
 
-  void fillEllipse(Size const & size, Rect & updateRect);
+  void fillEllipse(int centerX, int centerY, Size const & size, RGB888 const & color, Rect & updateRect);
 
-  void fillPath(Path const & path, Rect & updateRect);
+  void fillPath(Path const & path, RGB888 const & color, Rect & updateRect);
 
   void renderGlyphsBuffer(GlyphsBufferRenderInfo const & glyphsBufferRenderInfo, Rect & updateRect);
 
@@ -1001,7 +1005,7 @@ protected:
   template <typename TPreparePixel, typename TRawSetPixel>
   void genericDrawEllipse(Size const & size, Rect & updateRect, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
   {
-    auto pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().brushColor) : preparePixel(paintState().penColor);
+    auto pattern = preparePixel(getActualPenColor());
 
     const int clipX1 = paintState().absClippingRect.X1;
     const int clipY1 = paintState().absClippingRect.Y1;
@@ -1595,7 +1599,7 @@ protected:
                       TRawCopyRow rawCopyRow, TRawFillRow rawFillRow)
   {
     hideSprites(updateRect);
-    RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+    RGB888 color = getActualBrushColor();
     int Y1 = paintState().scrollingRegion.Y1;
     int Y2 = paintState().scrollingRegion.Y2;
     int X1 = paintState().scrollingRegion.X1;
@@ -1638,7 +1642,7 @@ protected:
                       TSwapRowsCopying swapRowsCopying, TSwapRowsPointers swapRowsPointers, TRawFillRow rawFillRow)
   {
     hideSprites(updateRect);
-    RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+    RGB888 color = getActualBrushColor();
     const int Y1 = paintState().scrollingRegion.Y1;
     const int Y2 = paintState().scrollingRegion.Y2;
     const int X1 = paintState().scrollingRegion.X1;
@@ -1699,7 +1703,7 @@ protected:
                       TPreparePixel preparePixel, TRawGetRow rawGetRow, TRawGetPixelInRow rawGetPixelInRow, TRawSetPixelInRow rawSetPixelInRow)
   {
     hideSprites(updateRect);
-    auto pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
+    auto pattern = preparePixel(getActualBrushColor());
 
     int Y1 = paintState().scrollingRegion.Y1;
     int Y2 = paintState().scrollingRegion.Y2;

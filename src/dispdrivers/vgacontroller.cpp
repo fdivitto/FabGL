@@ -810,7 +810,7 @@ void IRAM_ATTR VGAController::drawEllipse(Size const & size, Rect & updateRect)
 void IRAM_ATTR VGAController::clear(Rect & updateRect)
 {
   hideSprites(updateRect);
-  uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
+  uint8_t pattern = preparePixel(getActualBrushColor());
   for (int y = 0; y < m_viewPortHeight; ++y)
     memset((uint8_t*) m_viewPort[y], pattern, m_viewPortWidth);
 }
@@ -866,7 +866,7 @@ void IRAM_ATTR VGAController::VScroll(int scroll, Rect & updateRect)
 void IRAM_ATTR VGAController::HScroll(int scroll, Rect & updateRect)
 {
   hideSprites(updateRect);
-  uint8_t pattern8   = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
+  uint8_t pattern8   = preparePixel(getActualBrushColor());
   uint16_t pattern16 = pattern8 << 8 | pattern8;
   uint32_t pattern32 = pattern16 << 16 | pattern16;
 

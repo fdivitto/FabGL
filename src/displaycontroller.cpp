@@ -672,7 +672,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       paintState().brushColor = prim.color;
       break;
     case PrimitiveCmd::SetPixel:
-      setPixelAt( (PixelDesc) { prim.position, paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor }, updateRect );
+      setPixelAt( (PixelDesc) { prim.position, getActualPenColor() }, updateRect );
       break;
     case PrimitiveCmd::SetPixelAt:
       setPixelAt(prim.pixelDesc, updateRect);
@@ -690,7 +690,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       drawRect(prim.rect, updateRect);
       break;
     case PrimitiveCmd::FillEllipse:
-      fillEllipse(prim.size, updateRect);
+      fillEllipse(paintState().position.X, paintState().position.Y, prim.size, getActualBrushColor(), updateRect);
       break;
     case PrimitiveCmd::DrawEllipse:
       drawEllipse(prim.size, updateRect);
@@ -745,7 +745,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       drawPath(prim.path, updateRect);
       break;
     case PrimitiveCmd::FillPath:
-      fillPath(prim.path, updateRect);
+      fillPath(prim.path, getActualBrushColor(), updateRect);
       break;
     case PrimitiveCmd::SetOrigin:
       paintState().origin = prim.position;
@@ -759,9 +759,21 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
 }
 
 
+RGB888 IRAM_ATTR DisplayController::getActualBrushColor()
+{
+  return paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+}
+
+
+RGB888 IRAM_ATTR DisplayController::getActualPenColor()
+{
+  return paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+}
+
+
 void IRAM_ATTR DisplayController::lineTo(Point const & position, Rect & updateRect)
 {
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+  RGB888 color = getActualPenColor();
 
   int origX = paintState().origin.X;
   int origY = paintState().origin.Y;
@@ -797,7 +809,7 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect, Rect & updateRect)
 
   updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
   hideSprites(updateRect);
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+  RGB888 color = getActualPenColor();
 
   absDrawLine(x1 + 1, y1,     x2, y1, color);
   absDrawLine(x2,     y1 + 1, x2, y2, color);
@@ -828,17 +840,15 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
 
   updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
   hideSprites(updateRect);
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
+  RGB888 color = getActualBrushColor();
 
   for (int y = y1; y <= y2; ++y)
     rawFillRow(y, x1, x2, color);
 }
 
 
-void IRAM_ATTR DisplayController::fillEllipse(Size const & size, Rect & updateRect)
+void IRAM_ATTR DisplayController::fillEllipse(int centerX, int centerY, Size const & size, RGB888 const & color, Rect & updateRect)
 {
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
-
   const int clipX1 = paintState().absClippingRect.X1;
   const int clipY1 = paintState().absClippingRect.Y1;
   const int clipX2 = paintState().absClippingRect.X2;
@@ -852,9 +862,6 @@ void IRAM_ATTR DisplayController::fillEllipse(Size const & size, Rect & updateRe
 
   int x0 = halfWidth;
   int dx = 0;
-
-  int centerX = paintState().position.X;
-  int centerY = paintState().position.Y;
 
   updateRect = updateRect.merge(Rect(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight));
   hideSprites(updateRect);
@@ -926,7 +933,7 @@ void IRAM_ATTR DisplayController::renderGlyphsBuffer(GlyphsBufferRenderInfo cons
 
 void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
 {
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().brushColor : paintState().penColor;
+  RGB888 color = getActualPenColor();
 
   const int clipX1 = paintState().absClippingRect.X1;
   const int clipY1 = paintState().absClippingRect.Y1;
@@ -972,10 +979,8 @@ void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
 }
 
 
-void IRAM_ATTR DisplayController::fillPath(Path const & path, Rect & updateRect)
+void IRAM_ATTR DisplayController::fillPath(Path const & path, RGB888 const & color, Rect & updateRect)
 {
-  RGB888 color = paintState().paintOptions.swapFGBG ? paintState().penColor : paintState().brushColor;
-
   const int clipX1 = paintState().absClippingRect.X1;
   const int clipY1 = paintState().absClippingRect.Y1;
   const int clipX2 = paintState().absClippingRect.X2;

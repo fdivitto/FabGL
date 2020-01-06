@@ -451,7 +451,7 @@ void SSD1306Controller::drawEllipse(Size const & size, Rect & updateRect)
 void SSD1306Controller::clear(Rect & updateRect)
 {
   hideSprites(updateRect);
-  uint8_t pattern = paintState().paintOptions.swapFGBG ? preparePixel(paintState().penColor) : preparePixel(paintState().brushColor);
+  uint8_t pattern = preparePixel(getActualBrushColor());
   memset(m_screenBuffer, (pattern ? 255 : 0), m_viewPortWidth * m_viewPortHeight / 8);
 }
 
