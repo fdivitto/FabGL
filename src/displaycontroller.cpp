@@ -847,6 +847,7 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
 }
 
 
+// McIlroy's algorithm
 void IRAM_ATTR DisplayController::fillEllipse(int centerX, int centerY, Size const & size, RGB888 const & color, Rect & updateRect)
 {
   const int clipX1 = paintState().absClippingRect.X1;
@@ -856,53 +857,57 @@ void IRAM_ATTR DisplayController::fillEllipse(int centerX, int centerY, Size con
 
   const int halfWidth  = size.width / 2;
   const int halfHeight = size.height / 2;
-  const int hh = halfHeight * halfHeight;
-  const int ww = halfWidth * halfWidth;
-  const int hhww = hh * ww;
-
-  int x0 = halfWidth;
-  int dx = 0;
 
   updateRect = updateRect.merge(Rect(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight));
   hideSprites(updateRect);
 
-  if (centerY >= clipY1 && centerY <= clipY2) {
-    int col1 = centerX - halfWidth;
-    int col2 = centerX + halfWidth;
-    if (col1 <= clipX2 && col2 >= clipX1) {
-      col1 = iclamp(col1, clipX1, clipX2);
-      col2 = iclamp(col2, clipX1, clipX2);
-      rawFillRow(centerY, col1, col2, color);
+  const int a2 = halfWidth * halfWidth;
+  const int b2 = halfHeight * halfHeight;
+  const int crit1 = -(a2 / 4 + halfWidth % 2 + b2);
+  const int crit2 = -(b2 / 4 + halfHeight % 2 + a2);
+  const int crit3 = -(b2 / 4 + halfHeight % 2);
+  const int d2xt = 2 * b2;
+  const int d2yt = 2 * a2;
+  int x = 0;          // travels from 0 up to halfWidth
+  int y = halfHeight; // travels from halfHeight down to 0
+  int width = 1;
+  int t = -a2 * y;
+  int dxt = 2 * b2 * x;
+  int dyt = -2 * a2 * y;
+
+  while (y >= 0 && x <= halfWidth) {
+    if (t + b2 * x <= crit1 || t + a2 * y <= crit3) {
+      x++;
+      dxt += d2xt;
+      t += dxt;
+      width += 2;
+    } else {
+      int col1 = centerX - x;
+      int col2 = centerX - x + width - 1;
+      if (col1 <= clipX2 && col2 >= clipX1) {
+        col1 = iclamp(col1, clipX1, clipX2);
+        col2 = iclamp(col2, clipX1, clipX2);
+        int row1 = centerY - y;
+        int row2 = centerY + y;
+        if (row1 >= clipY1 && row1 <= clipY2)
+          rawFillRow(row1, col1, col2, color);
+        if (y != 0 && row2 >= clipY1 && row2 <= clipY2)
+          rawFillRow(row2, col1, col2, color);
+      }
+      if (t - a2 * y <= crit2) {
+        x++;
+        dxt += d2xt;
+        t += dxt;
+        width += 2;
+      }
+      y--;
+      dyt += d2yt;
+      t += dyt;
     }
   }
-
-  for (int y = 1; y <= halfHeight; ++y)
-  {
-    int x1 = x0 - (dx - 1);
-    for ( ; x1 > 0; x1--)
-      if (x1 * x1 * hh + y * y * ww <= hhww)
-        break;
-    dx = x0 - x1;
-    x0 = x1;
-
-    int col1 = centerX - x0;
-    int col2 = centerX + x0;
-
-    if (col1 <= clipX2 && col2 >= clipX1) {
-
-      col1 = iclamp(col1, clipX1, clipX2);
-      col2 = iclamp(col2, clipX1, clipX2);
-
-      int y1 = centerY - y;
-      if (y1 >= clipY1 && y1 <= clipY2)
-        rawFillRow(y1, col1, col2, color);
-
-      int y2 = centerY + y;
-      if (y2 >= clipY1 && y2 <= clipY2)
-        rawFillRow(y2, col1, col2, color);
-
-    }
-  }
+  // one line horizontal ellipse case
+  if (halfHeight == 0 && centerY >= clipY1 && centerY <= clipY2)
+    rawFillRow(centerY, iclamp(centerX - halfWidth, clipX1, clipX2), iclamp(centerX - halfWidth + 2 * halfWidth + 1, clipX1, clipX2), color);
 }
 
 

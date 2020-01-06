@@ -1002,6 +1002,7 @@ protected:
   }
 
 
+  // McIlroy's algorithm
   template <typename TPreparePixel, typename TRawSetPixel>
   void genericDrawEllipse(Size const & size, Rect & updateRect, TPreparePixel preparePixel, TRawSetPixel rawSetPixel)
   {
@@ -1012,82 +1013,63 @@ protected:
     const int clipX2 = paintState().absClippingRect.X2;
     const int clipY2 = paintState().absClippingRect.Y2;
 
-    int x0 = paintState().position.X - size.width / 2;
-    int y0 = paintState().position.Y - size.height / 2;
-    int x1 = paintState().position.X + size.width / 2;
-    int y1 = paintState().position.Y + size.height / 2;
+    const int centerX = paintState().position.X;
+    const int centerY = paintState().position.Y;
 
-    updateRect = updateRect.merge(Rect(x0, y0, x1, y1));
+    const int halfWidth  = size.width / 2;
+    const int halfHeight = size.height / 2;
+
+    updateRect = updateRect.merge(Rect(centerX - halfWidth, centerY - halfHeight, centerX + halfWidth, centerY + halfHeight));
     hideSprites(updateRect);
 
-    int a = abs (x1 - x0), b = abs (y1 - y0), b1 = b & 1;
-    int dx = 4 * (1 - a) * b * b, dy = 4 * (b1 + 1) * a * a;
-    int err = dx + dy + b1 * a * a, e2;
+    const int a2 = halfWidth * halfWidth;
+    const int b2 = halfHeight * halfHeight;
+    const int crit1 = -(a2 / 4 + halfWidth % 2 + b2);
+    const int crit2 = -(b2 / 4 + halfHeight % 2 + a2);
+    const int crit3 = -(b2 / 4 + halfHeight % 2);
+    const int d2xt = 2 * b2;
+    const int d2yt = 2 * a2;
+    int x = 0;          // travels from 0 up to halfWidth
+    int y = halfHeight; // travels from halfHeight down to 0
+    int t = -a2 * y;
+    int dxt = 2 * b2 * x;
+    int dyt = -2 * a2 * y;
 
-    if (x0 > x1) {
-      x0 = x1;
-      x1 += a;
-    }
-    if (y0 > y1)
-      y0 = y1;
-    y0 += (b + 1) / 2;
-    y1 = y0 - b1;
-    a *= 8 * a;
-    b1 = 8 * b * b;
-    do {
-      if (y0 >= clipY1 && y0 <= clipY2) {
-        if (x1 >= clipX1 && x1 <= clipX2) {
-          // bottom-right semicircle
-          rawSetPixel(x1, y0, pattern);
-        }
-        if (x0 >= clipX1 && x0 <= clipX2) {
-          // bottom-left semicircle
-          rawSetPixel(x0, y0, pattern);
-        }
+    while (y >= 0 && x <= halfWidth) {
+      const int col1 = centerX - x;
+      const int col2 = centerX + x;
+      const int row1 = centerY - y;
+      const int row2 = centerY + y;
+
+      if (col1 >= clipX1 && col1 <= clipX2) {
+        if (row1 >= clipY1 && row1 <= clipY2)
+          rawSetPixel(col1, row1, pattern);
+        if (row2 >= clipY1 && row2 <= clipY2)
+          rawSetPixel(col1, row2, pattern);
       }
-      if (y1 >= clipY1 && y1 <= clipY2) {
-        if (x0 >= clipX1 && x0 <= clipX2) {
-          // top-left semicircle
-          rawSetPixel(x0, y1, pattern);
-        }
-        if (x1 >= clipX1 && x1 <= clipX2) {
-          // top-right semicircle
-          rawSetPixel(x1, y1, pattern);
-        }
+      if (col1 >= clipX1 && col1 <= clipX2) {
+        if (row1 >= clipY1 && row1 <= clipY2)
+          rawSetPixel(col2, row1, pattern);
+        if (row2 >= clipY1 && row2 <= clipY2)
+          rawSetPixel(col2, row2, pattern);
       }
-      e2 = 2 * err;
-      if (e2 >= dx) {
-        ++x0;
-        --x1;
-        err += dx += b1;
+
+      if (t + b2 * x <= crit1 || t + a2 * y <= crit3) {
+        x++;
+        dxt += d2xt;
+        t += dxt;
+      } else if (t - a2 * y > crit2) {
+        y--;
+        dyt += d2yt;
+        t += dyt;
+      } else {
+        x++;
+        dxt += d2xt;
+        t += dxt;
+        y--;
+        dyt += d2yt;
+        t += dyt;
       }
-      if (e2 <= dy) {
-        ++y0;
-        --y1;
-        err += dy += a;
-      }
-    } while (x0 <= x1);
-
-    while (y0 - y1 < b) {
-      int x = x0 - 1;
-      int y = y0;
-      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
-        rawSetPixel(x, y, pattern);
-
-      x = x1 + 1;
-      y = y0++;
-      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
-        rawSetPixel(x, y, pattern);
-
-      x = x0 - 1;
-      y = y1;
-      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
-        rawSetPixel(x, y, pattern);
-
-      x = x1 + 1;
-      y = y1--;
-      if (x >= clipX1 && x <= clipX2 && y >= clipY1 && y <= clipY2)
-        rawSetPixel(x, y, pattern);
     }
   }
 
