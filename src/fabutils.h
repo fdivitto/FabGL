@@ -387,7 +387,7 @@ public:
   LightMemoryPool(int poolSize);
   ~LightMemoryPool();
   void * alloc(int size);
-  void free(void * mem);
+  void free(void * mem) { if (mem) markFree((uint8_t*)mem - m_mem - 2); }
 
   bool memCheck();
   int totFree();      // get total free memory
@@ -397,7 +397,7 @@ public:
 private:
 
   void mark(int pos, int16_t size, bool allocated);
-  void markFree(int pos);
+  void markFree(int pos) { m_mem[pos + 1] &= 0x7f; }
   int16_t getSize(int pos);
   bool isFree(int pos);
 

@@ -775,12 +775,6 @@ void LightMemoryPool::mark(int pos, int16_t size, bool allocated)
 }
 
 
-void LightMemoryPool::markFree(int pos)
-{
-  m_mem[pos + 1] &= 0x7f;
-}
-
-
 int16_t LightMemoryPool::getSize(int pos)
 {
   return m_mem[pos] | ((m_mem[pos + 1] & 0x7f) << 8);
@@ -843,13 +837,6 @@ void * LightMemoryPool::alloc(int size)
     }
   }
   return nullptr;
-}
-
-
-void LightMemoryPool::free(void * mem)
-{
-  if (mem)
-    markFree((uint8_t*)mem - m_mem - 2);
 }
 
 
