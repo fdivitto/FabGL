@@ -176,6 +176,10 @@ enum PrimitiveCmd : uint8_t {
   // Set pen width
   // params: ivalue
   SetPenWidth,
+
+  // Set line ends
+  // params: lineEnds
+  SetLineEnds,
 };
 
 
@@ -414,6 +418,15 @@ enum class PixelFormat : uint8_t {
 };
 
 
+/** \ingroup Enumerations
+* @brief This enum defines line ends when pen width is greater than 1
+*/
+enum class LineEnds : uint8_t {
+  None,    /**< No line ends */
+  Circle,  /**< Circle line ends */
+};
+
+
 /**
  * @brief Represents an image
  */
@@ -575,6 +588,7 @@ struct Primitive {
     BitmapDrawingInfo      bitmapDrawingInfo;
     Path                   path;
     PixelDesc              pixelDesc;
+    LineEnds               lineEnds;
   } __attribute__ ((packed));
 
   Primitive() { }
@@ -594,6 +608,7 @@ struct PaintState {
   Rect         clippingRect;    // relative clipping rectangle
   Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
   int16_t      penWidth;
+  LineEnds     lineEnds;
 };
 
 
@@ -836,7 +851,7 @@ protected:
 
   void absDrawThickLine(int X1, int Y1, int X2, int Y2, int penWidth, RGB888 const & color);
 
-  void fillRect(Rect const & rect, Rect & updateRect);
+  void fillRect(Rect const & rect, RGB888 const & color, Rect & updateRect);
 
   void fillEllipse(int centerX, int centerY, Size const & size, RGB888 const & color, Rect & updateRect);
 

@@ -389,6 +389,7 @@ void DisplayController::resetPaintState()
   m_paintState.clippingRect          = Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1);
   m_paintState.absClippingRect       = m_paintState.clippingRect;
   m_paintState.penWidth              = 1;
+  m_paintState.lineEnds              = LineEnds::None;
 }
 
 
@@ -686,7 +687,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       lineTo(prim.position, updateRect);
       break;
     case PrimitiveCmd::FillRect:
-      fillRect(prim.rect, updateRect);
+      fillRect(prim.rect, getActualBrushColor(), updateRect);
       break;
     case PrimitiveCmd::DrawRect:
       drawRect(prim.rect, updateRect);
@@ -760,6 +761,9 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
     case PrimitiveCmd::SetPenWidth:
       paintState().penWidth = imax(1, prim.ivalue);
       break;
+    case PrimitiveCmd::SetLineEnds:
+      paintState().lineEnds = prim.lineEnds;
+      break;
   }
 }
 
@@ -825,7 +829,7 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect, Rect & updateRect)
 }
 
 
-void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
+void IRAM_ATTR DisplayController::fillRect(Rect const & rect, RGB888 const & color, Rect & updateRect)
 {
   int x1 = (rect.X1 < rect.X2 ? rect.X1 : rect.X2) + paintState().origin.X;
   int y1 = (rect.Y1 < rect.Y2 ? rect.Y1 : rect.Y2) + paintState().origin.Y;
@@ -847,7 +851,6 @@ void IRAM_ATTR DisplayController::fillRect(Rect const & rect, Rect & updateRect)
 
   updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
   hideSprites(updateRect);
-  RGB888 color = getActualBrushColor();
 
   for (int y = y1; y <= y2; ++y)
     rawFillRow(y, x1, x2, color);
@@ -1078,26 +1081,34 @@ void IRAM_ATTR DisplayController::absDrawThickLine(int X1, int Y1, int X2, int Y
 
   Point pts[4];
 
-  double angle = atan2(Y2 - Y1, X2 - X1);
-  double pw = (double)penWidth / 2.0;
-  pts[0].X = X1 + lround(pw * cos(angle + M_PI / 2));
-  pts[0].Y = Y1 + lround(pw * sin(angle + M_PI / 2));
-  pts[1].X = X1 + lround(pw * cos(angle - M_PI / 2));
-  pts[1].Y = Y1 + lround(pw * sin(angle - M_PI / 2));
-  pts[2].X = X2 + lround(pw * cos(angle - M_PI / 2));
-  pts[2].Y = Y2 + lround(pw * sin(angle - M_PI / 2));
-  pts[3].X = X2 + lround(pw * cos(angle + M_PI / 2));
-  pts[3].Y = Y2 + lround(pw * sin(angle + M_PI / 2));
+  const double angle = atan2(Y2 - Y1, X2 - X1);
+  const double pw = (double)penWidth / 2.0;
+  const int ofs1 = lround(pw * cos(angle + M_PI_2));
+  const int ofs2 = lround(pw * sin(angle + M_PI_2));
+  const int ofs3 = lround(pw * cos(angle - M_PI_2));
+  const int ofs4 = lround(pw * sin(angle - M_PI_2));
+  pts[0].X = X1 + ofs1;
+  pts[0].Y = Y1 + ofs2;
+  pts[1].X = X1 + ofs3;
+  pts[1].Y = Y1 + ofs4;
+  pts[2].X = X2 + ofs3;
+  pts[2].Y = Y2 + ofs4;
+  pts[3].X = X2 + ofs1;
+  pts[3].Y = Y2 + ofs2;
 
   Rect updateRect;
   Path path = { pts, 4, false };
   fillPath(path, color, updateRect);
 
-  if (penWidth > 2) {
-    if ((penWidth & 1) == 0)
-      --penWidth;
-    fillEllipse(X1, Y1, Size(penWidth, penWidth), color, updateRect);
-    fillEllipse(X2, Y2, Size(penWidth, penWidth), color, updateRect);
+  switch (paintState().lineEnds) {
+    case LineEnds::Circle:
+      if ((penWidth & 1) == 0)
+        --penWidth;
+      fillEllipse(X1, Y1, Size(penWidth, penWidth), color, updateRect);
+      fillEllipse(X2, Y2, Size(penWidth, penWidth), color, updateRect);
+      break;
+    default:
+      break;
   }
 }
 
