@@ -296,6 +296,19 @@ public:
   void setPenWidth(int value);
 
   /**
+   * @nrief Sets line ends shape
+   *
+   * @param value Line ends shape.
+   *
+   * Example:
+   *
+   *     Canvas.setPenWidth(4);
+   *     Canvas.setLineEnds(LineEnds::Circle);
+   *     Canvas.drawLine(10, 10, 100, 10);
+   */
+  void setLineEnds(LineEnds value);
+
+  /**
    * @brief Fills a single pixel with the pen color.
    *
    * @param X Horizontal pixel position.

@@ -210,6 +210,15 @@ void Canvas::setPenWidth(int value)
 }
 
 
+void Canvas::setLineEnds(LineEnds value)
+{
+  Primitive p;
+  p.cmd = PrimitiveCmd::SetLineEnds;
+  p.lineEnds = value;
+  m_displayController->addPrimitive(p);
+}
+
+
 void Canvas::setBrushColor(RGB888 const & color)
 {
   Primitive p;

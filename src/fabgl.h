@@ -333,6 +333,7 @@ using fabgl::FlowControl;
 using fabgl::LineEditor;
 using fabgl::TerminalController;
 using fabgl::AutoSuspendInterrupts;
+using fabgl::LineEnds;
 
 
 
