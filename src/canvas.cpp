@@ -201,6 +201,15 @@ void Canvas::setBrushColor(uint8_t red, uint8_t green, uint8_t blue)
 }
 
 
+void Canvas::setPenWidth(int value)
+{
+  Primitive p;
+  p.cmd = PrimitiveCmd::SetPenWidth;
+  p.ivalue = value;
+  m_displayController->addPrimitive(p);
+}
+
+
 void Canvas::setBrushColor(RGB888 const & color)
 {
   Primitive p;

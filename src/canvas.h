@@ -284,6 +284,18 @@ public:
   void setBrushColor(RGB888 const & color);
 
   /**
+   * @brief Sets pen width for lines, rectangles and paths
+   *
+   * @param value Pen width (minimum is 1).
+   *
+   * Example:
+   * 
+   *     Canvas.setPenWidth(4);
+   *     Canvas.drawLine(10, 10, 100, 10);
+   */
+  void setPenWidth(int value);
+
+  /**
    * @brief Fills a single pixel with the pen color.
    *
    * @param X Horizontal pixel position.
