@@ -25,6 +25,7 @@
 
 #include <string.h>
 #include <limits.h>
+#include <math.h>
 
 #include "freertos/task.h"
 
@@ -387,6 +388,7 @@ void DisplayController::resetPaintState()
   m_paintState.origin                = Point(0, 0);
   m_paintState.clippingRect          = Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1);
   m_paintState.absClippingRect       = m_paintState.clippingRect;
+  m_paintState.penWidth              = 1;
 }
 
 
@@ -755,6 +757,9 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       paintState().clippingRect = prim.rect;
       updateAbsoluteClippingRect();
       break;
+    case PrimitiveCmd::SetPenWidth:
+      paintState().penWidth = imax(1, prim.ivalue);
+      break;
   }
 }
 
@@ -782,7 +787,8 @@ void IRAM_ATTR DisplayController::lineTo(Point const & position, Rect & updateRe
   int x2 = position.X + origX;
   int y2 = position.Y + origY;
 
-  updateRect = updateRect.merge(Rect(imin(x1, x2), imin(y1, y2), imax(x1, x2), imax(y1, y2)));
+  int hw = paintState().penWidth / 2;
+  updateRect = updateRect.merge(Rect(imin(x1, x2) - hw, imin(y1, y2) - hw, imax(x1, x2) + hw, imax(y1, y2) + hw));
   hideSprites(updateRect);
   absDrawLine(x1, y1, x2, y2, color);
 
@@ -807,7 +813,8 @@ void IRAM_ATTR DisplayController::drawRect(Rect const & rect, Rect & updateRect)
   int x2 = (rect.X1 < rect.X2 ? rect.X2 : rect.X1) + paintState().origin.X;
   int y2 = (rect.Y1 < rect.Y2 ? rect.Y2 : rect.Y1) + paintState().origin.Y;
 
-  updateRect = updateRect.merge(Rect(x1, y1, x2, y2));
+  int hw = paintState().penWidth / 2;
+  updateRect = updateRect.merge(Rect(x1 - hw, y1 - hw, x2 + hw, y2 + hw));
   hideSprites(updateRect);
   RGB888 color = getActualPenColor();
 
@@ -962,7 +969,8 @@ void IRAM_ATTR DisplayController::drawPath(Path const & path, Rect & updateRect)
   minY = tmax(clipY1, minY);
   maxY = tmin(clipY2, maxY);
 
-  updateRect = updateRect.merge(Rect(minX, minY, maxX, maxY));
+  int hw = paintState().penWidth / 2;
+  updateRect = updateRect.merge(Rect(minX - hw, minY - hw, maxX + hw, maxY + hw));
   hideSprites(updateRect);
 
   int i = 0;
@@ -1055,6 +1063,42 @@ void IRAM_ATTR DisplayController::fillPath(Path const & path, RGB888 const & col
 
   if (path.freePoints)
     m_primDynMemPool.free((void*)path.points);
+}
+
+
+void IRAM_ATTR DisplayController::absDrawThickLine(int X1, int Y1, int X2, int Y2, int penWidth, RGB888 const & color)
+{
+  // just to "de-absolutize"
+  const int origX = paintState().origin.X;
+  const int origY = paintState().origin.Y;
+  X1 -= origX;
+  Y1 -= origY;
+  X2 -= origX;
+  Y2 -= origY;
+
+  Point pts[4];
+
+  double angle = atan2(Y2 - Y1, X2 - X1);
+  double pw = (double)penWidth / 2.0;
+  pts[0].X = X1 + lround(pw * cos(angle + M_PI / 2));
+  pts[0].Y = Y1 + lround(pw * sin(angle + M_PI / 2));
+  pts[1].X = X1 + lround(pw * cos(angle - M_PI / 2));
+  pts[1].Y = Y1 + lround(pw * sin(angle - M_PI / 2));
+  pts[2].X = X2 + lround(pw * cos(angle - M_PI / 2));
+  pts[2].Y = Y2 + lround(pw * sin(angle - M_PI / 2));
+  pts[3].X = X2 + lround(pw * cos(angle + M_PI / 2));
+  pts[3].Y = Y2 + lround(pw * sin(angle + M_PI / 2));
+
+  Rect updateRect;
+  Path path = { pts, 4, false };
+  fillPath(path, color, updateRect);
+
+  if (penWidth > 2) {
+    if ((penWidth & 1) == 0)
+      --penWidth;
+    fillEllipse(X1, Y1, Size(penWidth, penWidth), color, updateRect);
+    fillEllipse(X2, Y2, Size(penWidth, penWidth), color, updateRect);
+  }
 }
 
 

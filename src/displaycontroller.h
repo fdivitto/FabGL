@@ -172,6 +172,10 @@ enum PrimitiveCmd : uint8_t {
   // Set clipping rectangle
   // params: rect
   SetClippingRect,
+
+  // Set pen width
+  // params: ivalue
+  SetPenWidth,
 };
 
 
@@ -589,6 +593,7 @@ struct PaintState {
   Point        origin;
   Rect         clippingRect;    // relative clipping rectangle
   Rect         absClippingRect; // actual absolute clipping rectangle (calculated when setting "origin" or "clippingRect")
+  int16_t      penWidth;
 };
 
 
@@ -829,6 +834,8 @@ protected:
 
   void drawPath(Path const & path, Rect & updateRect);
 
+  void absDrawThickLine(int X1, int Y1, int X2, int Y2, int penWidth, RGB888 const & color);
+
   void fillRect(Rect const & rect, Rect & updateRect);
 
   void fillEllipse(int centerX, int centerY, Size const & size, RGB888 const & color, Rect & updateRect);
@@ -928,6 +935,10 @@ protected:
   template <typename TPreparePixel, typename TRawFillRow, typename TRawInvertRow, typename TRawSetPixel, typename TRawInvertPixel>
   void genericAbsDrawLine(int X1, int Y1, int X2, int Y2, RGB888 const & color, TPreparePixel preparePixel, TRawFillRow rawFillRow, TRawInvertRow rawInvertRow, TRawSetPixel rawSetPixel, TRawInvertPixel rawInvertPixel)
   {
+    if (paintState().penWidth > 1) {
+      absDrawThickLine(X1, Y1, X2, Y2, paintState().penWidth, color);
+      return;
+    }
     auto pattern = preparePixel(color);
     if (Y1 == Y2) {
       // horizontal line
