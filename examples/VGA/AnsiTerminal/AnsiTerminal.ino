@@ -1,6 +1,6 @@
  /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - www.fabgl.com
-  Copyright (c) 2019 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2020 Fabrizio Di Vittorio.
   All rights reserved.
 
   This file is part of FabGL Library.
@@ -57,7 +57,7 @@ void setup()
   Terminal.enableCursor(true);
 
   Terminal.write("* * FabGL - Serial VT/ANSI Terminal\r\n");
-  Terminal.write("* * 2019 by Fabrizio Di Vittorio - www.fabgl.com\r\n\n");
+  Terminal.write("* * 2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\r\n\n");
   Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
   Terminal.printf("Viewport Size      : %d x %d\r\n", DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
