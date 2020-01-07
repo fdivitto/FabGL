@@ -245,6 +245,7 @@
  * @example SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example SSD1306_OLED/128x64/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example SSD1306_OLED/128x64/RTClock/RTClock.ino DateTime clock using DS3231 RTC
  * @example SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
