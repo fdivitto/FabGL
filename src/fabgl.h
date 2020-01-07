@@ -45,25 +45,27 @@
  * - - -
  *
  * FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br>
- * FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br>
+ * FabGL can also get input from a PS/2 Keyboard and a Mouse. ULP core handles PS/2 ports communications, leaving main CPU cores free to perform other tasks.<br>
+ * FabGL also implements: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br>
  *
- * This library works with ESP32 revision 1 and upper.
+ * This library works with ESP32 revision 1 and upper.<br>
  *
- * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
+ * VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.<br>
  *
  * There are several fixed and variable width fonts embedded.
  *
- * Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.
+ * Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.<br>
  *
  * When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.<br>
- * In this case primitives are always drawn on the back buffer.
+ * In this case primitives are always drawn on the back buffer.<br>
  *
  * Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing (using VGA driver), so no flickering is visible.<br>
- * If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.
+ * If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.<br>
  *
- * There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).
+ * There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).<br>
  *
- * Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.
+ * Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.<br>
+ * Audio output, like VGA output, is generated using DMA. CPU just mixes audio channels and prepares waveforms.<br>
  *
  * - - -
  *
