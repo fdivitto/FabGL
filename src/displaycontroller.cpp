@@ -1124,7 +1124,7 @@ void IRAM_ATTR DisplayController::drawBitmap(BitmapDrawingInfo const & bitmapDra
 }
 
 
-void IRAM_ATTR DisplayController::absDrawBitmap(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, bool ignoreClippingRect)
+void IRAM_ATTR DisplayController::absDrawBitmap(int destX, int destY, Bitmap const * bitmap, void * saveBackground, bool ignoreClippingRect)
 {
   const int clipX1 = ignoreClippingRect ? 0 : paintState().absClippingRect.X1;
   const int clipY1 = ignoreClippingRect ? 0 : paintState().absClippingRect.Y1;

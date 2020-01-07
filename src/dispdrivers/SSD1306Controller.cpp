@@ -541,10 +541,10 @@ void SSD1306Controller::rawDrawBitmap_Native(int destX, int destY, Bitmap const 
 }
 
 
-void SSD1306Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   uint8_t foregroundColor = RGB888toMono(bitmap->foregroundColor);
-  genericRawDrawBitmap_Mask(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount,
+  genericRawDrawBitmap_Mask(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
                             [&] (int y)        { return y; },                                     // rawGetRow
                             [&] (int y, int x) { return SSD1306_GETPIXEL(x, y); },                // rawGetPixelInRow
                             [&] (int y, int x) { SSD1306_SETPIXELCOLOR(x, y, foregroundColor); }  // rawSetPixelInRow
@@ -552,9 +552,9 @@ void SSD1306Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * 
 }
 
 
-void SSD1306Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
-  genericRawDrawBitmap_RGBA2222(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount,
+  genericRawDrawBitmap_RGBA2222(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
                                 [&] (int y)                     { return y; },                                         // rawGetRow
                                 [&] (int y, int x)              { return SSD1306_GETPIXEL(x, y); },                    // rawGetPixelInRow
                                 [&] (int y, int x, uint8_t src) { SSD1306_SETPIXELCOLOR(x, y, RGBA2222toMono(src)); }  // rawSetPixelInRow
@@ -562,9 +562,9 @@ void SSD1306Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap cons
 }
 
 
-void SSD1306Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, uint8_t * saveBackground, int X1, int Y1, int XCount, int YCount)
+void SSD1306Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
-  genericRawDrawBitmap_RGBA8888(destX, destY, bitmap, saveBackground, X1, Y1, XCount, YCount,
+  genericRawDrawBitmap_RGBA8888(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
                                 [&] (int y)                              { return y; },                                         // rawGetRow
                                 [&] (int y, int x)                       { return SSD1306_GETPIXEL(x, y); },                    // rawGetPixelInRow
                                 [&] (int y, int x, RGBA8888 const & src) { SSD1306_SETPIXELCOLOR(x, y, RGBA8888toMono(src)); }  // rawSetPixelInRow
