@@ -189,7 +189,7 @@ void setup()
   }
 
   // uncomment to forget date/time on powerloss
-  DS3231.clockEnabled(false);
+  //DS3231.clockEnabled(false);
 
   dateInvalid = !DS3231.dateTimeValid();
   if (dateInvalid && PS2Controller.keyboard()->isKeyboardAvailable()) {
@@ -215,9 +215,6 @@ void loop()
   cv.selectFont(&fabgl::FONT_std_15);
   cv.drawTextFmt(0, 0, "%s, %s %d", D2S[dt.dayOfWeek-1], M2S[dt.month - 1], dt.dayOfMonth);
   cv.drawTextFmt(13, 18, "%d", dt.year);
-  //cv.drawTextFmt(0, 18, "%s", encodeDate(dt));
-  //cv.selectFont(&fabgl::FONT_std_16);
-  //cv.drawTextFmt(0, 36, "%s", encodeTime(dt));
 
   cv.selectFont(&fabgl::FONT_std_12);
   cv.drawTextFmt(78, 44, "%s", encodeTime(dt));
@@ -240,7 +237,6 @@ void loop()
     }
   }
 
-  //delay(250);
   delay(1000);
 
 }
