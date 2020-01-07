@@ -20,6 +20,14 @@
  */
 
 
+
+ /*
+  * OLED - SDA => GPIO 4
+  * OLED - SCL => GPIO 15
+  */
+
+
+
 #include "fabgl.h"
 
 
