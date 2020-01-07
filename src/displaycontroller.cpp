@@ -743,6 +743,7 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       break;
     case PrimitiveCmd::SwapBuffers:
       swapBuffers();
+      updateRect = updateRect.merge(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
       break;
     case PrimitiveCmd::DrawPath:
       drawPath(prim.path, updateRect);

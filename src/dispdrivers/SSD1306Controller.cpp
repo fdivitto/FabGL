@@ -305,6 +305,9 @@ void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
     const int screenX1 = r.X1 - m_screenCol;
     const int screenX2 = r.X2 - m_screenCol;
 
+    // select the buffer to send
+    uint8_t * screenBuffer = isDoubleBuffered() ? m_altScreenBuffer : m_screenBuffer;
+
     // send one page (8 rows) at the time
     for (int y = r.Y1; y <= r.Y2; y += 8) {
       int screenY = y - screenRow;
@@ -312,7 +315,7 @@ void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
         int page = screenY >> 3;
         if (!(SSD1306_sendCmd(SSD1306_PAGEADDR, page, page) && SSD1306_sendCmd(SSD1306_COLUMNADDR, screenX1, screenX2)))
           break;  // address selection failed, try with next page
-        SSD1306_sendData(m_screenBuffer + r.X1 + (y >> 3) * m_viewPortWidth, r.width(), 0x40);
+        SSD1306_sendData(screenBuffer + r.X1 + (y >> 3) * m_viewPortWidth, r.width(), 0x40);
       }
     }
 
