@@ -3,13 +3,14 @@
 # Converts an image (png, jpeg, ....) to FabGL Bitmap structure
 #
 # usage:
-#    img2bitmap filename [-t x y] [-s width height] [-d] [-f0 | -f1]
+#    python img2bitmap filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2]
 #
 # -t  = pixel where to take transparent color
 # -s  = resize to specified values
 # -d  = enable dithering
 # -f0 = format is RGB2222 (default)
 # -f1 = format is RGB8888
+# -f2 = format is 1 bit monochrome (color/transparent)
 #
 # Example:
 #   python img2bitmap.py test.png -s 64 64 >out.c
@@ -29,12 +30,13 @@ format = 0  # RGBA2222
 if len(sys.argv) < 2:
   print "Converts an image (png, jpeg, ....) to FabGL Bitmap structure"
   print "Usage:"
-  print "  python img2bitmap filename [-t x y] [-s width height] [-d] [-f0 | -f1]\n"
+  print "  python img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1]\n"
   print "  -t  = pixel where to take transparent color"
   print "  -s  = resize to specified values\n"
   print "  -d  = enable dithering\n"
   print "  -f0 = format is RGBA2222 (default)\n"
   print "  -f1 = format is RGBA8888\n"
+  print "  -f2 = format is 1 bit monochrome (color/transparent)\n\n"
   print "Example:"
   print "  python img2bitmap.py input.png -s 64 64 >out.c"
   sys.exit()
@@ -55,6 +57,9 @@ while i < len(sys.argv):
     i += 1
   elif sys.argv[i] == "-f1":
     format = 1
+    i += 1
+  elif sys.argv[i] == "-f2":
+    format = 2
     i += 1
   else:
     i += 1
@@ -121,6 +126,19 @@ if format == 1:
       print "0x{:02x},".format(pix[x, y][1]),
       print "0x{:02x},".format(pix[x, y][2]),
       print "0x{:02x},".format(opix[x, y][3]),
+    print
+
+if format == 2:
+  formatstr = "PixelFormat::Mask"
+  for y in range(0, im.height):
+    print "\t",
+    b = 0
+    for x in range(0, im.width):
+      if opix[x, y][3]:
+        b |= 1 << (7 - x % 8)
+      if (x & 7) == 7 or x == im.width - 1:
+        print "0x{:02x},".format(b),
+        b = 0
     print
 
 
