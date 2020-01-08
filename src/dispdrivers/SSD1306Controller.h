@@ -50,6 +50,16 @@ namespace fabgl {
 
 
 
+/** \ingroup Enumerations
+* @brief This enum defines SSD1306 orientation
+*/
+enum class SSD1306Orientation {
+  Normal,             /**< Normal orientation */
+  ReverseHorizontal,  /**< Reverse horizontal */
+  ReverseVertical,    /**< Reverse vertical */
+  Rotate180,          /**< Rotate 180 degrees */
+};
+
 
 /**
  * @brief Display driver for SSD1306 based OLED display, with I2C connection.
@@ -178,6 +188,18 @@ public:
    */
   void invert(bool value);
 
+  /**
+   * @brief Set display orientation and rotation
+   *
+   * @param value Display orientation and rotation
+   *
+   * Example:
+   * 
+   *     // rotate by 180 degrees
+   *     DisplayController.setOrientation(fabgl::SSD1306Orientation::Rotate180);
+   */
+  void setOrientation(SSD1306Orientation value);
+
 
 private:
 
@@ -194,6 +216,10 @@ private:
   bool SSD1306_softReset();
 
   void SSD1306_sendScreenBuffer(Rect updateRect);
+
+  void sendRefresh();
+
+  void setupOrientation();
 
   void allocScreenBuffer();
 
@@ -271,6 +297,8 @@ private:
 
   volatile int       m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
   volatile bool      m_updateTaskRunning;
+
+  SSD1306Orientation m_orientation;
 
 };
 

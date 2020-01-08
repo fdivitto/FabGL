@@ -114,7 +114,8 @@ SSD1306Controller::SSD1306Controller()
     m_screenBuffer(nullptr),
     m_altScreenBuffer(nullptr),
     m_updateTaskHandle(nullptr),
-    m_updateTaskRunning(false)
+    m_updateTaskRunning(false),
+    m_orientation(SSD1306Orientation::Normal)
 {
 }
 
@@ -186,8 +187,7 @@ void SSD1306Controller::setScreenCol(int value)
 {
   if (value != m_screenCol) {
     m_screenCol = iclamp(value, 0, m_viewPortWidth - m_screenWidth);
-    Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
-    addPrimitive(p);
+    sendRefresh();
   }
 }
 
@@ -196,9 +196,15 @@ void SSD1306Controller::setScreenRow(int value)
 {
   if (value != m_screenRow) {
     m_screenRow = iclamp(value, 0, m_viewPortHeight - m_screenHeight);
-    Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
-    addPrimitive(p);
+    sendRefresh();
   }
+}
+
+
+void SSD1306Controller::sendRefresh()
+{
+  Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
+  addPrimitive(p);
 }
 
 
@@ -264,9 +270,8 @@ bool SSD1306Controller::SSD1306_softReset()
   SSD1306_sendCmd(SSD1306_SETDISPLAYOFFSET, 0);
   SSD1306_sendCmd(SSD1306_SETSTARTLINE);
   SSD1306_sendCmd(SSD1306_CHARGEPUMP, 0x14);      // 0x14 = SWITCHCAPVCC,  0x10 = EXTERNALVCC
-  SSD1306_sendCmd(SSD1306_MEMORYMODE, 0);
-  SSD1306_sendCmd(SSD1306_SEGREMAP | 0x1);
-  SSD1306_sendCmd(SSD1306_COMSCANDEC);
+  SSD1306_sendCmd(SSD1306_MEMORYMODE, 0b100);     // 0b100 = page addressing mode
+  setupOrientation();
   if (m_screenHeight == 64) {
     SSD1306_sendCmd(SSD1306_SETCOMPINS, 0x12);
     SSD1306_sendCmd(SSD1306_SETCONTRAST, 0xCF);   // max: 0xCF = SWITCHCAPVCC,  0x9F = EXTERNALVCC
@@ -280,6 +285,37 @@ bool SSD1306Controller::SSD1306_softReset()
   SSD1306_sendCmd(SSD1306_NORMALDISPLAY);
   SSD1306_sendCmd(SSD1306_DEACTIVATE_SCROLL);
   return SSD1306_sendCmd(SSD1306_DISPLAYON);
+}
+
+
+void SSD1306Controller::setupOrientation()
+{
+  switch (m_orientation) {
+    case SSD1306Orientation::Normal:
+      SSD1306_sendCmd(SSD1306_SEGREMAP | 0x1);
+      SSD1306_sendCmd(SSD1306_COMSCANDEC);
+      break;
+    case SSD1306Orientation::ReverseHorizontal:
+      SSD1306_sendCmd(SSD1306_SEGREMAP | 0x0);
+      SSD1306_sendCmd(SSD1306_COMSCANDEC);
+      break;
+    case SSD1306Orientation::ReverseVertical:
+      SSD1306_sendCmd(SSD1306_SEGREMAP | 0x1);
+      SSD1306_sendCmd(SSD1306_COMSCANINC);
+      break;
+    case SSD1306Orientation::Rotate180:
+      SSD1306_sendCmd(SSD1306_SEGREMAP | 0x0);
+      SSD1306_sendCmd(SSD1306_COMSCANINC);
+      break;
+  }
+}
+
+
+void SSD1306Controller::setOrientation(SSD1306Orientation value)
+{
+  m_orientation = value;
+  setupOrientation();
+  sendRefresh();
 }
 
 
