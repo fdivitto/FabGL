@@ -171,6 +171,13 @@ public:
 
   void readScreen(Rect const & rect, RGB888 * destBuf);
 
+  /**
+   * @brief Inverts display colors
+   *
+   * @param value True enables invertion.
+   */
+  void invert(bool value);
+
 
 private:
 

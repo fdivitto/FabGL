@@ -323,6 +323,12 @@ void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
 }
 
 
+void SSD1306Controller::invert(bool value)
+{
+  SSD1306_sendCmd(value ? SSD1306_INVERTDISPLAY : SSD1306_NORMALDISPLAY);
+}
+
+
 void SSD1306Controller::allocScreenBuffer()
 {
   m_screenBuffer = (uint8_t*) malloc(m_viewPortWidth * m_viewPortHeight / 8);
