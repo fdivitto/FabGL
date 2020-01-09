@@ -672,6 +672,18 @@ inline gpio_num_t int2gpio(int gpio)
 uint32_t msToTicks(int ms);
 
 
+enum class ChipPackage {
+  Unknown,
+  ESP32D0WDQ6,
+  ESP32D0WDQ5,
+  ESP32D2WDQ5,
+  ESP32PICOD4,
+};
+
+
+ChipPackage getChipPackage();
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts
 

@@ -33,6 +33,7 @@
 #include "driver/sdspi_host.h"
 #include "sdmmc_cmd.h"
 #include "esp_spiffs.h"
+#include "soc/efuse_reg.h"
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
@@ -150,6 +151,27 @@ uint32_t msToTicks(int ms)
   return ms < 0 ? portMAX_DELAY : pdMS_TO_TICKS(ms);
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// getChipPackage
+
+ChipPackage getChipPackage()
+{
+  // read CHIP_VER_PKG (block0, byte 3, 105th bit % 32 = 9, 3 bits)
+  uint32_t ver_pkg = (REG_READ(EFUSE_BLK0_RDATA3_REG) >> 9) & 7;
+  switch (ver_pkg) {
+    case 0:
+      return ChipPackage::ESP32D0WDQ6;
+    case 1:
+      return ChipPackage::ESP32D0WDQ5;
+    case 2:
+      return ChipPackage::ESP32D2WDQ5;
+    case 5:
+      return ChipPackage::ESP32PICOD4;
+    default:
+      return ChipPackage::Unknown;
+  }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
