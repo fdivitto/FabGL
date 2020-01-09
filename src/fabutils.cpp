@@ -469,7 +469,7 @@ int FileBrowser::countDirEntries(int * namesLength)
   int c = 0;
   *namesLength = 0;
   if (m_dir) {
-    suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     auto dirp = opendir(m_dir);
     while (dirp) {
       auto dp = readdir(dirp);
@@ -481,7 +481,6 @@ int FileBrowser::countDirEntries(int * namesLength)
       }
     }
     closedir(dirp);
-    resumeInterrupts();
   }
   return c;
 }
@@ -521,7 +520,7 @@ void FileBrowser::reload()
   m_items[0].isDir = true;
   ++m_count;
 
-  suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
   auto dirp = opendir(m_dir);
   for (int i = 0; i < c; ++i) {
     auto dp = readdir(dirp);
@@ -550,7 +549,6 @@ void FileBrowser::reload()
     }
   }
   closedir(dirp);
-  resumeInterrupts();
   if (m_sorted)
     qsort(m_items, m_count, sizeof(DirItem), DirComp);
 }
@@ -562,7 +560,7 @@ void FileBrowser::makeDirectory(char const * dirname)
 {
   int dirnameLen = strlen(dirname);
   if (dirnameLen > 0) {
-    suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     if (strncmp(m_dir, "/spiffs", 7) == 0) {
       // simulated directory, puts an hidden placeholder
       char fullpath[strlen(m_dir) + 3 + 2 * dirnameLen + 1];
@@ -574,7 +572,6 @@ void FileBrowser::makeDirectory(char const * dirname)
       sprintf(fullpath, "%s/%s", m_dir, dirname);
       mkdir(fullpath, ACCESSPERMS);
     }
-    resumeInterrupts();
   }
 }
 
@@ -584,7 +581,7 @@ void FileBrowser::makeDirectory(char const * dirname)
 // "name" is not a path, just a file or directory name inside "m_dir"
 void FileBrowser::remove(char const * name)
 {
-  suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
 
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
@@ -613,15 +610,13 @@ void FileBrowser::remove(char const * name)
       closedir(dirp);
     }
   }
-
-  resumeInterrupts();
 }
 
 
 // works only for files
 void FileBrowser::rename(char const * oldName, char const * newName)
 {
-  suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
 
   char oldfullpath[strlen(m_dir) + 1 + strlen(oldName) + 1];
   sprintf(oldfullpath, "%s/%s", m_dir, oldName);
@@ -630,8 +625,6 @@ void FileBrowser::rename(char const * oldName, char const * newName)
   sprintf(newfullpath, "%s/%s", m_dir, newName);
 
   ::rename(oldfullpath, newfullpath);
-
-  resumeInterrupts();
 }
 
 

@@ -202,7 +202,7 @@ void exe_wifi()
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
     Terminal.write("Connecting WiFi...");
     Terminal.flush();
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     WiFi.disconnect(true, true);
     for (int i = 0; i < 2; ++i) {
       WiFi.begin(ssid, psw);
@@ -210,7 +210,6 @@ void exe_wifi()
         break;
       WiFi.disconnect(true, true);
     }
-    fabgl::resumeInterrupts();
     if (WiFi.status() == WL_CONNECTED) {
       Terminal.printf("SSID: %s\r\nIP: %s\r\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
       error = false;

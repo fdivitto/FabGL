@@ -206,9 +206,9 @@ void emulator_menu()
         Terminal.write("Formatting SPIFFS removes RW disks and resets the Altair. Are you sure? (Y/N)");
         if (toupper(Terminal.read()) == 'Y') {
           Terminal.write("\n\rFormatting SPIFFS...");
-          fabgl::suspendInterrupts();
+          Terminal.flush();
+          AutoSuspendInterrupts autoInt;
           esp_spiffs_format(nullptr);
-          fabgl::resumeInterrupts();
           resetRequired = true;
         }
         break;

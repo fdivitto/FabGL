@@ -83,22 +83,19 @@ constexpr int bufferedFileDataSize = 4388;//4388;
 void diskFlush(FILE * file = nullptr)
 {
   // flush bufferedFile
+  AutoSuspendInterrupts autoInt;
   if (bufferedFileChanged && bufferedFile && bufferedFileDataPos != -1) {
-    fabgl::suspendInterrupts();
     fseek(bufferedFile, bufferedFileDataPos, SEEK_SET);
     //fprintf(stderr, "fseek(%d) fwrite(%d)\n", bufferedFileDataPos, bufferedFileDataSize);
     fwrite(bufferedFileData, bufferedFileDataSize, 1, bufferedFile);
     fflush(bufferedFile);
     fsync(fileno(bufferedFile));  // workaround from forums...
-    fabgl::resumeInterrupts();
     bufferedFileChanged = false;
   }
   if (file) {
     // flush specified file
-    fabgl::suspendInterrupts();
     fflush(file);
     fsync(fileno(file));  // workaround from forums...
-    fabgl::resumeInterrupts();
   }
 }
 
@@ -114,12 +111,11 @@ void fetchFileData(FILE * file, int position, int size)
     bufferedFile = file;
   }
   if (bufferedFileDataPos == -1 || position < bufferedFileDataPos || position + size >= bufferedFileDataPos + bufferedFileDataSize) {
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     diskFlush();
     fseek(file, position, SEEK_SET);
     //fprintf(stderr, "fseek(%d) fread(%d)\n", position, bufferedFileDataSize);
     fread(bufferedFileData, bufferedFileDataSize, 1, file);
-    fabgl::resumeInterrupts();
     bufferedFileDataPos = position;
   }
 }
@@ -149,27 +145,24 @@ void diskWrite(int position, void * buffer, int size, FILE * file)
 
 void diskRead(int position, void * buffer, int size, FILE * file)
 {
-  fabgl::suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
   fseek(file, position, SEEK_SET);
   fread(buffer, size, 1, file);
-  fabgl::resumeInterrupts();
 }
 
 
 void diskWrite(int position, void * buffer, int size, FILE * file)
 {
-  fabgl::suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
   fseek(file, position, SEEK_SET);
   fwrite(buffer, size, 1, file);
-  fabgl::resumeInterrupts();
 }
 
 void diskFlush(FILE * file = nullptr)
 {
-  fabgl::suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
   fflush(file);
   fsync(fileno(file));  // workaround from forums...
-  fabgl::resumeInterrupts();
 }
 
 //*/
@@ -425,9 +418,8 @@ void Mits88Disk::detach(int drive)
   if (m_readOnlyBuffer[drive]) {
     m_readOnlyBuffer[drive] = nullptr;
   } else if (m_file[drive]) {
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     fclose(m_file[drive]);
-    fabgl::resumeInterrupts();
     m_file[drive] = nullptr;
     delete [] m_fileSectorBuffer[drive];
     m_fileSectorBuffer[drive] = nullptr;
@@ -448,7 +440,7 @@ void Mits88Disk::attachFile(int drive, char const * filename)
 
   m_fileSectorBuffer[drive] = new uint8_t[SECTOR_SIZE];
 
-  fabgl::suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
 
   // file exists?
   struct stat st;
@@ -462,8 +454,6 @@ void Mits88Disk::attachFile(int drive, char const * filename)
     // file already exists, just open for read/write
     m_file[drive] = fopen(filename, "r+");
   }
-
-  fabgl::resumeInterrupts();
 
   flush();
 }

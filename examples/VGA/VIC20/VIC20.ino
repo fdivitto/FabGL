@@ -144,9 +144,8 @@ void initSPIFFS()
       .max_files              = 2,
       .format_if_mount_failed = true
   };
-  fabgl::suspendInterrupts();
+  AutoSuspendInterrupts autoInt;
   esp_vfs_spiffs_register(&conf);
-  fabgl::resumeInterrupts();
 }
 
 
@@ -369,10 +368,9 @@ class Menu : public uiApp {
       char psw[32]  = "";
       if (inputBox("WiFi Connect", "WiFi Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
           inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        fabgl::suspendInterrupts();
+        AutoSuspendInterrupts autoInt;
         preferences.putString("SSID", SSID);
         preferences.putString("WiFiPsw", psw);
-        fabgl::resumeInterrupts();
       }
     };
 
@@ -606,9 +604,8 @@ class Menu : public uiApp {
 
   // return true if WiFi is connected
   bool WiFiConnected() {
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     bool r = WiFi.status() == WL_CONNECTED;
-    fabgl::resumeInterrupts();
     return r;
   }
 
@@ -637,18 +634,17 @@ class Menu : public uiApp {
     static char const * DOWNDIR = "List";
     FileBrowser & dir = fileBrowser->content();
 
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     dir.setDirectory(ROOTDIR);
     dir.makeDirectory(DOWNDIR);
     dir.changeDirectory(DOWNDIR);
-    fabgl::resumeInterrupts();
   }
 
   // download list from LIST_URL
   // ret nullptr on fail
   char * downloadList()
   {
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     auto list = (char*) malloc(MAXLISTSIZE);
     auto dest = list;
     HTTPClient http;
@@ -667,7 +663,6 @@ class Menu : public uiApp {
       }
     }
     *dest = 0;
-    fabgl::resumeInterrupts();
     return list;
   }
 
@@ -707,7 +702,7 @@ class Menu : public uiApp {
   // download specified filename from URL
   bool downloadURL(char const * URL, char const * filename)
   {
-    fabgl::suspendInterrupts();
+    AutoSuspendInterrupts autoInt;
     FileBrowser & dir = fileBrowser->content();
     if (dir.exists(filename)) {
       fabgl::resumeInterrupts();
@@ -744,7 +739,6 @@ class Menu : public uiApp {
         success = (len == 0 || (len == -1 && dsize > 0));
       }
     }
-    fabgl::resumeInterrupts();
     return success;
   }
 
