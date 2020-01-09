@@ -50,7 +50,7 @@
 
 Preferences preferences;
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -311,15 +311,15 @@ void setup()
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
-  VGAController.begin();
+  DisplayController.begin();
 
   // maintain LOW!!! otherwise there isn't enough memory for WiFi!!!
-  VGAController.setResolution(VGA_400x300_60Hz);
+  DisplayController.setResolution(VGA_400x300_60Hz);
 
   // adjust this to center screen in your monitor
-  //VGAController.moveScreen(-6, 0);
+  //DisplayController.moveScreen(-6, 0);
 
-  Canvas cv(&VGAController);
+  Canvas cv(&DisplayController);
   cv.clear();
   cv.drawText(50, 170, "Initializing SD/Flash...");
   cv.waitCompletion();
@@ -332,7 +332,7 @@ void setup()
 
 void loop()
 {
-  app.run(&VGAController);
+  app.run(&DisplayController);
 }
 
 

@@ -24,8 +24,8 @@
 
 
 
-fabgl::VGAController VGAController;
-fabgl::Canvas        canvas(&VGAController);
+fabgl::VGAController DisplayController;
+fabgl::Canvas        canvas(&DisplayController);
 
 
 
@@ -49,9 +49,9 @@ struct Test {
 
 void setup()
 {
-  VGAController.begin();
-  VGAController.setResolution(VGA_320x200_75Hz, -1, -1, DOUBLEBUFFERING);
-  //VGAController.moveScreen(-8, 0);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_320x200_75Hz, -1, -1, DOUBLEBUFFERING);
+  //DisplayController.moveScreen(-8, 0);
 
   // get a font for about 40x14 text screen
   canvas.selectFont(&fabgl::FONT_8x8);

@@ -67,7 +67,7 @@ public:
 
   virtual ~SpritesTest()
   {
-    VGAController.removeSprites();
+    DisplayController.removeSprites();
     delete [] sprites_;
   }
 
@@ -82,7 +82,7 @@ public:
       sprite->fy = twrap<double>(sprite->fy + 3 * sin(sprite->dir), 0, canvas.getHeight());
       sprite->moveTo(ceil(sprite->fx), ceil(sprite->fy));
     }
-    VGAController.refreshSprites();
+    DisplayController.refreshSprites();
   }
 
   bool nextState()
@@ -97,7 +97,7 @@ public:
       newSprite->fx = canvas.getWidth() / 2.0;
       newSprite->fy = canvas.getHeight() / 2.0;
       newSprite->moveTo(ceil(newSprite->fx), ceil(newSprite->fy));
-      VGAController.setSprites(sprites_, spritesCount_);
+      DisplayController.setSprites(sprites_, spritesCount_);
     }
     ++counter_;
     return true;
