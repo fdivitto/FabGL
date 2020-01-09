@@ -702,6 +702,8 @@ bool FileBrowser::format(DriveType driveType, int drive)
 
 bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
+  if (getChipPackage() == ChipPackage::ESP32PICOD4 && (MISO == 16 || MOSI == 17))
+    return false; // PICO-D4 uses pins 16 and 17 for Flash
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
   sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
   slot_config.gpio_miso = int2gpio(MISO);
