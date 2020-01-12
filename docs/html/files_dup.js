@@ -22,8 +22,9 @@ var files_dup =
       [ "Scene", "classfabgl_1_1_scene.html", "classfabgl_1_1_scene" ]
     ] ],
     [ "soundgen.h", "soundgen_8h.html", "soundgen_8h" ],
-    [ "SSD1306Controller.h", "_s_s_d1306_controller_8h.html", [
-      [ "SSD1306Controller", "classfabgl_1_1_s_s_d1306_controller.html", "classfabgl_1_1_s_s_d1306_controller" ]
+    [ "SSD1306Controller.h", "_s_s_d1306_controller_8h.html", "_s_s_d1306_controller_8h" ],
+    [ "ST7789Controller.h", "_s_t7789_controller_8h.html", [
+      [ "ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", "classfabgl_1_1_s_t7789_controller" ]
     ] ],
     [ "swgenerator.h", "swgenerator_8h.html", null ],
     [ "terminal.h", "terminal_8h.html", "terminal_8h" ],

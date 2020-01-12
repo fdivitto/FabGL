@@ -1,21 +1,22 @@
 <map id="fabglconf.h" name="fabglconf.h">
-<area shape="rect" id="node2" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="379,79,507,104"/>
-<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="702,445,781,471"/>
-<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="827,225,888,251"/>
-<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="789,299,876,324"/>
-<area shape="rect" id="node9" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="968,299,1040,324"/>
-<area shape="rect" id="node10" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="203,152,331,177"/>
-<area shape="rect" id="node11" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="212,225,280,251"/>
-<area shape="rect" id="node12" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="20,152,128,177"/>
-<area shape="rect" id="node13" href="$_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="555,152,702,177"/>
-<area shape="rect" id="node14" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="878,152,957,177"/>
-<area shape="rect" id="node15" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="1033,152,1141,177"/>
-<area shape="rect" id="node16" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="963,225,1056,251"/>
-<area shape="rect" id="node17" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="1210,79,1270,104"/>
-<area shape="rect" id="node18" href="$_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="1267,152,1347,177"/>
-<area shape="rect" id="node19" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="1333,372,1424,397"/>
-<area shape="rect" id="node20" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="24,79,129,104"/>
-<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="406,152,480,177"/>
-<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="866,519,927,544"/>
-<area shape="rect" id="node8" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="779,372,859,397"/>
+<area shape="rect" id="node2" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="836,79,964,104"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="391,445,471,471"/>
+<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="483,225,544,251"/>
+<area shape="rect" id="node7" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="310,299,397,324"/>
+<area shape="rect" id="node9" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="472,299,544,324"/>
+<area shape="rect" id="node10" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="683,152,810,177"/>
+<area shape="rect" id="node11" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="793,225,861,251"/>
+<area shape="rect" id="node12" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="1097,152,1205,177"/>
+<area shape="rect" id="node13" href="$_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="1228,152,1375,177"/>
+<area shape="rect" id="node14" href="$_s_t7789_controller_8h.html" title="This file contains fabgl::ST7789Controller definition. " alt="" coords="936,152,1072,177"/>
+<area shape="rect" id="node15" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="93,152,173,177"/>
+<area shape="rect" id="node16" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="299,152,407,177"/>
+<area shape="rect" id="node17" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="264,225,357,251"/>
+<area shape="rect" id="node18" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="1302,79,1362,104"/>
+<area shape="rect" id="node19" href="$_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="1449,152,1530,177"/>
+<area shape="rect" id="node20" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="1516,372,1607,397"/>
+<area shape="rect" id="node21" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="1038,79,1143,104"/>
+<area shape="rect" id="node3" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="584,152,659,177"/>
+<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="843,519,904,544"/>
+<area shape="rect" id="node8" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="313,372,394,397"/>
 </map>

@@ -1,5 +1,6 @@
 var fabutils_8h =
 [
+    [ "AutoSuspendInterrupts", "structfabgl_1_1_auto_suspend_interrupts.html", null ],
     [ "DirItem", "structfabgl_1_1_dir_item.html", "structfabgl_1_1_dir_item" ],
     [ "FileBrowser", "classfabgl_1_1_file_browser.html", "classfabgl_1_1_file_browser" ],
     [ "MouseButtons", "structfabgl_1_1_mouse_buttons.html", "structfabgl_1_1_mouse_buttons" ],
@@ -7,6 +8,10 @@ var fabutils_8h =
     [ "Point", "structfabgl_1_1_point.html", "structfabgl_1_1_point" ],
     [ "Rect", "structfabgl_1_1_rect.html", "structfabgl_1_1_rect" ],
     [ "Size", "structfabgl_1_1_size.html", "structfabgl_1_1_size" ],
+    [ "DriveType", "fabutils_8h.html#ga9a469aacd095358acbe70b98e85bceee", [
+      [ "SPIFFS", "fabutils_8h.html#gga9a469aacd095358acbe70b98e85bceeea146673cebceb52efdad49e33019dd764", null ],
+      [ "SDCard", "fabutils_8h.html#gga9a469aacd095358acbe70b98e85bceeea826ee4b27642806340fe4905532841e8", null ]
+    ] ],
     [ "VirtualKey", "fabutils_8h.html#gae12c31a33f64281cba424d993a8a4381", [
       [ "VK_NONE", "fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381afed697c6504b385257870e50df5b034e", null ],
       [ "VK_SPACE", "fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a155d18f360246cf18117c0371f7ce716", null ],
@@ -191,5 +196,13 @@ var fabutils_8h =
       [ "VK_UMLAUT_u", "fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a91f9d054b88964aac954e0d8e8157932", null ],
       [ "VK_UMLAUT_o", "fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a0be726d0dfa501eae0e15248aa4598de", null ],
       [ "VK_UMLAUT_a", "fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a21e014abe301e34be97c162af672fcfc", null ]
-    ] ]
+    ] ],
+    [ "height", "fabutils_8h.html#a777dd66f9609a587ee98ad50de301662", null ],
+    [ "width", "fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f", null ],
+    [ "X", "fabutils_8h.html#aa6aba27bc1a89db9e350b50bbf881f57", null ],
+    [ "X1", "fabutils_8h.html#a0dd601bb81c34d0e0e1c71e445d8c9ed", null ],
+    [ "X2", "fabutils_8h.html#aacc253365e856de8781b525223af3c52", null ],
+    [ "Y", "fabutils_8h.html#abe4637362df8e341470401813999dd17", null ],
+    [ "Y1", "fabutils_8h.html#aefe36b84395404eaeb2fb7bc8dfa9266", null ],
+    [ "Y2", "fabutils_8h.html#a3e43b2629ffdaba77fe72f8f70818f07", null ]
 ];

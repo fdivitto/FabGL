@@ -98,31 +98,17 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_s_s_d1306_controller.ht
  <a href="classfabgl_1_1_s_s_d1306_controller.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_s_s_d1306_controller_8h_source.html">SSD1306Controller.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for fabgl::SSD1306Controller:</div>
-<div class="dyncontent">
-<div class="center"><img src="classfabgl_1_1_s_s_d1306_controller__inherit__graph.png" border="0" usemap="#fabgl_1_1_s_s_d1306_controller_inherit__map" alt="Inheritance graph"/></div>
-<map name="fabgl_1_1_s_s_d1306_controller_inherit__map" id="fabgl_1_1_s_s_d1306_controller_inherit__map">
-<area shape="rect" id="node2" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. " alt="" coords="12,5,171,31"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for fabgl::SSD1306Controller:</div>
-<div class="dyncontent">
-<div class="center"><img src="classfabgl_1_1_s_s_d1306_controller__coll__graph.png" border="0" usemap="#fabgl_1_1_s_s_d1306_controller_coll__map" alt="Collaboration graph"/></div>
-<map name="fabgl_1_1_s_s_d1306_controller_coll__map" id="fabgl_1_1_s_s_d1306_controller_coll__map">
-<area shape="rect" id="node2" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. " alt="" coords="12,5,171,31"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+
+<p>Inherits fabgl::GenericDisplayController.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a66a8b078f8daa503e5202fa057976b40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a66a8b078f8daa503e5202fa057976b40">available</a> ()</td></tr>
 <tr class="memdesc:a66a8b078f8daa503e5202fa057976b40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the SSD1306 device availability.  <a href="#a66a8b078f8daa503e5202fa057976b40">More...</a><br /></td></tr>
 <tr class="separator:a66a8b078f8daa503e5202fa057976b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accdedd5c795aeb136cd17a548ae24389"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#accdedd5c795aeb136cd17a548ae24389">begin</a> (<a class="el" href="classfabgl_1_1_i2_c.html">I2C</a> *i2c, int address=0x3C, gpio_num_t resetGPIO=GPIO_NUM_39)</td></tr>
-<tr class="memdesc:accdedd5c795aeb136cd17a548ae24389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes SSD1306 assigning <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">I2C</a> bus, reset pin and address.  <a href="#accdedd5c795aeb136cd17a548ae24389">More...</a><br /></td></tr>
-<tr class="separator:accdedd5c795aeb136cd17a548ae24389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1007ab8cf5f930596fdb9480157ae604"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a1007ab8cf5f930596fdb9480157ae604">begin</a> (<a class="el" href="classfabgl_1_1_i2_c.html">I2C</a> *i2c, int address=0x3C, gpio_num_t resetGPIO=GPIO_UNUSED)</td></tr>
+<tr class="memdesc:a1007ab8cf5f930596fdb9480157ae604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes SSD1306 assigning <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">I2C</a> bus, reset pin and address.  <a href="#a1007ab8cf5f930596fdb9480157ae604">More...</a><br /></td></tr>
+<tr class="separator:a1007ab8cf5f930596fdb9480157ae604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad05c52072f16c0778d2e83308fb58edd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#ad05c52072f16c0778d2e83308fb58edd">enableBackgroundPrimitiveExecution</a> (bool value)</td></tr>
 <tr class="memdesc:ad05c52072f16c0778d2e83308fb58edd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables drawings inside vertical retracing time.  <a href="#ad05c52072f16c0778d2e83308fb58edd">More...</a><br /></td></tr>
 <tr class="separator:ad05c52072f16c0778d2e83308fb58edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,6 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a882c78620db9d2f95ed55e9a5cc9e808"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a882c78620db9d2f95ed55e9a5cc9e808">getViewPortWidth</a> ()</td></tr>
 <tr class="memdesc:a882c78620db9d2f95ed55e9a5cc9e808"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines horizontal size of the viewport.  <a href="#a882c78620db9d2f95ed55e9a5cc9e808">More...</a><br /></td></tr>
 <tr class="separator:a882c78620db9d2f95ed55e9a5cc9e808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0673957752592fe8956d2b0a5cf3a570"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a0673957752592fe8956d2b0a5cf3a570">invert</a> (bool value)</td></tr>
+<tr class="memdesc:a0673957752592fe8956d2b0a5cf3a570"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts display colors.  <a href="#a0673957752592fe8956d2b0a5cf3a570">More...</a><br /></td></tr>
+<tr class="separator:a0673957752592fe8956d2b0a5cf3a570"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6772c2078dc1fa8c6a910a05692d2cda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a6772c2078dc1fa8c6a910a05692d2cda">isDoubleBuffered</a> ()</td></tr>
 <tr class="memdesc:a6772c2078dc1fa8c6a910a05692d2cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether <a class="el" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. ">DisplayController</a> is on double buffered mode.  <a href="#a6772c2078dc1fa8c6a910a05692d2cda">More...</a><br /></td></tr>
 <tr class="separator:a6772c2078dc1fa8c6a910a05692d2cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,9 +160,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a67f02cf6af916609232b18dc7f39230e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a67f02cf6af916609232b18dc7f39230e">setMouseCursor</a> (<a class="el" href="group___enumerations.html#gae9affb623792aa869a11e81f3f10a372">CursorName</a> cursorName)</td></tr>
 <tr class="memdesc:a67f02cf6af916609232b18dc7f39230e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor from a set of predefined cursors.  <a href="#a67f02cf6af916609232b18dc7f39230e">More...</a><br /></td></tr>
 <tr class="separator:a67f02cf6af916609232b18dc7f39230e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1275e17591af40b53c50b16697bf2dd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a1275e17591af40b53c50b16697bf2dd5">setMouseCursorPos</a> (int X, int Y)</td></tr>
+<tr class="memitem:a1275e17591af40b53c50b16697bf2dd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a1275e17591af40b53c50b16697bf2dd5">setMouseCursorPos</a> (int <a class="el" href="fabutils_8h.html#aa6aba27bc1a89db9e350b50bbf881f57">X</a>, int <a class="el" href="fabutils_8h.html#abe4637362df8e341470401813999dd17">Y</a>)</td></tr>
 <tr class="memdesc:a1275e17591af40b53c50b16697bf2dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor position.  <a href="#a1275e17591af40b53c50b16697bf2dd5">More...</a><br /></td></tr>
 <tr class="separator:a1275e17591af40b53c50b16697bf2dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad085637f2c3c6bf5bd062e92ba249a70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#ad085637f2c3c6bf5bd062e92ba249a70">setOrientation</a> (<a class="el" href="group___enumerations.html#gac52359a56bef8cb992b0ecd0e50d543c">SSD1306Orientation</a> value)</td></tr>
+<tr class="memdesc:ad085637f2c3c6bf5bd062e92ba249a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set display orientation and rotation.  <a href="#ad085637f2c3c6bf5bd062e92ba249a70">More...</a><br /></td></tr>
+<tr class="separator:ad085637f2c3c6bf5bd062e92ba249a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d465776c7776331b716b1f48cfe3ff5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a6d465776c7776331b716b1f48cfe3ff5">setResolution</a> (char const *modeline, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</td></tr>
 <tr class="memdesc:a6d465776c7776331b716b1f48cfe3ff5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets SSD1306 resolution and viewport size.  <a href="#a6d465776c7776331b716b1f48cfe3ff5">More...</a><br /></td></tr>
 <tr class="separator:a6d465776c7776331b716b1f48cfe3ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,11 +185,12 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Display driver for SSD1306 based OLED display, with <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">I2C</a> connection. </p>
+<p>This driver should also work with SH1106 (untested).</p>
 <p>Example: </p><pre class="fragment">fabgl::I2C               I2C;
 fabgl::SSD1306Controller SSD1306Controller;
 
 void setup() {
-  // SDA = gpio-4, SCL = gpio-15
+  // SDA = gpio-4, SCL = gpio-15  (WARN: disconnect VGA connector!!)
   I2C.begin(GPIO_NUM_4, GPIO_NUM_15);
 
   // default OLED address is 0x3C
@@ -205,7 +198,9 @@ void setup() {
   SSD1306Controller.setResolution(OLED_128x64);
 
   Canvas cv(&amp;SSD1306Controller);
-  cv.drawText(0, 0, "Hello World!");</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#_a1">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#_a1">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#_a1">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#_a1">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#_a1">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+  cv.clear();
+  cv.drawText(0, 0, "Hello World!");
+}</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#_a1">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#_a1">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#_a1">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_double_buffer_2_double_buffer_8ino-example.html#_a1">SSD1306_OLED/128x64/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#_a1">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#_a1">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#_a1">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_u_i_2_u_i_8ino-example.html#_a2">SSD1306_OLED/128x64/UI/UI.ino</a>.</dd>
 </dl></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a66a8b078f8daa503e5202fa057976b40"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a66a8b078f8daa503e5202fa057976b40">&#9670;&nbsp;</a></span>available()</h2>
@@ -232,12 +227,12 @@ void setup() {
 
 <p>Checks the SSD1306 device availability. </p>
 <dl class="section return"><dt>Returns</dt><dd>True is SSD1306 OLED device has been found and initialized. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a12">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a12">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a12">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a12">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a12">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a12">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a12">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_double_buffer_2_double_buffer_8ino-example.html#a6">SSD1306_OLED/128x64/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a24">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a12">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_u_i_2_u_i_8ino-example.html#a8">SSD1306_OLED/128x64/UI/UI.ino</a>.</dd>
 </dl>
 </div>
 </div>
-<a id="accdedd5c795aeb136cd17a548ae24389"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accdedd5c795aeb136cd17a548ae24389">&#9670;&nbsp;</a></span>begin()</h2>
+<a id="a1007ab8cf5f930596fdb9480157ae604"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1007ab8cf5f930596fdb9480157ae604">&#9670;&nbsp;</a></span>begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,7 +253,7 @@ void setup() {
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">gpio_num_t&#160;</td>
-          <td class="paramname"><em>resetGPIO</em> = <code>GPIO_NUM_39</code>&#160;</td>
+          <td class="paramname"><em>resetGPIO</em> = <code>GPIO_UNUSED</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -273,11 +268,11 @@ void setup() {
   <table class="params">
     <tr><td class="paramname">i2c</td><td><a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">I2C</a> pointer </td></tr>
     <tr><td class="paramname">address</td><td>Device address. Default is 0x3C. </td></tr>
-    <tr><td class="paramname">resetGPIO</td><td>Reset pin (use GPIO_NUM_39 to disable). Default if disabled. </td></tr>
+    <tr><td class="paramname">resetGPIO</td><td>Reset pin (use GPIO_UNUSED to disable). Default if disabled. </td></tr>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a9">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a9">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a9">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#a13">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a9">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a9">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a9">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a9">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_double_buffer_2_double_buffer_8ino-example.html#a2">SSD1306_OLED/128x64/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#a15">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a21">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a9">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_u_i_2_u_i_8ino-example.html#a3">SSD1306_OLED/128x64/UI/UI.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -476,6 +471,32 @@ void setup() {
 </dl>
 </div>
 </div>
+<a id="a0673957752592fe8956d2b0a5cf3a570"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0673957752592fe8956d2b0a5cf3a570">&#9670;&nbsp;</a></span>invert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::SSD1306Controller::invert </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inverts display colors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>True enables invertion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a6772c2078dc1fa8c6a910a05692d2cda"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6772c2078dc1fa8c6a910a05692d2cda">&#9670;&nbsp;</a></span>isDoubleBuffered()</h2>
 
@@ -590,7 +611,7 @@ void setup() {
 <p>Screen is automatically updated whenever a primitive is painted (look at <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">Canvas</a>).<br />
  When a sprite updates its image or its position (or any other property) it is required to force a refresh using this method.<br />
  <a class="el" href="classfabgl_1_1_display_controller.html#a3862c8630e9805dbed5d9c9bd808cead" title="Forces the sprites to be updated. ">DisplayController.refreshSprites()</a> is required also when using the double buffered mode, to paint sprites. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a16">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_t7789__t_f_t_2240x240_2_sprites_2_sprites_8ino-example.html#a6">ST7789_TFT/240x240/Sprites/Sprites.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a6">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -619,7 +640,7 @@ void setup() {
 
 <p>Empties the list of active sprites. </p>
 <p>Call this method when you don't need active sprites anymore. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a15">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a17">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -823,6 +844,33 @@ void setup() {
 
 </div>
 </div>
+<a id="ad085637f2c3c6bf5bd062e92ba249a70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad085637f2c3c6bf5bd062e92ba249a70">&#9670;&nbsp;</a></span>setOrientation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::SSD1306Controller::setOrientation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#gac52359a56bef8cb992b0ecd0e50d543c">SSD1306Orientation</a>&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set display orientation and rotation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Display orientation and rotation</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: </p><pre class="fragment">// rotate by 180 degrees
+DisplayController.setOrientation(fabgl::SSD1306Orientation::Rotate180);</pre> 
+</div>
+</div>
 <a id="a6d465776c7776331b716b1f48cfe3ff5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6d465776c7776331b716b1f48cfe3ff5">&#9670;&nbsp;</a></span>setResolution()</h2>
 
@@ -872,7 +920,7 @@ void setup() {
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a10">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a10">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a10">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#a14">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a10">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a10">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a10">SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a10">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_double_buffer_2_double_buffer_8ino-example.html#a4">SSD1306_OLED/128x64/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_network_terminal_2_network_terminal_8ino-example.html#a16">SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a22">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html#a10">SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino</a>, and <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_u_i_2_u_i_8ino-example.html#a6">SSD1306_OLED/128x64/UI/UI.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -985,7 +1033,7 @@ struct MySprite : Sprite {
 
 static MySprite sprites[10];
 
-VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a11">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_t7789__t_f_t_2240x240_2_sprites_2_sprites_8ino-example.html#a4">ST7789_TFT/240x240/Sprites/Sprites.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>

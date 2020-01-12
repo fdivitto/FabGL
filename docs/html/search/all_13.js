@@ -49,14 +49,16 @@ var searchData=
   ['uiwindowstate',['uiWindowState',['../structfabgl_1_1ui_window_state.html',1,'fabgl']]],
   ['uiwindowstyle',['uiWindowStyle',['../structfabgl_1_1ui_window_style.html',1,'fabgl']]],
   ['undefined',['Undefined',['../group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360',1,'fabgl']]],
-  ['underline',['underline',['../unionfabgl_1_1_glyph_options.html#a720e302dbddaf67427e64bd2bed59fcb',1,'fabgl::GlyphOptions::underline()'],['../unionfabgl_1_1_glyph_options.html#a4f1724b11c19a26631ed12f302f61db7',1,'fabgl::GlyphOptions::Underline(bool value)']]],
+  ['underline',['Underline',['../unionfabgl_1_1_glyph_options.html#a4f1724b11c19a26631ed12f302f61db7',1,'fabgl::GlyphOptions::Underline(bool value)'],['../unionfabgl_1_1_glyph_options.html#a720e302dbddaf67427e64bd2bed59fcb',1,'fabgl::GlyphOptions::underline()'],['../displaycontroller_8h.html#a2656ee44feda5ea3cac87985700be97f',1,'underline():&#160;displaycontroller.h'],['../displaycontroller_8h.html#aa83a2188e3fe9edf5b07fd2fbe50b289',1,'Underline(bool value):&#160;displaycontroller.h']]],
   ['unknownps2device',['UnknownPS2Device',['../group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0',1,'fabgl']]],
   ['unlock',['unlock',['../classfabgl_1_1_p_s2_device.html#a8f89f02a4a2684bce07ed264bbbf6773',1,'fabgl::PS2Device']]],
+  ['unmountsdcard',['unmountSDCard',['../classfabgl_1_1_file_browser.html#a66b458b16e2ec8604970a9c4e57ce908',1,'fabgl::FileBrowser']]],
+  ['unmountspiffs',['unmountSPIFFS',['../classfabgl_1_1_file_browser.html#aa7053076298bceb7e7bdf1518d84912c',1,'fabgl::FileBrowser']]],
   ['update',['update',['../classfabgl_1_1_collision_detector.html#a55d2fe2c8857aeb4f3c8cf86be6d409e',1,'fabgl::CollisionDetector::update()'],['../classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915',1,'fabgl::uiLabel::update()'],['../classfabgl_1_1ui_file_browser.html#a5a660405a8b4b86d2ec8e651206d4a88',1,'fabgl::uiFileBrowser::update()'],['../classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e',1,'fabgl::Scene::update()']]],
   ['updateabsoluteposition',['updateAbsolutePosition',['../classfabgl_1_1_mouse.html#a5a64bba846867e29857302fc8fa1c818',1,'fabgl::Mouse']]],
   ['updateanddetectcollision',['updateAndDetectCollision',['../classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#accd92470e9aefba528dd72213475b995',1,'fabgl::CollisionDetector::updateAndDetectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['updatesprite',['updateSprite',['../classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7',1,'fabgl::Scene']]],
   ['updatespriteanddetectcollisions',['updateSpriteAndDetectCollisions',['../classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae',1,'fabgl::Scene']]],
-  ['useropt1',['userOpt1',['../unionfabgl_1_1_glyph_options.html#ad82d0d179cef1fb02153b235d127e63f',1,'fabgl::GlyphOptions']]],
-  ['useropt2',['userOpt2',['../unionfabgl_1_1_glyph_options.html#a4f9aad9830a38e106ad36024d3338873',1,'fabgl::GlyphOptions']]]
+  ['useropt1',['userOpt1',['../unionfabgl_1_1_glyph_options.html#ad82d0d179cef1fb02153b235d127e63f',1,'fabgl::GlyphOptions::userOpt1()'],['../displaycontroller_8h.html#adf5b991f529df52d907c00a061458857',1,'userOpt1():&#160;displaycontroller.h']]],
+  ['useropt2',['userOpt2',['../unionfabgl_1_1_glyph_options.html#a4f9aad9830a38e106ad36024d3338873',1,'fabgl::GlyphOptions::userOpt2()'],['../displaycontroller_8h.html#a5ad74d5409163f1191ad4039b1447c26',1,'userOpt2():&#160;displaycontroller.h']]]
 ];

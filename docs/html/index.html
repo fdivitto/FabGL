@@ -93,25 +93,35 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="textblock"><p> 
 <a href="https://www.github.com/fdivitto/fabgl"> <img src="github.png" style="width:230px;height:80px;border:0;"> </a>
 </p>
-<p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
+<p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019-2020 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
 <hr/>
 <p>FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br />
- FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br />
+ FabGL can also get input from a PS/2 Keyboard and a Mouse. ULP core handles PS/2 ports communications, leaving main CPU cores free to perform other tasks.<br />
+ FabGL also implements: an Audio Engine, a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.<br />
 </p>
-<p>This library works with ESP32 revision 1 and upper.</p>
-<p>VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.</p>
+<p>This library works with ESP32 revision 1 and upper.<br />
+</p>
+<p>VGA output requires a digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.<br />
+</p>
 <p>There are several fixed and variable width fonts embedded.</p>
-<p>Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.</p>
+<p>Unlimited number of sprites are supported. However big sprites and a large amount of them reduces the frame rate and could generate flickering.<br />
+</p>
 <p>When there is enough memory (on low resolutions like 320x200), it is possible to allocate two screen buffers, so to implement double buffering.<br />
- In this case primitives are always drawn on the back buffer.</p>
+ In this case primitives are always drawn on the back buffer.<br />
+</p>
 <p>Except for double buffering or when explicitly disabled, all drawings are performed on vertical retracing (using VGA driver), so no flickering is visible.<br />
- If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.</p>
-<p>There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).</p>
-<p>Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.</p>
+ If the queue of primitives to draw is not processed before the vertical retracing ends, then it is interrupted and continued at next retracing.<br />
+</p>
+<p>There is a graphical user interface (GUI) with overlapping windows and mouse handling and a lot of widgets (buttons, editboxes, checkboxes, comboboxes, listboxes, etc..).<br />
+</p>
+<p>Finally, there is a sound engine, with multiple channels mixed to a mono output. Each channel can generate sine waveforms, square, etc... or custom sampled data.<br />
+ Audio output, like VGA output, is generated using DMA. CPU just mixes audio channels and prepares waveforms.<br />
+</p>
 <hr/>
 <p>The main classes of FabGL library are:</p><ul>
-<li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA controller. ">fabgl::VGAController</a>, the device driver for VGA output.</li>
-<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, the device driver for SSD1306 based OLED displays.</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA controller. ">fabgl::VGAController</a>, device driver for VGA output.</li>
+<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, device driver for SSD1306 based OLED displays.</li>
+<li><a class="el" href="classfabgl_1_1_s_t7789_controller.html" title="Display driver for ST7789 based OLED display, with SPI connection. ">fabgl::ST7789Controller</a>, device driver for ST7789 based TFT displays.</li>
 <li><a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a>, that provides a set of drawing primitives (lines, rectangles, text...).</li>
 <li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
 <li><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a>, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
@@ -142,7 +152,7 @@ $(document).ready(function(){initNavTree('index.html','');});
  <center> <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html">Double Buffering Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html">Collision Detection Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
 <p>Created by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>) - <a href="http://www.fabgl.com">http://www.fabgl.com</a> <br />
- Copyright (c) 2019 Fabrizio Di Vittorio. <br />
+ Copyright (c) 2019-2020 Fabrizio Di Vittorio. <br />
  All rights reserved. <br />
 </p>
 <p>This file is part of FabGL Library.</p>

@@ -39,10 +39,22 @@ var group___enumerations =
       [ "CursorResize4", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc", null ],
       [ "CursorTextInput", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18", null ]
     ] ],
+    [ "DriveType", "group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee", [
+      [ "SPIFFS", "group___enumerations.html#gga9a469aacd095358acbe70b98e85bceeea146673cebceb52efdad49e33019dd764", null ],
+      [ "SDCard", "group___enumerations.html#gga9a469aacd095358acbe70b98e85bceeea826ee4b27642806340fe4905532841e8", null ]
+    ] ],
+    [ "FlowControl", "group___enumerations.html#ga1786b5a5a82ac748a1bde3fb8451e7cb", [
+      [ "None", "group___enumerations.html#gga1786b5a5a82ac748a1bde3fb8451e7cba6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Software", "group___enumerations.html#gga1786b5a5a82ac748a1bde3fb8451e7cba719d067b229178f03bcfa1da4ac4dede", null ]
+    ] ],
     [ "KbdMode", "group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d", [
       [ "NoVirtualKeys", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06dadaa64f7602ad3caa98f09799e3e683b1", null ],
       [ "GenerateVirtualKeys", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4", null ],
       [ "CreateVirtualKeysQueue", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97", null ]
+    ] ],
+    [ "LineEnds", "group___enumerations.html#ga73114f8a303eb904d1fe4ad92a538586", [
+      [ "None", "group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Circle", "group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3", null ]
     ] ],
     [ "MouseType", "group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c", [
       [ "LegacyMouse", "group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5", null ],
@@ -50,10 +62,12 @@ var group___enumerations =
     ] ],
     [ "NativePixelFormat", "group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9", [
       [ "Mono", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
-      [ "SBGR2222", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ]
+      [ "SBGR2222", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
+      [ "RGB565BE", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ]
     ] ],
     [ "PixelFormat", "group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
       [ "Undefined", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360", null ],
+      [ "Native", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a925641e0b76c28cc940e8f3ca178d826", null ],
       [ "Mask", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf", null ],
       [ "RGBA2222", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7", null ],
       [ "RGBA8888", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619", null ]
@@ -71,6 +85,12 @@ var group___enumerations =
       [ "KeyboardPort0_MousePort1", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74", null ],
       [ "KeyboardPort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7", null ],
       [ "MousePort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4", null ]
+    ] ],
+    [ "SSD1306Orientation", "group___enumerations.html#gac52359a56bef8cb992b0ecd0e50d543c", [
+      [ "Normal", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca960b44c579bc2f6818d2daaf9e4c16f0", null ],
+      [ "ReverseHorizontal", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543cac3b9e126f88f9f8df2fd2be6e8a32559", null ],
+      [ "ReverseVertical", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca0ffc124cf46fbd9cdc3b9c4b04230de0", null ],
+      [ "Rotate180", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca371980c5d153a94cf022d6b4daa4d34c", null ]
     ] ],
     [ "TermType", "group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd", [
       [ "ANSI_VT", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2", null ],

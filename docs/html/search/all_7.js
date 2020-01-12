@@ -8,7 +8,7 @@ var searchData=
   ['hasminimizebutton',['hasMinimizeButton',['../structfabgl_1_1ui_frame_props.html#a8c807b7a49be228194a9339448ec8120',1,'fabgl::uiFrameProps']]],
   ['hazeltine1500',['Hazeltine1500',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf2db09bec0ffa1ed3836fa85a0d82a05',1,'fabgl']]],
   ['hbackporch',['HBackPorch',['../structfabgl_1_1_v_g_a_timings.html#a9336fdd43d196ec17dd7e54c2ac79c18',1,'fabgl::VGATimings']]],
-  ['height',['height',['../structfabgl_1_1_glyph.html#ad463231018e16a291f8a647e468ef6d3',1,'fabgl::Glyph::height()'],['../structfabgl_1_1_bitmap.html#a836fbdf0e47b513858c9f369aedaa076',1,'fabgl::Bitmap::height()'],['../structfabgl_1_1_size.html#afcbf56970b3a670d7337e3e19260c412',1,'fabgl::Size::height()']]],
+  ['height',['height',['../structfabgl_1_1_glyph.html#a9ad42c2b82617e2092822010d5dee55e',1,'fabgl::Glyph::height()'],['../structfabgl_1_1_bitmap.html#a836fbdf0e47b513858c9f369aedaa076',1,'fabgl::Bitmap::height()'],['../structfabgl_1_1_size.html#afcbf56970b3a670d7337e3e19260c412',1,'fabgl::Size::height()'],['../displaycontroller_8h.html#adcf201a8aabf55cb352ec05331242594',1,'height():&#160;displaycontroller.h'],['../fabutils_8h.html#a777dd66f9609a587ee98ad50de301662',1,'height():&#160;fabutils.h']]],
   ['hfrontporch',['HFrontPorch',['../structfabgl_1_1_v_g_a_timings.html#ac4b72d4c1284294edf055fc5b640b31f',1,'fabgl::VGATimings']]],
   ['horizontal',['Horizontal',['../group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f',1,'fabgl']]],
   ['hotspotx',['hotspotX',['../structfabgl_1_1_cursor.html#ae40bc3f57be9b5147851a542364f02a9',1,'fabgl::Cursor']]],

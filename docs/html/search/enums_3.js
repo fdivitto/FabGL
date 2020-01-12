@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nativepixelformat',['NativePixelFormat',['../group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9',1,'fabgl']]]
+  ['kbdmode',['KbdMode',['../group___enumerations.html#ga0eff89ccbe1087e0390e5cae305ef06d',1,'fabgl']]]
 ];

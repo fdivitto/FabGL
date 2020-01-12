@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_file_browser.html','');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classfabgl_1_1_file_browser-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fabgl::FileBrowser Class Reference</div>  </div>
@@ -137,6 +138,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a118d7dfa654286a6dfc6cd1267a99ced"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a118d7dfa654286a6dfc6cd1267a99ced">setSorted</a> (bool value)</td></tr>
 <tr class="memdesc:a118d7dfa654286a6dfc6cd1267a99ced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the items are sorted.  <a href="#a118d7dfa654286a6dfc6cd1267a99ced">More...</a><br /></td></tr>
 <tr class="separator:a118d7dfa654286a6dfc6cd1267a99ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a053d8434eec20eb218b6cc9a9f706b17"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a053d8434eec20eb218b6cc9a9f706b17">format</a> (<a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> driveType, int drive)</td></tr>
+<tr class="memdesc:a053d8434eec20eb218b6cc9a9f706b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats SPIFFS or SD Card.  <a href="#a053d8434eec20eb218b6cc9a9f706b17">More...</a><br /></td></tr>
+<tr class="separator:a053d8434eec20eb218b6cc9a9f706b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a026474624a1f2e995d9173c753fcb501"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a026474624a1f2e995d9173c753fcb501">getFSInfo</a> (<a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> driveType, int drive, int64_t *total, int64_t *used)</td></tr>
+<tr class="memdesc:a026474624a1f2e995d9173c753fcb501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets total and free space on a filesystem.  <a href="#a026474624a1f2e995d9173c753fcb501">More...</a><br /></td></tr>
+<tr class="separator:a026474624a1f2e995d9173c753fcb501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc0fcfd5302933ea31f50d0c043febcd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#adc0fcfd5302933ea31f50d0c043febcd">mountSDCard</a> (bool formatOnFail, char const *mountPath, int maxFiles=4, int allocationUnitSize=16 *1024, int MISO=16, int MOSI=17, int CLK=14, int CS=13)</td></tr>
+<tr class="memdesc:adc0fcfd5302933ea31f50d0c043febcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SD Card.  <a href="#adc0fcfd5302933ea31f50d0c043febcd">More...</a><br /></td></tr>
+<tr class="separator:adc0fcfd5302933ea31f50d0c043febcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924732a4696e35b6b9d27dfa0d08b451"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a924732a4696e35b6b9d27dfa0d08b451">mountSPIFFS</a> (bool formatOnFail, char const *mountPath, int maxFiles=4)</td></tr>
+<tr class="memdesc:a924732a4696e35b6b9d27dfa0d08b451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SPIFFS (Flash)  <a href="#a924732a4696e35b6b9d27dfa0d08b451">More...</a><br /></td></tr>
+<tr class="separator:a924732a4696e35b6b9d27dfa0d08b451"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66b458b16e2ec8604970a9c4e57ce908"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a66b458b16e2ec8604970a9c4e57ce908">unmountSDCard</a> ()</td></tr>
+<tr class="memdesc:a66b458b16e2ec8604970a9c4e57ce908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmounts filesystem on SD Card.  <a href="#a66b458b16e2ec8604970a9c4e57ce908">More...</a><br /></td></tr>
+<tr class="separator:a66b458b16e2ec8604970a9c4e57ce908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7053076298bceb7e7bdf1518d84912c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#aa7053076298bceb7e7bdf1518d84912c">unmountSPIFFS</a> ()</td></tr>
+<tr class="memdesc:aa7053076298bceb7e7bdf1518d84912c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmounts filesystem on SPIFFS (Flash)  <a href="#aa7053076298bceb7e7bdf1518d84912c">More...</a><br /></td></tr>
+<tr class="separator:aa7053076298bceb7e7bdf1518d84912c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classfabgl_1_1_file_browser.html" title="FileBrowser allows basic file system operations (dir, mkdir, remove and rename) ">FileBrowser</a> allows basic file system operations (dir, mkdir, remove and rename) </p>
@@ -250,6 +272,55 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a053d8434eec20eb218b6cc9a9f706b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a053d8434eec20eb218b6cc9a9f706b17">&#9670;&nbsp;</a></span>format()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::format </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a>&#160;</td>
+          <td class="paramname"><em>driveType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>drive</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Formats SPIFFS or SD Card. </p>
+<p>The filesystem must be already mounted before calling Format(). The formatted filesystem results unmounted at the end of formatting, so remount is necessary.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">driveType</td><td>Type of support (SPI-Flash or SD Card). </td></tr>
+    <tr><td class="paramname">drive</td><td>Drive number (Can be 0 when only one filesystem is mounted at the time)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success.</dd></dl>
+<p>Example: </p><pre class="fragment">// Format SPIFFS and remount it
+FileBrowser::format(fabgl::DriveType::SPIFFS, 0);
+FileBrowser::mountSPIFFS(false, "/spiffs");</pre> 
+</div>
+</div>
 <a id="af318c25a4f9790953af285970a0ed7ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af318c25a4f9790953af285970a0ed7ce">&#9670;&nbsp;</a></span>get()</h2>
 
@@ -283,6 +354,74 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>File or directory specificator </dd></dl>
 
+</div>
+</div>
+<a id="a026474624a1f2e995d9173c753fcb501"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a026474624a1f2e995d9173c753fcb501">&#9670;&nbsp;</a></span>getFSInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::getFSInfo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a>&#160;</td>
+          <td class="paramname"><em>driveType</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>drive</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>total</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t *&#160;</td>
+          <td class="paramname"><em>used</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets total and free space on a filesystem. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">driveType</td><td>Type of support (SPI-Flash or SD Card). </td></tr>
+    <tr><td class="paramname">drive</td><td>Drive number (Can be 0 when only one filesystem is mounted at the time). </td></tr>
+    <tr><td class="paramname">total</td><td>Total space on the filesystem in bytes. </td></tr>
+    <tr><td class="paramname">used</td><td>Used space on the filesystem in bytes.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success.</dd></dl>
+<p>Example: </p><pre class="fragment">// print used and free space on SPIFFS (Flash)
+int64_t total, used;
+FileBrowser::getFSInfo(fabgl::DriveType::SPIFFS, 0, &amp;total, &amp;used);
+Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);
+
+// print used and free space on SD Card
+int64_t total, used;
+FileBrowser::getFSInfo(fabgl::DriveType::SDCard, 0, &amp;total, &amp;used);
+Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);</pre> 
 </div>
 </div>
 <a id="aaa9477da9e33f303eb49adc1cbbbe635"></a>
@@ -326,7 +465,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Required outPath size </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Required outPath size. </dd></dl>
 
 </div>
 </div>
@@ -354,6 +493,149 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
+</div>
+</div>
+<a id="adc0fcfd5302933ea31f50d0c043febcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc0fcfd5302933ea31f50d0c043febcd">&#9670;&nbsp;</a></span>mountSDCard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::mountSDCard </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>formatOnFail</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>mountPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxFiles</em> = <code>4</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>allocationUnitSize</em> = <code>16&#160;*&#160;1024</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>MISO</em> = <code>16</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>MOSI</em> = <code>17</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>CLK</em> = <code>14</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>CS</em> = <code>13</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Mounts filesystem on SD Card. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">formatOnFail</td><td>Formats SD Card when it cannot be mounted. </td></tr>
+    <tr><td class="paramname">mountPath</td><td>Mount directory (ex. "/sdcard"). </td></tr>
+    <tr><td class="paramname">maxFiles</td><td>Number of files that can be open at the time (default 4). </td></tr>
+    <tr><td class="paramname">allocationUnitSize</td><td>Allocation unit size (default 16K). </td></tr>
+    <tr><td class="paramname">MISO</td><td>Pin for MISO signal (default 16). </td></tr>
+    <tr><td class="paramname">MOSI</td><td>Pin for MOSI signal (default 17). </td></tr>
+    <tr><td class="paramname">CLK</td><td>Pin for CLK signal (default 14). </td></tr>
+    <tr><td class="paramname">CS</td><td>Pin for CS signal (default 13).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success.</dd></dl>
+<p>Example: </p><pre class="fragment">// Mount SD Card
+FileBrowser::mountSDCard(false, "/sdcard");</pre> 
+</div>
+</div>
+<a id="a924732a4696e35b6b9d27dfa0d08b451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a924732a4696e35b6b9d27dfa0d08b451">&#9670;&nbsp;</a></span>mountSPIFFS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::mountSPIFFS </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>formatOnFail</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>mountPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxFiles</em> = <code>4</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Mounts filesystem on SPIFFS (Flash) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">formatOnFail</td><td>Formats SD Card when it cannot be mounted. </td></tr>
+    <tr><td class="paramname">mountPath</td><td>Mount directory (ex. "/spiffs"). </td></tr>
+    <tr><td class="paramname">maxFiles</td><td>Number of files that can be open at the time (default 4).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success.</dd></dl>
+<p>Example: </p><pre class="fragment">// Mount SD Card
+FileBrowser::mountSPIFFS(false, "/spiffs");</pre> 
 </div>
 </div>
 <a id="acc55e9f45c4429b21fd6c7a72f33a18b"></a>
@@ -488,6 +770,60 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a66b458b16e2ec8604970a9c4e57ce908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66b458b16e2ec8604970a9c4e57ce908">&#9670;&nbsp;</a></span>unmountSDCard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::FileBrowser::unmountSDCard </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unmounts filesystem on SD Card. </p>
+
+</div>
+</div>
+<a id="aa7053076298bceb7e7bdf1518d84912c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7053076298bceb7e7bdf1518d84912c">&#9670;&nbsp;</a></span>unmountSPIFFS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::FileBrowser::unmountSPIFFS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unmounts filesystem on SPIFFS (Flash) </p>
 
 </div>
 </div>

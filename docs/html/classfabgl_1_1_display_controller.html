@@ -98,15 +98,8 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_display_controller.html
  <a href="classfabgl_1_1_display_controller.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for fabgl::DisplayController:</div>
-<div class="dyncontent">
-<div class="center"><img src="classfabgl_1_1_display_controller__inherit__graph.png" border="0" usemap="#fabgl_1_1_display_controller_inherit__map" alt="Inheritance graph"/></div>
-<map name="fabgl_1_1_display_controller_inherit__map" id="fabgl_1_1_display_controller_inherit__map">
-<area shape="rect" id="node2" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. " alt="" coords="5,79,178,104"/>
-<area shape="rect" id="node3" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA controller. " alt="" coords="202,79,346,104"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+
+<p>Inherited by fabgl::GenericDisplayController.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -152,7 +145,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a67f02cf6af916609232b18dc7f39230e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a67f02cf6af916609232b18dc7f39230e">setMouseCursor</a> (<a class="el" href="group___enumerations.html#gae9affb623792aa869a11e81f3f10a372">CursorName</a> cursorName)</td></tr>
 <tr class="memdesc:a67f02cf6af916609232b18dc7f39230e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor from a set of predefined cursors.  <a href="#a67f02cf6af916609232b18dc7f39230e">More...</a><br /></td></tr>
 <tr class="separator:a67f02cf6af916609232b18dc7f39230e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1275e17591af40b53c50b16697bf2dd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a1275e17591af40b53c50b16697bf2dd5">setMouseCursorPos</a> (int X, int Y)</td></tr>
+<tr class="memitem:a1275e17591af40b53c50b16697bf2dd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html#a1275e17591af40b53c50b16697bf2dd5">setMouseCursorPos</a> (int <a class="el" href="fabutils_8h.html#aa6aba27bc1a89db9e350b50bbf881f57">X</a>, int <a class="el" href="fabutils_8h.html#abe4637362df8e341470401813999dd17">Y</a>)</td></tr>
 <tr class="memdesc:a1275e17591af40b53c50b16697bf2dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor position.  <a href="#a1275e17591af40b53c50b16697bf2dd5">More...</a><br /></td></tr>
 <tr class="separator:a1275e17591af40b53c50b16697bf2dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa1b9b681e9b6f13df829ec96b1b0fb5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -255,7 +248,7 @@ Public Member Functions</h2></td></tr>
 <p>Determines the screen height in pixels. </p>
 <dl class="section return"><dt>Returns</dt><dd>Screen height in pixels. </dd></dl>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a54d7923d1beec800077e93769cf8a38b">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a39986e2a1124e377072bbe50457c2d05">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a54d7923d1beec800077e93769cf8a38b">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#ace68c596a133c7129e76c704a8df8570">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a39986e2a1124e377072bbe50457c2d05">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -285,7 +278,7 @@ Public Member Functions</h2></td></tr>
 <p>Determines the screen width in pixels. </p>
 <dl class="section return"><dt>Returns</dt><dd>Screen width in pixels. </dd></dl>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a1714be70aa7c740976cd3a5a6d7457c2">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#afc335dc8fbdbfdd7b1a670f227d883e8">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a1714be70aa7c740976cd3a5a6d7457c2">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#ae46ddfa7006c4ed0585837ea78deff12">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#afc335dc8fbdbfdd7b1a670f227d883e8">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -315,7 +308,7 @@ Public Member Functions</h2></td></tr>
 <p>Determines vertical size of the viewport. </p>
 <dl class="section return"><dt>Returns</dt><dd>Vertical size of the viewport. </dd></dl>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a299c2bfe3660c0a8bc6ce38525f61788">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a59f04dbba57f6902d439f9dae2ff717d">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a299c2bfe3660c0a8bc6ce38525f61788">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#a37416675309b62ed2b7a3f17efba4e60">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a59f04dbba57f6902d439f9dae2ff717d">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -345,7 +338,7 @@ Public Member Functions</h2></td></tr>
 <p>Determines horizontal size of the viewport. </p>
 <dl class="section return"><dt>Returns</dt><dd>Horizontal size of the viewport. </dd></dl>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a62aed395da993973e820ffa87d2ce6ce">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a882c78620db9d2f95ed55e9a5cc9e808">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#a62aed395da993973e820ffa87d2ce6ce">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#a8898066d3c8344c336c523c932a940e4">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a882c78620db9d2f95ed55e9a5cc9e808">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -403,7 +396,7 @@ Public Member Functions</h2></td></tr>
 <p>Represents the native pixel format used by this display. </p>
 <dl class="section return"><dt>Returns</dt><dd>Display native pixel format </dd></dl>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ab261f12432eea2de7530e3787412586d">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a05949b527b09f06210c5ae07460c2503">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ab261f12432eea2de7530e3787412586d">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#ac131174a70010ee80caf11844fdd822c">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#a05949b527b09f06210c5ae07460c2503">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -447,7 +440,7 @@ Public Member Functions</h2></td></tr>
 <p>Screen is automatically updated whenever a primitive is painted (look at <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">Canvas</a>).<br />
  When a sprite updates its image or its position (or any other property) it is required to force a refresh using this method.<br />
  <a class="el" href="classfabgl_1_1_display_controller.html#a3862c8630e9805dbed5d9c9bd808cead" title="Forces the sprites to be updated. ">DisplayController.refreshSprites()</a> is required also when using the double buffered mode, to paint sprites. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a16">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_t7789__t_f_t_2240x240_2_sprites_2_sprites_8ino-example.html#a6">ST7789_TFT/240x240/Sprites/Sprites.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a6">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -476,7 +469,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Empties the list of active sprites. </p>
 <p>Call this method when you don't need active sprites anymore. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a15">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a17">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -506,7 +499,7 @@ Public Member Functions</h2></td></tr>
 <p>Resumes drawings after <a class="el" href="classfabgl_1_1_display_controller.html#ac6dc2247cdcd1b1ca682740c1d867a11" title="Suspends drawings. ">suspendBackgroundPrimitiveExecution()</a>. </p>
 <p>Resumes drawings enabling vertical sync interrupt. </p>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaa2d1522cce88d3ca2717db380f2e692">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#ad7d0fe367a5a580ffaaca45bf6c6e9cc">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaa2d1522cce88d3ca2717db380f2e692">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#a098b59863c47b44466a290cab12a07fd">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#ad7d0fe367a5a580ffaaca45bf6c6e9cc">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>
@@ -655,7 +648,7 @@ struct MySprite : Sprite {
 
 static MySprite sprites[10];
 
-VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a11">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_t7789__t_f_t_2240x240_2_sprites_2_sprites_8ino-example.html#a4">ST7789_TFT/240x240/Sprites/Sprites.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -688,7 +681,7 @@ VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><
  To avoid it a call to "processPrimitives()" should be performed very often.<br />
  This method maintains a counter so can be nested. </p>
 
-<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac1080e32a32fc6b8339575223c5e6574">fabgl::VGAController</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#afe89235eebb683c0ea80a954040a97e8">fabgl::SSD1306Controller</a>.</p>
+<p>Implemented in <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac1080e32a32fc6b8339575223c5e6574">fabgl::VGAController</a>, <a class="el" href="classfabgl_1_1_s_t7789_controller.html#ae9fe36cfadae1c50e2198d484dc1d6dd">fabgl::ST7789Controller</a>, and <a class="el" href="classfabgl_1_1_s_s_d1306_controller.html#afe89235eebb683c0ea80a954040a97e8">fabgl::SSD1306Controller</a>.</p>
 
 </div>
 </div>

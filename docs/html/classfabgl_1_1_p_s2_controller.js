@@ -1,6 +1,6 @@
 var classfabgl_1_1_p_s2_controller =
 [
-    [ "begin", "classfabgl_1_1_p_s2_controller.html#ab55f24513c22f151d3de91a1479ad7fc", null ],
+    [ "begin", "classfabgl_1_1_p_s2_controller.html#a34ef326505222b2b60d524e3c90455e4", null ],
     [ "begin", "classfabgl_1_1_p_s2_controller.html#afdf49e36312eb8ad33e427bf4391e9a5", null ],
     [ "dataAvailable", "classfabgl_1_1_p_s2_controller.html#a0689f3e86beb0108d90cfd26e73b13ae", null ],
     [ "getData", "classfabgl_1_1_p_s2_controller.html#a4c0c7059492a0b5b92e190f69dc0ddeb", null ],

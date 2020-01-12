@@ -88,7 +88,9 @@ $(document).ready(function(){initNavTree('displaycontroller_8h.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">displaycontroller.h File Reference</div>  </div>
 </div><!--header-->
@@ -117,13 +119,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="displaycontroller_8h__dep__incl.png" border="0" usemap="#displaycontroller_8hdep" alt=""/></div>
 <map name="displaycontroller_8hdep" id="displaycontroller_8hdep">
 <area shape="rect" id="node2" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="100,79,175,104"/>
-<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="257,445,319,471"/>
-<area shape="rect" id="node5" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="132,152,193,177"/>
+<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="283,445,344,471"/>
+<area shape="rect" id="node5" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="133,152,195,177"/>
 <area shape="rect" id="node9" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="300,299,428,324"/>
-<area shape="rect" id="node11" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="361,152,469,177"/>
-<area shape="rect" id="node12" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="436,79,583,104"/>
+<area shape="rect" id="node11" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="351,152,459,177"/>
+<area shape="rect" id="node12" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="483,152,629,177"/>
+<area shape="rect" id="node13" href="_s_t7789_controller_8h.html" title="This file contains fabgl::ST7789Controller definition. " alt="" coords="565,79,701,104"/>
 <area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="5,372,85,397"/>
-<area shape="rect" id="node6" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="42,225,129,251"/>
+<area shape="rect" id="node6" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="40,225,128,251"/>
 <area shape="rect" id="node8" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="153,225,226,251"/>
 <area shape="rect" id="node7" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="44,299,124,324"/>
 <area shape="rect" id="node10" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="351,372,419,397"/>
@@ -222,22 +225,503 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:gae9affb623792aa869a11e81f3f10a372"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a set of predefined mouse cursors.  <a href="group___enumerations.html#gae9affb623792aa869a11e81f3f10a372">More...</a><br /></td></tr>
 <tr class="separator:gae9affb623792aa869a11e81f3f10a372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga73114f8a303eb904d1fe4ad92a538586"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga73114f8a303eb904d1fe4ad92a538586">fabgl::LineEnds</a> : uint8_t { <a class="el" href="group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754">fabgl::LineEnds::None</a>, 
+<a class="el" href="group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3">fabgl::LineEnds::Circle</a>
+ }</td></tr>
+<tr class="memdesc:ga73114f8a303eb904d1fe4ad92a538586"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines line ends when pen width is greater than 1.  <a href="group___enumerations.html#ga73114f8a303eb904d1fe4ad92a538586">More...</a><br /></td></tr>
+<tr class="separator:ga73114f8a303eb904d1fe4ad92a538586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">fabgl::NativePixelFormat</a> : uint8_t { <a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086">fabgl::NativePixelFormat::Mono</a>, 
-<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184">fabgl::NativePixelFormat::SBGR2222</a>
+<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184">fabgl::NativePixelFormat::SBGR2222</a>, 
+<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358">fabgl::NativePixelFormat::RGB565BE</a>
  }</td></tr>
 <tr class="memdesc:gacafd29e9adc4dc4055558e61fd4599c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines the display controller native pixel format.  <a href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">More...</a><br /></td></tr>
 <tr class="separator:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">fabgl::PixelFormat</a> : uint8_t { <a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360">fabgl::PixelFormat::Undefined</a>, 
+<tr class="memitem:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">fabgl::PixelFormat</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360">fabgl::PixelFormat::Undefined</a>, 
+<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a925641e0b76c28cc940e8f3ca178d826">fabgl::PixelFormat::Native</a>, 
 <a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf">fabgl::PixelFormat::Mask</a>, 
 <a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7">fabgl::PixelFormat::RGBA2222</a>, 
-<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619">fabgl::PixelFormat::RGBA8888</a>
+<br />
+&#160;&#160;<a class="el" href="group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619">fabgl::PixelFormat::RGBA8888</a>
+<br />
  }</td></tr>
 <tr class="memdesc:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a pixel format.  <a href="group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1">More...</a><br /></td></tr>
 <tr class="separator:ga9bb815bb6f1169481ef8ad44f351e1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#ad03f06d4f3e36a9e80bd239d29fdb458">Bold</a> (bool value)</td></tr>
+<tr class="memdesc:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset bold.  <a href="#ad03f06d4f3e36a9e80bd239d29fdb458">More...</a><br /></td></tr>
+<tr class="separator:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceea3df50e577272aa576027eede649d"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#aceea3df50e577272aa576027eede649d">DoubleWidth</a> (uint8_t value)</td></tr>
+<tr class="memdesc:aceea3df50e577272aa576027eede649d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset doubleWidth.  <a href="#aceea3df50e577272aa576027eede649d">More...</a><br /></td></tr>
+<tr class="separator:aceea3df50e577272aa576027eede649d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4054936031229707e9189e4f2c865e67"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a4054936031229707e9189e4f2c865e67">FillBackground</a> (bool value)</td></tr>
+<tr class="memdesc:a4054936031229707e9189e4f2c865e67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset fillBackground.  <a href="#a4054936031229707e9189e4f2c865e67">More...</a><br /></td></tr>
+<tr class="separator:a4054936031229707e9189e4f2c865e67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a999881d9ade277b973d3064f113d71b9"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a999881d9ade277b973d3064f113d71b9">Invert</a> (uint8_t value)</td></tr>
+<tr class="memdesc:a999881d9ade277b973d3064f113d71b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset foreground and background swapping.  <a href="#a999881d9ade277b973d3064f113d71b9">More...</a><br /></td></tr>
+<tr class="separator:a999881d9ade277b973d3064f113d71b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90ffbe895814fa7f76c80adfea9d8e95"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a90ffbe895814fa7f76c80adfea9d8e95">Italic</a> (bool value)</td></tr>
+<tr class="memdesc:a90ffbe895814fa7f76c80adfea9d8e95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset italic.  <a href="#a90ffbe895814fa7f76c80adfea9d8e95">More...</a><br /></td></tr>
+<tr class="separator:a90ffbe895814fa7f76c80adfea9d8e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa83a2188e3fe9edf5b07fd2fbe50b289"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#aa83a2188e3fe9edf5b07fd2fbe50b289">Underline</a> (bool value)</td></tr>
+<tr class="memdesc:aa83a2188e3fe9edf5b07fd2fbe50b289"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset underlined.  <a href="#aa83a2188e3fe9edf5b07fd2fbe50b289">More...</a><br /></td></tr>
+<tr class="separator:aa83a2188e3fe9edf5b07fd2fbe50b289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a7c7fb36d372d349a62c14f1e6c7337ea"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a7c7fb36d372d349a62c14f1e6c7337ea">B</a></td></tr>
+<tr class="separator:a7c7fb36d372d349a62c14f1e6c7337ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96db82e580e46e24e2b39dd6c5bf7c21"><td class="memItemLeft" align="right" valign="top">uint8_t const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a96db82e580e46e24e2b39dd6c5bf7c21">data</a></td></tr>
+<tr class="separator:a96db82e580e46e24e2b39dd6c5bf7c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae2a690e4df0bce516938666009b5ea6"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#aae2a690e4df0bce516938666009b5ea6">G</a></td></tr>
+<tr class="separator:aae2a690e4df0bce516938666009b5ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcf201a8aabf55cb352ec05331242594"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#adcf201a8aabf55cb352ec05331242594">height</a></td></tr>
+<tr class="separator:adcf201a8aabf55cb352ec05331242594"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5802f48a4a51260d01324a9a46c4d840"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a5802f48a4a51260d01324a9a46c4d840">NOT</a></td></tr>
+<tr class="separator:a5802f48a4a51260d01324a9a46c4d840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6dca68b61d96e60ca0062e00390ba9f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#ad6dca68b61d96e60ca0062e00390ba9f">R</a></td></tr>
+<tr class="separator:ad6dca68b61d96e60ca0062e00390ba9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4ebc0c75fafd0babcc5095e6b3765ee"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#ab4ebc0c75fafd0babcc5095e6b3765ee">swapFGBG</a></td></tr>
+<tr class="separator:ab4ebc0c75fafd0babcc5095e6b3765ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09a2a45f731b02946ff6d3cd15c1a476"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#a09a2a45f731b02946ff6d3cd15c1a476">width</a></td></tr>
+<tr class="separator:a09a2a45f731b02946ff6d3cd15c1a476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6aba27bc1a89db9e350b50bbf881f57"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#aa6aba27bc1a89db9e350b50bbf881f57">X</a></td></tr>
+<tr class="separator:aa6aba27bc1a89db9e350b50bbf881f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4637362df8e341470401813999dd17"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#abe4637362df8e341470401813999dd17">Y</a></td></tr>
+<tr class="separator:abe4637362df8e341470401813999dd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. ">fabgl::DisplayController</a> definition. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad03f06d4f3e36a9e80bd239d29fdb458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad03f06d4f3e36a9e80bd239d29fdb458">&#9670;&nbsp;</a></span>Bold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::Bold </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset bold. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a34">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="aceea3df50e577272aa576027eede649d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aceea3df50e577272aa576027eede649d">&#9670;&nbsp;</a></span>DoubleWidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::DoubleWidth </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset doubleWidth. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a42">VGA/ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a6">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="a4054936031229707e9189e4f2c865e67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4054936031229707e9189e4f2c865e67">&#9670;&nbsp;</a></span>FillBackground()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::FillBackground </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset fillBackground. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_t7789__t_f_t_2240x240_2_double_buffer_2_double_buffer_8ino-example.html#a5">ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a5">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a41">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a13">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a4">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="a999881d9ade277b973d3064f113d71b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a999881d9ade277b973d3064f113d71b9">&#9670;&nbsp;</a></span>Invert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::Invert </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset foreground and background swapping. </p>
+
+</div>
+</div>
+<a id="a90ffbe895814fa7f76c80adfea9d8e95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90ffbe895814fa7f76c80adfea9d8e95">&#9670;&nbsp;</a></span>Italic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::Italic </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset italic. </p>
+
+</div>
+</div>
+<a id="aa83a2188e3fe9edf5b07fd2fbe50b289"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa83a2188e3fe9edf5b07fd2fbe50b289">&#9670;&nbsp;</a></span>Underline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::Underline </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset underlined. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a7c7fb36d372d349a62c14f1e6c7337ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c7fb36d372d349a62c14f1e6c7337ea">&#9670;&nbsp;</a></span>B</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t B</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Blue channel </p>
+
+</div>
+</div>
+<a id="a15e1f87cbc70601e7bb67d5e48f2f73d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15e1f87cbc70601e7bb67d5e48f2f73d">&#9670;&nbsp;</a></span>blank</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t blank</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled the glyph is filled with the background color. To implement characters invisible or blink. </p>
+
+</div>
+</div>
+<a id="ae74e61e5ecb7b667173a7aa2a38f576a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae74e61e5ecb7b667173a7aa2a38f576a">&#9670;&nbsp;</a></span>bold</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t bold</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled produces a bold-like style. </p>
+
+</div>
+</div>
+<a id="a96db82e580e46e24e2b39dd6c5bf7c21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96db82e580e46e24e2b39dd6c5bf7c21">&#9670;&nbsp;</a></span>data</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t const* data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Byte aligned binary data of the glyph. A 0 represents background or a transparent pixel. A 1 represents foreground. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a0">VGA/VIC20/VIC20.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="a89a44c5e986590e4eca4fb8649bba64e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89a44c5e986590e4eca4fb8649bba64e">&#9670;&nbsp;</a></span>doubleWidth</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t doubleWidth</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled the glyph is doubled. To implement characters double width. 0 = normal, 1 = double width, 2 = double width - double height top, 3 = double width - double height bottom. </p>
+
+</div>
+</div>
+<a id="adcdb248e9afa3dc4557bd43f034365be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcdb248e9afa3dc4557bd43f034365be">&#9670;&nbsp;</a></span>fillBackground</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t fillBackground</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled glyph background is filled with current background color. </p>
+
+</div>
+</div>
+<a id="aae2a690e4df0bce516938666009b5ea6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae2a690e4df0bce516938666009b5ea6">&#9670;&nbsp;</a></span>G</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t G</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Green channel </p>
+
+</div>
+</div>
+<a id="adcf201a8aabf55cb352ec05331242594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcf201a8aabf55cb352ec05331242594">&#9670;&nbsp;</a></span>height</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t height</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Glyph vertical size </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a7">VGA/Audio/Audio.ino</a>.</dd>
+</dl>
+</div>
+</div>
+<a id="ad1fd85e7fdb3d255187062fce6511ae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1fd85e7fdb3d255187062fce6511ae5">&#9670;&nbsp;</a></span>invert</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t invert</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled swaps foreground and background colors. To implement characters inverse (XORed with PaintOptions.swapFGBG) </p>
+
+</div>
+</div>
+<a id="ac653040b5d629ff1981c5802fc7d2b97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac653040b5d629ff1981c5802fc7d2b97">&#9670;&nbsp;</a></span>italic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t italic</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled skews the glyph on the right. To implement characters italic. </p>
+
+</div>
+</div>
+<a id="a5802f48a4a51260d01324a9a46c4d840"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5802f48a4a51260d01324a9a46c4d840">&#9670;&nbsp;</a></span>NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t NOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled performs NOT logical operator on destination. Implemented only for straight lines and non-filled rectangles. </p>
+
+</div>
+</div>
+<a id="ad6dca68b61d96e60ca0062e00390ba9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6dca68b61d96e60ca0062e00390ba9f">&#9670;&nbsp;</a></span>R</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t R</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Red channel </p>
+
+</div>
+</div>
+<a id="a3b59c735745c810161faa9660ef88aac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b59c735745c810161faa9660ef88aac">&#9670;&nbsp;</a></span>reduceLuminosity</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t reduceLuminosity</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled reduces luminosity. To implement characters faint. </p>
+
+</div>
+</div>
+<a id="ab4ebc0c75fafd0babcc5095e6b3765ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4ebc0c75fafd0babcc5095e6b3765ee">&#9670;&nbsp;</a></span>swapFGBG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t swapFGBG</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled swaps foreground and background colors </p>
+
+</div>
+</div>
+<a id="a2656ee44feda5ea3cac87985700be97f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2656ee44feda5ea3cac87985700be97f">&#9670;&nbsp;</a></span>underline</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t underline</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>If enabled the glyph is underlined. To implement characters underline. </p>
+
+</div>
+</div>
+<a id="adf5b991f529df52d907c00a061458857"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf5b991f529df52d907c00a061458857">&#9670;&nbsp;</a></span>userOpt1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t userOpt1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>User defined option </p>
+
+</div>
+</div>
+<a id="a5ad74d5409163f1191ad4039b1447c26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ad74d5409163f1191ad4039b1447c26">&#9670;&nbsp;</a></span>userOpt2</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t userOpt2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>User defined option </p>
+
+</div>
+</div>
+<a id="a09a2a45f731b02946ff6d3cd15c1a476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a2a45f731b02946ff6d3cd15c1a476">&#9670;&nbsp;</a></span>width</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t width</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Glyph horizontal size </p>
+
+</div>
+</div>
+<a id="aa6aba27bc1a89db9e350b50bbf881f57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6aba27bc1a89db9e350b50bbf881f57">&#9670;&nbsp;</a></span>X</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t X</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Horizontal glyph coordinate </p>
+
+</div>
+</div>
+<a id="abe4637362df8e341470401813999dd17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe4637362df8e341470401813999dd17">&#9670;&nbsp;</a></span>Y</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int16_t Y</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Vertical glyph coordinate </p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

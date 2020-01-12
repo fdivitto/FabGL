@@ -129,13 +129,14 @@ Public Member Functions</h2></td></tr>
 fabgl::DS3231 DS3231;
 
 void setup() {
-  I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL
+  I2C.begin(GPIO_NUM_4, GPIO_NUM_15);  // 4 = SDA, 15 = SCL (WARN: disconnect VGA connector!!)
   DS3231.begin(&amp;I2C);
 
   auto dt = DS3231.datetime();
   Serial.printf("%02d/%02d/%d  %02d:%02d:%02d\n", dt.dayOfMonth, dt.month, dt.year, dt.hours, dt.minutes, dt.seconds);
   Serial.printf("temp = %0.3f C\n", DS3231.temperature());
-}</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
+}</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#_a2">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae27b539070f9e446ed050b23db52597f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae27b539070f9e446ed050b23db52597f">&#9670;&nbsp;</a></span>available()</h2>
 
@@ -161,7 +162,8 @@ void setup() {
 
 <p>Determines if <a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">DS3231</a> is reachable. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if the device has been correctly initialized. </dd></dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a29">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="aadc1b17910d0fe13395b4fc80420c376"></a>
@@ -187,7 +189,8 @@ void setup() {
   </table>
   </dd>
 </dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a28">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="a10f7026e44afd34a6c21d755bab724b1"></a>
@@ -233,7 +236,8 @@ void setup() {
 
 <p>Queries <a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">DS3231</a> for current date and time. </p>
 <dl class="section return"><dt>Returns</dt><dd>A <a class="el" href="structfabgl_1_1_date_time.html" title="Represents date and time. ">DateTime</a> structure containing current date and time </dd></dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a12">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="a676aeab3aaafcb922df18e59e8617ef6"></a>
@@ -262,7 +266,8 @@ void setup() {
 <p>Determines the validity of datetime. </p>
 <p>After calling <a class="el" href="classfabgl_1_1_d_s3231.html#a0487522593d327be65a533a6f3ea5ec6" title="Sets current date and time. ">setDateTime()</a> the datetime becomes valid.</p>
 <dl class="section return"><dt>Returns</dt><dd>False indicates that the oscillator either is stopped or was stopped for some period and may be used to judge the validity of the timekeeping data. </dd></dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a30">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="a0487522593d327be65a533a6f3ea5ec6"></a>
@@ -289,7 +294,8 @@ void setup() {
   </table>
   </dd>
 </dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a17">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <a id="aa1fef8672fe5e18fba61079aa650a3b9"></a>
@@ -309,7 +315,8 @@ void setup() {
 
 <p>Forces <a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">DS3231</a> to read current temperature. </p>
 <dl class="section return"><dt>Returns</dt><dd>Current temperature in Celsius Degrees </dd></dl>
-
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_r_t_clock_2_r_t_clock_8ino-example.html#a35">SSD1306_OLED/128x64/RTClock/RTClock.ino</a>.</dd>
+</dl>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>

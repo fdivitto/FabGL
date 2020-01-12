@@ -2,6 +2,7 @@ var annotated_dup =
 [
     [ "fabgl", null, [
       [ "AltVirtualKeyDef", "structfabgl_1_1_alt_virtual_key_def.html", "structfabgl_1_1_alt_virtual_key_def" ],
+      [ "AutoSuspendInterrupts", "structfabgl_1_1_auto_suspend_interrupts.html", null ],
       [ "Bitmap", "structfabgl_1_1_bitmap.html", "structfabgl_1_1_bitmap" ],
       [ "Canvas", "classfabgl_1_1_canvas.html", "classfabgl_1_1_canvas" ],
       [ "CollisionDetector", "classfabgl_1_1_collision_detector.html", "classfabgl_1_1_collision_detector" ],
@@ -16,6 +17,7 @@ var annotated_dup =
       [ "I2C", "classfabgl_1_1_i2_c.html", "classfabgl_1_1_i2_c" ],
       [ "Keyboard", "classfabgl_1_1_keyboard.html", "classfabgl_1_1_keyboard" ],
       [ "KeyboardLayout", "structfabgl_1_1_keyboard_layout.html", "structfabgl_1_1_keyboard_layout" ],
+      [ "LineEditor", "classfabgl_1_1_line_editor.html", "classfabgl_1_1_line_editor" ],
       [ "Mouse", "classfabgl_1_1_mouse.html", "classfabgl_1_1_mouse" ],
       [ "MouseButtons", "structfabgl_1_1_mouse_buttons.html", "structfabgl_1_1_mouse_buttons" ],
       [ "MouseDelta", "structfabgl_1_1_mouse_delta.html", "structfabgl_1_1_mouse_delta" ],
@@ -39,7 +41,9 @@ var annotated_dup =
       [ "Sprite", "structfabgl_1_1_sprite.html", null ],
       [ "SquareWaveformGenerator", "classfabgl_1_1_square_waveform_generator.html", "classfabgl_1_1_square_waveform_generator" ],
       [ "SSD1306Controller", "classfabgl_1_1_s_s_d1306_controller.html", "classfabgl_1_1_s_s_d1306_controller" ],
+      [ "ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", "classfabgl_1_1_s_t7789_controller" ],
       [ "Terminal", "classfabgl_1_1_terminal.html", "classfabgl_1_1_terminal" ],
+      [ "TerminalController", "classfabgl_1_1_terminal_controller.html", "classfabgl_1_1_terminal_controller" ],
       [ "TriangleWaveformGenerator", "classfabgl_1_1_triangle_waveform_generator.html", "classfabgl_1_1_triangle_waveform_generator" ],
       [ "uiAnchors", "structfabgl_1_1ui_anchors.html", "structfabgl_1_1ui_anchors" ],
       [ "uiApp", "classfabgl_1_1ui_app.html", "classfabgl_1_1ui_app" ],

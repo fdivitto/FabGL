@@ -162,7 +162,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ade8aa461dc9c212dc472933d0818f3c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html#ade8aa461dc9c212dc472933d0818f3c0">setUIApp</a> (<a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app)</td></tr>
 <tr class="memdesc:ade8aa461dc9c212dc472933d0818f3c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current UI app.  <a href="#ade8aa461dc9c212dc472933d0818f3c0">More...</a><br /></td></tr>
 <tr class="separator:ade8aa461dc9c212dc472933d0818f3c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a850375ffcc2400b4b2614b2e2c395de4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html#a850375ffcc2400b4b2614b2e2c395de4">setupAbsolutePositioner</a> (int width, int height, bool createAbsolutePositionsQueue, <a class="el" href="classfabgl_1_1_display_controller.html">DisplayController</a> *updateDisplayController=nullptr, <a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app=nullptr)</td></tr>
+<tr class="memitem:a850375ffcc2400b4b2614b2e2c395de4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html#a850375ffcc2400b4b2614b2e2c395de4">setupAbsolutePositioner</a> (int <a class="el" href="fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h.html#a777dd66f9609a587ee98ad50de301662">height</a>, bool createAbsolutePositionsQueue, <a class="el" href="classfabgl_1_1_display_controller.html">DisplayController</a> *updateDisplayController=nullptr, <a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *app=nullptr)</td></tr>
 <tr class="memdesc:a850375ffcc2400b4b2614b2e2c395de4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes absolute position handler.  <a href="#a850375ffcc2400b4b2614b2e2c395de4">More...</a><br /></td></tr>
 <tr class="separator:a850375ffcc2400b4b2614b2e2c395de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac57c16eed2be91c78c932db25fc16873"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html#ac57c16eed2be91c78c932db25fc16873">status</a> ()</td></tr>
@@ -392,7 +392,7 @@ MouseStatus status = Mouse.getNextStatus();
 if (status.buttons.left) {
   Canvas.setPenColor(Color::BrightRed);
   Canvas.setPixel(status.X, status.Y);
-}</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a14">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+}</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a15">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -608,7 +608,7 @@ if (status.buttons.left) {
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if command has been successfully delivered to the mouse. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a12">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a14">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -769,7 +769,7 @@ if (status.buttons.left) {
 </div><div class="memdoc">
 
 <p>Gets or sets current mouse status. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a13">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a14">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
 </dl>
 </div>
 </div>

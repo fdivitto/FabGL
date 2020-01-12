@@ -1,13 +1,14 @@
 var classfabgl_1_1_s_s_d1306_controller =
 [
     [ "available", "classfabgl_1_1_s_s_d1306_controller.html#a66a8b078f8daa503e5202fa057976b40", null ],
-    [ "begin", "classfabgl_1_1_s_s_d1306_controller.html#accdedd5c795aeb136cd17a548ae24389", null ],
+    [ "begin", "classfabgl_1_1_s_s_d1306_controller.html#a1007ab8cf5f930596fdb9480157ae604", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_s_s_d1306_controller.html#ad05c52072f16c0778d2e83308fb58edd", null ],
     [ "enableBackgroundPrimitiveTimeout", "classfabgl_1_1_s_s_d1306_controller.html#a0bbc7368822596ba58e4512122a0a94f", null ],
     [ "getScreenHeight", "classfabgl_1_1_s_s_d1306_controller.html#a39986e2a1124e377072bbe50457c2d05", null ],
     [ "getScreenWidth", "classfabgl_1_1_s_s_d1306_controller.html#afc335dc8fbdbfdd7b1a670f227d883e8", null ],
     [ "getViewPortHeight", "classfabgl_1_1_s_s_d1306_controller.html#a59f04dbba57f6902d439f9dae2ff717d", null ],
     [ "getViewPortWidth", "classfabgl_1_1_s_s_d1306_controller.html#a882c78620db9d2f95ed55e9a5cc9e808", null ],
+    [ "invert", "classfabgl_1_1_s_s_d1306_controller.html#a0673957752592fe8956d2b0a5cf3a570", null ],
     [ "isDoubleBuffered", "classfabgl_1_1_s_s_d1306_controller.html#a6772c2078dc1fa8c6a910a05692d2cda", null ],
     [ "nativePixelFormat", "classfabgl_1_1_s_s_d1306_controller.html#a05949b527b09f06210c5ae07460c2503", null ],
     [ "processPrimitives", "classfabgl_1_1_s_s_d1306_controller.html#a4da2cfba4ed3d583a10f37b33e27c993", null ],
@@ -19,6 +20,7 @@ var classfabgl_1_1_s_s_d1306_controller =
     [ "setMouseCursor", "classfabgl_1_1_s_s_d1306_controller.html#a09a712cfc91abd619ffd4e44e38e7d42", null ],
     [ "setMouseCursor", "classfabgl_1_1_s_s_d1306_controller.html#a67f02cf6af916609232b18dc7f39230e", null ],
     [ "setMouseCursorPos", "classfabgl_1_1_s_s_d1306_controller.html#a1275e17591af40b53c50b16697bf2dd5", null ],
+    [ "setOrientation", "classfabgl_1_1_s_s_d1306_controller.html#ad085637f2c3c6bf5bd062e92ba249a70", null ],
     [ "setResolution", "classfabgl_1_1_s_s_d1306_controller.html#a6d465776c7776331b716b1f48cfe3ff5", null ],
     [ "setScreenCol", "classfabgl_1_1_s_s_d1306_controller.html#a4e2151dbf922df3bc5f6d1d949c81156", null ],
     [ "setScreenRow", "classfabgl_1_1_s_s_d1306_controller.html#a3c814f1bcec27dcaf703aecd5943835b", null ],

@@ -12,6 +12,7 @@ var searchData=
   ['fabglib_5fmax_5fcsi_5fparams',['FABGLIB_MAX_CSI_PARAMS',['../fabglconf_8h.html#a99b271b008df5c718700df60533916db',1,'fabglconf.h']]],
   ['fabglib_5fmax_5fdcs_5fcontent',['FABGLIB_MAX_DCS_CONTENT',['../fabglconf_8h.html#a88492a438ec3ba7cd8f59e36b81d719b',1,'fabglconf.h']]],
   ['fabglib_5fmouse_5fevents_5fqueue_5fsize',['FABGLIB_MOUSE_EVENTS_QUEUE_SIZE',['../fabglconf_8h.html#a4ed8f72017c1de9d95dedeb6e37b199b',1,'fabglconf.h']]],
+  ['fabglib_5fprimitives_5fdynbuffers_5fsize',['FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE',['../fabglconf_8h.html#a6a28696a36e7ed9d40cee15b3dba1330',1,'fabglconf.h']]],
   ['fabglib_5fscodetovk_5ftask_5fpriority',['FABGLIB_SCODETOVK_TASK_PRIORITY',['../fabglconf_8h.html#ad011d9ff772ecf5ab8be25d0261c38f9',1,'fabglconf.h']]],
   ['fabglib_5fscodetovk_5ftask_5fstack_5fsize',['FABGLIB_SCODETOVK_TASK_STACK_SIZE',['../fabglconf_8h.html#af4fc0cbc2afbabccc0f4ff8d17a5286a',1,'fabglconf.h']]],
   ['fabglib_5fterminal_5finput_5fqueue_5fsize',['FABGLIB_TERMINAL_INPUT_QUEUE_SIZE',['../fabglconf_8h.html#ad73f5d419961aaa98773099f9b4bb8e6',1,'fabglconf.h']]],

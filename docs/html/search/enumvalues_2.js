@@ -2,6 +2,7 @@ var searchData=
 [
   ['cancel',['Cancel',['../group___enumerations.html#ggaffcd6ee067ff3ac7adbe28eb192cd996aea4788705e6873b424c65e91c2846b19',1,'fabgl']]],
   ['checkbox',['CheckBox',['../group___enumerations.html#gga107cf534808867ce4023d92c15ef699ea7ea0f1332ade5b23b34502a3bfe715a2',1,'fabgl']]],
+  ['circle',['Circle',['../group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3',1,'fabgl']]],
   ['createvirtualkeysqueue',['CreateVirtualKeysQueue',['../group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97',1,'fabgl']]],
   ['cursorcross1',['CursorCross1',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa7fee58ccf7b3bb0f4bd95e3acbae422',1,'fabgl']]],
   ['cursorcross2',['CursorCross2',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9ef4c5d4c8d58c1c107edea14b5b041f',1,'fabgl']]],

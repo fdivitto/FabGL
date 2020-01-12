@@ -50,14 +50,46 @@ var displaycontroller_8h =
       [ "CursorResize4", "displaycontroller_8h.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc", null ],
       [ "CursorTextInput", "displaycontroller_8h.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18", null ]
     ] ],
+    [ "LineEnds", "displaycontroller_8h.html#ga73114f8a303eb904d1fe4ad92a538586", [
+      [ "None", "displaycontroller_8h.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Circle", "displaycontroller_8h.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3", null ]
+    ] ],
     [ "NativePixelFormat", "displaycontroller_8h.html#gacafd29e9adc4dc4055558e61fd4599c9", [
       [ "Mono", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
-      [ "SBGR2222", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ]
+      [ "SBGR2222", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
+      [ "RGB565BE", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ]
     ] ],
     [ "PixelFormat", "displaycontroller_8h.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
       [ "Undefined", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360", null ],
+      [ "Native", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1a925641e0b76c28cc940e8f3ca178d826", null ],
       [ "Mask", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1a4a18312b5b75f549d5551e5912ad6ebf", null ],
       [ "RGBA2222", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7", null ],
       [ "RGBA8888", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619", null ]
-    ] ]
+    ] ],
+    [ "Bold", "displaycontroller_8h.html#ad03f06d4f3e36a9e80bd239d29fdb458", null ],
+    [ "DoubleWidth", "displaycontroller_8h.html#aceea3df50e577272aa576027eede649d", null ],
+    [ "FillBackground", "displaycontroller_8h.html#a4054936031229707e9189e4f2c865e67", null ],
+    [ "Invert", "displaycontroller_8h.html#a999881d9ade277b973d3064f113d71b9", null ],
+    [ "Italic", "displaycontroller_8h.html#a90ffbe895814fa7f76c80adfea9d8e95", null ],
+    [ "Underline", "displaycontroller_8h.html#aa83a2188e3fe9edf5b07fd2fbe50b289", null ],
+    [ "B", "displaycontroller_8h.html#a7c7fb36d372d349a62c14f1e6c7337ea", null ],
+    [ "blank", "displaycontroller_8h.html#a15e1f87cbc70601e7bb67d5e48f2f73d", null ],
+    [ "bold", "displaycontroller_8h.html#ae74e61e5ecb7b667173a7aa2a38f576a", null ],
+    [ "data", "displaycontroller_8h.html#a96db82e580e46e24e2b39dd6c5bf7c21", null ],
+    [ "doubleWidth", "displaycontroller_8h.html#a89a44c5e986590e4eca4fb8649bba64e", null ],
+    [ "fillBackground", "displaycontroller_8h.html#adcdb248e9afa3dc4557bd43f034365be", null ],
+    [ "G", "displaycontroller_8h.html#aae2a690e4df0bce516938666009b5ea6", null ],
+    [ "height", "displaycontroller_8h.html#adcf201a8aabf55cb352ec05331242594", null ],
+    [ "invert", "displaycontroller_8h.html#ad1fd85e7fdb3d255187062fce6511ae5", null ],
+    [ "italic", "displaycontroller_8h.html#ac653040b5d629ff1981c5802fc7d2b97", null ],
+    [ "NOT", "displaycontroller_8h.html#a5802f48a4a51260d01324a9a46c4d840", null ],
+    [ "R", "displaycontroller_8h.html#ad6dca68b61d96e60ca0062e00390ba9f", null ],
+    [ "reduceLuminosity", "displaycontroller_8h.html#a3b59c735745c810161faa9660ef88aac", null ],
+    [ "swapFGBG", "displaycontroller_8h.html#ab4ebc0c75fafd0babcc5095e6b3765ee", null ],
+    [ "underline", "displaycontroller_8h.html#a2656ee44feda5ea3cac87985700be97f", null ],
+    [ "userOpt1", "displaycontroller_8h.html#adf5b991f529df52d907c00a061458857", null ],
+    [ "userOpt2", "displaycontroller_8h.html#a5ad74d5409163f1191ad4039b1447c26", null ],
+    [ "width", "displaycontroller_8h.html#a09a2a45f731b02946ff6d3cd15c1a476", null ],
+    [ "X", "displaycontroller_8h.html#aa6aba27bc1a89db9e350b50bbf881f57", null ],
+    [ "Y", "displaycontroller_8h.html#abe4637362df8e341470401813999dd17", null ]
 ];

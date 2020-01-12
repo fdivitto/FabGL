@@ -1,12 +1,13 @@
 var searchData=
 [
   ['waitcompletion',['waitCompletion',['../classfabgl_1_1_canvas.html#a699ce876fd2e9ca40cae20a88b13a515',1,'fabgl::Canvas']]],
+  ['waitfor',['waitFor',['../classfabgl_1_1_terminal.html#a785eeddaad609e475450c2957168c800',1,'fabgl::Terminal']]],
   ['warning',['Warning',['../group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a0eaadb4fcb48a0a0ed7bc9868be9fbaa',1,'fabgl']]],
   ['waveformgenerator',['WaveformGenerator',['../classfabgl_1_1_waveform_generator.html',1,'fabgl']]],
   ['wheelacceleration',['wheelAcceleration',['../classfabgl_1_1_mouse.html#a815d9c8e6c8b04b2bbcd97b6391ab1ed',1,'fabgl::Mouse']]],
   ['wheeldelta',['wheelDelta',['../structfabgl_1_1_mouse_status.html#a60e078de3e3bd4bbea7cb9c51774d1f6',1,'fabgl::MouseStatus']]],
   ['white',['White',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba3ec0db5c25f72a209e6460d47e226cb7',1,'fabgl']]],
-  ['width',['width',['../structfabgl_1_1_glyph.html#a97439c5450c06c95fdaa3c1794d40012',1,'fabgl::Glyph::width()'],['../structfabgl_1_1_bitmap.html#a80670a11199056962db988c4b2e5dde1',1,'fabgl::Bitmap::width()'],['../structfabgl_1_1_size.html#a225b9125956d1283ba37ca9feeb4cc0e',1,'fabgl::Size::width()']]],
+  ['width',['width',['../structfabgl_1_1_glyph.html#ab2183ae78c87a19f5fafae939c766ddc',1,'fabgl::Glyph::width()'],['../structfabgl_1_1_bitmap.html#a80670a11199056962db988c4b2e5dde1',1,'fabgl::Bitmap::width()'],['../structfabgl_1_1_size.html#a225b9125956d1283ba37ca9feeb4cc0e',1,'fabgl::Size::width()'],['../displaycontroller_8h.html#a09a2a45f731b02946ff6d3cd15c1a476',1,'width():&#160;displaycontroller.h'],['../fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f',1,'width():&#160;fabutils.h']]],
   ['window',['Window',['../group___enumerations.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b',1,'fabgl']]],
   ['windowprops',['windowProps',['../classfabgl_1_1ui_window.html#a8723fdee4c289c10af882284d4f6c191',1,'fabgl::uiWindow']]],
   ['windowstyle',['windowStyle',['../classfabgl_1_1ui_window.html#afe4a4306d8c4225e04a933701df99000',1,'fabgl::uiWindow']]],

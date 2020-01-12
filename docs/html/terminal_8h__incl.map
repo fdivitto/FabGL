@@ -1,12 +1,12 @@
 <map id="terminal.h" name="terminal.h">
-<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="4388,445,4475,471"/>
-<area shape="rect" id="node8" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="3875,299,3950,324"/>
-<area shape="rect" id="node14" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4307,152,4460,177"/>
-<area shape="rect" id="node44" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="4348,79,4429,104"/>
-<area shape="rect" id="node11" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="4013,372,4141,397"/>
+<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="4409,445,4496,471"/>
+<area shape="rect" id="node8" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="3965,299,4039,324"/>
+<area shape="rect" id="node14" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4379,152,4532,177"/>
+<area shape="rect" id="node44" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="4424,79,4505,104"/>
+<area shape="rect" id="node11" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="3962,372,4090,397"/>
 <area shape="rect" id="node13" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="3743,445,3818,471"/>
-<area shape="rect" id="node15" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4560,299,4721,324"/>
-<area shape="rect" id="node17" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="4097,225,4158,251"/>
-<area shape="rect" id="node16" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4571,372,4679,397"/>
+<area shape="rect" id="node15" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4368,299,4529,324"/>
+<area shape="rect" id="node17" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="4122,225,4183,251"/>
+<area shape="rect" id="node16" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4469,372,4577,397"/>
 <area shape="rect" id="node18" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="1987,372,2067,397"/>
 </map>

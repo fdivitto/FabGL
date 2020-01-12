@@ -16,6 +16,8 @@ var searchData=
   ['minutes',['minutes',['../structfabgl_1_1_date_time.html#a39576d9140384ea0c56e9e416edf9a76',1,'fabgl::DateTime']]],
   ['mono',['Mono',['../group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086',1,'fabgl']]],
   ['month',['month',['../structfabgl_1_1_date_time.html#a41523d81c808c57ad13e22a33e227520',1,'fabgl::DateTime']]],
+  ['mountsdcard',['mountSDCard',['../classfabgl_1_1_file_browser.html#adc0fcfd5302933ea31f50d0c043febcd',1,'fabgl::FileBrowser']]],
+  ['mountspiffs',['mountSPIFFS',['../classfabgl_1_1_file_browser.html#a924732a4696e35b6b9d27dfa0d08b451',1,'fabgl::FileBrowser']]],
   ['mouse',['Mouse',['../classfabgl_1_1_mouse.html',1,'fabgl::Mouse'],['../classfabgl_1_1_p_s2_controller.html#a79b4d1fba18151beeb25be343b5d5106',1,'fabgl::PS2Controller::mouse()']]],
   ['mouse_2eh',['mouse.h',['../mouse_8h.html',1,'']]],
   ['mouse5buttons',['Mouse5Buttons',['../group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5',1,'fabgl']]],
@@ -38,5 +40,7 @@ var searchData=
   ['movescreen',['moveScreen',['../classfabgl_1_1_v_g_a_controller.html#a0e315e01651c743b29840a36641e196f',1,'fabgl::VGAController']]],
   ['moveto',['moveTo',['../classfabgl_1_1_canvas.html#a1149e1edc415ac5d41b0b8220f07644d',1,'fabgl::Canvas']]],
   ['movewindow',['moveWindow',['../classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0',1,'fabgl::uiApp']]],
+  ['multilinedeletechar',['multilineDeleteChar',['../classfabgl_1_1_terminal_controller.html#a64fecfaf2cb82e2031a589741802357c',1,'fabgl::TerminalController']]],
+  ['multilineinsertchar',['multilineInsertChar',['../classfabgl_1_1_terminal_controller.html#a72cf42c3693902e91581808069c4c80b',1,'fabgl::TerminalController']]],
   ['multiscanblack',['multiScanBlack',['../structfabgl_1_1_v_g_a_timings.html#a9f903563825f80058230eb859cdeaf80',1,'fabgl::VGATimings']]]
 ];

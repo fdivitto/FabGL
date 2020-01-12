@@ -9,7 +9,7 @@ var searchData=
   ['detach',['detach',['../classfabgl_1_1_sound_generator.html#a5d7b92cd65efb7a15539c26ad9a77961',1,'fabgl::SoundGenerator']]],
   ['detectcollision',['detectCollision',['../classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#a7716dbe8f5e5829523a44a0705f7ea0e',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['directory',['directory',['../classfabgl_1_1ui_file_browser.html#a6796a8a2afae8567070baf4080b0094b',1,'fabgl::uiFileBrowser::directory()'],['../classfabgl_1_1_file_browser.html#a92055a2079161d3bfefc52d5c779cf76',1,'fabgl::FileBrowser::directory()']]],
-  ['doublewidth',['DoubleWidth',['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions']]],
+  ['doublewidth',['DoubleWidth',['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth()'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth():&#160;displaycontroller.h']]],
   ['down',['down',['../classfabgl_1_1ui_button.html#a1af6b3b72ee09464a86babf436f3121f',1,'fabgl::uiButton']]],
   ['drawbitmap',['drawBitmap',['../classfabgl_1_1_canvas.html#acf6eef1ebefb956d35d57b484a01093b',1,'fabgl::Canvas']]],
   ['drawchar',['drawChar',['../classfabgl_1_1_canvas.html#a711ad17e7551c20d28fcc43a59ee52cc',1,'fabgl::Canvas']]],

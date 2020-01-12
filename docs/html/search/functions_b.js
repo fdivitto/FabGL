@@ -6,11 +6,15 @@ var searchData=
   ['messagebox',['messageBox',['../classfabgl_1_1ui_app.html#add1a241eb65b95232d28a469c025e46c',1,'fabgl::uiApp']]],
   ['min',['min',['../classfabgl_1_1ui_slider.html#a8204e844ef8af52a9ff19e5733f84cee',1,'fabgl::uiSlider']]],
   ['minimizewindow',['minimizeWindow',['../classfabgl_1_1ui_app.html#ad7e36716653703be98d54d3ec55d1aaa',1,'fabgl::uiApp']]],
+  ['mountsdcard',['mountSDCard',['../classfabgl_1_1_file_browser.html#adc0fcfd5302933ea31f50d0c043febcd',1,'fabgl::FileBrowser']]],
+  ['mountspiffs',['mountSPIFFS',['../classfabgl_1_1_file_browser.html#a924732a4696e35b6b9d27dfa0d08b451',1,'fabgl::FileBrowser']]],
   ['mouse',['mouse',['../classfabgl_1_1_p_s2_controller.html#a79b4d1fba18151beeb25be343b5d5106',1,'fabgl::PS2Controller']]],
   ['mousedownpos',['mouseDownPos',['../classfabgl_1_1ui_window.html#a98f5b2828f58c2dcf9832ed7a52669b1',1,'fabgl::uiWindow']]],
   ['movefocus',['moveFocus',['../classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d',1,'fabgl::uiApp']]],
   ['movementacceleration',['movementAcceleration',['../classfabgl_1_1_mouse.html#a0a5271998bb760fd3f41f96b033f2eab',1,'fabgl::Mouse']]],
   ['movescreen',['moveScreen',['../classfabgl_1_1_v_g_a_controller.html#a0e315e01651c743b29840a36641e196f',1,'fabgl::VGAController']]],
   ['moveto',['moveTo',['../classfabgl_1_1_canvas.html#a1149e1edc415ac5d41b0b8220f07644d',1,'fabgl::Canvas']]],
-  ['movewindow',['moveWindow',['../classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0',1,'fabgl::uiApp']]]
+  ['movewindow',['moveWindow',['../classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0',1,'fabgl::uiApp']]],
+  ['multilinedeletechar',['multilineDeleteChar',['../classfabgl_1_1_terminal_controller.html#a64fecfaf2cb82e2031a589741802357c',1,'fabgl::TerminalController']]],
+  ['multilineinsertchar',['multilineInsertChar',['../classfabgl_1_1_terminal_controller.html#a72cf42c3693902e91581808069c4c80b',1,'fabgl::TerminalController']]]
 ];
