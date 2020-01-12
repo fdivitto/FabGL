@@ -1,0 +1,47 @@
+** FabGL GPIOs assignment summary - fabgl dev board rev2 **
+
+VGA
+  HSync => 23
+  VSync => 15
+  R0    => 22
+  R1    => 21
+  G0    => 19
+  G1    => 18
+  B0    => 5
+  B1    => 4
+
+PS/2 - Keyboard
+  DAT   => 32
+  CLK   => 33
+
+PS/2 - Mouse
+  DAT   => 27
+  CLK   => 26
+
+Audio
+  AUD   => 25
+
+SDCard - HSPI
+  MOSI  => 17
+  MISO  => 16
+  CLK   => 14
+  CS    => 13
+
+UART - UART2
+  RX    => 34
+  TX    => 2
+
+I2C (not usable with VGA)
+  SDA   => 4  (conflicts with VGA B1)
+  SCL   => 15 (conflicts with VGA VSync)
+
+SPI Display - VSPI (not usable with VGA)
+  CLK   => 18 (conflicts with VGA G1)
+  MISO  => 19 (conflicts with VGA G0)
+  MOSI  => 23 (conflicts with VGA HSync)
+  CS    => 5  (conflicts with VGA B0)
+  D/C   => 22 (conflicts with VGA R0)
+  RESET => 21 (conflicts with VGA R1)
+  
+  
+  
