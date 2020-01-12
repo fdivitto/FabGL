@@ -235,6 +235,13 @@
 /** Modeline for OLED 128x32 */
 #define OLED_128x32 "\"OLED_128x32\" 128 32"
 
+/** Modeline for TFT 240x240 */
+#define TFT_240x240 "\"TFT_240x240\" 240 240"
+
+/** Modeline for TFT 240x320 */
+#define TFT_240x320 "\"TFT_240x320\" 240 320"
+
+
 // Thanks to Paul Rickards (http://biosrhythm.com)
 
 #define NTSC_640x240_60hz "\"NTSC 640x240 (60Hz)\" 12.312 640 662 719 784 240 244 247 262 -hsync -vsync"
