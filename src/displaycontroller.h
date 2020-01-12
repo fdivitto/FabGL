@@ -1073,7 +1073,7 @@ protected:
         if (row2 >= clipY1 && row2 <= clipY2)
           rawSetPixel(col1, row2, pattern);
       }
-      if (col1 >= clipX1 && col1 <= clipX2) {
+      if (col2 >= clipX1 && col2 <= clipX2) {
         if (row1 >= clipY1 && row1 <= clipY2)
           rawSetPixel(col2, row1, pattern);
         if (row2 >= clipY1 && row2 <= clipY2)
