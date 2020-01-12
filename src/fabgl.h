@@ -242,7 +242,9 @@
  * @example VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example VGA/SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
- * @example VGA/Audio/Audio.ino Audio demo
+ * @example VGA/Audio/Audio.ino Audio demo with GUI
+ * @example VGA/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
+ * @example VGA/Sprites/Sprites.ino Simple sprites animation
  * @example SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
@@ -251,6 +253,12 @@
  * @example SSD1306_OLED/128x64/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
  * @example SSD1306_OLED/128x64/UI/UI.ino Graphic User Interface - GUI demo
+ *
+ * @example ST7789_TFT/240x240/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example ST7789_TFT/240x240/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
+ * @example ST7789_TFT/240x240/Sprites/Sprites.ino Simple sprites animation
+ * @example ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
+ *
  * @example Others/KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
  * @example Others/MouseStudio/MouseStudio.ino PS/2 mouse events
  */
