@@ -80,8 +80,9 @@ enum class SSD1306Orientation {
  *       SSD1306Controller.setResolution(OLED_128x64);
  *
  *       Canvas cv(&SSD1306Controller);
+ *       cv.clear();
  *       cv.drawText(0, 0, "Hello World!");
- *
+ *     }
  */
 class SSD1306Controller : public GenericDisplayController {
 
