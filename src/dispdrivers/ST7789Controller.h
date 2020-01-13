@@ -53,6 +53,18 @@ namespace fabgl {
 
 
 
+/** \ingroup Enumerations
+* @brief This enum defines ST7789 orientation
+*/
+enum class ST7789Orientation {
+  Normal,             /**< Normal orientation */
+  ReverseHorizontal,  /**< Reverse horizontal */
+  ReverseVertical,    /**< Reverse vertical */
+  Rotate90,           /**< Rotate 90 degrees */
+  Rotate180,          /**< Rotate 180 degrees */
+  Rotate270,          /**< Rotate 270 degrees */
+};
+
 
 /**
 * @brief Display driver for ST7789 based OLED display, with SPI connection.
@@ -79,7 +91,7 @@ public:
   ST7789Controller(ST7789Controller const&) = delete;
   void operator=(ST7789Controller const&)   = delete;
 
-  ST7789Controller();
+  ST7789Controller(int controllerWidth = 240, int controllerHeight = 320);
 
   ~ST7789Controller();
 
@@ -220,6 +232,18 @@ public:
    */
   void reset() { hardReset(); softReset(); }
 
+  /**
+   * @brief Set display orientation and rotation
+   *
+   * @param value Display orientation and rotation
+   *
+   * Example:
+   *
+   *     // rotate by 180 degrees
+   *     DisplayController.setOrientation(fabgl::ST7789Orientation::Rotate180);
+   */
+  void setOrientation(ST7789Orientation value);
+
 
 private:
 
@@ -230,6 +254,10 @@ private:
 
   void hardReset();
   void softReset();
+
+  void setupOrientation();
+
+  void sendRefresh();
 
   void sendScreenBuffer(Rect updateRect);
   void writeCommand(uint8_t cmd);
@@ -328,10 +356,20 @@ private:
   int16_t            m_viewPortWidth;
   int16_t            m_viewPortHeight;
 
+  // maximum width and height the controller can handle (240x320 on ST7789)
+  int16_t            m_controllerWidth;
+  int16_t            m_controllerHeight;
+
+  // offsets used on rotating
+  int16_t            m_rotOffsetX;
+  int16_t            m_rotOffsetY;
+
   TaskHandle_t       m_updateTaskHandle;
 
   volatile int       m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
   volatile bool      m_updateTaskRunning;
+
+  ST7789Orientation  m_orientation;
 
 };
 

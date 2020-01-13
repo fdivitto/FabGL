@@ -46,7 +46,6 @@
 #define ST7789_SWRST      0x01
 #define ST7789_SLPOUT     0x11
 #define ST7789_NORON      0x13
-#define ST7789_NORON      0x13
 #define ST7789_MADCTL     0x36
 #define ST7789_COLMOD     0x3A
 #define ST7789_RDDCOLMOD  0x0C
@@ -69,6 +68,9 @@
 #define ST7789_DISPON     0x29
 #define ST7789_RAMWR      0x2C
 #define ST7789_RAMCTRL    0xB0
+#define ST7789_PTLAR      0x30
+#define ST7789_PTLON      0x12
+
 
 
 namespace fabgl {
@@ -121,13 +123,18 @@ inline uint16_t RGBA8888toNative(RGBA8888 const & rgba8888)
 }
 
 
-ST7789Controller::ST7789Controller()
+ST7789Controller::ST7789Controller(int controllerWidth, int controllerHeight)
   : m_spi(nullptr),
     m_SPIDevHandle(nullptr),
     m_viewPort(nullptr),
     m_viewPortVisible(nullptr),
+    m_controllerWidth(controllerWidth),
+    m_controllerHeight(controllerHeight),
+    m_rotOffsetX(0),
+    m_rotOffsetY(0),
     m_updateTaskHandle(nullptr),
-    m_updateTaskRunning(false)
+    m_updateTaskRunning(false),
+    m_orientation(ST7789Orientation::Normal)
 {
 }
 
@@ -465,15 +472,7 @@ void ST7789Controller::softReset()
   // Normal Display Mode On
   writeCommand(ST7789_NORON);
 
-  // Memory Data Access Control
-  // MH (Display Data Latch Data Order) = 0 (LCD Refresh Left to Right)
-  // RGB (RGB/BGR Order)                = 1 (BGR)
-  // ML (Line Address Order)            = 0 (LCD Refresh Top to Bottom)
-  // MV (Page/Column Order)             = 0 (Normal Mode)
-  // MX (Column Address Order)          = 0 (Left to Right)
-  // MY (Page Address Order)            = 0 (Top to Bottom)
-  writeCommand(ST7789_MADCTL);
-  writeByte(0x08);
+  setupOrientation();
 
   // 0x55 = 0 (101) 0 (101) => 65K of RGB interface, 16 bit/pixel
   writeCommand(ST7789_COLMOD);
@@ -589,6 +588,69 @@ void ST7789Controller::softReset()
 }
 
 
+// For reference, normal mode is:
+//   Memory Data Access Control (MADCTL)
+//   0: unused
+//   1: unused
+//   2: MH (Display Data Latch Data Order) = 0 (LCD Refresh Left to Right)
+//   3: RGB (RGB/BGR Order)                = 1 (BGR)
+//   4: ML (Line Address Order)            = 0 (LCD Refresh Top to Bottom)
+//   5: MV (Page/Column Order)             = 0 (Normal Mode)
+//   6: MX (Column Address Order)          = 0 (Left to Right)
+//   7: MY (Page Address Order)            = 0 (Top to Bottom)
+void ST7789Controller::setupOrientation()
+{
+  m_rotOffsetX = 0;
+  m_rotOffsetY = 0;
+  switch (m_orientation) {
+    case ST7789Orientation::Normal:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08);
+      break;
+    case ST7789Orientation::ReverseHorizontal:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08 | 0x40);         // MX = 1
+      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
+      break;
+    case ST7789Orientation::ReverseVertical:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08 | 0x80);         // MY = 1
+      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
+      break;
+    case ST7789Orientation::Rotate90:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08 | 0x20 | 0x40);  // MV = 1, MX = 1
+      break;
+    case ST7789Orientation::Rotate180:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08 | 0x40 | 0x80);  // MX = 1, MY = 1
+      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
+      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
+      break;
+    case ST7789Orientation::Rotate270:
+      writeCommand(ST7789_MADCTL);
+      writeByte(0x08 | 0x20 | 0x80);  // MV = 1, MY = 1
+      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
+      break;
+  }
+}
+
+
+void ST7789Controller::setOrientation(ST7789Orientation value)
+{
+  m_orientation = value;
+  setupOrientation();
+  sendRefresh();
+}
+
+
+void ST7789Controller::sendRefresh()
+{
+  Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
+  addPrimitive(p);
+}
+
+
 void ST7789Controller::sendScreenBuffer(Rect updateRect)
 {
   SPIBeginWrite();
@@ -600,13 +662,13 @@ void ST7789Controller::sendScreenBuffer(Rect updateRect)
 
   // Column Address Set
   writeCommand(ST7789_CASET);
-  writeWord(updateRect.X1);   // XS (X Start)
-  writeWord(updateRect.X2);   // XE (X End)
+  writeWord(m_rotOffsetX + updateRect.X1);   // XS (X Start)
+  writeWord(m_rotOffsetX + updateRect.X2);   // XE (X End)
 
   // Row Address Set
   writeCommand(ST7789_RASET);
-  writeWord(updateRect.Y1);  // YS (Y Start)
-  writeWord(updateRect.Y2);  // YE (Y End)
+  writeWord(m_rotOffsetY + updateRect.Y1);  // YS (Y Start)
+  writeWord(m_rotOffsetY + updateRect.Y2);  // YE (Y End)
 
   writeCommand(ST7789_RAMWR);
   const int width = updateRect.width();
