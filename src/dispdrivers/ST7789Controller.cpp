@@ -568,16 +568,6 @@ void ST7789Controller::softReset()
   writeByte(0x1b);
   writeByte(0x1e);
 
-  // Column Address Set
-  writeCommand(ST7789_CASET);
-  writeWord(0);                   // XS (X Start)
-  writeWord(m_screenWidth - 1);   // XE (X End)
-
-  // Row Address Set
-  writeCommand(ST7789_RASET);
-  writeWord(0);                   // YS (Y Start)
-  writeWord(m_screenHeight - 1);  // YE (Y End)
-
   // Display Inversion On
   writeCommand(ST7789_INVON);
 
