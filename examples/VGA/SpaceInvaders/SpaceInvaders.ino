@@ -313,9 +313,13 @@ struct GameScene : public Scene {
     canvas.drawTextFmt(266, 14, "%05d", hiScore_);
   }
 
-  void moveEnemy(SISprite * enemy, int x, int y)
+  void moveEnemy(SISprite * enemy, int x, int y, bool * touchLeftSide, bool * touchRightSide)
   {
     if (enemy->visible) {
+      if (x <= 0)
+        *touchLeftSide = true;
+      if (x >= getWidth() - enemy->getWidth())
+        *touchRightSide = true;
       enemy->moveTo(x, y);
       enemy->setFrame(enemy->getFrameIndex() ? 0 : 1);
       updateSprite(enemy);
@@ -387,18 +391,17 @@ struct GameScene : public Scene {
         }
         // handle enemies movement
         enemiesX_ += enemiesDir_ * ENEMIES_STEP_X;
+        bool touchLeftSide = false, touchRightSide = false;
         for (int i = 0; i < ROWENEMIESCOUNT; ++i) {
-          moveEnemy(&enemiesR1_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 0 * ENEMIES_Y_SPACE);
-          moveEnemy(&enemiesR2_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 1 * ENEMIES_Y_SPACE);
-          moveEnemy(&enemiesR3_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 2 * ENEMIES_Y_SPACE);
-          moveEnemy(&enemiesR4_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 3 * ENEMIES_Y_SPACE);
-          moveEnemy(&enemiesR5_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 4 * ENEMIES_Y_SPACE);
+          moveEnemy(&enemiesR1_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 0 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
+          moveEnemy(&enemiesR2_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 1 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
+          moveEnemy(&enemiesR3_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 2 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
+          moveEnemy(&enemiesR4_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 3 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
+          moveEnemy(&enemiesR5_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 4 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
         }
-        bool leftSide  = enemiesX_ <= 0;
-        bool rightSide = enemiesX_ >= getWidth() - ROWENEMIESCOUNT * ENEMIES_X_SPACE;
-        if (rightSide || leftSide) {
+        if (touchLeftSide || touchRightSide) {
           if (enemiesDir_ == 0) {
-            enemiesDir_ = leftSide ? 1 : -1;
+            enemiesDir_ = touchLeftSide ? 1 : -1;
           } else {
             enemiesDir_ = 0;
             enemiesY_ += ENEMIES_STEP_Y;
