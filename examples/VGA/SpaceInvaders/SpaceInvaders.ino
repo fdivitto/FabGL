@@ -31,8 +31,8 @@
 using fabgl::iclamp;
 
 
-fabgl::VGAController VGAController;
-fabgl::Canvas        canvas(&VGAController);
+fabgl::VGAController DisplayController;
+fabgl::Canvas        canvas(&DisplayController);
 fabgl::PS2Controller PS2Controller;
 
 
@@ -53,7 +53,7 @@ struct IntroScene : public Scene {
   int starting_ = 0;
 
   IntroScene()
-    : Scene(0, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
+    : Scene(0, 20, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight())
   {
   }
 
@@ -212,7 +212,7 @@ struct GameScene : public Scene {
                           Bitmap(22, 16, shield_data, PixelFormat::Mask, RGB888(0, 255, 0), true), };
 
   GameScene()
-    : Scene(SPRITESCOUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
+    : Scene(SPRITESCOUNT, 20, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight())
   {
   }
 
@@ -270,7 +270,7 @@ struct GameScene : public Scene {
     enemyMother_->moveTo(getWidth(), ENEMIES_START_Y);
     addSprite(enemyMother_);
 
-    VGAController.setSprites(sprites_, SPRITESCOUNT);
+    DisplayController.setSprites(sprites_, SPRITESCOUNT);
 
     canvas.setBrushColor(Color::Black);
     canvas.clear();
@@ -513,7 +513,7 @@ struct GameScene : public Scene {
 
     if (gameState_ == GAMESTATE_LEVELCHANGED && esp_timer_get_time() >= pauseStart_ + 2500000) {
       stop(); // restart from next level
-      VGAController.removeSprites();
+      DisplayController.removeSprites();
     }
 
     if (gameState_ == GAMESTATE_GAMEOVER) {
@@ -526,12 +526,12 @@ struct GameScene : public Scene {
       if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
           (IntroScene::controller_ == 2 && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)) {
         stop();
-        VGAController.removeSprites();
+        DisplayController.removeSprites();
       }
 
     }
 
-    VGAController.refreshSprites();
+    DisplayController.refreshSprites();
   }
 
   void damageShield(SISprite * shield, Point collisionPoint)
@@ -611,11 +611,11 @@ void setup()
 {
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_320x200_75Hz);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_320x200_75Hz);
 
   // adjust this to center screen in your monitor
-  VGAController.moveScreen(20, -2);
+  //DisplayController.moveScreen(20, -2);
 }
 
 
