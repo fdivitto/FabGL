@@ -54,8 +54,8 @@ namespace fabgl {
 
 
 /** \ingroup Enumerations
-* @brief This enum defines ST7789 orientation
-*/
+ * @brief This enum defines ST7789 orientation
+ */
 enum class ST7789Orientation {
   Normal,             /**< Normal orientation */
   ReverseHorizontal,  /**< Reverse horizontal */
@@ -67,22 +67,22 @@ enum class ST7789Orientation {
 
 
 /**
-* @brief Display driver for ST7789 based OLED display, with SPI connection.
-*
-* Example:
-*
-*     fabgl::ST7789Controller DisplayController;
-*
-*     void setup() {
-*       // SCK = 18, MOSI = 23, D/C = 22, RESET = 21, no CS  (WARN: disconnect VGA connector!!)
-*       DisplayController.begin(18, 23, 22, 21, -1, VSPI_HOST);
-*       DisplayController.setResolution(TFT_240x240);
-*
-*       Canvas cv(&DisplayController);
-*       cv.clear();
-*       cv.drawText(0, 0, "Hello World!");
-*     }
-*/
+ * @brief Display driver for ST7789 based OLED display, with SPI connection.
+ *
+ * Example:
+ *
+ *     fabgl::ST7789Controller DisplayController;
+ *
+ *     void setup() {
+ *       // SCK = 18, MOSI = 23, D/C = 22, RESET = 21, no CS  (WARN: disconnect VGA connector!!)
+ *       DisplayController.begin(18, 23, 22, 21, -1, VSPI_HOST);
+ *       DisplayController.setResolution(TFT_240x240);
+ *
+ *       Canvas cv(&DisplayController);
+ *       cv.clear();
+ *       cv.drawText(0, 0, "Hello World!");
+ *     }
+ */
 class ST7789Controller : public GenericDisplayController {
 
 public:

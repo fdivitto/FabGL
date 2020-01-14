@@ -32,8 +32,8 @@
 
 
 
-#define ST7789_UPDATETASK_STACK              1024
-#define ST7789_UPDATETASK_PRIORITY              5
+#define ST7789_UPDATETASK_STACK             1024
+#define ST7789_UPDATETASK_PRIORITY          5
 
 #define ST7789_BACKGROUND_PRIMITIVE_TIMEOUT 10000  // uS
 
@@ -70,6 +70,10 @@
 #define ST7789_RAMCTRL    0xB0
 #define ST7789_PTLAR      0x30
 #define ST7789_PTLON      0x12
+#define ST7789_WRDISBV    0x51
+#define ST7789_WRCTRLD    0x53
+#define ST7789_WRCACE     0x55
+#define ST7789_WRCABCMB   0x5E
 
 
 
@@ -342,9 +346,11 @@ void ST7789Controller::SPIBeginWrite()
   if (m_spi) {
     m_spi->beginTransaction(SPISettings(ST7789_SPI_WRITE_FREQUENCY, SPI_MSBFIRST, ST7789_SPI_MODE));
   }
+
   if (m_SPIDevHandle) {
     spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
   }
+
   if (m_CS != GPIO_UNUSED) {
     gpio_set_level(m_CS, 0);
   }
@@ -375,6 +381,7 @@ void ST7789Controller::SPIWriteByte(uint8_t data)
   if (m_spi) {
     m_spi->write(data);
   }
+
   if (m_SPIDevHandle) {
     spi_transaction_t ta;
     ta.flags = SPI_TRANS_USE_TXDATA;
@@ -393,6 +400,7 @@ void ST7789Controller::SPIWriteWord(uint16_t data)
     m_spi->write(data >> 8);
     m_spi->write(data & 0xff);
   }
+
   if (m_SPIDevHandle) {
     spi_transaction_t ta;
     ta.flags = SPI_TRANS_USE_TXDATA;
@@ -411,6 +419,7 @@ void ST7789Controller::SPIWriteBuffer(void * data, size_t size)
   if (m_spi) {
     m_spi->writeBytes((uint8_t*)data, size);
   }
+
   if (m_SPIDevHandle) {
     spi_transaction_t ta;
     ta.flags = 0;
@@ -578,51 +587,37 @@ void ST7789Controller::softReset()
 }
 
 
-// For reference, normal mode is:
-//   Memory Data Access Control (MADCTL)
-//   0: unused
-//   1: unused
-//   2: MH (Display Data Latch Data Order) = 0 (LCD Refresh Left to Right)
-//   3: RGB (RGB/BGR Order)                = 1 (BGR)
-//   4: ML (Line Address Order)            = 0 (LCD Refresh Top to Bottom)
-//   5: MV (Page/Column Order)             = 0 (Normal Mode)
-//   6: MX (Column Address Order)          = 0 (Left to Right)
-//   7: MY (Page Address Order)            = 0 (Top to Bottom)
 void ST7789Controller::setupOrientation()
 {
   m_rotOffsetX = 0;
   m_rotOffsetY = 0;
+  uint8_t madclt = 0x08;  // BGR
   switch (m_orientation) {
-    case ST7789Orientation::Normal:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08);
-      break;
     case ST7789Orientation::ReverseHorizontal:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08 | 0x40);         // MX = 1
+      madclt |= 0x40;         // MX = 1
       m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
       break;
     case ST7789Orientation::ReverseVertical:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08 | 0x80);         // MY = 1
+      madclt |= 0x80;         // MY = 1
       m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
       break;
     case ST7789Orientation::Rotate90:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08 | 0x20 | 0x40);  // MV = 1, MX = 1
+      madclt |= 0x20 | 0x40;  // MV = 1, MX = 1
       break;
     case ST7789Orientation::Rotate180:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08 | 0x40 | 0x80);  // MX = 1, MY = 1
+      madclt |= 0x40 | 0x80;  // MX = 1, MY = 1
       m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
       m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
       break;
     case ST7789Orientation::Rotate270:
-      writeCommand(ST7789_MADCTL);
-      writeByte(0x08 | 0x20 | 0x80);  // MV = 1, MY = 1
+      madclt |= 0x20 | 0x80;  // MV = 1, MY = 1
       m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
       break;
+    default:
+      break;
   }
+  writeCommand(ST7789_MADCTL);
+  writeByte(madclt);
 }
 
 
