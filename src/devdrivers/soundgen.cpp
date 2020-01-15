@@ -20,7 +20,7 @@
  */
 
 
-//#include "Arduino.h"    // REMOVE!
+
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
@@ -88,7 +88,7 @@ void SineWaveformGenerator::setFrequency(int value) {
 
 
 int SineWaveformGenerator::getSample() {
-  if (m_frequency == 0) {
+  if (m_frequency == 0 || duration() == 0) {
     if (m_lastSample > 0)
       --m_lastSample;
     else if (m_lastSample < 0)
@@ -109,6 +109,9 @@ int SineWaveformGenerator::getSample() {
   m_lastSample = sample;
 
   m_phaseAcc = (m_phaseAcc + m_phaseInc) & 0x7ffff;
+
+  decDuration();
+
   return sample;
 }
 
@@ -148,7 +151,7 @@ void SquareWaveformGenerator::setDutyCycle(int dutyCycle)
 
 
 int SquareWaveformGenerator::getSample() {
-  if (m_frequency == 0) {
+  if (m_frequency == 0 || duration() == 0) {
     if (m_lastSample > 0)
       --m_lastSample;
     else if (m_lastSample < 0)
@@ -167,6 +170,9 @@ int SquareWaveformGenerator::getSample() {
   m_lastSample = sample;
 
   m_phaseAcc = (m_phaseAcc + m_phaseInc) & 0x7ffff;
+
+  decDuration();
+
   return sample;
 }
 
@@ -196,7 +202,7 @@ void TriangleWaveformGenerator::setFrequency(int value) {
 
 
 int TriangleWaveformGenerator::getSample() {
-  if (m_frequency == 0) {
+  if (m_frequency == 0 || duration() == 0) {
     if (m_lastSample > 0)
       --m_lastSample;
     else if (m_lastSample < 0)
@@ -215,6 +221,9 @@ int TriangleWaveformGenerator::getSample() {
   m_lastSample = sample;
 
   m_phaseAcc = (m_phaseAcc + m_phaseInc) & 0x7ffff;
+
+  decDuration();
+
   return sample;
 }
 
@@ -245,7 +254,7 @@ void SawtoothWaveformGenerator::setFrequency(int value) {
 
 
 int SawtoothWaveformGenerator::getSample() {
-  if (m_frequency == 0) {
+  if (m_frequency == 0 || duration() == 0) {
     if (m_lastSample > 0)
       --m_lastSample;
     else if (m_lastSample < 0)
@@ -264,6 +273,9 @@ int SawtoothWaveformGenerator::getSample() {
   m_lastSample = sample;
 
   m_phaseAcc = (m_phaseAcc + m_phaseInc) & 0x7ffff;
+
+  decDuration();
+
   return sample;
 }
 
@@ -288,12 +300,18 @@ void NoiseWaveformGenerator::setFrequency(int value)
 
 
 int NoiseWaveformGenerator::getSample() {
+  if (duration() == 0) {
+    return 0;
+  }
+
   // noise generator based on Galois LFSR
   m_noise = (m_noise >> 1) ^ (-(m_noise & 1) & 0xB400u);
   int sample = 127 - (m_noise >> 8);
 
   // process volume
   sample = sample * volume() / 127;
+
+  decDuration();
 
   return sample;
 }
@@ -322,6 +340,11 @@ void SamplesGenerator::setFrequency(int value)
 
 
 int SamplesGenerator::getSample() {
+
+  if (duration() == 0) {
+    return 0;
+  }
+
   int sample = m_data[m_index++];
 
   if (m_index == m_length)
@@ -329,6 +352,8 @@ int SamplesGenerator::getSample() {
 
   // process volume
   sample = sample * volume() / 127;
+
+  decDuration();
 
   return sample;
 }
@@ -397,10 +422,24 @@ void SoundGenerator::i2s_audio_init()
 // the same of suspendPlay, but fill also output DMA with 127s, making output mute (and making "bumping" effect)
 bool SoundGenerator::play(bool value)
 {
-  bool r = suspendPlay(value);
-  if (!value)
-    mutizeOutput();
-  return r;
+  if (playing() != value) {
+    bool r = suspendPlay(value);
+    if (!value)
+      mutizeOutput();
+    return r;
+  } else
+    return value;
+}
+
+
+void SoundGenerator::playSamples(int8_t const * data, int length)
+{
+  auto sgen = new SamplesGenerator(data, length);
+  sgen->setAutoDestroy(true);
+  sgen->enable(true);
+  sgen->setDuration(length);
+  attach(sgen);
+  play(true);
 }
 
 
@@ -453,9 +492,14 @@ void SoundGenerator::detach(WaveformGenerator * value)
 {
   if (!value)
     return;
-
   bool isPlaying = suspendPlay(false);
+  detachNoSuspend(value);
+  suspendPlay(isPlaying);
+}
 
+
+void SoundGenerator::detachNoSuspend(WaveformGenerator * value)
+{
   for (WaveformGenerator * c = m_channels, * prev = nullptr; c; prev = c, c = c->next) {
     if (c == value) {
       if (prev)
@@ -465,8 +509,6 @@ void SoundGenerator::detach(WaveformGenerator * value)
       break;
     }
   }
-
-  suspendPlay(isPlaying);
 }
 
 
@@ -484,11 +526,20 @@ void SoundGenerator::waveGenTask(void * arg)
 
     for (int i = 0; i < I2S_SAMPLE_BUFFER_SIZE; ++i) {
       int sample = 0, tvol = 0;
-      for (auto g = soundGenerator->m_channels; g; g = g->next)
+      for (auto g = soundGenerator->m_channels; g; ) {
         if (g->enabled()) {
           sample += g->getSample();
           tvol += g->volume();
+        } else if (g->duration() == 0 && g->autoDetach()) {
+          auto curr = g;
+          g = g->next;  // setup next item before detaching this one
+          soundGenerator->detachNoSuspend(curr);
+          if (curr->autoDestroy())
+            delete curr;
+          continue; // bypass "g = g->next;"
         }
+        g = g->next;
+      }
 
       int avol = tvol ? imin(127, 127 * 127 / tvol) : 127;
       sample = sample * avol / 127;

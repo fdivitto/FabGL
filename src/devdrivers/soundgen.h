@@ -57,7 +57,7 @@ namespace fabgl {
 /** @brief Base abstract class for waveform generators. A waveform generator can be seen as an audio channel that will be mixed by SoundGenerator. */
 class WaveformGenerator {
 public:
-  WaveformGenerator() : next(nullptr), m_sampleRate(0), m_volume(100), m_enabled(false) { }
+  WaveformGenerator() : next(nullptr), m_sampleRate(0), m_volume(100), m_enabled(false), m_duration(-1), m_autoDestroy(false), m_autoDetach(false) { }
 
   virtual ~WaveformGenerator() { }
 
@@ -67,6 +67,38 @@ public:
    * @param value Frequency in Hertz
    */
   virtual void setFrequency(int value) = 0;
+
+  /**
+   * @brief Sets number of samples to play
+   *
+   * @param value Number of samples to play. -1 = infinite.
+   */
+  void setDuration(uint32_t value) { m_duration = value; }
+
+  /**
+   * @brief Returns number of remaining samples to play
+   *
+   * @return Number of remaining samples to play. -1 = infinite.
+   */
+  uint32_t duration() { return m_duration; }
+
+  /**
+   * @brief Sets autodetach mode
+   *
+   * @value if true: this object needs to be detached from the sound generator when there are no more samples to play.
+   */
+  void setAutoDetach(bool value) { m_autoDetach = value; }
+
+  bool autoDetach() { return m_autoDetach; }
+
+  /**
+   * @brief Sets autodestroy mode
+   *
+   * @value if true: this object needs to be destroyed by the sound generat or when there are no more samples to play. This will set also setAutoDetach(true).
+   */
+  void setAutoDestroy(bool value) { m_autoDestroy = value; m_autoDetach |= value; }
+
+  bool autoDestroy() { return m_autoDestroy; }
 
   /**
    * @brief Gets next sample
@@ -123,10 +155,17 @@ public:
 
   WaveformGenerator * next;
 
+protected:
+
+  void decDuration() { --m_duration; if (m_duration == 0) m_enabled = false; }
+
 private:
   uint16_t m_sampleRate;
   int8_t   m_volume;
-  int8_t   m_enabled; // 0 = disabled, 1 = enabled
+  int8_t   m_enabled;   // 0 = disabled, 1 = enabled
+  uint32_t m_duration;  // number of samples to play (-1 = infinite)
+  bool     m_autoDestroy; // if true: this object needs to be destroyed by the sound generator when there are no more samples to play
+  bool     m_autoDetach;  // if true: this object needs to be autodetached from the sound generator when there are no more samples to play
 };
 
 
@@ -248,13 +287,13 @@ private:
  *
  * The GPIO used for audio output is GPIO-25. See @ref confAudio "Configuring Audio port" for audio connection sample schema.
  *
- * Here is supported sound generators:
- * SineWaveformGenerator
- * SquareWaveformGenerator
- * TriangleWaveformGenerator
- * SawtoothWaveformGenerator
- * NoiseWaveformGenerator
- * SamplesGenerator
+ * Here is a list of supported sound generators:
+ * - SineWaveformGenerator
+ * - SquareWaveformGenerator
+ * - TriangleWaveformGenerator
+ * - SawtoothWaveformGenerator
+ * - NoiseWaveformGenerator
+ * - SamplesGenerator
  */
 class SoundGenerator {
 
@@ -284,6 +323,16 @@ public:
    *     soundGenerator.play(true);
    */
   bool play(bool value);
+
+  /**
+   * @brief Plays the specified samples
+   *
+   * Starts immediately to play the specified samples. It is not required to call play().
+   *
+   * @param data Samples to play.
+   * @param length Number of samples to play.
+   */
+  void playSamples(int8_t const * data, int length);
 
   /**
    * @brief Determines whether sound generator is playing
@@ -336,6 +385,7 @@ private:
   static void waveGenTask(void * arg);
   bool suspendPlay(bool value);
   void mutizeOutput();
+  void detachNoSuspend(WaveformGenerator * value);
 
 
   TaskHandle_t        m_waveGenTaskHandle;
