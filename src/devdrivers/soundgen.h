@@ -331,6 +331,7 @@ public:
    *
    * @param data Samples to play.
    * @param length Number of samples to play.
+   * @param volume Volume value. Minimum is 0, maximum is 127.
    */
   void playSamples(int8_t const * data, int length, int volume = 100);
 
