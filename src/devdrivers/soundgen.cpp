@@ -40,8 +40,8 @@
 namespace fabgl {
 
 
-
-
+// maximum value is I2S_SAMPLE_BUFFER_SIZE
+#define FABGL_SAMPLE_BUFFER_SIZE 32
 
 
 
@@ -406,7 +406,7 @@ void SoundGenerator::i2s_audio_init()
   i2s_config.channel_format       = I2S_CHANNEL_FMT_ONLY_RIGHT;
   i2s_config.intr_alloc_flags     = 0;
   i2s_config.dma_buf_count        = 2;
-  i2s_config.dma_buf_len          = I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t);
+  i2s_config.dma_buf_len          = FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t);
   i2s_config.use_apll             = 0;
   i2s_config.tx_desc_auto_clear   = 0;
   i2s_config.intr_alloc_flags     = 0;
@@ -415,7 +415,7 @@ void SoundGenerator::i2s_audio_init()
   // init DAC pad
   i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN); // GPIO25
 
-  m_sampleBuffer = (uint16_t*) malloc(I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t));
+  m_sampleBuffer = (uint16_t*) malloc(FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t));
 }
 
 
@@ -525,7 +525,7 @@ void SoundGenerator::waveGenTask(void * arg)
 
     int mainVolume = soundGenerator->volume();
 
-    for (int i = 0; i < I2S_SAMPLE_BUFFER_SIZE; ++i) {
+    for (int i = 0; i < FABGL_SAMPLE_BUFFER_SIZE; ++i) {
       int sample = 0, tvol = 0;
       for (auto g = soundGenerator->m_channels; g; ) {
         if (g->enabled()) {
@@ -550,7 +550,7 @@ void SoundGenerator::waveGenTask(void * arg)
     }
 
     size_t bytes_written;
-    i2s_write(I2S_NUM_0, buf, I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
+    i2s_write(I2S_NUM_0, buf, FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
 
     // suspend when there is a notify (from suspendPlay(true)) or when there aren't channels to play
     if (ulTaskNotifyTake(true, 0)) {
@@ -567,11 +567,11 @@ void SoundGenerator::waveGenTask(void * arg)
 
 void SoundGenerator::mutizeOutput()
 {
-  for (int i = 0; i < I2S_SAMPLE_BUFFER_SIZE; ++i)
+  for (int i = 0; i < FABGL_SAMPLE_BUFFER_SIZE; ++i)
     m_sampleBuffer[i] = 127 << 8;
   size_t bytes_written;
   for (int i = 0; i < 4; ++i)
-    i2s_write(I2S_NUM_0, m_sampleBuffer, I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
+    i2s_write(I2S_NUM_0, m_sampleBuffer, FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
 }
 
 
