@@ -432,13 +432,14 @@ bool SoundGenerator::play(bool value)
 }
 
 
-void SoundGenerator::playSamples(int8_t const * data, int length)
+void SoundGenerator::playSamples(int8_t const * data, int length, int volume)
 {
   auto sgen = new SamplesGenerator(data, length);
-  sgen->setAutoDestroy(true);
-  sgen->enable(true);
-  sgen->setDuration(length);
   attach(sgen);
+  sgen->setAutoDestroy(true);
+  sgen->setDuration(length);
+  sgen->setVolume(volume);
+  sgen->enable(true);
   play(true);
 }
 

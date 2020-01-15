@@ -332,7 +332,7 @@ public:
    * @param data Samples to play.
    * @param length Number of samples to play.
    */
-  void playSamples(int8_t const * data, int length);
+  void playSamples(int8_t const * data, int length, int volume = 100);
 
   /**
    * @brief Determines whether sound generator is playing
