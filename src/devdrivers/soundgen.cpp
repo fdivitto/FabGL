@@ -552,8 +552,12 @@ void SoundGenerator::waveGenTask(void * arg)
     size_t bytes_written;
     i2s_write(I2S_NUM_0, buf, I2S_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
 
-    // request to suspend?
+    // suspend when there is a notify (from suspendPlay(true)) or when there aren't channels to play
     if (ulTaskNotifyTake(true, 0)) {
+      vTaskSuspend(nullptr);
+    }
+    if (soundGenerator->m_channels == nullptr) {
+      soundGenerator->mutizeOutput();
       vTaskSuspend(nullptr);
     }
 

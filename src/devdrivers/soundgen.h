@@ -328,12 +328,46 @@ public:
    * @brief Plays the specified samples
    *
    * Starts immediately to play the specified samples. It is not required to call play().
+   * This method returns without wait the end of sound.
    *
    * @param data Samples to play.
    * @param length Number of samples to play.
    * @param volume Volume value. Minimum is 0, maximum is 127.
    */
   void playSamples(int8_t const * data, int length, int volume = 100);
+
+  /**
+   * @brief Plays the specified waveform
+   *
+   * Starts immediately to play the specified waveform. It is not required to call play().
+   * This method returns without wait the end of sound.
+   *
+   * @param waveform Waveform to play.
+   * @param frequency Frequency in Hertz.
+   * @param durationMS Duration in milliseconds.
+   * @param volume Volume value. Minimum is 0, maximum is 127.
+   *
+   * Example:
+   *
+   *     // plays a sinewave at 500Hz for 200 milliseconds
+   *     soundGen.playSound(SineWaveformGenerator(), 500, 200);
+   *
+   *     // plays a C Major chord for 1 second
+   *     soundGen.playSound(SineWaveformGenerator(), 262, 1000);  // C
+   *     soundGen.playSound(SineWaveformGenerator(), 330, 1000);  // E
+   *     soundGen.playSound(SineWaveformGenerator(), 392, 1000);  // G
+   */
+  template <typename T>
+  void playSound(T const & waveform, int frequency, int durationMS, int volume = 100) {
+    auto wf = new T(waveform);
+    attach(wf);
+    wf->setFrequency(frequency);
+    wf->setVolume(volume);
+    wf->setAutoDestroy(true);
+    wf->setDuration(m_sampleRate / 1000 * durationMS);
+    wf->enable(true);
+    play(true);
+  }
 
   /**
    * @brief Determines whether sound generator is playing
