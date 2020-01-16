@@ -24,6 +24,7 @@
 #include "fabutils.h"
 
 #include "sprites.h"
+#include "sounds.h"
 
 
 
@@ -34,6 +35,7 @@ using fabgl::iclamp;
 fabgl::VGAController DisplayController;
 fabgl::Canvas        canvas(&DisplayController);
 fabgl::PS2Controller PS2Controller;
+SoundGenerator       soundGenerator;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +53,8 @@ struct IntroScene : public Scene {
   int textRow_  = 0;
   int textCol_  = 0;
   int starting_ = 0;
+
+  SamplesGenerator * music_ = nullptr;
 
   IntroScene()
     : Scene(0, 20, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight())
@@ -82,6 +86,8 @@ struct IntroScene : public Scene {
     canvas.setBrushColor(Color::Black);
 
     controller_ = 0;
+
+    music_ = soundGenerator.playSamples(themeSoundSamples, sizeof(themeSoundSamples), 100, -1);
   }
 
   void update(int updateCount)
@@ -93,8 +99,12 @@ struct IntroScene : public Scene {
 
     if (starting_) {
 
-      if (starting_ > 50)
+      if (starting_ > 50) {
+        // stop music
+        soundGenerator.detach(music_);
+        // stop scene
         stop();
+      }
 
       ++starting_;
       canvas.scroll(0, -5);
@@ -200,6 +210,7 @@ struct GameScene : public Scene {
   int enemiesY_            = ENEMIES_START_Y;
   int enemiesDir_          = 1;
   int enemiesAlive_        = ROWENEMIESCOUNT * 5;
+  int enemiesSoundCount_   = 0;
   SISprite * lastHitEnemy_ = nullptr;
   GameState gameState_     = GAMESTATE_PLAYING;
 
@@ -407,6 +418,9 @@ struct GameScene : public Scene {
             enemiesY_ += ENEMIES_STEP_Y;
           }
         }
+        // sound
+        ++enemiesSoundCount_;
+        soundGenerator.playSamples(invadersSoundSamples[enemiesSoundCount_ % 4], invadersSoundSamplesSize[enemiesSoundCount_ % 4]);
         // handle enemies fire generation
         if (!enemiesFire_->visible) {
           int shottingEnemy = random(enemiesAlive_);
@@ -476,6 +490,7 @@ struct GameScene : public Scene {
 
       // start enemy mother ship
       if ((updateCount % 800) == 0) {
+        soundGenerator.playSamples(motherShipSoundSamples, sizeof(motherShipSoundSamples), 100, 7000);
         enemyMother_->x = getWidth();
         enemyMother_->setFrame(0);
         enemyMother_->visible = true;
@@ -490,8 +505,8 @@ struct GameScene : public Scene {
           playerVelX_ = +1;
         else
           playerVelX_ = 0;
-        if (keyboard->isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)  // fire?
-          playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+        if (keyboard->isVKDown(fabgl::VK_SPACE) && !playerFire_->visible)  // player fire?
+          fire();
       } else if (IntroScene::controller_ == 2) {
         // MOUSE controller
         if (mouse->deltaAvailable()) {
@@ -499,8 +514,8 @@ struct GameScene : public Scene {
           mouse->getNextDelta(&delta);
           mouse->updateAbsolutePosition(&delta);
           playerAbsX_ = mouse->status().X;
-          if (delta.buttons.left && !playerFire_->visible)    // fire?
-            playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+          if (delta.buttons.left && !playerFire_->visible)    // player fire?
+            fire();
         }
       }
     }
@@ -534,6 +549,14 @@ struct GameScene : public Scene {
     DisplayController.refreshSprites();
   }
 
+  // player shoots
+  void fire()
+  {
+    playerFire_->moveTo(player_->x + 7, player_->y - 1)->visible = true;
+    soundGenerator.playSamples(fireSoundSamples, sizeof(fireSoundSamples));
+  }
+
+  // shield has been damaged
   void damageShield(SISprite * shield, Point collisionPoint)
   {
     Bitmap * shieldBitmap = shield->getFrame();
@@ -562,6 +585,7 @@ struct GameScene : public Scene {
     SISprite * sB = (SISprite*) spriteB;
     if (!lastHitEnemy_ && sA->type == TYPE_PLAYERFIRE && sB->type == TYPE_ENEMY) {
       // player fire hits an enemy
+      soundGenerator.playSamples(shootSoundSamples, sizeof(shootSoundSamples));
       sA->visible = false;
       sB->setFrame(2);
       lastHitEnemy_ = sB;
@@ -579,6 +603,7 @@ struct GameScene : public Scene {
     }
     if (gameState_ == GAMESTATE_PLAYING && sA->type == TYPE_ENEMIESFIRE && sB->type == TYPE_PLAYER) {
       // enemies fire hits player
+      soundGenerator.playSamples(explosionSoundSamples, sizeof(explosionSoundSamples));
       --lives_;
       gameState_ = lives_ ? GAMESTATE_PLAYERKILLED : GAMESTATE_ENDGAME;
       player_->setFrame(1);
@@ -586,6 +611,7 @@ struct GameScene : public Scene {
     }
     if (sB->type == TYPE_ENEMYMOTHER) {
       // player fire hits enemy mother ship
+      soundGenerator.playSamples(mothershipexplosionSoundSamples, sizeof(mothershipexplosionSoundSamples));
       sA->visible = false;
       sB->setFrame(1);
       lastHitEnemy_ = sB;
