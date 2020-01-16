@@ -432,15 +432,17 @@ bool SoundGenerator::play(bool value)
 }
 
 
-void SoundGenerator::playSamples(int8_t const * data, int length, int volume)
+SamplesGenerator * SoundGenerator::playSamples(int8_t const * data, int length, int volume, int durationMS)
 {
   auto sgen = new SamplesGenerator(data, length);
   attach(sgen);
   sgen->setAutoDestroy(true);
-  sgen->setDuration(length);
+  if (durationMS > -1)
+    sgen->setDuration(durationMS > 0 ? (m_sampleRate / 1000 * durationMS) : length );
   sgen->setVolume(volume);
   sgen->enable(true);
   play(true);
+  return sgen;
 }
 
 
@@ -507,6 +509,8 @@ void SoundGenerator::detachNoSuspend(WaveformGenerator * value)
         prev->next = c->next;
       else
         m_channels = c->next;
+      if (value->autoDestroy())
+        delete value;
       break;
     }
   }
@@ -535,8 +539,6 @@ void SoundGenerator::waveGenTask(void * arg)
           auto curr = g;
           g = g->next;  // setup next item before detaching this one
           soundGenerator->detachNoSuspend(curr);
-          if (curr->autoDestroy())
-            delete curr;
           continue; // bypass "g = g->next;"
         }
         g = g->next;

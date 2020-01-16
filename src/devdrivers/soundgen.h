@@ -333,8 +333,11 @@ public:
    * @param data Samples to play.
    * @param length Number of samples to play.
    * @param volume Volume value. Minimum is 0, maximum is 127.
+   * @param durationMS Duration in milliseconds. 0 = untile end of samples, -1 = infinite loop.
+   *
+   * @return Pointer to SamplesGenerator object. Lifetime of this object is limited to the duration.
    */
-  void playSamples(int8_t const * data, int length, int volume = 100);
+  SamplesGenerator * playSamples(int8_t const * data, int length, int volume = 100, int durationMS = 0);
 
   /**
    * @brief Plays the specified waveform
