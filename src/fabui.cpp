@@ -204,10 +204,12 @@ int uiApp::run(DisplayController * displayController, Keyboard * keyboard, Mouse
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
-  m_mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, m_displayController, this);
+  if (m_mouse)
+    m_mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, m_displayController, this);
 
   // setup keyboard
-  m_keyboard->setUIApp(this);
+  if (m_keyboard)
+    m_keyboard->setUIApp(this);
 
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(m_canvas->getWidth(), m_canvas->getHeight()), false);
@@ -221,7 +223,8 @@ int uiApp::run(DisplayController * displayController, Keyboard * keyboard, Mouse
   m_rootWindow->frameProps().moveable   = false;
 
   // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
-  m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+  if (m_mouse)
+    m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
   // avoid slow paint on low resolutions
   m_displayController->enableBackgroundPrimitiveTimeout(false);
@@ -266,9 +269,11 @@ int uiApp::run(DisplayController * displayController, Keyboard * keyboard, Mouse
   delete m_rootWindow;
   m_rootWindow = nullptr;
 
-  m_keyboard->setUIApp(nullptr);
+  if (m_keyboard)
+    m_keyboard->setUIApp(nullptr);
 
-  m_mouse->terminateAbsolutePositioner();
+  if (m_mouse)
+    m_mouse->terminateAbsolutePositioner();
 
   vQueueDelete(m_eventsQueue);
   m_eventsQueue = nullptr;
@@ -1106,13 +1111,19 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
 void uiApp::enableKeyboardAndMouseEvents(bool value)
 {
   if (value) {
-    m_keyboard->setUIApp(this);
-    m_mouse->setUIApp(this);
-    m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+    if (m_keyboard)
+      m_keyboard->setUIApp(this);
+    if (m_mouse) {
+      m_mouse->setUIApp(this);
+      m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
+    }
   } else {
-    m_keyboard->setUIApp(nullptr);
-    m_mouse->setUIApp(nullptr);
-    m_displayController->setMouseCursor(nullptr);
+    if (m_keyboard)
+      m_keyboard->setUIApp(nullptr);
+    if (m_mouse) {
+      m_mouse->setUIApp(nullptr);
+      m_displayController->setMouseCursor(nullptr);
+    }
   }
 }
 
