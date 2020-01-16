@@ -22,7 +22,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "freertos/timers.h"
+#include "freertos/semphr.h"
 
 #include "fabutils.h"
 #include "scene.h"
@@ -31,48 +31,84 @@
 
 
 
+
 namespace fabgl {
 
 
-Scene::Scene(int maxSpritesCount, int updateTimeMS, int width, int height)
- : m_width(width), m_height(height), m_collisionDetector(maxSpritesCount, width, height), m_suspendedTask(nullptr)
+Scene::Scene(int maxSpritesCount, int updateTimeMS, int width, int height, int stackSize)
+ : m_width(width),
+   m_height(height),
+   m_updateTimeMS(updateTimeMS),
+   m_collisionDetector(maxSpritesCount, width, height),
+   m_suspendedTask(nullptr),
+   m_running(false)
 {
-  m_updateTimer = xTimerCreate("", pdMS_TO_TICKS(updateTimeMS), pdTRUE, this, updateTimerFunc);
+  m_mutex = xSemaphoreCreateMutex();
+  xSemaphoreTake(m_mutex, portMAX_DELAY);  // suspend update task
+  xTaskCreate(updateTask, "", FABGL_DEFAULT_SCENETASK_STACKSIZE, this, 5, &m_updateTaskHandle);
 }
 
 
 Scene::~Scene()
 {
-  xTimerDelete(m_updateTimer, portMAX_DELAY);
+  stop();
+  xSemaphoreTake(m_mutex, portMAX_DELAY); // suspend update task
+  vTaskDelete(m_updateTaskHandle);
+  vSemaphoreDelete(m_mutex);
 }
 
 
 void Scene::start(bool suspendTask)
 {
-  m_updateCount = 0;
-  init();
-  xTimerStart(m_updateTimer, portMAX_DELAY);
-  if (suspendTask) {
-    m_suspendedTask = xTaskGetCurrentTaskHandle();
-    vTaskSuspend(m_suspendedTask);
-  } else
-    m_suspendedTask = nullptr;
+  if (!m_running) {
+    m_running = true;
+    m_updateCount = 0;
+    init();
+    xSemaphoreGive(m_mutex);  // resume update task
+    if (suspendTask) {
+      m_suspendedTask = xTaskGetCurrentTaskHandle();
+      vTaskSuspend(m_suspendedTask);
+    } else
+      m_suspendedTask = nullptr;
+  }
 }
 
 
 void Scene::stop()
-{  
-  xTimerStop(m_updateTimer, portMAX_DELAY);
-  if (m_suspendedTask)
-    vTaskResume(m_suspendedTask);
+{
+  if (m_running) {
+    // are we inside update task?
+    if (xTaskGetCurrentTaskHandle() != m_updateTaskHandle)
+      xSemaphoreTake(m_mutex, portMAX_DELAY); // no, suspend update task
+    m_running = false;
+    if (m_suspendedTask)
+      vTaskResume(m_suspendedTask);
+  }
 }
 
 
-void Scene::updateTimerFunc(TimerHandle_t xTimer)
+void Scene::updateTask(void * pvParameters)
 {
-  Scene * scene = (Scene*) pvTimerGetTimerID(xTimer);
-  scene->m_updateCount += 1;
-  scene->update(scene->m_updateCount);
+  Scene * scene = (Scene*) pvParameters;
+
+  while (true) {
+
+    xSemaphoreTake(scene->m_mutex, portMAX_DELAY);
+
+    int64_t t0 = esp_timer_get_time();  // us
+
+    if (scene->m_running) {
+      scene->m_updateCount += 1;
+      scene->update(scene->m_updateCount);
+    }
+
+    xSemaphoreGive(scene->m_mutex);
+
+    int64_t t1 = esp_timer_get_time();  // us
+    int delayMS = (scene->m_updateTimeMS - (t1 - t0) / 1000);
+    if (delayMS > 0)
+      vTaskDelay(delayMS / portTICK_PERIOD_MS);
+  }
 }
 
 

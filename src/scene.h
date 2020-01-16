@@ -38,6 +38,9 @@
 
 
 
+#define FABGL_DEFAULT_SCENETASK_STACKSIZE 2048
+
+
 namespace fabgl {
 
 
@@ -56,8 +59,9 @@ public:
    * @param updateTimeMS Number of milliseconds between updates. Scene.update() is called whenever an update occurs.
    * @param width The scene width in pixels.
    * @param height The scene height in pixels.
+   * @param stackSize Size of update task stack.
    */
-  Scene(int maxSpritesCount, int updateTimeMS, int width, int height);
+  Scene(int maxSpritesCount, int updateTimeMS, int width, int height, int stackSize = FABGL_DEFAULT_SCENETASK_STACKSIZE);
 
   virtual ~Scene();
 
@@ -159,18 +163,22 @@ public:
 
 private:
 
-  static void updateTimerFunc(TimerHandle_t xTimer);
+  static void updateTask(void * pvParameters);
 
 
   int               m_width;
   int               m_height;
 
-  TimerHandle_t     m_updateTimer;
+  TaskHandle_t      m_updateTaskHandle;
   int               m_updateCount;
+  int               m_updateTimeMS;
+  SemaphoreHandle_t m_mutex;
 
   CollisionDetector m_collisionDetector;
 
   TaskHandle_t      m_suspendedTask;
+
+  volatile bool     m_running;
 
 };
 
