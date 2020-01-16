@@ -45,7 +45,7 @@ class MyApp : public uiApp {
     // button to show TestControlsFrame
     testControlsFrame = new TestControlsFrame(rootWindow());
     testControlsButton = new uiButton(testsFrame, "Test Controls", Point(5, 20), Size(105, 20));
-    testControlsButton->onClick = [&]() { showWindow(testControlsFrame, true); };
+    testControlsButton->onClick = [&]() { showWindow(testControlsFrame, true); setActiveWindow(testControlsFrame); };
 
     // create a destroy frame buttons
     createFrameButton  = new uiButton(testsFrame, "Create Frame", Point(5, 45), Size(105, 20));
@@ -78,6 +78,8 @@ class MyApp : public uiApp {
     testTimerFrame = new TestTimerFrame(rootWindow());
     testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 170), Size(105, 20));
     testTimerButton->onClick = [&]() { showWindow(testTimerFrame, true); };
+
+    setActiveWindow(testsFrame);
 
   }
 
