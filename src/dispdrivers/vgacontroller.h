@@ -419,8 +419,9 @@ private:
 
   void init(gpio_num_t VSyncGPIO);
 
-  uint8_t packHVSync(bool HSync = false, bool VSync = false);
-  uint8_t preparePixel(RGB222 rgb, bool HSync = false, bool VSync = false);
+  uint8_t packHVSync(bool HSync, bool VSync);
+  uint8_t preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
+  uint8_t preparePixelWithSync(RGB222 rgb, bool HSync, bool VSync);
 
   void freeBuffers();
   void fillHorizBuffers(int offsetX);
@@ -515,6 +516,9 @@ private:
   volatile uint8_t *     m_HBlankLine_withVSync;
   volatile uint8_t *     m_HBlankLine;
   int16_t                m_HLineSize;
+
+  // contains H and V signals for visible line
+  volatile uint8_t       m_HVSync;
 
   volatile int16_t       m_viewPortCol;
   volatile int16_t       m_viewPortRow;

@@ -318,6 +318,8 @@ void VGAController::setResolution(VGATimings const& timings, int viewPortWidth, 
   m_timings = timings;
   setDoubleBuffered(doubleBuffered);
 
+  m_HVSync = packHVSync(false, false);
+
   m_HLineSize = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
 
   m_HBlankLine_withVSync = (uint8_t*) heap_caps_malloc(m_HLineSize, MALLOC_CAP_DMA);
@@ -673,7 +675,7 @@ uint8_t IRAM_ATTR VGAController::packHVSync(bool HSync, bool VSync)
 }
 
 
-uint8_t IRAM_ATTR VGAController::preparePixel(RGB222 rgb, bool HSync, bool VSync)
+uint8_t IRAM_ATTR VGAController::preparePixelWithSync(RGB222 rgb, bool HSync, bool VSync)
 {
   return packHVSync(HSync, VSync) | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT);
 }
@@ -686,7 +688,7 @@ uint8_t IRAM_ATTR VGAController::preparePixel(RGB222 rgb, bool HSync, bool VSync
 // Returns next pos to fill (startPos + length)
 int VGAController::fill(uint8_t volatile * buffer, int startPos, int length, uint8_t red, uint8_t green, uint8_t blue, bool HSync, bool VSync)
 {
-  uint8_t pattern = preparePixel((RGB222){red, green, blue}, HSync, VSync);
+  uint8_t pattern = preparePixelWithSync((RGB222){red, green, blue}, HSync, VSync);
   for (int i = 0; i < length; ++i, ++startPos)
     VGA_PIXELINROW(buffer, startPos) = pattern;
   return startPos;
@@ -769,10 +771,9 @@ void IRAM_ATTR VGAController::rawFillRow(int y, int x1, int x2, uint8_t pattern)
 void IRAM_ATTR VGAController::rawInvertRow(int y, int x1, int x2)
 {
   auto row = m_viewPort[y];
-  const uint8_t HVSync = packHVSync();
   for (int x = x1; x <= x2; ++x) {
     uint8_t * px = (uint8_t*) &VGA_PIXELINROW(row, x);
-    *px = HVSync | ~(*px);
+    *px = m_HVSync | ~(*px);
   }
 }
 
@@ -1074,21 +1075,19 @@ void VGAController::readScreen(Rect const & rect, RGB222 * destBuf)
 void VGAController::writeScreen(Rect const & rect, RGB222 * srcBuf)
 {
   uint8_t * sbuf = (uint8_t*) srcBuf;
-  const uint8_t HVSync = packHVSync();
   for (int y = rect.Y1; y <= rect.Y2; ++y) {
     uint8_t * row = (uint8_t*) m_viewPort[y];
     for (int x = rect.X1; x <= rect.X2; ++x, ++sbuf)
-      VGA_PIXELINROW(row, x) = *sbuf | HVSync;
+      VGA_PIXELINROW(row, x) = *sbuf | m_HVSync;
   }
 }
 
 
 void IRAM_ATTR VGAController::rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount)
 {
-  const uint8_t HVSync = packHVSync();
   genericRawDrawBitmap_Native(destX, destY, (uint8_t*) bitmap->data, bitmap->width, X1, Y1, XCount, YCount,
-                              [&] (int y)                             { return (uint8_t*) m_viewPort[y]; },       // rawGetRow
-                              [&] (uint8_t * row, int x, uint8_t src) { VGA_PIXELINROW(row, x) = HVSync | src; }  // rawSetPixelInRow
+                              [&] (int y)                             { return (uint8_t*) m_viewPort[y]; },         // rawGetRow
+                              [&] (uint8_t * row, int x, uint8_t src) { VGA_PIXELINROW(row, x) = m_HVSync | src; }  // rawSetPixelInRow
                              );
 }
 
@@ -1106,22 +1105,20 @@ void IRAM_ATTR VGAController::rawDrawBitmap_Mask(int destX, int destY, Bitmap co
 
 void IRAM_ATTR VGAController::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
-  const uint8_t HVSync = packHVSync();
   genericRawDrawBitmap_RGBA2222(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
-                                [&] (int y)                             { return (uint8_t*) m_viewPort[y]; },                 // rawGetRow
-                                [&] (uint8_t * row, int x)              { return VGA_PIXELINROW(row, x); },                   // rawGetPixelInRow
-                                [&] (uint8_t * row, int x, uint8_t src) { VGA_PIXELINROW(row, x) = HVSync | (src & 0x3f); }   // rawSetPixelInRow
+                                [&] (int y)                             { return (uint8_t*) m_viewPort[y]; },                   // rawGetRow
+                                [&] (uint8_t * row, int x)              { return VGA_PIXELINROW(row, x); },                     // rawGetPixelInRow
+                                [&] (uint8_t * row, int x, uint8_t src) { VGA_PIXELINROW(row, x) = m_HVSync | (src & 0x3f); }   // rawSetPixelInRow
                                );
 }
 
 
 void IRAM_ATTR VGAController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
-  const uint8_t HVSync = packHVSync();
   genericRawDrawBitmap_RGBA8888(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
                                  [&] (int y)                                      { return (uint8_t*) m_viewPort[y]; },   // rawGetRow
                                  [&] (uint8_t * row, int x)                       { return VGA_PIXELINROW(row, x); },     // rawGetPixelInRow
-                                 [&] (uint8_t * row, int x, RGBA8888 const & src) { VGA_PIXELINROW(row, x) = HVSync | (src.R >> 6) | (src.G >> 6 << 2) | (src.B >> 6 << 4); }   // rawSetPixelInRow
+                                 [&] (uint8_t * row, int x, RGBA8888 const & src) { VGA_PIXELINROW(row, x) = m_HVSync | (src.R >> 6) | (src.G >> 6 << 2) | (src.B >> 6 << 4); }   // rawSetPixelInRow
                                 );
 }
 
