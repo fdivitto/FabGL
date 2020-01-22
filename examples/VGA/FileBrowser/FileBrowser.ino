@@ -54,48 +54,6 @@ fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 
 
-fabgl::DriveType currentDriveType;
-char const *     currentMountPath;
-
-
-void unmountCurrent()
-{
-  if (currentDriveType == fabgl::DriveType::SPIFFS)
-    FileBrowser::unmountSPIFFS();
-  else
-    FileBrowser::unmountSDCard();
-}
-
-
-void remountCurrent()
-{
-  if (currentDriveType == fabgl::DriveType::SPIFFS)
-    FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH);
-  else {
-    if (!FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH))
-      selectFlash();  // fallback to spiflash in case of no SD card
-  }
-}
-
-
-void selectFlash()
-{
-  unmountCurrent();
-  currentDriveType = fabgl::DriveType::SPIFFS;
-  currentMountPath = SPIFFS_MOUNT_PATH;
-  remountCurrent();
-}
-
-
-void selectSDCard()
-{
-  unmountCurrent();
-  currentDriveType = fabgl::DriveType::SDCard;
-  currentMountPath = SDCARD_MOUNT_PATH;
-  remountCurrent();
-}
-
-
 class MyApp : public uiApp {
 
   uiLabel *       WiFiStatusLbl;
@@ -108,26 +66,12 @@ class MyApp : public uiApp {
     auto frame = new uiFrame(rootWindow(), "FileBrowser Example", Point(15, 10), Size(375, 275));
     frame->frameProps().hasCloseButton = false;
 
-    // Flash / SDCard selector
-    new uiLabel(frame, "Flash", Point(10, 25));
-    new uiLabel(frame, "SD Card", Point(70, 25));
-    auto flashRadio = new uiCheckBox(frame, Point(40, 25), Size(16, 16), uiCheckBoxKind::RadioButton);
-    auto SDCardRadio = new uiCheckBox(frame, Point(114, 25), Size(16, 16), uiCheckBoxKind::RadioButton);
-    flashRadio->setGroupIndex(1);
-    SDCardRadio->setGroupIndex(1);
-    flashRadio->onChange = [&]() {
-      selectFlash();
-      updateBrowser(true);
-    };
-    SDCardRadio->onChange = [&]() {
-      selectSDCard();
-      updateBrowser(true);
-    };
-    flashRadio->setChecked(true);
-
     // file browser
-    fileBrowser = new uiFileBrowser(frame, Point(10, 45), Size(140, 180));
-    fileBrowser->setDirectory(currentMountPath);
+    fileBrowser = new uiFileBrowser(frame, Point(10, 25), Size(140, 180));
+    fileBrowser->setDirectory("/");
+    fileBrowser->onChange = [&]() {
+      updateFreeSpaceLabel();
+    };
 
     // create directory button
     auto createDirBtn = new uiButton(frame, "Create Dir", Point(160, 25), Size(90, 20));
@@ -181,9 +125,7 @@ class MyApp : public uiApp {
     auto formatBtn = new uiButton(frame, "Format", Point(160, 125), Size(90, 20));
     formatBtn->onClick = [&]() {
       if (messageBox("Format sdcard", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
-        FileBrowser::format(currentDriveType, 0);
-        unmountCurrent();
-        remountCurrent();
+        FileBrowser::format(fileBrowser->content().getCurrentDriveType(), 0);
         updateBrowser();
       }
     };
@@ -223,10 +165,8 @@ class MyApp : public uiApp {
     setFocusedWindow(fileBrowser);
   }
 
-  void updateBrowser(bool goToRootDir = false)
+  void updateBrowser()
   {
-    if (goToRootDir)
-      fileBrowser->setDirectory(currentMountPath);
     fileBrowser->update();
     updateFreeSpaceLabel();
   }
@@ -294,7 +234,7 @@ class MyApp : public uiApp {
   // show used and free SD space
   void updateFreeSpaceLabel() {
     int64_t total, used;
-    FileBrowser::getFSInfo(currentDriveType, 0, &total, &used);
+    FileBrowser::getFSInfo(fileBrowser->content().getCurrentDriveType(), 0, &total, &used);
     freeSpaceLbl->setTextFmt("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024);
     freeSpaceLbl->update();
   }
@@ -304,7 +244,7 @@ class MyApp : public uiApp {
 
 void setup()
 {
-  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   preferences.begin("FileBrowser", false);
   preferences.clear();
@@ -313,7 +253,7 @@ void setup()
 
   DisplayController.begin();
 
-  // maintain LOW!!! otherwise there isn't enough memory for WiFi!!!
+  // keep LOW!!! otherwise there isn't enough memory for WiFi!!!
   DisplayController.setResolution(VGA_400x300_60Hz);
 
   // adjust this to center screen in your monitor
@@ -321,12 +261,11 @@ void setup()
 
   Canvas cv(&DisplayController);
   cv.clear();
-  cv.drawText(50, 170, "Initializing SD/Flash...");
+  cv.drawText(50, 170, "Initializing...");
   cv.waitCompletion();
-  selectFlash();
-  cv.clear();
-  cv.drawText(50, 170, "Connecting WiFi...");
-  cv.waitCompletion();
+
+  FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH);
+  FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH);
 }
 
 
