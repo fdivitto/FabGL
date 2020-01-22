@@ -323,6 +323,7 @@ using fabgl::uiMessageBoxResult;
 using fabgl::SineWaveformGenerator;
 using fabgl::SquareWaveformGenerator;
 using fabgl::NoiseWaveformGenerator;
+using fabgl::VICNoiseGenerator;
 using fabgl::TriangleWaveformGenerator;
 using fabgl::SawtoothWaveformGenerator;
 using fabgl::SamplesGenerator;
