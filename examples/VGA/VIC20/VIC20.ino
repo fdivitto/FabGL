@@ -131,10 +131,6 @@ fabgl::PS2Controller PS2Controller;
 Preferences preferences;
 
 
-// Main machine
-Machine machine(&VGAController);
-
-
 void initSPIFFS()
 {
   // setup SPIFFS
@@ -239,7 +235,13 @@ class Menu : public uiApp {
   uiLabel *       WiFiStatusLbl;
   uiLabel *       freeSpaceLbl;
 
+  // Main machine
+  Machine *       machine;
+
+
   void init() {
+    machine = new Machine(&VGAController);
+
     rootWindow()->frameStyle().backgroundColor = RGB888(255, 255, 255);
 
     // some static text
@@ -308,15 +310,15 @@ class Menu : public uiApp {
     // "reset" button
     auto resetButton = new uiButton(rootWindow(), "Soft Reset", Point(x, 60), Size(65, 19));
     resetButton->onClick = [&]() {
-      machine.reset();
+      machine->reset();
       runVIC20();
     };
 
     // "Hard Reset" button
     auto hresetButton = new uiButton(rootWindow(), "Hard Reset", Point(x, 85), Size(65, 19));
     hresetButton->onClick = [&]() {
-      machine.removeCRT();
-      machine.reset();
+      machine->removeCRT();
+      machine->reset();
       runVIC20();
     };
 
@@ -336,9 +338,9 @@ class Menu : public uiApp {
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
       RAMExpComboBox->items().append(RAMOPTS[i]);
-    RAMExpComboBox->selectItem((int)machine.RAMExpansion());
+    RAMExpComboBox->selectItem((int)machine->RAMExpansion());
     RAMExpComboBox->onChange = [&]() {
-      machine.setRAMExpansion((RAMExpansionOption)(RAMExpComboBox->selectedItem()));
+      machine->setRAMExpansion((RAMExpansionOption)(RAMExpComboBox->selectedItem()));
     };
 
     // joystick emulation options
@@ -354,12 +356,12 @@ class Menu : public uiApp {
     radioJNone->setGroupIndex(1);
     radioJCurs->setGroupIndex(1);
     radioJMous->setGroupIndex(1);
-    radioJNone->setChecked(machine.joyEmu() == JE_None);
-    radioJCurs->setChecked(machine.joyEmu() == JE_CursorKeys);
-    radioJMous->setChecked(machine.joyEmu() == JE_Mouse);
-    radioJNone->onChange = [&]() { machine.setJoyEmu(JE_None); };
-    radioJCurs->onChange = [&]() { machine.setJoyEmu(JE_CursorKeys); };
-    radioJMous->onChange = [&]() { machine.setJoyEmu(JE_Mouse); };
+    radioJNone->setChecked(machine->joyEmu() == JE_None);
+    radioJCurs->setChecked(machine->joyEmu() == JE_CursorKeys);
+    radioJMous->setChecked(machine->joyEmu() == JE_Mouse);
+    radioJNone->onChange = [&]() { machine->setJoyEmu(JE_None); };
+    radioJCurs->onChange = [&]() { machine->setJoyEmu(JE_CursorKeys); };
+    radioJMous->onChange = [&]() { machine->setJoyEmu(JE_Mouse); };
 
     // setup wifi button
     auto setupWifiBtn = new uiButton(rootWindow(), "Setup", Point(28, 330), Size(40, 19));
@@ -472,7 +474,7 @@ class Menu : public uiApp {
 
     enableKeyboardAndMouseEvents(false);
     keyboard->emptyVirtualKeyQueue();
-    machine.VIC().enableAudio(true);
+    machine->VIC().enableAudio(true);
 
     auto cv = canvas();
     cv->setBrushColor(0, 0, 0);
@@ -482,14 +484,14 @@ class Menu : public uiApp {
     while (run) {
 
       #if DEBUG
-        int cycles = machine.run();
+        int cycles = machine->run();
         if (restart) {
           scycles = cycles;
           restart = false;
         } else
           scycles += cycles;
       #else
-        machine.run();
+        machine->run();
       #endif
 
       // read keyboard
@@ -507,13 +509,13 @@ class Menu : public uiApp {
           // other keys
           default:
             // send to emulated machine
-            machine.setKeyboard(vk, keyDown);
+            machine->setKeyboard(vk, keyDown);
             break;
         }
       }
 
     }
-    machine.VIC().enableAudio(false);
+    machine->VIC().enableAudio(false);
     keyboard->emptyVirtualKeyQueue();
     enableKeyboardAndMouseEvents(true);
     rootWindow()->repaint();
@@ -571,7 +573,7 @@ class Menu : public uiApp {
 
       if (isPRG || isCRT) {
 
-        machine.removeCRT();
+        machine->removeCRT();
 
         int fullpathlen = dir.getFullPath(fname);
         char fullpath[fullpathlen];
@@ -579,7 +581,7 @@ class Menu : public uiApp {
 
         if (isPRG) {
           // this is a PRG, just reset, load and run
-          machine.loadPRG(fullpath, true, true);
+          machine->loadPRG(fullpath, true, true);
         } else if (isCRT) {
           // this a CRT, find other parts, load and reset
           char * addrPos = nullptr;
@@ -589,11 +591,11 @@ class Menu : public uiApp {
             static const char * POS = { "246Aa" }; // 2=2000, 4=4000, 6=6000, A=a000
             for (int i = 0; i < sizeof(POS); ++i) {
               *addrPos = POS[i];  // actually replaces char inside "fullpath"
-              machine.loadCRT(fullpath, true, getAddress(fullpath));
+              machine->loadCRT(fullpath, true, getAddress(fullpath));
             }
           } else {
             // no address specified, just load it
-            machine.loadCRT(fullpath, true, addr);
+            machine->loadCRT(fullpath, true, addr);
           }
         }
         backToVIC = true;
@@ -764,7 +766,7 @@ class Menu : public uiApp {
 
 void setup()
 {
-  Serial.begin(115200); // for debug purposes
+  //Serial.begin(115200); delay(500); Serial.write("\n\n\nReset\n"); // for debug purposes
 
   preferences.begin("VIC20", false);
 
