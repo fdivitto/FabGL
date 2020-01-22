@@ -420,6 +420,22 @@ void StringList::select(int index, bool value)
 ///////////////////////////////////////////////////////////////////////////////////
 // FileBrowser
 
+
+char const * FileBrowser::s_SPIFFSMountPath;
+bool         FileBrowser::s_SPIFFSMounted = false;
+int          FileBrowser::s_SPIFFSMaxFiles;
+
+char const * FileBrowser::s_SDCardMountPath;
+bool         FileBrowser::s_SDCardMounted = false;
+int          FileBrowser::s_SDCardMaxFiles;
+int          FileBrowser::s_SDCardAllocationUnitSize;
+int8_t       FileBrowser::s_SDCardMISO;
+int8_t       FileBrowser::s_SDCardMOSI;
+int8_t       FileBrowser::s_SDCardCLK;
+int8_t       FileBrowser::s_SDCardCS;
+
+
+
 FileBrowser::FileBrowser()
   : m_dir(nullptr),
     m_count(0),
@@ -468,13 +484,16 @@ void FileBrowser::changeDirectory(const char * subdir)
   if (strcmp(subdir, "..") == 0) {
     // go to parent directory
     auto lastSlash = strrchr(m_dir, '/');
-    if (lastSlash && lastSlash != m_dir) {
-      *lastSlash = 0;
+    if (lastSlash) {
+      if (lastSlash != m_dir)
+        lastSlash[0] = 0;
+      else
+        lastSlash[1] = 0;
       reload();
     }
   } else {
     // go to sub directory
-    int oldLen = strlen(m_dir);
+    int oldLen = strcmp(m_dir, "/") == 0 ? 0 : strlen(m_dir);
     char * newDir = (char*) malloc(oldLen + 1 + strlen(subdir) + 1);  // m_dir + '/' + subdir + 0
     strcpy(newDir, m_dir);
     newDir[oldLen] = '/';
@@ -489,21 +508,34 @@ void FileBrowser::changeDirectory(const char * subdir)
 int FileBrowser::countDirEntries(int * namesLength)
 {
   int c = 0;
-  *namesLength = 0;
-  if (m_dir) {
-    AutoSuspendInterrupts autoInt;
-    auto dirp = opendir(m_dir);
-    while (dirp) {
-      auto dp = readdir(dirp);
-      if (dp == NULL)
-        break;
-      if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
-        *namesLength += strlen(dp->d_name) + 1;
-        ++c;
+  if (strcmp(m_dir, "/") == 0) {
+
+    // root dir
+    if (s_SPIFFSMounted)
+      ++c;
+    if (s_SDCardMounted)
+      ++c;
+
+  } else {
+
+    *namesLength = 0;
+    if (m_dir) {
+      AutoSuspendInterrupts autoInt;
+      auto dirp = opendir(m_dir);
+      while (dirp) {
+        auto dp = readdir(dirp);
+        if (dp == NULL)
+          break;
+        if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
+          *namesLength += strlen(dp->d_name) + 1;
+          ++c;
+        }
       }
+      closedir(dirp);
     }
-    closedir(dirp);
+
   }
+
   return c;
 }
 
@@ -537,40 +569,59 @@ void FileBrowser::reload()
   m_namesStorage = (char*) malloc(namesAlloc);
   char * sname = m_namesStorage;
 
-  // first item is always ".."
-  m_items[0].name  = "..";
-  m_items[0].isDir = true;
-  ++m_count;
+  if (strcmp(m_dir, "/") == 0) {
 
-  AutoSuspendInterrupts autoInt;
-  auto dirp = opendir(m_dir);
-  for (int i = 0; i < c; ++i) {
-    auto dp = readdir(dirp);
-    if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
-      DirItem * di = m_items + m_count;
-      // check if this is a simulated directory (like in SPIFFS)
-      auto slashPos = strchr(dp->d_name, '/');
-      if (slashPos) {
-        // yes, this is a simulated dir. Trunc and avoid to insert it twice
-        int len = slashPos - dp->d_name;
-        strncpy(sname, dp->d_name, len);
-        sname[len] = 0;
-        if (!exists(sname)) {
+    // root dir
+    if (s_SPIFFSMounted) {
+      m_items[m_count].name  = s_SPIFFSMountPath + 1; // +1 to bypass "/"
+      m_items[m_count].isDir = true;
+      ++m_count;
+    }
+    if (s_SDCardMounted) {
+      m_items[m_count].name  = s_SDCardMountPath + 1; // +1 to bypass "/"
+      m_items[m_count].isDir = true;
+      ++m_count;
+    }
+
+  } else {
+
+    // first item is always ".."
+    m_items[0].name  = "..";
+    m_items[0].isDir = true;
+    ++m_count;
+
+    AutoSuspendInterrupts autoInt;
+    auto dirp = opendir(m_dir);
+    for (int i = 0; i < c; ++i) {
+      auto dp = readdir(dirp);
+      if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
+        DirItem * di = m_items + m_count;
+        // check if this is a simulated directory (like in SPIFFS)
+        auto slashPos = strchr(dp->d_name, '/');
+        if (slashPos) {
+          // yes, this is a simulated dir. Trunc and avoid to insert it twice
+          int len = slashPos - dp->d_name;
+          strncpy(sname, dp->d_name, len);
+          sname[len] = 0;
+          if (!exists(sname)) {
+            di->name  = sname;
+            di->isDir = true;
+            sname += len + 1;
+            ++m_count;
+          }
+        } else if (m_includeHiddenFiles || dp->d_name[0] != '.') {
+          strcpy(sname, dp->d_name);
           di->name  = sname;
-          di->isDir = true;
-          sname += len + 1;
+          di->isDir = (dp->d_type == DT_DIR);
+          sname += strlen(sname) + 1;
           ++m_count;
         }
-      } else if (m_includeHiddenFiles || dp->d_name[0] != '.') {
-        strcpy(sname, dp->d_name);
-        di->name  = sname;
-        di->isDir = (dp->d_type == DT_DIR);
-        sname += strlen(sname) + 1;
-        ++m_count;
       }
     }
+    closedir(dirp);
+
   }
-  closedir(dirp);
+
   if (m_sorted)
     qsort(m_items, m_count, sizeof(DirItem), DirComp);
 }
@@ -658,13 +709,24 @@ int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 }
 
 
+DriveType FileBrowser::getCurrentDriveType()
+{
+  if (strncmp(m_dir, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)
+    return DriveType::SPIFFS;
+  else if (strncmp(m_dir, s_SDCardMountPath, strlen(s_SDCardMountPath)) == 0)
+    return DriveType::SDCard;
+  else
+    return DriveType::None;
+}
+
+
 bool FileBrowser::format(DriveType driveType, int drive)
 {
   AutoSuspendInterrupts autoSuspendInt;
 
   esp_task_wdt_init(45, false);
 
-  if (driveType == DriveType::SDCard) {
+  if (driveType == DriveType::SDCard && s_SDCardMounted) {
 
     // unmount filesystem
     char drv[3] = {(char)('0' + drive), ':', 0};
@@ -689,14 +751,21 @@ bool FileBrowser::format(DriveType driveType, int drive)
 
     free(buffer);
 
+    remountSDCard();
+
     return true;
 
-  } else {
+  } else if (driveType == DriveType::SPIFFS && s_SPIFFSMounted) {
 
     // driveType == DriveType::SPIFFS
-    return esp_spiffs_format(nullptr) == ESP_OK;
+    bool r = (esp_spiffs_format(nullptr) == ESP_OK);
 
-  }
+    remountSPIFFS();
+
+    return r;
+
+  } else
+    return false;
 }
 
 
@@ -704,6 +773,15 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, int max
 {
   if (getChipPackage() == ChipPackage::ESP32PICOD4 && (MISO == 16 || MOSI == 17))
     return false; // PICO-D4 uses pins 16 and 17 for Flash
+
+  s_SDCardMountPath          = mountPath;
+  s_SDCardMaxFiles           = maxFiles;
+  s_SDCardAllocationUnitSize = allocationUnitSize;
+  s_SDCardMISO               = MISO;
+  s_SDCardMOSI               = MOSI;
+  s_SDCardCLK                = CLK;
+  s_SDCardCS                 = CS;
+
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
   sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
   slot_config.gpio_miso = int2gpio(MISO);
@@ -715,37 +793,64 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, int max
   mount_config.max_files = maxFiles;
   mount_config.allocation_unit_size = allocationUnitSize;
   sdmmc_card_t* card;
-  return esp_vfs_fat_sdmmc_mount(mountPath, &host, &slot_config, &mount_config, &card) == ESP_OK;
+  s_SDCardMounted = (esp_vfs_fat_sdmmc_mount(mountPath, &host, &slot_config, &mount_config, &card) == ESP_OK);
+  return s_SDCardMounted;
 }
 
 
 void FileBrowser::unmountSDCard()
 {
-  esp_vfs_fat_sdmmc_unmount();
+  if (s_SDCardMounted) {
+    esp_vfs_fat_sdmmc_unmount();
+    s_SDCardMounted = false;
+  }
+}
+
+
+bool FileBrowser::remountSDCard()
+{
+  unmountSDCard();
+  return mountSDCard(false, s_SDCardMountPath, s_SDCardMaxFiles, s_SDCardAllocationUnitSize, s_SDCardMISO, s_SDCardMOSI, s_SDCardCLK, s_SDCardCS);
 }
 
 
 bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles)
 {
+  s_SPIFFSMountPath = mountPath;
+  s_SPIFFSMaxFiles  = maxFiles;
   esp_vfs_spiffs_conf_t conf = {
-      .base_path = "/spiffs",
-      .partition_label = nullptr,
-      .max_files = 4,
+      .base_path              = mountPath,
+      .partition_label        = nullptr,
+      .max_files              = 4,
       .format_if_mount_failed = true
   };
   AutoSuspendInterrupts autoSuspendInt;
-  return esp_vfs_spiffs_register(&conf) == ESP_OK;
+  s_SPIFFSMounted = (esp_vfs_spiffs_register(&conf) == ESP_OK);
+  return s_SPIFFSMounted;
 }
 
 
 void FileBrowser::unmountSPIFFS()
 {
-  esp_vfs_spiffs_unregister(nullptr);
+  if (s_SPIFFSMounted) {
+    AutoSuspendInterrupts autoSuspendInt;
+    esp_vfs_spiffs_unregister(nullptr);
+    s_SPIFFSMounted = false;
+  }
+}
+
+
+bool FileBrowser::remountSPIFFS()
+{
+  unmountSPIFFS();
+  return mountSPIFFS(false, s_SPIFFSMountPath, s_SPIFFSMaxFiles);
 }
 
 
 bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int64_t * used)
 {
+  *total = *used = 0;
+
   if (driveType == DriveType::SDCard) {
 
     FATFS * fs;
@@ -760,10 +865,8 @@ bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int
 
     return true;
 
-  } else {
+  } else if (driveType == DriveType::SPIFFS) {
 
-    // driveType == DriveType::SPIFFS
-    *total = *used = 0;
     size_t stotal = 0, sused = 0;
     if (esp_spiffs_info(NULL, &stotal, &sused) != ESP_OK)
       return false;
@@ -771,7 +874,8 @@ bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int
     *used  = sused;
     return true;
 
-  }
+  } else
+    return false;
 }
 
 

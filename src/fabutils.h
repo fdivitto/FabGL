@@ -424,6 +424,7 @@ struct DirItem {
 * @brief This enum defines drive types (SPIFFS or SD Card)
 */
 enum class DriveType {
+  None,    /**< Unspecified */
   SPIFFS,  /**< SPIFFS (Flash) */
   SDCard,  /**< SD Card */
 };
@@ -534,6 +535,13 @@ public:
   int getFullPath(char const * name, char * outPath = nullptr, int maxlen = 0);
 
   /**
+   * @brief Returns the drive type of current directory
+   *
+   * @return Drive type.
+   */
+  DriveType getCurrentDriveType();
+
+  /**
    * @brief Formats SPIFFS or SD Card
    *
    * The filesystem must be already mounted before calling Format().
@@ -574,6 +582,13 @@ public:
   static bool mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles = 4, int allocationUnitSize = 16 * 1024, int MISO = 16, int MOSI = 17, int CLK = 14, int CS = 13);
 
   /**
+   * @brief Remounts SDCard filesystem, using the same parameters
+   *
+   * @return Returns True on success.
+   */
+  static bool remountSDCard();
+
+  /**
    * @brief Unmounts filesystem on SD Card
    */
   static void unmountSDCard();
@@ -593,6 +608,13 @@ public:
    *     FileBrowser::mountSPIFFS(false, "/spiffs");
    */
   static bool mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles = 4);
+
+  /**
+   * @brief Remounts SPIFFS filesystem, using the same parameters
+   *
+   * @return Returns True on success.
+   */
+  static bool remountSPIFFS();
 
   /**
    * @brief Unmounts filesystem on SPIFFS (Flash)
@@ -627,6 +649,21 @@ private:
 
   void clear();
   int countDirEntries(int * namesLength);
+
+  // SPIFFS static infos
+  static bool         s_SPIFFSMounted;
+  static char const * s_SPIFFSMountPath;
+  static int          s_SPIFFSMaxFiles;
+
+  // SD Card static infos
+  static bool         s_SDCardMounted;
+  static char const * s_SDCardMountPath;
+  static int          s_SDCardMaxFiles;
+  static int          s_SDCardAllocationUnitSize;
+  static int8_t       s_SDCardMISO;
+  static int8_t       s_SDCardMOSI;
+  static int8_t       s_SDCardCLK;
+  static int8_t       s_SDCardCS;
 
   char *    m_dir;
   int       m_count;
