@@ -21,14 +21,14 @@
 
 
 /*
-* Optional SD Card connections:
-*   MISO => GPIO 16
-*   MOSI => GPIO 17
-*   CLK  => GPIO 14
-*   CS   => GPIO 13
-*
-* To change above assignment fill other paramaters of FileBrowser::mountSDCard().
-*/
+ * Optional SD Card connections:
+ *   MISO => GPIO 16
+ *   MOSI => GPIO 17
+ *   CLK  => GPIO 14
+ *   CS   => GPIO 13
+ *
+ * To change above assignment fill other paramaters of FileBrowser::mountSDCard().
+ */
 
 
 
