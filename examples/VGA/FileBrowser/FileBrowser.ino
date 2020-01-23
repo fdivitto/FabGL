@@ -21,7 +21,7 @@
 
 
 /*
- * Optional SD Card connection:
+ * Optional SD Card connections:
  *   MISO => GPIO 16
  *   MOSI => GPIO 17
  *   CLK  => GPIO 14
