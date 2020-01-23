@@ -711,12 +711,13 @@ int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 
 DriveType FileBrowser::getCurrentDriveType()
 {
-  if (strncmp(m_dir, "/spiffs", 7) == 0 || strncmp(m_dir, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)
+  if (strncmp(m_dir, "/spiffs", 7) == 0 || (s_SPIFFSMounted && strncmp(m_dir, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)) {
     return DriveType::SPIFFS;
-  else if (strncmp(m_dir, s_SDCardMountPath, strlen(s_SDCardMountPath)) == 0)
+  } else if (s_SDCardMounted && strncmp(m_dir, s_SDCardMountPath, strlen(s_SDCardMountPath)) == 0) {
     return DriveType::SDCard;
-  else
+  } else {
     return DriveType::None;
+  }
 }
 
 
