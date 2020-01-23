@@ -36,8 +36,6 @@
 #include <Preferences.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include "esp_spiffs.h"
-#include "esp_task_wdt.h"
 #include <stdio.h>
 
 #include "fabgl.h"
