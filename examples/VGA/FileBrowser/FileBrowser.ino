@@ -21,7 +21,7 @@
 
 
 /*
- * SD Card signals:
+ * Optional SD Card connection:
  *   MISO => GPIO 16
  *   MOSI => GPIO 17
  *   CLK  => GPIO 14
@@ -44,8 +44,8 @@
 
 #define FORMAT_ON_FAIL     true
 
-#define SPIFFS_MOUNT_PATH  "/spiffs"
-#define SDCARD_MOUNT_PATH  "/sdcard"
+#define SPIFFS_MOUNT_PATH  "/flash"
+#define SDCARD_MOUNT_PATH  "/SD"
 
 
 Preferences preferences;
