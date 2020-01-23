@@ -19,6 +19,20 @@
   along with FabGL.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+/*
+* Optional SD Card connections:
+*   MISO => GPIO 16
+*   MOSI => GPIO 17
+*   CLK  => GPIO 14
+*   CS   => GPIO 13
+*
+* To change above assignment fill other paramaters of FileBrowser::mountSDCard().
+*/
+
+
+
+
 #include <Preferences.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -63,15 +77,21 @@ char const *  LIST_URL    = "http://cloud.cbm8bit.com/adamcost/vic20list.txt";
 constexpr int MAXLISTSIZE = 16384;
 
 
-// root SPIFFS directory
-char const * ROOTDIR = "/spiffs";
+// Flash and SDCard configuration
+#define FORMAT_ON_FAIL     true
+#define SPIFFS_MOUNT_PATH  "/flash"
+#define SDCARD_MOUNT_PATH  "/SD"
+
+
+// base path (can be SPIFFS_MOUNT_PATH or SDCARD_MOUNT_PATH depending from what was successfully mounted first)
+char const * basepath = nullptr;
 
 
 // name of embedded programs directory
 char const * EMBDIR = "Free";
 
 
-#define DEBUG 0
+#define DEBUG 1
 
 
 struct EmbeddedProgDef {
@@ -87,27 +107,27 @@ struct EmbeddedProgDef {
 //   ...modify like files in progs/embedded, and put filename and binary data in following list.
 const EmbeddedProgDef embeddedProgs[] = {
   { arukanoido_filename, arukanoido_prg, sizeof(arukanoido_prg) },
-  //{ demo_bah_bah_final_filename, demo_bah_bah_final_prg, sizeof(demo_bah_bah_final_prg) },
-  //{ demo_digit_filename, demo_digit_prg, sizeof(demo_digit_prg) },
-  { dragonwing_filename, dragonwing_prg, sizeof(dragonwing_prg) },
-  { kikstart_filename, kikstart_prg, sizeof(kikstart_prg) },
   { kweepoutmc_filename, kweepoutmc_prg, sizeof(kweepoutmc_prg) },
   { nibbler_filename, nibbler_prg, sizeof(nibbler_prg) },
   { pooyan_filename, pooyan_prg, sizeof(pooyan_prg) },
   { popeye_filename, popeye_prg, sizeof(popeye_prg) },
-  { pulse_filename, pulse_prg, sizeof(pulse_prg) },
   { spikes_filename, spikes_prg, sizeof(spikes_prg) },
-  { tank_battalion_filename, tank_battalion_prg, sizeof(tank_battalion_prg) },
   { tetris_plus_filename, tetris_plus_prg, sizeof(tetris_plus_prg) },
-  //{ blue_star_filename, blue_star_prg, sizeof(blue_star_prg) },
-  { demo_birthday_filename, demo_birthday_prg, sizeof(demo_birthday_prg) },
-  { omega_fury_filename, omega_fury_prg, sizeof(omega_fury_prg) },
   { splatform_filename, splatform_prg, sizeof(splatform_prg) },
-  { quikman_filename, quikman_prg, sizeof(quikman_prg) },
   { astro_panic_filename, astro_panic_prg, sizeof(astro_panic_prg) },
+
+  // you need more program flash in order to use remaining games. To do this select
+  // the board name "ESP32 Dev Module" and in menu "Tools->Partition Scheme", select "No OTA 2MB/2MB" or "Huge App".
+  /*
+  { dragonwing_filename, dragonwing_prg, sizeof(dragonwing_prg) },
+  { tank_battalion_filename, tank_battalion_prg, sizeof(tank_battalion_prg) },
+  { blue_star_filename, blue_star_prg, sizeof(blue_star_prg) },
+  { quikman_filename, quikman_prg, sizeof(quikman_prg) },
   { frogger07_filename, frogger07_prg, sizeof(frogger07_prg) },
-  { froggie_filename, froggie_prg, sizeof(froggie_prg) },
   { tammerfors_filename, tammerfors_prg, sizeof(tammerfors_prg) },
+  { pulse_filename, pulse_prg, sizeof(pulse_prg) },
+  { omega_fury_filename, omega_fury_prg, sizeof(omega_fury_prg) },
+  */
 };
 
 
@@ -131,25 +151,11 @@ fabgl::PS2Controller PS2Controller;
 Preferences preferences;
 
 
-void initSPIFFS()
-{
-  // setup SPIFFS
-  esp_vfs_spiffs_conf_t conf = {
-      .base_path              = ROOTDIR,
-      .partition_label        = NULL,
-      .max_files              = 2,
-      .format_if_mount_failed = true
-  };
-  AutoSuspendInterrupts autoInt;
-  esp_vfs_spiffs_register(&conf);
-}
-
-
-// copies embedded programs into SPIFFS
+// copies embedded programs into SPIFFS/SDCard
 void copyEmbeddedPrograms()
 {
   auto dir = FileBrowser();
-  dir.setDirectory(ROOTDIR);
+  dir.setDirectory(basepath);
   if (!dir.exists(EMBDIR)) {
     // there isn't a EMBDIR folder, let's create and populate it
     dir.makeDirectory(EMBDIR);
@@ -252,7 +258,7 @@ class Menu : public uiApp {
       cv->drawText(155, 345, "V I C 2 0  Emulator");
       cv->setPenColor(RGB888(128, 64, 64));
       cv->drawText(167, 357, "www.fabgl.com");
-      cv->drawText(141, 369, "2019 by Fabrizio Di Vittorio");
+      cv->drawText(130, 371, "2019/20 by Fabrizio Di Vittorio");
     };
 
     // programs list
@@ -265,7 +271,7 @@ class Menu : public uiApp {
     fileBrowser->windowStyle().focusedBorderColor = RGB888(255, 0, 0);
 
     fileBrowser->listBoxStyle().focusedBackgroundColor = RGB888(0, 255, 0);
-    fileBrowser->setDirectory(ROOTDIR);
+    fileBrowser->setDirectory(basepath);
     fileBrowser->onChange = [&]() {
       setSelectedProgramConf();
     };
@@ -479,6 +485,7 @@ class Menu : public uiApp {
     auto cv = canvas();
     cv->setBrushColor(0, 0, 0);
     cv->clear();
+    cv->waitCompletion();
 
     bool run = true;
     while (run) {
@@ -637,7 +644,7 @@ class Menu : public uiApp {
     FileBrowser & dir = fileBrowser->content();
 
     AutoSuspendInterrupts autoInt;
-    dir.setDirectory(ROOTDIR);
+    dir.setDirectory(basepath);
     dir.makeDirectory(DOWNDIR);
     dir.changeDirectory(DOWNDIR);
   }
@@ -746,9 +753,9 @@ class Menu : public uiApp {
 
   // show free SPIFFS space
   void updateFreeSpaceLabel() {
-    size_t total = 0, used = 0;
-    esp_spiffs_info(NULL, &total, &used);
-    freeSpaceLbl->setTextFmt("%d KB Free", (total - used) / 1024);
+    int64_t total, used;
+    FileBrowser::getFSInfo(fileBrowser->content().getCurrentDriveType(), 0, &total, &used);
+    freeSpaceLbl->setTextFmt("%lld KiB Free", (total - used) / 1024);
     freeSpaceLbl->update();
   }
 
@@ -766,7 +773,9 @@ class Menu : public uiApp {
 
 void setup()
 {
-  //Serial.begin(115200); delay(500); Serial.write("\n\n\nReset\n"); // for debug purposes
+  #if DEBUG
+  Serial.begin(115200); delay(500); Serial.write("\n\n\nReset\n"); // for debug purposes
+  #endif
 
   preferences.begin("VIC20", false);
 
@@ -783,9 +792,13 @@ void setup()
   cv.selectFont(&fabgl::FONT_8x8);
 
   cv.clear();
-  cv.drawText(25, 10, "Initializing SPIFFS...");
+  cv.drawText(25, 10, "Initializing...");
   cv.waitCompletion();
-  initSPIFFS();
+
+  if (FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH))
+    basepath = SDCARD_MOUNT_PATH;
+  else if (FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH))
+    basepath = SPIFFS_MOUNT_PATH;
 
   cv.drawText(25, 30, "Copying embedded programs...");
   cv.waitCompletion();
