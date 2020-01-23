@@ -627,14 +627,14 @@ void FileBrowser::reload()
 }
 
 
-// note: for SPIFFS this creates an empty ".dirname" file. The SPIFFS path is detected when path starts with "/spiffs"
+// note: for SPIFFS this creates an empty ".dirname" file. The SPIFFS path is detected when path starts with "/spiffs" or s_SPIFFSMountPath
 // "dirname" is not a path, just a directory name created inside "m_dir"
 void FileBrowser::makeDirectory(char const * dirname)
 {
   int dirnameLen = strlen(dirname);
   if (dirnameLen > 0) {
     AutoSuspendInterrupts autoInt;
-    if (strncmp(m_dir, "/spiffs", 7) == 0) {
+    if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory, puts an hidden placeholder
       char fullpath[strlen(m_dir) + 3 + 2 * dirnameLen + 1];
       sprintf(fullpath, "%s/%s/.%s", m_dir, dirname, dirname);
@@ -650,7 +650,7 @@ void FileBrowser::makeDirectory(char const * dirname)
 
 
 // removes a file or a directory (and all files inside it)
-// The SPIFFS path is detected when path starts with "/spiffs"
+// The SPIFFS path is detected when path starts with "/spiffs" or s_SPIFFSMountPath
 // "name" is not a path, just a file or directory name inside "m_dir"
 void FileBrowser::remove(char const * name)
 {
@@ -662,7 +662,7 @@ void FileBrowser::remove(char const * name)
 
   if (r != 0) {
     // failed
-    if (strncmp(m_dir, "/spiffs", 7) == 0) {
+    if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory
       // maybe this is a directory, remove ".dir" file
       char hidpath[strlen(m_dir) + 3 + 2 * strlen(name) + 1];
@@ -711,7 +711,7 @@ int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 
 DriveType FileBrowser::getCurrentDriveType()
 {
-  if (strncmp(m_dir, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)
+  if (strncmp(m_dir, "/spiffs", 7) == 0 || strncmp(m_dir, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)
     return DriveType::SPIFFS;
   else if (strncmp(m_dir, s_SDCardMountPath, strlen(s_SDCardMountPath)) == 0)
     return DriveType::SDCard;
