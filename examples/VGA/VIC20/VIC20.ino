@@ -91,7 +91,7 @@ char const * basepath = nullptr;
 char const * EMBDIR = "Free";
 
 
-#define DEBUG 1
+#define DEBUG 0
 
 
 struct EmbeddedProgDef {

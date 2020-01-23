@@ -1361,6 +1361,10 @@ void MOS6561::reset()
   m_scanY           = 0;
   m_Y               = 0;
   m_charRow         = 0;
+  m_charColumn      = 0;
+  m_inCharRow       = 0;
+  m_topPos          = 0;
+  m_leftPos         = 0;
   m_isVBorder       = false;
   m_colorLine       = nullptr;
   m_videoLine       = nullptr;
