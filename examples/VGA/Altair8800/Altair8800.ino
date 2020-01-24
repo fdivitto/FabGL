@@ -20,14 +20,32 @@
  */
 
 
-#include <Preferences.h>
 
-#include "esp_spiffs.h"
+ /*
+  * Optional SD Card connections:
+  *   MISO => GPIO 16
+  *   MOSI => GPIO 17
+  *   CLK  => GPIO 14
+  *   CS   => GPIO 13
+  *
+  * To change above assignment fill other paramaters of FileBrowser::mountSDCard().
+  */
+
+
+
+#include <Preferences.h>
 
 #include "fabgl.h"
 #include "fabutils.h"
 
 #include "src/machine.h"
+
+
+
+// Flash and SDCard configuration
+#define FORMAT_ON_FAIL     true
+#define SPIFFS_MOUNT_PATH  "/flash"
+#define SDCARD_MOUNT_PATH  "/SD"
 
 
 
@@ -103,11 +121,11 @@
 // Enable this when using minidisk images ("minidisk" folder)
 //#define DISKFORMAT MiniDisk_76K
 
-// Specify which disk image assign to drives
-#define DRIVE_A cpm22_dsk             // A: read only
-#define DRIVE_B games_dsk             // B: read only
-#define DRIVE_C "/spiffs/diskC.dsk"   // C: read/write
-#define DRIVE_D "/spiffs/diskD.dsk"   // D: read/write
+// Specify which disk image or file name assign to drives
+#define DRIVE_A cpm22_dsk     // A: read only
+#define DRIVE_B games_dsk     // B: read only
+#define DRIVE_C "diskC.dsk"   // C: read/write
+#define DRIVE_D "diskD.dsk"   // D: read/write
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -117,14 +135,14 @@
 
 constexpr int DefaultCPU = 1;       // 0 = i8080, 1 = Z80
 
-const char *  TermStr[] = { "ANSI/VT", "Lear Siegler ADM-3A", "Lear Siegler ADM-31", "Hazeltine 1500", "Osborne I", "Kaypro" };
-constexpr int DefaultTermIndex = 2; // Default: "ADM-31"
-constexpr int MaxTermIndex = 5;     // Max: "Kaypro"
+const char *  TermStr[]        = { "ANSI/VT", "Lear Siegler ADM-3A", "Lear Siegler ADM-31", "Hazeltine 1500", "Osborne I", "Kaypro" };
+constexpr int DefaultTermIndex = 2;   // Default: "ADM-31"
+constexpr int MaxTermIndex     = 5;   // Max: "Kaypro"
 
-const char *  KbdLayStr[] = { "US", "UK", "DE", "IT" };
+const char *  KbdLayStr[]              = { "US", "UK", "DE", "IT" };
 const fabgl::KeyboardLayout * KdbLay[] = { &fabgl::USLayout, &fabgl::UKLayout, &fabgl::GermanLayout, &fabgl::ItalianLayout };
-constexpr int DefaultKbdLayIndex = 1; // Default: "UK"
-constexpr int MaxKbdLayIndex = 3;     // Max: "IT"
+constexpr int DefaultKbdLayIndex       = 1;   // Default: "UK"
+constexpr int MaxKbdLayIndex           = 3;   // Max: "IT"
 
 const char * ColorsStr[] = { "Green/Black", "Yellow/Black", "White/Black", "Black/White", "Yellow/Blue", "Black/Yellow" };
 const Color TextColors[] = { Color::BrightGreen, Color::BrightYellow, Color::BrightWhite, Color::Black,       Color::BrightYellow, Color::Black };
@@ -145,6 +163,11 @@ SIO                  SIO0(&altair, 0x00);
 SIO                  SIO1(&altair, 0x10);
 SIO                  SIO2(&altair, 0x12);
 Preferences          preferences;
+
+
+// base path (can be SPIFFS_MOUNT_PATH or SDCARD_MOUNT_PATH depending from what was successfully mounted first)
+char const * basepath = nullptr;
+
 
 
 
@@ -168,7 +191,7 @@ void emulator_menu()
     Terminal.write( "\e[93m Z \e[37m Reset\e[K\n\r");
     Terminal.write( "\e[93m S \e[37m Send Disk to Serial\e[K\n\r");
     Terminal.write( "\e[93m R \e[37m Get Disk from Serial\e[K\n\r");
-    Terminal.write( "\e[93m F \e[37m Format SPIFFS\e[K\n\r");
+    Terminal.write( "\e[93m F \e[37m Format FileSystem\e[K\n\r");
     Terminal.printf("\e[93m U \e[37m CPU: \e[33m%s\e[K\n\r", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
     Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", preferences.getBool("realSpeed", false) ? "YES" : "NO");
     Terminal.write("\e[6A");  // cursor UP
@@ -201,14 +224,13 @@ void emulator_menu()
         break;
       }
 
-      // Format SPIFFS
+      // Format FileSystem
       case 'F':
-        Terminal.write("Formatting SPIFFS removes RW disks and resets the Altair. Are you sure? (Y/N)");
+        Terminal.write("Formatting filesystem removes RW disks and resets the Altair. Are you sure? (Y/N)");
         if (toupper(Terminal.read()) == 'Y') {
-          Terminal.write("\n\rFormatting SPIFFS...");
+          Terminal.write("\n\rFormatting...");
           Terminal.flush();
-          AutoSuspendInterrupts autoInt;
-          esp_spiffs_format(nullptr);
+          FileBrowser::format(FileBrowser::getDriveType(basepath), 0);
           resetRequired = true;
         }
         break;
@@ -328,33 +350,26 @@ void setup()
 
 void loop()
 {
-  Terminal.write("Formatting SPIFFS...\r");
+  Terminal.write("Initializing filesystem...\r");
   Terminal.flush();
 
-  // setup SPIFFS
-  esp_vfs_spiffs_conf_t conf = {
-      .base_path              = "/spiffs",
-      .partition_label        = NULL,
-      .max_files              = 4,
-      .format_if_mount_failed = true
-  };
-  fabgl::suspendInterrupts();
-  esp_vfs_spiffs_register(&conf);
-  //esp_spiffs_format(nullptr);   // uncomment to force SPIFFS format
-  fabgl::resumeInterrupts();
+  if (FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH))
+    basepath = SDCARD_MOUNT_PATH;
+  else if (FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH))
+    basepath = SPIFFS_MOUNT_PATH;
 
   // setup disk drives
 
   diskDrive.attachReadOnlyBuffer(0, DRIVE_A);
   diskDrive.attachReadOnlyBuffer(1, DRIVE_B);
 
-  Terminal.write("Creating Disk C...  \r");
+  Terminal.write("Creating Disk C...        \r");
   Terminal.flush();
-  diskDrive.attachFile(2, DRIVE_C);
+  diskDrive.attachFile(2, (String(basepath) + String("/") + String(DRIVE_C)).c_str());
 
-  Terminal.write("Creating Disk D...  \r");
+  Terminal.write("Creating Disk D...        \r");
   Terminal.flush();
-  diskDrive.attachFile(3, DRIVE_D);
+  diskDrive.attachFile(3, (String(basepath) + String("/") + String(DRIVE_D)).c_str());
 
   // setup SIOs (Serial I/O)
 
@@ -392,12 +407,15 @@ void loop()
   Terminal.write("                     \e[37mby Fabrizio Di Vittorio - www.fabgl.com\e[97m\e[K\r\n");
   Terminal.write("                     * * * * * * * * * * * * * * * * * * * */\e[K\r\n\e[K\n");
 
-  Terminal.printf("\e[33mFree DMA Memory       :\e[32m %d bytes\e[K\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
-  Terminal.printf("\e[33mFree 32 bit Memory    :\e[32m %d bytes\e[K\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+  Terminal.printf("\e[33mFree Memory :\e[32m %d bytes\e[K\r\n", heap_caps_get_free_size(0));
 
-  size_t total = 0, used = 0;
-  esp_spiffs_info(NULL, &total, &used);
-  Terminal.printf("\e[33mSPI Flash File System :\e[32m %d bytes used, %d bytes free\e[92m\e[K\r\n\e[K\n", used, total - used);
+  int64_t total, used;
+  FileBrowser::getFSInfo(FileBrowser::getDriveType(basepath), 0, &total, &used);
+  Terminal.printf("\e[33mFile System :\e[32m %lld KiB used, %lld KiB free\e[K\r\n", used / 1024, (total - used) / 1024);
+
+  Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", KbdLayStr[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
+  Terminal.printf("\e[33mCPU         : \e[32m%s\e[92m\e[K\r\n\e[K\n", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
+
   Terminal.printf("Press \e[93mPAUSE\e[92m to display emulator menu\e[K\r\n");
 
   setTerminalColors();
