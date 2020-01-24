@@ -524,7 +524,7 @@ public:
   void rename(char const * oldName, char const * newName);
 
   /**
-   * @brief Compose a full file path given a relative name
+   * @brief Composes a full file path given a relative name
    *
    * @param name Relative file name
    * @param outPath Where to place the full path. This can be NULL (used to calculate required buffer size).
@@ -540,6 +540,15 @@ public:
    * @return Drive type.
    */
   DriveType getCurrentDriveType();
+
+  /**
+   * @brief Returns the drive type of specified path
+   *
+   * @param path Path
+   *
+   * @return Drive type.
+   */
+  static DriveType getDriveType(char const * path);
 
   /**
    * @brief Formats SPIFFS or SD Card
