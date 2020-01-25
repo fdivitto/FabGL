@@ -39,29 +39,6 @@ namespace fabgl {
 
 
 
-// Array to convert Color enum to RGB222 struct
-// First eight maximum value is '1' to make them visible also when 8 colors are used.
-// From Red to Cyan are changed (1=>2) when 64 color mode is used.
-RGB222 COLOR2RGB222[16] = {
-  { 0, 0, 0 }, // Black
-  { 1, 0, 0 }, // Red
-  { 0, 1, 0 }, // Green
-  { 1, 1, 0 }, // Yellow
-  { 0, 0, 1 }, // Blue
-  { 1, 0, 1 }, // Magenta
-  { 0, 1, 1 }, // Cyan
-  { 1, 1, 1 }, // White
-  { 1, 1, 1 }, // BrightBlack
-  { 3, 0, 0 }, // BrightRed
-  { 0, 3, 0 }, // BrightGreen
-  { 3, 3, 0 }, // BrightYellow
-  { 0, 0, 3 }, // BrightBlue
-  { 3, 0, 3 }, // BrightMagenta
-  { 0, 3, 3 }, // BrightCyan
-  { 3, 3, 3 }, // BrightWhite
-};
-
-
 // Array to convert Color enum to RGB888 struct
 const RGB888 COLOR2RGB888[16] = {
   {   0,   0,   0 }, // Black
@@ -88,24 +65,7 @@ const RGB888 COLOR2RGB888[16] = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // RGB222 implementation
 
-
-RGB222::RGB222(Color color)
-{
-  *this = COLOR2RGB222[(int)color];
-}
-
-
-// static member
-void RGB222::optimizeFor64Colors()
-{
-  COLOR2RGB222[1] = RGB222(2, 0, 0); // Red
-  COLOR2RGB222[2] = RGB222(0, 2, 0); // Green
-  COLOR2RGB222[3] = RGB222(2, 2, 0); // Yellow
-  COLOR2RGB222[4] = RGB222(0, 0, 2); // Blue
-  COLOR2RGB222[5] = RGB222(2, 0, 2); // Magenta
-  COLOR2RGB222[6] = RGB222(0, 2, 2); // Cyan
-  COLOR2RGB222[7] = RGB222(2, 2, 2); // White
-}
+bool RGB222::lowBitOnly = false;
 
 
 //   0 ..  63 => 0
@@ -114,9 +74,15 @@ void RGB222::optimizeFor64Colors()
 // 192 .. 255 => 3
 RGB222::RGB222(RGB888 const & value)
 {
-  R = value.R >> 6;
-  G = value.G >> 6;
-  B = value.B >> 6;
+  if (lowBitOnly) {
+    R = value.R ? 1 : 0;
+    G = value.G ? 1 : 0;
+    B = value.B ? 1 : 0;
+  } else {
+    R = value.R >> 6;
+    G = value.G >> 6;
+    B = value.B >> 6;
+  }
 }
 
 
@@ -130,7 +96,6 @@ RGB888::RGB888(Color color)
 {
   *this = COLOR2RGB888[(int)color];
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

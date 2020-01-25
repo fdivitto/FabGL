@@ -93,6 +93,7 @@ void VGAController::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t b
   setupGPIO(HSyncGPIO, VGA_HSYNC_BIT, GPIO_MODE_OUTPUT);
   setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_INPUT_OUTPUT);  // input/output so can be generated interrupt on falling/rising edge
 
+  RGB222::lowBitOnly = true;
   m_bitsPerChannel = 1;
 }
 
@@ -108,9 +109,6 @@ void VGAController::begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t g
   setupGPIO(blue1GPIO,  VGA_BLUE_BIT + 1,  GPIO_MODE_OUTPUT);
 
   m_bitsPerChannel = 2;
-
-  // change RGB222 color conversion map to work well with Terminal
-  RGB222::optimizeFor64Colors();
 }
 
 

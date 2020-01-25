@@ -190,22 +190,22 @@ enum PrimitiveCmd : uint8_t {
  * First eight full implement all available colors when 1 bit per channel mode is used (having 8 colors).
  */
 enum Color {
-  Black,          /**< Equivalent to RGB222(0,0,0) and RGB888(0,0,0) */
-  Red,            /**< Equivalent to RGB222(2,0,0) and RGB888(128,0,0) */
-  Green,          /**< Equivalent to RGB222(0,2,0) and RGB888(0,128,0) */
-  Yellow,         /**< Equivalent to RGB222(2,2,0) and RGB888(128,128,0) */
-  Blue,           /**< Equivalent to RGB222(0,0,2) and RGB888(0,0,128) */
-  Magenta,        /**< Equivalent to RGB222(2,0,2) and RGB888(128,0,128) */
-  Cyan,           /**< Equivalent to RGB222(0,2,2) and RGB888(0,128,128) */
-  White,          /**< Equivalent to RGB222(2,2,2) and RGB888(128,128,128) */
-  BrightBlack,    /**< Equivalent to RGB222(1,1,1) and RGB888(64,64,64) */
-  BrightRed,      /**< Equivalent to RGB222(3,0,0) and RGB888(255,0,0) */
-  BrightGreen,    /**< Equivalent to RGB222(0,3,0) and RGB888(0,255,0) */
-  BrightYellow,   /**< Equivalent to RGB222(3,3,0) and RGB888(255,255,0) */
-  BrightBlue,     /**< Equivalent to RGB222(0,0,3) and RGB888(0,0,255) */
-  BrightMagenta,  /**< Equivalent to RGB222(3,0,3) and RGB888(255,0,255) */
-  BrightCyan,     /**< Equivalent to RGB222(0,3,3) and RGB888(0,255,255) */
-  BrightWhite,    /**< Equivalent to RGB222(3,3,3) and RGB888(255,255,255) */
+  Black,          /**< Equivalent to RGB888(0,0,0) */
+  Red,            /**< Equivalent to RGB888(128,0,0) */
+  Green,          /**< Equivalent to RGB888(0,128,0) */
+  Yellow,         /**< Equivalent to RGB888(128,128,0) */
+  Blue,           /**< Equivalent to RGB888(0,0,128) */
+  Magenta,        /**< Equivalent to RGB888(128,0,128) */
+  Cyan,           /**< Equivalent to RGB888(0,128,128) */
+  White,          /**< Equivalent to RGB888(128,128,128) */
+  BrightBlack,    /**< Equivalent to RGB888(64,64,64) */
+  BrightRed,      /**< Equivalent to RGB888(255,0,0) */
+  BrightGreen,    /**< Equivalent to RGB888(0,255,0) */
+  BrightYellow,   /**< Equivalent to RGB888(255,255,0) */
+  BrightBlue,     /**< Equivalent to RGB888(0,0,255) */
+  BrightMagenta,  /**< Equivalent to RGB888(255,0,255) */
+  BrightCyan,     /**< Equivalent to RGB888(0,255,255) */
+  BrightWhite,    /**< Equivalent to RGB888(255,255,255) */
 };
 
 
@@ -268,11 +268,10 @@ struct RGB222 {
   uint8_t B : 2;  /**< The Blue channel  */
 
   RGB222() : R(0), G(0), B(0) { }
-  RGB222(Color color);
   RGB222(uint8_t red, uint8_t green, uint8_t blue) : R(red), G(green), B(blue) { }
   RGB222(RGB888 const & value);
 
-  static void optimizeFor64Colors();
+  static bool lowBitOnly;  // true= 8 colors, false 64 colors
 };
 
 
