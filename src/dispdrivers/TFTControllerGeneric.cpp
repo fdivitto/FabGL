@@ -41,9 +41,6 @@
 #define TFT_SPI_MODE                     SPI_MODE3
 #define TFT_DMACHANNEL                   2
 
-#define TFT_CASET      0x2A
-#define TFT_RASET      0x2B
-#define TFT_RAMWR      0x2C
 
 
 
