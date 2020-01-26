@@ -276,7 +276,7 @@
 #include "displaycontroller.h"
 #include "dispdrivers/vgacontroller.h"
 #include "dispdrivers/SSD1306Controller.h"
-#include "dispdrivers/ST7789Controller.h"
+#include "dispdrivers/TFTControllerSpecif.h"
 #include "comdrivers/ps2controller.h"
 #include "comdrivers/tsi2c.h"
 #include "devdrivers/keyboard.h"

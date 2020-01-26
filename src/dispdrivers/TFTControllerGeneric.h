@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::ST7789Controller definition.
+ * @brief This file contains fabgl::TFTController definition.
  */
 
 
@@ -54,9 +54,9 @@ namespace fabgl {
 
 
 /** \ingroup Enumerations
- * @brief This enum defines ST7789 orientation
+ * @brief This enum defines TFT orientation
  */
-enum class ST7789Orientation {
+enum class TFTOrientation {
   Normal,             /**< Normal orientation */
   ReverseHorizontal,  /**< Reverse horizontal */
   ReverseVertical,    /**< Reverse vertical */
@@ -67,7 +67,7 @@ enum class ST7789Orientation {
 
 
 /**
- * @brief Display driver for ST7789 based OLED display, with SPI connection.
+ * @brief Base abstract class for TFT drivers with SPI connection.
  *
  * Example:
  *
@@ -83,20 +83,20 @@ enum class ST7789Orientation {
  *       cv.drawText(0, 0, "Hello World!");
  *     }
  */
-class ST7789Controller : public GenericDisplayController {
+class TFTController : public GenericDisplayController {
 
 public:
 
   // unwanted methods
-  ST7789Controller(ST7789Controller const&) = delete;
-  void operator=(ST7789Controller const&)   = delete;
+  TFTController(TFTController const&) = delete;
+  void operator=(TFTController const&)   = delete;
 
-  ST7789Controller(int controllerWidth = 240, int controllerHeight = 320);
+  TFTController(int controllerWidth = 240, int controllerHeight = 320);
 
-  ~ST7789Controller();
+  ~TFTController();
 
   /**
-   * @brief Initializes ST7789 display controller with Arduino style SPIClass object
+   * @brief Initializes TFT display controller with Arduino style SPIClass object
    *
    * @param spi SPIClass object.
    * @param DC GPIO of D/C signal (Data/Command).
@@ -115,7 +115,7 @@ public:
   void begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX = GPIO_UNUSED, gpio_num_t CS = GPIO_UNUSED);
 
   /**
-   * @brief Initializes ST7789 display controller with Arduino style SPIClass object
+   * @brief Initializes TFT display controller with Arduino style SPIClass object
    *
    * @param spi SPIClass object.
    * @param DC GPIO of D/C signal (Data/Command).
@@ -134,7 +134,7 @@ public:
   void begin(SPIClass * spi, int DC, int RESX = -1, int CS = -1);
 
   /**
-   * @brief Initializes ST7789 display controller
+   * @brief Initializes TFT display controller
    *
    * This initializer uses SDK API to get access to the SPI channel.
    *
@@ -157,9 +157,9 @@ public:
   void end();
 
   /**
-   * @brief Sets ST7789 resolution and viewport size
+   * @brief Sets TFT resolution and viewport size
    *
-   * Viewport size can be larger than display size. You can pan the view using ST7789Controller.setScreenCol() and ST7789Controller.setScreenRow().
+   * Viewport size can be larger than display size. You can pan the view using TFTController.setScreenCol() and TFTController.setScreenRow().
    *
    * @param modeline Native display reoslution. Allowed values like TFT_240x240, TFT_240x320...
    * @param viewPortWidth Virtual viewport width. Should be larger or equal to display native width.
@@ -240,12 +240,15 @@ public:
    * Example:
    *
    *     // rotate by 180 degrees
-   *     DisplayController.setOrientation(fabgl::ST7789Orientation::Rotate180);
+   *     DisplayController.setOrientation(fabgl::TFTOrientation::Rotate180);
    */
-  void setOrientation(ST7789Orientation value);
+  void setOrientation(TFTOrientation value);
 
 
-private:
+protected:
+
+  virtual void softReset() = 0;
+  virtual void setupOrientation() = 0;
 
   // abstract method of DisplayController
   int getBitmapSavePixelSize() { return 2; }
@@ -253,9 +256,6 @@ private:
   void setupGPIO();
 
   void hardReset();
-  void softReset();
-
-  void setupOrientation();
 
   void sendRefresh();
 
@@ -356,7 +356,7 @@ private:
   int16_t            m_viewPortWidth;
   int16_t            m_viewPortHeight;
 
-  // maximum width and height the controller can handle (240x320 on ST7789)
+  // maximum width and height the controller can handle (ie 240x320)
   int16_t            m_controllerWidth;
   int16_t            m_controllerHeight;
 
@@ -369,7 +369,7 @@ private:
   volatile int       m_updateTaskFuncSuspended;             // 0 = enabled, >0 suspended
   volatile bool      m_updateTaskRunning;
 
-  ST7789Orientation  m_orientation;
+  TFTOrientation     m_orientation;
 
 };
 

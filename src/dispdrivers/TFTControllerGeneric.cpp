@@ -27,53 +27,23 @@
 #include "freertos/task.h"
 
 #include "fabutils.h"
-#include "ST7789Controller.h"
+#include "TFTControllerGeneric.h"
 
 
 
 
-#define ST7789_UPDATETASK_STACK             1024
-#define ST7789_UPDATETASK_PRIORITY          5
+#define TFT_UPDATETASK_STACK             1024
+#define TFT_UPDATETASK_PRIORITY          5
 
-#define ST7789_BACKGROUND_PRIMITIVE_TIMEOUT 10000  // uS
+#define TFT_BACKGROUND_PRIMITIVE_TIMEOUT 10000  // uS
 
-#define ST7789_SPI_WRITE_FREQUENCY          40000000
-#define ST7789_SPI_MODE                     SPI_MODE3
-#define ST7789_DMACHANNEL                   2
+#define TFT_SPI_WRITE_FREQUENCY          40000000
+#define TFT_SPI_MODE                     SPI_MODE3
+#define TFT_DMACHANNEL                   2
 
-
-
-#define ST7789_SWRST      0x01
-#define ST7789_SLPOUT     0x11
-#define ST7789_NORON      0x13
-#define ST7789_MADCTL     0x36
-#define ST7789_COLMOD     0x3A
-#define ST7789_RDDCOLMOD  0x0C
-#define ST7789_PORCTRL    0xB2
-#define ST7789_GCTRL      0xB7
-#define ST7789_VCOMS      0xBB
-#define ST7789_LCMCTRL    0xC0
-#define ST7789_VDVVRHEN   0xC2
-#define ST7789_VRHS       0xC3
-#define ST7789_VDVS       0xC4
-#define ST7789_FRCTRL2    0xC6
-#define ST7789_PWCTRL1    0xD0
-#define ST7789_PVGAMCTRL  0xE0
-#define ST7789_NVGAMCTRL  0xE1
-#define ST7789_INVON      0x21
-#define ST7789_CASET      0x2A
-#define ST7789_RASET      0x2B
-#define ST7789_INVOFF     0x20
-#define ST7789_SLPOUT     0x11
-#define ST7789_DISPON     0x29
-#define ST7789_RAMWR      0x2C
-#define ST7789_RAMCTRL    0xB0
-#define ST7789_PTLAR      0x30
-#define ST7789_PTLON      0x12
-#define ST7789_WRDISBV    0x51
-#define ST7789_WRCTRLD    0x53
-#define ST7789_WRCACE     0x55
-#define ST7789_WRCABCMB   0x5E
+#define TFT_CASET      0x2A
+#define TFT_RASET      0x2B
+#define TFT_RAMWR      0x2C
 
 
 
@@ -127,7 +97,7 @@ inline uint16_t RGBA8888toNative(RGBA8888 const & rgba8888)
 }
 
 
-ST7789Controller::ST7789Controller(int controllerWidth, int controllerHeight)
+TFTController::TFTController(int controllerWidth, int controllerHeight)
   : m_spi(nullptr),
     m_SPIDevHandle(nullptr),
     m_viewPort(nullptr),
@@ -138,19 +108,19 @@ ST7789Controller::ST7789Controller(int controllerWidth, int controllerHeight)
     m_rotOffsetY(0),
     m_updateTaskHandle(nullptr),
     m_updateTaskRunning(false),
-    m_orientation(ST7789Orientation::Normal)
+    m_orientation(TFTOrientation::Normal)
 {
 }
 
 
-ST7789Controller::~ST7789Controller()
+TFTController::~TFTController()
 {
   end();
 }
 
 
 //// setup manually controlled pins
-void ST7789Controller::setupGPIO()
+void TFTController::setupGPIO()
 {
   // DC GPIO
   PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_DC], PIN_FUNC_GPIO);
@@ -175,7 +145,7 @@ void ST7789Controller::setupGPIO()
 
 // use SPIClass
 // without CS it is not possible to share SPI with other devices
-void ST7789Controller::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_num_t CS)
+void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_num_t CS)
 {
   m_spi   = spi;
   m_DC    = DC;
@@ -188,7 +158,7 @@ void ST7789Controller::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpi
 
 // use SPIClass
 // without CS it is not possible to share SPI with other devices
-void ST7789Controller::begin(SPIClass * spi, int DC, int RESX, int CS)
+void TFTController::begin(SPIClass * spi, int DC, int RESX, int CS)
 {
   begin(spi, int2gpio(DC), int2gpio(RESX), int2gpio(CS));
 }
@@ -196,7 +166,7 @@ void ST7789Controller::begin(SPIClass * spi, int DC, int RESX, int CS)
 
 // use SDK driver
 // without CS it is not possible to share SPI with other devices
-void ST7789Controller::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host)
+void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host)
 {
   m_SPIHost = (spi_host_device_t)host;
   m_SCK     = int2gpio(SCK);
@@ -210,7 +180,7 @@ void ST7789Controller::begin(int SCK, int MOSI, int DC, int RESX, int CS, int ho
 }
 
 
-void ST7789Controller::end()
+void TFTController::end()
 {
   if (m_updateTaskHandle)
     vTaskDelete(m_updateTaskHandle);
@@ -222,7 +192,7 @@ void ST7789Controller::end()
 }
 
 
-void ST7789Controller::setResolution(char const * modeline, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
+void TFTController::setResolution(char const * modeline, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
   char label[32];
   int pos = 0, swidth, sheight;
@@ -248,14 +218,14 @@ void ST7789Controller::setResolution(char const * modeline, int viewPortWidth, i
   allocViewPort();
 
   // setup update task
-  xTaskCreate(&updateTaskFunc, "", ST7789_UPDATETASK_STACK, this, ST7789_UPDATETASK_PRIORITY, &m_updateTaskHandle);
+  xTaskCreate(&updateTaskFunc, "", TFT_UPDATETASK_STACK, this, TFT_UPDATETASK_PRIORITY, &m_updateTaskHandle);
 
   // allows updateTaskFunc() to run
   m_updateTaskFuncSuspended = 0;
 }
 
 
-void ST7789Controller::setScreenCol(int value)
+void TFTController::setScreenCol(int value)
 {
   if (value != m_screenCol) {
     m_screenCol = iclamp(value, 0, m_viewPortWidth - m_screenWidth);
@@ -265,7 +235,7 @@ void ST7789Controller::setScreenCol(int value)
 }
 
 
-void ST7789Controller::setScreenRow(int value)
+void TFTController::setScreenRow(int value)
 {
   if (value != m_screenRow) {
     m_screenRow = iclamp(value, 0, m_viewPortHeight - m_screenHeight);
@@ -275,8 +245,7 @@ void ST7789Controller::setScreenRow(int value)
 }
 
 
-// hard reset ST7789
-void ST7789Controller::hardReset()
+void TFTController::hardReset()
 {
   if (m_RESX != GPIO_UNUSED) {
     SPIBeginWrite();
@@ -296,7 +265,7 @@ void ST7789Controller::hardReset()
 }
 
 
-void ST7789Controller::SPIBegin()
+void TFTController::SPIBegin()
 {
   if (m_spi)
     return;
@@ -309,12 +278,12 @@ void ST7789Controller::SPIBegin()
   busconf.quadwp_io_num   = -1;
   busconf.quadhd_io_num   = -1;
   busconf.flags           = SPICOMMON_BUSFLAG_MASTER;
-  auto r = spi_bus_initialize(m_SPIHost, &busconf, ST7789_DMACHANNEL);
+  auto r = spi_bus_initialize(m_SPIHost, &busconf, TFT_DMACHANNEL);
   if (r == ESP_OK || r == ESP_ERR_INVALID_STATE) {  // ESP_ERR_INVALID_STATE, maybe spi_bus_initialize already called
     spi_device_interface_config_t devconf;
     memset(&devconf, 0, sizeof(devconf));
-    devconf.mode           = ST7789_SPI_MODE;
-    devconf.clock_speed_hz = ST7789_SPI_WRITE_FREQUENCY;
+    devconf.mode           = TFT_SPI_MODE;
+    devconf.clock_speed_hz = TFT_SPI_WRITE_FREQUENCY;
     devconf.spics_io_num   = -1;
     devconf.flags          = 0;
     devconf.queue_size     = 1;
@@ -326,7 +295,7 @@ void ST7789Controller::SPIBegin()
 }
 
 
-void ST7789Controller::SPIEnd()
+void TFTController::SPIEnd()
 {
   if (m_spi)
     return;
@@ -341,10 +310,10 @@ void ST7789Controller::SPIEnd()
 }
 
 
-void ST7789Controller::SPIBeginWrite()
+void TFTController::SPIBeginWrite()
 {
   if (m_spi) {
-    m_spi->beginTransaction(SPISettings(ST7789_SPI_WRITE_FREQUENCY, SPI_MSBFIRST, ST7789_SPI_MODE));
+    m_spi->beginTransaction(SPISettings(TFT_SPI_WRITE_FREQUENCY, SPI_MSBFIRST, TFT_SPI_MODE));
   }
 
   if (m_SPIDevHandle) {
@@ -357,7 +326,7 @@ void ST7789Controller::SPIBeginWrite()
 }
 
 
-void ST7789Controller::SPIEndWrite()
+void TFTController::SPIEndWrite()
 {
   if (m_CS != GPIO_UNUSED) {
     gpio_set_level(m_CS, 1);
@@ -376,7 +345,7 @@ void ST7789Controller::SPIEndWrite()
 }
 
 
-void ST7789Controller::SPIWriteByte(uint8_t data)
+void TFTController::SPIWriteByte(uint8_t data)
 {
   if (m_spi) {
     m_spi->write(data);
@@ -394,7 +363,7 @@ void ST7789Controller::SPIWriteByte(uint8_t data)
 }
 
 
-void ST7789Controller::SPIWriteWord(uint16_t data)
+void TFTController::SPIWriteWord(uint16_t data)
 {
   if (m_spi) {
     m_spi->write(data >> 8);
@@ -414,7 +383,7 @@ void ST7789Controller::SPIWriteWord(uint16_t data)
 }
 
 
-void ST7789Controller::SPIWriteBuffer(void * data, size_t size)
+void TFTController::SPIWriteBuffer(void * data, size_t size)
 {
   if (m_spi) {
     m_spi->writeBytes((uint8_t*)data, size);
@@ -432,21 +401,21 @@ void ST7789Controller::SPIWriteBuffer(void * data, size_t size)
 }
 
 
-void ST7789Controller::writeCommand(uint8_t cmd)
+void TFTController::writeCommand(uint8_t cmd)
 {
   gpio_set_level(m_DC, 0);  // 0 = CMD
   SPIWriteByte(cmd);
 }
 
 
-void ST7789Controller::writeByte(uint8_t data)
+void TFTController::writeByte(uint8_t data)
 {
   gpio_set_level(m_DC, 1);  // 1 = DATA
   SPIWriteByte(data);
 }
 
 
-void ST7789Controller::writeData(void * data, size_t size)
+void TFTController::writeData(void * data, size_t size)
 {
   gpio_set_level(m_DC, 1);  // 1 = DATA
   SPIWriteBuffer(data, size);
@@ -454,174 +423,14 @@ void ST7789Controller::writeData(void * data, size_t size)
 
 
 // high byte first
-void ST7789Controller::writeWord(uint16_t data)
+void TFTController::writeWord(uint16_t data)
 {
   gpio_set_level(m_DC, 1);  // 1 = DATA
   SPIWriteWord(data);
 }
 
 
-// soft reset ST7789
-void ST7789Controller::softReset()
-{
-  // ST7789 software reset
-  SPIBeginWrite();
-  writeCommand(ST7789_SWRST);
-  SPIEndWrite();
-  vTaskDelay(150 / portTICK_PERIOD_MS);
-
-  // ST7789 setup
-
-  SPIBeginWrite();
-
-  // Sleep Out
-  writeCommand(ST7789_SLPOUT);
-  vTaskDelay(120 / portTICK_PERIOD_MS);
-
-  // Normal Display Mode On
-  writeCommand(ST7789_NORON);
-
-  setupOrientation();
-
-  // 0x55 = 0 (101) 0 (101) => 65K of RGB interface, 16 bit/pixel
-  writeCommand(ST7789_COLMOD);
-  writeByte(0x55);
-  vTaskDelay(10 / portTICK_PERIOD_MS);
-
-  // Porch Setting
-  writeCommand(ST7789_PORCTRL);
-  writeByte(0x0c);
-  writeByte(0x0c);
-  writeByte(0x00);
-  writeByte(0x33);
-  writeByte(0x33);
-
-  // Gate Control
-  // VGL = -10.43V
-  // VGH = 13.26V
-  writeCommand(ST7789_GCTRL);
-  writeByte(0x35);
-
-  // VCOM Setting
-  // 1.1V
-  writeCommand(ST7789_VCOMS);
-  writeByte(0x28);
-
-  // LCM Control
-  // XMH, XMX
-  writeCommand(ST7789_LCMCTRL);
-  writeByte(0x0C);
-
-  // VDV and VRH Command Enable
-  // CMDEN = 1, VDV and VRH register value comes from command write.
-  writeCommand(ST7789_VDVVRHEN);
-  writeByte(0x01);
-  writeByte(0xFF);
-
-  // VRH Set
-  // VAP(GVDD) = 4.35+( vcom+vcom offset+vdv) V
-  // VAN(GVCL) = -4.35+( vcom+vcom offset-vdv) V
-  writeCommand(ST7789_VRHS);
-  writeByte(0x10);
-
-  // VDV Set
-  // VDV  = 0V
-  writeCommand(ST7789_VDVS);
-  writeByte(0x20);
-
-  // Frame Rate Control in Normal Mode
-  // RTNA = 0xf (60Hz)
-  // NLA  = 0 (dot inversion)
-  writeCommand(ST7789_FRCTRL2);
-  writeByte(0x0f);
-
-  // Power Control 1
-  // VDS  = 2.3V
-  // AVCL = -4.8V
-  // AVDD = 6.8v
-  writeCommand(ST7789_PWCTRL1);
-  writeByte(0xa4);
-  writeByte(0xa1);
-
-  // Positive Voltage Gamma Control
-  writeCommand(ST7789_PVGAMCTRL);
-  writeByte(0xd0);
-  writeByte(0x00);
-  writeByte(0x02);
-  writeByte(0x07);
-  writeByte(0x0a);
-  writeByte(0x28);
-  writeByte(0x32);
-  writeByte(0x44);
-  writeByte(0x42);
-  writeByte(0x06);
-  writeByte(0x0e);
-  writeByte(0x12);
-  writeByte(0x14);
-  writeByte(0x17);
-
-  // Negative Voltage Gamma Control
-  writeCommand(ST7789_NVGAMCTRL);
-  writeByte(0xd0);
-  writeByte(0x00);
-  writeByte(0x02);
-  writeByte(0x07);
-  writeByte(0x0a);
-  writeByte(0x28);
-  writeByte(0x31);
-  writeByte(0x54);
-  writeByte(0x47);
-  writeByte(0x0e);
-  writeByte(0x1c);
-  writeByte(0x17);
-  writeByte(0x1b);
-  writeByte(0x1e);
-
-  // Display Inversion On
-  writeCommand(ST7789_INVON);
-
-  // Display On
-  writeCommand(ST7789_DISPON);
-
-  SPIEndWrite();
-}
-
-
-void ST7789Controller::setupOrientation()
-{
-  m_rotOffsetX = 0;
-  m_rotOffsetY = 0;
-  uint8_t madclt = 0x08;  // BGR
-  switch (m_orientation) {
-    case ST7789Orientation::ReverseHorizontal:
-      madclt |= 0x40;         // MX = 1
-      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
-      break;
-    case ST7789Orientation::ReverseVertical:
-      madclt |= 0x80;         // MY = 1
-      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
-      break;
-    case ST7789Orientation::Rotate90:
-      madclt |= 0x20 | 0x40;  // MV = 1, MX = 1
-      break;
-    case ST7789Orientation::Rotate180:
-      madclt |= 0x40 | 0x80;  // MX = 1, MY = 1
-      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
-      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
-      break;
-    case ST7789Orientation::Rotate270:
-      madclt |= 0x20 | 0x80;  // MV = 1, MY = 1
-      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
-      break;
-    default:
-      break;
-  }
-  writeCommand(ST7789_MADCTL);
-  writeByte(madclt);
-}
-
-
-void ST7789Controller::setOrientation(ST7789Orientation value)
+void TFTController::setOrientation(TFTOrientation value)
 {
   m_orientation = value;
   setupOrientation();
@@ -629,14 +438,14 @@ void ST7789Controller::setOrientation(ST7789Orientation value)
 }
 
 
-void ST7789Controller::sendRefresh()
+void TFTController::sendRefresh()
 {
   Primitive p(PrimitiveCmd::Refresh, Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
   addPrimitive(p);
 }
 
 
-void ST7789Controller::sendScreenBuffer(Rect updateRect)
+void TFTController::sendScreenBuffer(Rect updateRect)
 {
   SPIBeginWrite();
 
@@ -646,16 +455,16 @@ void ST7789Controller::sendScreenBuffer(Rect updateRect)
   auto viewPort = isDoubleBuffered() ? m_viewPortVisible : m_viewPort;
 
   // Column Address Set
-  writeCommand(ST7789_CASET);
+  writeCommand(TFT_CASET);
   writeWord(m_rotOffsetX + updateRect.X1);   // XS (X Start)
   writeWord(m_rotOffsetX + updateRect.X2);   // XE (X End)
 
   // Row Address Set
-  writeCommand(ST7789_RASET);
+  writeCommand(TFT_RASET);
   writeWord(m_rotOffsetY + updateRect.Y1);  // YS (Y Start)
   writeWord(m_rotOffsetY + updateRect.Y2);  // YE (Y End)
 
-  writeCommand(ST7789_RAMWR);
+  writeCommand(TFT_RAMWR);
   const int width = updateRect.width();
   for (int row = updateRect.Y1; row <= updateRect.Y2; ++row) {
     writeData(viewPort[row] + updateRect.X1, sizeof(uint16_t) * width);
@@ -665,7 +474,7 @@ void ST7789Controller::sendScreenBuffer(Rect updateRect)
 }
 
 
-void ST7789Controller::allocViewPort()
+void TFTController::allocViewPort()
 {
   m_viewPort = (uint16_t**) heap_caps_malloc(m_viewPortHeight * sizeof(uint16_t*), MALLOC_CAP_32BIT);
   for (int i = 0; i < m_viewPortHeight; ++i) {
@@ -683,7 +492,7 @@ void ST7789Controller::allocViewPort()
 }
 
 
-void ST7789Controller::freeViewPort()
+void TFTController::freeViewPort()
 {
   if (m_viewPort) {
     for (int i = 0; i < m_viewPortHeight; ++i)
@@ -700,9 +509,9 @@ void ST7789Controller::freeViewPort()
 }
 
 
-void ST7789Controller::updateTaskFunc(void * pvParameters)
+void TFTController::updateTaskFunc(void * pvParameters)
 {
-  ST7789Controller * ctrl = (ST7789Controller*) pvParameters;
+  TFTController * ctrl = (TFTController*) pvParameters;
 
   while (true) {
 
@@ -720,7 +529,7 @@ void ST7789Controller::updateTaskFunc(void * pvParameters)
     do {
 
       Primitive prim;
-      if (ctrl->getPrimitive(&prim, ST7789_BACKGROUND_PRIMITIVE_TIMEOUT / 1000) == false)
+      if (ctrl->getPrimitive(&prim, TFT_BACKGROUND_PRIMITIVE_TIMEOUT / 1000) == false)
         break;
 
       ctrl->execPrimitive(prim, updateRect);
@@ -728,7 +537,7 @@ void ST7789Controller::updateTaskFunc(void * pvParameters)
       if (ctrl->m_updateTaskFuncSuspended > 0)
         break;
 
-    } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startTime + ST7789_BACKGROUND_PRIMITIVE_TIMEOUT > esp_timer_get_time()));
+    } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startTime + TFT_BACKGROUND_PRIMITIVE_TIMEOUT > esp_timer_get_time()));
 
     ctrl->showSprites(updateRect);
 
@@ -740,7 +549,7 @@ void ST7789Controller::updateTaskFunc(void * pvParameters)
 
 
 
-void ST7789Controller::suspendBackgroundPrimitiveExecution()
+void TFTController::suspendBackgroundPrimitiveExecution()
 {
   ++m_updateTaskFuncSuspended;
   while (m_updateTaskRunning)
@@ -748,7 +557,7 @@ void ST7789Controller::suspendBackgroundPrimitiveExecution()
 }
 
 
-void ST7789Controller::resumeBackgroundPrimitiveExecution()
+void TFTController::resumeBackgroundPrimitiveExecution()
 {
   m_updateTaskFuncSuspended = tmax(0, m_updateTaskFuncSuspended - 1);
   if (m_updateTaskFuncSuspended == 0)
@@ -756,7 +565,7 @@ void ST7789Controller::resumeBackgroundPrimitiveExecution()
 }
 
 
-void ST7789Controller::setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect)
+void TFTController::setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect)
 {
   genericSetPixelAt(pixelDesc, updateRect,
                     [&] (RGB888 const & color)           { return preparePixel(color); },
@@ -767,7 +576,7 @@ void ST7789Controller::setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect
 
 // coordinates are absolute values (not relative to origin)
 // line clipped on current absolute clipping rectangle
-void ST7789Controller::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
+void TFTController::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
 {
   genericAbsDrawLine(X1, Y1, X2, Y2, color,
                      [&] (RGB888 const & color)                    { return preparePixel(color); },
@@ -780,7 +589,7 @@ void ST7789Controller::absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color)
 
 
 // parameters not checked
-void ST7789Controller::rawFillRow(int y, int x1, int x2, uint16_t pattern)
+void TFTController::rawFillRow(int y, int x1, int x2, uint16_t pattern)
 {
   auto px = m_viewPort[y] + x1;
   for (int x = x1; x <= x2; ++x, ++px)
@@ -789,7 +598,7 @@ void ST7789Controller::rawFillRow(int y, int x1, int x2, uint16_t pattern)
 
 
 // parameters not checked
-void ST7789Controller::rawFillRow(int y, int x1, int x2, RGB888 color)
+void TFTController::rawFillRow(int y, int x1, int x2, RGB888 color)
 {
   rawFillRow(y, x1, x2, preparePixel(color));
 }
@@ -797,7 +606,7 @@ void ST7789Controller::rawFillRow(int y, int x1, int x2, RGB888 color)
 
 // swaps all pixels inside the range x1...x2 of yA and yB
 // parameters not checked
-void ST7789Controller::swapRows(int yA, int yB, int x1, int x2)
+void TFTController::swapRows(int yA, int yB, int x1, int x2)
 {
   auto pxA = m_viewPort[yA] + x1;
   auto pxB = m_viewPort[yB] + x1;
@@ -806,7 +615,7 @@ void ST7789Controller::swapRows(int yA, int yB, int x1, int x2)
 }
 
 
-void ST7789Controller::rawInvertRow(int y, int x1, int x2)
+void TFTController::rawInvertRow(int y, int x1, int x2)
 {
   auto px = m_viewPort[y] + x1;
   for (int x = x1; x <= x2; ++x, ++px)
@@ -814,7 +623,7 @@ void ST7789Controller::rawInvertRow(int y, int x1, int x2)
 }
 
 
-void ST7789Controller::drawEllipse(Size const & size, Rect & updateRect)
+void TFTController::drawEllipse(Size const & size, Rect & updateRect)
 {
   genericDrawEllipse(size, updateRect,
                      [&] (RGB888 const & color)           { return preparePixel(color); },
@@ -823,7 +632,7 @@ void ST7789Controller::drawEllipse(Size const & size, Rect & updateRect)
 }
 
 
-void ST7789Controller::clear(Rect & updateRect)
+void TFTController::clear(Rect & updateRect)
 {
   hideSprites(updateRect);
   auto pattern = preparePixel(getActualBrushColor());
@@ -832,7 +641,7 @@ void ST7789Controller::clear(Rect & updateRect)
 }
 
 
-void ST7789Controller::VScroll(int scroll, Rect & updateRect)
+void TFTController::VScroll(int scroll, Rect & updateRect)
 {
   genericVScroll(scroll, updateRect,
                  [&] (int yA, int yB, int x1, int x2)        { swapRows(yA, yB, x1, x2); },              // swapRowsCopying
@@ -842,7 +651,7 @@ void ST7789Controller::VScroll(int scroll, Rect & updateRect)
 }
 
 
-void ST7789Controller::HScroll(int scroll, Rect & updateRect)
+void TFTController::HScroll(int scroll, Rect & updateRect)
 {
   genericHScroll(scroll, updateRect,
                  [&] (RGB888 const & color)               { return preparePixel(color); }, // preparePixel
@@ -853,7 +662,7 @@ void ST7789Controller::HScroll(int scroll, Rect & updateRect)
 }
 
 
-void ST7789Controller::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect)
+void TFTController::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect)
 {
   genericDrawGlyph(glyph, glyphOptions, penColor, brushColor, updateRect,
                    [&] (RGB888 const & color) { return preparePixel(color); },
@@ -863,7 +672,7 @@ void ST7789Controller::drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions,
 }
 
 
-void ST7789Controller::invertRect(Rect const & rect, Rect & updateRect)
+void TFTController::invertRect(Rect const & rect, Rect & updateRect)
 {
   genericInvertRect(rect, updateRect,
                     [&] (int Y, int X1, int X2) { rawInvertRow(Y, X1, X2); }
@@ -871,7 +680,7 @@ void ST7789Controller::invertRect(Rect const & rect, Rect & updateRect)
 }
 
 
-void ST7789Controller::swapFGBG(Rect const & rect, Rect & updateRect)
+void TFTController::swapFGBG(Rect const & rect, Rect & updateRect)
 {
   genericSwapFGBG(rect, updateRect,
                   [&] (RGB888 const & color)                    { return preparePixel(color); },
@@ -883,7 +692,7 @@ void ST7789Controller::swapFGBG(Rect const & rect, Rect & updateRect)
 
 
 // supports overlapping of source and dest rectangles
-void ST7789Controller::copyRect(Rect const & source, Rect & updateRect)
+void TFTController::copyRect(Rect const & source, Rect & updateRect)
 {
   genericCopyRect(source, updateRect,
                   [&] (int y)                                   { return m_viewPort[y]; },
@@ -894,7 +703,7 @@ void ST7789Controller::copyRect(Rect const & source, Rect & updateRect)
 
 
 // no bounds check is done!
-void ST7789Controller::readScreen(Rect const & rect, RGB888 * destBuf)
+void TFTController::readScreen(Rect const & rect, RGB888 * destBuf)
 {
   for (int y = rect.Y1; y <= rect.Y2; ++y) {
     auto row = m_viewPort[y] + rect.X1;
@@ -904,7 +713,7 @@ void ST7789Controller::readScreen(Rect const & rect, RGB888 * destBuf)
 }
 
 
-void ST7789Controller::rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount)
+void TFTController::rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount)
 {
   genericRawDrawBitmap_Native(destX, destY, (uint16_t*) bitmap->data, bitmap->width, X1, Y1, XCount, YCount,
                                  [&] (int y)                               { return m_viewPort[y]; },  // rawGetRow
@@ -913,7 +722,7 @@ void ST7789Controller::rawDrawBitmap_Native(int destX, int destY, Bitmap const *
 }
 
 
-void ST7789Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
+void TFTController::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   auto foregroundPattern = preparePixel(bitmap->foregroundColor);
   genericRawDrawBitmap_Mask(destX, destY, bitmap, (uint16_t*)saveBackground, X1, Y1, XCount, YCount,
@@ -924,7 +733,7 @@ void ST7789Controller::rawDrawBitmap_Mask(int destX, int destY, Bitmap const * b
 }
 
 
-void ST7789Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
+void TFTController::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   genericRawDrawBitmap_RGBA2222(destX, destY, bitmap, (uint16_t*)saveBackground, X1, Y1, XCount, YCount,
                                 [&] (int y)                              { return m_viewPort[y]; },            // rawGetRow
@@ -934,7 +743,7 @@ void ST7789Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const
 }
 
 
-void ST7789Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
+void TFTController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   genericRawDrawBitmap_RGBA8888(destX, destY, bitmap, (uint16_t*)saveBackground, X1, Y1, XCount, YCount,
                                  [&] (int y)                                       { return m_viewPort[y]; },            // rawGetRow
@@ -944,7 +753,7 @@ void ST7789Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const
 }
 
 
-void ST7789Controller::swapBuffers()
+void TFTController::swapBuffers()
 {
   tswap(m_viewPort, m_viewPortVisible);
 }
