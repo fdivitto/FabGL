@@ -36,11 +36,20 @@ namespace fabgl {
 
 
 #define ST7789_SWRST      0x01
-#define ST7789_SLPOUT     0x11
-#define ST7789_NORON      0x13
-#define ST7789_MADCTL     0x36
-#define ST7789_COLMOD     0x3A
 #define ST7789_RDDCOLMOD  0x0C
+#define ST7789_SLPOUT     0x11
+#define ST7789_PTLON      0x12
+#define ST7789_NORON      0x13
+#define ST7789_INVOFF     0x20
+#define ST7789_INVON      0x21
+#define ST7789_DISPON     0x29
+#define ST7789_PTLAR      0x30
+#define ST7789_COLMOD     0x3A
+#define ST7789_WRDISBV    0x51
+#define ST7789_WRCTRLD    0x53
+#define ST7789_WRCACE     0x55
+#define ST7789_WRCABCMB   0x5E
+#define ST7789_RAMCTRL    0xB0
 #define ST7789_PORCTRL    0xB2
 #define ST7789_GCTRL      0xB7
 #define ST7789_VCOMS      0xBB
@@ -52,17 +61,6 @@ namespace fabgl {
 #define ST7789_PWCTRL1    0xD0
 #define ST7789_PVGAMCTRL  0xE0
 #define ST7789_NVGAMCTRL  0xE1
-#define ST7789_INVON      0x21
-#define ST7789_INVOFF     0x20
-#define ST7789_SLPOUT     0x11
-#define ST7789_DISPON     0x29
-#define ST7789_RAMCTRL    0xB0
-#define ST7789_PTLAR      0x30
-#define ST7789_PTLON      0x12
-#define ST7789_WRDISBV    0x51
-#define ST7789_WRCTRLD    0x53
-#define ST7789_WRCACE     0x55
-#define ST7789_WRCABCMB   0x5E
 
 
 void ST7789Controller::softReset()
@@ -72,8 +70,6 @@ void ST7789Controller::softReset()
   writeCommand(ST7789_SWRST);
   SPIEndWrite();
   vTaskDelay(150 / portTICK_PERIOD_MS);
-
-  // setup
 
   SPIBeginWrite();
 
@@ -219,12 +215,11 @@ void ST7789Controller::setupOrientation()
     default:
       break;
   }
-  writeCommand(ST7789_MADCTL);
+  writeCommand(TFT_MADCTL);
   writeByte(madclt);
 }
 
 
-// ST7789
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
