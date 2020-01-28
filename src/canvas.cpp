@@ -110,6 +110,14 @@ void Canvas::clear()
 }
 
 
+void Canvas::reset()
+{
+  Primitive p;
+  p.cmd = PrimitiveCmd::Reset;
+  m_displayController->addPrimitive(p);
+}
+
+
 void Canvas::scroll(int offsetX, int offsetY)
 {
   Primitive p;

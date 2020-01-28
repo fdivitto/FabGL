@@ -164,6 +164,11 @@ public:
   void clear();
 
   /**
+   * @brief Resets paint state and other display controller settings.
+   */
+  void reset();
+
+  /**
    * @brief Defines the scrolling region.
    *
    * A scrolling region is the rectangle area where Canvas.scroll() method can operate.
