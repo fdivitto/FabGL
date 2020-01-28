@@ -62,6 +62,10 @@ enum PrimitiveCmd : uint8_t {
   // params: rect (rectangle to refresh)
   Refresh,
 
+  // Reset paint state
+  // params: none
+  Reset,
+
   // Set current pen color
   // params: color
   SetPenColor,

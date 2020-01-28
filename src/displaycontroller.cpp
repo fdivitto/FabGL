@@ -342,7 +342,7 @@ DisplayController::~DisplayController()
 }
 
 
-void DisplayController::resetPaintState()
+void IRAM_ATTR DisplayController::resetPaintState()
 {
   m_paintState.penColor              = RGB888(255, 255, 255);
   m_paintState.brushColor            = RGB888(0, 0, 0);
@@ -632,6 +632,9 @@ void IRAM_ATTR DisplayController::execPrimitive(Primitive const & prim, Rect & u
       break;
     case PrimitiveCmd::Refresh:
       updateRect = updateRect.merge(prim.rect);
+      break;
+    case PrimitiveCmd::Reset:
+      resetPaintState();
       break;
     case PrimitiveCmd::SetPenColor:
       paintState().penColor = prim.color;
