@@ -186,39 +186,6 @@ void ST7789Controller::softReset()
 }
 
 
-void ST7789Controller::setupOrientation()
-{
-  m_rotOffsetX = 0;
-  m_rotOffsetY = 0;
-  uint8_t madclt = 0x08;  // BGR
-  switch (m_orientation) {
-    case TFTOrientation::ReverseHorizontal:
-      madclt |= 0x40;         // MX = 1
-      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
-      break;
-    case TFTOrientation::ReverseVertical:
-      madclt |= 0x80;         // MY = 1
-      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
-      break;
-    case TFTOrientation::Rotate90:
-      madclt |= 0x20 | 0x40;  // MV = 1, MX = 1
-      break;
-    case TFTOrientation::Rotate180:
-      madclt |= 0x40 | 0x80;  // MX = 1, MY = 1
-      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
-      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
-      break;
-    case TFTOrientation::Rotate270:
-      madclt |= 0x20 | 0x80;  // MV = 1, MY = 1
-      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
-      break;
-    default:
-      break;
-  }
-  writeCommand(TFT_MADCTL);
-  writeByte(madclt);
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////

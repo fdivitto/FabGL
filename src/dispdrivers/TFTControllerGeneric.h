@@ -61,9 +61,7 @@ namespace fabgl {
  * @brief This enum defines TFT orientation
  */
 enum class TFTOrientation {
-  Normal,             /**< Normal orientation */
-  ReverseHorizontal,  /**< Reverse horizontal */
-  ReverseVertical,    /**< Reverse vertical */
+  Rotate0,            /**< Rotate 0 degrees */
   Rotate90,           /**< Rotate 90 degrees */
   Rotate180,          /**< Rotate 180 degrees */
   Rotate270,          /**< Rotate 270 degrees */
@@ -95,7 +93,7 @@ public:
   TFTController(TFTController const&) = delete;
   void operator=(TFTController const&)   = delete;
 
-  TFTController(int controllerWidth = 240, int controllerHeight = 320);
+  TFTController(int controllerWidth = 240, int controllerHeight = 320, TFTOrientation orientation = TFTOrientation::Rotate0, bool reverseHorizontal = false);
 
   ~TFTController();
 
@@ -252,7 +250,8 @@ public:
 protected:
 
   virtual void softReset() = 0;
-  virtual void setupOrientation() = 0;
+
+  virtual void setupOrientation();
 
   // abstract method of DisplayController
   int getBitmapSavePixelSize() { return 2; }
@@ -360,6 +359,10 @@ protected:
   int16_t            m_viewPortWidth;
   int16_t            m_viewPortHeight;
 
+  // view port size when rotation is 0 degrees
+  int16_t            m_rot0ViewPortWidth;
+  int16_t            m_rot0ViewPortHeight;
+
   // maximum width and height the controller can handle (ie 240x320)
   int16_t            m_controllerWidth;
   int16_t            m_controllerHeight;
@@ -374,6 +377,7 @@ protected:
   volatile bool      m_updateTaskRunning;
 
   TFTOrientation     m_orientation;
+  bool               m_reverseHorizontal;
 
 };
 

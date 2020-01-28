@@ -94,7 +94,7 @@ inline uint16_t RGBA8888toNative(RGBA8888 const & rgba8888)
 }
 
 
-TFTController::TFTController(int controllerWidth, int controllerHeight)
+TFTController::TFTController(int controllerWidth, int controllerHeight, TFTOrientation orientation, bool reverseHorizontal)
   : m_spi(nullptr),
     m_SPIDevHandle(nullptr),
     m_viewPort(nullptr),
@@ -105,7 +105,8 @@ TFTController::TFTController(int controllerWidth, int controllerHeight)
     m_rotOffsetY(0),
     m_updateTaskHandle(nullptr),
     m_updateTaskRunning(false),
-    m_orientation(TFTOrientation::Normal)
+    m_orientation(orientation),
+    m_reverseHorizontal(reverseHorizontal)
 {
 }
 
@@ -207,12 +208,13 @@ void TFTController::setResolution(char const * modeline, int viewPortWidth, int 
   m_viewPortWidth  = viewPortWidth < 0 ? m_screenWidth : viewPortWidth;
   m_viewPortHeight = viewPortHeight < 0 ? m_screenHeight : viewPortHeight;
 
+  m_rot0ViewPortWidth  = m_viewPortWidth;
+  m_rot0ViewPortHeight = m_viewPortHeight;
+
   resetPaintState();
 
   hardReset();
   softReset();
-
-  allocViewPort();
 
   // setup update task
   xTaskCreate(&updateTaskFunc, "", TFT_UPDATETASK_STACK, this, TFT_UPDATETASK_PRIORITY, &m_updateTaskHandle);
@@ -258,6 +260,63 @@ void TFTController::hardReset()
     SPIEndWrite();
 
     vTaskDelay(150 / portTICK_PERIOD_MS);
+  }
+}
+
+
+void TFTController::setupOrientation()
+{
+  freeViewPort();
+  m_viewPortWidth  = m_rot0ViewPortWidth;
+  m_viewPortHeight = m_rot0ViewPortHeight;
+  m_rotOffsetX = 0;
+  m_rotOffsetY = 0;
+  uint8_t MX = m_reverseHorizontal ? 0x40 : 0;
+  uint8_t madclt = 0x08 | MX;    // BGR
+  switch (m_orientation) {
+    case TFTOrientation::Rotate90:
+      tswap(m_viewPortWidth, m_viewPortHeight);
+      madclt |= 0x20;            // MV = 1
+      madclt ^= 0x40;            // inv MX
+      break;
+    case TFTOrientation::Rotate180:
+      madclt |= 0x80;            // MY = 1
+      madclt ^= 0x40;            // inv MX
+      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
+      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
+      break;
+    case TFTOrientation::Rotate270:
+      tswap(m_viewPortWidth, m_viewPortHeight);
+      madclt |= 0x20 | 0x80;     // MV = 1, MY = 1
+      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
+      break;
+    default:
+      break;
+  }
+  // Memory Access Control
+  writeCommand(TFT_MADCTL);
+  writeByte(madclt);
+
+  // alloc viewport
+  allocViewPort();
+
+  // resets scrolling region, clipping rect, etc...
+  Primitive p;
+  p.cmd = PrimitiveCmd::Reset;
+  addPrimitive(p);
+}
+
+
+void TFTController::setOrientation(TFTOrientation value)
+{
+  if (m_orientation != value) {
+    suspendBackgroundPrimitiveExecution();
+    m_orientation = value;
+    SPIBeginWrite();
+    setupOrientation();
+    SPIEndWrite();
+    resumeBackgroundPrimitiveExecution();
+    sendRefresh();
   }
 }
 
@@ -424,14 +483,6 @@ void TFTController::writeWord(uint16_t data)
 {
   gpio_set_level(m_DC, 1);  // 1 = DATA
   SPIWriteWord(data);
-}
-
-
-void TFTController::setOrientation(TFTOrientation value)
-{
-  m_orientation = value;
-  setupOrientation();
-  sendRefresh();
 }
 
 
