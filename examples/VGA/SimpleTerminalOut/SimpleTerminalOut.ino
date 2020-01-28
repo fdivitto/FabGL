@@ -26,19 +26,19 @@
 
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::Terminal      Terminal;
 
 
 void setup()
 {
-  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
-  //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  //DisplayController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
-  Terminal.begin(&VGAController);
+  Terminal.begin(&DisplayController);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
 
   Terminal.enableCursor(true);
@@ -72,7 +72,7 @@ void demo1()
   slowPrintf("===============================================\r\n\n");
   slowPrintf("This is a VGA Controller, PS2 Mouse and Keyboard Controller, Graphics Library,  Game Engine and ANSI/VT Terminal for the ESP32\r\n\n");
   slowPrintf("Current settings\r\n");
-  slowPrintf("Screen Size   : %d x %d\r\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
+  slowPrintf("Screen Size   : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
   slowPrintf("Terminal Size : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
   slowPrintf("Free Memory   : %d bytes\r\n\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 }
@@ -137,7 +137,7 @@ void demo3()
 
 void demo4()
 {
-  Canvas cv(&VGAController);
+  Canvas cv(&DisplayController);
   Terminal.write("\e[40;32m"); // background: black, foreground: green
   slowPrintf("\nMixed text and graphics:\r\n");
   slowPrintf("Points...\r\n");

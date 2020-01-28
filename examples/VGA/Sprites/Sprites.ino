@@ -25,7 +25,7 @@
 #include <math.h>
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 
 
 
@@ -84,13 +84,13 @@ Sprite sprites[3];
 
 void setup()
 {
-  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_320x200_75Hz);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_320x200_75Hz);
 
   // draw background
-  Canvas cv(&VGAController);
+  Canvas cv(&DisplayController);
   cv.setBrushColor(RGB888(0, 0, 64));
   cv.clear();
   cv.setPenColor(RGB888(64, 64, 0));
@@ -100,7 +100,7 @@ void setup()
     cv.drawLine(0, i, cv.getWidth() - 1, i);
 
   // adjust this to center screen in your monitor
-  //VGAController.moveScreen(-6, 0);
+  //DisplayController.moveScreen(-6, 0);
 
   // associates bitmaps to sprites
   sprites[0].addBitmap(&bitmap1);
@@ -118,7 +118,7 @@ void setup()
   sprites[2].visible = true;
 
   // add sprites to display controller
-  VGAController.setSprites(sprites, 3);
+  DisplayController.setSprites(sprites, 3);
 }
 
 
@@ -129,24 +129,24 @@ void loop()
 
   // set position of sprite 0
   sprites[0].x += 1;
-  if (sprites[0].x >= VGAController.getViewPortWidth())
+  if (sprites[0].x >= DisplayController.getViewPortWidth())
     sprites[0].x = 0;
   sprites[0].y = 50 + 35.0 * sin(count);
 
   // set position of sprite 1
   sprites[1].x += 1;
-  if (sprites[1].x >= VGAController.getViewPortWidth())
+  if (sprites[1].x >= DisplayController.getViewPortWidth())
     sprites[1].x = 0;
   sprites[1].y = 100 + 35.0 * cos(count);
 
   // set position of sprite 2
   sprites[2].x += 1;
-  if (sprites[2].x >= VGAController.getViewPortWidth())
+  if (sprites[2].x >= DisplayController.getViewPortWidth())
     sprites[2].x = 0;
   sprites[2].y = 150 + 35.0 * sin(count);
 
   // update sprites positions
-  VGAController.refreshSprites();
+  DisplayController.refreshSprites();
 
   count += 0.10;
 

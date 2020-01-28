@@ -153,7 +153,7 @@ constexpr int MaxColorsIndex     = 5;
 
 // globals
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
@@ -326,12 +326,12 @@ void setup()
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
   // setup VGA (default configuration with 64 colors)
-  VGAController.begin();
+  DisplayController.begin();
 
   if (preferences.getBool("emuCRT", false))
-    VGAController.setResolution(VGA_640x200_70HzRetro);
+    DisplayController.setResolution(VGA_640x200_70HzRetro);
   else
-    VGAController.setResolution(VGA_640x200_70Hz);
+    DisplayController.setResolution(VGA_640x200_70Hz);
 
   // uncomment to adjust screen alignment and size
   //VGAController.shrinkScreen(5, 0);

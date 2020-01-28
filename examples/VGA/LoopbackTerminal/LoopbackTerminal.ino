@@ -30,7 +30,7 @@
 
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
@@ -39,7 +39,7 @@ void print_info()
 {
   Terminal.write("\e[37m* * FabGL - Loopback VT/ANSI Terminal\r\n");
   Terminal.write("\e[34m* * 2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\e[32m\r\n\n");
-  Terminal.printf("\e[32mScreen Size        :\e[33m %d x %d\r\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
+  Terminal.printf("\e[32mScreen Size        :\e[33m %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
   Terminal.printf("\e[32mTerminal Size      :\e[33m %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
   Terminal.printf("\e[32mKeyboard           :\e[33m %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
   Terminal.printf("\e[32mFree DMA Memory    :\e[33m %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
@@ -52,14 +52,14 @@ void setup()
 {
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_640x350_70HzAlt1);
 
   // adjust screen position and size
-  //VGAController.shrinkScreen(5, 0);
-  //VGAController.moveScreen(-1, 0);
+  //DisplayController.shrinkScreen(5, 0);
+  //DisplayController.moveScreen(-1, 0);
 
-  Terminal.begin(&VGAController);
+  Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
 
   Terminal.setBackgroundColor(Color::Black);

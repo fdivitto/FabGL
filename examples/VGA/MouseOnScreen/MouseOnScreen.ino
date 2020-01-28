@@ -23,8 +23,8 @@
 #include "fabgl.h"
 
 
-fabgl::VGAController VGAController;
-fabgl::Canvas        canvas(&VGAController);
+fabgl::VGAController DisplayController;
+fabgl::Canvas        canvas(&DisplayController);
 fabgl::PS2Controller PS2Controller;
 
 
@@ -43,14 +43,14 @@ void showCursorPos(MouseStatus const & status)
 
 void setup()
 {
-  VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1);
-  //VGAController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_640x350_70HzAlt1);
+  //DisplayController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
   // Setup mouse
   PS2Controller.begin();
-  PS2Controller.mouse()->setupAbsolutePositioner(canvas.getWidth(), canvas.getHeight(), true, &VGAController);
-  VGAController.setMouseCursor((CursorName)cursor);
+  PS2Controller.mouse()->setupAbsolutePositioner(canvas.getWidth(), canvas.getHeight(), true, &DisplayController);
+  DisplayController.setMouseCursor((CursorName)cursor);
 
   canvas.setBrushColor(Color::Blue);
   canvas.clear();
@@ -75,7 +75,7 @@ void loop()
   // right button change mouse shape
   if (status.buttons.right) {
     cursor = ((CursorName)cursor == CursorName::CursorTextInput ? 0 : cursor + 1);
-    VGAController.setMouseCursor((CursorName)cursor);
+    DisplayController.setMouseCursor((CursorName)cursor);
   }
 
   // middle button clear screen

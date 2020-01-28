@@ -29,7 +29,7 @@
 #include "mario.h"
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 SoundGenerator       soundGenerator;
 
@@ -38,12 +38,12 @@ void setup()
 {
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_640x350_70HzAlt1);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_640x350_70HzAlt1);
 
   // adjust this to center screen in your monitor
-  //VGAController.moveScreen(20, -2);
-  //VGAController.moveScreen(-6, 0);
+  //DisplayController.moveScreen(20, -2);
+  //DisplayController.moveScreen(-6, 0);
 }
 
 
@@ -236,7 +236,7 @@ class MyApp : public uiApp {
 
 void loop()
 {
-  app.run(&VGAController);
+  app.run(&DisplayController);
 }
 
 

@@ -141,7 +141,7 @@ void vTimerCallback1SecExpired(xTimerHandle pxTimer)
 #endif
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 fabgl::PS2Controller PS2Controller;
 
 
@@ -244,7 +244,7 @@ class Menu : public uiApp {
 
 
   void init() {
-    machine = new Machine(&VGAController);
+    machine = new Machine(&DisplayController);
 
     rootWindow()->frameStyle().backgroundColor = RGB888(255, 255, 255);
 
@@ -780,13 +780,13 @@ void setup()
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::CreateVirtualKeysQueue);
   PS2Controller.keyboard()->setLayout(&fabgl::UKLayout);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_256x384_60Hz);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_256x384_60Hz);
 
   // adjust this to center screen in your monitor
-  //VGAController.moveScreen(20, -2);
+  //DisplayController.moveScreen(20, -2);
 
-  Canvas cv(&VGAController);
+  Canvas cv(&DisplayController);
   cv.selectFont(&fabgl::FONT_8x8);
 
   cv.clear();
@@ -812,6 +812,6 @@ void loop()
   #endif
 
   auto menu = new Menu;
-  menu->run(&VGAController);
+  menu->run(&DisplayController);
 }
 

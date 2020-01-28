@@ -26,7 +26,7 @@
 
 
 
-fabgl::VGAController VGAController;
+fabgl::VGAController DisplayController;
 
 
 #define SPACESHIP_COUNT 10
@@ -48,7 +48,7 @@ struct MyScene : public Scene {
   MySprite objects_[OBJECTS_COUNT];
 
   MyScene()
-    : Scene(OBJECTS_COUNT, 20, VGAController.getViewPortWidth(), VGAController.getViewPortHeight())
+    : Scene(OBJECTS_COUNT, 20, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight())
   {
   }
 
@@ -91,7 +91,7 @@ struct MyScene : public Scene {
       }
     }
 
-    VGAController.setSprites(objects_, OBJECTS_COUNT);
+    DisplayController.setSprites(objects_, OBJECTS_COUNT);
   }
 
   void update(int updateCount)
@@ -104,7 +104,7 @@ struct MyScene : public Scene {
       if (sprite->isAlive) {
 
         // this object is alive, move to the next position
-        sprite->moveBy(sprite->velX, sprite->velY, VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
+        sprite->moveBy(sprite->velX, sprite->velY, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
 
         // update the collision detector and check for a possible collision
         updateSpriteAndDetectCollisions(sprite);
@@ -121,9 +121,9 @@ struct MyScene : public Scene {
 
     // move Jupiter every 20 updates
     if ((updateCount % 20) == 0)
-      objects_[0].moveBy(1, 0, VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
+      objects_[0].moveBy(1, 0, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
 
-    VGAController.refreshSprites();
+    DisplayController.refreshSprites();
   }
 
   void collisionDetected(Sprite * spriteA, Sprite * spriteB, Point collisionPoint)
@@ -148,7 +148,7 @@ struct MyScene : public Scene {
 
   void paintSpace()
   {
-    Canvas cv(&VGAController);
+    Canvas cv(&DisplayController);
     cv.setBrushColor(Color::Black);
     cv.clear();
     cv.setPenColor(Color::White);
@@ -174,10 +174,10 @@ void setup()
   // just for debug
   Serial.begin(115200);
 
-  VGAController.begin();
-  VGAController.setResolution(VGA_320x200_75Hz);
-  //VGAController.moveScreen(20, 0);
-  VGAController.moveScreen(-8, 0);
+  DisplayController.begin();
+  DisplayController.setResolution(VGA_320x200_75Hz);
+  //DisplayController.moveScreen(20, 0);
+  DisplayController.moveScreen(-8, 0);
 }
 
 
