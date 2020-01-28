@@ -108,6 +108,7 @@ void VGAController::begin(gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t g
   setupGPIO(green1GPIO, VGA_GREEN_BIT + 1, GPIO_MODE_OUTPUT);
   setupGPIO(blue1GPIO,  VGA_BLUE_BIT + 1,  GPIO_MODE_OUTPUT);
 
+  RGB222::lowBitOnly = false;
   m_bitsPerChannel = 2;
 }
 
