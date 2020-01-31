@@ -189,9 +189,181 @@ void ST7789Controller::softReset()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// ILI9341
+
+
+#define ILI9341_SWRESET           0x01
+#define ILI9341_SLEEPOUT          0x11
+#define ILI9341_NORON             0x13
+#define ILI9341_GAMMASET          0x26
+#define ILI9341_DISPON            0x29
+#define ILI9341_PIXELFORMATSET    0x3A
+#define ILI9341_FRAMERATECTRL1    0xB1
+#define ILI9341_DISPLAYFUNCCTRL   0xB6
+#define ILI9341_POWERCTR1         0xC0
+#define ILI9341_POWERCTR2         0xC1
+#define ILI9341_VCOMCTR1          0xC5
+#define ILI9341_VCOMCTR2          0xC7
+#define ILI9341_POWERCTRLA        0xCB
+#define ILI9341_POWERCTRLB        0xCF
+#define ILI9341_POSGAMMACORR      0xE0
+#define ILI9341_NEGGAMMACORR      0xE1
+#define ILI9341_DRIVERTIMINGCTRLA 0xE8
+#define ILI9341_DRIVERTIMINGCTRLB 0xEA
+#define ILI9341_POWERONSEQCTRL    0xED
+#define ILI9341_DEVICECODE        0xEF
+#define ILI9341_ENABLE3G          0xF2
+#define ILI9341_PUMPRATIOCTRL     0xF7
 
 
 
+void ILI9341Controller::softReset()
+{
+  // software reset
+  SPIBeginWrite();
+  writeCommand(ILI9341_SWRESET);
+  SPIEndWrite();
+  vTaskDelay(150 / portTICK_PERIOD_MS);
+
+  SPIBeginWrite();
+
+  // unknown but required init sequence!
+  writeCommand(ILI9341_DEVICECODE);
+  writeByte(0x03);
+  writeByte(0x80);
+  writeByte(0x02);
+
+  // Power control B
+  writeCommand(ILI9341_POWERCTRLB);
+  writeByte(0x00);
+  writeByte(0XC1);
+  writeByte(0X30);
+
+  // Power on sequence control
+  writeCommand(ILI9341_POWERONSEQCTRL);
+  writeByte(0x64);
+  writeByte(0x03);
+  writeByte(0X12);
+  writeByte(0X81);
+
+  // Driver timing control A
+  writeCommand(ILI9341_DRIVERTIMINGCTRLA);
+  writeByte(0x85);
+  writeByte(0x00);
+  writeByte(0x78);
+
+  // Power control A
+  writeCommand(ILI9341_POWERCTRLA);
+  writeByte(0x39);
+  writeByte(0x2C);
+  writeByte(0x00);
+  writeByte(0x34);
+  writeByte(0x02);
+
+  // Pump ratio control
+  writeCommand(ILI9341_PUMPRATIOCTRL);
+  writeByte(0x20);
+
+  // Driver timing control B
+  writeCommand(ILI9341_DRIVERTIMINGCTRLB);
+  writeByte(0x00);
+  writeByte(0x00);
+
+  // Power Control 1
+  writeCommand(ILI9341_POWERCTR1);
+  writeByte(0x23);
+
+  // Power Control 2
+  writeCommand(ILI9341_POWERCTR2);
+  writeByte(0x10);
+
+  // VCOM Control 1
+  writeCommand(ILI9341_VCOMCTR1);
+  writeByte(0x3e);
+  writeByte(0x28);
+
+  // VCOM Control 2
+  writeCommand(ILI9341_VCOMCTR2);
+  writeByte(0x86);
+
+  setupOrientation();
+
+  // COLMOD: Pixel Format Set
+  writeCommand(ILI9341_PIXELFORMATSET);
+  writeByte(0x55);
+
+  // Frame Rate Control (In Normal Mode/Full Colors)
+  writeCommand(ILI9341_FRAMERATECTRL1);
+  writeByte(0x00);
+  writeByte(0x13); // 0x18 79Hz, 0x1B 70Hz (default), 0x13 100Hz
+
+  // Display Function Control
+  writeCommand(ILI9341_DISPLAYFUNCCTRL);
+  writeByte(0x08);
+  writeByte(0x82);
+  writeByte(0x27);
+
+  // Enable 3G (gamma control)
+  writeCommand(ILI9341_ENABLE3G);
+  writeByte(0x00);  // bit 0: 0 => disable 3G
+
+  // Gamma Set
+  writeCommand(ILI9341_GAMMASET);
+  writeByte(0x01);  // 1 = Gamma curve 1 (G2.2)
+
+  // Positive Gamma Correction
+  writeCommand(ILI9341_POSGAMMACORR);
+  writeByte(0x0F);
+  writeByte(0x31);
+  writeByte(0x2B);
+  writeByte(0x0C);
+  writeByte(0x0E);
+  writeByte(0x08);
+  writeByte(0x4E);
+  writeByte(0xF1);
+  writeByte(0x37);
+  writeByte(0x07);
+  writeByte(0x10);
+  writeByte(0x03);
+  writeByte(0x0E);
+  writeByte(0x09);
+  writeByte(0x00);
+
+  // Negative Gamma Correction
+  writeCommand(ILI9341_NEGGAMMACORR);
+  writeByte(0x00);
+  writeByte(0x0E);
+  writeByte(0x14);
+  writeByte(0x03);
+  writeByte(0x11);
+  writeByte(0x07);
+  writeByte(0x31);
+  writeByte(0xC1);
+  writeByte(0x48);
+  writeByte(0x08);
+  writeByte(0x0F);
+  writeByte(0x0C);
+  writeByte(0x31);
+  writeByte(0x36);
+  writeByte(0x0F);
+
+  // Sleep Out
+  writeCommand(ILI9341_SLEEPOUT);
+
+  // Normal Display Mode On
+  writeCommand(ILI9341_NORON);
+
+  SPIEndWrite();
+
+  vTaskDelay(120 / portTICK_PERIOD_MS);
+
+  SPIBeginWrite();
+
+  // Display ON
+  writeCommand(ILI9341_DISPON);
+  
+  SPIEndWrite();
+}
 
 
 } // end of namespace

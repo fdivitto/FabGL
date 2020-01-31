@@ -56,7 +56,15 @@ protected:
 };
 
 
-
+class ILI9341Controller : public TFTController {
+public:
+  ILI9341Controller(int controllerWidth = 240, int controllerHeight = 320, TFTOrientation orientation = TFTOrientation::Rotate0, bool reverseHorizontal = true)
+    : TFTController(controllerWidth, controllerHeight, orientation, reverseHorizontal)
+  {
+  }
+protected:
+  void softReset();
+};
 
 
 
