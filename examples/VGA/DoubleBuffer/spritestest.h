@@ -112,7 +112,7 @@ public:
 
 private:
 
-  static const int MAXSPRITES = 40;
+  static const int MAXSPRITES = 35;
 
   MySprite * sprites_ = nullptr;
 

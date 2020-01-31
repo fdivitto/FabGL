@@ -78,7 +78,7 @@ public:
 
 private:
 
-  static const int MAXBALLS = 400;
+  static const int MAXBALLS = 300;
 
   struct Ball {
     double x;

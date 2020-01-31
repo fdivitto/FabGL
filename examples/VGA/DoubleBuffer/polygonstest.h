@@ -23,7 +23,7 @@
 class PolygonsTest : public Test {
 
   static const int MAXPOINTS   = 7;
-  static const int MAXPOLYGONS = 150;
+  static const int MAXPOLYGONS = 100;
   static const int MAXPOLYSIZE = 80;
 
   struct DPoint {
