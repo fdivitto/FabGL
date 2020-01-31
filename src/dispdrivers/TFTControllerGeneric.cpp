@@ -98,7 +98,6 @@ TFTController::TFTController(int controllerWidth, int controllerHeight, TFTOrien
   : m_spi(nullptr),
     m_SPIDevHandle(nullptr),
     m_viewPort(nullptr),
-    m_viewPortVisible(nullptr),
     m_controllerWidth(controllerWidth),
     m_controllerHeight(controllerHeight),
     m_rotOffsetX(0),
@@ -499,9 +498,6 @@ void TFTController::sendScreenBuffer(Rect updateRect)
 
   updateRect = updateRect.intersection(Rect(0, 0, m_viewPortWidth - 1, m_viewPortHeight - 1));
 
-  // select the buffer to send
-  auto viewPort = isDoubleBuffered() ? m_viewPortVisible : m_viewPort;
-
   // Column Address Set
   writeCommand(TFT_CASET);
   writeWord(m_rotOffsetX + updateRect.X1);   // XS (X Start)
@@ -515,7 +511,7 @@ void TFTController::sendScreenBuffer(Rect updateRect)
   writeCommand(TFT_RAMWR);
   const int width = updateRect.width();
   for (int row = updateRect.Y1; row <= updateRect.Y2; ++row) {
-    writeData(viewPort[row] + updateRect.X1, sizeof(uint16_t) * width);
+    writeData(m_viewPort[row] + updateRect.X1, sizeof(uint16_t) * width);
   }
 
   SPIEndWrite();
@@ -529,14 +525,6 @@ void TFTController::allocViewPort()
     m_viewPort[i] = (uint16_t*) heap_caps_malloc(m_viewPortWidth * sizeof(uint16_t), MALLOC_CAP_DMA);
     memset(m_viewPort[i], 0, m_viewPortWidth * sizeof(uint16_t));
   }
-
-  if (isDoubleBuffered()) {
-    m_viewPortVisible = (uint16_t**) heap_caps_malloc(m_viewPortHeight * sizeof(uint16_t*), MALLOC_CAP_32BIT);
-    for (int i = 0; i < m_viewPortHeight; ++i) {
-      m_viewPortVisible[i] = (uint16_t*) heap_caps_malloc(m_viewPortWidth * sizeof(uint16_t), MALLOC_CAP_DMA);
-      memset(m_viewPortVisible[i], 0, m_viewPortWidth * sizeof(uint16_t));
-    }
-  }
 }
 
 
@@ -547,12 +535,6 @@ void TFTController::freeViewPort()
       heap_caps_free(m_viewPort[i]);
     heap_caps_free(m_viewPort);
     m_viewPort = nullptr;
-  }
-  if (m_viewPortVisible) {
-    for (int i = 0; i < m_viewPortHeight; ++i)
-      heap_caps_free(m_viewPortVisible[i]);
-    heap_caps_free(m_viewPortVisible);
-    m_viewPortVisible = nullptr;
   }
 }
 
@@ -591,7 +573,8 @@ void TFTController::updateTaskFunc(void * pvParameters)
 
     ctrl->m_updateTaskRunning = false;
 
-    ctrl->sendScreenBuffer(updateRect);
+    if (!ctrl->isDoubleBuffered())
+      ctrl->sendScreenBuffer(updateRect);
   }
 }
 
@@ -803,7 +786,8 @@ void TFTController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * 
 
 void TFTController::swapBuffers()
 {
-  tswap(m_viewPort, m_viewPortVisible);
+  // nothing to do, we just send current view port to the device
+  sendScreenBuffer(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
 }
 
 

@@ -112,7 +112,6 @@ inline uint8_t preparePixel(RGB888 const & rgb)
 SSD1306Controller::SSD1306Controller()
   : m_i2c(nullptr),
     m_screenBuffer(nullptr),
-    m_altScreenBuffer(nullptr),
     m_updateTaskHandle(nullptr),
     m_updateTaskRunning(false),
     m_orientation(SSD1306Orientation::Normal)
@@ -142,9 +141,6 @@ void SSD1306Controller::end()
 
   free(m_screenBuffer);
   m_screenBuffer = nullptr;
-
-  free(m_altScreenBuffer);
-  m_altScreenBuffer = nullptr;
 }
 
 
@@ -341,9 +337,6 @@ void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
     const int screenX1 = r.X1 - m_screenCol;
     const int screenX2 = r.X2 - m_screenCol;
 
-    // select the buffer to send
-    uint8_t * screenBuffer = isDoubleBuffered() ? m_altScreenBuffer : m_screenBuffer;
-
     // send one page (8 rows) at the time
     for (int y = r.Y1; y <= r.Y2; y += 8) {
       int screenY = y - screenRow;
@@ -351,7 +344,7 @@ void SSD1306Controller::SSD1306_sendScreenBuffer(Rect updateRect)
         int page = screenY >> 3;
         if (!(SSD1306_sendCmd(SSD1306_PAGEADDR, page, page) && SSD1306_sendCmd(SSD1306_COLUMNADDR, screenX1, screenX2)))
           break;  // address selection failed, try with next page
-        SSD1306_sendData(screenBuffer + r.X1 + (y >> 3) * m_viewPortWidth, r.width(), 0x40);
+        SSD1306_sendData(m_screenBuffer + r.X1 + (y >> 3) * m_viewPortWidth, r.width(), 0x40);
       }
     }
 
@@ -369,11 +362,6 @@ void SSD1306Controller::allocScreenBuffer()
 {
   m_screenBuffer = (uint8_t*) malloc(m_viewPortWidth * m_viewPortHeight / 8);
   memset(m_screenBuffer, 0, m_viewPortWidth * m_viewPortHeight / 8);
-
-  if (isDoubleBuffered()) {
-    m_altScreenBuffer = (uint8_t*) malloc(m_viewPortWidth * m_viewPortHeight / 8);
-    memset(m_altScreenBuffer, 0, m_viewPortWidth * m_viewPortHeight / 8);
-  }
 }
 
 
@@ -411,7 +399,8 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 
     ctrl->m_updateTaskRunning = false;
 
-    ctrl->SSD1306_sendScreenBuffer(updateRect);
+    if (!ctrl->isDoubleBuffered())
+      ctrl->SSD1306_sendScreenBuffer(updateRect);
   }
 }
 
@@ -616,7 +605,8 @@ void SSD1306Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap cons
 
 void SSD1306Controller::swapBuffers()
 {
-  tswap(m_screenBuffer, m_altScreenBuffer);
+  // nothing to do, we just send current view port to the device
+  SSD1306_sendScreenBuffer(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
 }
 
 
