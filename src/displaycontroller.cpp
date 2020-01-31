@@ -324,8 +324,7 @@ Bitmap::~Bitmap()
 DisplayController::DisplayController()
   : m_primDynMemPool(FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE)
 {
-  m_execQueue = xQueueCreate(FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
-
+  m_execQueue                           = nullptr;
   m_backgroundPrimitiveExecutionEnabled = true;
   m_sprites                             = nullptr;
   m_spritesCount                        = 0;
@@ -339,6 +338,16 @@ DisplayController::DisplayController()
 DisplayController::~DisplayController()
 {
   vQueueDelete(m_execQueue);
+}
+
+
+void DisplayController::setDoubleBuffered(bool value)
+{
+  m_doubleBuffered = value;
+  if (m_execQueue)
+    vQueueDelete(m_execQueue);
+  // on double buffering a queue of single element is enough and necessary (see addPrimitive() for details)
+  m_execQueue = xQueueCreate(value ? 1 : FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
 }
 
 
