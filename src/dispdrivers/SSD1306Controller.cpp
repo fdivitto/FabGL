@@ -400,7 +400,7 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
       if (ctrl->getPrimitive(&prim) == false)
         break;
 
-      ctrl->execPrimitive(prim, updateRect);
+      ctrl->execPrimitive(prim, updateRect, false);
 
       if (ctrl->m_updateTaskFuncSuspended > 0)
         break;

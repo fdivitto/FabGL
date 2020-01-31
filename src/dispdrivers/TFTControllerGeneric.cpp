@@ -580,7 +580,7 @@ void TFTController::updateTaskFunc(void * pvParameters)
       if (ctrl->getPrimitive(&prim, TFT_BACKGROUND_PRIMITIVE_TIMEOUT / 1000) == false)
         break;
 
-      ctrl->execPrimitive(prim, updateRect);
+      ctrl->execPrimitive(prim, updateRect, false);
 
       if (ctrl->m_updateTaskFuncSuspended > 0)
         break;

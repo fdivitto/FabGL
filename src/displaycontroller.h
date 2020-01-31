@@ -37,6 +37,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include "freertos/task.h"
 
 #include "fabglconf.h"
 #include "fabutils.h"
@@ -159,6 +160,7 @@ enum PrimitiveCmd : uint8_t {
   RefreshSprites,
 
   // Swap buffers (m_doubleBuffered must be True)
+  // params: notifyTask
   SwapBuffers,
 
   // Fill a path, using current brush color
@@ -592,6 +594,7 @@ struct Primitive {
     Path                   path;
     PixelDesc              pixelDesc;
     LineEnds               lineEnds;
+    TaskHandle_t           notifyTask;
   } __attribute__ ((packed));
 
   Primitive() { }
@@ -838,7 +841,7 @@ protected:
 
   //// implemented methods
 
-  void execPrimitive(Primitive const & prim, Rect & updateRect);
+  void execPrimitive(Primitive const & prim, Rect & updateRect, bool insideISR);
 
   void updateAbsoluteClippingRect();
 
@@ -876,7 +879,7 @@ protected:
 
   void absDrawBitmap(int destX, int destY, Bitmap const * bitmap, void * saveBackground, bool ignoreClippingRect);
 
-  void setDoubleBuffered(bool value) { m_doubleBuffered = value; }
+  void setDoubleBuffered(bool value);
 
   bool getPrimitive(Primitive * primitive, int timeOutMS = 0);
 

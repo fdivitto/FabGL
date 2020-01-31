@@ -704,7 +704,7 @@ void IRAM_ATTR VGAController::VSyncInterrupt()
     if (VGACtrl->getPrimitiveISR(&prim) == false)
       break;
 
-    VGACtrl->execPrimitive(prim, updateRect);
+    VGACtrl->execPrimitive(prim, updateRect, true);
 
     if (VGACtrl->m_VSyncInterruptSuspended)
       break;

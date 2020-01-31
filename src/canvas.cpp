@@ -502,6 +502,7 @@ void Canvas::swapBuffers()
 {
   Primitive p;
   p.cmd = PrimitiveCmd::SwapBuffers;
+  p.notifyTask = xTaskGetCurrentTaskHandle();
   m_displayController->addPrimitive(p);
   m_displayController->primitivesExecutionWait();
 }
