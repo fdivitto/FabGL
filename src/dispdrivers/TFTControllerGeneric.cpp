@@ -306,9 +306,9 @@ void TFTController::setupOrientation()
 }
 
 
-void TFTController::setOrientation(TFTOrientation value)
+void TFTController::setOrientation(TFTOrientation value, bool force)
 {
-  if (m_orientation != value) {
+  if (m_orientation != value || force) {
     suspendBackgroundPrimitiveExecution();
     m_orientation = value;
     SPIBeginWrite();
@@ -317,6 +317,13 @@ void TFTController::setOrientation(TFTOrientation value)
     resumeBackgroundPrimitiveExecution();
     sendRefresh();
   }
+}
+
+
+void TFTController::setReverseHorizontal(bool value)
+{
+  m_reverseHorizontal = value;
+  setOrientation(m_orientation, true);
 }
 
 

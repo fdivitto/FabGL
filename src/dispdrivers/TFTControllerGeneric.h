@@ -244,7 +244,16 @@ public:
    *     // rotate by 180 degrees
    *     DisplayController.setOrientation(fabgl::TFTOrientation::Rotate180);
    */
-  void setOrientation(TFTOrientation value);
+  void setOrientation(TFTOrientation value, bool force = false);
+
+  /**
+   * @brief Inverts horizontal axis
+   *
+   * Default value depends by the specific display.
+   *
+   * @param value True inverts horizontal axis.
+   */
+  void setReverseHorizontal(bool value);
 
 
 protected:
