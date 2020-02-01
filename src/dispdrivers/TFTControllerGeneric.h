@@ -93,7 +93,7 @@ public:
   TFTController(TFTController const&) = delete;
   void operator=(TFTController const&)   = delete;
 
-  TFTController(int controllerWidth = 240, int controllerHeight = 320, TFTOrientation orientation = TFTOrientation::Rotate0, bool reverseHorizontal = false);
+  TFTController();
 
   ~TFTController();
 

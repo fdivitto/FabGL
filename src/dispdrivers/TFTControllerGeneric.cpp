@@ -94,18 +94,18 @@ inline uint16_t RGBA8888toNative(RGBA8888 const & rgba8888)
 }
 
 
-TFTController::TFTController(int controllerWidth, int controllerHeight, TFTOrientation orientation, bool reverseHorizontal)
+TFTController::TFTController()
   : m_spi(nullptr),
     m_SPIDevHandle(nullptr),
     m_viewPort(nullptr),
-    m_controllerWidth(controllerWidth),
-    m_controllerHeight(controllerHeight),
+    m_controllerWidth(240),
+    m_controllerHeight(320),
     m_rotOffsetX(0),
     m_rotOffsetY(0),
     m_updateTaskHandle(nullptr),
     m_updateTaskRunning(false),
-    m_orientation(orientation),
-    m_reverseHorizontal(reverseHorizontal)
+    m_orientation(TFTOrientation::Rotate0),
+    m_reverseHorizontal(false)
 {
 }
 

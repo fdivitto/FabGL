@@ -37,7 +37,7 @@
 
 
 
-fabgl::ILI9341Controller DisplayController(240, 320, fabgl::TFTOrientation::Rotate90);
+fabgl::ILI9341Controller DisplayController;
 fabgl::Terminal          Terminal;
 
 
@@ -55,6 +55,7 @@ void setup()
 
   DisplayController.begin(TFT_SCK, TFT_MOSI, TFT_DC, TFT_RESET, TFT_CS, TFT_SPIBUS);
   DisplayController.setResolution(TFT_240x320);
+  DisplayController.setOrientation(fabgl::TFTOrientation::Rotate90);
 
   Terminal.begin(&DisplayController);
   //Terminal.setLogStream(Serial);  // DEBUG ONLY

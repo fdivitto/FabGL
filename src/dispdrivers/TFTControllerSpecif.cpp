@@ -219,6 +219,8 @@ void ST7789Controller::softReset()
 
 void ILI9341Controller::softReset()
 {
+  m_reverseHorizontal = true;
+
   // software reset
   SPIBeginWrite();
   writeCommand(ILI9341_SWRESET);
