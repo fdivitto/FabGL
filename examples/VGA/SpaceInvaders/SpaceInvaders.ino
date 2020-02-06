@@ -136,7 +136,7 @@ struct IntroScene : public Scene {
       if (updateCount > 50) {
         if (keyboard->isKeyboardAvailable() && keyboard->isVKDown(fabgl::VK_SPACE))
           controller_ = 1;  // select keyboard as controller
-        else if (mouse->isMouseAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
+        else if (mouse->isMouseAvailable() && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
           controller_ = 2;  // select mouse as controller
         starting_ = (controller_ > 0);  // start only when a controller has been selected
       }
@@ -539,7 +539,7 @@ struct GameScene : public Scene {
 
       // wait for SPACE or click from mouse
       if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
-          (IntroScene::controller_ == 2 && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)) {
+          (IntroScene::controller_ == 2 && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)) {
         stop();
         DisplayController.removeSprites();
       }
