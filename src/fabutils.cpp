@@ -592,8 +592,10 @@ void FileBrowser::reload()
 
     AutoSuspendInterrupts autoInt;
     auto dirp = opendir(m_dir);
-    for (int i = 0; i < c; ++i) {
+    while (dirp) {
       auto dp = readdir(dirp);
+      if (dp == NULL)
+        break;
       if (strcmp(".", dp->d_name) && strcmp("..", dp->d_name) && dp->d_type != DT_UNKNOWN) {
         DirItem * di = m_items + m_count;
         // check if this is a simulated directory (like in SPIFFS)
@@ -705,7 +707,7 @@ void FileBrowser::rename(char const * oldName, char const * newName)
 // Specifying outPath=nullptr returns required length
 int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 {
-  return outPath ? snprintf(outPath, maxlen, "%s/%s", m_dir, name) : snprintf(nullptr, 0, "%s/%s", m_dir, name) + 1;
+  return (outPath ? snprintf(outPath, maxlen, "%s/%s", m_dir, name) : snprintf(nullptr, 0, "%s/%s", m_dir, name)) + 1;
 }
 
 
