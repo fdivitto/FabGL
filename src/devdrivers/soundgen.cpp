@@ -299,7 +299,8 @@ void NoiseWaveformGenerator::setFrequency(int value)
 }
 
 
-int NoiseWaveformGenerator::getSample() {
+int NoiseWaveformGenerator::getSample()
+{
   if (duration() == 0) {
     return 0;
   }
@@ -485,7 +486,6 @@ void SoundGenerator::i2s_audio_init()
   i2s_config.dma_buf_len          = FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t);
   i2s_config.use_apll             = 0;
   i2s_config.tx_desc_auto_clear   = 0;
-  i2s_config.intr_alloc_flags     = 0;
   // install and start i2s driver
   i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
   // init DAC pad
