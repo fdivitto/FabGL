@@ -208,7 +208,25 @@ struct GameScene : public Scene {
   int playerAbsX_          = -1; // used when controller is mouse (-1 = no move)
   int enemiesX_            = ENEMIES_START_X;
   int enemiesY_            = ENEMIES_START_Y;
-  int enemiesDir_          = 1;
+
+  // enemiesDir_
+  //   bit 0 : if 1 moving left
+  //   bit 1 : if 1 moving right
+  //   bit 2 : if 1 moving down
+  //   bit 3 : if 0 before was moving left, if 1 before was moving right
+  // Allowed cases:
+  //   1  = moving left
+  //   2  = moving right
+  //   4  = moving down (before was moving left)
+  //   12 = moving down (before was moving right)
+
+  static constexpr int ENEMY_MOV_LEFT              = 1;
+  static constexpr int ENEMY_MOV_RIGHT             = 2;
+  static constexpr int ENEMY_MOV_DOWN_BEFORE_LEFT  = 4;
+  static constexpr int ENEMY_MOV_DOWN_BEFORE_RIGHT = 12;
+
+  int enemiesDir_          = ENEMY_MOV_RIGHT;
+
   int enemiesAlive_        = ROWENEMIESCOUNT * 5;
   int enemiesSoundCount_   = 0;
   SISprite * lastHitEnemy_ = nullptr;
@@ -324,13 +342,11 @@ struct GameScene : public Scene {
     canvas.drawTextFmt(266, 14, "%05d", hiScore_);
   }
 
-  void moveEnemy(SISprite * enemy, int x, int y, bool * touchLeftSide, bool * touchRightSide)
+  void moveEnemy(SISprite * enemy, int x, int y, bool * touchSide)
   {
     if (enemy->visible) {
-      if (x <= 0)
-        *touchLeftSide = true;
-      if (x >= getWidth() - enemy->getWidth())
-        *touchRightSide = true;
+      if (x <= 0 || x >= getWidth() - enemy->getWidth())
+        *touchSide = true;
       enemy->moveTo(x, y);
       enemy->setFrame(enemy->getFrameIndex() ? 0 : 1);
       updateSprite(enemy);
@@ -401,22 +417,27 @@ struct GameScene : public Scene {
           lastHitEnemy_ = nullptr;
         }
         // handle enemies movement
-        enemiesX_ += enemiesDir_ * ENEMIES_STEP_X;
-        bool touchLeftSide = false, touchRightSide = false;
+        enemiesX_ += (-1 * (enemiesDir_ & 1) + (enemiesDir_ >> 1 & 1)) * ENEMIES_STEP_X;
+        enemiesY_ += (enemiesDir_ >> 2 & 1) * ENEMIES_STEP_Y;
+        bool touchSide = false;
         for (int i = 0; i < ROWENEMIESCOUNT; ++i) {
-          moveEnemy(&enemiesR1_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 0 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
-          moveEnemy(&enemiesR2_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 1 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
-          moveEnemy(&enemiesR3_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 2 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
-          moveEnemy(&enemiesR4_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 3 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
-          moveEnemy(&enemiesR5_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 4 * ENEMIES_Y_SPACE, &touchLeftSide, &touchRightSide);
+          moveEnemy(&enemiesR1_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 0 * ENEMIES_Y_SPACE, &touchSide);
+          moveEnemy(&enemiesR2_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 1 * ENEMIES_Y_SPACE, &touchSide);
+          moveEnemy(&enemiesR3_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 2 * ENEMIES_Y_SPACE, &touchSide);
+          moveEnemy(&enemiesR4_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 3 * ENEMIES_Y_SPACE, &touchSide);
+          moveEnemy(&enemiesR5_[i], enemiesX_ + i * ENEMIES_X_SPACE, enemiesY_ + 4 * ENEMIES_Y_SPACE, &touchSide);
         }
-        if (touchLeftSide || touchRightSide) {
-          if (enemiesDir_ == 0) {
-            enemiesDir_ = touchLeftSide ? 1 : -1;
-          } else {
-            enemiesDir_ = 0;
-            enemiesY_ += ENEMIES_STEP_Y;
-          }
+        switch (enemiesDir_) {
+          case ENEMY_MOV_DOWN_BEFORE_LEFT:
+            enemiesDir_ = ENEMY_MOV_RIGHT;
+            break;
+          case ENEMY_MOV_DOWN_BEFORE_RIGHT:
+            enemiesDir_ = ENEMY_MOV_LEFT;
+            break;
+          default:
+            if (touchSide)
+              enemiesDir_ = (enemiesDir_ == ENEMY_MOV_LEFT ? ENEMY_MOV_DOWN_BEFORE_LEFT : ENEMY_MOV_DOWN_BEFORE_RIGHT);
+            break;
         }
         // sound
         ++enemiesSoundCount_;
