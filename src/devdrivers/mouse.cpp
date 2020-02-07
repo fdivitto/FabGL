@@ -125,7 +125,7 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
       return false;  // timeout
   }
 
-  // the unique way we have to check packed is disaligned, the bit 4 of first byte must be always 1
+  // the unique way we have to check a packet is disaligned: the bit 4 of first byte must be always 1
   if ((rcv[0] & 8) == 0) {
     PS2Controller::instance()->warmInit();
     return false;
