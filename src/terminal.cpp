@@ -3640,6 +3640,10 @@ void LineEditor::endInput()
 {
   m_termctrl.end();
   m_state = -1;
+  if (m_text == nullptr) {
+    m_text = (char*) malloc(1);
+    m_text[0] = 0;
+  }
 }
 
 
