@@ -29,7 +29,7 @@ namespace fabgl {
 
 
 const TermInfoKbdConv kbdConv_Generic[] = {
-  // Cursor Up => CTRL-E, WordStar left
+  // Cursor Up => CTRL-E, WordStar Up
   { VK_UP, "\x05" },
 
   // Cursor Down => CTRL-X, WordStar Down
