@@ -1710,6 +1710,8 @@ void uiFrame::setTitleFmt(const char *format, ...)
   va_start(ap, format);
   int size = vsnprintf(nullptr, 0, format, ap) + 1;
   if (size > 0) {
+    va_end(ap);
+    va_start(ap, format);
     char buf[size + 1];
     vsnprintf(buf, size, format, ap);
     setTitle(buf);
@@ -2864,6 +2866,8 @@ void uiLabel::setTextFmt(const char *format, ...)
   va_start(ap, format);
   int size = vsnprintf(nullptr, 0, format, ap) + 1;
   if (size > 0) {
+    va_end(ap);
+    va_start(ap, format);
     char buf[size + 1];
     vsnprintf(buf, size, format, ap);
     setText(buf);
