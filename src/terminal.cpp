@@ -3595,7 +3595,7 @@ LineEditor::~LineEditor()
 
 void LineEditor::setLength(int newLength)
 {
-  if (m_allocated < newLength) {
+  if (m_allocated < newLength || m_allocated == 0) {
     int allocated = imax(m_allocated * 2, newLength);
     m_text = (char*) realloc(m_text, allocated + 1);
     memset(m_text + m_allocated, 0, allocated - m_allocated + 1);
