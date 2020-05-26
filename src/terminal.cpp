@@ -126,8 +126,6 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
   m_emuState.tabStop = nullptr;
   m_font.data = nullptr;
 
-  set132ColumnMode(false);
-
   m_savedCursorStateList = nullptr;
 
   m_alternateScreenBuffer = false;
@@ -141,10 +139,12 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
   m_emuState.ctrlBits = 7;
 
   // cursor setup
-  m_cursorState   = false;
+  m_cursorState = false;
   m_emuState.cursorEnabled = false;
 
   m_mutex = xSemaphoreCreateMutex();
+
+  set132ColumnMode(false);
 
   // blink support
   m_blinkTimer = xTimerCreate("", pdMS_TO_TICKS(FABGLIB_DEFAULT_BLINK_PERIOD_MS), pdTRUE, this, blinkTimerFunc);
