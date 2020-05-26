@@ -537,6 +537,15 @@ public:
   void localWrite(uint8_t c);
 
   /**
+   * @brief Injects a string of keys into the keyboard queue.
+   *
+   * Characters added with localWrite() will be received with read(), available() and peek() methods.
+   *
+   * @param str A string of ASCII codes to inject into the queue.
+   */
+  void localWrite(char const * str);
+
+  /**
    * @brief Injects keys into the keyboard queue.
    *
    * Characters inserted with localWrite() will be received with read(), available() and peek() methods.
@@ -546,13 +555,14 @@ public:
   void localInsert(uint8_t c);
 
   /**
-   * @brief Injects a string of keys into the keyboard queue.
+   * @brief Injects keys into the keyboard queue.
    *
-   * Characters added with localWrite() will be received with read(), available() and peek() methods.
+   * This is the same of localInsert().
+   * Characters inserted with localWrite() will be received with read(), available() and peek() methods.
    *
-   * @param str A string of ASCII codes to inject into the queue.
+   * @param c ASCII code to inject into the queue.
    */
-  void localWrite(char const * str);
+  void unRead(uint8_t c) { localInsert(c); }
 
   /**
    * @brief Sets the stream where to output debugging logs.
