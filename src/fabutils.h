@@ -485,10 +485,11 @@ public:
    * @brief Determines if a file exists
    *
    * @param name Relative file or directory name
+   * @param caseSensitive If true (default) comparison is case sensitive
    *
    * @return True if the file exists
    */
-  bool exists(char const * name);
+  bool exists(char const * name, bool caseSensitive = true);
 
   /**
    * @brief Determines if the items are sorted

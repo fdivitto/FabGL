@@ -540,11 +540,17 @@ int FileBrowser::countDirEntries(int * namesLength)
 }
 
 
-bool FileBrowser::exists(char const * name)
+bool FileBrowser::exists(char const * name, bool caseSensitive)
 {
-  for (int i = 0; i < m_count; ++i)
-    if (strcmp(name, m_items[i].name) == 0)
-      return true;
+  if (caseSensitive) {
+    for (int i = 0; i < m_count; ++i)
+      if (strcmp(name, m_items[i].name) == 0)
+        return true;
+  } else {
+    for (int i = 0; i < m_count; ++i)
+      if (strcasecmp(name, m_items[i].name) == 0)
+        return true;
+  }
   return false;
 }
 
