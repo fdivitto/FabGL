@@ -334,10 +334,10 @@ void setup()
     DisplayController.setResolution(VGA_640x200_70Hz);
 
   // uncomment to adjust screen alignment and size
-  //VGAController.shrinkScreen(5, 0);
-  //VGAController.moveScreen(-1, 0);
+  //DisplayController.shrinkScreen(5, 0);
+  //DisplayController.moveScreen(-1, 0);
 
-  Terminal.begin(&VGAController);
+  Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
 
   Terminal.setBackgroundColor(Color::Black);
