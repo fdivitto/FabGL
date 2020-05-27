@@ -806,6 +806,40 @@ char * FileBrowser::createTempFilename()
   }
 }
 
+
+void FileBrowser::truncate(char const * name, size_t size)
+{
+  AutoSuspendInterrupts autoInt;
+
+  char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
+  sprintf(fullpath, "%s/%s", m_dir, name);
+
+  // in future maybe...
+  //::truncate(name, size);
+
+  // for now...
+  char * tempFilename = createTempFilename();
+  ::rename(fullpath, tempFilename);
+  constexpr size_t BUFLEN = 512;
+  void * buf = malloc(BUFLEN);
+  auto fr = fopen(tempFilename, "rb");
+  if (fr) {
+    auto fw = fopen(fullpath, "wb");
+    if (fw) {
+      while (!feof(fr)) {
+        auto l = fread(buf, 1, BUFLEN, fr);
+        fwrite(buf, 1, l, fw);
+      }
+      fclose(fw);
+    }
+    fclose(fr);
+  }
+  free(buf);
+  unlink(tempFilename);
+  free(tempFilename);
+}
+
+
 // concatenates current directory and specified name and store result into fullpath
 // Specifying outPath=nullptr returns required length
 int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)

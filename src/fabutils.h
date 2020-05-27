@@ -583,6 +583,14 @@ public:
   void rename(char const * oldName, char const * newName);
 
   /**
+   * @brief Truncates a file to the specified size
+   *
+   * @param name Relative file name
+   * @param size New size in bytes
+   */
+  void truncate(char const * name, size_t size);
+
+  /**
    * @brief Creates a random temporary filename, with absolute path
    *
    * @return Pointer to temporary string. It must be freed using free().
