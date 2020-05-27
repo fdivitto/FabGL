@@ -1034,16 +1034,18 @@ public:
   /**
    * @brief Object constructor
    *
-   * @param terminal The Terminal instance to control.
+   * @param terminal The Terminal instance to control. If not specified you have to set delegates.
    */
-  TerminalController(Terminal * terminal);
+  TerminalController(Terminal * terminal = nullptr);
 
   ~TerminalController();
 
   /**
    * @brief Initializes TerminalController operations
+   *
+   * @param terminal The Terminal instance to control. If not specified you have to set delegates.
    */
-  void begin();
+  void begin(Terminal * terminal = nullptr);
 
   /**
    * @brief Finalizes TerminalController operations
@@ -1145,7 +1147,36 @@ public:
    */
   int setChars(char const * buffer, int count);
 
+  //// Delegates ////
+
+  /**
+   * @brief Read character delegate
+   *
+   * This delegate is called whenever a character needs to be read, and no Terminal has been specified.
+   * The delegate should block until a character is received.
+   *
+   * First parameter represents a pointer to the receiving character code.
+   */
+  Delegate<int *> onRead;
+
+  /**
+   * @brief Write character delegate
+   *
+   * This delegate is called whenever a character needs to be written, and no Terminal has been specified.
+   *
+   * First parameter represents the character code to send.
+   */
+  Delegate<int> onWrite;
+
+
 private:
+
+  void waitFor(int value);
+  void write(uint8_t c);
+  void write(char const * str);
+  int read();
+
+
   Terminal * m_terminal;
 };
 
