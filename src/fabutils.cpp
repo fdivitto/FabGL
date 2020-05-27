@@ -570,6 +570,61 @@ size_t FileBrowser::fileSize(char const * name)
 }
 
 
+bool FileBrowser::fileCreationDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds)
+{
+  char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
+  sprintf(fullpath, "%s/%s", m_dir, name);
+  struct stat s;
+  if (stat(fullpath, &s))
+    return false;
+  auto tm  = *localtime((time_t*)&s.st_ctime);  // I know, this is not create date, but status change. Anyway I cannot find "st_birthtimespec"
+  *year    = 1900 + tm.tm_year;
+  *month   = 1 + tm.tm_mon;
+  *day     = tm.tm_mday;
+  *hour    = tm.tm_hour;
+  *minutes = tm.tm_min;
+  *seconds = imin(tm.tm_sec, 59); // [0, 61] (until C99), [0, 60] (since C99)
+  return true;
+}
+
+
+bool FileBrowser::fileUpdateDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds)
+{
+  char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
+  sprintf(fullpath, "%s/%s", m_dir, name);
+  struct stat s;
+  if (stat(fullpath, &s))
+    return false;
+  auto tm  = *localtime((time_t*)&s.st_mtime);
+  *year    = 1900 + tm.tm_year;
+  *month   = 1 + tm.tm_mon;
+  *day     = tm.tm_mday;
+  *hour    = tm.tm_hour;
+  *minutes = tm.tm_min;
+  *seconds = imin(tm.tm_sec, 59); // [0, 61] (until C99), [0, 60] (since C99)
+  return true;
+}
+
+
+bool FileBrowser::fileAccessDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds)
+{
+  char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
+  sprintf(fullpath, "%s/%s", m_dir, name);
+  struct stat s;
+  if (stat(fullpath, &s))
+    return false;
+  auto tm  = *localtime((time_t*)&s.st_atime);
+  *year    = 1900 + tm.tm_year;
+  *month   = 1 + tm.tm_mon;
+  *day     = tm.tm_mday;
+  *hour    = tm.tm_hour;
+  *minutes = tm.tm_min;
+  *seconds = imin(tm.tm_sec, 59); // [0, 61] (until C99), [0, 60] (since C99)
+  return true;
+}
+
+
+
 int DirComp(const void * i1, const void * i2)
 {
   DirItem * d1 = (DirItem*)i1;

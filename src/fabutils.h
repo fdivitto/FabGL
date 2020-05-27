@@ -505,6 +505,51 @@ public:
   size_t fileSize(char const * name);
 
   /**
+   * @brief Gets file creation date and time
+   *
+   * @param name Relative file name
+   * @param year Pointer to year
+   * @param month Pointer to month (1..12)
+   * @param day Pointer to day (1..31)
+   * @param hour Pointer to hour (0..23)
+   * @param minutes Pointer to minutes (0..59)
+   * @param seconds Pointer to seconds (0..59, or 60)
+   *
+   * @return True on success
+   */
+  bool fileCreationDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds);
+
+  /**
+   * @brief Gets file update date and time
+   *
+   * @param name Relative file name
+   * @param year Pointer to year
+   * @param month Pointer to month (1..12)
+   * @param day Pointer to day (1..31)
+   * @param hour Pointer to hour (0..23)
+   * @param minutes Pointer to minutes (0..59)
+   * @param seconds Pointer to seconds (0..59, or 60)
+   *
+   * @return True on success
+   */
+  bool fileUpdateDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds);
+
+  /**
+   * @brief Gets file access date and time
+   *
+   * @param name Relative file name
+   * @param year Pointer to year
+   * @param month Pointer to month (1..12)
+   * @param day Pointer to day (1..31)
+   * @param hour Pointer to hour (0..23)
+   * @param minutes Pointer to minutes (0..59)
+   * @param seconds Pointer to seconds (0..59, or 60)
+   *
+   * @return True on success
+   */
+  bool fileAccessDate(char const * name, int * year, int * month, int * day, int * hour, int * minutes, int * seconds);
+
+  /**
    * @brief Determines if the items are sorted
    *
    * @param value If true items will be sorted in ascending order (directories first)
