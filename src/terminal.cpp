@@ -3065,6 +3065,22 @@ void Terminal::consumeFabGLSeq()
       break;
     }
 
+    // Return virtual key state
+    // Seq:
+    //    ESC 0xFF FABGL_ENTERM_ISVKDOWN VKCODE
+    // params:
+    //    VKCODE : virtual key code to check
+    // return:
+    //    byte: 0xFE   (reply tag)
+    //    byte: 0 = key is up, 1 = key is down
+    case FABGL_ENTERM_ISVKDOWN:
+    {
+      VirtualKey vk = (VirtualKey) getNextCode(false);
+      send(0xFE);
+      send(keyboard()->isVKDown(vk) ? 1 : 0);
+      break;
+    }
+
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
       logFmt("Unknown: ESC 0xFF %02x\n", c);
@@ -3606,6 +3622,13 @@ int TerminalController::setChars(char const * buffer, int count)
 }
 
 
+bool TerminalController::isVKDown(VirtualKey vk)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_ISVKDOWN);
+  write((uint8_t)vk);
+  waitFor(0xFE);
+  return read();
 }
 
 

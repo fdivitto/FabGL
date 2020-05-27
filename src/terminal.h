@@ -229,6 +229,7 @@ namespace fabgl {
 #define FABGL_ENTERM_CURSORRIGHT   8
 #define FABGL_ENTERM_SETCHAR       9
 #define FABGL_ENTERM_SETCHARS     10
+#define FABGL_ENTERM_ISVKDOWN     11
 
 
 
@@ -1146,6 +1147,16 @@ public:
    * @return Number of vertical scrolls occurred.
    */
   int setChars(char const * buffer, int count);
+
+  /**
+   * @brief Checks if a virtual key is currently down
+   *
+   * @param vk Virtual key code
+   *
+   * @return True is the specified key is pressed
+   */
+  bool isVKDown(VirtualKey vk);
+
 
   //// Delegates ////
 
