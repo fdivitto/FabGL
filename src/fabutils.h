@@ -496,6 +496,15 @@ public:
   bool exists(char const * name, bool caseSensitive = true);
 
   /**
+   * @brief Determines file size
+   *
+   * @param name Relative file name
+   *
+   * @return File size in bytes
+   */
+  size_t fileSize(char const * name);
+
+  /**
    * @brief Determines if the items are sorted
    *
    * @param value If true items will be sorted in ascending order (directories first)

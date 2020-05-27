@@ -555,6 +555,21 @@ bool FileBrowser::exists(char const * name, bool caseSensitive)
 }
 
 
+size_t FileBrowser::fileSize(char const * name)
+{
+  size_t size = 0;
+  char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
+  sprintf(fullpath, "%s/%s", m_dir, name);
+  auto fr = fopen(fullpath, "rb");
+  if (fr) {
+    fseek(fr, 0, SEEK_END);
+    size = ftell(fr);
+    fclose(fr);
+  }
+  return size;
+}
+
+
 int DirComp(const void * i1, const void * i2)
 {
   DirItem * d1 = (DirItem*)i1;
