@@ -346,6 +346,7 @@ using fabgl::RGBA2222;
 using fabgl::RGB888;
 using fabgl::RGBA8888;
 using fabgl::FlowControl;
+using fabgl::LineEditorSpecialChar;
 using fabgl::LineEditor;
 using fabgl::TerminalController;
 using fabgl::AutoSuspendInterrupts;
