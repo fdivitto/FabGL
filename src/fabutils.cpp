@@ -691,7 +691,12 @@ void FileBrowser::remove(char const * name)
   int r = unlink(fullpath);
 
   if (r != 0) {
-    // failed
+    // failed, try to remove directory
+    r = rmdir(fullpath);
+  }
+
+  if (r != 0) {
+    // failed, try simulated directory in SPIFFS
     if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory
       // maybe this is a directory, remove ".dir" file
