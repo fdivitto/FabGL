@@ -3493,7 +3493,8 @@ void TerminalController::write(uint8_t c)
 {
   if (m_terminal)
     m_terminal->write(c);
-  onWrite(c);
+  else
+    onWrite(c);
 }
 
 
