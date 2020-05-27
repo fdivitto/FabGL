@@ -791,6 +791,21 @@ void FileBrowser::rename(char const * oldName, char const * newName)
 }
 
 
+// return a full path
+char * FileBrowser::createTempFilename()
+{
+  constexpr int FLEN = 6;
+  auto ret = (char*) malloc(strlen(m_dir) + 1 + FLEN + 1);
+  while (true) {
+    char name[FLEN + 1] = {0};
+    for (int i = 0; i < FLEN; ++i)
+      name[i] = 65 + (rand() % 26);
+    sprintf(ret, "%s/%s", m_dir, name);
+    if (!exists(name))
+      return ret;
+  }
+}
+
 // concatenates current directory and specified name and store result into fullpath
 // Specifying outPath=nullptr returns required length
 int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)

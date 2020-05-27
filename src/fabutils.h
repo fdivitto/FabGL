@@ -583,6 +583,13 @@ public:
   void rename(char const * oldName, char const * newName);
 
   /**
+   * @brief Creates a random temporary filename, with absolute path
+   *
+   * @return Pointer to temporary string. It must be freed using free().
+   */
+  char * createTempFilename();
+
+  /**
    * @brief Composes a full file path given a relative name
    *
    * @param name Relative file name
