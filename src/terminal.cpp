@@ -3754,7 +3754,7 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
         case 'D':
           if (m_inputPos > 0) {
             int count = 1;
-            if (m_terminal->keyboard()->isVKDown(VK_LCTRL)) {
+            if (m_termctrl.isVKDown(VK_LCTRL)) {
               // CTRL + Cursor Left => start of previous word
               while (m_inputPos - count > 0 && (m_text[m_inputPos - count] == ASCII_SPC || m_text[m_inputPos - count - 1] != ASCII_SPC))
                 ++count;
@@ -3769,7 +3769,7 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
         case 'C':
           if (m_inputPos < m_textLength) {
             int count = 1;
-            if (m_terminal->keyboard()->isVKDown(VK_LCTRL)) {
+            if (m_termctrl.isVKDown(VK_LCTRL)) {
               // CTRL + Cursor Right => start of next word
               while (m_text[m_inputPos + count] && (m_text[m_inputPos + count] == ASCII_SPC || m_text[m_inputPos + count - 1] != ASCII_SPC))
                 ++count;
