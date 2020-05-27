@@ -466,11 +466,11 @@ void FileBrowser::clear()
 
 
 // set absolute directory (full path must be specified)
-void FileBrowser::setDirectory(const char * path)
+bool FileBrowser::setDirectory(const char * path)
 {
   free(m_dir);
   m_dir = strdup(path);
-  reload();
+  return reload();
 }
 
 
@@ -566,8 +566,10 @@ int DirComp(const void * i1, const void * i2)
 }
 
 
-void FileBrowser::reload()
+bool FileBrowser::reload()
 {
+  bool retval = true;
+
   clear();
   int namesAlloc;
   int c = countDirEntries(&namesAlloc);
@@ -626,12 +628,17 @@ void FileBrowser::reload()
         }
       }
     }
-    closedir(dirp);
+    if (dirp)
+      closedir(dirp);
+    else
+      retval = false;
 
   }
 
   if (m_sorted)
     qsort(m_items, m_count, sizeof(DirItem), DirComp);
+
+  return retval;
 }
 
 

@@ -443,20 +443,24 @@ public:
    * @brief Sets absolute directory path
    *
    * @param path Absolute directory path (ie "/spiffs")
+   *
+   * @return True on success
    */
-  void setDirectory(const char * path);    // set absolute path
+  bool setDirectory(const char * path);
 
   /**
    * @brief Sets relative directory path
    *
    * @param subdir Relative directory path (ie "subdir")
    */
-  void changeDirectory(const char * subdir); // set relative path
+  void changeDirectory(const char * subdir);
 
   /**
    * @brief Reloads directory content
+   *
+   * @return True on successful reload.
    */
-  void reload();
+  bool reload();
 
   /**
    * @brief Determines absolute path of current directory
