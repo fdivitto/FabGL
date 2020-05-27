@@ -3646,13 +3646,17 @@ LineEditor::LineEditor(Terminal * terminal)
     m_textLength(0),
     m_allocated(0),
     m_state(-1),
-    m_insertMode(true)
+    m_insertMode(true),
+    m_typeText(nullptr),
+    m_typingIndex(0)
 {
 }
 
 
 LineEditor::~LineEditor()
 {
+  if (m_typeText)
+    free(m_typeText);
   free(m_text);
 }
 
@@ -3669,6 +3673,15 @@ void LineEditor::setLength(int newLength)
 }
 
 
+void LineEditor::typeText(char const * text)
+{
+  if (m_typeText)
+    free(m_typeText);
+  m_typeText = strdup(text);
+  m_typingIndex = 0;
+}
+
+
 void LineEditor::setText(char const * text, bool moveCursor)
 {
   setText(text, strlen(text), moveCursor);
@@ -3677,16 +3690,49 @@ void LineEditor::setText(char const * text, bool moveCursor)
 
 void LineEditor::setText(char const * text, int length, bool moveCursor)
 {
+  if (m_state > -1) {
+    // already editing, replace previous text
+    m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+    for (int i = 0; i < m_textLength; ++i)
+      m_termctrl.setChar(' ');
+    m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+    m_homeRow -= m_termctrl.setChars(text, length);
+  }
   setLength(length);
   memcpy(m_text, text, length);
   m_text[length] = 0;
-  m_state = -1;
   m_inputPos = moveCursor ? length : 0;
+}
+
+
+void LineEditor::write(uint8_t c)
+{
+  if (m_terminal)
+    m_terminal->write(c);
+  else
+    onWrite(c);
+}
+
+
+int LineEditor::read()
+{
+  if (m_terminal)
+    return m_terminal->read(-1);
+  else {
+    int c;
+    onRead(&c);
+    return c;
+  }
 }
 
 
 void LineEditor::beginInput()
 {
+  if (m_terminal == nullptr) {
+    // in case a terminal has been not specified, we need to use onRead and onWrite delegates
+    m_termctrl.onRead  = [&](int * c) { onRead(c); };
+    m_termctrl.onWrite = [&](int c)   { onWrite(c); };
+  }
   m_termctrl.begin();
   m_homeCol = m_termctrl.getCursorCol();
   m_homeRow = m_termctrl.getCursorRow();
@@ -3713,7 +3759,7 @@ void LineEditor::endInput()
 }
 
 
-char const * LineEditor::edit(int maxLength, int timeOutMS)
+char const * LineEditor::edit(int maxLength)
 {
 
   // init?
@@ -3722,7 +3768,20 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
 
   while (true) {
 
-    int c = m_terminal->read(timeOutMS);
+    int c;
+
+    if (m_typeText) {
+      c = m_typeText[m_typingIndex++];
+      if (c == 0) {
+        free(m_typeText);
+        m_typeText = nullptr;
+        continue;
+      }
+    } else {
+      c = read();
+    }
+
+    onChar(&c);
 
     // timeout?
     if (c < 0)
@@ -3750,6 +3809,18 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
       // CSI mode
 
       switch (c) {
+
+        // "ESC [ A" : cursor Up
+        case 'A':
+          onSpecialChar(LineEditorSpecialChar::CursorUp);
+          m_state = 0;
+          break;
+
+        // "ESC [ B" : cursor Down
+        case 'B':
+          onSpecialChar(LineEditorSpecialChar::CursorDown);
+          m_state = 0;
+          break;
 
         // "ESC [ D" : cursor Left
         case 'D':
@@ -3840,6 +3911,7 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
 
         // DEL, delete character at left
         case 0x7F:
+        case 0x08:
           if (m_inputPos > 0) {
             m_termctrl.cursorLeft(1);
             m_termctrl.multilineDeleteChar(m_textLength - m_inputPos);
@@ -3851,10 +3923,30 @@ char const * LineEditor::edit(int maxLength, int timeOutMS)
 
         // CR, newline and return the inserted text
         case 0x0D:
-          m_termctrl.cursorRight(m_textLength - m_inputPos);
-          m_terminal->write("\r\n");
-          endInput();
-          return m_text;
+        {
+          int op = 0;
+          onCarriageReturn(&op);
+          if (op < 2) {
+            m_termctrl.cursorRight(m_textLength - m_inputPos);
+            if (op == 0) {
+              write('\r');
+              write('\n');
+            }
+            endInput();
+            return m_text;
+          } else
+            break;
+        }
+
+        // CTRL-E, WordStar UP
+        case 0x05:
+          onSpecialChar(LineEditorSpecialChar::CursorUp);
+          break;
+
+        // CTRL-X, WordStar DOWN
+        case 0x18:
+          onSpecialChar(LineEditorSpecialChar::CursorDown);
+          break;
 
         // insert printable chars
         case 32 ... 126:

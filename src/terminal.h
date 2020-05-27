@@ -1198,6 +1198,15 @@ private:
 // LineEditor
 
 
+/** \ingroup Enumerations
+ * @brief Special character specified in on values from LineEditor::onSpecialChar delegate
+ */
+enum class LineEditorSpecialChar {
+  CursorUp,    /**< Cursor Up */
+  CursorDown,  /**< Cursor Down */
+};
+
+
 /**
  * @brief LineEditor is a single-line / multiple-rows editor which uses the Terminal object as input and output.
  *
@@ -1236,6 +1245,7 @@ public:
    * @brief Sets initial text
    *
    * Call this method if the input must have some text already inserted.
+   * This method can be also called during editing to replace current text.
    *
    * @param text Initial text.
    * @param moveCursor If true the cursor is moved at the end of initial text.
@@ -1253,6 +1263,7 @@ public:
    * @brief Sets initial text specifying length
    *
    * Call this method if the input must have some text already inserted.
+   * This method can be also called during editing to replace current text.
    *
    * @param text Initial text.
    * @param length Text length
@@ -1261,16 +1272,24 @@ public:
   void setText(char const * text, int length, bool moveCursor = true);
 
   /**
+   * @brief Simulates user typing
+   *
+   * This method simulates user typing. Unlike setText, this methods allows control characters and generates onChar events.
+   *
+   * @param text Text to type
+   */
+  void typeText(char const * text);
+
+  /**
    * @brief Reads user input and return the inserted line
    *
-   * This method returns when user press ENTER/RETURN or when the specified timeout has expired.
+   * This method returns when user press ENTER/RETURN.
    *
    * @param maxLength Maximum amount of character the user can type. 0 = unlimited.
-   * @param timeOutMS Timeout in milliseconds. If timeout expires the cursor is not moved from its current position. -1 = no timeout.
    *
-   * @return Returns what user typed and edited, or NULL on timeout.
+   * @return Returns what user typed and edited.
    */
-  char const * edit(int maxLength = 0, int timeOutMS = -1);
+  char const * edit(int maxLength = 0);
 
   /**
    * @brief Gets current content
@@ -1286,11 +1305,62 @@ public:
    */
   void setInsertMode(bool value) { m_insertMode = value; }
 
+
+  // delegates
+
+  /**
+   * @brief Read character delegate
+   *
+   * This delegate is called whenever a character needs to be read, and no Terminal has been specified.
+   * The delegate should block until a character is received.
+   *
+   * First parameter represents a pointer to the receiving character code.
+   */
+  Delegate<int *> onRead;
+
+  /**
+   * @brief Write character delegate
+   *
+   * This delegate is called whenever a character needs to be written, and no Terminal has been specified.
+   *
+   * First parameter represents the character code to send.
+   */
+  Delegate<int> onWrite;
+
+  /**
+   * @brief A delegate called whenever a character has been received
+   *
+   * First parameter represents a pointer to the receiving character code.
+   */
+  Delegate<int *>  onChar;
+
+  /**
+   * @brief A delegate called whenever carriage return has been pressed
+   *
+   * First parameter specifies the action to perform when ENTER has been pressed:
+   *
+   *    0 = new line and end editing (default)
+   *    1 = end editing
+   *    2 = continue editing
+   */
+  Delegate<int *> onCarriageReturn;
+
+  /**
+   * @brief A delegate called whenever a special character has been pressed
+   *
+   * First parameter receives the special key pressed. The type is LineEditorSpecialChar.
+   */
+  Delegate<LineEditorSpecialChar> onSpecialChar;
+
+
 private:
 
   void beginInput();
   void endInput();
   void setLength(int newLength);
+
+  void write(uint8_t c);
+  int read();
 
   Terminal *          m_terminal;
   TerminalController  m_termctrl;
@@ -1302,6 +1372,8 @@ private:
   int16_t             m_homeCol;
   int16_t             m_homeRow;
   bool                m_insertMode;
+  char *              m_typeText;
+  int                 m_typingIndex;
 };
 
 
