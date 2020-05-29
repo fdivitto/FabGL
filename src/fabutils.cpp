@@ -468,8 +468,10 @@ void FileBrowser::clear()
 // set absolute directory (full path must be specified)
 bool FileBrowser::setDirectory(const char * path)
 {
-  free(m_dir);
-  m_dir = strdup(path);
+  if (m_dir == nullptr || strcmp(path, m_dir) != 0) {
+    free(m_dir);
+    m_dir = strdup(path);
+  }
   return reload();
 }
 
