@@ -533,7 +533,8 @@ int FileBrowser::countDirEntries(int * namesLength)
           ++c;
         }
       }
-      closedir(dirp);
+      if (dirp)
+        closedir(dirp);
     }
 
   }
