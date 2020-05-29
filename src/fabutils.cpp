@@ -563,6 +563,7 @@ size_t FileBrowser::fileSize(char const * name)
   size_t size = 0;
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
+  AutoSuspendInterrupts autoInt;
   auto fr = fopen(fullpath, "rb");
   if (fr) {
     fseek(fr, 0, SEEK_END);
@@ -577,6 +578,7 @@ bool FileBrowser::fileCreationDate(char const * name, int * year, int * month, i
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
+  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
@@ -595,6 +597,7 @@ bool FileBrowser::fileUpdateDate(char const * name, int * year, int * month, int
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
+  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
@@ -613,6 +616,7 @@ bool FileBrowser::fileAccessDate(char const * name, int * year, int * month, int
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
+  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
