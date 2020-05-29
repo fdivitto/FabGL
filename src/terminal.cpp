@@ -2797,6 +2797,13 @@ void Terminal::consumeESCVT52()
   logFmt("ESC%c\n", c);
   #endif
 
+  // this allows fabgl sequences even in VT52 mode
+  if (c == 0xFF && m_emuState.allowFabGLSequences > 0) {
+    // ESC 0xFF : FabGL specific sequence
+    consumeFabGLSeq();
+    return;
+  }
+
   switch (c) {
 
     // ESC < : Exit VT52 mode, goes to VT100 mode
