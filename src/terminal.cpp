@@ -96,13 +96,18 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 
 
 Terminal::Terminal()
-  : m_canvas(nullptr)
+  : m_canvas(nullptr),
+    m_mutex(nullptr)
 {
 }
 
 
 Terminal::~Terminal()
 {
+  // end() called?
+  if (m_mutex)
+    end();
+    
   delete m_canvas;
 }
 
@@ -383,7 +388,6 @@ void Terminal::end()
   vTaskDelete(m_keyboardReaderTaskHandle);
 
   xTimerDelete(m_blinkTimer, portMAX_DELAY);
-  vSemaphoreDelete(m_mutex);
 
   clearSavedCursorStates();
 
@@ -395,6 +399,9 @@ void Terminal::end()
   freeFont();
   freeTabStops();
   freeGlyphsMap();
+
+  vSemaphoreDelete(m_mutex);
+  m_mutex = nullptr;
 }
 
 
