@@ -549,7 +549,7 @@ public:
   /**
    * @brief Injects keys into the keyboard queue.
    *
-   * Characters inserted with localWrite() will be received with read(), available() and peek() methods.
+   * Characters inserted with localInsert() will be received with read(), available() and peek() methods.
    *
    * @param c ASCII code to inject into the queue.
    */
