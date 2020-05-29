@@ -819,8 +819,11 @@ ChipPackage getChipPackage();
  *     }  // on exit interrupts are resumed
  */
 struct AutoSuspendInterrupts {
-  AutoSuspendInterrupts() { suspendInterrupts(); }
-  ~AutoSuspendInterrupts() { resumeInterrupts(); }
+  AutoSuspendInterrupts() : suspended(true) { suspendInterrupts(); }
+  ~AutoSuspendInterrupts() { resume(); }
+  void resume() { if (suspended) resumeInterrupts(); suspended = false; }
+
+  bool suspended;
 };
 
 
