@@ -805,6 +805,13 @@ public:
    */
   Keyboard * keyboard() { return m_keyboard; }
 
+  /**
+   * @brief Gets associated canvas object.
+   *
+   * @return The Canvas object.
+   */
+  Canvas * canvas() { return m_canvas; }
+
 
 private:
 

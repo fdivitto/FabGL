@@ -695,11 +695,15 @@ bool Terminal::int_enableCursor(bool value)
   if (m_emuState.cursorEnabled != value) {
     m_emuState.cursorEnabled = value;
     if (m_emuState.cursorEnabled) {
-      if (uxQueueMessagesWaiting(m_inputQueue) == 0)
-        blinkCursor();  // just to show the cursor immediately
+      if (uxQueueMessagesWaiting(m_inputQueue) == 0) {
+        // just to show the cursor before next blink
+        blinkCursor();
+      }
     } else {
-      if (m_cursorState)
-        blinkCursor(); // make sure cursor is hidden
+      if (m_cursorState) {
+        // make sure cursor is hidden
+        blinkCursor();
+      }
     }
   }
   return prev;
