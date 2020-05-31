@@ -107,8 +107,6 @@ Terminal::~Terminal()
   // end() called?
   if (m_mutex)
     end();
-    
-  delete m_canvas;
 }
 
 
@@ -171,6 +169,35 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
   m_termInfo = nullptr;
 
   reset();
+}
+
+
+void Terminal::end()
+{
+  if (m_keyboardReaderTaskHandle)
+    vTaskDelete(m_keyboardReaderTaskHandle);
+
+  xTimerDelete(m_blinkTimer, portMAX_DELAY);
+
+  clearSavedCursorStates();
+
+  vTaskDelete(m_charsConsumerTaskHandle);
+  vQueueDelete(m_inputQueue);
+
+  if (m_outputQueue)
+    vQueueDelete(m_outputQueue);
+
+  freeFont();
+  freeTabStops();
+  freeGlyphsMap();
+
+  vSemaphoreDelete(m_mutex);
+  m_mutex = nullptr;
+
+  delete m_canvas;
+
+  if (isActive())
+    s_activeTerminal = nullptr;
 }
 
 
@@ -380,28 +407,6 @@ void Terminal::freeGlyphsMap()
     free((void*) m_alternateMap);
     m_alternateMap = nullptr;
   }
-}
-
-
-void Terminal::end()
-{
-  vTaskDelete(m_keyboardReaderTaskHandle);
-
-  xTimerDelete(m_blinkTimer, portMAX_DELAY);
-
-  clearSavedCursorStates();
-
-  vTaskDelete(m_charsConsumerTaskHandle);
-  vQueueDelete(m_inputQueue);
-
-  vQueueDelete(m_outputQueue);
-
-  freeFont();
-  freeTabStops();
-  freeGlyphsMap();
-
-  vSemaphoreDelete(m_mutex);
-  m_mutex = nullptr;
 }
 
 
