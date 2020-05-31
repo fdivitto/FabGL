@@ -450,6 +450,9 @@ FileBrowser::FileBrowser()
 FileBrowser::~FileBrowser()
 {
   clear();
+
+  free(m_dir);
+  m_dir = nullptr;
 }
 
 
