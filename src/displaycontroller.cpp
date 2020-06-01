@@ -321,6 +321,9 @@ Bitmap::~Bitmap()
 // DisplayController implementation
 
 
+int DisplayController::queueSize = FABGLIB_DEFAULT_DISPLAYCONTROLLER_QUEUE_SIZE;
+
+
 DisplayController::DisplayController()
   : m_primDynMemPool(FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE)
 {
@@ -347,7 +350,7 @@ void DisplayController::setDoubleBuffered(bool value)
   if (m_execQueue)
     vQueueDelete(m_execQueue);
   // on double buffering a queue of single element is enough and necessary (see addPrimitive() for details)
-  m_execQueue = xQueueCreate(value ? 1 : FABGLIB_EXEC_QUEUE_SIZE, sizeof(Primitive));
+  m_execQueue = xQueueCreate(value ? 1 : DisplayController::queueSize, sizeof(Primitive));
 }
 
 

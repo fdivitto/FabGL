@@ -801,6 +801,19 @@ public:
 
   virtual void readScreen(Rect const & rect, RGB888 * destBuf) = 0;
 
+
+  // statics (used for common default properties)
+
+  /**
+   * @brief Size of display controller primitives queue
+   *
+   * Application should change before begin() method.
+   *
+   * Default value is FABGLIB_DEFAULT_DISPLAYCONTROLLER_QUEUE_SIZE (defined in fabglconf.h)
+   */
+  static int queueSize;
+
+
 protected:
 
   //// abstract methods
