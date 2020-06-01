@@ -858,6 +858,16 @@ int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 }
 
 
+FILE * FileBrowser::openFile(char const * filename, char const * mode)
+{
+  char fullpath[strlen(m_dir) + 1 + strlen(filename) + 1];
+  strcpy(fullpath, m_dir);
+  strcat(fullpath, "/");
+  strcat(fullpath, filename);
+  return fopen(fullpath, mode);
+}
+
+
 DriveType FileBrowser::getCurrentDriveType()
 {
   return getDriveType(m_dir);

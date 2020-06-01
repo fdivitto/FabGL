@@ -609,6 +609,16 @@ public:
   int getFullPath(char const * name, char * outPath = nullptr, int maxlen = 0);
 
   /**
+   * @brief Opens a file from current directory
+   *
+   * @param filename Name of file to open
+   * @param mode Open mode (like the fopen mode)
+   *
+   * @return Same result of fopen C function
+   */
+  FILE * openFile(char const * filename, char const * mode);
+
+  /**
    * @brief Returns the drive type of current directory
    *
    * @return Drive type.
