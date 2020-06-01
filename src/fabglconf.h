@@ -42,9 +42,8 @@
 /** Blink (cursor, text blink, ...) period in ms. */
 #define FABGLIB_DEFAULT_BLINK_PERIOD_MS 500
 
-
 /** Size of display controller primitives queue */
-#define FABGLIB_EXEC_QUEUE_SIZE 1024
+#define FABGLIB_DEFAULT_DISPLAYCONTROLLER_QUEUE_SIZE 1024
 
 
 /** Size (in bytes) of primitives dynamic buffers. Used by primitives like drawPath and fillPath to contain path points. */
@@ -52,19 +51,19 @@
 
 
 /** Number of characters the terminal can "write" without pause (increase if you have loss of characters in serial port). */
-#define FABGLIB_TERMINAL_INPUT_QUEUE_SIZE 1024
+#define FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE 1024
 
 
 /** Number of characters the terminal can store from keyboard. */
 #define FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE 32
 
 
-#define FABGLIB_TERMINAL_XOFF_THRESHOLD (FABGLIB_TERMINAL_INPUT_QUEUE_SIZE / 2)
-#define FABGLIB_TERMINAL_XON_THRESHOLD  (FABGLIB_TERMINAL_INPUT_QUEUE_SIZE / 4)
+#define FABGLIB_TERMINAL_XOFF_THRESHOLD (FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE / 2)
+#define FABGLIB_TERMINAL_XON_THRESHOLD  (FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE / 4)
 
 
 /** Stack size of the task that processes Terminal input stream. */
-#define FABGLIB_CHARS_CONSUMER_TASK_STACK_SIZE 2048
+#define FABGLIB_DEFAULT_TERMINAL_INPUT_CONSUMER_TASK_STACK_SIZE 2048
 
 
 /** Priority of the task that processes Terminal input stream. */
@@ -72,18 +71,18 @@
 
 
 /** Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal */
-#define FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE 2048
+#define FABGLIB_DEFAULT_TERMINAL_KEYBOARD_READER_TASK_STACK_SIZE 2048
 
 
 /** Priority of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal */
 #define FABGLIB_KEYBOARD_READER_TASK_PRIORITY 5
 
 
-/** Stack size of the task that converts scancodes to virtualkeys Keyboard */
-#define FABGLIB_SCODETOVK_TASK_STACK_SIZE 800
+/** Stack size of the task that converts scancodes to Virtual Keys Keyboard */
+#define FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE 800
 
 
-/** Priority of the task that converts scancodes to virtualkeys Keyboard */
+/** Priority of the task that converts scancodes to Virtual Keys Keyboard */
 #define FABGLIB_SCODETOVK_TASK_PRIORITY 5
 
 
