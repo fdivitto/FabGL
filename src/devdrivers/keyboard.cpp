@@ -392,6 +392,11 @@ const KeyboardLayout ItalianLayout {
 };
 
 
+
+int Keyboard::scancodeToVirtualKeyTaskStackSize = FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE;
+
+
+
 Keyboard::Keyboard()
   : m_keyboardAvailable(false)
 {
@@ -423,7 +428,7 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
   if (generateVirtualKeys || createVKQueue) {
     if (createVKQueue)
       m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(uint16_t));
-    xTaskCreate(&SCodeToVKConverterTask, "", FABGLIB_SCODETOVK_TASK_STACK_SIZE, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
+    xTaskCreate(&SCodeToVKConverterTask, "", Keyboard::scancodeToVirtualKeyTaskStackSize, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
   }
 }
 

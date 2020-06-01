@@ -404,6 +404,20 @@ public:
   Delegate<VirtualKey *, bool> onVirtualKey;
 
 
+  //// statics (used for common default properties) ////
+
+
+  /**
+   * @brief Stack size of the task that converts scancodes to Virtual Keys Keyboard.
+   *
+   * Application should change before begin() method.
+   *
+   * Default value is FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE (defined in fabglconf.h)
+   */
+  static int scancodeToVirtualKeyTaskStackSize;
+
+
+
 private:
 
   VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = nullptr);
