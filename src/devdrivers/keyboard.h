@@ -289,6 +289,15 @@ public:
   VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
   /**
+   * @brief Adds or inserts a virtual key into the virtual keys queue
+   *
+   * @param virtualKey Virtual key to add or insert
+   * @param keyDown True is the virtual key is down
+   * @param insert If true virtual key is inserted as first item
+   */
+  void injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert = false);
+
+  /**
    * @brief Empties the virtual keys queue
    */
   void emptyVirtualKeyQueue();
@@ -382,6 +391,18 @@ public:
 #if FABGLIB_HAS_VirtualKeyO_STRING
   static char const * virtualKeyToString(VirtualKey virtualKey);
 #endif
+
+
+  //// Delegates ////
+
+  /**
+   * @brief Delegate called whenever a new virtual key is decoded from scancodes
+   *
+   * First parameter is a pointer to the decoded virtual key
+   * Second parameter specifies if the key is Down (true) or Up (false)
+   */
+  Delegate<VirtualKey *, bool> onVirtualKey;
+
 
 private:
 

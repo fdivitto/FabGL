@@ -853,25 +853,39 @@ VirtualKey Keyboard::blockingGetVirtualKey(bool * keyDown)
 }
 
 
+void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert)
+{
+  // update m_VKMap
+  if (keyDown)
+    m_VKMap[(int)virtualKey >> 3] |= 1 << ((int)virtualKey & 7);
+  else
+    m_VKMap[(int)virtualKey >> 3] &= ~(1 << ((int)virtualKey & 7));
+
+  // has VK queue? Insert VK into it.
+  if (m_virtualKeyQueue) {
+    uint16_t code = (uint16_t)virtualKey | (keyDown ? 0x8000 : 0);
+    auto ticksToWait = (m_uiApp ? 0 : portMAX_DELAY);  // 0, and not portMAX_DELAY to avoid uiApp locks
+    if (insert)
+      xQueueSendToFront(m_virtualKeyQueue, &code, ticksToWait);
+    else
+      xQueueSendToBack(m_virtualKeyQueue, &code, ticksToWait);
+  }
+}
+
+
 void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 {
   Keyboard * keyboard = (Keyboard*) pvParameters;
   while (true) {
     bool keyDown;
     VirtualKey vk = keyboard->blockingGetVirtualKey(&keyDown);
+
+    keyboard->onVirtualKey(&vk, keyDown);
+
     if (vk != VK_NONE) {
 
-      // update m_VKMap
-      if (keyDown)
-        keyboard->m_VKMap[(int)vk >> 3] |= 1 << ((int)vk & 7);
-      else
-        keyboard->m_VKMap[(int)vk >> 3] &= ~(1 << ((int)vk & 7));
-
-      // has VK queue? Insert VK into it.
-      if (keyboard->m_virtualKeyQueue) {
-        uint16_t code = (uint16_t)vk | (keyDown ? 0x8000 : 0);
-        xQueueSendToBack(keyboard->m_virtualKeyQueue, &code, (keyboard->m_uiApp ? 0 : portMAX_DELAY));  // 0, and not portMAX_DELAY to avoid uiApp locks
-      }
+      // add into m_virtualKeyQueue and update m_VKMap
+      keyboard->injectVirtualKey(vk, keyDown);
 
       // need to send events to uiApp?
       if (keyboard->m_uiApp) {
