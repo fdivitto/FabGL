@@ -484,7 +484,7 @@ bool FileBrowser::setDirectory(const char * path)
 //   "dirname": go inside the specified sub directory
 void FileBrowser::changeDirectory(const char * subdir)
 {
-  if (!m_dir)
+  if (!m_dir || strlen(subdir) == 0)
     return;
   if (strcmp(subdir, "..") == 0) {
     // go to parent directory
