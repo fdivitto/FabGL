@@ -579,7 +579,11 @@ void Terminal::setBackgroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultBackgroundColor = color;
-  Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 40 : 92));
+  //Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 40 : 92));  <--- removed to reduce stack size
+  write("\e[");
+  char buf[4];
+  write(itoa((int)color + (color < Color::BrightBlack ? 40 : 92), buf, 10));
+  write('m');
 }
 
 
@@ -595,7 +599,11 @@ void Terminal::setForegroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultForegroundColor = color;
-  Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 30 : 82));
+  //Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 30 : 82));    <--- removed to reduce stack size
+  write("\e[");
+  char buf[4];
+  write(itoa((int)color + (color < Color::BrightBlack ? 30 : 82), buf, 10));
+  write('m');
 }
 
 
