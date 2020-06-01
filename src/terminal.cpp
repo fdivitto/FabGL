@@ -97,6 +97,13 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 volatile Terminal * Terminal::s_activeTerminal = nullptr;
 
 
+int Terminal::inputQueueSize = FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE;
+
+int Terminal::inputConsumerTaskStackSize = FABGLIB_DEFAULT_TERMINAL_INPUT_CONSUMER_TASK_STACK_SIZE;
+
+int Terminal::keyboardReaderTaskStackSize = FABGLIB_DEFAULT_TERMINAL_KEYBOARD_READER_TASK_STACK_SIZE;
+
+
 
 Terminal::Terminal()
   : m_canvas(nullptr),
@@ -176,8 +183,8 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
   xTimerStart(m_blinkTimer, portMAX_DELAY);
 
   // queue and task to consume input characters
-  m_inputQueue = xQueueCreate(FABGLIB_TERMINAL_INPUT_QUEUE_SIZE, sizeof(uint8_t));
-  xTaskCreate(&charsConsumerTask, "", FABGLIB_CHARS_CONSUMER_TASK_STACK_SIZE, this, FABGLIB_CHARS_CONSUMER_TASK_PRIORITY, &m_charsConsumerTaskHandle);
+  m_inputQueue = xQueueCreate(Terminal::inputQueueSize, sizeof(uint8_t));
+  xTaskCreate(&charsConsumerTask, "", Terminal::inputConsumerTaskStackSize, this, FABGLIB_CHARS_CONSUMER_TASK_PRIORITY, &m_charsConsumerTaskHandle);
 
   m_defaultBackgroundColor = Color::Black;
   m_defaultForegroundColor = Color::White;
@@ -230,10 +237,10 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
   m_serialPort = &serialPort;
   m_autoXONOFF = autoXONXOFF;
 
-  m_serialPort->setRxBufferSize(FABGLIB_TERMINAL_INPUT_QUEUE_SIZE);
+  m_serialPort->setRxBufferSize(Terminal::inputQueueSize);
 
   if (m_keyboard->isKeyboardAvailable())
-    xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
+    xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 
   // just in case a reset occurred after an XOFF
   if (m_autoXONOFF)
@@ -355,7 +362,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
   //addApbChangeCallback(this, uart_on_apb_change);
 
   if (m_keyboard->isKeyboardAvailable())
-    xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
+    xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
 
 
@@ -363,7 +370,7 @@ void Terminal::connectLocally()
 {
   m_outputQueue = xQueueCreate(FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE, sizeof(uint8_t));
   if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
-    xTaskCreate(&keyboardReaderTask, "", FABGLIB_KEYBOARD_READER_TASK_STACK_SIZE, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
+    xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
 
 

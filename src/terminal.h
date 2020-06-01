@@ -829,6 +829,37 @@ public:
 
 
 
+  // statics (used for common default properties)
+
+
+  /**
+   * @brief Number of characters the terminal can "write" without pause (increase if you have loss of characters in serial port).
+   *
+   * Application should change before begin() method.
+   *
+   * Default value is FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE (defined in fabglconf.h)
+   */
+  static int inputQueueSize;
+
+  /**
+   * @brief Stack size of the task that processes Terminal input stream.
+   *
+   * Application should change before begin() method.
+   *
+   * Default value is FABGLIB_DEFAULT_TERMINAL_INPUT_CONSUMER_TASK_STACK_SIZE (defined in fabglconf.h)
+   */
+  static int inputConsumerTaskStackSize;
+
+  /**
+   * @brief Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Terminal.
+   *
+   * Application should change before begin() method.
+   *
+   * Default value is FABGLIB_DEFAULT_TERMINAL_KEYBOARD_READER_TASK_STACK_SIZE (defined in fabglconf.h)
+   */
+  static int keyboardReaderTaskStackSize;
+
+
 private:
 
   void reset();
