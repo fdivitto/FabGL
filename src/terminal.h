@@ -812,6 +812,22 @@ public:
    */
   Canvas * canvas() { return m_canvas; }
 
+  /**
+   * @brief Activate this terminal for input and output.
+   *
+   * Only one terminal can be active at the time, for input and output.
+   * Use this method to activate a terminal. This method de-activates currently active terminal.
+   */
+  void activate();
+
+  /**
+   * @brief Determines if this terminal is active or not.
+   *
+   * @return True is this terminal is active for input and output.
+   */
+  bool isActive() { return s_activeTerminal == this; }
+
+
 
 private:
 
@@ -925,6 +941,10 @@ private:
   //static void uart_on_apb_change(void * arg, apb_change_ev_t ev_type, uint32_t old_apb, uint32_t new_apb);
 
   void uartCheckInputQueueForFlowControl();
+
+  // indicates which is the active terminal when there are multiple instances of Terminal
+  static volatile Terminal *   s_activeTerminal;
+
 
   DisplayController * m_displayController;
   Canvas *           m_canvas;
