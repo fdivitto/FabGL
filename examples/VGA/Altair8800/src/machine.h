@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "Z80/Z80.h"
 
 
 // Altair 88-DSK Boot ROM (starts at 0xFF00)
@@ -163,7 +164,7 @@ private:
 // Machine
 
 
-enum CPU {
+enum class CPU {
   i8080,
   Z80
 };
@@ -172,7 +173,7 @@ enum CPU {
 typedef void (*MenuCallback)();
 
 
-class Machine {
+class Machine : public Z80Interface {
 
 public:
 
@@ -190,22 +191,27 @@ public:
 
   void run(CPU cpu, int address);
 
-  int readByte(int address);
-  void writeByte(int address, int value);
+  uint8_t readByte(uint16_t address);
+  void writeByte(uint16_t address, uint8_t value);
 
-  int readIO(int address);
-  void writeIO(int address, int value);
+  uint16_t readWord(uint16_t addr)              { return readByte(addr) | (readByte(addr + 1) << 8); }
+  void writeWord(uint16_t addr, uint16_t value) { writeByte(addr, value & 0xFF); writeByte(addr + 1, value >> 8); }
+
+
+  uint8_t readIO(uint16_t address);
+  void writeIO(uint16_t address, uint8_t value);
 
   void setRealSpeed(bool value) { m_realSpeed = value; }
   bool realSpeed() { return m_realSpeed; }
 
 private:
 
-  int nextStep(CPU cpu, void * param);
+  int nextStep(CPU cpu);
 
   Device *     m_devices;
   bool         m_realSpeed;
   uint8_t *    m_RAM;
   MenuCallback m_menuCallback;
+  Z80          m_Z80;
 };
 

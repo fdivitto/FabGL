@@ -35,7 +35,7 @@
 #include "fabutils.h"
 
 #include "i8080/i8080.h"
-#include "Z80/z80emu.h"
+
 
 
 
@@ -177,7 +177,8 @@ void diskFlush(FILE * file = nullptr)
 Machine::Machine()
   : m_devices(nullptr),
     m_realSpeed(false),
-    m_menuCallback(nullptr)
+    m_menuCallback(nullptr),
+    m_Z80(this)
 {
 }
 
@@ -208,39 +209,37 @@ void Machine::attachRAM(int RAMSize)
 }
 
 
-IRAM_ATTR int Machine::nextStep(CPU cpu, void * param)
+IRAM_ATTR int Machine::nextStep(CPU cpu)
 {
   auto keyboard = fabgl::PS2Controller::instance()->keyboard();
   if (m_menuCallback && keyboard->isVKDown(VirtualKey::VK_PAUSE))
     m_menuCallback();
-  return (cpu == i8080 ? i8080_instruction() : Z80Emulate((Z80_STATE*)param, 0, this));
+  return (cpu == CPU::i8080 ? i8080_instruction() : m_Z80.emulate(0));
 }
 
 
 IRAM_ATTR void Machine::run(CPU cpu, int address)
 {
-  Z80_STATE Z80State;
-
-  if (cpu == i8080) {
+  if (cpu == CPU::i8080) {
     i8080_init(this);
     i8080_jump(address);
   } else {
-    Z80Reset(&Z80State);
-    Z80State.pc = address;
+    m_Z80.reset();
+    m_Z80.setPC(address);
   }
 
   while (true) {
     int cycles = 0;
     if (m_realSpeed) {
       int64_t t = esp_timer_get_time();  // time in microseconds
-      cycles = nextStep(cpu, &Z80State);
+      cycles = nextStep(cpu);
       if (m_realSpeed) {
         t += cycles / 2;    // at 2MHz each cycle last 0.5us, so instruction time is cycles*0.5, that is cycles/2
         while (esp_timer_get_time() < t)
           ;
       }
     } else {
-      cycles = nextStep(cpu, &Z80State);
+      cycles = nextStep(cpu);
     }
     for (Device * d = m_devices; d; d = d->next)
       d->tick(cycles);
@@ -249,19 +248,19 @@ IRAM_ATTR void Machine::run(CPU cpu, int address)
 }
 
 
-int Machine::readByte(int address)
+uint8_t Machine::readByte(uint16_t address)
 {
   return m_RAM[address];
 }
 
 
-void Machine::writeByte(int address, int value)
+void Machine::writeByte(uint16_t address, uint8_t value)
 {
   m_RAM[address] = value;
 }
 
 
-int Machine::readIO(int address)
+uint8_t Machine::readIO(uint16_t address)
 {
   for (Device * d = m_devices; d; d = d->next) {
     int value;
@@ -277,7 +276,7 @@ int Machine::readIO(int address)
 }
 
 
-void Machine::writeIO(int address, int value)
+void Machine::writeIO(uint16_t address, uint8_t value)
 {
   for (Device * d = m_devices; d; d = d->next)
     if (d->write(address, value))
