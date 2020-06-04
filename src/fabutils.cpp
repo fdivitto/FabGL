@@ -270,6 +270,21 @@ void removeRectangle(Stack<Rect> & rects, Rect const & mainRect, Rect const & re
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////
+// Rect
+
+Rect IRAM_ATTR Rect::merge(Rect const & rect) const
+{
+  return Rect(imin(rect.X1, X1), imin(rect.Y1, Y1), imax(rect.X2, X2), imax(rect.Y2, Y2));
+}
+
+
+Rect IRAM_ATTR Rect::intersection(Rect const & rect) const
+{
+  return Rect(tmax(X1, rect.X1), tmax(Y1, rect.Y1), tmin(X2, rect.X2), tmin(Y2, rect.Y2));
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 // StringList
