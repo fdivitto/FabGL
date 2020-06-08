@@ -1549,6 +1549,9 @@ void Terminal::setTerminalType(TermType value)
     case TermType::VT52:
       setTerminalType(&term_VT52);
       break;
+    case TermType::ANSILegacy:
+      setTerminalType(&term_ANSILegacy);
+      break;
   }
 }
 

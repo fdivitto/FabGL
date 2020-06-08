@@ -463,4 +463,23 @@ const TermInfo term_VT52 = {
 };
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ANSI Legacy
+
+
+// sorted by TermSeq name
+const TermInfoVideoConv videoConv_ANSILegacy[] = {
+
+  // Last item marker
+  { nullptr, 0, { } },
+};
+
+
+const TermInfo term_ANSILegacy = {
+  "",
+  videoConv_ANSILegacy,
+  kbdConv_Generic
+};
+
+
 }

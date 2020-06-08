@@ -108,6 +108,7 @@ enum TermType {
   Osborne,        /**< Emulated Osborne I */
   Kaypro,         /**< Emulated Kaypro */
   VT52,           /**< Emulated VT52 terminal */
+  ANSILegacy      /**< Legacy ANSI emulation */
 };
 
 
@@ -130,6 +131,9 @@ extern const TermInfo term_Kaypro;
 
 // VT52
 extern const TermInfo term_VT52;
+
+// ANSI Legacy
+extern const TermInfo term_ANSILegacy;
 
 
 
