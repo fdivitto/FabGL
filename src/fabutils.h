@@ -1039,60 +1039,60 @@ enum VirtualKey {
 
 #define ASCII_NUL   0x00   // Null
 #define ASCII_SOH   0x01   // Start of Heading
-#define ASCII_CTRLA 0x01
+#define ASCII_CTRLA 0x01   // CTRL-A
 #define ASCII_STX   0x02   // Start of Text
-#define ASCII_CTRLB 0x02
+#define ASCII_CTRLB 0x02   // CTRL-B
 #define ASCII_ETX   0x03   // End Of Text
-#define ASCII_CTRLC 0x03
+#define ASCII_CTRLC 0x03   // CTRL-C
 #define ASCII_EOT   0x04   // End Of Transmission
-#define ASCII_CTRLD 0x04
+#define ASCII_CTRLD 0x04   // CTRL-D
 #define ASCII_ENQ   0x05   // Enquiry
-#define ASCII_CTRLE 0x05
+#define ASCII_CTRLE 0x05   // CTRL-E
 #define ASCII_ACK   0x06   // Acknowledge
-#define ASCII_CTRLF 0x06
+#define ASCII_CTRLF 0x06   // CTRL-F
 #define ASCII_BEL   0x07   // Bell
-#define ASCII_CTRLG 0x07
+#define ASCII_CTRLG 0x07   // CTRL-G
 #define ASCII_BS    0x08   // Backspace
-#define ASCII_CTRLH 0x08
+#define ASCII_CTRLH 0x08   // CTRL-H
 #define ASCII_HT    0x09   // Horizontal Tab
-#define ASCII_TAB   0x09
-#define ASCII_CTRLI 0x09
+#define ASCII_TAB   0x09   // Horizontal Tab
+#define ASCII_CTRLI 0x09   // CTRL-I
 #define ASCII_LF    0x0A   // Line Feed
-#define ASCII_CTRLJ 0x0A
+#define ASCII_CTRLJ 0x0A   // CTRL-J
 #define ASCII_VT    0x0B   // Vertical Tab
-#define ASCII_CTRLK 0x0B
+#define ASCII_CTRLK 0x0B   // CTRL-K
 #define ASCII_FF    0x0C   // Form Feed
-#define ASCII_CTRLL 0x0C
+#define ASCII_CTRLL 0x0C   // CTRL-L
 #define ASCII_CR    0x0D   // Carriage Return
-#define ASCII_CTRLM 0x0D
+#define ASCII_CTRLM 0x0D   // CTRL-M
 #define ASCII_SO    0x0E   // Shift Out
-#define ASCII_CTRLN 0x0E
+#define ASCII_CTRLN 0x0E   // CTRL-N
 #define ASCII_SI    0x0F   // Shift In
-#define ASCII_CTRLO 0x0F
+#define ASCII_CTRLO 0x0F   // CTRL-O
 #define ASCII_DLE   0x10   // Data Link Escape
-#define ASCII_CTRLP 0x10
+#define ASCII_CTRLP 0x10   // CTRL-P
 #define ASCII_DC1   0x11   // Device Control 1
-#define ASCII_CTRLQ 0x11
+#define ASCII_CTRLQ 0x11   // CTRL-Q
 #define ASCII_XON   0x11   // Transmission On
 #define ASCII_DC2   0x12   // Device Control 2
-#define ASCII_CTRLR 0x12
+#define ASCII_CTRLR 0x12   // CTRL-R
 #define ASCII_DC3   0x13   // Device Control 3
 #define ASCII_XOFF  0x13   // Transmission Off
-#define ASCII_CTRLS 0x13
+#define ASCII_CTRLS 0x13   // CTRL-S
 #define ASCII_DC4   0x14   // Device Control 4
-#define ASCII_CTRLT 0x14
+#define ASCII_CTRLT 0x14   // CTRL-T
 #define ASCII_NAK   0x15   // Negative Acknowledge
-#define ASCII_CTRLU 0x15
+#define ASCII_CTRLU 0x15   // CTRL-U
 #define ASCII_SYN   0x16   // Synchronous Idle
-#define ASCII_CTRLV 0x16
+#define ASCII_CTRLV 0x16   // CTRL-V
 #define ASCII_ETB   0x17   // End-of-Transmission-Block
-#define ASCII_CTRLW 0x17
+#define ASCII_CTRLW 0x17   // CTRL-W
 #define ASCII_CAN   0x18   // Cancel
-#define ASCII_CTRLX 0x18
+#define ASCII_CTRLX 0x18   // CTRL-X
 #define ASCII_EM    0x19   // End of Medium
-#define ASCII_CTRLY 0x19
+#define ASCII_CTRLY 0x19   // CTRL-Y
 #define ASCII_SUB   0x1A   // Substitute
-#define ASCII_CTRLZ 0x1A
+#define ASCII_CTRLZ 0x1A   // CTRL-Z
 #define ASCII_ESC   0x1B   // Escape
 #define ASCII_FS    0x1C   // File Separator
 #define ASCII_GS    0x1D   // Group Separator
