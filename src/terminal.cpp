@@ -4061,18 +4061,18 @@ char const * LineEditor::edit(int maxLength)
       switch (c) {
 
         // ESC, switch to ESC mode
-        case 0x1B:
+        case ASCII_ESC:
           m_state = 1;
           break;
 
         // DEL, delete character at left
-        case 0x7F:
-        case 0x08:
+        case ASCII_DEL:
+        case ASCII_BS:  // alias CTRL-H / backspace
           performDeleteLeft();
           break;
 
         // CR, newline and return the inserted text
-        case 0x0D:
+        case ASCII_CR:
         {
           int op = 0;
           onCarriageReturn(&op);
@@ -4089,12 +4089,12 @@ char const * LineEditor::edit(int maxLength)
         }
 
         // CTRL-E, WordStar UP
-        case 0x05:
+        case ASCII_CTRLE:
           performCursorUp();
           break;
 
         // CTRL-X, WordStar DOWN
-        case 0x18:
+        case ASCII_CTRLX:
           performCursorDown();
           break;
 
