@@ -3861,6 +3861,82 @@ void LineEditor::endInput()
 }
 
 
+void LineEditor::performCursorUp()
+{
+  onSpecialChar(LineEditorSpecialChar::CursorUp);
+}
+
+
+void LineEditor::performCursorDown()
+{
+  onSpecialChar(LineEditorSpecialChar::CursorDown);
+}
+
+
+void LineEditor::performCursorLeft()
+{
+  if (m_inputPos > 0) {
+    int count = 1;
+    if (m_termctrl.isVKDown(VK_LCTRL)) {
+      // CTRL + Cursor Left => start of previous word
+      while (m_inputPos - count > 0 && (m_text[m_inputPos - count] == ASCII_SPC || m_text[m_inputPos - count - 1] != ASCII_SPC))
+        ++count;
+    }
+    m_termctrl.cursorLeft(count);
+    m_inputPos -= count;
+  }
+}
+
+
+void LineEditor::performCursorRight()
+{
+  if (m_inputPos < m_textLength) {
+    int count = 1;
+    if (m_termctrl.isVKDown(VK_LCTRL)) {
+      // CTRL + Cursor Right => start of next word
+      while (m_text[m_inputPos + count] && (m_text[m_inputPos + count] == ASCII_SPC || m_text[m_inputPos + count - 1] != ASCII_SPC))
+        ++count;
+    }
+    m_termctrl.cursorRight(count);
+    m_inputPos += count;
+  }
+}
+
+
+void LineEditor::performCursorHome()
+{
+  m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+}
+
+
+void LineEditor::performCursorEnd()
+{
+  m_termctrl.cursorRight(m_textLength - m_inputPos);
+}
+
+
+void LineEditor::performDeleteRight()
+{
+  if (m_inputPos < m_textLength) {
+    memmove(m_text + m_inputPos, m_text + m_inputPos + 1, m_textLength - m_inputPos);
+    m_termctrl.multilineDeleteChar(m_textLength - m_inputPos - 1);
+    --m_textLength;
+  }
+}
+
+
+void LineEditor::performDeleteLeft()
+{
+  if (m_inputPos > 0) {
+    m_termctrl.cursorLeft(1);
+    m_termctrl.multilineDeleteChar(m_textLength - m_inputPos);
+    memmove(m_text + m_inputPos - 1, m_text + m_inputPos, m_textLength - m_inputPos + 1);
+    --m_inputPos;
+    --m_textLength;
+  }
+}
+
+
 char const * LineEditor::edit(int maxLength)
 {
 
@@ -3914,43 +3990,25 @@ char const * LineEditor::edit(int maxLength)
 
         // "ESC [ A" : cursor Up
         case 'A':
-          onSpecialChar(LineEditorSpecialChar::CursorUp);
+          performCursorUp();
           m_state = 0;
           break;
 
         // "ESC [ B" : cursor Down
         case 'B':
-          onSpecialChar(LineEditorSpecialChar::CursorDown);
+          performCursorUp();
           m_state = 0;
           break;
 
         // "ESC [ D" : cursor Left
         case 'D':
-          if (m_inputPos > 0) {
-            int count = 1;
-            if (m_termctrl.isVKDown(VK_LCTRL)) {
-              // CTRL + Cursor Left => start of previous word
-              while (m_inputPos - count > 0 && (m_text[m_inputPos - count] == ASCII_SPC || m_text[m_inputPos - count - 1] != ASCII_SPC))
-                ++count;
-            }
-            m_termctrl.cursorLeft(count);
-            m_inputPos -= count;
-          }
+          performCursorLeft();
           m_state = 0;
           break;
 
         // "ESC [ C" : cursor right
         case 'C':
-          if (m_inputPos < m_textLength) {
-            int count = 1;
-            if (m_termctrl.isVKDown(VK_LCTRL)) {
-              // CTRL + Cursor Right => start of next word
-              while (m_text[m_inputPos + count] && (m_text[m_inputPos + count] == ASCII_SPC || m_text[m_inputPos + count - 1] != ASCII_SPC))
-                ++count;
-            }
-            m_termctrl.cursorRight(count);
-            m_inputPos += count;
-          }
+          performCursorRight();
           m_state = 0;
           break;
 
@@ -3966,23 +4024,19 @@ char const * LineEditor::edit(int maxLength)
 
             // Home
             case '1':
-              m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+              performCursorHome();
               m_inputPos = 0;
               break;
 
             // End
             case '4':
-              m_termctrl.cursorRight(m_textLength - m_inputPos);
+              performCursorEnd();
               m_inputPos = m_textLength;
               break;
 
             // Delete
             case '3':
-              if (m_inputPos < m_textLength) {
-                memmove(m_text + m_inputPos, m_text + m_inputPos + 1, m_textLength - m_inputPos);
-                m_termctrl.multilineDeleteChar(m_textLength - m_inputPos - 1);
-                --m_textLength;
-              }
+              performDeleteRight();
               break;
 
             // Insert
@@ -4014,13 +4068,7 @@ char const * LineEditor::edit(int maxLength)
         // DEL, delete character at left
         case 0x7F:
         case 0x08:
-          if (m_inputPos > 0) {
-            m_termctrl.cursorLeft(1);
-            m_termctrl.multilineDeleteChar(m_textLength - m_inputPos);
-            memmove(m_text + m_inputPos - 1, m_text + m_inputPos, m_textLength - m_inputPos + 1);
-            --m_inputPos;
-            --m_textLength;
-          }
+          performDeleteLeft();
           break;
 
         // CR, newline and return the inserted text
@@ -4042,12 +4090,12 @@ char const * LineEditor::edit(int maxLength)
 
         // CTRL-E, WordStar UP
         case 0x05:
-          onSpecialChar(LineEditorSpecialChar::CursorUp);
+          performCursorUp();
           break;
 
         // CTRL-X, WordStar DOWN
         case 0x18:
-          onSpecialChar(LineEditorSpecialChar::CursorDown);
+          performCursorDown();
           break;
 
         // insert printable chars

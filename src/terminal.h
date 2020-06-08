@@ -1420,6 +1420,16 @@ private:
   void write(uint8_t c);
   int read();
 
+  void performCursorUp();
+  void performCursorDown();
+  void performCursorLeft();
+  void performCursorRight();
+  void performCursorHome();
+  void performCursorEnd();
+  void performDeleteRight();
+  void performDeleteLeft();
+
+
   Terminal *          m_terminal;
   TerminalController  m_termctrl;
   char *              m_text;
