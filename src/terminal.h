@@ -219,17 +219,18 @@ namespace fabgl {
 
 #define FABGL_ENTERM_CMD "\e\xff"
 
-#define FABGL_ENTERM_GETCURSORPOS  1
-#define FABGL_ENTERM_GETCURSORCOL  2
-#define FABGL_ENTERM_GETCURSORROW  3
-#define FABGL_ENTERM_SETCURSORPOS  4
-#define FABGL_ENTERM_INSERTSPACE   5
-#define FABGL_ENTERM_DELETECHAR    6
-#define FABGL_ENTERM_CURSORLEFT    7
-#define FABGL_ENTERM_CURSORRIGHT   8
-#define FABGL_ENTERM_SETCHAR       9
-#define FABGL_ENTERM_SETCHARS     10
-#define FABGL_ENTERM_ISVKDOWN     11
+#define FABGL_ENTERM_GETCURSORPOS   1
+#define FABGL_ENTERM_GETCURSORCOL   2
+#define FABGL_ENTERM_GETCURSORROW   3
+#define FABGL_ENTERM_SETCURSORPOS   4
+#define FABGL_ENTERM_INSERTSPACE    5
+#define FABGL_ENTERM_DELETECHAR     6
+#define FABGL_ENTERM_CURSORLEFT     7
+#define FABGL_ENTERM_CURSORRIGHT    8
+#define FABGL_ENTERM_SETCHAR        9
+#define FABGL_ENTERM_SETCHARS      10
+#define FABGL_ENTERM_ISVKDOWN      11
+#define FABGL_ENTERM_DISABLEFABSEQ 12
 
 
 
@@ -973,6 +974,8 @@ private:
 
   void uartCheckInputQueueForFlowControl();
 
+  void enableFabGLSequences(bool value);
+
   // indicates which is the active terminal when there are multiple instances of Terminal
   static volatile Terminal *   s_activeTerminal;
 
@@ -1078,11 +1081,12 @@ private:
 /**
  * @brief TerminalController allows direct controlling of the Terminal object without using escape sequences
  *
+ * TerminalController needs FabGL specific sequences to be enabled (this is the default).
+ *
  * Example:
  *
  *     // Writes "Hello" at 10, 10
  *     TerminalController termctrl(&Terminal);
- *     termctrl.begin();
  *     termctrl.setCursorPos(10, 10);
  *     Terminal.write("Hello");
  */
@@ -1100,16 +1104,11 @@ public:
   ~TerminalController();
 
   /**
-   * @brief Initializes TerminalController operations
+   * @brief Set destination terminal
    *
    * @param terminal The Terminal instance to control. If not specified you have to set delegates.
    */
-  void begin(Terminal * terminal = nullptr);
-
-  /**
-   * @brief Finalizes TerminalController operations
-   */
-  void end();
+  void setTerminal(Terminal * terminal = nullptr);
 
   /**
    * @brief Sets current cursor position
@@ -1214,6 +1213,11 @@ public:
    * @return True is the specified key is pressed
    */
   bool isVKDown(VirtualKey vk);
+
+  /**
+   * @brief Disables FabGL specific sequences
+   */
+  void disableFabGLSequences();
 
 
   //// Delegates ////

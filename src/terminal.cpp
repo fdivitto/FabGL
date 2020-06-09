@@ -463,7 +463,7 @@ void Terminal::reset()
   m_emuState.backarrowKeyMode      = false;
   m_emuState.ANSIMode              = true;
   m_emuState.VT52GraphicsMode      = false;
-  m_emuState.allowFabGLSequences   = 0;
+  m_emuState.allowFabGLSequences   = 1;  // enabled for default
   m_emuState.characterSetIndex     = 0;  // Select G0
   for (int i = 0; i < 4; ++i)
     m_emuState.characterSet[i] = 1;     // G0, G1, G2 and G3 = USASCII
@@ -1145,6 +1145,14 @@ void Terminal::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainDouble
   }
   if (c != ASCII_SPC || selective)
     refresh(X1 + 1, Y1 + 1, X2 + 1, Y2 + 1);
+}
+
+
+void Terminal::enableFabGLSequences(bool value)
+{
+  m_emuState.allowFabGLSequences += value ? 1 : -1;
+  if (m_emuState.allowFabGLSequences < 0)
+    m_emuState.allowFabGLSequences = 0;
 }
 
 
@@ -2667,9 +2675,7 @@ void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, char 
     // Allows enhanced FabGL sequences (default disabled)
     // This set is "incremental". This is actually disabled when the counter reach 0.
     case 7999:
-      m_emuState.allowFabGLSequences += set ? 1 : -1;
-      if (m_emuState.allowFabGLSequences < 0)
-        m_emuState.allowFabGLSequences = 0;
+      enableFabGLSequences(set);
       break;
 
     default:
@@ -3173,6 +3179,13 @@ void Terminal::consumeFabGLSeq()
       break;
     }
 
+    // Disable FabGL sequences
+    // Seq:
+    //   ESC 0xFF FABGL_ENTERM_DISABLEFABSEQ
+    case FABGL_ENTERM_DISABLEFABSEQ:
+      enableFabGLSequences(false);
+      break;
+
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
       logFmt("Unknown: ESC 0xFF %02x\n", c);
@@ -3575,19 +3588,9 @@ TerminalController::~TerminalController()
 }
 
 
-void TerminalController::begin(Terminal * terminal)
+void TerminalController::setTerminal(Terminal * terminal)
 {
-  if (terminal)
-    m_terminal = terminal;
-  // enable fabgl sequences
-  write("\e[?7999h");
-}
-
-
-void TerminalController::end()
-{
-  // disable (if not enabled before) fabgl sequences
-  write("\e[?7999l");
+  m_terminal = terminal;
 }
 
 
@@ -3735,6 +3738,12 @@ bool TerminalController::isVKDown(VirtualKey vk)
 }
 
 
+void TerminalController::disableFabGLSequences()
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_DISABLEFABSEQ);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3835,7 +3844,6 @@ void LineEditor::beginInput()
     m_termctrl.onRead  = [&](int * c) { onRead(c); };
     m_termctrl.onWrite = [&](int c)   { onWrite(c); };
   }
-  m_termctrl.begin();
   m_homeCol = m_termctrl.getCursorCol();
   m_homeRow = m_termctrl.getCursorRow();
   if (m_text) {
@@ -3852,7 +3860,6 @@ void LineEditor::beginInput()
 
 void LineEditor::endInput()
 {
-  m_termctrl.end();
   m_state = -1;
   if (m_text == nullptr) {
     m_text = (char*) malloc(1);
@@ -3906,12 +3913,14 @@ void LineEditor::performCursorRight()
 void LineEditor::performCursorHome()
 {
   m_termctrl.setCursorPos(m_homeCol, m_homeRow);
+  m_inputPos = 0;
 }
 
 
 void LineEditor::performCursorEnd()
 {
   m_termctrl.cursorRight(m_textLength - m_inputPos);
+  m_inputPos = m_textLength;
 }
 
 
@@ -4044,13 +4053,11 @@ char const * LineEditor::edit(int maxLength)
             // Home
             case '1':
               performCursorHome();
-              m_inputPos = 0;
               break;
 
             // End
             case '4':
               performCursorEnd();
-              m_inputPos = m_textLength;
               break;
 
             // Delete
