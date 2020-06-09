@@ -3982,6 +3982,25 @@ char const * LineEditor::edit(int maxLength)
 
       }
 
+    } else if (m_state == 2) {
+
+      // CTRL-Q mode
+
+      switch (c) {
+
+        // CTRL-Q S => WordStar Home
+        case 'S':
+          performCursorHome();
+          break;
+
+        // CTRL-Q D => WordStar End
+        case 'D':
+          performCursorEnd();
+          break;
+
+      }
+      m_state = 0;
+
     } else if (m_state >= 31) {
 
       // CSI mode
@@ -4065,10 +4084,20 @@ char const * LineEditor::edit(int maxLength)
           m_state = 1;
           break;
 
+        // CTRL-Q, switch to CTRL-Q mode
+        case ASCII_CTRLQ:
+          m_state = 2;
+          break;
+
         // DEL, delete character at left
         case ASCII_DEL:
         case ASCII_BS:  // alias CTRL-H / backspace
           performDeleteLeft();
+          break;
+
+        // CTRL-G, delete character at right
+        case ASCII_CTRLG:
+          performDeleteRight();
           break;
 
         // CR, newline and return the inserted text
@@ -4096,6 +4125,16 @@ char const * LineEditor::edit(int maxLength)
         // CTRL-X, WordStar DOWN
         case ASCII_CTRLX:
           performCursorDown();
+          break;
+
+        // CTRL-S, WordStar LEFT
+        case ASCII_CTRLS:
+          performCursorLeft();
+          break;
+
+        // CTRL-D, WordStar RIGHT
+        case ASCII_CTRLD:
+          performCursorRight();
           break;
 
         // insert printable chars

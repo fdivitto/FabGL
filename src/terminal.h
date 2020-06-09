@@ -1436,7 +1436,7 @@ private:
   int                 m_textLength;
   int                 m_allocated;
   int16_t             m_inputPos;
-  int16_t             m_state;     // -1 = begin input, 0 = normal input, 1 = ESC, >=31 = CSI (actual value specified the third char if present)
+  int16_t             m_state;     // -1 = begin input, 0 = normal input, 1 = ESC, 2 = CTRL-Q, >=31 = CSI (actual value specifies the third char if present)
   int16_t             m_homeCol;
   int16_t             m_homeRow;
   bool                m_insertMode;
