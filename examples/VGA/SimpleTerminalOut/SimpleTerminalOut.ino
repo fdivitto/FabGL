@@ -82,7 +82,7 @@ void demo1()
 void demo2()
 {
   Terminal.write("\e[40;32m"); // background: black, foreground: green
-  slowPrintf("8 or 64 colors supported (depends by GPIOs used)\r\n");
+  slowPrintf("8 or 64 colors supported\r\n");
   slowPrintf("ANSI colors:\r\n");
   // foregrounds
   Terminal.write("\e[31mRED\t"); delay(500);
