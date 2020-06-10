@@ -900,7 +900,7 @@ private:
   void restoreCursorState();
   void clearSavedCursorStates();
 
-  void erase(int X1, int Y1, int X2, int Y2, char c, bool maintainDoubleWidth, bool selective);
+  void erase(int X1, int Y1, int X2, int Y2, uint8_t c, bool maintainDoubleWidth, bool selective);
 
   void consumeInputQueue();
   void consumeESC();
@@ -908,13 +908,13 @@ private:
   void consumeFabGLSeq();
   void consumeCSIQUOT(int * params, int paramsCount);
   void consumeCSISPC(int * params, int paramsCount);
-  char consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound);
-  void consumeDECPrivateModes(int const * params, int paramsCount, char c);
+  uint8_t consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound);
+  void consumeDECPrivateModes(int const * params, int paramsCount, uint8_t c);
   void consumeDCS();
   void execSGRParameters(int const * params, int paramsCount);
   void consumeESCVT52();
 
-  void execCtrlCode(char c);
+  void execCtrlCode(uint8_t c);
 
   static void charsConsumerTask(void * pvParameters);
   static void keyboardReaderTask(void * pvParameters);
@@ -927,9 +927,9 @@ private:
 
   static void IRAM_ATTR uart_isr(void *arg);
 
-  char getNextCode(bool processCtrlCodes);
+  uint8_t getNextCode(bool processCtrlCodes);
 
-  bool setChar(char c);
+  bool setChar(uint8_t c);
   GlyphOptions getGlyphOptionsAt(int X, int Y);
 
   void insertAt(int column, int row, int count);
@@ -950,13 +950,13 @@ private:
 
   void useAlternateScreenBuffer(bool value);
 
-  void send(char c);
+  void send(uint8_t c);
   void send(char const * str);
   void sendCSI();
   void sendDCS();
   void sendSS3();
-  void sendCursorKeyCode(char c);
-  void sendKeypadCursorKeyCode(char applicationCode, const char * numericCode);
+  void sendCursorKeyCode(uint8_t c);
+  void sendKeypadCursorKeyCode(uint8_t applicationCode, const char * numericCode);
 
   void ANSIDecodeVirtualKey(VirtualKey vk);
   void VT52DecodeVirtualKey(VirtualKey vk);
@@ -966,9 +966,10 @@ private:
   void convQueue(const char * str, bool fromISR);
   void TermDecodeVirtualKey(VirtualKey vk);
 
-  bool addToInputQueue(char c, bool fromISR);
+  bool addToInputQueue(uint8_t c, bool fromISR);
+  bool insertToInputQueue(uint8_t c, bool fromISR);
 
-  void write(char c, bool fromISR);
+  void write(uint8_t c, bool fromISR);
 
   //static void uart_on_apb_change(void * arg, apb_change_ev_t ev_type, uint32_t old_apb, uint32_t new_apb);
 
@@ -1065,7 +1066,7 @@ private:
   VirtualKey                m_lastPressedKey;
 
   uint8_t                   m_convMatchedCount;
-  char                      m_convMatchedChars[EmuTerminalMaxChars];
+  uint8_t                   m_convMatchedChars[EmuTerminalMaxChars];
   TermInfoVideoConv const * m_convMatchedItem;
   TermInfo const *          m_termInfo;
 
@@ -1191,8 +1192,6 @@ public:
    *
    * @return True if vertical scroll occurred.
    */
-  bool setChar(char c);
-
   /**
    * @brief Sets a sequence of raw characters starting from current cursor position
    *
@@ -1204,6 +1203,7 @@ public:
    * @return Number of vertical scrolls occurred.
    */
   int setChars(char const * buffer, int count);
+  bool setChar(uint8_t c);
 
   /**
    * @brief Checks if a virtual key is currently down

@@ -1113,7 +1113,7 @@ void Terminal::deleteAt(int column, int row, int count)
 // Coordinates are cursor coordinates (1,1  = top left)
 // maintainDoubleWidth = true: Maintains line attributes (double width)
 // selective = true: erase only characters with userOpt1 = 0
-void Terminal::erase(int X1, int Y1, int X2, int Y2, char c, bool maintainDoubleWidth, bool selective)
+void Terminal::erase(int X1, int Y1, int X2, int Y2, uint8_t c, bool maintainDoubleWidth, bool selective)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   logFmt("erase(%d, %d, %d, %d, %d, %d)\n", X1, Y1, X2, Y2, (int)c, (int)maintainDoubleWidth);
@@ -1296,7 +1296,7 @@ int Terminal::read()
 int Terminal::read(int timeOutMS)
 {
   if (m_outputQueue) {
-    char c;
+    uint8_t c;
     xQueueReceive(m_outputQueue, &c, msToTicks(timeOutMS));
     return c;
   } else
@@ -1409,7 +1409,7 @@ void IRAM_ATTR Terminal::uart_isr(void *arg)
 
 
 // send a character to m_serialPort or m_outputQueue
-void Terminal::send(char c)
+void Terminal::send(uint8_t c)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES
   logFmt("=> %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
@@ -1486,7 +1486,7 @@ int Terminal::availableForWrite()
 }
 
 
-bool Terminal::addToInputQueue(char c, bool fromISR)
+bool Terminal::addToInputQueue(uint8_t c, bool fromISR)
 {
   if (fromISR)
     return xQueueSendToBackFromISR(m_inputQueue, &c, nullptr);
@@ -1495,7 +1495,7 @@ bool Terminal::addToInputQueue(char c, bool fromISR)
 }
 
 
-void Terminal::write(char c, bool fromISR)
+void Terminal::write(uint8_t c, bool fromISR)
 {
   if (m_termInfo == nullptr)
     addToInputQueue(c, fromISR);  // send unprocessed
@@ -1717,7 +1717,7 @@ void Terminal::convQueue(const char * str, bool fromISR)
 
 // set specified character at current cursor position
 // return true if vertical scroll happened
-bool Terminal::setChar(char c)
+bool Terminal::setChar(uint8_t c)
 {
   bool vscroll = false;
 
@@ -1842,10 +1842,10 @@ GlyphOptions Terminal::getGlyphOptionsAt(int X, int Y)
 
 
 // blocking operation
-char Terminal::getNextCode(bool processCtrlCodes)
+uint8_t Terminal::getNextCode(bool processCtrlCodes)
 {
   while (true) {
-    char c;
+    uint8_t c;
     xQueueReceive(m_inputQueue, &c, portMAX_DELAY);
 
     if (m_uart)
@@ -1871,7 +1871,7 @@ void Terminal::charsConsumerTask(void * pvParameters)
 
 void Terminal::consumeInputQueue()
 {
-  char c = getNextCode(false);  // blocking call. false: do not process ctrl chars
+  uint8_t c = getNextCode(false);  // blocking call. false: do not process ctrl chars
 
   xSemaphoreTake(m_mutex, portMAX_DELAY);
 
@@ -1902,7 +1902,7 @@ void Terminal::consumeInputQueue()
 }
 
 
-void Terminal::execCtrlCode(char c)
+void Terminal::execCtrlCode(uint8_t c)
 {
   switch (c) {
 
@@ -1983,7 +1983,7 @@ void Terminal::consumeESC()
     return;
   }
 
-  char c = getNextCode(true);   // true: process ctrl chars
+  uint8_t c = getNextCode(true);   // true: process ctrl chars
 
   if (c == '[') {
     // ESC [ : start of CSI sequence
@@ -2146,7 +2146,7 @@ void Terminal::consumeESC()
 // a parameter is a number. Parameters are separated by ';'. Example: "5;27;3"
 // first parameter has index 0
 // params array must have up to FABGLIB_MAX_CSI_PARAMS
-char Terminal::consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound)
+uint8_t Terminal::consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound)
 {
   // get parameters until maximum size reached or a command character has been found
   *paramsCount = 1; // one parameter is always assumed (even if not exists)
@@ -2154,7 +2154,7 @@ char Terminal::consumeParamsAndGetCode(int * params, int * paramsCount, bool * q
   int * p = params;
   *p = 0;
   while (true) {
-    char c = getNextCode(true);  // true: process ctrl chars
+    uint8_t c = getNextCode(true);  // true: process ctrl chars
 
     #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
     log(c);
@@ -2203,7 +2203,7 @@ void Terminal::consumeCSI()
   bool questionMarkFound;
   int params[FABGLIB_MAX_CSI_PARAMS];
   int paramsCount;
-  char c = consumeParamsAndGetCode(params, &paramsCount, &questionMarkFound);
+  uint8_t c = consumeParamsAndGetCode(params, &paramsCount, &questionMarkFound);
 
   // ESC [ ? ... h
   // ESC [ ? ... l
@@ -2483,7 +2483,7 @@ void Terminal::consumeCSI()
 // consume CSI " sequences
 void Terminal::consumeCSIQUOT(int * params, int paramsCount)
 {
-  char c = getNextCode(true);  // true: process ctrl chars
+  uint8_t c = getNextCode(true);  // true: process ctrl chars
 
   switch (c) {
 
@@ -2508,7 +2508,7 @@ void Terminal::consumeCSIQUOT(int * params, int paramsCount)
 // consume CSI SPC sequences
 void Terminal::consumeCSISPC(int * params, int paramsCount)
 {
-  char c = getNextCode(true);  // true: process ctrl chars
+  uint8_t c = getNextCode(true);  // true: process ctrl chars
 
   switch (c) {
 
@@ -2535,7 +2535,7 @@ void Terminal::consumeCSISPC(int * params, int paramsCount)
 // ESC [ ? # h     <- set
 // ESC [ ? # l     <- reset
 // "c" can be "h" or "l"
-void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, char c)
+void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, uint8_t c)
 {
   bool set = (c == 'h');
   switch (params[0]) {
@@ -2827,14 +2827,14 @@ void Terminal::consumeDCS()
   bool questionMarkFound;
   int params[FABGLIB_MAX_CSI_PARAMS];
   int paramsCount;
-  char c = consumeParamsAndGetCode(params, &paramsCount, &questionMarkFound);
+  uint8_t c = consumeParamsAndGetCode(params, &paramsCount, &questionMarkFound);
 
   // get DCS content up to ST
-  char content[FABGLIB_MAX_DCS_CONTENT];
+  uint8_t content[FABGLIB_MAX_DCS_CONTENT];
   int contentLength = 0;
   content[contentLength++] = c;
   while (true) {
-    char c = getNextCode(false);  // false: do notprocess ctrl chars, ESC needed here
+    uint8_t c = getNextCode(false);  // false: do notprocess ctrl chars, ESC needed here
     if (c == ASCII_ESC) {
       if (getNextCode(false) == '\\')
         break;  // ST found
@@ -2882,7 +2882,7 @@ void Terminal::consumeDCS()
 
 void Terminal::consumeESCVT52()
 {
-  char c = getNextCode(false);
+  uint8_t c = getNextCode(false);
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
   logFmt("ESC%c\n", c);
@@ -3003,7 +3003,7 @@ void Terminal::consumeFabGLSeq()
   log("ESC 0xFF");
   #endif
 
-  char c = getNextCode(false);   // false: don't process ctrl chars
+  uint8_t c = getNextCode(false);   // false: don't process ctrl chars
 
   // process command in "c"
   switch (c) {
@@ -3242,7 +3242,7 @@ void Terminal::keyboardReaderTask(void * pvParameters)
 }
 
 
-void Terminal::sendCursorKeyCode(char c)
+void Terminal::sendCursorKeyCode(uint8_t c)
 {
   if (m_emuState.cursorKeysMode)
     sendSS3();
@@ -3252,7 +3252,7 @@ void Terminal::sendCursorKeyCode(char c)
 }
 
 
-void Terminal::sendKeypadCursorKeyCode(char applicationCode, const char * numericCode)
+void Terminal::sendKeypadCursorKeyCode(uint8_t applicationCode, const char * numericCode)
 {
   if (m_emuState.keypadMode == KeypadMode::Application) {
     sendSS3();
@@ -3705,7 +3705,7 @@ void TerminalController::multilineDeleteChar(int charsToMove)
 }
 
 
-bool TerminalController::setChar(char c)
+bool TerminalController::setChar(uint8_t c)
 {
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_SETCHAR);
