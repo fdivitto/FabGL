@@ -217,22 +217,6 @@ namespace fabgl {
 
 
 
-#define FABGL_ENTERM_CMD "\e\xff"
-
-#define FABGL_ENTERM_GETCURSORPOS   1
-#define FABGL_ENTERM_GETCURSORCOL   2
-#define FABGL_ENTERM_GETCURSORROW   3
-#define FABGL_ENTERM_SETCURSORPOS   4
-#define FABGL_ENTERM_INSERTSPACE    5
-#define FABGL_ENTERM_DELETECHAR     6
-#define FABGL_ENTERM_CURSORLEFT     7
-#define FABGL_ENTERM_CURSORRIGHT    8
-#define FABGL_ENTERM_SETCHAR        9
-#define FABGL_ENTERM_SETCHARS      10
-#define FABGL_ENTERM_ISVKDOWN      11
-#define FABGL_ENTERM_DISABLEFABSEQ 12
-
-
 
 /** \ingroup Enumerations
  * @brief This enum defines various serial port flow control methods
@@ -339,7 +323,7 @@ struct EmuState {
   // VT52 Graphics Mode
   bool         VT52GraphicsMode;
 
-  // Allow FabGL specific sequences (ESC 0xFF .....)
+  // Allow FabGL specific sequences (ESC FABGL_ENTERM_CODE .....)
   int          allowFabGLSequences;  // >0 allow, 0 = don't allow
 };
 

@@ -94,6 +94,22 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
                                   "XOFF", "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS", "RS", "US", "SPC"};
 
 
+#define FABGL_ENTERM_CODE           0xFE
+#define FABGL_ENTERM_CMD            "\e\xFE"
+#define FABGL_ENTERM_REPLYCODE      0xFD
+
+#define FABGL_ENTERM_GETCURSORPOS   0x01
+#define FABGL_ENTERM_GETCURSORCOL   0x02
+#define FABGL_ENTERM_GETCURSORROW   0x03
+#define FABGL_ENTERM_SETCURSORPOS   0x04
+#define FABGL_ENTERM_INSERTSPACE    0x05
+#define FABGL_ENTERM_DELETECHAR     0x06
+#define FABGL_ENTERM_CURSORLEFT     0x07
+#define FABGL_ENTERM_CURSORRIGHT    0x08
+#define FABGL_ENTERM_SETCHAR        0x09
+#define FABGL_ENTERM_ISVKDOWN       0x0A
+#define FABGL_ENTERM_DISABLEFABSEQ  0x0B
+#define FABGL_ENTERM_SETTERMTYPE    0x0C
 volatile Terminal * Terminal::s_activeTerminal = nullptr;
 
 
@@ -1991,8 +2007,8 @@ void Terminal::consumeESC()
     return;
   }
 
-  if (c == 0xFF && m_emuState.allowFabGLSequences > 0) {
-    // ESC 0xFF : FabGL specific sequence
+  if (c == FABGL_ENTERM_CODE && m_emuState.allowFabGLSequences > 0) {
+    // ESC FABGL_ENTERM_CODE : FabGL specific sequence
     consumeFabGLSeq();
     return;
   }
@@ -2889,8 +2905,8 @@ void Terminal::consumeESCVT52()
   #endif
 
   // this allows fabgl sequences even in VT52 mode
-  if (c == 0xFF && m_emuState.allowFabGLSequences > 0) {
-    // ESC 0xFF : FabGL specific sequence
+  if (c == FABGL_ENTERM_CODE && m_emuState.allowFabGLSequences > 0) {
+    // ESC FABGL_ENTERM_CODE : FabGL specific sequence
     consumeFabGLSeq();
     return;
   }
@@ -2996,11 +3012,11 @@ void Terminal::consumeESCVT52()
 }
 
 
-// consume FabGL specific sequence (ESC 0xFF ....)
+// consume FabGL specific sequence (ESC FABGL_ENTERM_CODE ....)
 void Terminal::consumeFabGLSeq()
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
-  log("ESC 0xFF");
+  log("ESC FABGL_ENTERM_CODE");
   #endif
 
   uint8_t c = getNextCode(false);   // false: don't process ctrl chars
@@ -3010,48 +3026,48 @@ void Terminal::consumeFabGLSeq()
 
     // Get cursor horizontal position (1 = leftmost pos)
     // Seq:
-    //    ESC 0xFF FABGL_ENTERM_GETCURSORCOL
+    //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_GETCURSORCOL
     // params:
     //    none
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: column
     case FABGL_ENTERM_GETCURSORCOL:
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(m_emuState.cursorX);
       break;
 
     // Get cursor vertical position (1 = topmost pos)
     // Seq:
-    //    ESC 0xFF FABGL_ENTERM_GETCURSORROW
+    //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_GETCURSORROW
     // params:
     //    none
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: row
     case FABGL_ENTERM_GETCURSORROW:
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(m_emuState.cursorY);
       break;
 
     // Get cursor position
     // Seq:
-    //    ESC 0xFF FABGL_ENTERM_GETCURSORPOS
+    //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_GETCURSORPOS
     // params:
     //    none
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: column
     //    byte: row
     case FABGL_ENTERM_GETCURSORPOS:
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(m_emuState.cursorX);
       send(m_emuState.cursorY);
       break;
 
     // Set cursor position
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_SETCURSORPOS COL ROW
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETCURSORPOS COL ROW
     // params:
     //   COL (byte): column (1 = first column)
     //   ROW (byte): row (1 = first row)
@@ -3067,18 +3083,18 @@ void Terminal::consumeFabGLSeq()
     // Advances cursor by one position. Characters after CHARSTOMOVE length are overwritter.
     // Vertical scroll may occurs.
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_INSERTSPACE CHARSTOMOVE_L CHARSTOMOVE_H
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_INSERTSPACE CHARSTOMOVE_L CHARSTOMOVE_H
     // params:
     //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the right by one position
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
     case FABGL_ENTERM_INSERTSPACE:
     {
       uint8_t charsToMove_L = getNextCode(false);
       uint8_t charsToMove_H = getNextCode(false);
       bool scroll = multilineInsertChar(charsToMove_L | charsToMove_H << 8);
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(scroll);
       break;
     }
@@ -3086,7 +3102,7 @@ void Terminal::consumeFabGLSeq()
     // Delete character at current position, moving next CHARSTOMOVE characters to the left (even on multiple lines).
     // Characters after CHARSTOMOVE are filled with spaces.
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_DELETECHAR CHARSTOMOVE_L CHARSTOMOVE_H
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_DELETECHAR CHARSTOMOVE_L CHARSTOMOVE_H
     // params:
     //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the left by one position
     case FABGL_ENTERM_DELETECHAR:
@@ -3099,7 +3115,7 @@ void Terminal::consumeFabGLSeq()
 
     // Move cursor at left, wrapping lines if necessary
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_CURSORLEFT COUNT_L COUNT_H
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_CURSORLEFT COUNT_L COUNT_H
     // params:
     //   COUNT_L, COUNT_H (byte): number of positions to move to the left
     case FABGL_ENTERM_CURSORLEFT:
@@ -3112,7 +3128,7 @@ void Terminal::consumeFabGLSeq()
 
     // Move cursor at right, wrapping lines if necessary
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_CURSORRIGHT COUNT
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_CURSORRIGHT COUNT_L COUNT_H
     // params:
     //   COUNT (byte): number of positions to move to the right
     case FABGL_ENTERM_CURSORRIGHT:
@@ -3126,46 +3142,46 @@ void Terminal::consumeFabGLSeq()
     // Sets char CHAR at current position and advance one position. Scroll if necessary.
     // This do not interpret character as a special code, but just sets it.
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_SETCHAR CHAR
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETCHAR CHAR
     // params:
     //   CHAR (byte): character to set
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
     case FABGL_ENTERM_SETCHAR:
     {
       bool scroll = setChar(getNextCode(false));
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(scroll);
       break;
     }
 
     // Return virtual key state
     // Seq:
-    //    ESC 0xFF FABGL_ENTERM_ISVKDOWN VKCODE
+    //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_ISVKDOWN VKCODE
     // params:
     //    VKCODE : virtual key code to check
     // return:
-    //    byte: 0xFE   (reply tag)
+    //    byte: FABGL_ENTERM_REPLYCODE   (reply tag)
     //    byte: 0 = key is up, 1 = key is down
     case FABGL_ENTERM_ISVKDOWN:
     {
       VirtualKey vk = (VirtualKey) getNextCode(false);
-      send(0xFE);
+      send(FABGL_ENTERM_REPLYCODE);
       send(keyboard()->isVKDown(vk) ? 1 : 0);
       break;
     }
 
     // Disable FabGL sequences
     // Seq:
-    //   ESC 0xFF FABGL_ENTERM_DISABLEFABSEQ
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_DISABLEFABSEQ
     case FABGL_ENTERM_DISABLEFABSEQ:
       enableFabGLSequences(false);
       break;
 
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
-      logFmt("Unknown: ESC 0xFF %02x\n", c);
+      logFmt("Unknown: ESC FABGL_ENTERM_CODE %02x\n", c);
       #endif
       break;
   }
@@ -3638,7 +3654,7 @@ void TerminalController::getCursorPos(int * col, int * row)
 {
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_GETCURSORPOS);
-  waitFor(0xFE);
+  waitFor(FABGL_ENTERM_REPLYCODE);
   *col = read();
   *row = read();
 }
@@ -3648,7 +3664,7 @@ int TerminalController::getCursorCol()
 {
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_GETCURSORCOL);
-  waitFor(0xFE);
+  waitFor(FABGL_ENTERM_REPLYCODE);
   return read();
 }
 
@@ -3657,7 +3673,7 @@ int TerminalController::getCursorRow()
 {
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_GETCURSORROW);
-  waitFor(0xFE);
+  waitFor(FABGL_ENTERM_REPLYCODE);
   return read();
 }
 
@@ -3668,7 +3684,7 @@ bool TerminalController::multilineInsertChar(int charsToMove)
   write(FABGL_ENTERM_INSERTSPACE);
   write(charsToMove & 0xff);
   write(charsToMove >> 8);
-  waitFor(0xFE);
+  waitFor(FABGL_ENTERM_REPLYCODE);
   return read();
 }
 
@@ -3687,10 +3703,7 @@ bool TerminalController::setChar(uint8_t c)
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_SETCHAR);
   write(c);
-  waitFor(0xFE);
-  return read();
-}
-
+  waitFor(FABGL_ENTERM_REPLYCODE);
   return read();
 }
 
@@ -3700,7 +3713,7 @@ bool TerminalController::isVKDown(VirtualKey vk)
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_ISVKDOWN);
   write((uint8_t)vk);
-  waitFor(0xFE);
+  waitFor(FABGL_ENTERM_REPLYCODE);
   return read();
 }
 
