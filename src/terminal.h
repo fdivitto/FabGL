@@ -1192,17 +1192,6 @@ public:
    *
    * @return True if vertical scroll occurred.
    */
-  /**
-   * @brief Sets a sequence of raw characters starting from current cursor position
-   *
-   * Cursor position is moved by the amount of characters set.
-   *
-   * @param buffer The buffer containing raw characters.
-   * @param count Number of characters to set.
-   *
-   * @return Number of vertical scrolls occurred.
-   */
-  int setChars(char const * buffer, int count);
   bool setChar(uint8_t c);
 
   /**

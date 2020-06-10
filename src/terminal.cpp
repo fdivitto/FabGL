@@ -3140,29 +3140,6 @@ void Terminal::consumeFabGLSeq()
       break;
     }
 
-    // Sets a sequence of chars starting from current position and advancing the cursor for each character. Scroll if necessary.
-    // This do not interpret character as a special code, but just sets it.
-    // Seq:
-    //   ESC 0xFF FABGL_ENTERM_SETCHARS COUNT_L COUNT_H ...chars...
-    // params:
-    //   COUNT_L, COUNT_H (byte): number of characters to sets
-    //   ...chars... (bytes): the characters to sets
-    // return:
-    //    byte: 0xFE   (reply tag)
-    //    byte: 0 = vertical scroll not occurred, >0 = number of vertical scrolls occurred
-    case FABGL_ENTERM_SETCHARS:
-    {
-      uint8_t count_L = getNextCode(false);
-      uint8_t count_H = getNextCode(false);
-      int count = count_L | count_H << 8;
-      int scrolls = 0;
-      for (int i = 0; i < count; ++i)
-        scrolls += setChar(getNextCode(false));
-      send(0xFE);
-      send(scrolls);
-      break;
-    }
-
     // Return virtual key state
     // Seq:
     //    ESC 0xFF FABGL_ENTERM_ISVKDOWN VKCODE
@@ -3714,16 +3691,6 @@ bool TerminalController::setChar(uint8_t c)
   return read();
 }
 
-
-int TerminalController::setChars(char const * buffer, int count)
-{
-  write(FABGL_ENTERM_CMD);
-  write(FABGL_ENTERM_SETCHARS);
-  write(count & 0xff);
-  write(count >> 8);
-  for (int i = 0; i < count; ++i, ++buffer)
-    write(*buffer);
-  waitFor(0xFE);
   return read();
 }
 
@@ -3807,7 +3774,8 @@ void LineEditor::setText(char const * text, int length, bool moveCursor)
     for (int i = 0; i < m_textLength; ++i)
       m_termctrl.setChar(' ');
     m_termctrl.setCursorPos(m_homeCol, m_homeRow);
-    m_homeRow -= m_termctrl.setChars(text, length);
+    for (int i = 0; i < length; ++i)
+      m_homeRow -= m_termctrl.setChar(text[i]);
   }
   setLength(length);
   memcpy(m_text, text, length);
@@ -3848,7 +3816,8 @@ void LineEditor::beginInput()
   m_homeRow = m_termctrl.getCursorRow();
   if (m_text) {
     // m_inputPos already set by setText()
-    m_homeRow -= m_termctrl.setChars(m_text, strlen(m_text));
+    for (int i = 0, len = strlen(m_text); i < len; ++i)
+      m_homeRow -= m_termctrl.setChar(m_text[i]);
     if (m_inputPos == 0)
       m_termctrl.setCursorPos(m_homeCol, m_homeRow);
   } else {
