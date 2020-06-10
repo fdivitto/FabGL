@@ -1447,7 +1447,7 @@ void IRAM_ATTR Terminal::uart_isr(void *arg)
       break;
     }
     // add to input queue
-    term->addToInputQueue(uart->fifo.rw_byte, true);
+    term->write(uart->fifo.rw_byte, true);
   }
 
   // clear interrupt flag
