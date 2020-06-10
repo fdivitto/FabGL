@@ -110,6 +110,31 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_ISVKDOWN       0x0A
 #define FABGL_ENTERM_DISABLEFABSEQ  0x0B
 #define FABGL_ENTERM_SETTERMTYPE    0x0C
+
+const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
+                                   3,  // FABGL_ENTERM_GETCURSORPOS
+                                   3,  // FABGL_ENTERM_GETCURSORCOL
+                                   3,  // FABGL_ENTERM_GETCURSORROW
+                                   5,  // FABGL_ENTERM_SETCURSORPOS
+                                   5,  // FABGL_ENTERM_INSERTSPACE
+                                   5,  // FABGL_ENTERM_DELETECHAR
+                                   5,  // FABGL_ENTERM_CURSORLEFT
+                                   5,  // FABGL_ENTERM_CURSORRIGHT
+                                   4,  // FABGL_ENTERM_SETCHAR
+                                   4,  // FABGL_ENTERM_ISVKDOWN
+                                   3,  // FABGL_ENTERM_DISABLEFABSEQ
+                                   4,  // FABGL_ENTERM_SETTERMTYPE
+                                  };
+
+
+
+
+
+
+
+
+
+
 volatile Terminal * Terminal::s_activeTerminal = nullptr;
 
 
@@ -181,6 +206,11 @@ void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
 
   m_autoXONOFF = false;
   m_XOFF = false;
+
+  m_lastWrittenChar = 0;
+
+  m_writeDetectedFabGLSeq = false;
+  m_writeFabGLSeqLength = 0;
 
   // conformance level
   m_emuState.conformanceLevel = 4; // VT400
@@ -1522,10 +1552,26 @@ bool Terminal::insertToInputQueue(uint8_t c, bool fromISR)
 
 void Terminal::write(uint8_t c, bool fromISR)
 {
-  if (m_termInfo == nullptr)
+  if (m_termInfo == nullptr || m_writeDetectedFabGLSeq)
     addToInputQueue(c, fromISR);  // send unprocessed
   else
     convHandleTranslation(c, fromISR);
+
+  if (m_writeDetectedFabGLSeq) {
+    if (m_writeFabGLSeqLength == 0) {
+      m_writeFabGLSeqLength = FABGLSEQLENGTH[c] - 3;
+    } else {
+      --m_writeFabGLSeqLength;
+    }
+    if (m_writeFabGLSeqLength == 0) {
+      m_writeDetectedFabGLSeq = false;
+    }
+  } else if (m_emuState.allowFabGLSequences && m_lastWrittenChar == ASCII_ESC && c == FABGL_ENTERM_CODE) {
+    m_writeDetectedFabGLSeq = true;
+    m_writeFabGLSeqLength = 0;
+  }
+
+  m_lastWrittenChar = c;
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES
   logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));

@@ -1049,6 +1049,13 @@ private:
   TermInfoVideoConv const * m_convMatchedItem;
   TermInfo const *          m_termInfo;
 
+  // last char added with write()
+  volatile uint8_t          m_lastWrittenChar;
+
+  // when a FabGL sequence has been detected in write()
+  volatile bool             m_writeDetectedFabGLSeq;
+  volatile int              m_writeFabGLSeqLength;
+
 };
 
 
