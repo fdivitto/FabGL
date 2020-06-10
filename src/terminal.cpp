@@ -1511,6 +1511,15 @@ bool Terminal::addToInputQueue(uint8_t c, bool fromISR)
 }
 
 
+bool Terminal::insertToInputQueue(uint8_t c, bool fromISR)
+{
+  if (fromISR)
+    return xQueueSendToFrontFromISR(m_inputQueue, &c, nullptr);
+  else
+    return xQueueSendToFront(m_inputQueue, &c, portMAX_DELAY);
+}
+
+
 void Terminal::write(uint8_t c, bool fromISR)
 {
   if (m_termInfo == nullptr)
@@ -1539,42 +1548,58 @@ int Terminal::write(const uint8_t * buffer, int size)
 }
 
 
-void Terminal::setTerminalType(TermInfo const * value)
+void Terminal::setTerminalType(TermType value)
 {
-  m_termInfo = nullptr;
-  write("\e[?2h");  // disable VT52 mode
-  if (value != nullptr)
-    write(value->initString);
-  m_termInfo = value;
+  // doesn't set it immediately, serialize into the queue
+  TerminalController(this).setTerminalType(value);
 }
 
 
-void Terminal::setTerminalType(TermType value)
+void Terminal::setTerminalTypeInt(TermInfo const * value)
+{
+  // disable VT52 mode
+  m_emuState.ANSIMode = true;
+  m_emuState.conformanceLevel = 4;
+
+  m_termInfo = nullptr;
+
+  if (value != nullptr) {
+    // need to "insert" initString in reverse order
+    auto s = value->initString;
+    for (int i = strlen(s) - 1; i >= 0; --i)
+      insertToInputQueue(s[i], false);
+
+    m_termInfo = value;
+  }
+}
+
+
+void Terminal::setTerminalTypeInt(TermType value)
 {
   switch (value) {
     case TermType::ANSI_VT:
-      setTerminalType(nullptr);
+      setTerminalTypeInt(nullptr);
       break;
     case TermType::ADM3A:
-      setTerminalType(&term_ADM3A);
+      setTerminalTypeInt(&term_ADM3A);
       break;
     case TermType::ADM31:
-      setTerminalType(&term_ADM31);
+      setTerminalTypeInt(&term_ADM31);
       break;
     case TermType::Hazeltine1500:
-      setTerminalType(&term_Hazeltine1500);
+      setTerminalTypeInt(&term_Hazeltine1500);
       break;
     case TermType::Osborne:
-      setTerminalType(&term_Osborne);
+      setTerminalTypeInt(&term_Osborne);
       break;
     case TermType::Kaypro:
-      setTerminalType(&term_Kaypro);
+      setTerminalTypeInt(&term_Kaypro);
       break;
     case TermType::VT52:
-      setTerminalType(&term_VT52);
+      setTerminalTypeInt(&term_VT52);
       break;
     case TermType::ANSILegacy:
-      setTerminalType(&term_ANSILegacy);
+      setTerminalTypeInt(&term_ANSILegacy);
       break;
   }
 }
@@ -3179,6 +3204,15 @@ void Terminal::consumeFabGLSeq()
       enableFabGLSequences(false);
       break;
 
+    // Set terminal type
+    // Seq:
+    //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETTERMTYPE TERMINDEX
+    // params:
+    //    TERMINDEX : index of terminal to emulate (TermType)
+    case FABGL_ENTERM_SETTERMTYPE:
+      setTerminalTypeInt((TermType) getNextCode(false));
+      break;
+
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
       logFmt("Unknown: ESC FABGL_ENTERM_CODE %02x\n", c);
@@ -3722,6 +3756,14 @@ void TerminalController::disableFabGLSequences()
 {
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_DISABLEFABSEQ);
+}
+
+
+void TerminalController::setTerminalType(TermType value)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_SETTERMTYPE);
+  write((int)value);
 }
 
 

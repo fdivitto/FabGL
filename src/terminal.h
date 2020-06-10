@@ -663,15 +663,6 @@ public:
   int availableForWrite();
 
   /**
-   * @brief Sets the terminal type to emulate specifying conversion tables
-   *
-   * @param value Conversione tables for the terminal to emulate. nullptr = native ANSI/VT terminal.
-   *
-   * Default and native is ANSI/VT100 mode. Other terminals are emulated translating to native mode.
-   */
-  void setTerminalType(TermInfo const * value);
-
-  /**
    * @brief Sets the terminal type to emulate
    *
    * @param value A terminal to emulate
@@ -961,6 +952,10 @@ private:
 
   void enableFabGLSequences(bool value);
 
+  void setTerminalTypeInt(TermType value);
+  void setTerminalTypeInt(TermInfo const * value);
+
+
   // indicates which is the active terminal when there are multiple instances of Terminal
   static volatile Terminal *   s_activeTerminal;
 
@@ -1191,6 +1186,13 @@ public:
    * @brief Disables FabGL specific sequences
    */
   void disableFabGLSequences();
+
+  /**
+   * @brief Sets the terminal type to emulate
+   *
+   * @param value A terminal to emulate
+   */
+  void setTerminalType(TermType value);
 
 
   //// Delegates ////
