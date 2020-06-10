@@ -111,6 +111,7 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_DISABLEFABSEQ  0x0B
 #define FABGL_ENTERM_SETTERMTYPE    0x0C
 
+// each fabgl specific sequence has a fixed length, specified here:
 const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
                                    3,  // FABGL_ENTERM_GETCURSORPOS
                                    3,  // FABGL_ENTERM_GETCURSORCOL
@@ -1557,6 +1558,7 @@ void Terminal::write(uint8_t c, bool fromISR)
   else
     convHandleTranslation(c, fromISR);
 
+  // this is necessary to avoid to call convHandleTranslation() in the middle of FabGL specific sequence (which can have binary data inside)
   if (m_writeDetectedFabGLSeq) {
     if (m_writeFabGLSeqLength == 0) {
       m_writeFabGLSeqLength = FABGLSEQLENGTH[c] - 3;
