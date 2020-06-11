@@ -98,6 +98,7 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_CMD            "\e\xFE"
 #define FABGL_ENTERM_REPLYCODE      0xFD
 
+
 #define FABGL_ENTERM_GETCURSORPOS   0x01
 #define FABGL_ENTERM_GETCURSORCOL   0x02
 #define FABGL_ENTERM_GETCURSORROW   0x03
@@ -110,6 +111,9 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_ISVKDOWN       0x0A
 #define FABGL_ENTERM_DISABLEFABSEQ  0x0B
 #define FABGL_ENTERM_SETTERMTYPE    0x0C
+#define FABGL_ENTERM_SETFGCOLOR     0x0D
+#define FABGL_ENTERM_SETBGCOLOR     0X0E
+
 
 // each fabgl specific sequence has a fixed length, specified here:
 const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
@@ -125,6 +129,8 @@ const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
                                    4,  // FABGL_ENTERM_ISVKDOWN
                                    3,  // FABGL_ENTERM_DISABLEFABSEQ
                                    4,  // FABGL_ENTERM_SETTERMTYPE
+                                   4,  // FABGL_ENTERM_SETFGCOLOR
+                                   4,  // FABGL_ENTERM_SETBGCOLOR
                                   };
 
 
@@ -3261,6 +3267,24 @@ void Terminal::consumeFabGLSeq()
       int_setTerminalType((TermType) getNextCode(false));
       break;
 
+    // Set foreground color
+    // Seq:
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETFGCOLOR COLORINDEX
+    // params:
+    //   COLORINDEX : 0..15 (index of Color enum)
+    case FABGL_ENTERM_SETFGCOLOR:
+      int_setForegroundColor((Color) getNextCode(false));
+      break;
+
+    // Set background color
+    // Seq:
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETBGCOLOR COLORINDEX
+    // params:
+    //   COLORINDEX : 0..15 (index of Color enum)
+    case FABGL_ENTERM_SETBGCOLOR:
+      int_setBackgroundColor((Color) getNextCode(false));
+      break;
+
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
       logFmt("Unknown: ESC FABGL_ENTERM_CODE %02x\n", c);
@@ -3813,6 +3837,23 @@ void TerminalController::setTerminalType(TermType value)
   write(FABGL_ENTERM_SETTERMTYPE);
   write((int)value);
 }
+
+
+void TerminalController::setForegroundColor(Color value)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_SETFGCOLOR);
+  write((int)value);
+}
+
+
+void TerminalController::setBackgroundColor(Color value)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_SETBGCOLOR);
+  write((int)value);
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

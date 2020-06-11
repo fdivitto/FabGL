@@ -1201,6 +1201,20 @@ public:
    */
   void setTerminalType(TermType value);
 
+  /**
+   * @brief Sets foreground color
+   *
+   * @param value Foreground color
+   */
+  void setForegroundColor(Color value);
+
+  /**
+   * @brief Sets background color
+   *
+   * @param value Background color
+   */
+  void setBackgroundColor(Color value);
+
 
   //// Delegates ////
 
