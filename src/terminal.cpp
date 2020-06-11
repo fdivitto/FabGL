@@ -1603,7 +1603,7 @@ void Terminal::setTerminalType(TermType value)
 }
 
 
-void Terminal::setTerminalTypeInt(TermInfo const * value)
+void Terminal::int_setTerminalType(TermInfo const * value)
 {
   // disable VT52 mode
   m_emuState.ANSIMode = true;
@@ -1622,32 +1622,32 @@ void Terminal::setTerminalTypeInt(TermInfo const * value)
 }
 
 
-void Terminal::setTerminalTypeInt(TermType value)
+void Terminal::int_setTerminalType(TermType value)
 {
   switch (value) {
     case TermType::ANSI_VT:
-      setTerminalTypeInt(nullptr);
+      int_setTerminalType(nullptr);
       break;
     case TermType::ADM3A:
-      setTerminalTypeInt(&term_ADM3A);
+      int_setTerminalType(&term_ADM3A);
       break;
     case TermType::ADM31:
-      setTerminalTypeInt(&term_ADM31);
+      int_setTerminalType(&term_ADM31);
       break;
     case TermType::Hazeltine1500:
-      setTerminalTypeInt(&term_Hazeltine1500);
+      int_setTerminalType(&term_Hazeltine1500);
       break;
     case TermType::Osborne:
-      setTerminalTypeInt(&term_Osborne);
+      int_setTerminalType(&term_Osborne);
       break;
     case TermType::Kaypro:
-      setTerminalTypeInt(&term_Kaypro);
+      int_setTerminalType(&term_Kaypro);
       break;
     case TermType::VT52:
-      setTerminalTypeInt(&term_VT52);
+      int_setTerminalType(&term_VT52);
       break;
     case TermType::ANSILegacy:
-      setTerminalTypeInt(&term_ANSILegacy);
+      int_setTerminalType(&term_ANSILegacy);
       break;
   }
 }
@@ -3258,7 +3258,7 @@ void Terminal::consumeFabGLSeq()
     // params:
     //    TERMINDEX : index of terminal to emulate (TermType)
     case FABGL_ENTERM_SETTERMTYPE:
-      setTerminalTypeInt((TermType) getNextCode(false));
+      int_setTerminalType((TermType) getNextCode(false));
       break;
 
     default:

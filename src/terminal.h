@@ -952,8 +952,8 @@ private:
 
   void enableFabGLSequences(bool value);
 
-  void setTerminalTypeInt(TermType value);
-  void setTerminalTypeInt(TermInfo const * value);
+  void int_setTerminalType(TermType value);
+  void int_setTerminalType(TermInfo const * value);
 
 
   // indicates which is the active terminal when there are multiple instances of Terminal
