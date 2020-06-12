@@ -1227,6 +1227,10 @@ protected:
 
     auto penPattern   = preparePixel(penColor);
     auto brushPattern = preparePixel(brushColor);
+    auto boldPattern  = bold ? preparePixel(RGB888(penColor.R / 2 + 1,
+                                                   penColor.G / 2 + 1,
+                                                   penColor.B / 2 + 1))
+                             : preparePixel(RGB888(0, 0, 0));
 
     for (int y = Y1; y < Y1 + YCount; ++y, ++destY) {
 
@@ -1255,7 +1259,7 @@ protected:
             rawSetPixelInRow(dstrow, adestX, penPattern);
             prevSet = true;
           } else if (bold && prevSet) {
-            rawSetPixelInRow(dstrow, adestX, penPattern);
+            rawSetPixelInRow(dstrow, adestX, boldPattern);
             prevSet = false;
           } else if (fillBackground) {
             rawSetPixelInRow(dstrow, adestX, brushPattern);
