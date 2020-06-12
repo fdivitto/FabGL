@@ -113,6 +113,7 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_SETTERMTYPE    0x0C
 #define FABGL_ENTERM_SETFGCOLOR     0x0D
 #define FABGL_ENTERM_SETBGCOLOR     0X0E
+#define FABGL_ENTERM_SETCHARSTYLE   0x0F
 
 
 // each fabgl specific sequence has a fixed length, specified here:
@@ -131,6 +132,7 @@ const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
                                    4,  // FABGL_ENTERM_SETTERMTYPE
                                    4,  // FABGL_ENTERM_SETFGCOLOR
                                    4,  // FABGL_ENTERM_SETBGCOLOR
+                                   5,  // FABGL_ENTERM_SETCHARSTYLE
                                   };
 
 
@@ -3285,6 +3287,44 @@ void Terminal::consumeFabGLSeq()
       int_setBackgroundColor((Color) getNextCode(false));
       break;
 
+    // Set char style
+    // Seq:
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_SETCHARSTYLE STYLEINDEX ENABLE
+    // params:
+    //   STYLEINDEX : 0 = bold, 1 = reduce luminosity, 2 = italic, 3 = underline, 4 = blink, 5 = blank, 6 = inverse
+    //   ENABLE     : 0 = disable, 1 = enable
+    case FABGL_ENTERM_SETCHARSTYLE:
+    {
+      int idx = getNextCode(false);
+      int val = getNextCode(false);
+      switch (idx) {
+        case 0: // bold
+          m_glyphOptions.bold = val;
+          break;
+        case 1: // reduce luminosity
+          m_glyphOptions.reduceLuminosity = val;
+          break;
+        case 2: // italic
+          m_glyphOptions.italic = val;
+          break;
+        case 3: // underline
+          m_glyphOptions.underline = val;
+          break;
+        case 4: // blink
+          m_glyphOptions.userOpt1 = val;
+          break;
+        case 5: // blank
+          m_glyphOptions.blank = val;
+          break;
+        case 6: // inverse
+          m_glyphOptions.invert = val;
+          break;
+      }
+      if (isActive())
+        m_canvas->setGlyphOptions(m_glyphOptions);
+      break;
+    }
+
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
       logFmt("Unknown: ESC FABGL_ENTERM_CODE %02x\n", c);
@@ -3852,6 +3892,15 @@ void TerminalController::setBackgroundColor(Color value)
   write(FABGL_ENTERM_CMD);
   write(FABGL_ENTERM_SETBGCOLOR);
   write((int)value);
+}
+
+
+void TerminalController::setCharStyle(CharStyle style, bool enabled)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_SETCHARSTYLE);
+  write((int)style);
+  write(enabled ? 1 : 0);
 }
 
 

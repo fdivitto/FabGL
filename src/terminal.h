@@ -247,6 +247,20 @@ enum KeypadMode {
 };
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines a character style
+ */
+enum CharStyle {
+  Bold,               /**< Bold */
+  ReducedLuminosity,  /**< Reduced luminosity */
+  Italic,             /**< Italic */
+  Underline,          /**< Underlined */
+  Blink,              /**< Blinking text */
+  Blank,              /**< Invisible text */
+  Inverse,            /**< Swap background and foreground colors */
+};
+
+
 struct EmuState {
 
   // Index of characterSet[], 0 = G0 (Standard)  1 = G1 (Alternate),  2 = G2,  3 = G3
@@ -1214,6 +1228,14 @@ public:
    * @param value Background color
    */
   void setBackgroundColor(Color value);
+
+  /**
+   * @brief Enables or disables specified character style
+   *
+   * @param style Style to enable or disable
+   * @param enabled If true the style is enabled, if false the style is disabled
+   */
+  void setCharStyle(CharStyle style, bool enabled);
 
 
   //// Delegates ////
