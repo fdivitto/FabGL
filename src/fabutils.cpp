@@ -760,12 +760,32 @@ void FileBrowser::makeDirectory(char const * dirname)
     if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory, puts an hidden placeholder
       char fullpath[strlen(m_dir) + 3 + 2 * dirnameLen + 1];
-      sprintf(fullpath, "%s/%s/.%s", m_dir, dirname, dirname);
-      FILE * f = fopen(fullpath, "wb");
-      fclose(f);
+      auto name = dirname;
+      while (*name) {
+        auto next = name + 1;
+        while (*next && *next != '\\' && *next != '/')
+          ++next;
+        strcpy(fullpath, m_dir);
+        if (dirname != name) {
+          strcat(fullpath, "/");
+          strncat(fullpath, dirname, name - dirname - 1);
+        }
+        strcat(fullpath, "/");
+        strncat(fullpath, name, next - name);
+        strcat(fullpath, "/.");
+        strncat(fullpath, name, next - name);
+        replacePathSep(fullpath, '/');
+        FILE * f = fopen(fullpath, "wb");
+        fclose(f);
+        if (*next == 0)
+          break;
+        name = next + 1;
+      }
+
     } else {
       char fullpath[strlen(m_dir) + 1 + dirnameLen + 1];
       sprintf(fullpath, "%s/%s", m_dir, dirname);
+      replacePathSep(fullpath, '/');
       mkdir(fullpath, ACCESSPERMS);
     }
   }
@@ -894,6 +914,9 @@ FILE * FileBrowser::openFile(char const * filename, char const * mode)
   strcpy(fullpath, m_dir);
   strcat(fullpath, "/");
   strcat(fullpath, filename);
+
+  replacePathSep(fullpath, '/');
+
   return fopen(fullpath, mode);
 }
 
