@@ -674,7 +674,7 @@ public:
    *     // Mount SD Card
    *     FileBrowser::mountSDCard(false, "/sdcard");
    */
-  static bool mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles = 4, int allocationUnitSize = 16 * 1024, int MISO = 16, int MOSI = 17, int CLK = 14, int CS = 13);
+  static bool mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles = 4, int allocationUnitSize = 16 * 1024, int MISO = 16, int MOSI = 17, int CLK = 14, int CS = 13);
 
   /**
    * @brief Remounts SDCard filesystem, using the same parameters
@@ -702,7 +702,7 @@ public:
    *     // Mount SD Card
    *     FileBrowser::mountSPIFFS(false, "/spiffs");
    */
-  static bool mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles = 4);
+  static bool mountSPIFFS(bool formatOnFail, char const * mountPath, size_t maxFiles = 4);
 
   /**
    * @brief Remounts SPIFFS filesystem, using the same parameters
@@ -748,12 +748,12 @@ private:
   // SPIFFS static infos
   static bool         s_SPIFFSMounted;
   static char const * s_SPIFFSMountPath;
-  static int          s_SPIFFSMaxFiles;
+  static size_t       s_SPIFFSMaxFiles;
 
   // SD Card static infos
   static bool         s_SDCardMounted;
   static char const * s_SDCardMountPath;
-  static int          s_SDCardMaxFiles;
+  static size_t       s_SDCardMaxFiles;
   static int          s_SDCardAllocationUnitSize;
   static int8_t       s_SDCardMISO;
   static int8_t       s_SDCardMOSI;

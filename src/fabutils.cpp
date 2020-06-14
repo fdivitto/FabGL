@@ -438,11 +438,11 @@ void StringList::select(int index, bool value)
 
 char const * FileBrowser::s_SPIFFSMountPath;
 bool         FileBrowser::s_SPIFFSMounted = false;
-int          FileBrowser::s_SPIFFSMaxFiles;
+size_t       FileBrowser::s_SPIFFSMaxFiles;
 
 char const * FileBrowser::s_SDCardMountPath;
 bool         FileBrowser::s_SDCardMounted = false;
-int          FileBrowser::s_SDCardMaxFiles;
+size_t       FileBrowser::s_SDCardMaxFiles;
 int          FileBrowser::s_SDCardAllocationUnitSize;
 int8_t       FileBrowser::s_SDCardMISO;
 int8_t       FileBrowser::s_SDCardMOSI;
@@ -952,7 +952,7 @@ bool FileBrowser::format(DriveType driveType, int drive)
 }
 
 
-bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, int maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
+bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
   if (getChipPackage() == ChipPackage::ESP32PICOD4 && (MISO == 16 || MOSI == 17))
     return false; // PICO-D4 uses pins 16 and 17 for Flash
@@ -997,14 +997,14 @@ bool FileBrowser::remountSDCard()
 }
 
 
-bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, int maxFiles)
+bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t maxFiles)
 {
   s_SPIFFSMountPath = mountPath;
   s_SPIFFSMaxFiles  = maxFiles;
   esp_vfs_spiffs_conf_t conf = {
       .base_path              = mountPath,
       .partition_label        = nullptr,
-      .max_files              = 4,
+      .max_files              = maxFiles,
       .format_if_mount_failed = true
   };
   AutoSuspendInterrupts autoSuspendInt;
