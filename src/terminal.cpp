@@ -294,7 +294,7 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
 
   m_serialPort->setRxBufferSize(Terminal::inputQueueSize);
 
-  if (m_keyboard->isKeyboardAvailable())
+  if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
     xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 
   // just in case a reset occurred after an XOFF
