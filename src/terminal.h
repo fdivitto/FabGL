@@ -528,6 +528,13 @@ public:
   void connectLocally();
 
   /**
+   * @brief Avoids using of terminal locally.
+   *
+   * This is the opposite of connectLocally().
+   */
+  void disconnectLocally();
+
+  /**
    * @brief Injects keys into the keyboard queue.
    *
    * Characters added with localWrite() will be received with read(), available() and peek() methods.

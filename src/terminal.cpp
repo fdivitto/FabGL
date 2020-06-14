@@ -429,6 +429,14 @@ void Terminal::connectLocally()
 }
 
 
+void Terminal::disconnectLocally()
+{
+  if (m_outputQueue)
+    vQueueDelete(m_outputQueue);
+  m_outputQueue = nullptr;
+}
+
+
 void Terminal::logFmt(const char * format, ...)
 {
   if (m_logStream) {
