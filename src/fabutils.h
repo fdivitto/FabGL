@@ -816,6 +816,16 @@ enum class ChipPackage {
 ChipPackage getChipPackage();
 
 
+/**
+ * @brief Replaces path separators
+ *
+ * @param path Path with separators to replace
+ * @param newSep New separator character
+ */
+void replacePathSep(char * path, char newSep);
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts
 

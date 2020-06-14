@@ -174,6 +174,19 @@ ChipPackage getChipPackage()
 }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// converts '\' or '/' to newSep
+
+void replacePathSep(char * path, char newSep)
+{
+  for (; *path; ++path)
+    if (*path == '\\' || *path == '/')
+      *path = newSep;
+}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Sutherland-Cohen line clipping algorithm
 
