@@ -432,6 +432,8 @@ enum class DriveType {
 
 /**
  * @brief FileBrowser allows basic file system operations (dir, mkdir, remove and rename)
+ *
+ * Note: SPIFFS filenames (including fullpath) cannot exceed SPIFFS_OBJ_NAME_LEN (32 bytes) size.
  */
 class FileBrowser {
 public:
