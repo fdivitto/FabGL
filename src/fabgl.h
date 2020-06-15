@@ -352,5 +352,6 @@ using fabgl::TerminalController;
 using fabgl::AutoSuspendInterrupts;
 using fabgl::LineEnds;
 using fabgl::CharStyle;
+using fabgl::TerminalTransition;
 
 

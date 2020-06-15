@@ -144,7 +144,7 @@ const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
 
 
 
-volatile Terminal * Terminal::s_activeTerminal = nullptr;
+Terminal * Terminal::s_activeTerminal = nullptr;
 
 
 int Terminal::inputQueueSize = FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE;
@@ -173,10 +173,40 @@ Terminal::~Terminal()
 }
 
 
-void Terminal::activate()
+void Terminal::activate(TerminalTransition transition)
 {
   xSemaphoreTake(m_mutex, portMAX_DELAY);
   if (s_activeTerminal != this) {
+
+    if (s_activeTerminal && transition != TerminalTransition::None) {
+      s_activeTerminal = nullptr;
+      AutoSuspendInterrupts autoInt;
+      switch (transition) {
+        case TerminalTransition::LeftToRight:
+          for (int x = 0; x < m_columns; ++x) {
+            m_canvas->scroll(m_font.width, 0);
+            m_canvas->setOrigin(-m_font.width * (m_columns - x - 1), 0);
+            for (int y = 0; y < m_rows; ++y)
+              m_canvas->renderGlyphsBuffer(m_columns - x - 1, y, &m_glyphsBuffer);
+            m_canvas->waitCompletion(false);
+            delayMicroseconds(2000);
+          }
+          break;
+        case TerminalTransition::RightToLeft:
+          for (int x = 0; x < m_columns; ++x) {
+            m_canvas->scroll(-m_font.width, 0);
+            m_canvas->setOrigin(m_font.width * (m_columns - x - 1), 0);
+            for (int y = 0; y < m_rows; ++y)
+              m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
+            m_canvas->waitCompletion(false);
+            delayMicroseconds(2000);
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
     s_activeTerminal = this;
     vTaskResume(m_keyboardReaderTaskHandle);
     m_canvas->setGlyphOptions(m_glyphOptions);

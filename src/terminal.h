@@ -261,6 +261,16 @@ enum CharStyle {
 };
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines terminal transition effect
+ */
+enum class TerminalTransition {
+  None,
+  LeftToRight,    /**< Left to right */
+  RightToLeft,    /**< Right to left */
+};
+
+
 struct EmuState {
 
   // Index of characterSet[], 0 = G0 (Standard)  1 = G1 (Alternate),  2 = G2,  3 = G3
@@ -814,8 +824,10 @@ public:
    *
    * Only one terminal can be active at the time, for input and output.
    * Use this method to activate a terminal. This method de-activates currently active terminal.
+   *
+   * @param transition Optional transition effect
    */
-  void activate();
+  void activate(TerminalTransition transition = TerminalTransition::None);
 
   /**
    * @brief Determines if this terminal is active or not.
@@ -978,7 +990,7 @@ private:
 
 
   // indicates which is the active terminal when there are multiple instances of Terminal
-  static volatile Terminal *   s_activeTerminal;
+  static Terminal *  s_activeTerminal;
 
 
   DisplayController * m_displayController;

@@ -118,7 +118,7 @@ public:
   /**
    * @brief Sets the axes origin.
    *
-   * Setting axes origin will translate every coordinate by the specified value (expect for sprites).
+   * Setting axes origin will translate every coordinate by the specified value (except for sprites).
    *
    * @param X Horizontal translation (0 = no translation).
    * @param Y Vertical translation (0 = no translation).
@@ -128,7 +128,7 @@ public:
   /**
    * @brief Sets the axes origin.
    *
-   * Setting axes origin will translate every coordinate by the specified value (expect for sprites).
+   * Setting axes origin will translate every coordinate by the specified value (except for sprites).
    *
    * @param origin Origin coordinates.
    */
