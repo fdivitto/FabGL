@@ -28,6 +28,11 @@ fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
 
+// notes about GPIO 2 and 12
+//    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
+//              In normal boot mode (GPIO0 high), GPIO2 is ignored.
+//    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
+//                    espefuse.py set_flash_voltage 3.3V              <<== good for ESP32 with 3.3V voltage (ESP-WROOM-32)
 #define UART_RX 34
 #define UART_TX 2
 
@@ -67,6 +72,9 @@ void setup()
   Terminal.write("Connect server to UART2 - 8N1 - 115200 baud\r\n\n");
 
   Terminal.setForegroundColor(Color::BrightGreen);
+
+  // uncomment to specify terminal emulation
+  //Terminal.setTerminalType(TermType::ANSILegacy);
 }
 
 
