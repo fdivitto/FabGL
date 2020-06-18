@@ -32,7 +32,10 @@ fabgl::Terminal      Terminal;
 //    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
 //              In normal boot mode (GPIO0 high), GPIO2 is ignored.
 //    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
-//                    espefuse.py set_flash_voltage 3.3V              <<== good for ESP32 with 3.3V voltage (ESP-WROOM-32)
+//                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
+//                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
+//                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
+//                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
 #define UART_RX 34
 #define UART_TX 2
 
