@@ -707,6 +707,7 @@ bool FileBrowser::reload()
     ++m_count;
 
     AutoSuspendInterrupts autoInt;
+    int hiddenFilesCount = 0;
     auto dirp = opendir(m_dir);
     while (dirp) {
       auto dp = readdir(dirp);
@@ -727,12 +728,17 @@ bool FileBrowser::reload()
             sname += len + 1;
             ++m_count;
           }
-        } else if (m_includeHiddenFiles || dp->d_name[0] != '.') {
-          strcpy(sname, dp->d_name);
-          di->name  = sname;
-          di->isDir = (dp->d_type == DT_DIR);
-          sname += strlen(sname) + 1;
-          ++m_count;
+        } else {
+          bool isHidden = dp->d_name[0] == '.';
+          if (!isHidden || m_includeHiddenFiles) {
+            strcpy(sname, dp->d_name);
+            di->name  = sname;
+            di->isDir = (dp->d_type == DT_DIR);
+            sname += strlen(sname) + 1;
+            ++m_count;
+          }
+          if (isHidden)
+            ++hiddenFilesCount;
         }
       }
     }
@@ -740,6 +746,10 @@ bool FileBrowser::reload()
       closedir(dirp);
     else
       retval = false;
+
+    // for SPIFFS "opendir" returns always true, even for not existing dirs. An hidden file means there is the SPIFFS directory placeholder
+    if (m_count == 1 && hiddenFilesCount == 0 && getDriveType(m_dir) == DriveType::SPIFFS)
+      retval = false; // no hidden files, so the directory doesn't exist
 
   }
 
