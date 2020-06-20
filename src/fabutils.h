@@ -589,8 +589,10 @@ public:
    *
    * @param name Relative file name
    * @param size New size in bytes
+   *
+   * @return Returns true on success.
    */
-  void truncate(char const * name, size_t size);
+  bool truncate(char const * name, size_t size);
 
   /**
    * @brief Creates a random temporary filename, with absolute path

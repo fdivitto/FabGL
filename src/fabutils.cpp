@@ -526,7 +526,7 @@ void FileBrowser::changeDirectory(const char * subdir)
     }
   } else {
     // go to sub directory
-    int oldLen = strcmp(m_dir, "/") == 0 ? 0 : strlen(m_dir);
+    auto oldLen = strcmp(m_dir, "/") == 0 ? 0 : strlen(m_dir);
     char * newDir = (char*) malloc(oldLen + 1 + strlen(subdir) + 1);  // m_dir + '/' + subdir + 0
     strcpy(newDir, m_dir);
     newDir[oldLen] = '/';
@@ -719,7 +719,7 @@ bool FileBrowser::reload()
         auto slashPos = strchr(dp->d_name, '/');
         if (slashPos) {
           // yes, this is a simulated dir. Trunc and avoid to insert it twice
-          int len = slashPos - dp->d_name;
+          auto len = slashPos - dp->d_name;
           strncpy(sname, dp->d_name, len);
           sname[len] = 0;
           if (!exists(sname)) {
@@ -863,21 +863,21 @@ void FileBrowser::rename(char const * oldName, char const * newName)
 char * FileBrowser::createTempFilename()
 {
   constexpr int FLEN = 6;
-  auto ret = (char*) malloc(strlen(m_dir) + 1 + FLEN + 1);
+  auto ret = (char*) malloc(strlen(m_dir) + 1 + FLEN + 4 + 1);
   while (true) {
-    char name[FLEN + 1] = {0};
+    char name[FLEN + 1] = { 0 };
     for (int i = 0; i < FLEN; ++i)
       name[i] = 65 + (rand() % 26);
-    sprintf(ret, "%s/%s", m_dir, name);
+    sprintf(ret, "%s/%s.TMP", m_dir, name);
     if (!exists(name))
       return ret;
   }
 }
 
 
-void FileBrowser::truncate(char const * name, size_t size)
+bool FileBrowser::truncate(char const * name, size_t size)
 {
-  AutoSuspendInterrupts autoInt;
+  constexpr size_t BUFLEN = 512;
 
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
@@ -885,26 +885,43 @@ void FileBrowser::truncate(char const * name, size_t size)
   // in future maybe...
   //::truncate(name, size);
 
+  bool retval = false;
+
+  AutoSuspendInterrupts autoInt;
+
   // for now...
   char * tempFilename = createTempFilename();
-  ::rename(fullpath, tempFilename);
-  constexpr size_t BUFLEN = 512;
-  void * buf = malloc(BUFLEN);
-  auto fr = fopen(tempFilename, "rb");
-  if (fr) {
-    auto fw = fopen(fullpath, "wb");
-    if (fw) {
-      while (!feof(fr)) {
-        auto l = fread(buf, 1, BUFLEN, fr);
-        fwrite(buf, 1, l, fw);
+  if (::rename(fullpath, tempFilename) == 0) {
+    void * buf = malloc(BUFLEN);
+    if (buf) {
+      auto fr = fopen(tempFilename, "rb");
+      if (fr) {
+        auto fw = fopen(fullpath, "wb");
+        if (fw) {
+
+          while (size > 0) {
+            auto l = fread(buf, 1, tmin(size, BUFLEN), fr);
+            if (l == 0)
+              break;
+            fwrite(buf, 1, l, fw);
+            size -= l;
+          }
+
+          // just in case truncate is used to expand the file
+          for (; size > 0; --size)
+            fputc(0, fw);
+
+          retval = true;
+          fclose(fw);
+        }
+        fclose(fr);
       }
-      fclose(fw);
     }
-    fclose(fr);
+    free(buf);
+    unlink(tempFilename);
   }
-  free(buf);
-  unlink(tempFilename);
   free(tempFilename);
+  return retval;
 }
 
 
