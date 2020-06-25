@@ -235,6 +235,7 @@
  * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example VGA/Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
+ * @example VGA/MultitaskingCPM/MultitaskingCPM.ino Multitasking - Multisession CP/M 3 compatible system. Supports directories and FAT32 file system with SD Cards.
  * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
  * @example VGA/LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
  * @example VGA/ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
