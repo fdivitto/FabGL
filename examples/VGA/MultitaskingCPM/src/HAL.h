@@ -160,7 +160,7 @@ public:
 
   int allocatedBlocks();
 
-  static int systemFree() { return heap_caps_get_free_size(MALLOC_CAP_8BIT); }
+  static int systemFree() { return heap_caps_get_free_size(MALLOC_CAP_32BIT); }
 
   void fillMem(uint16_t addr, uint8_t value, size_t size);
   void copyMem(uint16_t destAddr, uint16_t srcAddr, size_t size);
@@ -199,7 +199,7 @@ private:
 
   uint32_t           m_CPUSpeed;  // 0 = max
 
-  uint8_t *          m_memBlock[64];  // 64 blocks of 1K
+  uint32_t *         m_memBlock[64];  // 64 blocks of 1K
 
   bool               m_execMainLoop;
 

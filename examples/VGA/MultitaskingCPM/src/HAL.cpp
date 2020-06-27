@@ -58,7 +58,7 @@ HAL::~HAL()
 
   for (int i = 0; i < 64; ++i)
     if (m_memBlock[i])
-      free(m_memBlock[i]);
+      heap_caps_free(m_memBlock[i]);
 }
 
 
@@ -77,7 +77,9 @@ bool HAL::checkMem(uint16_t addr)
 {
   int block = addr >> 10;
   if (m_memBlock[block] == nullptr) {
-    m_memBlock[block] = (uint8_t*) malloc(1024);
+    m_memBlock[block] = (uint32_t*) heap_caps_malloc(1024, MALLOC_CAP_8BIT);
+    if (!m_memBlock[block])
+      m_memBlock[block] = (uint32_t*) heap_caps_malloc(1024, MALLOC_CAP_32BIT);
     #if MSGDEBUG & DEBUG_HAL
     logf("Allocated block %d\r\n", block);
     #endif
@@ -98,7 +100,7 @@ void HAL::releaseMem(uint16_t startAddr, size_t endAddr)
   int block = startAddr >> 10;
   while (startAddr < endAddr && block < 64) {
     if (m_memBlock[block] && (block << 10) == startAddr && (endAddr - startAddr + 1) >= 1024) { // free only when addr is 1K aligned and remaining size is >=1K
-      free(m_memBlock[block]);
+      heap_caps_free(m_memBlock[block]);
       m_memBlock[block] = nullptr;
       #if MSGDEBUG & DEBUG_HAL
       logf("Free block %d\r\n", block);
@@ -316,7 +318,10 @@ uint8_t HAL::readByte(uint16_t addr)
 {
   if (!checkMem(addr))
     return 0;
-  uint8_t value = m_memBlock[addr >> 10][addr & 1023];
+
+  uint32_t val32 = *(m_memBlock[addr >> 10] + ((addr >> 2) & 0b11111111));  // 32 bit aligned pointer
+  uint8_t value = ((uint8_t*)&val32)[addr & 0b11];
+
   #if MSGDEBUG
   if (addr >= SCB_PAGEADDR && addr < SCB_PAGEADDR + SCB_SIZE) {
     int field = static_cast<int>(addr) - static_cast<int>(SCB_ADDR);
@@ -329,6 +334,7 @@ uint8_t HAL::readByte(uint16_t addr)
     #endif
   }
   #endif
+
   return value;
 }
 
@@ -337,7 +343,12 @@ void HAL::writeByte(uint16_t addr, uint8_t value)
 {
   if (!checkMem(addr))
     return;
-  m_memBlock[addr >> 10][addr & 1023] = value;
+
+  uint32_t * ptr32 = m_memBlock[addr >> 10] + ((addr >> 2) & 0b11111111); // 32 bit aligned pointer
+  uint32_t val32 = *ptr32;
+  ((uint8_t*)&val32)[addr & 0b11] = value;
+  *ptr32 = val32;
+
   #if MSGDEBUG
   if (addr >= SCB_PAGEADDR && addr < SCB_PAGEADDR + SCB_SIZE) {
     int field = static_cast<int>(addr) - static_cast<int>(SCB_ADDR);
