@@ -3,9 +3,8 @@
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
-If you would like to **support FabGL's development**, please see the [**Donations page**][Donations].
-You can also support me getting my own [development board](https://www.tindie.com/products/fabgl/fabgl-development-board/).
 
+You can support development by purchasing my own [development board](https://www.tindie.com/products/fabgl/fabgl-development-board/).
 
 This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
