@@ -176,6 +176,11 @@ void CCP::run()
 
         // reset terminal type
         m_HAL->setTerminalType(m_defaultTerminalType);
+
+        // set default char style
+        m_termCtrl.setForegroundColor(Color::BrightGreen);
+        m_termCtrl.setBackgroundColor(Color::Black);
+        m_termCtrl.setCharStyle(CharStyle::Bold, false);
       }
 
       // prompt
