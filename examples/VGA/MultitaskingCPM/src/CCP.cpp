@@ -171,6 +171,9 @@ void CCP::run()
         // close all zombie files
         m_BDOS->closeAllFiles();
 
+        // release unused memory
+        m_HAL->releaseMem(TPA_ADDR, m_BDOS->getTPATop());
+
         // reset terminal type
         m_HAL->setTerminalType(m_defaultTerminalType);
       }

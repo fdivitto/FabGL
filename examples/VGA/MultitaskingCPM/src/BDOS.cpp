@@ -554,11 +554,11 @@ void BDOS::execLoadedProgram(size_t size)
   // remove RSXs that can be removed
   removeRSX();
 
-  // release unused memory
-  m_HAL->releaseMem(TPA_ADDR, getTPATop());
-
   // this restores BDOS and BIOS entries (for BDOS also takes care of RSX)
   m_BIOS->BIOS_call_WBOOT();
+
+  // release unused memory
+  m_HAL->releaseMem(TPA_ADDR, getTPATop());
 }
 
 
