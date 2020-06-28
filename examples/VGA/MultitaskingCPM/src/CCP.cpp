@@ -236,9 +236,11 @@ void CCP::run()
         --len;
       }
 
-      // uppercase command, detect and separate multiple commands (avoid double '!!')
+      // uppercase command (up to first space), detect and separate multiple commands (avoid double '!!')
+      bool spcFound = false;
       for (int i = 0; i < len; ++i) {
-        if (m_HAL->readByte(cmdlineAddr + i) == '!') {
+        auto c = m_HAL->readByte(cmdlineAddr + i);
+        if (c == '!') {
           if (m_HAL->readByte(cmdlineAddr + i + 1) != '!') {
             // found multiple commands separator, split first command from the others
             multicmd = (char *) malloc(len - i + 1);
@@ -251,8 +253,10 @@ void CCP::run()
             m_HAL->moveMem(cmdlineAddr + i, cmdlineAddr + i + 1, len - i);
             --len;
           }
-        } else {
-          m_HAL->writeByte(cmdlineAddr + i, toupper(m_HAL->readByte(cmdlineAddr + i)));
+        } else if (c == ' ') {
+          spcFound = true;
+        } else if (!spcFound) {
+          m_HAL->writeByte(cmdlineAddr + i, toupper(c));
         }
       }
 
