@@ -77,9 +77,7 @@ bool HAL::checkMem(uint16_t addr)
 {
   int block = addr >> 10;
   if (m_memBlock[block] == nullptr) {
-    m_memBlock[block] = (uint32_t*) heap_caps_malloc(1024, MALLOC_CAP_8BIT);
-    if (!m_memBlock[block])
-      m_memBlock[block] = (uint32_t*) heap_caps_malloc(1024, MALLOC_CAP_32BIT);
+    m_memBlock[block] = (uint32_t*) heap_caps_malloc(1024, MALLOC_CAP_32BIT);
     #if MSGDEBUG & DEBUG_HAL
     logf("Allocated block %d\r\n", block);
     #endif
