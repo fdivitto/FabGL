@@ -1,5 +1,5 @@
 /*
-  Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - www.fabgl.com
+  Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
   Copyright (c) 2019-2020 Fabrizio Di Vittorio.
   All rights reserved.
 
@@ -24,6 +24,9 @@
 
 #include "Arduino.h"
 #include "WiFiGeneric.h"
+
+
+namespace fabgl {
 
 
 ICMP::ICMP()
@@ -118,3 +121,5 @@ uint8_t ICMP::raw_recv_fn(void * arg, raw_pcb * pcb, pbuf * p, const ip_addr_t *
 }
 
 
+
+}

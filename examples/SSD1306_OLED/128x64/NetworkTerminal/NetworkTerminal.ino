@@ -31,7 +31,7 @@
 
 #include <WiFi.h>
 
-#include "ICMP.h"
+#include "network/ICMP.h"
 
 
 #define OLED_SDA       GPIO_NUM_4
@@ -302,7 +302,7 @@ void exe_ping()
   int pcount = sscanf(inputLine, "ping %s", host);
   if (pcount > 0) {
     int sent = 0, recv = 0;
-    ICMP icmp;
+    fabgl::ICMP icmp;
     while (true) {
 
       // CTRL-C ?

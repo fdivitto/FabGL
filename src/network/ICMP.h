@@ -1,5 +1,5 @@
 /*
-  Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - www.fabgl.com
+  Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
   Copyright (c) 2019-2020 Fabrizio Di Vittorio.
   All rights reserved.
 
@@ -20,8 +20,15 @@
  */
 
 
-#ifndef ICMP_h
-#define ICMP_h
+#pragma once
+
+
+/**
+ * @file
+ *
+ * @brief This file contains ICMP (ping) class
+ */
+
 
 
 #include "Client.h"
@@ -34,7 +41,44 @@
 #include "lwip/inet_chksum.h"
 
 
-class ICMP {
+#include "fabglconf.h"
+#include "fabutils.h"
+
+
+
+namespace fabgl {
+
+
+
+/**
+ * @brief ICMP Implementation
+ *
+ * Used to ping a network device using its IP or its host name.
+ *
+ * Example:
+ *
+ *     fabgl::ICMP icmp;
+ *     while (true) {
+ *
+ *       // CTRL-C ?
+ *       if (Terminal.available() && Terminal.read() == 0x03)
+ *         break;
+ *
+ *       int t = icmp.ping("www.fabgl.com");
+ *       if (t >= 0) {
+ *         Terminal.printf("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\r\n", icmp.receivedBytes(), icmp.hostIP().toString().c_str(), icmp.receivedSeq(), icmp.receivedTTL(), (double)t/1000.0);
+ *         delay(1000);
+ *       } else if (t == -2) {
+ *         Terminal.printf("Cannot resolve %s: Unknown host\r\n", host);
+ *         break;
+ *       } else {
+ *         Terminal.printf("Request timeout for icmp_seq %d\r\n", icmp.receivedSeq());
+ *       }
+ *
+ *     }
+ *
+ */
+ class ICMP {
 
 public:
 
@@ -67,4 +111,6 @@ private:
 };
 
 
-#endif /* ICMP_h */
+
+
+}
