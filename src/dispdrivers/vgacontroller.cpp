@@ -89,7 +89,7 @@ void VGAController::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t b
   setupGPIO(greenGPIO, VGA_GREEN_BIT, GPIO_MODE_OUTPUT);
   setupGPIO(blueGPIO,  VGA_BLUE_BIT,  GPIO_MODE_OUTPUT);
 
-  // GPUI configuration for VSync and HSync
+  // GPIO configuration for VSync and HSync
   setupGPIO(HSyncGPIO, VGA_HSYNC_BIT, GPIO_MODE_OUTPUT);
   setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_INPUT_OUTPUT);  // input/output so can be generated interrupt on falling/rising edge
 
