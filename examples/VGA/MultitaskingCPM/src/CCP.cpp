@@ -25,6 +25,11 @@
 #include "supervisor.h"
 
 
+#ifdef HAS_WIFI
+  #include "network/ICMP.h"
+#endif
+
+
 // statically allocated variables
 
 #define CCP_STATIC_VARS_ADDR   TPA_ADDR
@@ -72,7 +77,7 @@ static const struct {
 
 
 
-constexpr int COMMANDSCOUNT = 18;
+constexpr int COMMANDSCOUNT = 23;
 
 static const struct {
   char const * name;
@@ -96,6 +101,12 @@ static const struct {
   { "<EXIT    >", "Exit current or specified session." },
   { "<EMU     >", "Select terminal emulation type." },
   { "<KEYB    >", "Change keyboard layout." },
+  { "<WIFISCAN>", "Scan for WiFi networks." },
+  { "<WIFI    >", "Connect to WiFi network." },
+  { "<PING    >", "Ping an host." },
+  { "<TELNET  >", "Open a Telnet session to a host." },
+
+  { "<F1...F12>", "Use function keys to create or switch sessions." },
 };
 
 
@@ -417,6 +428,14 @@ bool CCP::internalCommand(uint16_t cmdlineAddr, size_t cmdlen, uint16_t tailAddr
     return cmd_EMU(tailAddr);
   } else if (iscmd("keyb", cmdlen, cmdlineAddr)) {
     return cmd_KEYB(tailAddr);
+  } else if (iscmd("wifiscan", cmdlen, cmdlineAddr)) {
+    return cmd_WIFISCAN(tailAddr);
+  } else if (iscmd("wifi", cmdlen, cmdlineAddr)) {
+    return cmd_WIFI(tailAddr);
+  } else if (iscmd("ping", cmdlen, cmdlineAddr)) {
+    return cmd_PING(tailAddr);
+  } else if (iscmd("telnet", cmdlen, cmdlineAddr)) {
+    return cmd_TELNET(tailAddr);
   }
 
   return false;
@@ -1147,11 +1166,18 @@ bool CCP::cmd_INFO(uint16_t paramsAddr)
     if (m_HAL->getDriveMountPath(i))
       consoleOutFmt("  %c:  %s\r\n", 'A' + i, m_HAL->getDriveMountPath(i));
   }
+
   consoleOutFmt("\n%d Bytes TPA  (System free %d Bytes)\r\n", m_BDOS->getTPASize(), HAL::systemFree());
+
   int sessionID = Supervisor::instance()->getSessionIDByTaskHandle(xTaskGetCurrentTaskHandle());
   consoleOutFmt("Terminal #%d (%s)\r\n", sessionID + 1, TERMS[m_defaultTerminalType].name);
 
-  m_termCtrl.setForegroundColor(Color::BrightGreen);
+  #ifdef HAS_WIFI
+  if (HAL::wifiConnected()) {
+    consoleOutFmt("WiFi SSID  : %s\r\n", WiFi.SSID().c_str());
+    consoleOutFmt("Current IP : %s\r\n", WiFi.localIP().toString().c_str());
+  }
+  #endif
 
   return true;
 }
@@ -1285,4 +1311,260 @@ bool CCP::cmd_DINFO(uint16_t paramsAddr)
   consoleOutFmt("BIOS Address changed : %c\r\n", m_BDOS->BIOSAddrChanged() ? 'Y' : 'N');
   consoleOutFmt("TPA Size             : %d Bytes\r\n", m_BDOS->getTPASize());
   return true;
+}
+
+
+bool CCP::wifiErrorMsg()
+{
+  consoleOut("WiFi not compiled. Enable HAS_WIFI in defs.h\r\n");
+  return true;
+}
+
+
+bool CCP::cmd_WIFISCAN(uint16_t paramsAddr)
+{
+  #ifdef HAS_WIFI
+
+  static char const * ENC2STR[] = { "Open", "WEP", "WPA-PSK", "WPA2-PSK", "WPA/WPA2-PSK", "WPA-ENTERPRISE" };
+  m_HAL->setTerminalType(TermType::ANSILegacy);
+  consoleOut("Scanning...");
+  delay(100); // give time to display last terminal msg, because we will suspend interrupts...
+  fabgl::suspendInterrupts();
+  int networksCount = WiFi.scanNetworks();
+  fabgl::resumeInterrupts();
+  consoleOutFmt("%d network(s) found\r\n", networksCount);
+  if (networksCount) {
+    consoleOut("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[32m\r\n");
+    for (int i = 0; i < networksCount; ++i)
+      consoleOutFmt("\e[33m %d\e[4G%s\e[33m\e[45G%d dBm\e[55G%d\e[60G%s\e[32m\r\n", i + 1, WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i), ENC2STR[WiFi.encryptionType(i)]);
+  }
+  WiFi.scanDelete();
+  m_HAL->setTerminalType(m_defaultTerminalType);
+  return true;
+
+  #else
+
+  return wifiErrorMsg();
+
+  #endif
+}
+
+
+bool CCP::cmd_WIFI(uint16_t paramsAddr)
+{
+  #ifdef HAS_WIFI
+
+  // are there parameters?
+  if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
+    // no, fail
+    consoleOut("Usage:\r\n");
+    consoleOutFmt("  WIFI ssid password : Connect to WiFi network. Example: WIFI mynet mypass\r\n", TERMSCOUNT - 1);
+    return true;
+  }
+
+  char paramStore[m_HAL->strLen(paramsAddr) + 1];
+  m_HAL->copyStr(paramStore, paramsAddr);
+  char * param = paramStore;
+
+  while (*param && isspace(*param))
+    ++param;
+
+  static const int MAX_SSID_SIZE = 32;
+  static const int MAX_PSW_SIZE  = 32;
+  char ssid[MAX_SSID_SIZE + 1];
+  char psw[MAX_PSW_SIZE + 1] = {0};
+  if (sscanf(param, "%32s %32s", ssid, psw) >= 1) {
+    consoleOut("Connecting WiFi...");
+    delay(100);
+    AutoSuspendInterrupts autoInt;
+    WiFi.disconnect(true, true);
+    for (int i = 0; i < 2; ++i) {
+      WiFi.begin(ssid, psw);
+      if (WiFi.waitForConnectResult() == WL_CONNECTED)
+        break;
+      WiFi.disconnect(true, true);
+    }
+    if (WiFi.status() == WL_CONNECTED) {
+      consoleOutFmt("connected to %s, IP is %s\r\n", WiFi.SSID().c_str(), WiFi.localIP().toString().c_str());
+    } else {
+      consoleOutFmt("failed!\r\n");
+    }
+  }
+  return true;
+
+  #else
+
+  return wifiErrorMsg();
+
+  #endif
+}
+
+
+bool CCP::cmd_PING(uint16_t paramsAddr)
+{
+  #ifdef HAS_WIFI
+
+  // are there parameters?
+  if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
+    // no, fail
+    consoleOut("Usage:\r\n");
+    consoleOutFmt("  PING host : Pings an host or IP. Example: PING www.fabgl.com\r\n", TERMSCOUNT - 1);
+    return true;
+  }
+
+  char paramStore[m_HAL->strLen(paramsAddr) + 1];
+  m_HAL->copyStr(paramStore, paramsAddr);
+  char * param = paramStore;
+
+  while (*param && isspace(*param))
+    ++param;
+
+  int sent = 0, recv = 0;
+  fabgl::ICMP icmp;
+  while (true) {
+
+    // CTRL-C ?
+    if (m_BDOS->SCB_getWord(SCB_PROGRAMRETCODE_W) == 0xFFFE)
+      break;
+
+    int t = icmp.ping(param);
+    if (t >= 0) {
+      consoleOutFmt("%d bytes from %s: icmp_seq=%d ttl=%d time=%.3f ms\r\n", icmp.receivedBytes(), icmp.hostIP().toString().c_str(), icmp.receivedSeq(), icmp.receivedTTL(), (double)t/1000.0);
+      delay(1000);
+      ++recv;
+    } else if (t == -2) {
+      consoleOutFmt("Cannot resolve %s: Unknown host\r\n", param);
+      break;
+    } else {
+      consoleOutFmt("Request timeout for icmp_seq %d\r\n", icmp.receivedSeq());
+    }
+    ++sent;
+
+  }
+  if (sent > 0) {
+    consoleOutFmt("--- %s ping statistics ---\r\n", param);
+    consoleOutFmt("%d packets transmitted, %d packets received, %.1f%% packet loss\r\n", sent, recv, (double)(sent - recv) / sent * 100.0);
+  }
+
+  return true;
+
+  #else
+
+  return wifiErrorMsg();
+
+  #endif
+
+}
+
+
+#ifdef HAS_WIFI
+static int clientWaitForChar(WiFiClient & client)
+{
+  // not so good...:-)
+  while (!client.available())
+    ;
+  return client.read();
+}
+#endif
+
+
+bool CCP::cmd_TELNET(uint16_t paramsAddr)
+{
+  #ifdef HAS_WIFI
+
+  // are there parameters?
+  if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
+    // no, fail
+    consoleOut("Usage:\r\n");
+    consoleOutFmt("  TELNET host : Telnet to host or IP. Example: TELNET towel.blinkenlights.nl\r\n", TERMSCOUNT - 1);
+    return true;
+  }
+
+  char paramStore[m_HAL->strLen(paramsAddr) + 1];
+  m_HAL->copyStr(paramStore, paramsAddr);
+  char * param = paramStore;
+
+  while (*param && isspace(*param))
+    ++param;
+
+  auto host = param;
+
+  // find port number
+  while (*param && !isspace(*param))
+    ++param;
+  *param++ = 0;
+  auto port = atoi(param);
+  if (port == 0)
+    port = 23;
+
+  WiFiClient client;
+
+  consoleOutFmt("Trying %s, port %d...\r\n", host, port);
+  if (client.connect(host, port)) {
+    consoleOutFmt("Connected to %s\r\n", host);
+  } else {
+    consoleOut("Unable to connect to remote host\r\n");
+    return true;
+  }
+
+  while (true) {
+
+    // CTRL-C ?
+    if (m_BDOS->SCB_getWord(SCB_PROGRAMRETCODE_W) == 0xFFFE)
+      break;
+
+    // process data from remote host (up to 1024 codes at the time)
+    //for (int i = 0; client.available() && i < 1024; ++i) {
+    if (client.available()) {
+      int c = client.read();
+      if (c == 0xFF) {
+        // IAC (Interpret As Command)
+        uint8_t cmd = clientWaitForChar(client);
+        uint8_t opt = clientWaitForChar(client);
+        if (cmd == 0xFD && opt == 0x1F) {
+          // DO WINDOWSIZE
+          client.write("\xFF\xFB\x1F", 3); // IAC WILL WINDOWSIZE
+          client.write("\xFF\xFA\x1F" "\x00\x50\x00\x19" "\xFF\xF0", 9);  // IAC SB WINDOWSIZE 0 80 0 25 IAC SE
+        } else if (cmd == 0xFD && opt == 0x18) {
+          // DO TERMINALTYPE
+          client.write("\xFF\xFB\x18", 3); // IAC WILL TERMINALTYPE
+        } else if (cmd == 0xFA && opt == 0x18) {
+          // SB TERMINALTYPE
+          c = clientWaitForChar(client);  // bypass '1'
+          c = clientWaitForChar(client);  // bypass IAC
+          c = clientWaitForChar(client);  // bypass SE
+          client.write("\xFF\xFA\x18\x00" "wsvt25" "\xFF\xF0", 12); // IAC SB TERMINALTYPE 0 "...." IAC SE
+        } else {
+          uint8_t pck[3] = {0xFF, 0, opt};
+          if (cmd == 0xFD)  // DO -> WONT
+            pck[1] = 0xFC;
+          else if (cmd == 0xFB) // WILL -> DO
+            pck[1] = 0xFD;
+          client.write(pck, 3);
+        }
+      } else {
+        consoleOutChar(c);
+      }
+    }
+    // process data from terminal (keyboard)
+    while (m_BDOS->BDOS_callConsoleStatus()) {
+      client.write( m_BDOS->BDOS_callDirectConsoleIO(0xFF) );
+    }
+    // return to prompt?
+    if (!client.connected()) {
+      client.stop();
+      break;
+    }
+
+  }
+
+  return true;
+
+  #else
+
+  return wifiErrorMsg();
+
+  #endif
+
+
 }

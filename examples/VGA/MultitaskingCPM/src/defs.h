@@ -26,6 +26,9 @@
 #include <stdint.h>
 
 
+//#define HAS_WIFI
+
+
 // Start of system area
 #define SYSTEM_ADDR    0xFD00 - 6   // some programs (catchum!) doesn't like 6 bytes serial number at start of bdos, but wants bdos entry at page start
 

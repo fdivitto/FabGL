@@ -68,6 +68,12 @@ private:
   bool cmd_KEYB(uint16_t paramsAddr);
   bool cmd_EXIT(uint16_t paramsAddr);
   bool cmd_DINFO(uint16_t paramsAddr);
+  bool cmd_WIFISCAN(uint16_t paramsAddr);
+  bool cmd_WIFI(uint16_t paramsAddr);
+  bool cmd_PING(uint16_t paramsAddr);
+  bool cmd_TELNET(uint16_t paramsAddr);
+
+  bool wifiErrorMsg();
 
   HAL *              m_HAL;
   BDOS *             m_BDOS;

@@ -488,5 +488,14 @@ void HAL::setDateTime(int year, int month, int day, int hour, int minutes, int s
 }
 
 
+#ifdef HAS_WIFI
+
+bool HAL::wifiConnected()
+{
+  return WiFi.status() == WL_CONNECTED;
+}
+
+#endif
+
 
 

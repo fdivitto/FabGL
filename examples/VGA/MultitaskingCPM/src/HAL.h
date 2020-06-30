@@ -30,6 +30,16 @@
 #include "fabgl.h"
 
 
+#ifndef _ESP32_SOC_H_
+  #undef HAS_WIFI
+#endif
+
+
+#ifdef HAS_WIFI
+  #include <WiFi.h>
+#endif
+
+
 #define DEBUG_NONE   0
 #define DEBUG_ERRORS 1
 #define DEBUG_HAL    2
@@ -186,6 +196,13 @@ public:
 
   uint8_t readIO(uint16_t addr);
   void writeIO(uint16_t addr, uint8_t value);
+
+
+  // WIFI
+
+  #ifdef HAS_WIFI
+  static bool wifiConnected();
+  #endif
 
 
 

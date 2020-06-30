@@ -15,8 +15,11 @@
 */
 
 
-static const uint8_t PROFILE_SUB[] = "path A:BIN;A:SDK;B:MYSOFT\\BIN\r\n"
-                                     "setdef a,b,* [temporary=A:,order=(sub,com)]\r\n"
+#include "defs.h"
+
+
+static const uint8_t PROFILE_SUB[] = "path A:BIN;A:SDK\r\n"
+                                     "setdef A,B,* [TEMPORARY=A:,ORDER=(SUB,COM)]\r\n"
                                      "info\r\n"
                                      "\x1a";  // <<-- text file terminator
 
@@ -2269,10 +2272,12 @@ static const Program programs[] = {
   { "BIN", "SAVE.COM", SAVE_COM, sizeof(SAVE_COM) },        // from 2k fixed CP/M 3
   { "BIN", "RENAME.COM", RENAME_COM, sizeof(RENAME_COM) },  // from 2k fixed CP/M 3
   { "BIN", "DUMP.COM", DUMP_COM, sizeof(DUMP_COM) },        // from 2k fixed CP/M 3
+  #ifndef HAS_WIFI
   { "BIN", "IF.COM", IF_COM, sizeof(IF_COM) },              // from SIMTEL
   { "BIN", "DIFF.COM", DIFF_COM, sizeof(DIFF_COM) },        // from SIMTEL (DIF2) unix like tools
   { "BIN", "GREP.COM", GREP_COM, sizeof(GREP_COM) },        // from SIMTEL unix like tools
   { "BIN", "ECHO.COM", ECHO_COM, sizeof(ECHO_COM) },        // from SIMTEL
+  #endif
 
   { "SDK", "HEXCOM.COM", HEXCOM_COM, sizeof(HEXCOM_COM) },
   { "SDK", "GENCOM.COM", GENCOM_COM, sizeof(GENCOM_COM) },
@@ -2280,28 +2285,38 @@ static const Program programs[] = {
   { "SDK", "LINK.COM", LINK_COM, sizeof(LINK_COM) },
   { "SDK", "MAC.COM", MAC_COM, sizeof(MAC_COM) },
   { "SDK", "RMAC.COM", RMAC_COM, sizeof(RMAC_COM) },
-  { "SDK", "SID.COM", SID_COM, sizeof(SID_COM) },
   { "SDK", "ZSID.COM", ZSID_COM, sizeof(ZSID_COM) },
   { "SDK", "MBASIC.COM", MBASIC_COM, sizeof(MBASIC_COM) },
   { "SDK", "VDE.COM", VDE_COM, sizeof(VDE_COM) },
+  #ifndef HAS_WIFI
+  { "SDK", "SID.COM", SID_COM, sizeof(SID_COM) },
   { "SDK", "Z80ASM.COM", Z80ASM_COM, sizeof(Z80ASM_COM) },
+  #endif
 
+  #ifndef HAS_WIFI
+  // Turbo Pascal 3
   { R"(SDK\TURBO3)", "TINST.COM", TINST_COM, sizeof(TINST_COM) },
   { R"(SDK\TURBO3)", "TINST.DTA", TINST_DTA, sizeof(TINST_DTA) },
   { R"(SDK\TURBO3)", "TINST.MSG", TINST_MSG, sizeof(TINST_MSG) },
   { R"(SDK\TURBO3)", "TURBO.COM", TURBO_COM, sizeof(TURBO_COM) },
   { R"(SDK\TURBO3)", "TURBO.MSG", TURBO_MSG, sizeof(TURBO_MSG) },
   { R"(SDK\TURBO3)", "TURBO.OVR", TURBO_OVR, sizeof(TURBO_OVR) },
+  #endif
 
+  #ifndef HAS_WIFI
+  // SBASIC (structured, without line numbers Basic)
   { R"(SDK\SBASIC)", "BASICLIB.REL", BASICLIB_REL, sizeof(BASICLIB_REL) },
   { R"(SDK\SBASIC)", "SBASIC.COM", SBASIC_COM, sizeof(SBASIC_COM) },
   { R"(SDK\SBASIC)", "OVERLAYB.COM", OVERLAYB_COM, sizeof(OVERLAYB_COM) },
   { R"(SDK\SBASIC)", "USERLIB.REL", USERLIB_REL, sizeof(USERLIB_REL) },
+  #endif
 
   { "GAMES", "CATCHUM.COM", CATCHUM_COM, sizeof(CATCHUM_COM) },
   { "GAMES", "CATCHUM.DAT", CATCHUM_DAT, sizeof(CATCHUM_DAT) },
+  { "GAMES", "GORILLA.COM", GORILLA_COM, sizeof(GORILLA_COM) },
+  #ifndef HAS_WIFI
   { "GAMES", "LADDER.COM", LADDER_COM, sizeof(LADDER_COM) },
   { "GAMES", "LADDER.DAT", LADDER_DAT, sizeof(LADDER_DAT) },
-  { "GAMES", "GORILLA.COM", GORILLA_COM, sizeof(GORILLA_COM) },
+  #endif
 
 };
