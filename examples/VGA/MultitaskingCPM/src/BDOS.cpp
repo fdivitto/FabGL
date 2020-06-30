@@ -778,6 +778,22 @@ int BDOS::BDOS_callConsoleIn()
 }
 
 
+int BDOS::BDOS_callConsoleStatus()
+{
+  uint16_t BC = 0x000B, DE = 0, HL = 0, AF = 0;
+  BDOS_call(&BC, &DE, &HL, &AF);
+  return AF >> 8;
+}
+
+
+int BDOS::BDOS_callDirectConsoleIO(int mode)
+{
+  uint16_t BC = 0x0006, DE = mode, HL = 0, AF = 0;
+  BDOS_call(&BC, &DE, &HL, &AF);
+  return AF >> 8;
+}
+
+
 void BDOS::BDOS_callConsoleOut(char c)
 {
   uint16_t BC = 0x0002, DE = c, HL = 0, AF = 0;

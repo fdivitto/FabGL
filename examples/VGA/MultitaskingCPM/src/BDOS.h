@@ -221,6 +221,8 @@ public:
 
   // BDOS calls helpers from host (not CPU code)
   int BDOS_callConsoleIn();
+  int BDOS_callConsoleStatus();
+  int BDOS_callDirectConsoleIO(int mode);
   void BDOS_callConsoleOut(char c);
   void BDOS_callOutputString(char const * str, uint16_t workBufAddr, size_t workBufSize, size_t maxChars = 0);
   void BDOS_callOutputString(uint16_t str);
