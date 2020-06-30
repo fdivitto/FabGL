@@ -162,6 +162,9 @@ void CCP::run()
       if (!m_BDOS->SCB_testBit(SCB_CCPFLAGS2_B, SCB_CCPFLAGS2_SUBMIT)) {
         //// NOT submitting
 
+        // reset program environment
+        m_BDOS->resetProgramEnv();
+
         // reset page mode to its default value
         m_BDOS->SCB_setByte(SCB_PAGEMODE_B, m_BDOS->SCB_getByte(SCB_DEFAULTPAGEMODE_B));
 
