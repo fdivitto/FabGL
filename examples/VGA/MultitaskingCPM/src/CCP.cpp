@@ -429,16 +429,25 @@ bool CCP::cmd_HELP(uint16_t paramsAddr)
     return false;
 
   consoleOut("\nBuilt-in commands:\r\n");
-  for (int i = 0; i < COMMANDSCOUNT; ++i) {
-  m_termCtrl.setForegroundColor(Color::BrightWhite);
+
+  int conHeight = m_BDOS->SCB_getByte(SCB_PAGEMODE_B) == 0 ? m_BDOS->SCB_getByte(SCB_CONSOLEPAGELENGTH_B) : 0;  // 0 = unpaged
+
+  for (int i = 0, row = 1; i < COMMANDSCOUNT; ++i, ++row) {
+    m_termCtrl.setForegroundColor(Color::BrightWhite);
     consoleOut(CMDS[i].name);
     consoleOutChar(' ');
     m_termCtrl.setForegroundColor(Color::BrightYellow);
     consoleOut(CMDS[i].desc);
     consoleOut("\r\n");
-  }
 
-  m_termCtrl.setForegroundColor(Color::BrightGreen);
+    if (conHeight && conHeight == row + 3) {
+      consoleOut("\r\nPress RETURN to Continue ");
+      m_BDOS->BDOS_callConsoleIn();
+      consoleOut("\r\n");
+      row = 1;
+    }
+
+  }
 
   return true;
 }
