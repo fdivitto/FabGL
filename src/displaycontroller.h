@@ -643,14 +643,28 @@ enum class DisplayControllerType {
  */
 class BaseDisplayController {
 
-  public:
+public:
 
-    /**
-     * @brief Determines the display controller type
-     *
-     * @return Display controller type.
-     */
-    virtual DisplayControllerType controllerType() = 0;
+  /**
+   * @brief Determines the display controller type
+   *
+   * @return Display controller type.
+   */
+  virtual DisplayControllerType controllerType() = 0;
+
+  /**
+   * @brief Determines the screen width in pixels.
+   *
+   * @return Screen width in pixels.
+   */
+  virtual int getScreenWidth() = 0;
+
+  /**
+   * @brief Determines the screen height in pixels.
+   *
+   * @return Screen height in pixels.
+   */
+  virtual int getScreenHeight() = 0;
 };
 
 
@@ -660,7 +674,7 @@ class BaseDisplayController {
  */
 class TextualDisplayController : public BaseDisplayController {
 
-  public:
+public:
 
     DisplayControllerType controllerType() { return DisplayControllerType::Textual; }
 };
@@ -693,20 +707,6 @@ public:
    * @return Vertical size of the viewport.
    */
   virtual int getViewPortHeight() = 0;
-
-  /**
-   * @brief Determines the screen width in pixels.
-   *
-   * @return Screen width in pixels.
-   */
-  virtual int getScreenWidth() = 0;
-
-  /**
-   * @brief Determines the screen height in pixels.
-   *
-   * @return Screen height in pixels.
-   */
-  virtual int getScreenHeight() = 0;
 
   /**
    * @brief Represents the native pixel format used by this display.
