@@ -85,7 +85,7 @@ enum class TFTOrientation {
  *       cv.drawText(0, 0, "Hello World!");
  *     }
  */
-class TFTController : public GenericDisplayController {
+class TFTController : public GenericBitmappedDisplayController {
 
 public:
 

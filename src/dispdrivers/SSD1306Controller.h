@@ -84,7 +84,7 @@ enum class SSD1306Orientation {
  *       cv.drawText(0, 0, "Hello World!");
  *     }
  */
-class SSD1306Controller : public GenericDisplayController {
+class SSD1306Controller : public GenericBitmappedDisplayController {
 
 public:
 

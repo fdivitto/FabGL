@@ -134,7 +134,7 @@ struct VGATimings {
 *     // Set 640x350@70Hz resolution
 *     VGAController.setResolution(VGA_640x350_70Hz);
 */
-class VGAController : public GenericDisplayController {
+class VGAController : public GenericBitmappedDisplayController {
 
 public:
 
