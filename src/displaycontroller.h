@@ -628,17 +628,57 @@ struct PaintState {
 
 
 
+/** \ingroup Enumerations
+ * @brief This enum defines types of display controllers
+ */
+enum class DisplayControllerType {
+  Textual,      /**< The display controller can represents text only */
+  Bitmapped,    /**< The display controller can represents text and bitmapped graphics */
+};
+
+
+
+/**
+ * @brief Represents the base abstract class for all display controllers
+ */
+class BaseDisplayController {
+
+  public:
+
+    /**
+     * @brief Determines the display controller type
+     *
+     * @return Display controller type.
+     */
+    virtual DisplayControllerType controllerType() = 0;
+};
+
+
+
+/**
+ * @brief Represents the base abstract class for textual display controllers
+ */
+class TextualDisplayController : public BaseDisplayController {
+
+  public:
+
+    DisplayControllerType controllerType() { return DisplayControllerType::Textual; }
+};
+
+
 
 /**
  * @brief Represents the base abstract class for bitmapped display controllers
  */
-class BitmappedDisplayController {
+class BitmappedDisplayController : public BaseDisplayController {
 
 public:
 
   BitmappedDisplayController();
 
   ~BitmappedDisplayController();
+
+  DisplayControllerType controllerType() { return DisplayControllerType::Bitmapped; }
 
   /**
    * @brief Determines horizontal size of the viewport.
