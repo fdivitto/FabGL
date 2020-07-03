@@ -219,7 +219,7 @@ void Terminal::activate(TerminalTransition transition)
 }
 
 
-void Terminal::begin(DisplayController * displayController, Keyboard * keyboard)
+void Terminal::begin(BitmappedDisplayController * displayController, Keyboard * keyboard)
 {
   m_displayController = displayController;
 

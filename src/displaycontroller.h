@@ -27,7 +27,7 @@
 /**
  * @file
  *
- * @brief This file contains fabgl::DisplayController definition.
+ * @brief This file contains fabgl::BitmappedDisplayController definition.
  */
 
 
@@ -630,15 +630,15 @@ struct PaintState {
 
 
 /**
- * @brief Represents the base abstract class for display controllers
+ * @brief Represents the base abstract class for bitmapped display controllers
  */
-class DisplayController {
+class BitmappedDisplayController {
 
 public:
 
-  DisplayController();
+  BitmappedDisplayController();
 
-  ~DisplayController();
+  ~BitmappedDisplayController();
 
   /**
    * @brief Determines horizontal size of the viewport.
@@ -736,7 +736,7 @@ public:
    * A sprite is an image that keeps background unchanged.<br>
    * There is no limit to the number of active sprites, but flickering and slow
    * refresh happens when a lot of sprites (or large sprites) are visible.<br>
-   * To empty the list of active sprites call DisplayController.removeSprites().
+   * To empty the list of active sprites call BitmappedDisplayController.removeSprites().
    *
    * @param sprites The list of sprites to make currently active.
    * @param count Number of sprites in the list.
@@ -771,14 +771,14 @@ public:
    * Screen is automatically updated whenever a primitive is painted (look at Canvas).<br>
    * When a sprite updates its image or its position (or any other property) it is required
    * to force a refresh using this method.<br>
-   * DisplayController.refreshSprites() is required also when using the double buffered mode, to paint sprites.
+   * BitmappedDisplayController.refreshSprites() is required also when using the double buffered mode, to paint sprites.
    */
   void refreshSprites();
 
   /**
-   * @brief Determines whether DisplayController is on double buffered mode.
+   * @brief Determines whether BitmappedDisplayController is on double buffered mode.
    *
-   * @return True if DisplayController is on double buffered mode.
+   * @return True if BitmappedDisplayController is on double buffered mode.
    */
   bool isDoubleBuffered() { return m_doubleBuffered; }
 
@@ -949,7 +949,7 @@ private:
 // GenericDisplayController
 
 
-class GenericDisplayController : public DisplayController {
+class GenericDisplayController : public BitmappedDisplayController {
 
 protected:
 

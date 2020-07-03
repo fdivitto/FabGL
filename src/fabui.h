@@ -2268,7 +2268,7 @@ public:
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  int run(DisplayController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  int run(BitmappedDisplayController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
    * @brief Terminates application and free resources
@@ -2622,7 +2622,7 @@ public:
 
   Mouse * mouse() { return m_mouse; }
 
-  DisplayController * displayController() { return m_displayController; }
+  BitmappedDisplayController * displayController() { return m_displayController; }
 
   Canvas * canvas() { return m_canvas; }
 
@@ -2646,7 +2646,7 @@ private:
   void suspendCaret(bool value);
 
 
-  DisplayController * m_displayController;
+  BitmappedDisplayController * m_displayController;
 
   Canvas *        m_canvas;
 

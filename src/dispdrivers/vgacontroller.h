@@ -204,10 +204,10 @@ public:
    */
   void begin();
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void suspendBackgroundPrimitiveExecution();
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void resumeBackgroundPrimitiveExecution();
 
   /**
@@ -219,7 +219,7 @@ public:
    */
   uint8_t getBitsPerChannel() { return m_bitsPerChannel; }
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   NativePixelFormat nativePixelFormat() { return NativePixelFormat::SBGR2222; }
 
   /**
@@ -255,10 +255,10 @@ public:
 
   VGATimings * getResolutionTimings() { return &m_timings; }
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   int getScreenWidth()    { return m_timings.HVisibleArea; }
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   int getScreenHeight()   { return m_timings.VVisibleArea; }
 
   /**
@@ -275,10 +275,10 @@ public:
    */
   int getViewPortRow()    { return m_viewPortRow; }
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   int getViewPortWidth()  { return m_viewPortWidth; }
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   int getViewPortHeight() { return m_viewPortHeight; }
 
   /**
@@ -433,49 +433,49 @@ private:
   void freeViewPort();
   int calcRequiredDMABuffersCount(int viewPortHeight);  
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void drawEllipse(Size const & size, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void clear(Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void VScroll(int scroll, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void HScroll(int scroll, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void drawGlyph(Glyph const & glyph, GlyphOptions glyphOptions, RGB888 penColor, RGB888 brushColor, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void invertRect(Rect const & rect, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void copyRect(Rect const & source, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void swapFGBG(Rect const & rect, Rect & updateRect);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void swapBuffers();
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_Mask(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void rawFillRow(int y, int x1, int x2, RGB888 color);
 
   void rawFillRow(int y, int x1, int x2, uint8_t pattern);
@@ -484,10 +484,10 @@ private:
 
   void swapRows(int yA, int yB, int x1, int x2);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   void absDrawLine(int X1, int Y1, int X2, int Y2, RGB888 color);
 
-  // abstract method of DisplayController
+  // abstract method of BitmappedDisplayController
   int getBitmapSavePixelSize() { return 1; }
 
   static void VSyncInterrupt();

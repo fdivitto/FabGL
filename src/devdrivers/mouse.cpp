@@ -150,7 +150,7 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
 }
 
 
-void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, DisplayController * updateDisplayController, uiApp * app)
+void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, BitmappedDisplayController * updateDisplayController, uiApp * app)
 {
   m_area                  = Size(width, height);
   m_status.X              = width >> 1;

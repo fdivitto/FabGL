@@ -185,7 +185,7 @@ uiApp::~uiApp()
 }
 
 
-int uiApp::run(DisplayController * displayController, Keyboard * keyboard, Mouse * mouse)
+int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboard, Mouse * mouse)
 {
   m_displayController = displayController;
 

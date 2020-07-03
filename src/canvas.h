@@ -67,7 +67,7 @@ class Canvas {
 
 public:
 
-  Canvas(DisplayController * displayController);
+  Canvas(BitmappedDisplayController * displayController);
 
   /**
    * @brief Determines the canvas width in pixels.
@@ -755,7 +755,7 @@ public:
 
 private:
 
-  DisplayController * m_displayController;
+  BitmappedDisplayController * m_displayController;
 
   FontInfo const *    m_fontInfo;
   uint8_t             m_textHorizRate; // specify character size: 1 = m_fontInfo.width, 2 = m_fontInfo.width * 2, etc...
