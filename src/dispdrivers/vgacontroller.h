@@ -415,6 +415,8 @@ public:
    */
   uint8_t * getScanline(int y)                { return (uint8_t*) m_viewPort[y]; }
 
+  static bool convertModelineToTimings(char const * modeline, VGATimings * timings);
+
 private:
 
   void init(gpio_num_t VSyncGPIO);

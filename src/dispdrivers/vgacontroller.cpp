@@ -152,7 +152,7 @@ void VGAController::resumeBackgroundPrimitiveExecution()
 
 // modeline syntax:
 //   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
-static bool convertModelineToTimings(char const * modeline, VGATimings * timings)
+bool VGAController::convertModelineToTimings(char const * modeline, VGATimings * timings)
 {
   float freq;
   int hdisp, hsyncstart, hsyncend, htotal, vdisp, vsyncstart, vsyncend, vtotal;
