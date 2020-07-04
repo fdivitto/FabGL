@@ -35,7 +35,7 @@ void setup()
   //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  DisplayController.setResolution(VGA_640x350_70HzAlt1);
   //DisplayController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
 
   Terminal.begin(&DisplayController);
