@@ -3270,6 +3270,13 @@ bool BDOS::hasExt(uint16_t FCBaddr, char const * ext)
 }
 
 
+void BDOS::strToUpper(char * str)
+{
+  for (; *str; ++str)
+    *str = toupper(*str);
+}
+
+
 
 // Creates an absolute path (including mounting path) from a relative or disk-relative path.
 //
@@ -3290,13 +3297,14 @@ bool BDOS::hasExt(uint16_t FCBaddr, char const * ext)
 //   nullptr => invalid drive
 char * BDOS::createAbsolutePath(uint16_t pathAddr, bool insertMountPath, int * drive)
 {
-  char const * path = nullptr;
+  char * path = nullptr;
 
   auto pathLen = pathAddr ? m_HAL->strLen(pathAddr) : 0;
   char pathStorage[pathLen + 1];
   if (pathLen > 0) {
     m_HAL->copyStr(pathStorage, pathAddr);
     path = pathStorage;
+    strToUpper(path);
   }
 
   // bypass spaces

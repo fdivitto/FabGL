@@ -408,6 +408,8 @@ private:
   void addFileToCache(uint16_t FCBaddr, FILE * file);
   void removeFileFromCache(FILE * file);
 
+  static void strToUpper(char * str);
+
 
   HAL *           m_HAL;
 
