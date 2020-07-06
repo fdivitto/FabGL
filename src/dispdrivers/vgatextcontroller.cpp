@@ -21,9 +21,9 @@ namespace fabgl {
 
 // statics
 
-int        VGATextController::s_scanLine;
 uint32_t   VGATextController::s_blankPatternDWord;
 uint32_t * VGATextController::s_fgbgPattern = nullptr;
+volatile int VGATextController::s_scanLine;
 
 
 

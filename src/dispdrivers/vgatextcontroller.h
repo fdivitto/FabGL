@@ -177,7 +177,7 @@ private:
   static void I2SInterrupt(void * arg);
 
 
-  static int             s_scanLine;
+  static volatile int    s_scanLine;
   static uint32_t        s_blankPatternDWord;
   static uint32_t *      s_fgbgPattern;
 
