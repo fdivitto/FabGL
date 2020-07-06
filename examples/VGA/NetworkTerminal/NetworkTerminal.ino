@@ -42,10 +42,10 @@ char const * currentScript = nullptr;
 bool         error = false;
 
 
-fabgl::VGAController DisplayController;
-fabgl::PS2Controller PS2Controller;
-fabgl::Terminal      Terminal;
-fabgl::LineEditor    LineEditor(&Terminal);
+fabgl::VGATextController DisplayController;
+fabgl::PS2Controller     PS2Controller;
+fabgl::Terminal          Terminal;
+fabgl::LineEditor        LineEditor(&Terminal);
 
 
 void exe_info()
@@ -321,9 +321,7 @@ void setup()
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x200_70Hz, 640, 200);
-  //DisplayController.shrinkScreen(5, 0);
-  //DisplayController.moveScreen(-1, 0);
+  DisplayController.setResolution();
 
   Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
