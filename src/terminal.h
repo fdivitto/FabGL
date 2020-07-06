@@ -451,7 +451,7 @@ public:
    * @param displayController The output display controller
    * @param keyboard Keyboard device. nullptr = gets from PS2Controller
    */
-  void begin(BitmappedDisplayController * displayController, Keyboard * keyboard = nullptr);
+  void begin(BaseDisplayController * displayController, Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -993,8 +993,9 @@ private:
   static Terminal *  s_activeTerminal;
 
 
-  BitmappedDisplayController * m_displayController;
+  BaseDisplayController * m_displayController;
   Canvas *           m_canvas;
+  bool               m_bitmappedDisplayController;  // true = bitmapped, false = textual
 
   Keyboard *         m_keyboard;
 

@@ -178,7 +178,7 @@ void Terminal::activate(TerminalTransition transition)
   xSemaphoreTake(m_mutex, portMAX_DELAY);
   if (s_activeTerminal != this) {
 
-    if (s_activeTerminal && transition != TerminalTransition::None) {
+    if (s_activeTerminal && transition != TerminalTransition::None && m_canvas) {
       s_activeTerminal = nullptr;
       AutoSuspendInterrupts autoInt;
       switch (transition) {
@@ -209,9 +209,20 @@ void Terminal::activate(TerminalTransition transition)
 
     s_activeTerminal = this;
     vTaskResume(m_keyboardReaderTaskHandle);
-    m_canvas->setGlyphOptions(m_glyphOptions);
-    m_canvas->setBrushColor(m_emuState.backgroundColor);
-    m_canvas->setPenColor(m_emuState.foregroundColor);
+    if (m_bitmappedDisplayController) {
+      // restore canvas state for bitmapped display controller
+      m_canvas->setGlyphOptions(m_glyphOptions);
+      m_canvas->setBrushColor(m_emuState.backgroundColor);
+      m_canvas->setPenColor(m_emuState.foregroundColor);
+    } else {
+      // restore textual display controller state
+      auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
+      txtCtrl->setTextMap(m_glyphsBuffer.map);
+      txtCtrl->setCursorBackground(m_emuState.backgroundColor);
+      txtCtrl->setCursorForeground(m_emuState.foregroundColor);
+      txtCtrl->setCursorPos(m_emuState.cursorY - 1, m_emuState.cursorX - 1);
+      txtCtrl->enableCursor(m_emuState.cursorEnabled);
+    }
     updateCanvasScrollingRegion();
     refresh();
   }
@@ -219,11 +230,15 @@ void Terminal::activate(TerminalTransition transition)
 }
 
 
-void Terminal::begin(BitmappedDisplayController * displayController, Keyboard * keyboard)
+void Terminal::begin(BaseDisplayController * displayController, Keyboard * keyboard)
 {
   m_displayController = displayController;
+  m_bitmappedDisplayController = (m_displayController->controllerType() == DisplayControllerType::Bitmapped);
 
-  m_canvas = new Canvas(m_displayController);
+  if (m_bitmappedDisplayController)
+    m_canvas = new Canvas(static_cast<BitmappedDisplayController*>(m_displayController));
+  else
+    m_canvas = nullptr;
 
   m_keyboard = keyboard;
   if (m_keyboard == nullptr && PS2Controller::instance()) {
@@ -588,7 +603,8 @@ void Terminal::reset()
     .userOpt1         = 0,    // blinking
     .userOpt2         = 0,    // 0 = erasable by DECSED or DECSEL,  1 = not erasable by DECSED or DECSEL
   }};
-  m_canvas->setGlyphOptions(m_glyphOptions);
+  if (m_canvas)
+    m_canvas->setGlyphOptions(m_glyphOptions);
 
   m_paintOptions = PaintOptions();
 
@@ -611,33 +627,53 @@ void Terminal::loadFont(FontInfo const * font)
   log("loadFont()\n");
   #endif
 
-  freeFont();
+  if (m_bitmappedDisplayController) {
 
-  m_font = *font;
-#if FABGLIB_CACHE_FONT_IN_RAM
-  int size = m_font.height * 256 * ((m_font.width + 7) / 8);
-  m_font.data = (uint8_t const*) malloc(size);
-  memcpy((void*)m_font.data, font->data, size);
-#else
-  m_font.data = font->data;
-#endif
+    // bitmapped display controller
 
-  m_columns = tmin(m_canvas->getWidth() / m_font.width, 132);
-  m_rows    = tmin(m_canvas->getHeight() / m_font.height, 25);
+    freeFont();
+
+    m_font = *font;
+  #if FABGLIB_CACHE_FONT_IN_RAM
+    int size = m_font.height * 256 * ((m_font.width + 7) / 8);
+    m_font.data = (uint8_t const*) malloc(size);
+    memcpy((void*)m_font.data, font->data, size);
+  #else
+    m_font.data = font->data;
+  #endif
+
+    m_columns = tmin(m_canvas->getWidth() / m_font.width, 132);
+    m_rows    = tmin(m_canvas->getHeight() / m_font.height, 25);
+
+    m_glyphsBuffer.glyphsWidth  = m_font.width;
+    m_glyphsBuffer.glyphsHeight = m_font.height;
+    m_glyphsBuffer.glyphsData   = m_font.data;
+
+  } else {
+
+    // textual display controller
+
+    m_columns = static_cast<TextualDisplayController*>(m_displayController)->getColumns();
+    m_rows    = static_cast<TextualDisplayController*>(m_displayController)->getRows();
+
+  }
 
   freeTabStops();
   m_emuState.tabStop = (uint8_t*) malloc(m_columns);
   resetTabStops();
 
   freeGlyphsMap();
-  m_glyphsBuffer.glyphsWidth  = m_font.width;
-  m_glyphsBuffer.glyphsHeight = m_font.height;
-  m_glyphsBuffer.glyphsData   = m_font.data;
   m_glyphsBuffer.columns      = m_columns;
   m_glyphsBuffer.rows         = m_rows;
-  m_glyphsBuffer.map          = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_32BIT);
+  m_glyphsBuffer.map          = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+
   m_alternateMap = nullptr;
   m_alternateScreenBuffer = false;
+
+  if (!m_bitmappedDisplayController && isActive()) {
+    // associate map with textual display controller
+    static_cast<TextualDisplayController*>(m_displayController)->setTextMap(m_glyphsBuffer.map);
+  }
 
   setScrollingRegion(1, m_rows);
 }
@@ -648,7 +684,7 @@ void Terminal::flush(bool waitVSync)
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
   log("flush()\n");
   #endif
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     while (uxQueueMessagesWaiting(m_inputQueue) > 0)
       ;
     m_canvas->waitCompletion(waitVSync);
@@ -664,7 +700,10 @@ void Terminal::set132ColumnMode(bool value)
   log("set132ColumnMode()\n");
   #endif
 
-  loadFont(getPresetFontInfo(m_canvas->getWidth(), m_canvas->getHeight(), (value ? 132 : 80), 25));
+  if (m_bitmappedDisplayController)
+    loadFont(getPresetFontInfo(m_canvas->getWidth(), m_canvas->getHeight(), (value ? 132 : 80), 25));
+  else
+    loadFont(nullptr);
 }
 
 
@@ -683,8 +722,12 @@ void Terminal::setBackgroundColor(Color color, bool setAsDefault)
 void Terminal::int_setBackgroundColor(Color color)
 {
   m_emuState.backgroundColor = color;
-  if (isActive())
-    m_canvas->setBrushColor(color);
+  if (isActive()) {
+    if (m_bitmappedDisplayController)
+      m_canvas->setBrushColor(color);
+    else
+      static_cast<TextualDisplayController*>(m_displayController)->setCursorBackground(color);
+  }
 }
 
 
@@ -703,8 +746,12 @@ void Terminal::setForegroundColor(Color color, bool setAsDefault)
 void Terminal::int_setForegroundColor(Color color)
 {
   m_emuState.foregroundColor = color;
-  if (isActive())
-    m_canvas->setPenColor(color);
+  if (isActive()) {
+    if (m_bitmappedDisplayController)
+      m_canvas->setPenColor(color);
+    else
+      static_cast<TextualDisplayController*>(m_displayController)->setCursorForeground(color);
+  }
 }
 
 
@@ -713,8 +760,10 @@ void Terminal::reverseVideo(bool value)
   if (m_paintOptions.swapFGBG != value) {
     m_paintOptions.swapFGBG = value;
     if (isActive()) {
-      m_canvas->setPaintOptions(m_paintOptions);
-      m_canvas->swapRectangle(0, 0, m_canvas->getWidth() - 1, m_canvas->getHeight() - 1);
+      if (m_bitmappedDisplayController) {
+        m_canvas->setPaintOptions(m_paintOptions);
+        m_canvas->swapRectangle(0, 0, m_canvas->getWidth() - 1, m_canvas->getHeight() - 1);
+      }
     }
   }
 }
@@ -734,7 +783,7 @@ void Terminal::int_clear()
   log("int_clear()\n");
   #endif
 
-  if (isActive())
+  if (m_bitmappedDisplayController && isActive())
     m_canvas->clear();
   clearMap(m_glyphsBuffer.map);
 }
@@ -802,6 +851,9 @@ void Terminal::setCursorPos(int X, int Y)
   m_emuState.cursorY = tclamp(Y, 1, (int)m_rows);
   m_emuState.cursorPastLastCol = false;
 
+  if (!m_bitmappedDisplayController && isActive())
+    static_cast<TextualDisplayController*>(m_displayController)->setCursorPos(m_emuState.cursorY - 1, m_emuState.cursorX - 1);
+
   #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCSALL
   logFmt("setCursorPos(%d, %d) => set to (%d, %d)\n", X, Y, m_emuState.cursorX, m_emuState.cursorY);
   #endif
@@ -834,16 +886,22 @@ bool Terminal::int_enableCursor(bool value)
   bool prev = m_emuState.cursorEnabled;
   if (m_emuState.cursorEnabled != value) {
     m_emuState.cursorEnabled = value;
-    if (m_emuState.cursorEnabled) {
-      if (uxQueueMessagesWaiting(m_inputQueue) == 0) {
-        // just to show the cursor before next blink
-        blinkCursor();
+    if (m_bitmappedDisplayController) {
+      // bitmapped display, simulated cursor
+      if (m_emuState.cursorEnabled) {
+        if (uxQueueMessagesWaiting(m_inputQueue) == 0) {
+          // just to show the cursor before next blink
+          blinkCursor();
+        }
+      } else {
+        if (m_cursorState) {
+          // make sure cursor is hidden
+          blinkCursor();
+        }
       }
-    } else {
-      if (m_cursorState) {
-        // make sure cursor is hidden
-        blinkCursor();
-      }
+    } else if (isActive()) {
+      // textual display, native cursor
+      static_cast<TextualDisplayController*>(m_displayController)->enableCursor(value);
     }
   }
   return prev;
@@ -880,7 +938,7 @@ void Terminal::blinkTimerFunc(TimerHandle_t xTimer)
 
 void Terminal::blinkCursor()
 {
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     m_cursorState = !m_cursorState;
     int X = (m_emuState.cursorX - 1) * m_font.width;
     int Y = (m_emuState.cursorY - 1) * m_font.height;
@@ -909,7 +967,8 @@ void Terminal::blinkText()
     bool keepEnabled = false;
     int rows = m_rows;
     int cols = m_columns;
-    m_canvas->beginUpdate();
+    if (m_bitmappedDisplayController)
+      m_canvas->beginUpdate();
     for (int y = 0; y < rows; ++y) {
       uint32_t * itemPtr = m_glyphsBuffer.map + y * cols;
       for (int x = 0; x < cols; ++x, ++itemPtr) {
@@ -922,9 +981,11 @@ void Terminal::blinkText()
           keepEnabled = true;
         }
       }
-      m_canvas->waitCompletion(false);
+      if (m_bitmappedDisplayController)
+        m_canvas->waitCompletion(false);
     }
-    m_canvas->endUpdate();
+    if (m_bitmappedDisplayController)
+      m_canvas->endUpdate();
     if (!keepEnabled)
       m_blinkingTextEnabled = false;
   }
@@ -977,7 +1038,7 @@ void Terminal::scrollDown()
   log("scrollDown\n");
   #endif
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     // scroll down using canvas
     if (m_emuState.smoothScroll) {
       for (int i = 0; i < m_font.height; ++i)
@@ -1017,7 +1078,7 @@ void Terminal::scrollUp()
   log("scrollUp\n");
   #endif
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     // scroll up using canvas
     if (m_emuState.smoothScroll) {
       for (int i = 0; i < m_font.height; ++i)
@@ -1066,7 +1127,7 @@ void Terminal::setScrollingRegion(int top, int down, bool resetCursorPos)
 
 void Terminal::updateCanvasScrollingRegion()
 {
-  if (isActive())
+  if (m_bitmappedDisplayController && isActive())
     m_canvas->setScrollingRegion(0, (m_emuState.scrollingRegionTop - 1) * m_font.height, m_canvas->getWidth() - 1, m_emuState.scrollingRegionDown * m_font.height - 1);
 }
 
@@ -1102,7 +1163,7 @@ bool Terminal::multilineInsertChar(int charsToMove)
     } else {
       ++row;
     }
-    if (isActive())
+    if (m_bitmappedDisplayController && isActive())
       m_canvas->waitCompletion(false);
   }
   return scrolled;
@@ -1118,7 +1179,7 @@ void Terminal::insertAt(int column, int row, int count)
 
   count = tmin((int)m_columns, count);
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     // move characters on the right using canvas
     int charWidth = getCharWidthAt(row);
     m_canvas->setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
@@ -1157,7 +1218,7 @@ void Terminal::multilineDeleteChar(int charsToMove)
     deleteAt(col, row, 1);
     charsToMove -= m_columns - col;
     if (charsToMove > 0) {
-      if (isActive())
+      if (m_bitmappedDisplayController && isActive())
         m_canvas->waitCompletion(false);
       uint32_t * lastItem  = m_glyphsBuffer.map + (row - 1) * m_columns + (m_columns - 1);
       lastItem[0] = lastItem[1];
@@ -1165,7 +1226,7 @@ void Terminal::multilineDeleteChar(int charsToMove)
     }
     col = 1;
     ++row;
-    if (isActive())
+    if (m_bitmappedDisplayController && isActive())
       m_canvas->waitCompletion(false);
   }
 }
@@ -1180,7 +1241,7 @@ void Terminal::deleteAt(int column, int row, int count)
 
   count = imin(m_columns - column + 1, count);
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     // move characters on the right using canvas
     int charWidth = getCharWidthAt(row);
     m_canvas->setScrollingRegion((column - 1) * charWidth, (row - 1) * m_font.height, charWidth * getColumnsAt(row) - 1, row * m_font.height - 1);
@@ -1217,7 +1278,7 @@ void Terminal::erase(int X1, int Y1, int X2, int Y2, uint8_t c, bool maintainDou
   X2 = tclamp(X2 - 1, 0, (int)m_columns - 1);
   Y2 = tclamp(Y2 - 1, 0, (int)m_rows - 1);
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     if (c == ASCII_SPC && !selective) {
       int charWidth = getCharWidthAt(m_emuState.cursorY);
       m_canvas->fillRectangle(X1 * charWidth, Y1 * m_font.height, (X2 + 1) * charWidth - 1, (Y2 + 1) * m_font.height - 1);
@@ -1309,7 +1370,7 @@ void Terminal::restoreCursorState()
     if (m_savedCursorStateList->tabStop)
       memcpy(m_emuState.tabStop, m_savedCursorStateList->tabStop, m_columns);
     m_glyphOptions = m_savedCursorStateList->glyphOptions;
-    if (isActive())
+    if (m_bitmappedDisplayController && isActive())
       m_canvas->setGlyphOptions(m_glyphOptions);
     m_emuState.characterSetIndex = m_savedCursorStateList->characterSetIndex;
     for (int i = 0; i < 4; ++i)
@@ -1330,7 +1391,7 @@ void Terminal::useAlternateScreenBuffer(bool value)
     m_alternateScreenBuffer = value;
     if (!m_alternateMap) {
       // first usage, need to setup the alternate screen
-      m_alternateMap = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_32BIT);
+      m_alternateMap = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
       clearMap(m_alternateMap);
       m_alternateCursorX = 1;
       m_alternateCursorY = 1;
@@ -1876,7 +1937,7 @@ bool Terminal::setChar(uint8_t c)
   glyphOptions.doubleWidth = glyphMapItem_getOptions(mapItemPtr).doubleWidth;
   *mapItemPtr = GLYPHMAP_ITEM_MAKE(c, m_emuState.backgroundColor, m_emuState.foregroundColor, glyphOptions);
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     if (glyphOptions.value != m_glyphOptions.value)
       m_canvas->setGlyphOptions(glyphOptions);
 
@@ -1886,11 +1947,11 @@ bool Terminal::setChar(uint8_t c)
 
     if (glyphOptions.value != m_glyphOptions.value)
       m_canvas->setGlyphOptions(m_glyphOptions);
-
-    // blinking text?
-    if (m_glyphOptions.userOpt1)
-      m_prevBlinkingTextEnabled = true; // consumeInputQueue() will set the value
   }
+
+  // blinking text?
+  if (m_glyphOptions.userOpt1)
+    m_prevBlinkingTextEnabled = true; // consumeInputQueue() will set the value
 
   if (m_emuState.cursorX == m_columns) {
     m_emuState.cursorPastLastCol = true;
@@ -1919,7 +1980,7 @@ void Terminal::refresh(int X, int Y)
   logFmt("refresh(%d, %d)\n", X, Y);
   #endif
 
-  if (isActive())
+  if (m_bitmappedDisplayController && isActive())
     m_canvas->renderGlyphsBuffer(X - 1, Y - 1, &m_glyphsBuffer);
 }
 
@@ -1930,7 +1991,7 @@ void Terminal::refresh(int X1, int Y1, int X2, int Y2)
   logFmt("refresh(%d, %d, %d, %d)\n", X1, Y1, X2, Y2);
   #endif
 
-  if (isActive()) {
+  if (m_bitmappedDisplayController && isActive()) {
     for (int y = Y1 - 1; y < Y2; ++y) {
       for (int x = X1 - 1; x < X2; ++x)
         m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
@@ -2945,7 +3006,7 @@ void Terminal::execSGRParameters(int const * params, int paramsCount)
 
     }
   }
-  if (isActive())
+  if (m_bitmappedDisplayController && isActive())
     m_canvas->setGlyphOptions(m_glyphOptions);
 }
 
@@ -3358,7 +3419,7 @@ void Terminal::consumeFabGLSeq()
           m_glyphOptions.invert = val;
           break;
       }
-      if (isActive())
+      if (m_bitmappedDisplayController && isActive())
         m_canvas->setGlyphOptions(m_glyphOptions);
       break;
     }
