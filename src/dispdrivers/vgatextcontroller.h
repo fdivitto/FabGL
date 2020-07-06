@@ -50,7 +50,10 @@ namespace fabgl {
 #define VGATextController_CHARHEIGHT 14
 #define VGATextController_COLUMNS    80
 #define VGATextController_ROWS       34
-#define VGATextController_LINES       4    // must be a divisor of visible area height (i.e. 640x480, must be a divisor of 480)
+
+// Increase if you have flickering on FAT or SPIFFS access or on intensive CPU operations.
+// must be a divisor of visible area height (i.e. 640x480, must be a divisor of 480)
+#define VGATextController_LINES       4
 
 #define VGATextController_MODELINE   VGA_640x480_60Hz
 
