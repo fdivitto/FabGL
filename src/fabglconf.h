@@ -195,6 +195,9 @@
 /** Modeline for 640x400@70Hz resolution */
 #define VGA_640x400_70Hz "\"640x400@70Hz\" 25.175 640 656 752 800 400 412 414 449 -HSync -VSync"
 
+/** Modeline for 640x400@60Hz (actually 640x480 but with less lines) */
+#define VGA_640x400_60Hz "\"640x400@60Hz-mod\" 25.175 640 656 752 800 400 452 454 525 -HSync -VSync"
+
 /** Modeline for 640x480@60Hz resolution */
 #define VGA_640x480_60Hz "\"640x480@60Hz\" 25.175 640 656 752 800 480 490 492 525 -HSync -VSync"
 
