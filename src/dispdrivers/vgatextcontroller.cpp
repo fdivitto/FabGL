@@ -21,9 +21,9 @@ namespace fabgl {
 
 // statics
 
-uint32_t   VGATextController::s_blankPatternDWord;
-uint32_t * VGATextController::s_fgbgPattern = nullptr;
 volatile int VGATextController::s_scanLine;
+uint32_t     VGATextController::s_blankPatternDWord;
+uint32_t *   VGATextController::s_fgbgPattern = nullptr;
 
 
 
@@ -49,6 +49,9 @@ VGATextController::~VGATextController()
 
 void VGATextController::setTextMap(uint32_t const * map)
 {
+  // wait for the end of frame
+  while (m_map != nullptr && s_scanLine < m_timings.VVisibleArea)
+    ;
   m_map = map;
 }
 
