@@ -48,6 +48,9 @@
 #define SDCARD_MOUNT_PATH  "/SD"
 
 
+// Display controller (textual or bitmapped)
+#define USE_TEXTUAL_DISPLAYCONTROLLER
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // 8'' disk images (338K)
@@ -153,9 +156,13 @@ constexpr int MaxColorsIndex     = 5;
 
 // globals
 
-fabgl::VGAController DisplayController;
-fabgl::PS2Controller PS2Controller;
-fabgl::Terminal      Terminal;
+#ifdef USE_TEXTUAL_DISPLAYCONTROLLER
+fabgl::VGATextController DisplayController;
+#else
+fabgl::VGAVGAController  DisplayController;
+#endif
+fabgl::PS2Controller     PS2Controller;
+fabgl::Terminal          Terminal;
 
 Machine              altair;
 Mits88Disk           diskDrive(&altair, DISKFORMAT);
@@ -197,7 +204,9 @@ void emulator_menu()
     Terminal.write("\e[6A");  // cursor UP
     Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", TermStr[preferences.getInt("termEmu", DefaultTermIndex)] );
     Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", KbdLayStr[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
+    #ifndef USE_TEXTUAL_DISPLAYCONTROLLER
     Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", preferences.getBool("emuCRT", false) ? "YES" : "NO");
+    #endif
     Terminal.printf("\t\t\t\t\t\e[93m C \e[37m Colors: \e[33m%s\e[K\n\r", ColorsStr[preferences.getInt("colors", DefaultColorsIndex)] );
     Terminal.write( "\t\t\t\t\t\e[93m O \e[37m Reset Configuration\e[K\n\r");
 
@@ -399,15 +408,11 @@ void loop()
 
   Terminal.write("\e[97m\e[44m");
   Terminal.write("                    /* * * * * * * * * * * * * * * * * * * *\e[K\r\n");
-  Terminal.write("\e#6");
-  Terminal.write("\e#3              ALTAIR  8800\e[K\r\n");
-  Terminal.write("\e#4              ALTAIR  8800\e[K\r\n");
-  Terminal.write("\e#5");
-  Terminal.write("\e[K\r\n");
+  Terminal.write("                             A L T A I R     8 8 0 0 \e[K\r\n");
   Terminal.write("                     \e[37mby Fabrizio Di Vittorio - www.fabgl.com\e[97m\e[K\r\n");
   Terminal.write("                     * * * * * * * * * * * * * * * * * * * */\e[K\r\n\e[K\n");
 
-  Terminal.printf("\e[33mFree Memory :\e[32m %d bytes\e[K\r\n", heap_caps_get_free_size(0));
+  Terminal.printf("\e[33mFree Memory :\e[32m %d bytes\e[K\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
 
   int64_t total, used;
   FileBrowser::getFSInfo(FileBrowser::getDriveType(basepath), 0, &total, &used);
