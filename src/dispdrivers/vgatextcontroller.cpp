@@ -340,6 +340,8 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
       return;
     }
 
+    int scanLine = s_scanLine;
+
     int cursorRow = 0, cursorCol = 0;
     int cursorFG = 0, cursorBG = 0;
     const auto cursorVisible = (ctrl->m_cursorEnabled && ctrl->m_cursorCounter >= 0);
@@ -356,13 +358,13 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 
     for (int i = 0; i < VGATextController_LINES / 2; ++i) {
 
-      auto dest = ctrl->m_lines[s_scanLine % VGATextController_LINES];
+      auto dest = ctrl->m_lines[scanLine % VGATextController_LINES];
 
-      int textRow = s_scanLine / VGATextController_CHARHEIGHT;
+      int textRow = scanLine / VGATextController_CHARHEIGHT;
 
       if (textRow < VGATextController_ROWS) {
 
-        const int rowInChar = s_scanLine % VGATextController_CHARHEIGHT;
+        const int rowInChar = scanLine % VGATextController_CHARHEIGHT;
 
         auto mapItemPtr = map + textRow * VGATextController_COLUMNS;
 
@@ -419,9 +421,11 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
         }
       }
 
-      ++s_scanLine;
+      ++scanLine;
 
     }
+
+    s_scanLine = scanLine;
 
   }
 
