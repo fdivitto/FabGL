@@ -107,7 +107,7 @@ struct VGATimings {
 
 
 /**
-* @brief Represents the VGA controller
+* @brief Represents the VGA bitmapped controller
 *
 * Use this class to set screen resolution and to associate VGA signals to ESP32 GPIO outputs.
 *
