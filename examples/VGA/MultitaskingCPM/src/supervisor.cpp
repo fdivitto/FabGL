@@ -43,7 +43,7 @@
 Supervisor * Supervisor::s_singleton = nullptr;
 
 
-Supervisor::Supervisor(DisplayController * displayController)
+Supervisor::Supervisor(BaseDisplayController * displayController)
   : m_displayController(displayController),
     m_activeSessionID(-1)
 {

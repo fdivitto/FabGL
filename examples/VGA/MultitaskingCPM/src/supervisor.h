@@ -35,7 +35,7 @@
 #define MAXSESSIONS 12
 
 
-using fabgl::DisplayController;
+using fabgl::BaseDisplayController;
 
 
 struct Session {
@@ -50,7 +50,7 @@ class Supervisor {
 
 public:
 
-  Supervisor(DisplayController * displayController);
+  Supervisor(BaseDisplayController * displayController);
   ~Supervisor();
 
   static Supervisor * instance() { return s_singleton; }
@@ -75,8 +75,8 @@ private:
 
   static Supervisor * s_singleton;
 
-  DisplayController * m_displayController;
-  Session             m_sessions[MAXSESSIONS];
-  int                 m_activeSessionID;
+  BaseDisplayController * m_displayController;
+  Session                 m_sessions[MAXSESSIONS];
+  int                     m_activeSessionID;
 
 };

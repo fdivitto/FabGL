@@ -2306,9 +2306,9 @@ static const Program programs[] = {
   #ifndef HAS_WIFI
   // SBASIC (structured, without line numbers Basic)
   { R"(SDK\SBASIC)", "BASICLIB.REL", BASICLIB_REL, sizeof(BASICLIB_REL) },
-  { R"(SDK\SBASIC)", "SBASIC.COM", SBASIC_COM, sizeof(SBASIC_COM) },
+  { R"(SDK\SBASIC)", "SBASIC.COM",   SBASIC_COM,   sizeof(SBASIC_COM) },
   { R"(SDK\SBASIC)", "OVERLAYB.COM", OVERLAYB_COM, sizeof(OVERLAYB_COM) },
-  { R"(SDK\SBASIC)", "USERLIB.REL", USERLIB_REL, sizeof(USERLIB_REL) },
+  { R"(SDK\SBASIC)", "USERLIB.REL",  USERLIB_REL,  sizeof(USERLIB_REL) },
   #endif
 
   { "GAMES", "CATCHUM.COM", CATCHUM_COM, sizeof(CATCHUM_COM) },

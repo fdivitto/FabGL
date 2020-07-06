@@ -50,7 +50,7 @@
 
 // globals
 
-fabgl::VGAController DisplayController;
+fabgl::VGATextController DisplayController;
 fabgl::PS2Controller PS2Controller;
 
 Supervisor supervisor(&DisplayController);
