@@ -178,32 +178,66 @@ void Terminal::activate(TerminalTransition transition)
   xSemaphoreTake(m_mutex, portMAX_DELAY);
   if (s_activeTerminal != this) {
 
-    if (s_activeTerminal && transition != TerminalTransition::None && m_canvas) {
-      s_activeTerminal = nullptr;
-      AutoSuspendInterrupts autoInt;
-      switch (transition) {
-        case TerminalTransition::LeftToRight:
-          for (int x = 0; x < m_columns; ++x) {
-            m_canvas->scroll(m_font.width, 0);
-            m_canvas->setOrigin(-m_font.width * (m_columns - x - 1), 0);
-            for (int y = 0; y < m_rows; ++y)
-              m_canvas->renderGlyphsBuffer(m_columns - x - 1, y, &m_glyphsBuffer);
-            m_canvas->waitCompletion(false);
-            delayMicroseconds(2000);
-          }
-          break;
-        case TerminalTransition::RightToLeft:
-          for (int x = 0; x < m_columns; ++x) {
-            m_canvas->scroll(-m_font.width, 0);
-            m_canvas->setOrigin(m_font.width * (m_columns - x - 1), 0);
-            for (int y = 0; y < m_rows; ++y)
-              m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
-            m_canvas->waitCompletion(false);
-            delayMicroseconds(2000);
-          }
-          break;
-        default:
-          break;
+    if (s_activeTerminal && transition != TerminalTransition::None) {
+      if (m_bitmappedDisplayController) {
+        // bitmapped controller, use Canvas to perform the animation
+        s_activeTerminal = nullptr;
+        AutoSuspendInterrupts autoInt;
+        switch (transition) {
+          case TerminalTransition::LeftToRight:
+            for (int x = 0; x < m_columns; ++x) {
+              m_canvas->scroll(m_font.width, 0);
+              m_canvas->setOrigin(-m_font.width * (m_columns - x - 1), 0);
+              for (int y = 0; y < m_rows; ++y)
+                m_canvas->renderGlyphsBuffer(m_columns - x - 1, y, &m_glyphsBuffer);
+              m_canvas->waitCompletion(false);
+              delayMicroseconds(2000);
+            }
+            break;
+          case TerminalTransition::RightToLeft:
+            for (int x = 0; x < m_columns; ++x) {
+              m_canvas->scroll(-m_font.width, 0);
+              m_canvas->setOrigin(m_font.width * (m_columns - x - 1), 0);
+              for (int y = 0; y < m_rows; ++y)
+                m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
+              m_canvas->waitCompletion(false);
+              delayMicroseconds(2000);
+            }
+            break;
+          default:
+            break;
+        }
+      } else {
+        // textual controller, use temporary buffer to perform animation
+        auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
+        auto map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+        memcpy(map, s_activeTerminal->m_glyphsBuffer.map, sizeof(uint32_t) * m_columns * m_rows);
+        txtCtrl->enableCursor(false);
+        txtCtrl->setTextMap(map);
+        switch (transition) {
+          case TerminalTransition::LeftToRight:
+            for (int x = 0; x < m_columns; ++x) {
+              for (int y = 0; y < m_rows; ++y) {
+                memmove(map + y * m_columns + 1, map + y * m_columns, sizeof(uint32_t) * (m_columns - 1));
+                map[y * m_columns] = m_glyphsBuffer.map[y * m_columns + m_columns - x - 1];
+              }
+              vTaskDelay(5);
+            }
+            break;
+          case TerminalTransition::RightToLeft:
+            for (int x = 0; x < m_columns; ++x) {
+              for (int y = 0; y < m_rows; ++y) {
+                memmove(map + y * m_columns, map + y * m_columns + 1, sizeof(uint32_t) * (m_columns - 1));
+                map[y * m_columns + m_columns - 1] = m_glyphsBuffer.map[y * m_columns + x];
+              }
+              vTaskDelay(5);
+            }
+            break;
+          default:
+            break;
+        }
+        txtCtrl->setTextMap(m_glyphsBuffer.map);
+        free(map);
       }
     }
 
