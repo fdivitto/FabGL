@@ -677,6 +677,14 @@ class TextualDisplayController : public BaseDisplayController {
 public:
 
     DisplayControllerType controllerType() { return DisplayControllerType::Textual; }
+
+    virtual int getColumns() = 0;
+    virtual int getRows() = 0;
+    virtual void setTextMap(uint32_t const * map) = 0;
+    virtual void enableCursor(bool value) = 0;
+    virtual void setCursorPos(int row, int col) = 0;      // row and col starts from 0
+    virtual void setCursorForeground(Color value) = 0;
+    virtual void setCursorBackground(Color value) = 0;
 };
 
 
