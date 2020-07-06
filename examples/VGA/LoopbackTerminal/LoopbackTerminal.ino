@@ -30,9 +30,9 @@
 
 
 
-fabgl::VGAController DisplayController;
-fabgl::PS2Controller PS2Controller;
-fabgl::Terminal      Terminal;
+fabgl::VGATextController DisplayController;
+fabgl::PS2Controller     PS2Controller;
+fabgl::Terminal          Terminal;
 
 
 void print_info()
@@ -50,14 +50,12 @@ void print_info()
 
 void setup()
 {
+  Serial.begin(115200);
+
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x350_70HzAlt1);
-
-  // adjust screen position and size
-  //DisplayController.shrinkScreen(5, 0);
-  //DisplayController.moveScreen(-1, 0);
+  DisplayController.setResolution();
 
   Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
