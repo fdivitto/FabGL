@@ -110,6 +110,9 @@ public:
    * A reset command (Mouse.reset() method) is automatically sent to the mouse.<br>
    * This method also initializes the PS2Controller to use port 0 only.
    *
+   * Because PS/2 ports are handled by the ULP processor, just few GPIO ports are actually usable. They are:
+   * GPIO_NUM_2, GPIO_NUM_4, GPIO_NUM_12 (with some limitations), GPIO_NUM_13, GPIO_NUM_14, GPIO_NUM_15, GPIO_NUM_25, GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_32 and GPIO_NUM_33.
+   *
    * @param clkGPIO The GPIO number of Clock line
    * @param dataGPIO The GPIO number of Data line
    *
