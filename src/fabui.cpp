@@ -634,6 +634,11 @@ uiWindow * uiApp::moveFocus(int delta)
     do {
       int maxIndex;
       uiWindow * child = parent->getChildWithFocusIndex(newIndex, &maxIndex);
+
+      // this avoids infinite loop (case SHIFT_TAB when there isn't an active window or focusable controls)
+      if (maxIndex == -1)
+        break;
+
       if (child) {
         proposed = child;
         break;
