@@ -355,8 +355,9 @@ public:
    * @param pos Top-left coordinates of the window relative to the parent
    * @param size The window size
    * @param visible If true the window is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible);
+  uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID = 0);
 
   virtual ~uiWindow();
 
@@ -574,9 +575,23 @@ public:
    *
    * @return The focus index
    */
-  int focusIndex() { return m_focusIndex; }
+  int focusIndex()                       { return m_focusIndex; }
 
-  Canvas * canvas() { return m_canvas; }
+  Canvas * canvas()                      { return m_canvas; }
+
+  /**
+   * @brief Sets style class for this UI element
+   *
+   * @param value Style class identifier
+   */
+  void setStyleClassID(uint32_t value) { m_styleClassID = value; }
+
+  /**
+   * @brief Determines current style class for this UI element
+   *
+   * @return Style class ID
+   */
+  uint32_t styleClassID()                { return m_styleClassID; }
   
 
   // Delegates
@@ -657,6 +672,8 @@ private:
   uiWindow *    m_prev;
   uiWindow *    m_firstChild;
   uiWindow *    m_lastChild;
+
+  uint32_t      m_styleClassID;
 };
 
 
@@ -736,8 +753,9 @@ public:
    * @param pos Top-left coordinates of the frame relative to the parent
    * @param size The frame size
    * @param visible If true the frame is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible = true);
+  uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiFrame();
 
@@ -888,8 +906,9 @@ public:
    * @param pos Top-left coordinates of the control relative to the parent
    * @param size The control size
    * @param visible If true the control is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible);
+  uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID = 0);
 
   virtual ~uiControl();
 
@@ -940,8 +959,9 @@ public:
    * @param pos Top-left coordinates of the control relative to the parent
    * @param size The control size
    * @param visible If true the control is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiScrollableControl();
 
@@ -1120,8 +1140,9 @@ public:
    * @param size The button size
    * @param kind The button kind (button or switch)
    * @param visible If true the button is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind = uiButtonKind::Button, bool visible = true);
+  uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind = uiButtonKind::Button, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiButton();
 
@@ -1251,8 +1272,9 @@ public:
    * @param pos Top-left coordinates of the text edit relative to the parent
    * @param size The text edit size
    * @param visible If true the button is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible = true);
+  uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiTextEdit();
 
@@ -1368,8 +1390,9 @@ public:
    * @param pos Top-left coordinates of the label relative to the parent
    * @param size The label size. If Size(0, 0) then size is automatically calculated
    * @param visible If true the label is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
+  uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size = Size(0, 0), bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiLabel();
 
@@ -1455,8 +1478,9 @@ public:
    * @param pos Top-left coordinates of the image relative to the parent
    * @param size The image size. If Size(0, 0) then size is automatically calculated
    * @param visible If true the image is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size = Size(0, 0), bool visible = true);
+  uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size = Size(0, 0), bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiImage();
 
@@ -1523,8 +1547,9 @@ public:
    * @param pos Top-left coordinates of the panel relative to the parent
    * @param size The panel size
    * @param visible If true the panel is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiPanel();
 
@@ -1570,8 +1595,9 @@ public:
    * @param pos Top-left coordinates of the paintbox relative to the parent
    * @param size The paintbox size
    * @param visible If true the paintbox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiPaintBox();
 
@@ -1635,8 +1661,9 @@ public:
    * @param pos Top-left coordinates of the listbox relative to the parent
    * @param size The listbox size
    * @param visible If true the listbox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiCustomListBox();
 
@@ -1739,8 +1766,9 @@ public:
    * @param pos Top-left coordinates of the listbox relative to the parent
    * @param size The listbox size
    * @param visible If true the listbox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   /**
    * @brief A list of strings representing the listbox content
@@ -1782,8 +1810,9 @@ public:
    * @param pos Top-left coordinates of the listbox relative to the parent
    * @param size The listbox size
    * @param visible If true the listbox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible = true);
+  uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   /**
    * @brief Sets current directory
@@ -1892,8 +1921,9 @@ public:
    * @param size The combobox size
    * @param listHeight Height in pixels of the open listbox
    * @param visible If true the combobox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true);
+  uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true, uint32_t styleClassID = 0);
 
   ~uiComboBox();
 
@@ -2020,8 +2050,9 @@ public:
    * @param size The checkbox size
    * @param kind Defines the checkbox behaviour: checkbox or radiobutton
    * @param visible If true the checkbox is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind = uiCheckBoxKind::CheckBox, bool visible = true);
+  uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind = uiCheckBoxKind::CheckBox, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiCheckBox();
 
@@ -2118,8 +2149,9 @@ public:
    * @param size The slider size
    * @param orientation The slider orientation
    * @param visible If true the slider is immediately visible
+   * @param styleClassID Optional style class identifier
    */
-  uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible = true);
+  uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiSlider();
 
@@ -2196,6 +2228,13 @@ private:
 };
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiStyle
+
+struct uiStyle {
+  virtual void setStyle(uiObject * object, uint32_t styleClassID) = 0;
+};
 
 
 
@@ -2610,6 +2649,21 @@ public:
    */
   virtual void init();
 
+  /**
+   * @brief Sets application controls style
+   *
+   * @param value Style class descriptor
+   */
+  void setStyle(uiStyle * value)           { m_style = value; }
+
+  /**
+   * @brief Gets current application controls style
+   *
+   * @return Current style (nullptr = default).
+   */
+  uiStyle * style()                        { return m_style; }
+
+
   // delegates
 
   /**
@@ -2681,6 +2735,8 @@ private:
 
   int             m_lastMouseUpTimeMS;   // time (MS) at mouse up. Used to measure double clicks
   Point           m_lastMouseUpPos;      // screen position of last mouse up
+
+  uiStyle *       m_style;
 };
 
 

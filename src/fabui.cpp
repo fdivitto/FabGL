@@ -87,12 +87,14 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_KEYDOWN:
     case UIEVT_KEYUP:
-      Serial.printf("VK=%s ", Keyboard.virtualKeyToString(event->params.key.VK));
+      #ifdef FABGLIB_HAS_VirtualKeyO_STRING
+      Serial.printf("VK=%s ", Keyboard::virtualKeyToString(event->params.key.VK));
       if (event->params.key.LALT) Serial.write(" +LALT");
       if (event->params.key.RALT) Serial.write(" +RALT");
       if (event->params.key.CTRL) Serial.write(" +CTRL");
       if (event->params.key.SHIFT) Serial.write(" +SHIFT");
       if (event->params.key.GUI) Serial.write(" +GUI");
+      #endif
       break;
     case UIEVT_TIMER:
       Serial.printf("handle=%p", event->params.timerHandle);
@@ -102,7 +104,7 @@ void dumpEvent(uiEvent * event)
   }
   Serial.write("\n");
 }
-*/
+//*/
 
 
 
@@ -173,7 +175,8 @@ uiApp::uiApp()
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
     m_caretInvertState(-1),
-    m_lastMouseUpTimeMS(0)
+    m_lastMouseUpTimeMS(0),
+    m_style(nullptr)
 {
   objectType().uiApp = true;
   setApp(this);
@@ -1144,7 +1147,7 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
 // uiWindow
 
 
-uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible)
+uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
   : uiEvtHandler(parent ? parent->app() : nullptr),
     m_parent(parent),
     m_pos(pos),
@@ -1154,7 +1157,8 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_next(nullptr),
     m_prev(nullptr),
     m_firstChild(nullptr),
-    m_lastChild(nullptr)
+    m_lastChild(nullptr),
+    m_styleClassID(styleClassID)
 {
   objectType().uiWindow = true;
 
@@ -1163,8 +1167,11 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
   m_state.minimized = false;
   m_state.active    = false;
 
-  if (app())
+  if (app()) {
     m_canvas = app()->canvas();
+    if (app()->style() && styleClassID)
+      app()->style()->setStyle(this, styleClassID);
+  }
 
   if (parent)
     parent->addChild(this);
@@ -1684,8 +1691,8 @@ uiWindow * uiWindow::getChildWithFocusIndex(int focusIndex, int * maxIndex)
 // uiFrame
 
 
-uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible)
-  : uiWindow(parent, pos, size, visible),
+uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiWindow(parent, pos, size, visible, 0),
     m_title(nullptr),
     m_titleLength(0),
     m_mouseDownFrameItem(uiFrameItem::None),
@@ -1693,6 +1700,8 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
     m_lastReshapingBox(Rect(0, 0, 0, 0))
 {
   objectType().uiFrame = true;
+  if (app() && app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
   setTitle(title);
 }
 
@@ -2226,11 +2235,14 @@ void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
 // uiControl
 
 
-uiControl::uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiWindow(parent, pos, size, visible)
+uiControl::uiControl(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiWindow(parent, pos, size, visible, 0)
 {
   objectType().uiControl = true;
   windowProps().activable = false;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -2255,8 +2267,8 @@ void uiControl::processEvent(uiEvent * event)
 // uiButton
 
 
-uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, uiButtonKind kind, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_text(nullptr),
     m_textExtent(0),
     m_down(false),
@@ -2270,6 +2282,9 @@ uiButton::uiButton(uiWindow * parent, char const * text, const Point & pos, cons
   windowStyle().focusedBorderSize  = 2;
   windowStyle().borderColor        = RGB888(64, 64, 64);
   windowStyle().focusedBorderColor = RGB888(0, 0, 255);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 
   setText(text);
 }
@@ -2401,8 +2416,8 @@ void uiButton::setDown(bool value)
 // uiTextEdit
 
 
-uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_text(nullptr),
     m_textLength(0),
     m_textSpace(0),
@@ -2417,6 +2432,9 @@ uiTextEdit::uiTextEdit(uiWindow * parent, char const * text, const Point & pos, 
   windowStyle().defaultCursor = CursorName::CursorTextInput;
   windowStyle().borderColor   = RGB888(64, 64, 64);
   windowStyle().borderSize    = 1;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 
   setText(text);
 }
@@ -2838,8 +2856,8 @@ void uiTextEdit::selectWordAt(int mouseX)
 // uiLabel
 
 
-uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_text(nullptr),
     m_textExtent(0)
 {
@@ -2847,7 +2865,12 @@ uiLabel::uiLabel(uiWindow * parent, char const * text, const Point & pos, const 
 
   windowProps().focusable = false;
   windowStyle().borderSize = 0;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+
   m_autoSize = (size.width == 0 && size.height == 0);
+
   setText(text);
 }
 
@@ -2933,15 +2956,20 @@ void uiLabel::processEvent(uiEvent * event)
 // TODO? bitmap is not copied, but just referenced
 
 
-uiImage::uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiImage::uiImage(uiWindow * parent, Bitmap const * bitmap, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_bitmap(nullptr)
 {
   objectType().uiImage = true;
 
   windowProps().focusable = false;
   windowStyle().borderSize = 0;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+
   m_autoSize = (size.width == 0 && size.height == 0);
+
   setBitmap(bitmap);
 }
 
@@ -2999,14 +3027,17 @@ void uiImage::processEvent(uiEvent * event)
 // uiPanel
 
 
-uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible)
+uiPanel::uiPanel(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0)
 {
   objectType().uiPanel = true;
 
   windowProps().focusable = false;
   windowStyle().borderSize = 1;
   windowStyle().borderColor = RGB888(64, 64, 64);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3050,14 +3081,17 @@ void uiPanel::processEvent(uiEvent * event)
 // uiPaintBox
 
 
-uiPaintBox::uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiScrollableControl(parent, pos, size, visible)
+uiPaintBox::uiPaintBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiScrollableControl(parent, pos, size, visible, 0)
 {
   objectType().uiPaintBox = true;
 
   windowProps().focusable = false;
   windowStyle().borderSize  = 1;
   windowStyle().borderColor = RGB888(64, 64, 64);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3104,8 +3138,8 @@ void uiPaintBox::processEvent(uiEvent * event)
 // uiScrollableControl
 
 
-uiScrollableControl::uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiScrollableControl::uiScrollableControl(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_HScrollBarPosition(0),
     m_HScrollBarVisible(0),
     m_HScrollBarRange(0),
@@ -3116,6 +3150,9 @@ uiScrollableControl::uiScrollableControl(uiWindow * parent, const Point & pos, c
     m_scrollTimer(nullptr)
 {
   objectType().uiScrollableControl = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3447,8 +3484,8 @@ Rect uiScrollableControl::clientRect(uiOrigin origin)
 // uiCustomListBox
 
 
-uiCustomListBox::uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiScrollableControl(parent, pos, size, visible),
+uiCustomListBox::uiCustomListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiScrollableControl(parent, pos, size, visible, 0),
     m_firstVisibleItem(0)
 {
   objectType().uiCustomListBox = true;
@@ -3457,6 +3494,9 @@ uiCustomListBox::uiCustomListBox(uiWindow * parent, const Point & pos, const Siz
 
   windowStyle().borderSize  = 1;
   windowStyle().borderColor = RGB888(64, 64, 64);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3709,10 +3749,13 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
 // uiListBox
 
 
-uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiCustomListBox(parent, pos, size, visible)
+uiListBox::uiListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiCustomListBox(parent, pos, size, visible, 0)
 {
   objectType().uiListBox = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3732,11 +3775,14 @@ void uiListBox::items_draw(int index, const Rect & itemRect)
 // uiFileBrowser
 
 
-uiFileBrowser::uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible)
-  : uiCustomListBox(parent, pos, size, visible),
+uiFileBrowser::uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiCustomListBox(parent, pos, size, visible, 0),
     m_selected(-1)
 {
   objectType().uiFileBrowser = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -3842,9 +3888,9 @@ void uiFileBrowser::processEvent(uiEvent * event)
 // uiComboBox
 
 
-uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible)
-  : uiTextEdit(parent, "", pos, size, visible),
-    m_listBox(new uiListBox(parent, Point(0, 0), Size(0, 0), false)),
+uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
+  : uiTextEdit(parent, "", pos, size, visible, 0),
+    m_listBox(new uiListBox(parent, Point(0, 0), Size(0, 0), false, 0)),
     m_listHeight(listHeight)
 {
   objectType().uiComboBox = true;
@@ -3867,6 +3913,9 @@ uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, 
       app()->setFocusedWindow(this);
     }
   };
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -4017,8 +4066,8 @@ void uiComboBox::paintComboBox()
 // uiCheckBox
 
 
-uiCheckBox::uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiCheckBox::uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, uiCheckBoxKind kind, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_checked(false),
     m_kind(kind),
     m_groupIndex(-1)
@@ -4031,6 +4080,9 @@ uiCheckBox::uiCheckBox(uiWindow * parent, const Point & pos, const Size & size, 
   windowStyle().focusedBorderSize  = 2;
   windowStyle().borderColor        = RGB888(64, 64, 64);
   windowStyle().focusedBorderColor = RGB888(0, 0, 255);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -4160,8 +4212,8 @@ void uiCheckBox::unCheckGroup()
 // uiSlider
 
 
-uiSlider::uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible)
-  : uiControl(parent, pos, size, visible),
+uiSlider::uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOrientation orientation, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_orientation(orientation),
     m_position(0),
     m_min(0),
@@ -4175,6 +4227,9 @@ uiSlider::uiSlider(uiWindow * parent, const Point & pos, const Size & size, uiOr
   windowStyle().focusedBorderColor = RGB888(0, 0, 255);
 
   windowProps().focusable = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
