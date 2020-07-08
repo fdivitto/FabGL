@@ -691,13 +691,15 @@ struct uiFrameProps {
   uint8_t hasCloseButton    : 1; /**< Frame has close button. Make sure the window has a title bar setting window title */
   uint8_t hasMaximizeButton : 1; /**< Frame has maximize button. Make sure the window has a title bar setting window title */
   uint8_t hasMinimizeButton : 1; /**< Frame has minimize button. Make sure the window has a title bar setting window title */
+  uint8_t fillBackground    : 1; /**< Frame has filled background */
 
   uiFrameProps() :
     resizeable(true),
     moveable(true),
     hasCloseButton(true),
     hasMaximizeButton(true),
-    hasMinimizeButton(true)
+    hasMinimizeButton(true),
+    fillBackground(true)
   { }
 };
 

@@ -263,8 +263,10 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
 
   m_displayController->setMouseCursor(nullptr);
 
-  m_canvas->setBrushColor(m_rootWindow->frameStyle().backgroundColor);
-  m_canvas->clear();
+  if (m_rootWindow->frameProps().fillBackground) {
+    m_canvas->setBrushColor(m_rootWindow->frameStyle().backgroundColor);
+    m_canvas->clear();
+  }
 
   delete m_rootWindow;
   m_rootWindow = nullptr;
@@ -1802,7 +1804,7 @@ void uiFrame::paintFrame()
     bkgRect.Y1 += barHeight;
   }
   // background
-  if (!state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
+  if (m_frameProps.fillBackground && !state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
     canvas()->setBrushColor(m_frameStyle.backgroundColor);
     canvas()->fillRectangle(bkgRect);
   }
