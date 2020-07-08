@@ -245,6 +245,7 @@ void Terminal::activate(TerminalTransition transition)
     vTaskResume(m_keyboardReaderTaskHandle);
     if (m_bitmappedDisplayController) {
       // restore canvas state for bitmapped display controller
+      m_canvas->reset();
       m_canvas->setGlyphOptions(m_glyphOptions);
       m_canvas->setBrushColor(m_emuState.backgroundColor);
       m_canvas->setPenColor(m_emuState.foregroundColor);
