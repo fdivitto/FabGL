@@ -264,6 +264,16 @@ void Terminal::activate(TerminalTransition transition)
 }
 
 
+void Terminal::deactivate()
+{
+  xSemaphoreTake(m_mutex, portMAX_DELAY);
+  if (s_activeTerminal == this) {
+    s_activeTerminal = nullptr;
+  }
+  xSemaphoreGive(m_mutex);
+}
+
+
 void Terminal::begin(BaseDisplayController * displayController, Keyboard * keyboard)
 {
   m_displayController = displayController;

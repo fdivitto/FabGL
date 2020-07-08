@@ -820,7 +820,7 @@ public:
   Canvas * canvas() { return m_canvas; }
 
   /**
-   * @brief Activate this terminal for input and output.
+   * @brief Activates this terminal for input and output.
    *
    * Only one terminal can be active at the time, for input and output.
    * Use this method to activate a terminal. This method de-activates currently active terminal.
@@ -828,6 +828,11 @@ public:
    * @param transition Optional transition effect
    */
   void activate(TerminalTransition transition = TerminalTransition::None);
+
+  /**
+   * @brief Deactivates this terminal.
+   */
+  void deactivate();
 
   /**
    * @brief Determines if this terminal is active or not.
