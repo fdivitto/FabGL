@@ -112,6 +112,18 @@ enum TermType {
 };
 
 
+struct SupportedTerminals {
+  static int count()            { return (int)ANSILegacy - (int)ANSI_VT + 1; }
+  static char const * * names() {
+    static char const * TERMS[] = { "ANSI",  "ADM 3A", "ADM 31", "Hazeltine 1500", "Osborne", "Kaypro", "VT52", "ANSI Legacy" };
+    return TERMS;
+  }
+  static TermType * types() {
+    static TermType TYPES[]     = { ANSI_VT, ADM3A,    ADM31,    Hazeltine1500,    Osborne,   Kaypro,   VT52,   ANSILegacy };
+    return TYPES;
+  }
+};
+
 
 
 // Lear Siegler ADM-3A
