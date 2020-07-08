@@ -58,25 +58,6 @@
 
 
 
-constexpr int TERMSCOUNT = 8;
-
-static const struct {
-  char const * name;
-  TermType     type;
-} TERMS[TERMSCOUNT] = {
-  { "ANSI",           TermType::ANSI_VT },
-  { "ADM 3A",         TermType::ADM3A },
-  { "ADM 31",         TermType::ADM31 },
-  { "Hazeltine 1500", TermType::Hazeltine1500 },
-  { "Osborne",        TermType::Osborne },
-  { "Kaypro",         TermType::Kaypro },
-  { "VT52",           TermType::VT52 },
-  { "ANSI Legacy",    TermType::ANSILegacy },
-};
-
-
-
-
 constexpr int COMMANDSCOUNT = 23;
 
 static const struct {
@@ -1170,7 +1151,7 @@ bool CCP::cmd_INFO(uint16_t paramsAddr)
   consoleOutFmt("\n%d Bytes TPA  (System free %d Bytes)\r\n", m_BDOS->getTPASize(), HAL::systemFree());
 
   int sessionID = Supervisor::instance()->getSessionIDByTaskHandle(xTaskGetCurrentTaskHandle());
-  consoleOutFmt("Terminal #%d (%s)\r\n", sessionID + 1, TERMS[m_defaultTerminalType].name);
+  consoleOutFmt("Terminal #%d (%s)\r\n", sessionID + 1, SupportedTerminals::names()[m_defaultTerminalType]);
 
   #ifdef HAS_WIFI
   if (HAL::wifiConnected()) {
@@ -1202,10 +1183,10 @@ bool CCP::cmd_EMU(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  EMU 0-%d : Set terminal emulation. Example: EMU 3\r\n\n", TERMSCOUNT - 1);
+    consoleOutFmt("  EMU 0-%d : Set terminal emulation. Example: EMU 3\r\n\n", SupportedTerminals::count() - 1);
     consoleOut("Supported terminal emulations:\r\n");
-    for (int i = 0; i < TERMSCOUNT; ++i)
-      consoleOutFmt("  %d = %s\r\n", i, TERMS[i].name);
+    for (int i = 0; i < SupportedTerminals::count(); ++i)
+      consoleOutFmt("  %d = %s\r\n", i, SupportedTerminals::names()[i]);
     return true;
   }
 
@@ -1218,11 +1199,11 @@ bool CCP::cmd_EMU(uint16_t paramsAddr)
 
   int idx = atoi(param);
 
-  if (idx >= 0 && idx < TERMSCOUNT) {
+  if (idx >= 0 && idx < SupportedTerminals::count()) {
 
-    m_defaultTerminalType = TERMS[idx].type;
+    m_defaultTerminalType = SupportedTerminals::types()[idx];
     m_HAL->setTerminalType(m_defaultTerminalType);
-    consoleOutFmt("Terminal type is: %s\r\n", TERMS[m_defaultTerminalType].name);
+    consoleOutFmt("Terminal type is: %s\r\n", SupportedTerminals::names()[m_defaultTerminalType]);
 
   } else {
     consoleOut("Invalid index number\r\n");
@@ -1241,7 +1222,7 @@ bool CCP::cmd_KEYB(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  KEYB US, UK, DE, IT : Set keyboard layout. Example: KEYB DE\r\n", TERMSCOUNT - 1);
+    consoleOutFmt("  KEYB US, UK, DE, IT : Set keyboard layout. Example: KEYB DE\r\n");
     return true;
   }
 
@@ -1293,7 +1274,7 @@ bool CCP::cmd_EXIT(uint16_t paramsAddr)
 
   int idx = atoi(param);
 
-  if (idx >= 0 && idx < TERMSCOUNT)
+  if (idx >= 0 && idx < SupportedTerminals::count())
     Supervisor::instance()->abortSession(idx, AbortReason::SessionClosed);
 
   return true;
@@ -1358,7 +1339,7 @@ bool CCP::cmd_WIFI(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  WIFI ssid password : Connect to WiFi network. Example: WIFI mynet mypass\r\n", TERMSCOUNT - 1);
+    consoleOutFmt("  WIFI ssid password : Connect to WiFi network. Example: WIFI mynet mypass\r\n");
     return true;
   }
 
@@ -1408,7 +1389,7 @@ bool CCP::cmd_PING(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  PING host : Pings an host or IP. Example: PING www.fabgl.com\r\n", TERMSCOUNT - 1);
+    consoleOutFmt("  PING host : Pings an host or IP. Example: PING www.fabgl.com\r\n");
     return true;
   }
 
@@ -1476,7 +1457,7 @@ bool CCP::cmd_TELNET(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  TELNET host : Telnet to host or IP. Example: TELNET towel.blinkenlights.nl\r\n", TERMSCOUNT - 1);
+    consoleOutFmt("  TELNET host : Telnet to host or IP. Example: TELNET towel.blinkenlights.nl\r\n");
     return true;
   }
 
