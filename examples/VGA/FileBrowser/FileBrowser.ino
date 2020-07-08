@@ -247,7 +247,6 @@ void setup()
   //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   preferences.begin("FileBrowser", false);
-  preferences.clear();
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
