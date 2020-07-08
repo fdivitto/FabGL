@@ -138,9 +138,8 @@
 
 constexpr int DefaultCPU = 1;       // 0 = i8080, 1 = Z80
 
-const char *  TermStr[]        = { "ANSI/VT", "Lear Siegler ADM-3A", "Lear Siegler ADM-31", "Hazeltine 1500", "Osborne I", "Kaypro" };
 constexpr int DefaultTermIndex = 2;   // Default: "ADM-31"
-constexpr int MaxTermIndex     = 5;   // Max: "Kaypro"
+constexpr int MaxTermIndex     = 7;   // Max: "Legacy ANSI"
 
 const char *  KbdLayStr[]              = { "US", "UK", "DE", "IT" };
 const fabgl::KeyboardLayout * KdbLay[] = { &fabgl::USLayout, &fabgl::UKLayout, &fabgl::GermanLayout, &fabgl::ItalianLayout };
@@ -202,7 +201,7 @@ void emulator_menu()
     Terminal.printf("\e[93m U \e[37m CPU: \e[33m%s\e[K\n\r", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
     Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", preferences.getBool("realSpeed", false) ? "YES" : "NO");
     Terminal.write("\e[6A");  // cursor UP
-    Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", TermStr[preferences.getInt("termEmu", DefaultTermIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", SupportedTerminals::names()[preferences.getInt("termEmu", DefaultTermIndex)] );
     Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", KbdLayStr[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
     #ifndef USE_TEXTUAL_DISPLAYCONTROLLER
     Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", preferences.getBool("emuCRT", false) ? "YES" : "NO");
