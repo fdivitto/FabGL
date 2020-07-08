@@ -842,6 +842,17 @@ public:
   bool isActive() { return s_activeTerminal == this; }
 
 
+  //// Delegates ////
+
+  /**
+   * @brief Delegate called whenever a new virtual key is received from keyboard
+   *
+   * First parameter is a pointer to the decoded virtual key
+   * Second parameter specifies if the key is Down (true) or Up (false)
+   */
+  Delegate<VirtualKey *, bool> onVirtualKey;
+
+
 
   // statics (used for common default properties)
 

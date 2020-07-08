@@ -3492,6 +3492,8 @@ void Terminal::keyboardReaderTask(void * pvParameters)
 
     if (term->isActive()) {
 
+      term->onVirtualKey(&vk, keyDown);
+
       if (keyDown) {
 
         if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == vk)
