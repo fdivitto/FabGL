@@ -91,6 +91,23 @@ extern const KeyboardLayout GermanLayout;
 extern const KeyboardLayout ItalianLayout;
 
 
+struct SupportedLayouts {
+  static int count()            { return 4; }
+  static char const * * names() {
+    static char const * NAMES[] = { "German", "Italian", "UK British", "US English" };
+    return NAMES;
+  }
+  static char const * * shortNames() {
+    static char const * SNAMES[] = { "DE", "IT", "UK", "US" };
+    return SNAMES;
+  }
+  static const KeyboardLayout * * layouts() {
+    static KeyboardLayout const * LAYOUTS[] = { &GermanLayout, &ItalianLayout, &UKLayout, &USLayout };
+    return LAYOUTS;
+  }
+};
+
+
 /**
  * @brief The PS2 Keyboard controller class.
  *
