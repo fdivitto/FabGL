@@ -63,6 +63,7 @@
             *uiPaintBox
               *uiCustomListBox
                 *uiListBox
+                *uiColorListBox
                 *uiFileBrowser
             uiMemoEdit
           *uiCheckBox
@@ -221,9 +222,11 @@ struct uiObjectType {
   uint32_t uiComboBox          : 1;
   uint32_t uiCheckBox          : 1;
   uint32_t uiSlider            : 1;
+  uint32_t uiColorListBox      : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
-                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0), uiCheckBox(0), uiSlider(0)
+                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
+                   uiCheckBox(0), uiSlider(0), uiColorListBox(0)
     { }
 };
 
@@ -1881,6 +1884,48 @@ private:
   FileBrowser m_dir;
   int         m_selected;  // -1 = no sel
 
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorListBox
+
+/** @brief Shows a list of 16 colors, one selectable */
+class uiColorListBox : public uiCustomListBox {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A listbox must always have a parent window
+   * @param pos Top-left coordinates of the listbox relative to the parent
+   * @param size The listbox size
+   * @param visible If true the listbox is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiColorListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
+
+  /**
+   * @brief Currently selected color
+   *
+   * @return Currently selected color.
+   */
+  Color color();
+
+
+protected:
+
+  virtual int items_getCount()                      { return 16; }
+  virtual void items_deselectAll()                  { }
+  virtual void items_select(int index, bool select) { if (select) m_selectedColor = (Color)index; }
+  virtual bool items_selected(int index)            { return index == (int)m_selectedColor; }
+  virtual void items_draw(int index, const Rect & itemRect);
+
+
+private:
+
+  Color m_selectedColor;
 };
 
 

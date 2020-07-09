@@ -3771,6 +3771,32 @@ void uiListBox::items_draw(int index, const Rect & itemRect)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorListBox
+
+
+uiColorListBox::uiColorListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiCustomListBox(parent, pos, size, visible, 0)
+{
+  objectType().uiColorListBox = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+}
+
+
+void uiColorListBox::items_draw(int index, const Rect & itemRect)
+{
+  constexpr int BORDER = 1;
+  canvas()->setBrushColor((Color)index);
+  canvas()->fillRectangle(itemRect.X1 + BORDER, itemRect.Y1 + BORDER, itemRect.X2 - BORDER, itemRect.Y2 - BORDER);
+}
+
+
+// uiColorListBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiFileBrowser
 
 
