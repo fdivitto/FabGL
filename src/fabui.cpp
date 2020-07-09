@@ -554,9 +554,8 @@ uiWindow * uiApp::setActiveWindow(uiWindow * value)
   uiWindow * prev = m_activeWindow;
 
   if (value != m_activeWindow) {
-
-    // is "value" window activable? If not turn "value" to the first activabe parent
-    while (!value->m_windowProps.activable) {
+    // is "value" window activable? If not turn "value" to the first activable parent
+    while (value && !value->m_windowProps.activable) {
       value = value->m_parent;
       if (!value)
         return prev; // no parent is activable

@@ -322,9 +322,9 @@ struct uiWindowProps {
 /** @brief Contains the window style */
 struct uiWindowStyle {
   CursorName    defaultCursor      = CursorName::CursorPointerSimpleReduced;  /**< Default window mouse cursor */
-  RGB888        borderColor        = RGB888(128, 128, 128);                         /**< Border color */
-  RGB888        activeBorderColor  = RGB888(128, 128, 255);                         /**< Border color when active */
-  RGB888        focusedBorderColor = RGB888(0, 0, 255);                         /**< Border color when focused */
+  RGB888        borderColor        = RGB888(128, 128, 128);                   /**< Border color */
+  RGB888        activeBorderColor  = RGB888(128, 128, 255);                   /**< Border color when active */
+  RGB888        focusedBorderColor = RGB888(0, 0, 255);                       /**< Border color when focused */
   uint8_t       borderSize         = 3;                                       /**< Border size in pixels. This determines also the resize grips area. */
   uint8_t       focusedBorderSize  = 1;                                       /**< Border size when focused */
 };
