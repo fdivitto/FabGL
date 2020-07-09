@@ -828,6 +828,22 @@ ChipPackage getChipPackage();
 void replacePathSep(char * path, char newSep);
 
 
+/**
+ * @brief Composes UART configuration word
+ *
+ * @param parity Parity. 0 = none, 1 = even, 2 = odd
+ * @param dataLength Data word length. 0 = 5 bits, 1 = 6 bits, 2 = 7 bits, 3 = 8 bits
+ * @param stopBits Number of stop bits. 1 = 1 bit, 2 = 1.5 bits, 3 = 2 bits
+ */
+inline uint32_t UARTConf(int parity, int dataLength, int stopBits)
+{
+  uint32_t w = 0x8000000 | (dataLength << 2) | (stopBits << 4);
+  if (parity)
+    w |= (parity == 1 ? 0b10 : 0b11);
+  return w;
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts
