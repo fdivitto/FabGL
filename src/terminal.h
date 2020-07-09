@@ -1142,11 +1142,23 @@ public:
   ~TerminalController();
 
   /**
-   * @brief Set destination terminal
+   * @brief Clears screen
+   */
+  void clear();
+
+  /**
+   * @brief Sets destination terminal
    *
    * @param terminal The Terminal instance to control. If not specified you have to set delegates.
    */
   void setTerminal(Terminal * terminal = nullptr);
+
+  /**
+   * @brief Enables/disables cursor
+   *
+   * @param value True enables cursor, False disables cursor
+   */
+  void enableCursor(bool value);
 
   /**
    * @brief Sets current cursor position

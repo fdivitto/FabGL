@@ -114,6 +114,8 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGL_ENTERM_SETFGCOLOR     0x0D
 #define FABGL_ENTERM_SETBGCOLOR     0X0E
 #define FABGL_ENTERM_SETCHARSTYLE   0x0F
+#define FABGL_ENTERM_CLEAR          0x10
+#define FABGL_ENTERM_ENABLECURSOR   0x11
 
 
 // each fabgl specific sequence has a fixed length, specified here:
@@ -133,6 +135,8 @@ const uint8_t FABGLSEQLENGTH[] = { 0,  // invalid
                                    4,  // FABGL_ENTERM_SETFGCOLOR
                                    4,  // FABGL_ENTERM_SETBGCOLOR
                                    5,  // FABGL_ENTERM_SETCHARSTYLE
+                                   3,  // FABGL_ENTERM_CLEAR
+                                   4,  // FABGL_ENTERM_ENABLECURSOR
                                   };
 
 
@@ -756,11 +760,7 @@ void Terminal::setBackgroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultBackgroundColor = color;
-  //Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 40 : 92));  <--- removed to reduce stack size
-  write("\e[");
-  char buf[4];
-  write(itoa((int)color + (color < Color::BrightBlack ? 40 : 92), buf, 10));
-  write('m');
+  TerminalController(this).setBackgroundColor(color);
 }
 
 
@@ -780,11 +780,7 @@ void Terminal::setForegroundColor(Color color, bool setAsDefault)
 {
   if (setAsDefault)
     m_defaultForegroundColor = color;
-  //Print::printf("\e[%dm", (int)color + (color < Color::BrightBlack ? 30 : 82));    <--- removed to reduce stack size
-  write("\e[");
-  char buf[4];
-  write(itoa((int)color + (color < Color::BrightBlack ? 30 : 82), buf, 10));
-  write('m');
+  TerminalController(this).setForegroundColor(color);
 }
 
 
@@ -816,9 +812,9 @@ void Terminal::reverseVideo(bool value)
 
 void Terminal::clear(bool moveCursor)
 {
-  Print::write("\e[2J");
+  TerminalController(this).clear();
   if (moveCursor)
-    Print::write("\e[1;1H");
+    TerminalController(this).setCursorPos(1, 1);
 }
 
 
@@ -921,8 +917,7 @@ int Terminal::getAbsoluteRow(int Y)
 
 void Terminal::enableCursor(bool value)
 {
-  Print::write("\e[?25");
-  Print::write(value ? "h" : "l");
+  TerminalController(this).enableCursor(value);
 }
 
 
@@ -3249,6 +3244,24 @@ void Terminal::consumeFabGLSeq()
   // process command in "c"
   switch (c) {
 
+    // Clear screen
+    // Seq:
+    //   ESC FABGL_ENTERM_CODE FABGL_ENTERM_CLEAR
+    // params:
+    //   none
+    case FABGL_ENTERM_CLEAR:
+      erase(1, 1, m_columns, m_rows, ASCII_SPC, false, false);
+      break;
+
+    // Enable/disable cursor
+    // Seq:
+    //  ESC FABGL_ENTERM_CODE FABGL_ENTERM_ENABLECURSOR STATE
+    // params:
+    //  STATE (byte): 0 = disable, 1 = enable
+    case FABGL_ENTERM_ENABLECURSOR:
+      m_prevCursorEnabled = getNextCode(false);
+      break;
+
     // Get cursor horizontal position (1 = leftmost pos)
     // Seq:
     //    ESC FABGL_ENTERM_CODE FABGL_ENTERM_GETCURSORCOL
@@ -3912,6 +3925,21 @@ void TerminalController::waitFor(int value)
   while (true)
     if (read() == value)
       return;
+}
+
+
+void TerminalController::clear()
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_CLEAR);
+}
+
+
+void TerminalController::enableCursor(bool value)
+{
+  write(FABGL_ENTERM_CMD);
+  write(FABGL_ENTERM_ENABLECURSOR);
+  write(value ? 1 : 0);
 }
 
 
