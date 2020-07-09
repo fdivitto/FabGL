@@ -381,6 +381,13 @@ int StringList::append(char const * str)
 }
 
 
+void StringList::append(char const * strlist[], int count)
+{
+  for (int i = 0; i < count; ++i)
+    insert(m_count, strlist[i]);
+}
+
+
 void StringList::set(int index, char const * str)
 {
   if (m_ownStrings) {
