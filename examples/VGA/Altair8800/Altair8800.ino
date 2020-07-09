@@ -136,20 +136,17 @@
 
 // consts
 
-constexpr int DefaultCPU = 1;       // 0 = i8080, 1 = Z80
+constexpr int DefaultCPU         = 1;   // 0 = i8080, 1 = Z80
 
-constexpr int DefaultTermIndex = 2;   // Default: "ADM-31"
-constexpr int MaxTermIndex     = 7;   // Max: "Legacy ANSI"
+constexpr int DefaultTermIndex   = 2;   // Default: "ADM-31"
+constexpr int MaxTermIndex       = 7;   // Max: "Legacy ANSI"
 
-const char *  KbdLayStr[]              = { "US", "UK", "DE", "IT" };
-const fabgl::KeyboardLayout * KdbLay[] = { &fabgl::USLayout, &fabgl::UKLayout, &fabgl::GermanLayout, &fabgl::ItalianLayout };
-constexpr int DefaultKbdLayIndex       = 1;   // Default: "UK"
-constexpr int MaxKbdLayIndex           = 3;   // Max: "IT"
+constexpr int DefaultKbdLayIndex = 2;   // Default: "UK"
 
 const char * ColorsStr[] = { "Green/Black", "Yellow/Black", "White/Black", "Black/White", "Yellow/Blue", "Black/Yellow" };
 const Color TextColors[] = { Color::BrightGreen, Color::BrightYellow, Color::BrightWhite, Color::Black,       Color::BrightYellow, Color::Black };
 const Color BackColors[] = { Color::Black,       Color::Black,        Color::Black,       Color::BrightWhite, Color::Blue,         Color::BrightYellow };
-constexpr int DefaultColorsIndex = 0; // Default: Green/Black
+constexpr int DefaultColorsIndex = 0;   // Default: Green/Black
 constexpr int MaxColorsIndex     = 5;
 
 
@@ -202,7 +199,7 @@ void emulator_menu()
     Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", preferences.getBool("realSpeed", false) ? "YES" : "NO");
     Terminal.write("\e[6A");  // cursor UP
     Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", SupportedTerminals::names()[preferences.getInt("termEmu", DefaultTermIndex)] );
-    Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", KbdLayStr[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
     #ifndef USE_TEXTUAL_DISPLAYCONTROLLER
     Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", preferences.getBool("emuCRT", false) ? "YES" : "NO");
     #endif
@@ -283,10 +280,10 @@ void emulator_menu()
       case 'K':
       {
         int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex) + 1;
-        if (kbdLayIndex > MaxKbdLayIndex)
+        if (kbdLayIndex >= SupportedLayouts::count())
           kbdLayIndex = 0;
         preferences.putInt("kbdLay", kbdLayIndex);
-        PS2Controller.keyboard()->setLayout(KdbLay[kbdLayIndex]);
+        PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[kbdLayIndex]);
         break;
       }
 
@@ -417,7 +414,7 @@ void loop()
   FileBrowser::getFSInfo(FileBrowser::getDriveType(basepath), 0, &total, &used);
   Terminal.printf("\e[33mFile System :\e[32m %lld KiB used, %lld KiB free\e[K\r\n", used / 1024, (total - used) / 1024);
 
-  Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", KbdLayStr[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
+  Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
   Terminal.printf("\e[33mCPU         : \e[32m%s\e[92m\e[K\r\n\e[K\n", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
 
   Terminal.printf("Press \e[93mPAUSE\e[92m to display emulator menu\e[K\r\n");
@@ -426,7 +423,7 @@ void loop()
 
   // setup keyboard layout
   int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex);
-  PS2Controller.keyboard()->setLayout(KdbLay[kbdLayIndex]);
+  PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[kbdLayIndex]);
 
   // setup terminal emulation
   int termIndex = preferences.getInt("termEmu", DefaultTermIndex);
