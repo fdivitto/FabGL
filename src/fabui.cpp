@@ -3775,7 +3775,8 @@ void uiListBox::items_draw(int index, const Rect & itemRect)
 
 
 uiColorListBox::uiColorListBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
-  : uiCustomListBox(parent, pos, size, visible, 0)
+  : uiCustomListBox(parent, pos, size, visible, 0),
+    m_selectedColor((Color)0)
 {
   objectType().uiColorListBox = true;
 
