@@ -1118,7 +1118,8 @@ private:
 /**
  * @brief TerminalController allows direct controlling of the Terminal object without using escape sequences
  *
- * TerminalController needs FabGL specific sequences to be enabled (this is the default).
+ * TerminalController needs FabGL specific sequences to be enabled (this is the default), and always works
+ * despite the selected terminal emulation.
  *
  * Example:
  *
