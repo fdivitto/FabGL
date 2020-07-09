@@ -493,6 +493,7 @@ public:
    * loop to do something other.<br>
    * <br>
    * This is the preferred way to connect the Terminal with a serial port.<br>
+   * You may call connectSerialPort whenever a parameters needs to be changed (except for rx and tx pins).
    *
    * @param baud Baud rate.
    * @param config Defines word length, parity and stop bits. Example: SERIAL_8N1.

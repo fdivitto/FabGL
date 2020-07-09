@@ -442,19 +442,49 @@ void Terminal::uartCheckInputQueueForFlowControl()
 // connect to UART2
 void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted)
 {
-  Serial2.end();
+  uart_dev_t * uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
 
-  m_uart = true;
+  bool initialSetup = !m_uart;
+
+  if (initialSetup) {
+    // uart not configured, configure now
+
+    Serial2.end();
+
+    m_uart = true;
+
+    DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_UART2_CLK_EN);
+    DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_UART2_RST);
+
+    // flush
+    uartFlushTXFIFO();
+    uartFlushRXFIFO();
+
+    // TX/RX Pin direction
+    pinMode(rxPin, INPUT);
+    pinMode(txPin, OUTPUT);
+
+    // RX interrupt
+    uart->conf1.rxfifo_full_thrhd = 1;  // an interrupt for each character received
+    uart->conf1.rx_tout_thrhd = 2;      // actually not used
+    uart->conf1.rx_tout_en    = 0;      // timeout not enabled
+    uart->int_ena.rxfifo_full = 1;      // interrupt on FIFO full (1 character - see rxfifo_full_thrhd)
+    uart->int_ena.frm_err     = 1;      // interrupt on frame error
+    uart->int_ena.rxfifo_tout = 0;      // no interrupt on rx timeout (see rx_tout_en and rx_tout_thrhd)
+    uart->int_ena.parity_err  = 1;      // interrupt on rx parity error
+    uart->int_ena.rxfifo_ovf  = 1;      // interrupt on rx overflow
+    uart->int_clr.val = 0xffffffff;
+    esp_intr_alloc(ETS_UART2_INTR_SOURCE, 0, uart_isr, this, nullptr);
+
+    // setup FIFOs size
+    uart->mem_conf.rx_size = 3;  // RX: 384 bytes (this is the max for UART2)
+    uart->mem_conf.tx_size = 1;  // TX: 128 bytes
+
+    if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
+      xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
+  }
+
   m_autoXONOFF = (flowControl == FlowControl::Software);
-
-  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
-
-  DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, DPORT_UART2_CLK_EN);
-  DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, DPORT_UART2_RST);
-
-  // flush
-  uartFlushTXFIFO();
-  uartFlushRXFIFO();
 
   // set baud rate
   uint32_t clk_div = (getApbFrequency() << 4) / baud;
@@ -468,28 +498,8 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     uart->rs485_conf.dl1_en  = 1;
   }
 
-  // RX Pin
-  pinMode(rxPin, INPUT);
+  // TX/RX Pin logic
   pinMatrixInAttach(rxPin, U2RXD_IN_IDX, inverted);
-
-  // RX interrupt
-  uart->conf1.rxfifo_full_thrhd = 1;  // an interrupt for each character received
-  uart->conf1.rx_tout_thrhd = 2;      // actually not used
-  uart->conf1.rx_tout_en    = 0;      // timeout not enabled
-  uart->int_ena.rxfifo_full = 1;      // interrupt on FIFO full (1 character - see rxfifo_full_thrhd)
-  uart->int_ena.frm_err     = 1;      // interrupt on frame error
-  uart->int_ena.rxfifo_tout = 0;      // no interrupt on rx timeout (see rx_tout_en and rx_tout_thrhd)
-  uart->int_ena.parity_err  = 1;      // interrupt on rx parity error
-  uart->int_ena.rxfifo_ovf  = 1;      // interrupt on rx overflow
-  uart->int_clr.val = 0xffffffff;
-  esp_intr_alloc(ETS_UART2_INTR_SOURCE, 0, uart_isr, this, nullptr);
-
-  // setup FIFOs size
-  uart->mem_conf.rx_size = 3;  // RX: 384 bytes (this is the max for UART2)
-  uart->mem_conf.tx_size = 1;  // TX: 128 bytes
-
-  // TX Pin
-  pinMode(txPin, OUTPUT);
   pinMatrixOutAttach(txPin, U2TXD_OUT_IDX, inverted, false);
 
   // Flow Control
@@ -502,16 +512,15 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     uart->swfc_conf.xoff_threshold = 0;
     uart->swfc_conf.xon_char  = ASCII_XON;
     uart->swfc_conf.xoff_char = ASCII_XOFF;
-    // send an XON right now
-    m_XOFF = true;
-    uart->flow_conf.send_xon = 1;
+    if (initialSetup) {
+      // send an XON right now
+      m_XOFF = true;
+      uart->flow_conf.send_xon = 1;
+    }
   }
 
   // APB Change callback (TODO?)
   //addApbChangeCallback(this, uart_on_apb_change);
-
-  if (m_keyboard->isKeyboardAvailable())
-    xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
 
 
