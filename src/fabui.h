@@ -609,7 +609,9 @@ public:
    * @return Style class ID
    */
   uint32_t styleClassID()                { return m_styleClassID; }
-  
+
+  void setParentProcessKbdEvents(bool value) { m_parentProcessKbdEvents = value; }
+
 
   // Delegates
 
@@ -691,6 +693,9 @@ private:
   uiWindow *    m_lastChild;
 
   uint32_t      m_styleClassID;
+
+  // if true parent processes keyboard events
+  bool          m_parentProcessKbdEvents;
 };
 
 
