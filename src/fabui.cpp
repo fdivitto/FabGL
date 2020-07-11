@@ -643,32 +643,24 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 // delta = -1, go previous focused index
 uiWindow * uiApp::moveFocus(int delta)
 {
-  uiWindow * old = m_focusedWindow;
-  uiWindow * parent = old ? old->parent() : m_activeWindow;
-  if (parent && parent->hasChildren()) {
-    uiWindow * proposed = old;
-    int startingIndex = old ? old->focusIndex() + delta : 0;
-    int newIndex = startingIndex;
-    do {
-      int maxIndex;
-      uiWindow * child = parent->getChildWithFocusIndex(newIndex, &maxIndex);
-
-      // this avoids infinite loop (case SHIFT_TAB when there isn't an active window or focusable controls)
-      if (maxIndex == -1)
-        break;
-
-      if (child) {
-        proposed = child;
-        break;
-      }
-      if (delta > 0)
-        newIndex = (newIndex >= maxIndex ? 0 : newIndex + delta);
-      else
-        newIndex = (newIndex <= 0 ? maxIndex : newIndex + delta);
-    } while (newIndex != startingIndex);
-    setFocusedWindow(proposed);
-  }
-  return old;
+  uiWindow * parent = m_focusedWindow ? m_focusedWindow->parentFrame() : m_activeWindow;
+  int startingIndex = m_focusedWindow ? m_focusedWindow->focusIndex() + delta : 0;
+  int newIndex = startingIndex;
+  do {
+    int maxIndex = -1;
+    uiWindow * newFocusedCtrl = parent->findChildWithFocusIndex(newIndex, &maxIndex);
+    if (maxIndex == -1)
+      return m_focusedWindow; // no change
+    if (newFocusedCtrl) {
+      setFocusedWindow(newFocusedCtrl);
+      return newFocusedCtrl;
+    }
+    if (delta > 0)
+      newIndex = (newIndex >= maxIndex ? 0 : newIndex + delta);
+    else
+      newIndex = (newIndex <= 0 ? maxIndex : newIndex + delta);
+  } while (newIndex != startingIndex);
+  return m_focusedWindow; // no change
 }
 
 
@@ -1173,7 +1165,8 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_prev(nullptr),
     m_firstChild(nullptr),
     m_lastChild(nullptr),
-    m_styleClassID(styleClassID)
+    m_styleClassID(styleClassID),
+    m_parentProcessKbdEvents(false)
 {
   objectType().uiWindow = true;
 
@@ -1194,7 +1187,9 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
   if (visible && app())
     app()->showWindow(this, true);
 
-  m_focusIndex = prev() ? prev()->m_focusIndex + 1 : 0;
+  auto pframe = parentFrame();
+  m_focusIndex = pframe ? ((uiFrame*)pframe)->getNextFreeFocusIndex() : 0;
+
   if (app()) {
     uiEvent evt = uiEvent(this, UIEVT_CREATE);
     app()->postEvent(&evt);
@@ -1508,16 +1503,13 @@ void uiWindow::processEvent(uiEvent * event)
       break;
 
     case UIEVT_KEYDOWN:
-      // only non-focusable windows can make focusable its children
-      if (!m_windowProps.focusable) {
-        // move focused child
-        if (event->params.key.VK == VK_TAB) {
-          if (event->params.key.SHIFT)
-            app()->moveFocus(-1);
-          else
-            app()->moveFocus(1);
-        }
-      }
+      if (m_parentProcessKbdEvents)
+        m_parent->processEvent(event);
+      break;
+
+    case UIEVT_KEYUP:
+      if (m_parentProcessKbdEvents)
+        m_parent->processEvent(event);
       break;
 
     case UIEVT_PAINT:
@@ -1687,14 +1679,21 @@ bool uiWindow::isFocusable()
 }
 
 
-uiWindow * uiWindow::getChildWithFocusIndex(int focusIndex, int * maxIndex)
+// set maxIndex = -1 at first call
+uiWindow * uiWindow::findChildWithFocusIndex(int focusIndex, int * maxIndex)
 {
-  *maxIndex = -1;
   for (auto child = m_firstChild; child; child = child->m_next) {
     if (child->isFocusable()) {
       *maxIndex = imax(*maxIndex, child->m_focusIndex);
-      if (child->m_focusIndex == focusIndex)
+      if (child->m_focusIndex == focusIndex) {
         return child;
+      }
+    }
+    if (child->hasChildren()) {
+      auto r = child->findChildWithFocusIndex(focusIndex, maxIndex);
+      if (r) {
+        return r;
+      }
     }
   }
   return nullptr;
@@ -1725,7 +1724,8 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
     m_titleLength(0),
     m_mouseDownFrameItem(uiFrameItem::None),
     m_mouseMoveFrameItem(uiFrameItem::None),
-    m_lastReshapingBox(Rect(0, 0, 0, 0))
+    m_lastReshapingBox(Rect(0, 0, 0, 0)),
+    m_nextFreeFocusIndex(0)
 {
   objectType().uiFrame = true;
   if (app() && app()->style() && styleClassID)
@@ -1988,6 +1988,13 @@ void uiFrame::processEvent(uiEvent * event)
       break;
 
     case UIEVT_KEYDOWN:
+      // move focused child
+      if (event->params.key.VK == VK_TAB) {
+        if (event->params.key.SHIFT)
+          app()->moveFocus(-1);
+        else
+          app()->moveFocus(1);
+      }
       onKeyDown(event->params.key);
       break;
 

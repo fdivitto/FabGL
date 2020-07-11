@@ -656,7 +656,8 @@ protected:
 private:
 
   void paintWindow();
-  uiWindow * getChildWithFocusIndex(int focusIndex, int * maxIndex);
+
+  uiWindow * findChildWithFocusIndex(int focusIndex, int * maxIndex);
 
 
   uiWindow *    m_parent;
@@ -762,6 +763,8 @@ enum class uiFrameItem : uint8_t {
 
 /**
  * @brief A frame is a window with a title bar, maximize/minimize/close buttons and that is resizeable or moveable
+ *
+ * A frame is the unique container that can handle focus travel (TAB and SHIFT-TAB) among child controls.
  */
 class uiFrame : public uiWindow {
 
@@ -823,6 +826,8 @@ public:
   uiFrameProps & frameProps() { return m_frameProps; }
 
   Rect clientRect(uiOrigin origin);
+
+  int getNextFreeFocusIndex() { return m_nextFreeFocusIndex++; }
 
 
   // Delegates
@@ -905,6 +910,8 @@ private:
   uiFrameItem m_mouseMoveFrameItem;  // frame item on mouse move
 
   Rect        m_lastReshapingBox;    // last reshaping box painted by drawReshapingBox(), (0,0,0,0) if there isn't any
+
+  int                m_nextFreeFocusIndex;
 
 };
 
