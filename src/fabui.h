@@ -121,6 +121,9 @@ enum uiEventID {
   UIEVT_DESTROY,
   UIEVT_CLOSE,      // Request to close (frame Close button)
   UIEVT_QUIT,       // Quit the application
+  UIEVT_CREATE,
+  UIEVT_CHILDSETFOCUS,  // a UIEVT_SETFOCUS has been sent to a child
+  UIEVT_CHILDKILLFOCUS, // a UIEVT_KILLFOCUS has been sent to a child
 };
 
 
@@ -150,6 +153,12 @@ struct uiMouseEventInfo {
 };
 
 
+struct uiFocusInfo {
+  uiWindow * oldFocused;
+  uiWindow * newFocused;
+};
+
+
 struct uiEvent {
   uiEvtHandler * dest;
   uiEventID      id;
@@ -171,12 +180,10 @@ struct uiEvent {
     uiTimerHandle timerHandle;
     // event: UIEVT_EXITMODAL
     int modalResult;
-    // event: UIEVT_SETFOCUS
-    uiWindow * oldFocused;
-    // event: UIEVT_KILLFOCUS
-    uiWindow * newFocused;
     // event: UIEVT_QUIT
     int exitCode;
+    // event: UIEVT_SETFOCUS, UIEVT_KILLFOCUS, UIEVT_CHILDKILLFOCUS, UIEVT_CHILDSETFOCUS
+    uiFocusInfo focusInfo;
 
     uiEventParams() { }
   } params;
