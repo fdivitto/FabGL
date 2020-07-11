@@ -1697,6 +1697,15 @@ uiWindow * uiWindow::getChildWithFocusIndex(int focusIndex, int * maxIndex)
 }
 
 
+uiWindow * uiWindow::parentFrame()
+{
+  uiWindow * ret = m_parent;
+  while (ret && ret->objectType().uiFrame == 0)
+    ret = ret->parent();
+  return ret;
+}
+
+
 // uiWindow
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

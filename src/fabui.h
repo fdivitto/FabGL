@@ -509,6 +509,13 @@ public:
   uiWindow * parent() { return m_parent; }
 
   /**
+   * @brief Determines the parent frame
+   *
+   * @return Parent frame
+   */
+  uiWindow * parentFrame();
+
+  /**
    * @brief Determines mouse position when left button was down
    *
    * @return Mouse position
