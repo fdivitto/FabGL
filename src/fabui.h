@@ -67,7 +67,8 @@
                 *uiFileBrowser
             uiMemoEdit
           *uiCheckBox
-          *uiComboBox
+          *uiCustomComboBox
+            *uiComboBox
           uiMenu
           uiGauge
           *uiSlider
@@ -230,10 +231,11 @@ struct uiObjectType {
   uint32_t uiCheckBox          : 1;
   uint32_t uiSlider            : 1;
   uint32_t uiColorListBox      : 1;
+  uint32_t uiCustomComboBox    : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
                    uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
-                   uiCheckBox(0), uiSlider(0), uiColorListBox(0)
+                   uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0)
     { }
 };
 
@@ -1957,12 +1959,12 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// uiComboBox
+// uiCustomComboBox
 
 
 /** @brief Contains the listbox style */
 struct uiComboBoxStyle {
-  RGB888 buttonBackgroundColor = RGB888(64, 64, 64);  /**< Background color of open/close button */
+  RGB888 buttonBackgroundColor = RGB888(64, 64, 64);     /**< Background color of open/close button */
   RGB888 buttonColor           = RGB888(128, 128, 128);  /**< Foreground color of open/close button */
 };
 
@@ -1978,8 +1980,8 @@ struct uiComboBoxProps {
 };
 
 
-/** @brief This is a combination of a listbox and a single-line editable textbox */
-class uiComboBox : public uiTextEdit
+/** @brief This is a combination of a listbox and another component, base of all combobox components */
+class uiCustomComboBox : public uiControl
 {
 
 public:
@@ -1994,20 +1996,11 @@ public:
    * @param visible If true the combobox is immediately visible
    * @param styleClassID Optional style class identifier
    */
-  uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true, uint32_t styleClassID = 0);
+  uiCustomComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID);
 
-  ~uiComboBox();
+  ~uiCustomComboBox();
 
   virtual void processEvent(uiEvent * event);
-
-  /**
-   * @brief A list of strings representing items of the combobox
-   *
-   * Repainting is required when the string list changes.
-   *
-   * @return L-value representing combobox items
-   */
-  StringList & items() { return m_listBox->items(); }
 
   /**
    * @brief Sets or gets combobox style
@@ -2021,7 +2014,7 @@ public:
    *
    * @return L-value representing listbox style
    */
-  uiListBoxStyle & listBoxStyle() { return m_listBox->listBoxStyle(); }
+  uiListBoxStyle & listBoxStyle() { return listbox()->listBoxStyle(); }
 
   /**
    * @brief Sets or gets combobox properties
@@ -2035,7 +2028,7 @@ public:
    *
    * @return Index of the selected item or -1 if no item is selected
    */
-  int selectedItem() { return m_listBox->firstSelectedItem(); }
+  int selectedItem() { return listbox()->firstSelectedItem(); }
 
   /**
    * @brief Selects an item
@@ -2057,25 +2050,103 @@ public:
 
 protected:
 
-  virtual Rect getEditRect();
+  virtual uiCustomListBox * listbox() = 0;
+  virtual uiControl * editcontrol()   = 0;
+  virtual void updateEditControl()    = 0;
 
+  Size getEditControlSize();
 
 private:
 
   void paintComboBox();
   Rect getButtonRect();
-  int buttonWidth();
   void openListBox();
   void closeListBox();
   void switchListBox();
-  void updateTextEdit();
+  int buttonWidth();
 
 
-  uiListBox *     m_listBox;
-  int             m_listHeight;
-  uiComboBoxStyle m_comboBoxStyle;
-  uiComboBoxProps m_comboBoxProps;
+  int               m_listHeight;
+  uiComboBoxStyle   m_comboBoxStyle;
+  uiComboBoxProps   m_comboBoxProps;
+};
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiComboBox
+
+
+/** @brief This is a combination of a listbox and a single-line editable textbox */
+class uiComboBox : public uiCustomComboBox
+{
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A combobox must always have a parent window
+   * @param pos Top-left coordinates of the combobox relative to the parent
+   * @param size The combobox size
+   * @param listHeight Height in pixels of the open listbox
+   * @param visible If true the combobox is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true, uint32_t styleClassID = 0);
+
+  ~uiComboBox();
+
+  /**
+   * @brief A list of strings representing items of the combobox
+   *
+   * Repainting is required when the string list changes.
+   *
+   * @return L-value representing combobox items
+   */
+  StringList & items() { return m_listBox->items(); }
+
+  /**
+   * @brief Sets or gets text edit style
+   *
+   * @return L-value representing text edit style (colors, font, etc...)
+   */
+  uiTextEditStyle & textEditStyle() { return m_textEdit->textEditStyle(); }
+
+  /**
+   * @brief Sets or gets text edit properties
+   *
+   * @return L-value representing some text edit properties
+   */
+  uiTextEditProps & textEditProps() { return m_textEdit->textEditProps(); }
+
+  /**
+   * @brief Replaces current text
+   *
+   * Text edit needs to be repainted in order to display changed text.
+   *
+   * @param value Text to set
+   */
+  void setText(char const * value) { m_textEdit->setText(value); }
+
+  /**
+   * @brief Gets current content of the text edit
+   *
+   * @return Text edit content
+   */
+  char const * text() { return m_textEdit->text(); }
+
+
+protected:
+
+  uiCustomListBox * listbox()  { return m_listBox; }
+  uiControl * editcontrol()    { return m_textEdit; }
+  void updateEditControl();
+
+private:
+  uiTextEdit * m_textEdit;
+  uiListBox *  m_listBox;
 
 };
 

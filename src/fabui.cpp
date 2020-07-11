@@ -3946,74 +3946,67 @@ void uiFileBrowser::processEvent(uiEvent * event)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// uiComboBox
+// uiCustomComboBox
 
 
-uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
-  : uiTextEdit(parent, "", pos, size, visible, 0),
-    m_listBox(new uiListBox(parent, Point(0, 0), Size(0, 0), false, 0)),
+uiCustomComboBox::uiCustomComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
     m_listHeight(listHeight)
 {
-  objectType().uiComboBox = true;
+  objectType().uiCustomComboBox = true;
 
-  textEditProps().hasCaret  = false;
-  textEditProps().allowEdit = false;
+  windowProps().focusable = true;
 
-  m_listBox->onKillFocus = [&]() {
-    closeListBox();
-  };
-
-  m_listBox->onChange = [&]() {
-    updateTextEdit();
-    onChange();
-  };
-
-  m_listBox->onKeyUp = [&](uiKeyEventInfo key) {
-    if (key.VK == VK_RETURN) {
-      closeListBox();
-      app()->setFocusedWindow(this);
-    }
-  };
+  windowStyle().borderSize = 0;
 
   if (app()->style() && styleClassID)
     app()->style()->setStyle(this, styleClassID);
 }
 
 
-uiComboBox::~uiComboBox()
+uiCustomComboBox::~uiCustomComboBox()
 {
 }
 
 
 // index = -1 -> deselect all
-void uiComboBox::selectItem(int index)
+void uiCustomComboBox::selectItem(int index)
 {
   if (index < 0)
-    m_listBox->deselectAll();
+    listbox()->deselectAll();
   else
-    m_listBox->selectItem(index);
-  updateTextEdit();
+    listbox()->selectItem(index);
+  updateEditControl();
 }
 
 
-// refresh text edit with the selected listbox item
-void uiComboBox::updateTextEdit()
+void uiCustomComboBox::processEvent(uiEvent * event)
 {
-  int idx = selectedItem();
-  setText(idx > -1 ? items().get(idx) : "");
-  repaint();
-}
-
-
-void uiComboBox::processEvent(uiEvent * event)
-{
-  uiTextEdit::processEvent(event);
+  uiControl::processEvent(event);
 
   switch (event->id) {
 
+    case UIEVT_CREATE:
+      listbox()->onKillFocus = [&]() {
+        closeListBox();
+      };
+      listbox()->onChange = [&]() {
+        updateEditControl();
+        onChange();
+      };
+      listbox()->onKeyUp = [&](uiKeyEventInfo key) {
+        if (key.VK == VK_RETURN) {
+          closeListBox();
+          app()->setFocusedWindow(this);
+        }
+      };
+      editcontrol()->setParentProcessKbdEvents(true); // we want keyboard events also here
+      break;
+
     case UIEVT_PAINT:
-      beginPaint(event, uiTextEdit::clientRect(uiOrigin::Window));
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintComboBox();
       break;
 
@@ -4022,24 +4015,40 @@ void uiComboBox::processEvent(uiEvent * event)
         switchListBox();
       break;
 
-    case UIEVT_SETFOCUS:
-      if (m_comboBoxProps.openOnFocus && event->params.oldFocused != m_listBox)
+    case UIEVT_CHILDSETFOCUS:
+      if (m_comboBoxProps.openOnFocus && event->params.focusInfo.newFocused == editcontrol()
+                                      && event->params.focusInfo.oldFocused != listbox()
+                                      && event->params.focusInfo.oldFocused != this) {
         openListBox();
+      }
+      break;
+
+    case UIEVT_SETFOCUS:
+      if (event->params.focusInfo.oldFocused != listbox() && event->params.focusInfo.oldFocused != editcontrol()) {
+        if (m_comboBoxProps.openOnFocus) {
+          openListBox();
+        } else {
+          app()->setFocusedWindow(editcontrol());
+        }
+      } else if (event->params.focusInfo.oldFocused == listbox()) {
+        app()->setFocusedWindow(editcontrol());
+      }
       break;
 
     case UIEVT_KILLFOCUS:
-      if (event->params.newFocused != m_listBox)
+      if (event->params.focusInfo.newFocused != listbox()) {
         closeListBox();
+      }
       break;
 
     case UIEVT_KEYDOWN:
-      m_listBox->processEvent(event);
+      listbox()->processEvent(event);
       break;
 
     case UIEVT_KEYUP:
       // ALT-DOWN or ALT-UP or ENTER opens listbox
       if (((event->params.key.RALT || event->params.key.LALT) && (event->params.key.VK == VK_DOWN || event->params.key.VK == VK_UP)) || (event->params.key.VK == VK_RETURN))
-        openListBox();
+        switchListBox();
       break;
 
     default:
@@ -4048,56 +4057,58 @@ void uiComboBox::processEvent(uiEvent * event)
 }
 
 
-void uiComboBox::openListBox()
+void uiCustomComboBox::openListBox()
 {
   Rect r = rect(uiOrigin::Parent);
   r.Y1 = r.Y2 + 1;
   r.Y2 = r.Y1 + m_listHeight;
-  m_listBox->bringOnTop();
-  app()->reshapeWindow(m_listBox, r);
-  app()->showWindow(m_listBox, true);
-  app()->setFocusedWindow(m_listBox);
+  listbox()->bringOnTop();
+  app()->reshapeWindow(listbox(), r);
+  app()->showWindow(listbox(), true);
+  app()->setFocusedWindow(listbox());
 }
 
 
-void uiComboBox::closeListBox()
+void uiCustomComboBox::closeListBox()
 {
-  app()->showWindow(m_listBox, false);
+  app()->showWindow(listbox(), false);
 }
 
 
-void uiComboBox::switchListBox()
+void uiCustomComboBox::switchListBox()
 {
-  if (m_listBox->state().visible)
+  if (listbox()->state().visible) {
     closeListBox();
-  else
+    app()->setFocusedWindow(editcontrol());
+  } else {
     openListBox();
+  }
 }
 
 
-int uiComboBox::buttonWidth()
+Size uiCustomComboBox::getEditControlSize()
 {
-  return size().height / 2;
+  Rect clientArea = uiControl::clientRect(uiOrigin::Window);
+  return Size(clientArea.width() - buttonWidth(), clientArea.height());
 }
 
 
-Rect uiComboBox::getEditRect()
+int uiCustomComboBox::buttonWidth()
 {
-  Rect r = uiTextEdit::getEditRect();
-  r.X2 -= buttonWidth();
-  return r;
+  Rect clientArea = uiControl::clientRect(uiOrigin::Window);
+  return clientArea.height() / 2;
 }
 
 
-Rect uiComboBox::getButtonRect()
+Rect uiCustomComboBox::getButtonRect()
 {
-  Rect btnRect = uiTextEdit::getEditRect();
+  Rect btnRect = uiControl::clientRect(uiOrigin::Window);
   btnRect.X1 = btnRect.X2 - buttonWidth() + 1;
   return btnRect;
 }
 
 
-void uiComboBox::paintComboBox()
+void uiCustomComboBox::paintComboBox()
 {
   Rect btnRect = getButtonRect();
 
@@ -4115,6 +4126,44 @@ void uiComboBox::paintComboBox()
   canvas()->drawLine(arrowRect.X1 + hWidth, arrowRect.Y1, arrowRect.X2, arrowRect.Y1 + hHeight - vDist);
   canvas()->drawLine(arrowRect.X1, arrowRect.Y1 + hHeight + vDist, arrowRect.X1 + hWidth, arrowRect.Y2);
   canvas()->drawLine(arrowRect.X1 + hWidth, arrowRect.Y2, arrowRect.X2, arrowRect.Y1 + hHeight + vDist);
+}
+
+
+// uiCustomComboBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiComboBox
+
+
+uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
+  : uiCustomComboBox(parent, pos, size, listHeight, visible, 0),
+    m_textEdit(nullptr),
+    m_listBox(nullptr)
+{
+  objectType().uiComboBox = true;
+
+  m_textEdit = new uiTextEdit(this, "", Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), true, 0);
+  m_textEdit->textEditProps().hasCaret  = false;
+  m_textEdit->textEditProps().allowEdit = false;
+
+  m_listBox = new uiListBox(parent, Point(0, 0), Size(0, 0), false, 0);
+}
+
+
+uiComboBox::~uiComboBox()
+{
+}
+
+
+// refresh text edit with the selected listbox item
+void uiComboBox::updateEditControl()
+{
+  int idx = selectedItem();
+  m_textEdit->setText(idx > -1 ? items().get(idx) : "");
+  m_textEdit->repaint();
 }
 
 
