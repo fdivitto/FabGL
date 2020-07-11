@@ -1195,6 +1195,10 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     app()->showWindow(this, true);
 
   m_focusIndex = prev() ? prev()->m_focusIndex + 1 : 0;
+  if (app()) {
+    uiEvent evt = uiEvent(this, UIEVT_CREATE);
+    app()->postEvent(&evt);
+  }
 }
 
 
