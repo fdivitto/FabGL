@@ -69,10 +69,12 @@
           *uiCheckBox
           *uiCustomComboBox
             *uiComboBox
+            *uiColorComboBox
           uiMenu
           uiGauge
           *uiSlider
           uiSpinButton
+          *uiColorBox
 
 */
 
@@ -232,10 +234,12 @@ struct uiObjectType {
   uint32_t uiSlider            : 1;
   uint32_t uiColorListBox      : 1;
   uint32_t uiCustomComboBox    : 1;
+  uint32_t uiColorBox          : 1;
+  uint32_t uiColorComboBox     : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
                    uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
-                   uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0)
+                   uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0), uiColorBox(0), uiColorComboBox(0)
     { }
 };
 
@@ -1664,6 +1668,53 @@ private:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorBox
+
+/** @brief A color box is a control that shows a single color */
+class uiColorBox : public uiControl {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A panel must always have a parent window
+   * @param pos Top-left coordinates of the panel relative to the parent
+   * @param size The panel size
+   * @param visible If true the panel is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiColorBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
+
+  virtual ~uiColorBox();
+
+  virtual void processEvent(uiEvent * event);
+
+  /**
+   * @brief Gets current colorbox color
+   *
+   * @return Current color
+   */
+  Color color() { return m_color; }
+
+  /**
+   * @brief Sets current colorbox color
+   *
+   * @param value Color to set
+   */
+  void setColor(Color value);
+
+private:
+
+  void paintColorBox();
+
+
+  Color m_color;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiCustomListBox
 
 
@@ -2147,6 +2198,59 @@ protected:
 private:
   uiTextEdit * m_textEdit;
   uiListBox *  m_listBox;
+
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorComboBox
+
+
+/** @brief This is a combination of a color listbox and a colorbox */
+class uiColorComboBox : public uiCustomComboBox
+{
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A combobox must always have a parent window
+   * @param pos Top-left coordinates of the combobox relative to the parent
+   * @param size The combobox size
+   * @param listHeight Height in pixels of the open listbox
+   * @param visible If true the combobox is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiColorComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible = true, uint32_t styleClassID = 0);
+
+  ~uiColorComboBox();
+
+  /**
+   * @brief Sets current selected color
+   *
+   * @param value Color to set
+   */
+  void selectColor(Color value) { selectItem((int)value); }
+
+  /**
+   * @brief Determines current selected color
+   *
+   * @return Currently selected color
+   */
+  Color selectedColor()         { return (Color) selectedItem(); }
+
+
+protected:
+
+  uiCustomListBox * listbox()  { return m_colorListBox; }
+  uiControl * editcontrol()    { return m_colorBox; }
+  void updateEditControl();
+
+private:
+  uiColorBox *     m_colorBox;
+  uiColorListBox * m_colorListBox;
 
 };
 

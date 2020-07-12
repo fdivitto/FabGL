@@ -3170,6 +3170,68 @@ void uiPaintBox::processEvent(uiEvent * event)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorBox
+
+
+uiColorBox::uiColorBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0),
+    m_color(Color::BrightWhite)
+{
+  objectType().uiColorBox = true;
+
+  windowProps().focusable = true;
+  windowStyle().borderSize = 1;
+  windowStyle().borderColor = RGB888(64, 64, 64);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+}
+
+
+uiColorBox::~uiColorBox()
+{
+}
+
+
+void uiColorBox::setColor(Color value)
+{
+  m_color = value;
+  repaint();
+}
+
+
+void uiColorBox::paintColorBox()
+{
+  Rect bkgRect = uiControl::clientRect(uiOrigin::Window);
+  // main color
+  canvas()->setBrushColor(m_color);
+  canvas()->fillRectangle(bkgRect);
+}
+
+
+void uiColorBox::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
+      paintColorBox();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+// uiPanel
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiScrollableControl
 
 
@@ -3780,6 +3842,7 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiListBox
 
@@ -3806,6 +3869,7 @@ void uiListBox::items_draw(int index, const Rect & itemRect)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiColorListBox
 
@@ -3815,6 +3879,8 @@ uiColorListBox::uiColorListBox(uiWindow * parent, const Point & pos, const Size 
     m_selectedColor((Color)0)
 {
   objectType().uiColorListBox = true;
+
+  listBoxStyle().itemHeight = 10;
 
   if (app()->style() && styleClassID)
     app()->style()->setStyle(this, styleClassID);
@@ -3831,6 +3897,7 @@ void uiColorListBox::items_draw(int index, const Rect & itemRect)
 
 // uiColorListBox
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4150,6 +4217,9 @@ uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, 
   m_textEdit->textEditProps().allowEdit = false;
 
   m_listBox = new uiListBox(parent, Point(0, 0), Size(0, 0), false, 0);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
 }
 
 
@@ -4170,6 +4240,41 @@ void uiComboBox::updateEditControl()
 // uiComboBox
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiColorComboBox
+
+
+uiColorComboBox::uiColorComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
+  : uiCustomComboBox(parent, pos, size, listHeight, visible, 0),
+    m_colorBox(nullptr),
+    m_colorListBox(nullptr)
+{
+  objectType().uiColorComboBox = true;
+
+  m_colorBox     = new uiColorBox(this, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), true, 0);
+  m_colorListBox = new uiColorListBox(parent, Point(0, 0), Size(0, 0), false, 0);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+}
+
+
+uiColorComboBox::~uiColorComboBox()
+{
+}
+
+
+// refresh text edit with the selected listbox item
+void uiColorComboBox::updateEditControl()
+{
+  m_colorBox->setColor( (Color) selectedItem() );
+}
+
+
+// uiComboBox
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

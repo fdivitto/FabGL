@@ -338,6 +338,8 @@ using fabgl::uiComboBoxStyle;
 using fabgl::uiCheckBoxStyle;
 using fabgl::uiSliderStyle;
 using fabgl::uiColorListBox;
+using fabgl::uiColorBox;
+using fabgl::uiColorComboBox;
 using fabgl::SoundGenerator;
 using fabgl::uiMessageBoxResult;
 using fabgl::SineWaveformGenerator;
