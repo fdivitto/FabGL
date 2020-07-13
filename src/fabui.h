@@ -616,6 +616,13 @@ public:
    */
   uint32_t styleClassID()                { return m_styleClassID; }
 
+  /**
+   * @brief Enables a child window to send keyboard events to its parent
+   *
+   * Events aren't posted, but processed instantly.
+   *
+   * @param value When true parent processes keyboard events
+   */
   void setParentProcessKbdEvents(bool value) { m_parentProcessKbdEvents = value; }
 
 
@@ -718,12 +725,12 @@ struct uiFrameStyle {
   RGB888              backgroundColor                = RGB888(255, 255, 255);  /**< Frame background color */
   RGB888              titleBackgroundColor           = RGB888(128, 128, 128);  /**< Title background color */
   RGB888              activeTitleBackgroundColor     = RGB888(128, 128, 255);  /**< Title background color when active */
-  RGB888              titleColor                     = RGB888(0, 0, 0);  /**< Title color */
-  RGB888              activeTitleColor               = RGB888(0, 0, 0);  /**< Title color when active */
-  FontInfo const *    titleFont                      = &FONT_std_12;  /**< Title font */
-  RGB888              buttonColor                    = RGB888(64, 64, 64);  /**< Color used to draw Close, Maximize and Minimize buttons */
-  RGB888              activeButtonColor              = RGB888(0, 0, 0);  /**< Color used to draw Close, Maximize and Minimize buttons */
-  RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);  /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
+  RGB888              titleColor                     = RGB888(0, 0, 0);        /**< Title color */
+  RGB888              activeTitleColor               = RGB888(0, 0, 0);        /**< Title color when active */
+  FontInfo const *    titleFont                      = &FONT_std_12;           /**< Title font */
+  RGB888              buttonColor                    = RGB888(64, 64, 64);     /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB888              activeButtonColor              = RGB888(0, 0, 0);        /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);      /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
   RGB888              mouseOverButtonColor           = RGB888(255, 255, 255);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
 };
 
@@ -912,10 +919,10 @@ private:
   char *             m_title;
   int                m_titleLength;
 
-  uiFrameItem m_mouseDownFrameItem;  // frame item on mouse down
-  uiFrameItem m_mouseMoveFrameItem;  // frame item on mouse move
+  uiFrameItem        m_mouseDownFrameItem;  // frame item on mouse down
+  uiFrameItem        m_mouseMoveFrameItem;  // frame item on mouse move
 
-  Rect        m_lastReshapingBox;    // last reshaping box painted by drawReshapingBox(), (0,0,0,0) if there isn't any
+  Rect               m_lastReshapingBox;    // last reshaping box painted by drawReshapingBox(), (0,0,0,0) if there isn't any
 
   int                m_nextFreeFocusIndex;
 
@@ -958,10 +965,10 @@ public:
 
 /** @brief Contains the scrollable control style */
 struct uiScrollableControlStyle {
-  RGB888  scrollBarBackgroundColor          = RGB888(64, 64, 64);  /**< Background color of the scrollbar */
+  RGB888  scrollBarBackgroundColor          = RGB888(64, 64, 64);     /**< Background color of the scrollbar */
   RGB888  scrollBarForegroundColor          = RGB888(128, 128, 128);  /**< Foreground color of the scrollbar */
   RGB888  mouseOverScrollBarForegroundColor = RGB888(255, 255, 255);  /**< Foreground color of the scrollbar when mouse is over it */
-  uint8_t scrollBarSize                     = 11;            /**< Width of vertical scrollbar, height of vertical scroll bar */
+  uint8_t scrollBarSize                     = 11;                     /**< Width of vertical scrollbar, height of vertical scroll bar */
 };
 
 
@@ -1019,7 +1026,7 @@ public:
    *
    * @return Scrollbar position in scroll units
    */
-  int HScrollBarPos() { return m_HScrollBarPosition; }
+  int HScrollBarPos()     { return m_HScrollBarPosition; }
 
   /**
    * @brief Determines horizontal scrollbar visible portion (aka thumb size) of the scrollable content
@@ -1038,7 +1045,7 @@ public:
    *
    * @return Scrollbar range in scroll units.
    */
-  int HScrollBarRange() { return m_HScrollBarRange; }
+  int HScrollBarRange()   { return m_HScrollBarRange; }
 
   /**
    * @brief Determines position of the vertical scrollbar thumb
@@ -1048,7 +1055,7 @@ public:
    *
    * @return Scrollbar position in scroll units
    */
-  int VScrollBarPos() { return m_VScrollBarPosition; }
+  int VScrollBarPos()     { return m_VScrollBarPosition; }
 
   /**
    * @brief Determines vertical scrollbar visible portion (aka thumb size) of the scrollable content
@@ -1067,7 +1074,7 @@ public:
    *
    * @return Scrollbar range in scroll units.
    */
-  int VScrollBarRange() { return m_VScrollBarRange; }
+  int VScrollBarRange()  { return m_VScrollBarRange; }
 
 
   // Delegates
@@ -2265,7 +2272,7 @@ struct uiCheckBoxStyle {
   RGB888              backgroundColor          = RGB888(128, 128, 128);  /**< Background color */
   RGB888              checkedBackgroundColor   = RGB888(128, 128, 255);  /**< Background color when checked */
   RGB888              mouseOverBackgroundColor = RGB888(128, 128, 255);  /**< Background color when mouse is over */
-  RGB888              foregroundColor          = RGB888(0, 0, 0);  /**< Foreground color */
+  RGB888              foregroundColor          = RGB888(0, 0, 0);        /**< Foreground color */
 };
 
 
@@ -2375,9 +2382,9 @@ private:
 /** @brief Contains the slider style */
 struct uiSliderStyle {
   RGB888 backgroundColor = RGB888(255, 255, 255);    /**< Slider background color */
-  RGB888 slideColor      = RGB888(0, 128, 128);    /**< Color of internal slide */
-  RGB888 rangeColor      = RGB888(0, 128, 255);    /**< Color of slide before the grip */
-  RGB888 gripColor       = RGB888(0, 0, 255);    /**< Color of slider grip */
+  RGB888 slideColor      = RGB888(0, 128, 128);      /**< Color of internal slide */
+  RGB888 rangeColor      = RGB888(0, 128, 255);      /**< Color of slide before the grip */
+  RGB888 gripColor       = RGB888(0, 0, 255);        /**< Color of slider grip */
   RGB888 ticksColor      = RGB888(255, 255, 255);    /**> Ticks color */
 };
 
