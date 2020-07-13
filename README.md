@@ -39,6 +39,10 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/LL8J7tjxeXA/hqdefault.jpg)](https://www.youtube.com/watch?v=LL8J7tjxeXA "")
 
+### Serial Terminal for MBC2 Z80 Board (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/Ww_pH_ZOLqU/hqdefault.jpg)](https://www.youtube.com/watch?v=Ww_pH_ZOLqU "")
+
 ### Graphical User Interface - GUI (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/84ytGdiOih0/hqdefault.jpg)](https://www.youtube.com/watch?v=84ytGdiOih0 "")
