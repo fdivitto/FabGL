@@ -28,6 +28,7 @@ fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
 
+
 // notes about GPIO 2 and 12
 //    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
 //              In normal boot mode (GPIO0 high), GPIO2 is ignored.
@@ -39,50 +40,60 @@ fabgl::Terminal      Terminal;
 #define UART_RX 34
 #define UART_TX 2
 
-#define UART_BAUD     115200
-#define UART_CONF     SERIAL_8N1
-#define UART_FLOWCTRL FlowControl::Software
 
+#include "confdialog.h"
 
 
 void setup()
 {
   //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
 
+  preferences.begin("AnsiTerminal", false);
+  //preferences.clear();
+
   // only keyboard configured on port 0
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x350_70HzAlt1, 640, 350);
+  //DisplayController.setResolution(VGA_640x350_70HzAlt1);
+  DisplayController.setResolution(VGA_640x480_60Hz, 640, 350);
 
   Terminal.begin(&DisplayController);
-  Terminal.connectSerialPort(UART_BAUD, UART_CONF, UART_RX, UART_TX, UART_FLOWCTRL);
   //Terminal.setLogStream(Serial);  // debug only
 
-  Terminal.setBackgroundColor(Color::Black);
-  Terminal.setForegroundColor(Color::Green);
+  ConfDialogApp::loadConfiguration();
+
   Terminal.clear();
   Terminal.enableCursor(true);
 
-  Terminal.write("* * FabGL - Serial VT/ANSI Terminal\r\n");
-  Terminal.write("* * 2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\r\n\n");
-  Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
-  Terminal.printf("Viewport Size      : %d x %d\r\n", DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
+  Terminal.write("* *  FabGL - Serial Terminal                            * *\r\n");
+  Terminal.write("* *  2019-2020 by Fabrizio Di Vittorio - www.fabgl.com  * *\r\n\n");
+  //Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
-  Terminal.printf("Keyboard           : %s\r\n\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
-  Terminal.printf("Free DMA Memory    : %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
-  Terminal.printf("Free 32 bit Memory : %d\r\n\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
-  Terminal.write("Connect server to UART2 - 8N1 - 115200 baud\r\n\n");
+  Terminal.printf("Keyboard           : %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
+  Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
+  //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+  Terminal.write("\r\nPress F12 to change terminal configuration\r\n\n");
 
-  Terminal.setForegroundColor(Color::BrightGreen);
-
-  // uncomment to specify terminal emulation
-  //Terminal.setTerminalType(TermType::ANSILegacy);
+  // look for F12 key to open configuration dialog
+  Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
+    if (*vk == VirtualKey::VK_F12) {
+      if (!keyDown) {
+        Terminal.deactivate();
+        auto dlgApp = new ConfDialogApp;
+        dlgApp->run(&DisplayController);
+        delete dlgApp;
+        Terminal.keyboard()->emptyVirtualKeyQueue();
+        Terminal.activate();
+      }
+      *vk = VirtualKey::VK_NONE;
+    }
+  };
 }
 
 
 void loop()
 {
   // the job is done using UART interrupts
-  vTaskSuspend(nullptr);
+  vTaskDelete(NULL);
 }
