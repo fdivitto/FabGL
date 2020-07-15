@@ -34,6 +34,8 @@
 
 #include "freertos/FreeRTOS.h"
 
+#include <driver/adc.h>
+
 
 namespace fabgl {
 
@@ -843,6 +845,8 @@ inline uint32_t UARTConf(int parity, int dataLength, int stopBits)
   return w;
 }
 
+
+adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio);
 
 
 ///////////////////////////////////////////////////////////////////////////////////

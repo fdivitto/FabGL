@@ -174,6 +174,31 @@ ChipPackage getChipPackage()
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////////
+adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio)
+{
+  switch (gpio) {
+    case ADC1_CHANNEL_0_GPIO_NUM:
+      return ADC1_CHANNEL_0;
+    case ADC1_CHANNEL_1_GPIO_NUM:
+      return ADC1_CHANNEL_1;
+    case ADC1_CHANNEL_2_GPIO_NUM:
+      return ADC1_CHANNEL_2;
+    case ADC1_CHANNEL_3_GPIO_NUM:
+      return ADC1_CHANNEL_3;
+    case ADC1_CHANNEL_4_GPIO_NUM:
+      return ADC1_CHANNEL_4;
+    case ADC1_CHANNEL_5_GPIO_NUM:
+      return ADC1_CHANNEL_5;
+    case ADC1_CHANNEL_6_GPIO_NUM:
+      return ADC1_CHANNEL_6;
+    case ADC1_CHANNEL_7_GPIO_NUM:
+      return ADC1_CHANNEL_7;
+    default:
+      return ADC1_CHANNEL_0;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // converts '\' or '/' to newSep
