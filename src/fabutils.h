@@ -849,6 +849,9 @@ inline uint32_t UARTConf(int parity, int dataLength, int stopBits)
 adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio);
 
 
+void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, void * arg, intr_handle_t * ret_handle, int core);
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts
 

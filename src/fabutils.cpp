@@ -201,6 +201,35 @@ adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+// esp_intr_alloc_pinnedToCore
+
+struct esp_intr_alloc_args {
+  int             source;
+  int             flags;
+  intr_handler_t  handler;
+  void *          arg;
+  intr_handle_t * ret_handle;
+  TaskHandle_t    waitingTask;
+};
+
+void esp_intr_alloc_pinnedToCore_task(void * arg)
+{
+  auto args = (esp_intr_alloc_args*) arg;
+  esp_intr_alloc(args->source, args->flags, args->handler, args->arg, args->ret_handle);
+  xTaskNotifyGive(args->waitingTask);
+  vTaskDelete(NULL);
+}
+
+void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, void * arg, intr_handle_t * ret_handle, int core)
+{
+  esp_intr_alloc_args args = { source, flags, handler, arg, ret_handle, xTaskGetCurrentTaskHandle() };
+  xTaskCreatePinnedToCore(esp_intr_alloc_pinnedToCore_task, "" , 1024, &args, 3, NULL, core);
+  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
 // converts '\' or '/' to newSep
 
 void replacePathSep(char * path, char newSep)
