@@ -64,7 +64,7 @@ void VGATextController::init(gpio_num_t VSyncGPIO)
 
   // load font into RAM
   int charDataSize = 256 * FONT_8x14.height * (FONT_8x14.width + 7) / 8;
-  m_charData = (uint8_t*) malloc(charDataSize);
+  m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT);
   memcpy(m_charData, FONT_8x14.data, charDataSize);
 }
 
@@ -243,7 +243,7 @@ void VGATextController::setResolution(VGATimings const& timings)
         for (int bg = 0; bg < 16; ++bg) {
           uint8_t fg_pat = preparePixel(RGB222((Color)fg));
           uint8_t bg_pat = preparePixel(RGB222((Color)bg));
-          s_fgbgPattern[i | (fg << 4) | (bg << 8)] = (i & 0b1000 ? (fg_pat << 16) : (bg_pat << 16)) |
+          s_fgbgPattern[i | (bg << 4) | (fg << 8)] = (i & 0b1000 ? (fg_pat << 16) : (bg_pat << 16)) |
                                                      (i & 0b0100 ? (fg_pat << 24) : (bg_pat << 24)) |
                                                      (i & 0b0010 ? (fg_pat << 0) : (bg_pat << 0)) |
                                                      (i & 0b0001 ? (fg_pat << 8) : (bg_pat << 8));
@@ -381,17 +381,16 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 
           } else {
 
-            int fg = (int)glyphMapItem_getFGColor(mapItem);
-            int bg = (int)glyphMapItem_getBGColor(mapItem);
+            int fgbg = (mapItem >> 4) & 0b111111110000;
 
             // invert?
-            if (options.invert)
-              tswap(fg, bg);
+            if (options.invert) {
+              fgbg = ((fgbg >> 4) & 0b11110000) | ((fgbg << 4) & 0b111100000000);
+            }
 
             // cursor?
             if (cursorVisible && textRow == cursorRow && col == cursorCol) {
-              bg = cursorFG;
-              fg = cursorBG;
+              fgbg = (cursorFG << 4) | (cursorBG << 8);
             }
 
             // max char width is 8
@@ -407,8 +406,8 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
               charRowData = 0xFF;
             }
 
-            *dest++ = s_fgbgPattern[(charRowData >> 4)  | (fg << 4) | (bg << 8)];
-            *dest++ = s_fgbgPattern[(charRowData & 0xF) | (fg << 4) | (bg << 8)];
+            *dest++ = s_fgbgPattern[(charRowData >> 4)  | fgbg];
+            *dest++ = s_fgbgPattern[(charRowData & 0xF) | fgbg];
 
           }
 
