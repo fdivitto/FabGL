@@ -68,8 +68,7 @@ String driveB_path;
 
 void setup()
 {
-  Serial.begin(115200);
-  //delay(500); Serial.write("\r\nReset\r\n");
+  //Serial.begin(115200); delay(500); Serial.write("\r\nReset\r\n");
 
   disableCore0WDT();
   disableCore1WDT();
@@ -88,7 +87,7 @@ void setup()
 
   DisplayController.begin();
   DisplayController.setResolution(VGA_640x200_70Hz);
-  //DisplayController.setResolution(VGA_640x350_70HzAlt1);
+  //DisplayController.setResolution(VGA_640x480_60Hz, 640, 200);
 
   auto term = new fabgl::Terminal;
   term->begin(&DisplayController);

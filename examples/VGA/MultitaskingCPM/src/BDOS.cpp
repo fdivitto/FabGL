@@ -1922,6 +1922,7 @@ FILE * BDOS::openFile(uint16_t FCBaddr, bool create, bool tempext, int errFunc, 
 
   char filename[13];
   getFilenameFromFCB(FCBaddr, filename);
+  strToUpper(filename);
 
   if (tempext) {
     // replace extension with '$$$'
