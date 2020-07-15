@@ -58,7 +58,7 @@
 
 
 
-constexpr int COMMANDSCOUNT = 23;
+constexpr int COMMANDSCOUNT = 24;
 
 static const struct {
   char const * name;
@@ -86,6 +86,7 @@ static const struct {
   { "<WIFI    >", "Connect to WiFi network." },
   { "<PING    >", "Ping an host." },
   { "<TELNET  >", "Open a Telnet session to a host." },
+  { "<FORMAT  >", "Erase SPIFFS or SD Card and restore programs." },
 
   { "<F1...F12>", "Use function keys to create or switch sessions." },
 };
@@ -417,6 +418,8 @@ bool CCP::internalCommand(uint16_t cmdlineAddr, size_t cmdlen, uint16_t tailAddr
     return cmd_PING(tailAddr);
   } else if (iscmd("telnet", cmdlen, cmdlineAddr)) {
     return cmd_TELNET(tailAddr);
+  } else if (iscmd("format", cmdlen, cmdlineAddr)) {
+    return cmd_FORMAT(tailAddr);
   }
 
   return false;
@@ -1547,5 +1550,20 @@ bool CCP::cmd_TELNET(uint16_t paramsAddr)
 
   #endif
 
+}
 
+
+bool CCP::cmd_FORMAT(uint16_t paramsAddr)
+{
+  auto basePath = m_BDOS->createAbsolutePath(0);
+  auto driveType = FileBrowser::getDriveType(basePath);
+  free(basePath);
+  consoleOutFmt("WARNING: ALL DATA ON %s WILL BE LOST!\r\n", driveType == fabgl::DriveType::SPIFFS ? "SPIFFS" : "SD Card");
+  consoleOut("Proceed with Format (Y/N)? ");
+  int c = m_BDOS->BDOS_callConsoleIn();
+  if (c != 'y' && c != 'Y')
+    return true;
+  FileBrowser::format(driveType, 0);
+  ESP.restart();
+  return true;
 }

@@ -72,6 +72,7 @@ private:
   bool cmd_WIFI(uint16_t paramsAddr);
   bool cmd_PING(uint16_t paramsAddr);
   bool cmd_TELNET(uint16_t paramsAddr);
+  bool cmd_FORMAT(uint16_t paramsAddr);
 
   bool wifiErrorMsg();
 
