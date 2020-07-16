@@ -70,11 +70,6 @@ Terminal * Supervisor::createTerminal()
   Terminal * term = new Terminal;
   term->begin(m_displayController);
   term->connectLocally();      // to use Terminal.read(), available(), etc..
-  term->setTerminalType(TermType::ANSILegacy);
-  term->setBackgroundColor(Color::Black);
-  term->setForegroundColor(Color::BrightGreen);
-  term->clear();
-  term->enableCursor(true);
   return term;
 }
 
@@ -147,6 +142,14 @@ void Supervisor::sessionThread(void * arg)
 
   AbortReason abortReason = AbortReason::NoAbort;
 
+  auto term = session->terminal;
+
+  term->setTerminalType(TermType::ANSILegacy);
+  term->setBackgroundColor(Color::Black);
+  term->setForegroundColor(Color::BrightGreen);
+  term->clear();
+  term->enableCursor(true);
+
   while (true) {
 
     if (HAL::systemFree() < SESSION_MIN_MEM) {
@@ -158,7 +161,7 @@ void Supervisor::sessionThread(void * arg)
 
     session->hal = &hal;
 
-    hal.setTerminal(session->terminal);
+    hal.setTerminal(term);
 
     instance()->onNewSession(&hal);
 
@@ -181,26 +184,26 @@ void Supervisor::sessionThread(void * arg)
       // should never reach this!
       break;
     case AbortReason::OutOfMemory:
-      session->terminal->write("\r\n\nOut of memory, session aborted.\r\n");
+      term->write("\r\n\nOut of memory, session aborted.\r\n");
       break;
     case AbortReason::GeneralFailure:
-      session->terminal->write("\r\n\nGeneral failure, session aborted.\r\n");
+      term->write("\r\n\nGeneral failure, session aborted.\r\n");
       break;
     case AbortReason::AuxTerm:
-      session->terminal->write("\r\n\nOpening UART terminal...\r\n");
-      session->terminal->disconnectLocally();
-      session->terminal->connectSerialPort(UART_BAUD, UART_CONF, UART_RX, UART_TX, UART_FLOWCTRL);
+      term->write("\r\n\nOpening UART terminal...\r\n");
+      term->disconnectLocally();
+      term->connectSerialPort(UART_BAUD, UART_CONF, UART_RX, UART_TX, UART_FLOWCTRL);
       vTaskDelete(NULL);
       break;
     case AbortReason::SessionClosed:
-      session->terminal->write("\r\n\nSession closed.");
+      term->write("\r\n\nSession closed.");
       break;
   }
 
-  session->terminal->flush();
+  term->flush();
 
-  session->terminal->end();
-  delete session->terminal;
+  term->end();
+  delete term;
 
   session->terminal = nullptr;
   session->thread = nullptr;

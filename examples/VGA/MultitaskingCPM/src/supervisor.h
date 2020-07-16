@@ -73,7 +73,7 @@ private:
 
   Terminal * createTerminal();
 
-  static Supervisor * s_singleton;
+  static Supervisor *     s_singleton;
 
   BaseDisplayController * m_displayController;
   Session                 m_sessions[MAXSESSIONS];
