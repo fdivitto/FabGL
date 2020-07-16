@@ -361,6 +361,9 @@ union GlyphOptions {
 
   /** @brief Helper method to set or reset foreground and background swapping */
   GlyphOptions & Invert(uint8_t value) { invert = value; return *this; }
+
+  /** @brief Helper method to set or reset foreground and background swapping */
+  GlyphOptions & Blank(uint8_t value) { blank = value; return *this; }
 } __attribute__ ((packed));
 
 
