@@ -46,16 +46,17 @@
 namespace fabgl {
 
 
-#define VGATextController_CHARWIDTH   8    // max 8
-#define VGATextController_CHARHEIGHT 14
-#define VGATextController_COLUMNS    80
-#define VGATextController_ROWS       34
+#define VGATextController_CHARWIDTH      8    // max 8
+#define VGATextController_CHARWIDTHBYTES ((VGATextController_CHARWIDTH + 7) / 8)
+#define VGATextController_CHARHEIGHT     14
+#define VGATextController_COLUMNS        80
+#define VGATextController_ROWS           34
+#define VGATextController_WIDTH          640
+#define VGATextController_HEIGHT         480
 
-// Increase if you have flickering on FAT or SPIFFS access or on intensive CPU operations.
-// must be even and a divisor of visible area height (i.e. 640x480, must be a divisor of 480)
-#define VGATextController_LINES       16
+#define VGATextController_MODELINE       VGA_640x480_60Hz
 
-#define VGATextController_MODELINE   VGA_640x480_60Hz
+//#define VGATextController_PERFORMANCE_CHECK
 
 
 
@@ -63,10 +64,10 @@ namespace fabgl {
 /**
 * @brief Represents the VGA text-only controller
 *
-* The text only VGA controller allows only text, but requires about 55K of RAM.
+* The text only VGA controller allows only text, but requires less than 50K of RAM.
 * Resolution is fixed at 640x480, with 80 columns by 34 rows, 16 colors.
 *
-* Text only output is very CPU intensive process because there is an interrupt every four lines displayed. Anyway this allows to have
+* Text only output is very CPU intensive process and consumes up to 30% of one CPU core. Anyway this allows to have
 * more than 290K free for your application.
 *
 * Graphics (Canvas) aren't possible. Also, some character styles aren't also possible (double size, 132 columns, italic).
@@ -180,9 +181,12 @@ private:
   static void I2SInterrupt(void * arg);
 
 
-  static volatile int    s_scanLine;
-  static uint32_t        s_blankPatternDWord;
-  static uint32_t *      s_fgbgPattern;
+  static volatile int        s_scanLine;
+  static uint32_t            s_blankPatternDWord;
+  static uint32_t *          s_fgbgPattern;
+  static int                 s_textRow;
+  static bool                s_upperRow;
+  static lldesc_t volatile * s_frameResetDesc;
 
   VGATimings             m_timings;
 
@@ -190,9 +194,8 @@ private:
   int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
   lldesc_t volatile *    m_DMABuffers;
   int                    m_DMABuffersCount;
-  lldesc_t volatile *    m_frameResetDesc;
 
-  uint32_t *             m_lines[VGATextController_LINES];
+  uint32_t *             m_lines;
 
   volatile uint8_t *     m_blankLine; // for vertical porch lines
   volatile uint8_t *     m_syncLine;  // for vertical sync lines
