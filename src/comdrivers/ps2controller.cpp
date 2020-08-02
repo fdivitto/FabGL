@@ -898,8 +898,9 @@ void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gp
   SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);         // start
 
   // install RTC interrupt handler (on ULP Wake() instruction)
-  // note about ESP_INTR_FLAG_LEVEL2: this is necessary in order to work reliably with interrupt intensive VGATextController
-  esp_intr_alloc(ETS_RTC_CORE_INTR_SOURCE, ESP_INTR_FLAG_LEVEL2 | ESP_INTR_FLAG_IRAM, rtc_isr, this, &m_isrHandle);
+  // note about ESP_INTR_FLAG_LEVEL2: this is necessary in order to work reliably with interrupt intensive VGATextController, when running on the same core
+  // must be core "1" due the RTC
+  esp_intr_alloc_pinnedToCore(ETS_RTC_CORE_INTR_SOURCE, ESP_INTR_FLAG_LEVEL2 | ESP_INTR_FLAG_IRAM, rtc_isr, this, &m_isrHandle, 1);
   SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
 }
 
