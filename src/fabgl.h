@@ -379,5 +379,6 @@ using fabgl::LineEnds;
 using fabgl::CharStyle;
 using fabgl::TerminalTransition;
 using fabgl::SupportedLayouts;
+using fabgl::CoreUsage;
 
 

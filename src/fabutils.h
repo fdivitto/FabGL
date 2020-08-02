@@ -875,6 +875,22 @@ struct AutoSuspendInterrupts {
 };
 
 
+///////////////////////////////////////////////////////////////////////////////////
+// CoreUsage
+
+/**
+ * @brief This class helps to choice a core for intensive processing tasks
+ */
+struct CoreUsage {
+
+  static int busiestCore()                 { return s_busiestCore; }
+  static int quietCore()                   { return s_busiestCore != -1 ? s_busiestCore ^ 1 : -1; }
+  static void setBusiestCore(int core)     { s_busiestCore = core; }
+
+  private:
+    static int s_busiestCore;  // -1 = none, 0 = core 0, 1 = core 1
+};
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
