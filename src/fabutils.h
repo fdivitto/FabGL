@@ -820,6 +820,15 @@ enum class ChipPackage {
 
 ChipPackage getChipPackage();
 
+inline __attribute__((always_inline)) uint32_t getCycleCount() {
+  uint32_t ccount;
+  __asm__ __volatile__(
+    "esync \n\t"
+    "rsr %0, ccount \n\t"
+    : "=a" (ccount)
+  );
+  return ccount;
+}
 
 /**
  * @brief Replaces path separators
