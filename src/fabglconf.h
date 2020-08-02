@@ -122,6 +122,10 @@
 #define FABGLIB_MOUSE_EVENTS_QUEUE_SIZE 64
 
 
+/** Core to use for CPU intensive tasks like VGA signals generation in VGATextController or VGA16Controller */
+#define FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE 0   // core 1 is the unique core to use PS/2 due the RTC access
+
+
 // debug options
 #define FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES   0
 #define FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES  0
