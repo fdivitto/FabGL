@@ -156,21 +156,15 @@ void VGATextController::setResolution(VGATimings const& timings)
 
   m_HVSync = packHVSync(false, false);
 
-  m_rawLineWidth   = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
-  m_rawFrameHeight = m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch;
-
-  m_HSyncPos       = m_timings.HFrontPorch;
-  m_HBackPorchPos  = m_HSyncPos + m_timings.HSyncPulse;
-  m_HVisiblePos    = m_HBackPorchPos + m_timings.HBackPorch;
-
-  m_DMABuffersCount = m_rawFrameHeight + m_timings.VVisibleArea;
+  m_DMABuffersCount = 2 * m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch;
 
   m_DMABuffers = (lldesc_t*) heap_caps_malloc(m_DMABuffersCount * sizeof(lldesc_t), MALLOC_CAP_DMA);
 
   m_lines = (uint32_t*) heap_caps_malloc(VGATextController_CHARHEIGHT * VGATextController_WIDTH, MALLOC_CAP_DMA);
 
-  m_blankLine = (uint8_t*) heap_caps_malloc(m_rawLineWidth, MALLOC_CAP_DMA);
-  m_syncLine  = (uint8_t*) heap_caps_malloc(m_rawLineWidth, MALLOC_CAP_DMA);
+  int rawLineWidth = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
+  m_blankLine = (uint8_t*) heap_caps_malloc(rawLineWidth, MALLOC_CAP_DMA);
+  m_syncLine  = (uint8_t*) heap_caps_malloc(rawLineWidth, MALLOC_CAP_DMA);
 
   // horiz: FRONTPORCH -> SYNC -> BACKPORCH -> VISIBLEAREA
   //
@@ -223,7 +217,7 @@ void VGATextController::setResolution(VGATimings const& timings)
       m_DMABuffers[i].offset       = 0;
       m_DMABuffers[i].owner        = 1;
       m_DMABuffers[i].qe.stqe_next = (lldesc_t*) (i ==  m_DMABuffersCount - 1 ? &m_DMABuffers[0] : &m_DMABuffers[i + 1]);
-      m_DMABuffers[i].length       = m_rawLineWidth;
+      m_DMABuffers[i].length       = rawLineWidth;
       m_DMABuffers[i].size         = (m_DMABuffers[i].length + 3) & (~3);
 
       if (invLine < m_timings.VFrontPorch || invLine >= m_timings.VFrontPorch + m_timings.VSyncPulse)
@@ -306,7 +300,8 @@ void VGATextController::fillDMABuffers()
     VGA_PIXELINROW(m_blankLine, x) = preparePixelWithSync((RGB222){0, 0, 0}, false, false);
     VGA_PIXELINROW(m_syncLine, x)  = preparePixelWithSync((RGB222){0, 0, 0}, false, true);
   }
-  for (int rx = 0; x < m_rawLineWidth; ++x, ++rx) {
+  int rawLineWidth = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
+  for (int rx = 0; x < rawLineWidth; ++x, ++rx) {
     VGA_PIXELINROW(m_blankLine, x) = preparePixelWithSync((RGB222){0, 0, 0}, false, false);
     VGA_PIXELINROW(m_syncLine, x)  = preparePixelWithSync((RGB222){0, 0, 0}, false, true);
     for (int i = 0; i < VGATextController_CHARHEIGHT; ++i)

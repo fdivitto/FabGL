@@ -200,14 +200,7 @@ private:
   volatile uint8_t *     m_blankLine; // for vertical porch lines
   volatile uint8_t *     m_syncLine;  // for vertical sync lines
 
-  volatile int           m_rawLineWidth;
-  volatile int           m_rawFrameHeight;
-
   intr_handle_t          m_isr_handle;
-
-  volatile int           m_HSyncPos;
-  volatile int           m_HBackPorchPos;
-  volatile int           m_HVisiblePos;
 
   // contains H and V signals for visible line
   volatile uint8_t       m_HVSync;
