@@ -420,6 +420,7 @@ enum class NativePixelFormat : uint8_t {
   Mono,       /**< 1 bit per pixel. 0 = black, 1 = white */
   SBGR2222,   /**< 8 bit per pixel: VHBBGGRR (bit 7=VSync 6=HSync 5=B 4=B 3=G 2=G 1=R 0=R). Each color channel can have values from 0 to 3 (maxmum intensity). */
   RGB565BE,   /**< 16 bit per pixel: RGB565 big endian. */
+  PALETTE16,  /**< 4 bit palette (16 colors), packed as two pixels per byte. */
 };
 
 
