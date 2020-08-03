@@ -217,7 +217,7 @@ void Terminal::activate(TerminalTransition transition)
         auto map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
         memcpy(map, s_activeTerminal->m_glyphsBuffer.map, sizeof(uint32_t) * m_columns * m_rows);
         txtCtrl->enableCursor(false);
-        txtCtrl->setTextMap(map);
+        txtCtrl->setTextMap(map, m_rows);
         switch (transition) {
           case TerminalTransition::LeftToRight:
             for (int x = 0; x < m_columns; ++x) {
@@ -240,7 +240,7 @@ void Terminal::activate(TerminalTransition transition)
           default:
             break;
         }
-        txtCtrl->setTextMap(m_glyphsBuffer.map);
+        txtCtrl->setTextMap(m_glyphsBuffer.map, m_rows);
         free(map);
       }
     }
@@ -256,7 +256,7 @@ void Terminal::activate(TerminalTransition transition)
     } else {
       // restore textual display controller state
       auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
-      txtCtrl->setTextMap(m_glyphsBuffer.map);
+      txtCtrl->setTextMap(m_glyphsBuffer.map, m_rows);
       txtCtrl->setCursorBackground(m_emuState.backgroundColor);
       txtCtrl->setCursorForeground(m_emuState.foregroundColor);
       txtCtrl->setCursorPos(m_emuState.cursorY - 1, m_emuState.cursorX - 1);
@@ -279,15 +279,20 @@ void Terminal::deactivate()
 }
 
 
-void Terminal::begin(BaseDisplayController * displayController, Keyboard * keyboard)
+bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, int maxRows, Keyboard * keyboard)
 {
   m_displayController = displayController;
   m_bitmappedDisplayController = (m_displayController->controllerType() == DisplayControllerType::Bitmapped);
 
-  if (m_bitmappedDisplayController)
+  m_maxColumns = maxColumns;
+  m_maxRows    = maxRows;
+
+  if (m_bitmappedDisplayController) {
     m_canvas = new Canvas(static_cast<BitmappedDisplayController*>(m_displayController));
-  else
+  } else {
     m_canvas = nullptr;
+    static_cast<TextualDisplayController*>(m_displayController)->adjustMapSize(&m_maxColumns, &m_maxRows);
+  }
 
   m_keyboard = keyboard;
   if (m_keyboard == nullptr && PS2Controller::instance()) {
@@ -346,7 +351,12 @@ void Terminal::begin(BaseDisplayController * displayController, Keyboard * keybo
 
   m_termInfo = nullptr;
 
-  reset();
+  bool success = (m_glyphsBuffer.map != nullptr);
+
+  if (success)
+    reset();
+
+  return success;
 }
 
 
@@ -700,8 +710,8 @@ void Terminal::loadFont(FontInfo const * font)
     m_font.data = font->data;
   #endif
 
-    m_columns = tmin(m_canvas->getWidth() / m_font.width, 132);
-    m_rows    = tmin(m_canvas->getHeight() / m_font.height, 25);
+    m_columns = m_canvas->getWidth() / m_font.width;
+    m_rows    = m_canvas->getHeight() / m_font.height;
 
     m_glyphsBuffer.glyphsWidth  = m_font.width;
     m_glyphsBuffer.glyphsHeight = m_font.height;
@@ -715,6 +725,12 @@ void Terminal::loadFont(FontInfo const * font)
     m_rows    = static_cast<TextualDisplayController*>(m_displayController)->getRows();
 
   }
+
+  // check maximum columns and rows
+  if (m_maxColumns > 0 && m_maxColumns < m_columns)
+    m_columns = m_maxColumns;
+  if (m_maxRows > 0 && m_maxRows < m_rows)
+    m_rows = m_maxRows;
 
   freeTabStops();
   m_emuState.tabStop = (uint8_t*) malloc(m_columns);
@@ -730,7 +746,7 @@ void Terminal::loadFont(FontInfo const * font)
 
   if (!m_bitmappedDisplayController && isActive()) {
     // associate map with textual display controller
-    static_cast<TextualDisplayController*>(m_displayController)->setTextMap(m_glyphsBuffer.map);
+    static_cast<TextualDisplayController*>(m_displayController)->setTextMap(m_glyphsBuffer.map, m_rows);
   }
 
   setScrollingRegion(1, m_rows);

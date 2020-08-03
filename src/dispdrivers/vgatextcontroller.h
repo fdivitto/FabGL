@@ -150,7 +150,15 @@ public:
    *
    * This is set automatically by the terminal.
    */
-  void setTextMap(uint32_t const * map);
+  void setTextMap(uint32_t const * map, int rows);
+
+  /**
+   * @brief Adjust columns and rows to the controller limits
+   *
+   * @param columns If > 0 then it is set to 80.
+   * @param rows If > 0 then it is limited to 1..34 range.
+   */
+  void adjustMapSize(int * columns, int * rows);
 
   int getScreenWidth()    { return m_timings.HVisibleArea; }
   int getScreenHeight()   { return m_timings.VVisibleArea; }
@@ -196,6 +204,8 @@ private:
   int                    m_DMABuffersCount;
 
   uint32_t *             m_lines;
+
+  int                    m_rows;
 
   volatile uint8_t *     m_blankLine; // for vertical porch lines
   volatile uint8_t *     m_syncLine;  // for vertical sync lines

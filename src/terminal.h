@@ -449,9 +449,13 @@ public:
    * Applications should call this method before any other method call and after resolution has been set.
    *
    * @param displayController The output display controller
+   * @param maxColumns Maximum number of columns (-1 = depends by the display horizontal resolution)
+   * @param maxRows Maximum number of rows (-1 = depends by the display vertical resolution)
    * @param keyboard Keyboard device. nullptr = gets from PS2Controller
+   *
+   * @return False on fail to allocate required memory
    */
-  void begin(BaseDisplayController * displayController, Keyboard * keyboard = nullptr);
+  bool begin(BaseDisplayController * displayController, int maxColumns = -1, int maxRows = -1, Keyboard * keyboard = nullptr);
 
   /**
    * @brief Finalizes the terminal.
@@ -1066,6 +1070,10 @@ private:
 
   volatile int       m_columns;
   volatile int       m_rows;
+
+  // checked in loadFont() to limit m_columns and m_rows (-1 = not checked)
+  int                m_maxColumns;
+  int                m_maxRows;
 
   // optional serial port
   // data from serial port is processed and displayed

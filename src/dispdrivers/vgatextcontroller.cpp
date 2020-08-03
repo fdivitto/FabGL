@@ -54,12 +54,23 @@ VGATextController::~VGATextController()
 }
 
 
-void VGATextController::setTextMap(uint32_t const * map)
+void VGATextController::setTextMap(uint32_t const * map, int rows)
 {
   // wait for the end of frame
   while (m_map != nullptr && s_scanLine < m_timings.VVisibleArea)
     ;
-  m_map = map;
+  m_rows = rows;
+  m_map  = map;
+}
+
+
+void VGATextController::adjustMapSize(int * columns, int * rows)
+{
+  if (*columns > 0)
+    *columns = VGATextController_COLUMNS;
+  if (*rows > VGATextController_ROWS)
+    *rows = VGATextController_ROWS;
+
 }
 
 
@@ -358,7 +369,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 
     auto lines = ctrl->m_lines;
 
-    if (s_textRow < VGATextController_ROWS) {
+    if (s_textRow < ctrl->m_rows) {
 
       int cursorCol = 0;
       int cursorFGBG = 0;

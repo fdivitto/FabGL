@@ -684,7 +684,8 @@ public:
 
     virtual int getColumns() = 0;
     virtual int getRows() = 0;
-    virtual void setTextMap(uint32_t const * map) = 0;
+    virtual void adjustMapSize(int * columns, int * rows) = 0;
+    virtual void setTextMap(uint32_t const * map, int rows) = 0;
     virtual void enableCursor(bool value) = 0;
     virtual void setCursorPos(int row, int col) = 0;      // row and col starts from 0
     virtual void setCursorForeground(Color value) = 0;
