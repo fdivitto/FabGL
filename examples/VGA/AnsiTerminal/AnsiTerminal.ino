@@ -75,16 +75,27 @@ void setup()
   //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
   Terminal.write("\r\nPress F12 to change terminal configuration\r\n\n");
 
-  // look for F12 key to open configuration dialog
   Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
     if (*vk == VirtualKey::VK_F12) {
       if (!keyDown) {
+        // releasing F12 key to open configuration dialog
         Terminal.deactivate();
         auto dlgApp = new ConfDialogApp;
         dlgApp->run(&DisplayController);
         delete dlgApp;
         Terminal.keyboard()->emptyVirtualKeyQueue();
         Terminal.activate();
+      } else {
+        // pressing CTRL + ALT + F12, reset parameters and reboot
+        if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
+            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
+          Terminal.write("\r\nReset of terminal settings...");
+          preferences.clear();
+          delay(2000);
+          Terminal.write("\r\nRebooting...");
+          delay(2000);
+          ESP.restart();
+        }
       }
       *vk = VirtualKey::VK_NONE;
     }
