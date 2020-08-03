@@ -173,6 +173,7 @@ void demo4()
     Terminal.write("\e[40;32mScrolling...\r\n");
     delay(250);
   }
+  cv.clear();
 }
 
 void demo5()
