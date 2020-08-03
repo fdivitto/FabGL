@@ -68,7 +68,11 @@ Supervisor::~Supervisor()
 Terminal * Supervisor::createTerminal()
 {
   Terminal * term = new Terminal;
-  term->begin(m_displayController);
+  if (!term->begin(m_displayController)) {
+    // failed to initialize terminal
+    delete term;
+    return nullptr;
+  }
   term->connectLocally();      // to use Terminal.read(), available(), etc..
   return term;
 }
