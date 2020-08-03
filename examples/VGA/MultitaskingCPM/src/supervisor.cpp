@@ -80,19 +80,22 @@ Terminal * Supervisor::createTerminal()
 
 void Supervisor::activateSession(int id)
 {
-  if (m_sessions[id].thread == nullptr) {
+  if (m_sessions[id].terminal == nullptr) {
     m_sessions[id].terminal = createTerminal();
-
-    // why this? Use xTaskCreate() if you are using VGAController, which is not CPU intensive. Use xTaskCreatePinnedToCore() when using
-    // VGATextController, which is CPU intensive.
-    //xTaskCreate(&sessionThread, "", SESSIONTHREAD_STACK_SIZE, &m_sessions[id], SESSIONTHREAD_TASK_PRIORITY, &m_sessions[id].thread);
-    xTaskCreatePinnedToCore(&sessionThread, "", SESSIONTHREAD_STACK_SIZE, &m_sessions[id], SESSIONTHREAD_TASK_PRIORITY, &m_sessions[id].thread, 0);
+    if (m_sessions[id].terminal == nullptr)
+      return; // failed
   }
 
   auto trans = (m_activeSessionID == -1 ? TerminalTransition::None : (id < m_activeSessionID ? TerminalTransition::LeftToRight : TerminalTransition::RightToLeft));
-
   m_sessions[id].terminal->activate(trans);
   m_activeSessionID = id;
+
+  if (m_sessions[id].thread == nullptr) {
+    if (CoreUsage::busiestCore() == -1)
+      xTaskCreate(&sessionThread, "", SESSIONTHREAD_STACK_SIZE, &m_sessions[id], SESSIONTHREAD_TASK_PRIORITY, &m_sessions[id].thread);
+    else
+      xTaskCreatePinnedToCore(&sessionThread, "", SESSIONTHREAD_STACK_SIZE, &m_sessions[id], SESSIONTHREAD_TASK_PRIORITY, &m_sessions[id].thread, CoreUsage::quietCore());
+  }
 }
 
 
