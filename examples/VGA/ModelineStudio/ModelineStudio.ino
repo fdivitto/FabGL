@@ -122,9 +122,9 @@ void printInfo()
     Serial.printf("shrinkScreen(%d, %d)\n", shrinkX, shrinkY);
   Serial.printf("Screen size   : %d x %d\n", VGAController.getScreenWidth(), VGAController.getScreenHeight());
   Serial.printf("Viewport size : %d x %d\n", VGAController.getViewPortWidth(), VGAController.getViewPortHeight());
-  Serial.printf("Free memory (total, min, largest): %d, %d, %d\n\n", heap_caps_get_free_size(MALLOC_CAP_DMA),
-                                                                   heap_caps_get_minimum_free_size(MALLOC_CAP_DMA),
-                                                                   heap_caps_get_largest_free_block(MALLOC_CAP_DMA));
+  Serial.printf("Free memory (total, min, largest): %d, %d, %d\n\n", heap_caps_get_free_size(MALLOC_CAP_32BIT),
+                                                                   heap_caps_get_minimum_free_size(MALLOC_CAP_32BIT),
+                                                                   heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));
 }
 
 
