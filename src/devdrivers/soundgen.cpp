@@ -326,7 +326,7 @@ int NoiseWaveformGenerator::getSample()
 /////////////////////////////////////////////////////////////////////////////////////////////
 // VICNoiseGenerator
 // "tries" to emulate VIC6561 noise generator
-// derived from a reverse enginnered VHDL code: http://www.denial.shamani.dk/bb/viewtopic.php?t=8733&start=210
+// derived from a reverse engineering VHDL code: http://sleepingelephant.com/ipw-web/bulletin/bb/viewtopic.php?f=11&t=8733&fbclid=IwAR16x6OMMb670bA2ZtYcbB0Zat_X-oHNB0NxxYigPffXa8G_InSIoNAEiPU
 
 
 VICNoiseGenerator::VICNoiseGenerator()
