@@ -26,8 +26,8 @@
 
 
 
-fabgl::VGAController DisplayController;
-fabgl::Terminal      Terminal;
+fabgl::VGA16Controller DisplayController;
+fabgl::Terminal        Terminal;
 
 
 void setup()
@@ -35,8 +35,7 @@ void setup()
   //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x350_70HzAlt1);
-  //DisplayController.setResolution(VGA_640x240_60Hz);    // select to have more free memory
+  DisplayController.setResolution(VGA_640x480_60Hz);
 
   Terminal.begin(&DisplayController);
   Terminal.setLogStream(Serial);  // DEBUG ONLY
@@ -208,5 +207,4 @@ void loop()
   demo4();
   delay(4000);
   demo5();
-  delay(4000);
 }
