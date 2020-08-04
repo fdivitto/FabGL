@@ -23,7 +23,7 @@
 #include "fabgl.h"
 
 
-fabgl::VGAController DisplayController;
+fabgl::VGA16Controller DisplayController;
 fabgl::PS2Controller PS2Controller;
 fabgl::Terminal      Terminal;
 
@@ -49,14 +49,12 @@ void setup()
   //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
 
   preferences.begin("AnsiTerminal", false);
-  //preferences.clear();
 
   // only keyboard configured on port 0
   PS2Controller.begin(PS2Preset::KeyboardPort0);
 
   DisplayController.begin();
-  //DisplayController.setResolution(VGA_640x350_70HzAlt1);
-  DisplayController.setResolution(VGA_640x480_60Hz, 640, 350);
+  DisplayController.setResolution(VGA_640x480_60Hz);
 
   Terminal.begin(&DisplayController);
   //Terminal.setLogStream(Serial);  // debug only
