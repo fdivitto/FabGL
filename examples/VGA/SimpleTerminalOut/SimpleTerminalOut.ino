@@ -65,15 +65,16 @@ void slowPrintf(const char * format, ...)
 
 void demo1()
 {
-  Terminal.write("\e[40;32m"); // background: black, foreground: green
+  Terminal.write("\e[40;92m"); // background: black, foreground: green
   Terminal.write("\e[2J");     // clear screen
   Terminal.write("\e[1;1H");   // move cursor to 1,1
   slowPrintf("* * * *  W E L C O M E   T O   F a b G L  * * * *\r\n");
   slowPrintf("2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\r\n");
-  slowPrintf("===============================================\r\n\n");
-  slowPrintf("This is a VGA Controller, PS2 Mouse and Keyboard Controller, Graphics Library,  Game Engine and ANSI/VT Terminal for the ESP32\r\n\n");
+  slowPrintf("=================================================\r\n\n");
+  slowPrintf("A Display Controller, PS2 Mouse and Keyboard Controller, Graphics Library, Audio Engine, Game Engine and ANSI/VT Terminal for the ESP32\r\n\n");
   slowPrintf("Current settings\r\n");
   slowPrintf("Screen Size   : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+  slowPrintf("Viewport Size : %d x %d\r\n", DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
   slowPrintf("Terminal Size : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
   slowPrintf("Free Memory   : %d bytes\r\n\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
 }
