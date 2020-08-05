@@ -177,6 +177,12 @@ void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host)
 }
 
 
+void TFTController::begin()
+{
+  begin(18, 23, 22, 21, 5, VSPI_HOST);
+}
+
+
 void TFTController::end()
 {
   if (m_updateTaskHandle)

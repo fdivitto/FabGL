@@ -156,6 +156,19 @@ public:
    */
   void begin(int SCK, int MOSI, int DC, int RESX, int CS, int host);
 
+  /**
+   * @brief Initializes TFT display controller
+   *
+   * This initializer uses SDK API to get access to the SPI channel, assigning following configuration:
+   *   SCK    = 18
+   *   MOSI   = 23
+   *   DC     = 22
+   *   RESET  = 21
+   *   CS     =  5
+   *   host   = VSPI_HOST
+   */
+  void begin();
+
   void end();
 
   /**

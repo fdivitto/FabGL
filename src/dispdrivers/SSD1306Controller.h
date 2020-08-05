@@ -106,6 +106,17 @@ public:
    */
   void begin(I2C * i2c, int address = 0x3C, gpio_num_t resetGPIO = GPIO_UNUSED);
 
+  /**
+   * @brief Initializes SSD1306.
+   *
+   * This initializer uses following configuration:
+   *   SDA = 4
+   *   SCL = 15
+   *   Address = 0x3C
+   *   no reset
+   */
+  void begin();
+
   void end();
 
   /**

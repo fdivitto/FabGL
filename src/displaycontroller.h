@@ -649,6 +649,10 @@ class BaseDisplayController {
 
 public:
 
+  virtual void setResolution(char const * modeline, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false) = 0;
+
+  virtual void begin() = 0;
+
   /**
    * @brief Determines the display controller type
    *

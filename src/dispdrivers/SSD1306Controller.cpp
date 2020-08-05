@@ -133,6 +133,14 @@ void SSD1306Controller::begin(I2C * i2c, int address, gpio_num_t resetGPIO)
 }
 
 
+void SSD1306Controller::begin()
+{
+  auto i2c = new I2C;
+  i2c->begin(GPIO_NUM_4, GPIO_NUM_15);
+  begin(i2c);
+}
+
+
 void SSD1306Controller::end()
 {
   if (m_updateTaskHandle)
