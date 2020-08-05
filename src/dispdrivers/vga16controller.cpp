@@ -109,6 +109,7 @@ void VGA16Controller::init(gpio_num_t VSyncGPIO)
   m_isr_handle                   = nullptr;
   m_taskProcessingPrimitives     = false;
   m_processPrimitivesOnBlank     = false;
+  m_primitiveExecTask            = nullptr;
 
   m_GPIOStream.begin();
 }
