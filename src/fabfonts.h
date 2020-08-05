@@ -45,9 +45,26 @@
 #include "fonts/font_8x8.h"
 #include "fonts/font_8x9.h"
 #include "fonts/font_8x14.h"
+#include "fonts/font_8x16.h"
+#include "fonts/font_8x19.h"
 #include "fonts/font_9x15.h"
 #include "fonts/font_9x18.h"
 #include "fonts/font_10x20.h"
+
+#include "fonts/font_slant_8x14.h"
+#include "fonts/font_sanserif_8x16.h"
+#include "fonts/font_sanserif_8x14.h"
+#include "fonts/font_lcd_8x14.h"
+#include "fonts/font_courier_8x14.h"
+#include "fonts/font_computer_8x14.h"
+#include "fonts/font_bigserif_8x14.h"
+#include "fonts/font_bigserif_8x16.h"
+#include "fonts/font_block_8x14.h"
+#include "fonts/font_broadway_8x14.h"
+#include "fonts/font_oldengl_8x16.h"
+#include "fonts/font_wiggly_8x16.h"
+
+
 
 // variable width
 #include "fonts/font_std_12.h"

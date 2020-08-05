@@ -35,6 +35,8 @@ namespace fabgl {
 // and getPresetFixedFont().
 static const FontInfo * FIXED_WIDTH_EMBEDDED_FONTS[] = {
   // please, bigger fonts first!
+  &FONT_8x19,
+  &FONT_8x16,
   &FONT_8x14,
   &FONT_8x8,
   &FONT_8x9,
