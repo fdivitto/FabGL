@@ -148,7 +148,7 @@ void VGATextController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 }
 
 
-void VGATextController::setResolution(char const * modeline)
+void VGATextController::setResolution(char const * modeline, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
   VGATimings timings;
   if (VGAController::convertModelineToTimings(VGATextController_MODELINE, &timings))

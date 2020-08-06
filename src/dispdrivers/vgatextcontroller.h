@@ -143,7 +143,7 @@ public:
    *
    * This call is required, even you cannot set or change resolution.
    */
-  void setResolution(char const * modeline = nullptr);
+  void setResolution(char const * modeline = nullptr, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
   /**
    * @brief Sets text map to display
