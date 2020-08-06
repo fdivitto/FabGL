@@ -750,6 +750,7 @@ void Terminal::loadFont(FontInfo const * font)
   }
 
   setScrollingRegion(1, m_rows);
+  int_clear();
 }
 
 
@@ -2821,7 +2822,6 @@ void Terminal::consumeDECPrivateModes(int const * params, int paramsCount, uint8
     case 3:
       if (m_emuState.allow132ColumnMode) {
         set132ColumnMode(set);
-        int_clear();
         setCursorPos(1, 1);
       }
       break;
