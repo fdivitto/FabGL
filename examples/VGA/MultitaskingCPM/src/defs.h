@@ -26,7 +26,7 @@
 #include <stdint.h>
 
 
-//#define HAS_WIFI
+#define HAS_WIFI
 
 
 // Start of system area
