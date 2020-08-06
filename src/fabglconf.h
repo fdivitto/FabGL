@@ -33,6 +33,8 @@
  */
 
 
+#include <esp_wifi.h>
+
 
 
 /** Defines ESP32 XTAL frequency in Hz. */
@@ -123,7 +125,7 @@
 
 
 /** Core to use for CPU intensive tasks like VGA signals generation in VGATextController or VGA16Controller */
-#define FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE 0   // core 1 is the unique core to use PS/2 due the RTC access
+#define FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE (WIFI_TASK_CORE_ID ^ 1) // using the same core of WiFi may cause flickering
 
 
 // debug options
