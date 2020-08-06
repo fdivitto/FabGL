@@ -1181,6 +1181,14 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
       app()->style()->setStyle(this, styleClassID);
   }
 
+  if (m_pos == UIWINDOW_PARENTCENTER) {
+    if (parent) {
+      m_pos = Point((parent->size().width - size.width) / 2, (parent->size().height - size.height) / 2);
+    } else {
+      m_pos = Point(0, 0);
+    }
+  }
+
   if (parent)
     parent->addChild(this);
 

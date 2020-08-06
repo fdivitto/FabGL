@@ -357,6 +357,9 @@ struct uiAnchors {
 };
 
 
+#define UIWINDOW_PARENTCENTER Point(-1000, -1000)
+
+
 /** @brief Base class for all visible UI elements (Frames and Controls) */
 class uiWindow : public uiEvtHandler {
 
@@ -368,7 +371,7 @@ public:
    * @brief Creates an instance of the object
    *
    * @param parent The parent window. A window must always have a parent window
-   * @param pos Top-left coordinates of the window relative to the parent
+   * @param pos Top-left coordinates of the window relative to the parent. Set UIWINDOW_PARENTCENTER to center over parent window
    * @param size The window size
    * @param visible If true the window is immediately visible
    * @param styleClassID Optional style class identifier
@@ -788,7 +791,7 @@ public:
    *
    * @param parent Parent window
    * @param title Title of the frame. An empty string hides the title bar
-   * @param pos Top-left coordinates of the frame relative to the parent
+   * @param pos Top-left coordinates of the frame relative to the parent. Set UIWINDOW_PARENTCENTER to center over parent window
    * @param size The frame size
    * @param visible If true the frame is immediately visible
    * @param styleClassID Optional style class identifier
