@@ -50,6 +50,7 @@
 
 // globals
 
+//fabgl::VGA16Controller   DisplayController;
 fabgl::VGATextController DisplayController;
 fabgl::PS2Controller     PS2Controller;
 
@@ -86,8 +87,7 @@ void setup()
   // setup VGA (default configuration with 64 colors)
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x200_70Hz);
-  //DisplayController.setResolution(VGA_640x480_60Hz, 640, 200);
+  DisplayController.setResolution(VGA_640x480_60Hz);      // good when using VGA16Controller
 
   auto term = new fabgl::Terminal;
   term->begin(&DisplayController);
