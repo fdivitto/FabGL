@@ -207,7 +207,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));
 
   // setup absolute events from mouse
-  if (m_mouse)
+  if (m_mouse && m_mouse->isMouseAvailable())
     m_mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, m_displayController, this);
 
   // setup keyboard
@@ -226,7 +226,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   m_rootWindow->frameProps().moveable   = false;
 
   // setup mouse cursor (otherwise it has to wait mouse first moving to show mouse pointer)
-  if (m_mouse)
+  if (m_mouse && m_mouse->isMouseAvailable())
     m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
 
   // avoid slow paint on low resolutions
@@ -277,7 +277,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   if (m_keyboard)
     m_keyboard->setUIApp(nullptr);
 
-  if (m_mouse)
+  if (m_mouse && m_mouse->isMouseAvailable())
     m_mouse->terminateAbsolutePositioner();
 
   vQueueDelete(m_eventsQueue);
@@ -1130,14 +1130,14 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
   if (value) {
     if (m_keyboard)
       m_keyboard->setUIApp(this);
-    if (m_mouse) {
+    if (m_mouse && m_mouse->isMouseAvailable()) {
       m_mouse->setUIApp(this);
       m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
     }
   } else {
     if (m_keyboard)
       m_keyboard->setUIApp(nullptr);
-    if (m_mouse) {
+    if (m_mouse && m_mouse->isMouseAvailable()) {
       m_mouse->setUIApp(nullptr);
       m_displayController->setMouseCursor(nullptr);
     }
