@@ -34,6 +34,9 @@
 namespace fabgl {
 
 
+bool Mouse::s_quickCheckHardware = false;
+
+
 Mouse::Mouse()
   : m_mouseAvailable(false),
     m_mouseType(LegacyMouse),
@@ -56,6 +59,8 @@ Mouse::~Mouse()
 
 void Mouse::begin(int PS2Port)
 {
+  if (s_quickCheckHardware)
+    PS2Device::quickCheckHardware();
   PS2Device::begin(PS2Port);
   reset();
 }
@@ -72,12 +77,16 @@ void Mouse::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
 
 bool Mouse::reset()
 {
-  // tries up to six times for mouse reset
-  for (int i = 0; i < 3; ++i) {
+  if (s_quickCheckHardware) {
     m_mouseAvailable = send_cmdReset();
-    if (m_mouseAvailable)
-      break;
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+  } else {
+    // tries up to three times for mouse reset
+    for (int i = 0; i < 3; ++i) {
+      m_mouseAvailable = send_cmdReset();
+      if (m_mouseAvailable)
+        break;
+      vTaskDelay(500 / portTICK_PERIOD_MS);
+    }
   }
 
   // negotiate compatibility and default parameters
@@ -309,6 +318,15 @@ MouseStatus Mouse::getNextStatus(int timeOutMS)
   if (m_absoluteQueue)
     xQueueReceive(m_absoluteQueue, &status, msToTicks(timeOutMS));
   return status;
+}
+
+
+void Mouse::emptyQueue()
+{
+  while (getData(0) != -1)
+    ;
+  if (m_absoluteQueue)
+    xQueueReset(m_absoluteQueue);
 }
 
 

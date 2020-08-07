@@ -319,12 +319,25 @@ public:
    */
   int & wheelAcceleration()    { return m_wheelAcceleration; }
 
+  /**
+   * @brief Empties the mouse status and events queue
+   */
+  void emptyQueue();
+
+
+  /**
+   * @brief Disable re-try when a mouse is not found
+   */
+  static void quickCheckHardware()   { s_quickCheckHardware = true; }
+
 
 private:
 
   int getPacketSize();
   static void absoluteUpdateTimerFunc(TimerHandle_t xTimer);
 
+
+  static bool     s_quickCheckHardware;
 
   bool            m_mouseAvailable;
   MouseType       m_mouseType;
