@@ -18,6 +18,33 @@ static const char * PARITY_STR[]    = { "None", "Even", "Odd" };
 static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
 static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 
+static const char * RESOLUTIONS_STR[]      = { "640x480, 16 colors", "640x350, 64 colors", "512x384, 64 colors" };
+static const int    RESOLUTIONS_TYPE[]     = { 1, 0, 0 };   // 0 = VGAController, 1 = VGA16Controller
+static const char * RESOLUTIONS_MODELINE[] = { VGA_640x480_60Hz, VGA_640x350_70HzAlt1, VGA_512x384_60Hz };
+constexpr int       RESOLUTIONS_COUNT      = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
+
+static const char *            FONTS_STR[]  = { "Auto", "VGA 4x6", "VGA 5x7", "VGA 5x8", "VGA 6x8", "VGA 6x9", "VGA 6x10", "VGA 6x12", "VGA 6x13",
+                                                "VGA 7x13", "VGA 7x14", "VGA 8x8", "VGA 8x9", "VGA 8x13", "VGA 8x14", "VGA 8x16", "VGA 8x19", "VGA 9x15",
+                                                "VGA 9x18", "VGA 10x20", "BigSerif 8x14", "BigSerif 8x16", "Block 8x14", "Broadway 8x14",
+                                                "Computer 8x14", "Courier 8x14", "LCD 8x14", "Old English 8x16", "Sans Serif 8x14", "Sans Serif 8x16",
+                                                "Slant 8x14", "Wiggly 8x16" };
+static const fabgl::FontInfo * FONTS_INFO[] = { nullptr, &fabgl::FONT_4x6, &fabgl::FONT_5x7, &fabgl::FONT_5x8, &fabgl::FONT_6x8, &fabgl::FONT_6x9,
+                                               &fabgl::FONT_6x10, &fabgl::FONT_6x12, &fabgl::FONT_6x13, &fabgl::FONT_7x13, &fabgl::FONT_7x14, &fabgl::FONT_8x8,
+                                               &fabgl::FONT_8x9, &fabgl::FONT_8x13, &fabgl::FONT_8x14, &fabgl::FONT_8x16, &fabgl::FONT_8x19, &fabgl::FONT_9x15,
+                                               &fabgl::FONT_9x18, &fabgl::FONT_10x20, &fabgl::FONT_BIGSERIF_8x14, &fabgl::FONT_BIGSERIF_8x16, &fabgl::FONT_BLOCK_8x14,
+                                               &fabgl::FONT_BROADWAY_8x14, &fabgl::FONT_COMPUTER_8x14, &fabgl::FONT_COURIER_8x14,
+                                               &fabgl::FONT_LCD_8x14, &fabgl::FONT_OLDENGL_8x16, &fabgl::FONT_SANSERIF_8x14, &fabgl::FONT_SANSERIF_8x16,
+                                               &fabgl::FONT_SLANT_8x14, &fabgl::FONT_WIGGLY_8x16 };
+constexpr int                  FONTS_COUNT  = sizeof(FONTS_STR) / sizeof(char const *);
+
+static const char * COLUMNS_STR[] = { "Max", "80", "132" };
+static const int    COLUMNS_INT[] = { 0, 80, 132 };
+constexpr int       COLUMNS_COUNT = sizeof(COLUMNS_STR) / sizeof(char const *);
+
+static const char * ROWS_STR[]    = { "Max", "24", "25" };
+static const int    ROWS_INT[]    = { 0, 24, 25 };
+constexpr int       ROWS_COUNT    = sizeof(ROWS_STR) / sizeof(char const *);
+
 
 
 #define STYLE_FRAME_ID     1
@@ -62,8 +89,44 @@ struct ConfDialogStyle : uiStyle {
 
 
 
+struct RebootDialog : public uiFrame {
+  uiLabel *  label;
+  uiButton * button;
+  int        counter;
+
+  RebootDialog(uiFrame * parent)
+    : uiFrame(parent, "Terminal restart required", UIWINDOW_PARENTCENTER, Size(230, 60)) {
+    frameProps().resizeable        = false;
+    frameProps().moveable          = false;
+    frameProps().hasCloseButton    = false;
+    frameProps().hasMaximizeButton = false;
+    frameProps().hasMinimizeButton = false;
+
+    label = new uiLabel(this, "", Point(5, 30));
+
+    button = new uiButton(this, "Reboot Now!", Point(132, 27), Size(80, 20));
+    button->onClick = [&]() {
+      ESP.restart();
+    };
+
+    counter = 3;
+    app()->setTimer(this, 1000);
+    onTimer = [&](uiTimerHandle tHandle) { countDown(); };
+    countDown();
+  }
+
+  void countDown() {
+    app()->setFocusedWindow(button);
+    if (counter < 0)
+      ESP.restart();
+    label->setTextFmt("Rebooting in %d seconds...", counter--);
+  }
+};
+
+
 class ConfDialogApp : public uiApp {
 
+  Rect              frameRect;
   uiFrame *         frame;
   uiComboBox *      termComboBox;
   uiComboBox *      kbdComboBox;
@@ -74,6 +137,10 @@ class ConfDialogApp : public uiApp {
   uiComboBox *      flowCtrlComboBox;
   uiColorComboBox * bgColorComboBox;
   uiColorComboBox * fgColorComboBox;
+  uiComboBox *      resolutionComboBox;
+  uiComboBox *      fontComboBox;
+  uiComboBox *      columnsComboBox;
+  uiComboBox *      rowsComboBox;
 
   void init() {
 
@@ -81,7 +148,14 @@ class ConfDialogApp : public uiApp {
 
     rootWindow()->frameProps().fillBackground = false;
 
-    frame = new uiFrame(rootWindow(), "Terminal Configuration", Point(110, 60), Size(380, 220), true, STYLE_FRAME_ID);
+    frame = new uiFrame(rootWindow(), "Terminal Configuration", UIWINDOW_PARENTCENTER, Size(380, 275), true, STYLE_FRAME_ID);
+    frameRect = frame->rect(fabgl::uiOrigin::Screen);
+
+    frame->frameProps().resizeable        = false;
+    frame->frameProps().moveable          = false;
+    frame->frameProps().hasCloseButton    = false;
+    frame->frameProps().hasMaximizeButton = false;
+    frame->frameProps().hasMinimizeButton = false;
 
     // ESC : exit without save
     // F10 : save and exit
@@ -158,6 +232,33 @@ class ConfDialogApp : public uiApp {
     flowCtrlComboBox->selectItem((int)getFlowCtrl());
 
 
+    y += 55;
+
+    // resolution
+    new uiLabel(frame, "Resolution", Point(10, y), Size(0, 0), true, STYLE_LABEL_ID);
+    resolutionComboBox = new uiComboBox(frame, Point(10, y + 12), Size(119, 20), 53, true, STYLE_COMBOBOX);
+    resolutionComboBox->items().append(RESOLUTIONS_STR, RESOLUTIONS_COUNT);
+    resolutionComboBox->selectItem(getResolutionIndex());
+
+    // font
+    new uiLabel(frame, "Font", Point(144,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    fontComboBox = new uiComboBox(frame, Point(144, y + 12), Size(110, 20), 70, true, STYLE_COMBOBOX);
+    fontComboBox->items().append(FONTS_STR, FONTS_COUNT);
+    fontComboBox->selectItem(getFontIndex());
+
+    // columns
+    new uiLabel(frame, "Columns", Point(269,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    columnsComboBox = new uiComboBox(frame, Point(269, y + 12), Size(40, 20), 50, true, STYLE_COMBOBOX);
+    columnsComboBox->items().append(COLUMNS_STR, COLUMNS_COUNT);
+    columnsComboBox->selectItem(getColumnsIndex());
+
+    // rows
+    new uiLabel(frame, "Rows", Point(324,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    rowsComboBox = new uiComboBox(frame, Point(324, y + 12), Size(40, 20), 50, true, STYLE_COMBOBOX);
+    rowsComboBox->items().append(ROWS_STR, ROWS_COUNT);
+    rowsComboBox->selectItem(getRowsIndex());
+
+
     y += 70;
 
     // exit without save button
@@ -181,6 +282,13 @@ class ConfDialogApp : public uiApp {
 
 
   void saveProps() {
+    // need reboot?
+    bool reboot = resolutionComboBox->selectedItem() != getResolutionIndex() ||
+                  fontComboBox->selectedItem()       != getFontIndex()       ||
+                  columnsComboBox->selectedItem()    != getColumnsIndex()    ||
+                  rowsComboBox->selectedItem()       != getRowsIndex()       ||
+                  bgColorComboBox->selectedColor()   != getBGColor();
+
     preferences.putInt("TermType", termComboBox->selectedItem());
     preferences.putInt("KbdLayout", kbdComboBox->selectedItem());
     preferences.putInt("BaudRate", baudRateComboBox->selectedItem());
@@ -190,11 +298,29 @@ class ConfDialogApp : public uiApp {
     preferences.putInt("FlowCtrl", flowCtrlComboBox->selectedItem());
     preferences.putInt("BGColor", (int)bgColorComboBox->selectedColor());
     preferences.putInt("FGColor", (int)fgColorComboBox->selectedColor());
+    preferences.putInt("Resolution", resolutionComboBox->selectedItem());
+    preferences.putInt("Font", fontComboBox->selectedItem());
+    preferences.putInt("Columns", columnsComboBox->selectedItem());
+    preferences.putInt("Rows", rowsComboBox->selectedItem());
+
+    if (reboot) {
+      auto rebootDialog = new RebootDialog(frame);
+      showModalWindow(rebootDialog);  // no return!
+    }
+
     loadConfiguration();
   }
 
 
 public:
+
+  ~ConfDialogApp() {
+    // this is required, becasue the terminal may not cover the entire screen
+    canvas()->reset();
+    canvas()->setBrushColor(getBGColor());
+    canvas()->fillRectangle(frameRect);
+  }
+
 
   static TermType getTermType() {
     return (TermType) preferences.getInt("TermType", 7);    // default 7 = ANSILegacy
@@ -232,6 +358,53 @@ public:
     return (Color) preferences.getInt("FGColor", (int)Color::BrightGreen);
   }
 
+  static int getResolutionIndex() {
+    return preferences.getInt("Resolution", 0);             // default 0 = 640x480, 80x34, 16 colors
+  }
+
+  static int getFontIndex() {
+    return preferences.getInt("Font", 0);                   // default 0 = auto
+  }
+
+  static int getColumnsIndex() {
+    return preferences.getInt("Columns", 0);                // default 0 = MAX
+  }
+
+  static int getRowsIndex() {
+    return preferences.getInt("Rows", 0);                   // default 0 = MAX
+  }
+
+  static void setupDisplay() {
+    // setup display controller
+    auto res = getResolutionIndex();
+    switch (RESOLUTIONS_TYPE[res]) {
+      // VGAController
+      case 0:
+        DisplayController = new fabgl::VGAController;
+        break;
+      case 1:
+        DisplayController = new fabgl::VGA16Controller;
+        break;
+    }
+    DisplayController->begin();
+    DisplayController->setResolution(RESOLUTIONS_MODELINE[res]);
+
+    // setup terminal
+    auto cols = COLUMNS_INT[getColumnsIndex()];
+    auto rows = ROWS_INT[getRowsIndex()];
+    Terminal.begin(DisplayController, (cols ? cols : -1), (rows ? rows : -1));
+    // this is required when terminal columns and rows do not cover entire screen
+    Terminal.canvas()->setBrushColor(getBGColor());
+    Terminal.canvas()->clear();
+    if (getFontIndex() == 0) {
+      // auto select a font from specified Columns and Rows or from 80x25
+      Terminal.loadFont(fabgl::getPresetFontInfo(Terminal.canvas()->getWidth(), Terminal.canvas()->getHeight(), (cols ? cols : 80), (rows ? rows : 25)));
+    } else {
+      // load specified font
+      Terminal.loadFont(FONTS_INFO[getFontIndex()]);
+    }
+  }
+
   static void loadConfiguration() {
     Terminal.setTerminalType(getTermType());
     Terminal.keyboard()->setLayout(SupportedLayouts::layouts()[getKbdLayoutIndex()]);
@@ -240,4 +413,14 @@ public:
     Terminal.setForegroundColor(getFGColor());
   }
 
+};
+
+
+// an app just to show reboot message and reboot
+class RebootDialogApp : public uiApp {
+  void init() {
+    rootWindow()->frameProps().fillBackground = false;
+    auto rebootDialog = new RebootDialog(rootWindow());
+    showModalWindow(rebootDialog);  // no return!
+  }
 };

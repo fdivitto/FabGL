@@ -23,9 +23,9 @@
 #include "fabgl.h"
 
 
-fabgl::VGA16Controller DisplayController;
-fabgl::PS2Controller PS2Controller;
-fabgl::Terminal      Terminal;
+fabgl::BitmappedDisplayController * DisplayController;
+fabgl::PS2Controller           PS2Controller;
+fabgl::Terminal                Terminal;
 
 
 
@@ -48,27 +48,33 @@ void setup()
 {
   //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
 
+  // more stack is required for the UI (used inside Terminal.onVirtualKey)
+  Terminal.keyboardReaderTaskStackSize = 3000;
+
   preferences.begin("AnsiTerminal", false);
 
+  // because mouse is optional, don't re-try if it is not found (to speed-up boot)
+  fabgl::Mouse::quickCheckHardware();
+
   // only keyboard configured on port 0
-  PS2Controller.begin(PS2Preset::KeyboardPort0);
+  //PS2Controller.begin(PS2Preset::KeyboardPort0);
+  PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
 
-  DisplayController.begin();
-  DisplayController.setResolution(VGA_640x480_60Hz);
+  ConfDialogApp::setupDisplay();
 
-  Terminal.begin(&DisplayController);
+  ConfDialogApp::loadConfiguration();  
+
   //Terminal.setLogStream(Serial);  // debug only
-
-  ConfDialogApp::loadConfiguration();
 
   Terminal.clear();
   Terminal.enableCursor(true);
 
   Terminal.write("* *  FabGL - Serial Terminal                            * *\r\n");
   Terminal.write("* *  2019-2020 by Fabrizio Di Vittorio - www.fabgl.com  * *\r\n\n");
-  //Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+  Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController->getScreenWidth(), DisplayController->getScreenHeight());
   Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
-  Terminal.printf("Keyboard           : %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
+  Terminal.printf("Keyboard           : %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "Yes" : "No");
+  Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
   Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
   //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
   Terminal.write("\r\nPress F12 to change terminal configuration\r\n\n");
@@ -78,8 +84,9 @@ void setup()
       if (!keyDown) {
         // releasing F12 key to open configuration dialog
         Terminal.deactivate();
+        PS2Controller.mouse()->emptyQueue();  // avoid previous mouse movements to be showed on UI
         auto dlgApp = new ConfDialogApp;
-        dlgApp->run(&DisplayController);
+        dlgApp->run(DisplayController);
         delete dlgApp;
         Terminal.keyboard()->emptyVirtualKeyQueue();
         Terminal.activate();
@@ -87,12 +94,9 @@ void setup()
         // pressing CTRL + ALT + F12, reset parameters and reboot
         if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
             (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
-          Terminal.write("\r\nReset of terminal settings...");
-          preferences.clear();
-          delay(2000);
-          Terminal.write("\r\nRebooting...");
-          delay(2000);
-          ESP.restart();
+          Terminal.deactivate();
+          auto rebootApp = new RebootDialogApp;
+          rebootApp->run(DisplayController);
         }
       }
       *vk = VirtualKey::VK_NONE;
