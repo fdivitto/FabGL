@@ -186,7 +186,7 @@ class ConfDialogApp : public uiApp {
     preferences.putInt("BaudRate", baudRateComboBox->selectedItem());
     preferences.putInt("DataLen", datalenComboBox->selectedItem());
     preferences.putInt("Parity", parityComboBox->selectedItem());
-    preferences.putInt("StopBits", parityComboBox->selectedItem() + 1);
+    preferences.putInt("StopBits", stopBitsComboBox->selectedItem() + 1);
     preferences.putInt("FlowCtrl", flowCtrlComboBox->selectedItem());
     preferences.putInt("BGColor", (int)bgColorComboBox->selectedColor());
     preferences.putInt("FGColor", (int)fgColorComboBox->selectedColor());
