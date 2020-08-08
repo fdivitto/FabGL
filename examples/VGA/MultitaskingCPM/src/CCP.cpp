@@ -1563,6 +1563,8 @@ bool CCP::cmd_FORMAT(uint16_t paramsAddr)
   int c = m_BDOS->BDOS_callConsoleIn();
   if (c != 'y' && c != 'Y')
     return true;
+  consoleOut("\r\nFormatting...");
+  delay(100);
   FileBrowser::format(driveType, 0);
   ESP.restart();
   return true;
