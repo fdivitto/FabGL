@@ -57,7 +57,6 @@ void setup()
   fabgl::Mouse::quickCheckHardware();
 
   // only keyboard configured on port 0
-  //PS2Controller.begin(PS2Preset::KeyboardPort0);
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
 
   ConfDialogApp::setupDisplay();
@@ -95,6 +94,7 @@ void setup()
         if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
             (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
           Terminal.deactivate();
+          preferences.clear();
           auto rebootApp = new RebootDialogApp;
           rebootApp->run(DisplayController);
         }
