@@ -820,6 +820,21 @@ public:
   using Print::write;
 
   /**
+   * @brief Like localWrite() but sends also to serial port if connected
+   *
+   * @param c Character code to send
+   */
+  void send(uint8_t c);
+
+  /**
+   * @brief Like localWrite() but sends also to serial port if connected
+   *
+   * @param str String to send
+   */
+  void send(char const * str);
+
+
+  /**
    * @brief Gets associated keyboard object.
    *
    * @return The Keyboard object.
@@ -988,8 +1003,6 @@ private:
 
   void useAlternateScreenBuffer(bool value);
 
-  void send(uint8_t c);
-  void send(char const * str);
   void sendCSI();
   void sendDCS();
   void sendSS3();
