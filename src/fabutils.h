@@ -804,6 +804,13 @@ inline gpio_num_t int2gpio(int gpio)
 }
 
 
+// converts 0..9 -> '0'..'9', 10..15 -> 'a'..'f'
+inline char digit2hex(int digit)
+{
+  return digit < 10 ? '0' + digit : 'a' + digit - 10;
+}
+
+
 // milliseconds to FreeRTOS ticks.
 // ms = -1 => maximum delay (portMAX_DELAY)
 uint32_t msToTicks(int ms);
