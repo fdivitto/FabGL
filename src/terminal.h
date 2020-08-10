@@ -516,7 +516,7 @@ public:
   /**
    * @brief Pools the serial port for incoming data.
    *
-   * Tnis method needs to be called in the application main loop to check if new data
+   * This method needs to be called in the application main loop to check if new data
    * is coming from the current serial port (specified using Terminal.connectSerialPort).
    *
    * Example:
@@ -526,6 +526,15 @@ public:
    *     }
    */
   void pollSerialPort();
+
+  /**
+   * @brief Disables/Enables serial port RX
+   *
+   * This method temporarily disables RX from serial port, discarding all incoming data.
+   *
+   * @param value If True RX is disabled. If False RX is re-enabled.
+   */
+  void disableSerialPortRX(bool value)         { m_uartRXEnabled = !value; }
 
   /**
    * @brief Permits using of terminal locally.
@@ -1084,6 +1093,9 @@ private:
   // data from serial port is processed and displayed
   // keys from keyboard are processed and sent to serial port
   volatile bool             m_uart;
+
+  // if false all inputs from UART are discarded
+  volatile bool             m_uartRXEnabled;
 
   // contains characters to be processed (from write() calls)
   volatile QueueHandle_t    m_inputQueue;

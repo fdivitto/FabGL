@@ -161,7 +161,8 @@ int Terminal::keyboardReaderTaskStackSize = FABGLIB_DEFAULT_TERMINAL_KEYBOARD_RE
 
 Terminal::Terminal()
   : m_canvas(nullptr),
-    m_mutex(nullptr)
+    m_mutex(nullptr),
+    m_uartRXEnabled(true)
 {
   if (s_activeTerminal == nullptr)
     s_activeTerminal = this;
@@ -1573,7 +1574,9 @@ void Terminal::pollSerialPort()
     if (!avail)
       break;
 
-    write( m_serialPort->read() );
+    auto r = m_serialPort->read();
+    if (m_uartRXEnabled)
+      write(r);
   }
 }
 
@@ -1620,7 +1623,9 @@ void IRAM_ATTR Terminal::uart_isr(void *arg)
       break;
     }
     // add to input queue
-    term->write(uart->fifo.rw_byte, true);
+    auto r = uart->fifo.rw_byte;
+    if (term->m_uartRXEnabled)
+      term->write(r, true);
   }
 
   // clear interrupt flag
