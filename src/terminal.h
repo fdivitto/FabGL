@@ -43,6 +43,7 @@
 #include "canvas.h"
 #include "devdrivers/keyboard.h"
 #include "terminfo.h"
+#include "devdrivers/soundgen.h"
 
 #include "Stream.h"
 
@@ -347,7 +348,7 @@ struct EmuState {
   // VT52 Graphics Mode
   bool         VT52GraphicsMode;
 
-  // Allow FabGL specific sequences (ESC FABGL_ENTERM_CODE .....)
+  // Allow FabGL specific sequences (ESC FABGLEXT_STARTCODE .....)
   int          allowFabGLSequences;  // >0 allow, 0 = don't allow
 };
 
@@ -961,6 +962,7 @@ private:
   void consumeESC();
   void consumeCSI();
   void consumeFabGLSeq();
+  void consumeFabGLGraphicsSeq();
   void consumeCSIQUOT(int * params, int paramsCount);
   void consumeCSISPC(int * params, int paramsCount);
   uint8_t consumeParamsAndGetCode(int * params, int * paramsCount, bool * questionMarkFound);
@@ -1033,6 +1035,11 @@ private:
   void int_setTerminalType(TermType value);
   void int_setTerminalType(TermInfo const * value);
 
+  void sound(int waveform, int frequency, int duration, int volume);
+
+  uint8_t extGetByteParam();
+  int extGetIntParam();
+  void extGetCmdParam(char * cmd);
 
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
@@ -1140,7 +1147,11 @@ private:
 
   // when a FabGL sequence has been detected in write()
   volatile bool             m_writeDetectedFabGLSeq;
-  volatile int              m_writeFabGLSeqLength;
+
+  // used by extGetIntParam(), extGetCmdParam(), extGetByteParam() to store next item (to avoid insertToInputQueue() which can cause dead-locks)
+  int                       m_extNextCode; // -1 = no code
+
+  SoundGenerator *          m_soundGenerator;
 
 };
 
