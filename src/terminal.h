@@ -935,6 +935,8 @@ private:
   void int_setBackgroundColor(Color color);
   void int_setForegroundColor(Color color);
 
+  void syncDisplayController();
+
   // tab stops
   void nextTabStop();
   void setTabStop(int column, bool set);

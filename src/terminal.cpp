@@ -248,23 +248,7 @@ void Terminal::activate(TerminalTransition transition)
 
     s_activeTerminal = this;
     vTaskResume(m_keyboardReaderTaskHandle);
-    if (m_bitmappedDisplayController) {
-      // restore canvas state for bitmapped display controller
-      m_canvas->reset();
-      m_canvas->setGlyphOptions(m_glyphOptions);
-      m_canvas->setBrushColor(m_emuState.backgroundColor);
-      m_canvas->setPenColor(m_emuState.foregroundColor);
-    } else {
-      // restore textual display controller state
-      auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
-      txtCtrl->setTextMap(m_glyphsBuffer.map, m_rows);
-      txtCtrl->setCursorBackground(m_emuState.backgroundColor);
-      txtCtrl->setCursorForeground(m_emuState.foregroundColor);
-      txtCtrl->setCursorPos(m_emuState.cursorY - 1, m_emuState.cursorX - 1);
-      txtCtrl->enableCursor(m_emuState.cursorEnabled);
-    }
-    updateCanvasScrollingRegion();
-    refresh();
+    syncDisplayController();
   }
   xSemaphoreGive(m_mutex);
 }
@@ -277,6 +261,29 @@ void Terminal::deactivate()
     s_activeTerminal = nullptr;
   }
   xSemaphoreGive(m_mutex);
+}
+
+
+// synchronize display controller (and canvas) state
+void Terminal::syncDisplayController()
+{
+  if (m_bitmappedDisplayController) {
+    // restore canvas state for bitmapped display controller
+    m_canvas->reset();
+    m_canvas->setGlyphOptions(m_glyphOptions);
+    m_canvas->setBrushColor(m_emuState.backgroundColor);
+    m_canvas->setPenColor(m_emuState.foregroundColor);
+  } else {
+    // restore textual display controller state
+    auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
+    txtCtrl->setTextMap(m_glyphsBuffer.map, m_rows);
+    txtCtrl->setCursorBackground(m_emuState.backgroundColor);
+    txtCtrl->setCursorForeground(m_emuState.foregroundColor);
+    txtCtrl->setCursorPos(m_emuState.cursorY - 1, m_emuState.cursorX - 1);
+    txtCtrl->enableCursor(m_emuState.cursorEnabled);
+  }
+  updateCanvasScrollingRegion();
+  refresh();
 }
 
 
@@ -3280,6 +3287,7 @@ void Terminal::consumeFabGLSeq()
     // params:
     //   none
     case FABGL_ENTERM_CLEAR:
+      syncDisplayController();
       erase(1, 1, m_columns, m_rows, ASCII_SPC, false, false);
       break;
 
