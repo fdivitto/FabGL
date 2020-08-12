@@ -38,7 +38,7 @@ void setup()
   DisplayController.setResolution(VGA_640x480_60Hz);
 
   Terminal.begin(&DisplayController);
-  Terminal.setLogStream(Serial);  // DEBUG ONLY
+  //Terminal.setLogStream(Serial);  // DEBUG ONLY
 
   Terminal.enableCursor(true);
 }
