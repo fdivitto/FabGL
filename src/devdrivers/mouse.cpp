@@ -174,7 +174,7 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
 
   m_uiApp = app;
 
-  if (createAbsolutePositionsQueue) {
+  if (createAbsolutePositionsQueue && m_absoluteQueue == nullptr) {
     m_absoluteQueue = xQueueCreate(FABGLIB_MOUSE_EVENTS_QUEUE_SIZE, sizeof(MouseStatus));
   }
 
@@ -183,7 +183,7 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
     m_updateDisplayController->setMouseCursorPos(m_status.X, m_status.Y);
   }
 
-  if (m_updateDisplayController || createAbsolutePositionsQueue || m_uiApp) {
+  if ((m_updateDisplayController || createAbsolutePositionsQueue || m_uiApp) && m_absoluteUpdateTimer == nullptr) {
     // create and start the timer
     m_absoluteUpdateTimer = xTimerCreate("", pdMS_TO_TICKS(10), pdTRUE, this, absoluteUpdateTimerFunc);
     xTimerStart(m_absoluteUpdateTimer, portMAX_DELAY);
