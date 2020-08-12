@@ -42,6 +42,7 @@
 
 #include "fabutils.h"
 #include "terminal.h"
+#include "devdrivers/mouse.h"
 
 
 
@@ -128,6 +129,9 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGLEXT_READADC        'C'
 #define FABGLEXT_SOUND          'S'
 #define FABGLEXT_GRAPHICSCMD    'G'
+#define FABGLEXT_SHOWMOUSE      'H'
+#define FABGLEXT_GETMOUSEPOS    'M'
+#define FABGLEXT_DELAY          'Y'
 
 // maximum length of sub commands (includes ending zero)
 #define FABGLEXT_MAXSUBCMDLEN   16
@@ -3777,6 +3781,89 @@ void Terminal::consumeFabGLSeq()
     case FABGLEXT_GRAPHICSCMD:
       consumeFabGLGraphicsSeq();
       break;
+
+    // Show or hide mouse pointer
+    // Seq:
+    //    ESC FABGLEXT_STARTCODE FABGLEXT_SHOWMOUSE VALUE FABGLEXT_ENDCODE
+    // params:
+    //    VALUE (char) : '1' show mouse, '0' (and others) hide mouse
+    case FABGLEXT_SHOWMOUSE:
+    {
+      bool value = (extGetByteParam() == '1');
+      if (m_bitmappedDisplayController) {
+        auto dispctrl = static_cast<BitmappedDisplayController*>(m_displayController);
+        auto mouse = PS2Controller::instance()->mouse();
+        if (mouse && mouse->isMouseAvailable()) {
+          if (value) {
+            mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, dispctrl);
+            dispctrl->setMouseCursor(CursorName::CursorPointerSimpleReduced);
+          } else {
+            dispctrl->setMouseCursor(nullptr);
+            mouse->terminateAbsolutePositioner();
+          }
+        }
+      }
+      extGetByteParam();  // FABGLEXT_ENDCODE
+      break;
+    }
+
+    // Get mouse position
+    // Seq:
+    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETMOUSEPOS FABGLEXT_ENDCODE
+    // params:
+    //    none
+    // return:
+    //    byte: FABGLEXT_REPLYCODE   (reply tag)
+    //    3 hex digits : x position
+    //    char: ';'
+    //    3 hex digits : y position
+    //    char: ';'
+    //    1 hex digit : scroll wheel delta (0..15)
+    //    char: ';'
+    //    1 hex digit : pressed button (bit 1 = left button, bit 2 = middle button, bit 3 = right button)
+    case FABGLEXT_GETMOUSEPOS:
+    {
+      extGetByteParam();  // FABGLEXT_ENDCODE
+      if (m_bitmappedDisplayController) {
+        auto mouse = PS2Controller::instance()->mouse();
+        auto x = mouse->status().X;
+        auto y = mouse->status().Y;
+        send(FABGLEXT_REPLYCODE);
+        // x
+        send(toupper(digit2hex((x & 0xF00) >> 8)));
+        send(toupper(digit2hex((x & 0x0F0) >> 4)));
+        send(toupper(digit2hex((x & 0x00F)     )));
+        send(';');
+        // y
+        send(toupper(digit2hex((y & 0xF00) >> 8)));
+        send(toupper(digit2hex((y & 0x0F0) >> 4)));
+        send(toupper(digit2hex((y & 0x00F)     )));
+        send(';');
+        // scroll wheel
+        send(toupper(digit2hex(mouse->status().wheelDelta & 0xf)));
+        send(';');
+        // button
+        auto b = mouse->status().buttons;
+        send(toupper(digit2hex( b.left | (b.middle << 1) | (b.right << 2) )));
+      }
+      break;
+    }
+
+    // Delay for milliseconds (return FABGLEXT_REPLYCODE when time is elapsed)
+    // Seq:
+    //    ESC FABGLEXT_STARTCODE FABGLEXT_DELAY VALUE FABGLEXT_ENDCODE
+    // params:
+    //    VALUE (text) : number (milliseconds)
+    // return:
+    //    byte: FABGLEXT_REPLYCODE   (reply tag)
+    case FABGLEXT_DELAY:
+    {
+      auto value = extGetIntParam();
+      extGetByteParam();  // FABGLEXT_ENDCODE
+      delay(value);
+      send(FABGLEXT_REPLYCODE);
+      break;
+    }
 
     default:
       #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
