@@ -3887,8 +3887,10 @@ void Terminal::consumeFabGLGraphicsSeq()
     // Seq:
     //    FABGLEXT_GCLEAR FABGLEXT_ENDCODE
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->reset();
-    m_canvas->clear();
+    if (m_canvas) {
+      m_canvas->reset();
+      m_canvas->clear();
+    }
 
   } else if (strcmp(cmd, FABGLEXT_GSETBRUSHCOLOR) == 0) {
 
@@ -3905,7 +3907,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int b = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->setBrushColor(r, g, b);
+    if (m_canvas)
+      m_canvas->setBrushColor(r, g, b);
 
   } else if (strcmp(cmd, FABGLEXT_GSETPENCOLOR) == 0) {
 
@@ -3922,7 +3925,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int b = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->setPenColor(r, g, b);
+    if (m_canvas)
+      m_canvas->setPenColor(r, g, b);
 
   } else if (strcmp(cmd, FABGLEXT_GSETPIXEL) == 0) {
 
@@ -3936,7 +3940,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int y = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->setPixel(x, y);
+    if (m_canvas)
+      m_canvas->setPixel(x, y);
 
   } else if (strcmp(cmd, FABGLEXT_GSCROLL) == 0) {
 
@@ -3950,7 +3955,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int oy = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->scroll(ox, oy);
+    if (m_canvas)
+      m_canvas->scroll(ox, oy);
 
   } else if (strcmp(cmd, FABGLEXT_GPENWIDTH) == 0) {
 
@@ -3961,7 +3967,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     //    WIDTH (text) : number
     int w = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->setPenWidth(w);
+    if (m_canvas)
+      m_canvas->setPenWidth(w);
 
   } else if (strcmp(cmd, FABGLEXT_GLINE) == 0) {
 
@@ -3981,7 +3988,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int y2 = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->drawLine(x1, y1, x2, y2);
+    if (m_canvas)
+      m_canvas->drawLine(x1, y1, x2, y2);
 
   } else if (strcmp(cmd, FABGLEXT_GRECT) == 0) {
 
@@ -4001,7 +4009,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int y2 = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->drawRectangle(x1, y1, x2, y2);
+    if (m_canvas)
+      m_canvas->drawRectangle(x1, y1, x2, y2);
 
   } else if (strcmp(cmd, FABGLEXT_GFILLRECT) == 0) {
 
@@ -4021,7 +4030,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int y2 = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->fillRectangle(x1, y1, x2, y2);
+    if (m_canvas)
+      m_canvas->fillRectangle(x1, y1, x2, y2);
 
   } else if (strcmp(cmd, FABGLEXT_GELLIPSE) == 0) {
 
@@ -4041,7 +4051,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int h = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->drawEllipse(x, y, w, h);
+    if (m_canvas)
+      m_canvas->drawEllipse(x, y, w, h);
 
   } else if (strcmp(cmd, FABGLEXT_GFILLELLIPSE) == 0) {
 
@@ -4061,7 +4072,8 @@ void Terminal::consumeFabGLGraphicsSeq()
     extGetByteParam();  // ';'
     int h = extGetIntParam();
     extGetByteParam();  // FABGLEXT_ENDCODE
-    m_canvas->fillEllipse(x, y, w, h);
+    if (m_canvas)
+      m_canvas->fillEllipse(x, y, w, h);
 
   } else if (strcmp(cmd, FABGLEXT_GPATH) == 0) {
 
@@ -4084,7 +4096,8 @@ void Terminal::consumeFabGLGraphicsSeq()
       if (extGetByteParam() == FABGLEXT_ENDCODE)
         break;
     }
-    m_canvas->drawPath(pts, count);
+    if (m_canvas)
+      m_canvas->drawPath(pts, count);
 
   } else if (strcmp(cmd, FABGLEXT_GFILLPATH) == 0) {
 
@@ -4107,7 +4120,8 @@ void Terminal::consumeFabGLGraphicsSeq()
       if (extGetByteParam() == FABGLEXT_ENDCODE)
         break;
     }
-    m_canvas->fillPath(pts, count);
+    if (m_canvas)
+      m_canvas->fillPath(pts, count);
 
   } else {
     #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
