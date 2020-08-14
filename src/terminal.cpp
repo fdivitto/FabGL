@@ -3312,6 +3312,7 @@ uint8_t Terminal::extGetByteParam()
 
 
 // get integer parameter terminated by non digit character
+// the integer may have a single space in place of sign (ie "-10", "+10", " 10" are valid values)
 int Terminal::extGetIntParam()
 {
   int sign = -2;  // -2 = not set
@@ -3324,7 +3325,7 @@ int Terminal::extGetIntParam()
         if (c == '-') {
           sign = -1;
           continue;
-        } else if (c == '+') {
+        } else if (c == '+' || c == ' ') {
           sign = 1;
           continue;
         }
