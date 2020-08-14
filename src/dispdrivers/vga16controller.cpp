@@ -668,25 +668,25 @@ void VGA16Controller::setupDefaultPalette()
 }
 
 
-//   0        => 0
-//   1 .. 127 => 1
+//   0 .. 63  => 0
+//  64 .. 127 => 1
 // 128 .. 191 => 2
 // 192 .. 255 => 3
 static uint8_t RGB888toPackedRGB222(RGB888 const & rgb)
 {
-  static const int CONVR[4] = { 1 << 0,    // 00XXXXXX (0..63)
+  static const int CONVR[4] = { 0 << 0,    // 00XXXXXX (0..63)
                                 1 << 0,    // 01XXXXXX (64..127)
                                 2 << 0,    // 10XXXXXX (128..191)
                                 3 << 0, }; // 11XXXXXX (192..255)
-  static const int CONVG[4] = { 1 << 2,    // 00XXXXXX (0..63)
+  static const int CONVG[4] = { 0 << 2,    // 00XXXXXX (0..63)
                                 1 << 2,    // 01XXXXXX (64..127)
                                 2 << 2,    // 10XXXXXX (128..191)
                                 3 << 2, }; // 11XXXXXX (192..255)
-  static const int CONVB[4] = { 1 << 4,    // 00XXXXXX (0..63)
+  static const int CONVB[4] = { 0 << 4,    // 00XXXXXX (0..63)
                                 1 << 4,    // 01XXXXXX (64..127)
                                 2 << 4,    // 10XXXXXX (128..191)
                                 3 << 4, }; // 11XXXXXX (192..255)
-  return (rgb.R ? CONVR[rgb.R >> 6] : 0) | (rgb.G ? CONVG[rgb.G >> 6] : 0) | (rgb.B ? CONVB[rgb.B >> 6] : 0);
+  return (CONVR[rgb.R >> 6]) | (CONVG[rgb.G >> 6]) | (CONVB[rgb.B >> 6]);
 }
 
 
