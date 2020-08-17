@@ -2295,6 +2295,12 @@ void Terminal::consumeESC()
     return;
   }
 
+  if (c == ']') {
+    // ESC ] : start of OSC sequence
+    consumeOSC();
+    return;
+  }
+
   if (c == FABGLEXT_STARTCODE && m_emuState.allowFabGLSequences > 0) {
     // ESC FABGLEXT_STARTCODE : FabGL specific sequence
     consumeFabGLSeq();
