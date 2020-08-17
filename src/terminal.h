@@ -1064,9 +1064,12 @@ private:
   // true when m_alternateMap and m_glyphBuffer.map has been swapped
   bool               m_alternateScreenBuffer;
 
-  // just to restore cursor X and Y pos when swapping screens (alternate screen)
+  // just to restore some properties when swapping screens (alternate screen)
   int                m_alternateCursorX;
   int                m_alternateCursorY;
+  int                m_alternateScrollingRegionTop;
+  int                m_alternateScrollingRegionDown;
+  bool               m_alternateCursorBlinkingEnabled;
 
   FontInfo           m_font;
 

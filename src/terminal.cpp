@@ -1471,6 +1471,9 @@ void Terminal::restoreCursorState()
 
 void Terminal::useAlternateScreenBuffer(bool value)
 {
+  #if FABGLIB_TERMINAL_DEBUG_REPORT_DESCS
+  logFmt("useAlternateScreenBuffer: %d\n", value);
+  #endif
   if (m_alternateScreenBuffer != value) {
     m_alternateScreenBuffer = value;
     if (!m_alternateMap) {
@@ -1479,10 +1482,17 @@ void Terminal::useAlternateScreenBuffer(bool value)
       clearMap(m_alternateMap);
       m_alternateCursorX = 1;
       m_alternateCursorY = 1;
+      m_alternateScrollingRegionTop  = 1;
+      m_alternateScrollingRegionDown = m_rows;
+      m_alternateCursorBlinkingEnabled = true;
     }
     tswap(m_alternateMap, m_glyphsBuffer.map);
     tswap(m_emuState.cursorX, m_alternateCursorX);
     tswap(m_emuState.cursorY, m_alternateCursorY);
+    tswap(m_emuState.scrollingRegionTop, m_alternateScrollingRegionTop);
+    tswap(m_emuState.scrollingRegionDown, m_alternateScrollingRegionDown);
+    tswap(m_emuState.cursorBlinkingEnabled, m_alternateCursorBlinkingEnabled);
+    setScrollingRegion(m_emuState.scrollingRegionTop, m_emuState.scrollingRegionDown, false);
     m_emuState.cursorPastLastCol = false;
     refresh();
   }
