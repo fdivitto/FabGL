@@ -793,9 +793,14 @@ void Terminal::set132ColumnMode(bool value)
   log("set132ColumnMode()\n");
   #endif
 
-  if (m_bitmappedDisplayController)
+  if (m_bitmappedDisplayController) {
+    if (value) {
+      // 132x25 is forced because ANSI compatibility
+      m_maxColumns = 132;
+      m_maxRows    = 25;
+    }
     loadFont(getPresetFontInfo(m_canvas->getWidth(), m_canvas->getHeight(), (value ? 132 : 80), 25));
-  else
+  } else
     loadFont(nullptr);
 }
 
