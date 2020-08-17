@@ -961,6 +961,7 @@ private:
   void consumeInputQueue();
   void consumeESC();
   void consumeCSI();
+  void consumeOSC();
   void consumeFabGLSeq();
   void consumeFabGLGraphicsSeq();
   void consumeCSIQUOT(int * params, int paramsCount);

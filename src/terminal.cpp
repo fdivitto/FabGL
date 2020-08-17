@@ -3272,6 +3272,27 @@ void Terminal::consumeESCVT52()
 }
 
 
+// consume OSC sequence (ESC + ']' already consumed)
+// OSC is terminated by ASCII_BEL or ST (ESC + '\')
+void Terminal::consumeOSC()
+{
+  #if FABGLIB_TERMINAL_DEBUG_REPORT_ESC
+  log("ESC]");
+  #endif
+
+  char prevChar = 0;
+  while (true) {
+    uint8_t c = getNextCode(false);
+    #if FABGLIB_TERMINAL_DEBUG_REPORT_OSC_CONTENT
+    logFmt("OSC: %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)(c)] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
+    #endif
+    if (c == ASCII_BEL || (c == '\\' && prevChar == ASCII_ESC))
+      break;
+    prevChar = c;
+  }
+}
+
+
 void Terminal::sound(int waveform, int frequency, int duration, int volume)
 {
   if (!m_soundGenerator)
