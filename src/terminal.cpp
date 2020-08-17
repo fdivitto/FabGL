@@ -910,7 +910,7 @@ bool Terminal::moveDown()
   log("moveDown()\n");
   #endif
 
-  if (m_emuState.cursorY == m_emuState.scrollingRegionDown)
+  if (m_emuState.cursorY == m_emuState.scrollingRegionDown || m_emuState.cursorY == m_rows)
     return true;
   setCursorPos(m_emuState.cursorX, m_emuState.cursorY + 1);
   return false;
@@ -1136,7 +1136,7 @@ void Terminal::scrollDown()
       m_canvas->scroll(0, m_font.height);
   }
 
-  // move down scren buffer
+  // move down screen buffer
   for (int y = m_emuState.scrollingRegionDown - 1; y > m_emuState.scrollingRegionTop - 1; --y)
     memcpy(m_glyphsBuffer.map + y * m_columns, m_glyphsBuffer.map + (y - 1) * m_columns, m_columns * sizeof(uint32_t));
 
@@ -1167,6 +1167,13 @@ void Terminal::scrollUp()
   log("scrollUp\n");
   #endif
 
+  auto ldown = m_emuState.scrollingRegionDown;
+  if (m_emuState.cursorY == m_rows) {
+    // scrolling occurs always when at bottom row, even if it is out of scrolling region (xterm has the same behaviour)
+    m_emuState.scrollingRegionDown = m_rows;
+    updateCanvasScrollingRegion();
+  }
+
   if (m_bitmappedDisplayController && isActive()) {
     // scroll up using canvas
     if (m_emuState.smoothScroll) {
@@ -1185,6 +1192,11 @@ void Terminal::scrollUp()
   uint32_t * itemPtr = m_glyphsBuffer.map + (m_emuState.scrollingRegionDown - 1) * m_columns;
   for (int x = 0; x < m_columns; ++x, ++itemPtr)
     *itemPtr = itemValue;
+
+  if (ldown != m_emuState.scrollingRegionDown) {
+    m_emuState.scrollingRegionDown = ldown;
+    updateCanvasScrollingRegion();
+  }
 }
 
 
