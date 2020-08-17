@@ -2152,6 +2152,10 @@ uint8_t Terminal::getNextCode(bool processCtrlCodes)
     uint8_t c;
     xQueueReceive(m_inputQueue, &c, portMAX_DELAY);
 
+    #if FABGLIB_TERMINAL_DEBUG_REPORT_INQUEUE_CODES
+    logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
+    #endif
+
     if (m_uart)
       uartCheckInputQueueForFlowControl();
 
