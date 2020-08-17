@@ -3026,6 +3026,11 @@ void Terminal::execSGRParameters(int const * params, int paramsCount)
         m_glyphOptions.reduceLuminosity = 1;
         break;
 
+      // Select primary font
+      case 10:
+        m_emuState.characterSetIndex = 0;
+        break;
+
       // Disable Bold and Faint
       case 22:
         m_glyphOptions.bold = m_glyphOptions.reduceLuminosity = 0;
