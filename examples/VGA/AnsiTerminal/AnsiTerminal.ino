@@ -51,6 +51,8 @@ void setup()
   // more stack is required for the UI (used inside Terminal.onVirtualKey)
   Terminal.keyboardReaderTaskStackSize = 3000;
 
+  Terminal.inputQueueSize = 2048; // 2048 good to pass vttest
+
   preferences.begin("AnsiTerminal", false);
 
   // because mouse is optional, don't re-try if it is not found (to speed-up boot)
