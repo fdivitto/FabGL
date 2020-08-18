@@ -132,6 +132,7 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGLEXT_SHOWMOUSE      'H'
 #define FABGLEXT_GETMOUSEPOS    'M'
 #define FABGLEXT_DELAY          'Y'
+#define FABGLEXT_USERSEQ        '#'
 
 // maximum length of sub commands (includes ending zero)
 #define FABGLEXT_MAXSUBCMDLEN   16
@@ -3926,6 +3927,26 @@ void Terminal::consumeFabGLSeq()
       extGetByteParam();  // FABGLEXT_ENDCODE
       delay(value);
       send(FABGLEXT_REPLYCODE);
+      break;
+    }
+
+    // User sequence
+    // Seq:
+    //    ESC FABGLEXT_STARTCODE FABGLEXT_USERSEQ ... FABGLEXT_ENDCODE
+    // params:
+    //    ... any character different than FABGLEXT_ENDCODE, and up to FABGLEXT_MAXSUBCMDLEN characters
+    case FABGLEXT_USERSEQ:
+    {
+      char usrseq[FABGLEXT_MAXSUBCMDLEN];
+      int count = 0;
+      while (count < FABGLEXT_MAXSUBCMDLEN) {
+        char c = extGetByteParam();
+        if (c == FABGLEXT_ENDCODE)
+          break;
+        usrseq[count++] = c;
+      }
+      usrseq[count] = 0;
+      onUserSequence(usrseq);
       break;
     }
 

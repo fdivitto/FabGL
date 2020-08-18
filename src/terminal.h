@@ -883,6 +883,16 @@ public:
   Delegate<VirtualKey *, bool> onVirtualKey;
 
 
+  /**
+   * @brief Delegate called whenever a new user sequence has been received
+   *
+   * The parameter contains a zero terminated string containing the user sequence payload.
+   * User sequence starts with ESC + "_#" and terminates with "$". For example, when then terminal
+   * receives "ESC_#mycommand$", the delegate receives "mycommand" string.
+   */
+  Delegate<char const *> onUserSequence;
+
+
 
   // statics (used for common default properties)
 
