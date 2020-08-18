@@ -26,6 +26,7 @@
 
 #include "fabui.h"
 #include "uistyle.h"
+#include "restartdialog.h"
 
 
 Preferences preferences;
@@ -74,42 +75,6 @@ constexpr int       ROWS_COUNT    = sizeof(ROWS_STR) / sizeof(char const *);
 
 
 
-
-struct RebootDialog : public uiFrame {
-  uiLabel *  label;
-  uiButton * button;
-  int        counter;
-
-  RebootDialog(uiFrame * parent)
-    : uiFrame(parent, "Terminal restart required", UIWINDOW_PARENTCENTER, Size(230, 60)) {
-    frameProps().resizeable        = false;
-    frameProps().moveable          = false;
-    frameProps().hasCloseButton    = false;
-    frameProps().hasMaximizeButton = false;
-    frameProps().hasMinimizeButton = false;
-
-    label = new uiLabel(this, "", Point(5, 30));
-
-    button = new uiButton(this, "Reboot Now!", Point(132, 27), Size(80, 20));
-    button->onClick = [&]() {
-      ESP.restart();
-    };
-
-    counter = 3;
-    app()->setTimer(this, 1000);
-    onTimer = [&](uiTimerHandle tHandle) { countDown(); };
-    countDown();
-  }
-
-  void countDown() {
-    app()->setFocusedWindow(button);
-    if (counter < 0)
-      ESP.restart();
-    label->setTextFmt("Rebooting in %d seconds...", counter--);
-  }
-};
-
-
 class ConfDialogApp : public uiApp {
 
   Rect              frameRect;
@@ -130,7 +95,7 @@ class ConfDialogApp : public uiApp {
 
   void init() {
 
-    setStyle(&confDialogStyle);
+    setStyle(&dialogStyle);
 
     rootWindow()->frameProps().fillBackground = false;
 
@@ -402,11 +367,3 @@ public:
 };
 
 
-// an app just to show reboot message and reboot
-class RebootDialogApp : public uiApp {
-  void init() {
-    rootWindow()->frameProps().fillBackground = false;
-    auto rebootDialog = new RebootDialog(rootWindow());
-    showModalWindow(rebootDialog);  // no return!
-  }
-};
