@@ -58,7 +58,7 @@ void setup()
   // because mouse is optional, don't re-try if it is not found (to speed-up boot)
   fabgl::Mouse::quickCheckHardware();
 
-  // only keyboard configured on port 0
+  // keyboard configured on port 0, and optionally mouse on port 1
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
 
   ConfDialogApp::setupDisplay();
@@ -97,6 +97,7 @@ void setup()
             (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
           Terminal.deactivate();
           preferences.clear();
+          // show reboot dialog
           auto rebootApp = new RebootDialogApp;
           rebootApp->run(DisplayController);
         }
