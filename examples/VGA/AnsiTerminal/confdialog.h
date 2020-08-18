@@ -26,6 +26,7 @@
 
 #include "fabui.h"
 #include "uistyle.h"
+#include "progsdialog.h"
 #include "restartdialog.h"
 
 
@@ -43,6 +44,7 @@ static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
 static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 
 static const char * RESOLUTIONS_STR[]      = { "640x480, 16 colors", "640x350, 64 colors", "512x384, 64 colors" };
+static const char * RESOLUTIONS_CMDSTR[]   = { "640x480x16",         "640x350x64",         "512x384x64"         };
 static const int    RESOLUTIONS_TYPE[]     = { 1, 0, 0 };   // 0 = VGAController, 1 = VGA16Controller
 static const char * RESOLUTIONS_MODELINE[] = { VGA_640x480_60Hz, VGA_640x350_70HzAlt1, VGA_512x384_60Hz };
 constexpr int       RESOLUTIONS_COUNT      = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
@@ -69,15 +71,19 @@ static const char * ROWS_STR[]    = { "Max", "24", "25" };
 static const int    ROWS_INT[]    = { 0, 24, 25 };
 constexpr int       ROWS_COUNT    = sizeof(ROWS_STR) / sizeof(char const *);
 
+constexpr int       BOOTINFO_DISABLED     = 0;
+constexpr int       BOOTINFO_ENABLED      = 1;
+constexpr int       BOOTINFO_TEMPDISABLED = 2;
 
 
 
 
 
-
-class ConfDialogApp : public uiApp {
+struct ConfDialogApp : public uiApp {
 
   Rect              frameRect;
+  int               progToInstall;
+
   uiFrame *         frame;
   uiComboBox *      termComboBox;
   uiComboBox *      kbdComboBox;
@@ -92,6 +98,7 @@ class ConfDialogApp : public uiApp {
   uiComboBox *      fontComboBox;
   uiComboBox *      columnsComboBox;
   uiComboBox *      rowsComboBox;
+  uiCheckBox *      infoCheckBox;
 
   void init() {
 
@@ -108,6 +115,8 @@ class ConfDialogApp : public uiApp {
     frame->frameProps().hasMaximizeButton = false;
     frame->frameProps().hasMinimizeButton = false;
 
+    progToInstall = -1;
+
     // ESC : exit without save
     // F10 : save and exit
     frame->onKeyUp = [&](uiKeyEventInfo key) {
@@ -119,13 +128,14 @@ class ConfDialogApp : public uiApp {
       }
     };
 
-    int y = 24;
+    int y = 19;
 
     // little help
-    new uiLabel(frame, "Use the TAB key to move between fields", Point(90, y), Size(0, 0), true, STYLE_LABELHELP_ID);
+    new uiLabel(frame, "Press TAB key to move between fields", Point(100, y), Size(0, 0), true, STYLE_LABELHELP_ID);
+    new uiLabel(frame, "Outside this dialog press CTRL-ALT-F12 to reset settings", Point(52, y + 12), Size(0, 0), true, STYLE_LABELHELP_ID);
 
 
-    y += 30;
+    y += 34;
 
     // select terminal emulation combobox
     new uiLabel(frame, "Terminal Type", Point(10,  y), Size(0, 0), true, STYLE_LABEL_ID);
@@ -150,7 +160,7 @@ class ConfDialogApp : public uiApp {
     fgColorComboBox->selectColor(getFGColor());
 
 
-    y += 55;
+    y += 48;
 
     // baud rate
     new uiLabel(frame, "Baud Rate", Point(10,  y), Size(0, 0), true, STYLE_LABEL_ID);
@@ -183,7 +193,7 @@ class ConfDialogApp : public uiApp {
     flowCtrlComboBox->selectItem((int)getFlowCtrl());
 
 
-    y += 55;
+    y += 48;
 
     // resolution
     new uiLabel(frame, "Resolution", Point(10, y), Size(0, 0), true, STYLE_LABEL_ID);
@@ -204,25 +214,45 @@ class ConfDialogApp : public uiApp {
     columnsComboBox->selectItem(getColumnsIndex());
 
     // rows
-    new uiLabel(frame, "Rows", Point(324,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Rows", Point(325,  y), Size(0, 0), true, STYLE_LABEL_ID);
     rowsComboBox = new uiComboBox(frame, Point(324, y + 12), Size(40, 20), 50, true, STYLE_COMBOBOX);
     rowsComboBox->items().append(ROWS_STR, ROWS_COUNT);
     rowsComboBox->selectItem(getRowsIndex());
 
 
-    y += 70;
+    y += 48;
+
+    // show boot info
+    new uiLabel(frame, "Show Boot Info", Point(10, y), Size(0, 0), true, STYLE_LABEL_ID);
+    infoCheckBox = new uiCheckBox(frame, Point(80, y - 2), Size(16, 16), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
+    infoCheckBox->setChecked(getBootInfo() == BOOTINFO_ENABLED);
+
+
+    y += 48;
 
     // exit without save button
-    auto exitNoSaveButton = new uiButton(frame, "Quit [ESC]", Point(90, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto exitNoSaveButton = new uiButton(frame, "Quit [ESC]", Point(10, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
     exitNoSaveButton->onClick = [&]() {
       quit(0);
     };
 
     // exit with save button
-    auto exitSaveButton = new uiButton(frame, "Save & Quit [F10]", Point(190, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto exitSaveButton = new uiButton(frame, "Save & Quit [F10]", Point(110, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
     exitSaveButton->onClick = [&]() {
       saveProps();
       quit(0);
+    };
+
+    // install a program
+    auto installButton = new uiButton(frame, "Install Programs", Point(278, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    installButton->onClick = [&]() {
+      progToInstall = -1;
+      auto progsDialog = new ProgsDialog(rootWindow());
+      if (showModalWindow(progsDialog) == 1) {
+        progToInstall = progsDialog->progComboBox->selectedItem();
+        quit(0);
+      }
+      destroyWindow(progsDialog);
     };
 
 
@@ -253,6 +283,7 @@ class ConfDialogApp : public uiApp {
     preferences.putInt("Font", fontComboBox->selectedItem());
     preferences.putInt("Columns", columnsComboBox->selectedItem());
     preferences.putInt("Rows", rowsComboBox->selectedItem());
+    preferences.putInt("BootInfo", infoCheckBox->checked() ? BOOTINFO_ENABLED : BOOTINFO_DISABLED);
 
     if (reboot) {
       auto rebootDialog = new RebootDialog(frame);
@@ -262,8 +293,6 @@ class ConfDialogApp : public uiApp {
     loadConfiguration();
   }
 
-
-public:
 
   ~ConfDialogApp() {
     // this is required, becasue the terminal may not cover the entire screen
@@ -313,6 +342,10 @@ public:
     return preferences.getInt("Resolution", 0);             // default 0 = 640x480, 80x34, 16 colors
   }
 
+  static int getTempResolutionIndex() {
+    return preferences.getInt("TempResolution", -1);         // default -1 = no temp resolution
+  }
+
   static int getFontIndex() {
     return preferences.getInt("Font", 0);                   // default 0 = auto
   }
@@ -325,9 +358,17 @@ public:
     return preferences.getInt("Rows", 0);                   // default 0 = MAX
   }
 
+  static int getBootInfo() {
+    return preferences.getInt("BootInfo", BOOTINFO_ENABLED);
+  }
+
   static void setupDisplay() {
     // setup display controller
-    auto res = getResolutionIndex();
+    auto res = getTempResolutionIndex();
+    if (res == -1)
+      res = getResolutionIndex();
+    else
+      preferences.putInt("TempResolution", -1);
     switch (RESOLUTIONS_TYPE[res]) {
       // VGAController
       case 0:
