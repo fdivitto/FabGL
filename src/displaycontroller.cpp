@@ -226,7 +226,7 @@ void Bitmap::allocate()
     case PixelFormat::Native:
       break;
     case PixelFormat::Mask:
-      data = (uint8_t*) malloc((width + 7) * height / 8);
+      data = (uint8_t*) malloc((width + 7) / 8 * height);
       break;
     case PixelFormat::RGBA2222:
       data = (uint8_t*) malloc(width * height);
@@ -246,7 +246,7 @@ void Bitmap::copyFrom(void const * srcData)
     case PixelFormat::Native:
       break;
     case PixelFormat::Mask:
-      memcpy(data, srcData, (width + 7) * height / 8);
+      memcpy(data, srcData, (width + 7) / 8 * height);
       break;
     case PixelFormat::RGBA2222:
       memcpy(data, srcData, width * height);
