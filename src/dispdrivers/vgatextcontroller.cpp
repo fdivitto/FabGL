@@ -81,7 +81,7 @@ void VGATextController::init(gpio_num_t VSyncGPIO)
   m_GPIOStream.begin();
 
   // load font into RAM
-  int charDataSize = 256 * FONT_8x14.height * (FONT_8x14.width + 7) / 8;
+  int charDataSize = 256 * FONT_8x14.height * ((FONT_8x14.width + 7) / 8);
   m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT);
   memcpy(m_charData, FONT_8x14.data, charDataSize);
 }
