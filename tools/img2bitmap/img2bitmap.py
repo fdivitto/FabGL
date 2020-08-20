@@ -3,7 +3,7 @@
 # Converts an image (png, jpeg, ....) to FabGL Bitmap structure
 #
 # usage:
-#    python img2bitmap filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2]
+#    python img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2] [-o0 | -o1]
 #
 # -t  = pixel where to take transparent color
 # -s  = resize to specified values
@@ -11,6 +11,8 @@
 # -f0 = format is RGB2222 (default)
 # -f1 = format is RGB8888
 # -f2 = format is 1 bit monochrome (color/transparent)
+# -o0 = output as FabGL C++ code (default)
+# -o1 = output as simple hex string
 #
 # Example:
 #   python img2bitmap.py test.png -s 64 64 >out.c
@@ -22,21 +24,34 @@ import sys
 import os
 from PIL import Image
 
+
+def outhex(v):
+  global outs
+  if outmode == 0:
+    outs = outs + "0x{:02x}, ".format(v)
+  if outmode == 1:
+    outs = outs + "{:02x}".format(v)
+
+
+
 transpColorPos = None
 newSize = None
 dithering = False
 format = 0  # RGBA2222
+outmode = 0  # C++
 
 if len(sys.argv) < 2:
   print "Converts an image (png, jpeg, ....) to FabGL Bitmap structure"
   print "Usage:"
-  print "  python img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1]\n"
+  print "  python img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2]  [-o0 | -o1]\n"
   print "  -t  = pixel where to take transparent color"
   print "  -s  = resize to specified values\n"
   print "  -d  = enable dithering\n"
   print "  -f0 = format is RGBA2222 (default)\n"
   print "  -f1 = format is RGBA8888\n"
-  print "  -f2 = format is 1 bit monochrome (color/transparent)\n\n"
+  print "  -f2 = format is 1 bit monochrome (color/transparent)\n"
+  print "  -o0 = output as FabGL C++ code (default)\n"
+  print "  -o1 = output as simple hex string\n\n"
   print "Example:"
   print "  python img2bitmap.py input.png -s 64 64 >out.c"
   sys.exit()
@@ -60,6 +75,12 @@ while i < len(sys.argv):
     i += 1
   elif sys.argv[i] == "-f2":
     format = 2
+    i += 1
+  elif sys.argv[i] == "-o0":
+    outmode = 0
+    i += 1
+  elif sys.argv[i] == "-o1":
+    outmode = 1
     i += 1
   else:
     i += 1
@@ -103,45 +124,55 @@ else:
 pix = im.load()
 
 
-print "const uint8_t {}_data[] = {{".format(name)
+outs = ""
+
+if outmode == 0:
+  outs = outs + "const uint8_t {}_data[] = {{\n".format(name)
+
+if outmode == 1:
+  outs = outs + "Size: {} x {}\n".format(im.width, im.height)
+  outs = outs + "Data:\n"
 
 if format == 0:
   formatstr = "PixelFormat::RGBA2222"
   for y in range(0, im.height):
-    print "\t",
+    outs = outs + "\t"
     for x in range(0, im.width):
       v  = int(pix[x, y][0] / 255.0 * 3.0)        # R
       v |= int(pix[x, y][1] / 255.0 * 3.0) << 2   # G
       v |= int(pix[x, y][2] / 255.0 * 3.0) << 4   # B
       v |= int(opix[x, y][3] / 255.0 * 3.0) << 6  # A
-      print "0x{:02x},".format(v),
-    print
+      outhex(v)
+    outs = outs + "\n"
 
 if format == 1:
   formatstr = "PixelFormat::RGBA8888"
   for y in range(0, im.height):
-    print "\t",
+    outs = outs + "\t"
     for x in range(0, im.width):
-      print "0x{:02x},".format(pix[x, y][0]),
-      print "0x{:02x},".format(pix[x, y][1]),
-      print "0x{:02x},".format(pix[x, y][2]),
-      print "0x{:02x},".format(opix[x, y][3]),
-    print
+      outhex(pix[x, y][0])
+      outhex(pix[x, y][1])
+      outhex(pix[x, y][2])
+      outhex(opix[x, y][3])
+    outs = outs + "\n"
 
 if format == 2:
   formatstr = "PixelFormat::Mask"
   for y in range(0, im.height):
-    print "\t",
+    outs = outs + "\t"
     b = 0
     for x in range(0, im.width):
       if opix[x, y][3]:
         b |= 1 << (7 - x % 8)
       if (x & 7) == 7 or x == im.width - 1:
-        print "0x{:02x},".format(b),
+        outhex(b)
         b = 0
-    print
+    outs = outs + "\n"
+
+if outmode == 0:
+  outs = outs + "};\n"
+  outs = outs + "Bitmap {} = Bitmap({}, {}, &{}_data[0], {});".format(name, im.width, im.height, name, formatstr)
+
+print outs
 
 
-print "};"
-
-print "Bitmap {} = Bitmap({}, {}, &{}_data[0], {});".format(name, im.width, im.height, name, formatstr)
