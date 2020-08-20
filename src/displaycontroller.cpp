@@ -113,6 +113,8 @@ Sprite::Sprite()
   savedBackgroundWidth    = 0;
   savedBackgroundHeight   = 0;
   savedBackground         = nullptr; // allocated or reallocated when bitmaps are added
+  savedX                  = 0;
+  savedY                  = 0;
   collisionDetectorObject = nullptr;
   visible                 = true;
   isStatic                = false;
@@ -496,7 +498,8 @@ void BitmappedDisplayController::setSprites(Sprite * sprites, int count, int spr
       int reqBackBufferSize = 0;
       for (int i = 0; i < sprite->framesCount; ++i)
         reqBackBufferSize = tmax(reqBackBufferSize, sprite->frames[i]->width * getBitmapSavePixelSize() * sprite->frames[i]->height);
-      sprite->savedBackground = (uint8_t*) realloc(sprite->savedBackground, reqBackBufferSize);
+      if (reqBackBufferSize > 0)
+        sprite->savedBackground = (uint8_t*) realloc(sprite->savedBackground, reqBackBufferSize);
     }
   }
 }
