@@ -62,8 +62,11 @@
     progComboBox->items().append(PROGRAMS_NAME, PROGRAMS_COUNT);
     progComboBox->selectItem(0);
     progComboBox->onChange = [&]() {
-      helpLabel1->setText(PROGRAMS_HELP[progComboBox->selectedItem() * 2]);
-      helpLabel2->setText(PROGRAMS_HELP[progComboBox->selectedItem() * 2 + 1]);
+      auto idx = progComboBox->selectedItem();
+      if (idx >= 0) {
+        helpLabel1->setText(PROGRAMS_HELP[idx * 2]);
+        helpLabel2->setText(PROGRAMS_HELP[idx * 2 + 1]);
+      }
     };
 
     y += 70;

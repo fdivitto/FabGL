@@ -225,6 +225,89 @@ static const char GRAPH_BAS[] =       "1 REM Draws some graphics" NL
                                       "\x1a";  // <<-- text file terminator
 
 
+static const char SPRITE_BAS[] =      "1 REM Sprites demo" NL
+                                      "100 WIDTH 255" NL
+                                      "110 GOSUB 10000: REM Define functions" NL
+                                      "120 REM Cursor off" NL
+                                      "130 PRINT FNCURSOROFF$;" NL
+                                      "140 REM Number of sprites" NL
+                                      "150 PRINT FNSPRITECOUNT$(2);" NL
+                                      "160 REM Sprite 0" NL
+                                      "170 PRINT FNSPRITEDEFRGB2$(0, 16, 14);" NL
+                                      "180 GOSUB 20010: REM Sprite 0 data" NL
+                                      "190 REM Sprite 1" NL
+                                      "200 PRINT FNSPRITEDEFMONO$(1, 64, 64, 0, 255, 255);" NL
+                                      "210 GOSUB 20200: REM Sprite 1 data" NL
+                                      "220 REM move sprites" NL
+                                      "230 X0 = 0: Y0 = 320" NL
+                                      "240 O0 = 1" NL
+                                      "260 FOR I = 0 TO 900" NL
+                                      "270     REM Move sprites" NL
+                                      "280     PRINT FNSPRITESET$(0, \"V\", 0, X0, Y0);" NL
+                                      "290     PRINT FNSPRITESET$(1, \"V\", 0, 320 + SIN(I / 25) * 100, 200 + COS(I / 25) * 100);" NL
+                                      "300     X0 = X0 + O0" NL
+                                      "310     IF X0 > 400 THEN O0 = -1" NL
+                                      "320     IF X0 < 200 THEN O0 = 1" NL
+                                      "350     REM Draw starts and scroll down" NL
+                                      "360     PRINT FNPEN$(255,255,255);" NL
+                                      "370     IF (I MOD 2) = 0 THEN PRINT FNPIXEL$(640*RND, 0);FNSCROLL$(0, 1);" NL
+                                      "410 NEXT I" NL
+                                      "420 PRINT FNSPRITESET$(0, \"H\", 0, 0, 0);" NL
+                                      "430 PRINT FNSPRITESET$(1, \"H\", 0, 0, 0);" NL
+                                      "440 PRINT FNSPRITECOUNT$(0);" NL
+                                      "450 PRINT FNCURSORON$;" NL
+                                      "460 END" NL
+                                      "10000 REM" NL
+                                      "10010 REM ** DEFINE FUNCTIONS **" NL
+                                      "10020 DEF FNSPRITECOUNT$(COUNT%) = CHR$(27)+\"_GSPRITECOUNT\"+STR$(COUNT%)+\"$\"" NL
+                                      "10030 DEF FNSPRITEDEFMONO$(INDEX%, W%, H%, R%, G%, B%) = CHR$(27)+\"_GSPRITEDEF\"+STR$(INDEX%)+\";\"+STR$(W%)+\";\"+STR$(H%)+\";M;\"+STR$(R%)+\";\"+STR$(G%)+\";\"+STR$(B%)+\";\"" NL
+                                      "10040 DEF FNSPRITEDEFRGB2$(INDEX%, W%, H%) = CHR$(27)+\"_GSPRITEDEF\"+STR$(INDEX%)+\";\"+STR$(W%)+\";\"+STR$(H%)+\";2;\"" NL
+                                      "10050 DEF FNSPRITEDEFRGB8$(INDEX%, W%, H%) = CHR$(27)+\"_GSPRITEDEF\"+STR$(INDEX%)+\";\"+STR$(W%)+\";\"+STR$(H%)+\";8;\"" NL
+                                      "10060 DEF FNSPRITESET$(INDEX%, VISIBLE$, FRAME%, X%, Y%) = CHR$(27)+\"_GSPRITESET\"+STR$(INDEX%)+\";\"+VISIBLE$+\";\"+STR$(FRAME%)+\";\"+STR$(X%)+\";\"+STR$(Y%)+\"$\"" NL
+                                      "10070 DEF FNCURSORON$ = CHR$(27)+\"_E1$\"" NL
+                                      "10080 DEF FNCURSOROFF$ = CHR$(27)+\"_E0$\"" NL
+                                      "10090 DEF FNPEN$(R%, G%, B%) = CHR$(27)+\"_GPEN\"+STR$(R%)+\";\"+STR$(G%)+\";\"+STR$(B%)+\"$\"" NL
+                                      "10100 DEF FNPIXEL$(X%, Y%) = CHR$(27)+\"_GPIXEL\"+STR$(X%)+\";\"+STR$(Y%)+\"$\"" NL
+                                      "10110 DEF FNSCROLL$(X%, Y%) = CHR$(27)+\"_GSCROLL\"+STR$(X%)+\";\"+STR$(Y%)+\"$\"" NL
+                                      "11000 RETURN" NL
+                                      "20000 REM" NL
+                                      "20010 REM ** Define 16x14, RGB222 sprite **" NL
+                                      "20020 PRINT \"00000000000000eaea00000000000000\";" NL
+                                      "20030 PRINT \"000000000000eaeaeaea000000000000\";" NL
+                                      "20040 PRINT \"000000000000eaeaeaea000000000000\";" NL
+                                      "20050 PRINT \"00e000000000eaeaeaea00000000e000\";" NL
+                                      "20060 PRINT \"00e000000000eaeaeaea00000000e000\";" NL
+                                      "20070 PRINT \"e0e000000000eaeaeaea00000000e0e0\";" NL
+                                      "20080 PRINT \"e0e00000e000eaeaeaea00e00000e0e0\";" NL
+                                      "20090 PRINT \"e0e00000e0eaeac2c2eaeae00000e0e0\";" NL
+                                      "20100 PRINT \"e0e000e0e0eac2eaeac2eae0e000e0e0\";" NL
+                                      "20110 PRINT \"e0e000eaeaeaeaeaeaeaeaeaea00e0e0\";" NL
+                                      "20120 PRINT \"e0e0eaeaeaeac20000c2eaeaeaeae0e0\";" NL
+                                      "20130 PRINT \"e0e0eaeaeac2c20000c2c2eaeaeae0e0\";" NL
+                                      "20140 PRINT \"e0e0ea00c2c2c20000c2c2c200eae0e0\";" NL
+                                      "20150 PRINT \"e00000000000c20000c20000000000e0$\";" NL
+                                      "20160 RETURN" NL
+                                      "20200 REM ** Define 64x64, monochrome sprite **" NL
+                                      "20210 PRINT \"0000001f00000000000001fff0000000000007fffc00000000000ffffe000000\";" NL
+                                      "20220 PRINT \"00003f001f80000000007c0007c000000000f80003e007c00001e00000f0fff8\";" NL
+                                      "20230 PRINT \"0003c000007bfffc00038000003ffefe00070000001f800e00070000001e0007\";" NL
+                                      "20240 PRINT \"000e0000000e0007000e0000000e0007001c0000000700030018000000030007\";" NL
+                                      "20250 PRINT \"003800000003800700380000000380070030000000038006007000000003000e\";" NL
+                                      "20260 PRINT \"007000000007000e006000000007001c00600000000e001c00e00000000e0038\";" NL
+                                      "20270 PRINT \"00e00000001c003800e00000003c007000c00000003800f000c00000007000e0\";" NL
+                                      "20280 PRINT \"00c0000000e001c000c0000001e003c000c0000003c0078000c0000007800700\";" NL
+                                      "20290 PRINT \"00c000000f000f0000e000001e001e0000e000003c003c0000e0000078007800\";" NL
+                                      "20300 PRINT \"00e00001f000f80000e00003e001f00000e0000fc003f00001f0001f0007f000\";" NL
+                                      "20310 PRINT \"03f0007e000fb00003b001f8001e7000073807f0003c70000e1f7fc000786000\";" NL
+                                      "20320 PRINT \"0e1fff0000f0e0001c0ff80001e0e0003c03c00007c0c000380000000f81c000\";" NL
+                                      "20330 PRINT \"300000001f01c000700000007c03800070000000f8078000e0000003f0070000\";" NL
+                                      "20340 PRINT \"e0000007c00e0000e000000f801e0000c000003f003c0000c00000fc00780000\";" NL
+                                      "20350 PRINT \"c00003f800f00000c0000fe003e00000e0003fc00fc00000f001ffffff800000\";" NL
+                                      "20360 PRINT \"7c3ff9fffe0000003fffe07ff80000001fff00078000000007f0000000000000$\";" NL
+                                      "20370 RETURN" NL
+                                      "\x1a";  // <<-- text file terminator
+
+
 static const char * PROGRAMS_NAME[] =  { "BLINK.BAS",
                                          "GPIOREAD.BAS",
                                          "ADC.BAS",
@@ -232,6 +315,7 @@ static const char * PROGRAMS_NAME[] =  { "BLINK.BAS",
                                          "SOUND.BAS",
                                          "MOUSE.BAS",
                                          "GRAPH.BAS",
+                                         "SPRITE.BAS",
                                       };
 
 static const char * PROGRAMS[]    =    { BLINK_BAS,
@@ -241,6 +325,7 @@ static const char * PROGRAMS[]    =    { BLINK_BAS,
                                          SOUND_BAS,
                                          MOUSE_BAS,
                                          GRAPH_BAS,
+                                         SPRITE_BAS,
                                        };
 
 
@@ -252,6 +337,7 @@ static const char * PROGRAMS_HELP[] = { "Sets GPIO-12 as Output pin and ", "turn
                                         "Generates some sounds", "",
                                         "Shows mouse positions and status", "",
                                         "Draws some graphics", "",
+                                        "Shows how create and move sprites", "",
                                       };
 
 
