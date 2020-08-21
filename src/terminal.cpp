@@ -151,6 +151,9 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGLEXT_GFILLELLIPSE   "FILLELLIPSE"
 #define FABGLEXT_GPATH          "PATH"
 #define FABGLEXT_GFILLPATH      "FILLPATH"
+#define FABGLEXT_GSPRITECOUNT   "SPRITECOUNT"
+#define FABGLEXT_GSPRITEDEF     "SPRITEDEF"
+#define FABGLEXT_GSPRITESET     "SPRITESET"
 
 
 
@@ -172,7 +175,9 @@ Terminal::Terminal()
   : m_canvas(nullptr),
     m_mutex(nullptr),
     m_uartRXEnabled(true),
-    m_soundGenerator(nullptr)
+    m_soundGenerator(nullptr),
+    m_sprites(nullptr),
+    m_spritesCount(0)
 {
   if (s_activeTerminal == nullptr)
     s_activeTerminal = this;
@@ -187,6 +192,8 @@ Terminal::~Terminal()
 
   if (m_soundGenerator)
     delete m_soundGenerator;
+
+  freeSprites();
 }
 
 
@@ -3959,6 +3966,21 @@ void Terminal::consumeFabGLSeq()
 }
 
 
+void Terminal::freeSprites()
+{
+  for (int i = 0; i < m_spritesCount; ++i) {
+    for (int j = 0; j < m_sprites[i].framesCount; ++j) {
+      free(m_sprites[i].frames[j]->data);  // free bitmap data
+      delete m_sprites[i].frames[j];       // free bitmap struct
+    }
+  }
+  delete [] m_sprites;
+  m_sprites = nullptr;
+  m_spritesCount = 0;
+}
+
+
+
 // already received: ESC FABGLEXT_STARTCODE FABGLEXT_GRAPHICSCMD
 void Terminal::consumeFabGLGraphicsSeq()
 {
@@ -4206,6 +4228,128 @@ void Terminal::consumeFabGLGraphicsSeq()
     }
     if (m_canvas)
       m_canvas->fillPath(pts, count);
+
+  } else if (strcmp(cmd, FABGLEXT_GSPRITECOUNT) == 0) {
+
+    // Determines number of sprites to define
+    // Seq:
+    //    FABGLEXT_GSPRITECOUNT COUNT FABGLEXT_ENDCODE
+    // params:
+    //    COUNT (text) : number of sprites that will be defined by FABGLEXT_GSPRITEDEF (0 = free memory)
+    //Serial.write("P1\n");
+    int count = extGetIntParam();
+    extGetByteParam();
+    if (m_bitmappedDisplayController) {
+      static_cast<BitmappedDisplayController*>(m_displayController)->setSprites<Sprite>(nullptr, 0);
+      freeSprites();
+      if (count > 0) {
+        m_spritesCount = count;
+        m_sprites = new Sprite[count];
+      }
+    }
+
+  } else if (strcmp(cmd, FABGLEXT_GSPRITEDEF) == 0) {
+
+    // Add a bitmap to a sprite
+    // Seq:
+    //    FABGLEXT_GSPRITEDEF SPRITEINDEX ';' WIDTH ';' HEIGHT ';' FORMAT ';' [R ';' G ';' B ';'] DATA... FABGLEXT_ENDCODE
+    // params:
+    //    SPRITEINDEX (text) : sprite index (0...)
+    //    WIDTH (text)       : sprite width
+    //    HEIGHT (text)      : sprite height
+    //    FORMAT (char)      : 'M' = PixelFormat::Mask, '2' = PixelFormat::RGBA2222, '8' = PixelFormat::RGBA8888
+    //    R (text)           : red (0..255) when FORMAT is "MASK"
+    //    G (text)           : green (0..255) when FORMAT is "MASK"
+    //    B (text)           : blue (0..255) when FORMAT is "MASK"
+    //    DATA (text)        : 2 digits hex number
+    //Serial.write("P2\n");
+    int sprite = extGetIntParam();
+    extGetByteParam();
+    int width = extGetIntParam();
+    extGetByteParam();
+    int height = extGetIntParam();
+    extGetByteParam();
+    char cformat = extGetByteParam();
+    extGetByteParam();
+    int r = 0, g = 0, b = 0;
+    int bytes = 0;
+    PixelFormat format = PixelFormat::Undefined;
+    switch (cformat) {
+      case 'M':
+        r = extGetIntParam();
+        extGetByteParam();
+        g = extGetIntParam();
+        extGetByteParam();
+        b = extGetIntParam();
+        extGetByteParam();
+        bytes = (width + 7) / 8 * height;
+        format = PixelFormat::Mask;
+        break;
+      case '2':
+        bytes = width * height;
+        format = PixelFormat::RGBA2222;
+        break;
+      case '8':
+        bytes = width * height * 4;
+        format = PixelFormat::RGBA8888;
+        break;
+    }
+    auto data = (uint8_t*) malloc(bytes);
+    //Serial.printf("expected %d\n", bytes);
+    for (int i = 0; i < bytes + 1; ++i) { // +1 to include ending code
+      auto c = extGetByteParam();
+      //Serial.printf("%d %c\n", i, c);
+      if (c == FABGLEXT_ENDCODE)
+        break;
+      data[i] = hex2digit(tolower(c)) << 4;
+      c = extGetByteParam();
+      //Serial.printf("%d %c\n", i, c);
+      if (c == FABGLEXT_ENDCODE)
+        break;
+      data[i] |= hex2digit(tolower(c));
+    }
+    if (m_bitmappedDisplayController && sprite < m_spritesCount) {
+      auto bitmap = new Bitmap(width, height, data, format, RGB888(r, g, b), false);
+      m_sprites[sprite].addBitmap(bitmap);
+      static_cast<BitmappedDisplayController*>(m_displayController)->setSprites(m_sprites, m_spritesCount);
+      //Serial.printf("def sprite %d w=%d h=%d f=%c r=%d g=%d b=%d\n", sprite, width, height, cformat, r, g, b);
+    } else {
+      // error
+      free(data);
+    }
+    //Serial.write("P3\n");
+
+  } else if (strcmp(cmd, FABGLEXT_GSPRITESET) == 0) {
+
+    // Set sprite visibility, position and frame
+    // Seq:
+    //    FABGLEXT_GSPRITESET SPRITEINDEX ';' VISIBLE ';' FRAME ';' POSX ';' POSY FABGLEXT_ENDCODE
+    // params:
+    //    SPRITEINDEX (text) : sprite index (0...)
+    //    VISIBLE (char)     : 'H' = hidden, 'V' = visible
+    //    FRAME (text)       : frame index (0...)
+    //    POSX (text)        : x position
+    //    POSY (text)        : y position
+    //Serial.write("P3_1\n");
+    int sprite = extGetIntParam();
+    extGetByteParam();
+    char visible = extGetByteParam();
+    extGetByteParam();
+    int frame = extGetIntParam();
+    extGetByteParam();
+    int posx = extGetIntParam();
+    extGetByteParam();
+    int posy = extGetIntParam();
+    extGetByteParam();
+    if (m_bitmappedDisplayController && sprite < m_spritesCount) {
+      m_sprites[sprite].visible = (visible == 'V');
+      m_sprites[sprite].setFrame(frame);
+      m_sprites[sprite].x = posx;
+      m_sprites[sprite].y = posy;
+      static_cast<BitmappedDisplayController*>(m_displayController)->refreshSprites();
+      //Serial.printf("set sprite %d vis=%c frame=%d x=%d y=%d\n", sprite, visible, frame, posx, posy);
+    }
+    //Serial.write("P3_2\n");
 
   } else {
     #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT

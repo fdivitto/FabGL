@@ -811,6 +811,13 @@ inline char digit2hex(int digit)
 }
 
 
+// converts '0'..'9' -> 0..9, 'a'..'f' -> 10..15
+inline int hex2digit(char hex)
+{
+  return hex < 'a' ? hex - '0' : hex - 'a' + 10;
+}
+
+
 // milliseconds to FreeRTOS ticks.
 // ms = -1 => maximum delay (portMAX_DELAY)
 uint32_t msToTicks(int ms);

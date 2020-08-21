@@ -1052,6 +1052,8 @@ private:
   int extGetIntParam();
   void extGetCmdParam(char * cmd);
 
+  void freeSprites();
+
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
 
@@ -1166,6 +1168,9 @@ private:
   int                       m_extNextCode; // -1 = no code
 
   SoundGenerator *          m_soundGenerator;
+
+  Sprite *                  m_sprites;
+  int                       m_spritesCount;
 
 };
 
