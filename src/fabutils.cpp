@@ -440,6 +440,24 @@ int StringList::append(char const * str)
 }
 
 
+int StringList::appendFmt(const char *format, ...)
+{
+  takeStrings();
+  va_list ap;
+  va_start(ap, format);
+  int size = vsnprintf(nullptr, 0, format, ap) + 1;
+  if (size > 0) {
+    va_end(ap);
+    va_start(ap, format);
+    char buf[size + 1];
+    vsnprintf(buf, size, format, ap);
+    insert(m_count, buf);
+  }
+  va_end(ap);
+  return m_count - 1;
+}
+
+
 void StringList::append(char const * strlist[], int count)
 {
   for (int i = 0; i < count; ++i)

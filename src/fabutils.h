@@ -346,6 +346,7 @@ public:
   StringList();
   ~StringList();
   int append(char const * str);
+  int appendFmt(const char *format, ...);
   void append(char const * strlist[], int count);
   void insert(int index, char const * str);
   void set(int index, char const * str);
