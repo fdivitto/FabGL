@@ -37,6 +37,7 @@
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
+#include "dispdrivers/vga16controller.h"
 #include "comdrivers/ps2controller.h"
 
 
@@ -127,6 +128,8 @@ void free32(void * ptr)
 
 void suspendInterrupts()
 {
+  if (VGA16Controller::instance())
+    VGA16Controller::instance()->suspendBackgroundPrimitiveExecution();
   if (VGAController::instance())
     VGAController::instance()->suspendBackgroundPrimitiveExecution();
   if (PS2Controller::instance())
@@ -140,6 +143,8 @@ void resumeInterrupts()
     PS2Controller::instance()->resume();
   if (VGAController::instance())
     VGAController::instance()->resumeBackgroundPrimitiveExecution();
+  if (VGA16Controller::instance())
+    VGA16Controller::instance()->resumeBackgroundPrimitiveExecution();
 }
 
 
