@@ -3181,9 +3181,9 @@ void uiPaintBox::processEvent(uiEvent * event)
 // uiColorBox
 
 
-uiColorBox::uiColorBox(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+uiColorBox::uiColorBox(uiWindow * parent, const Point & pos, const Size & size, Color color, bool visible, uint32_t styleClassID)
   : uiControl(parent, pos, size, visible, 0),
-    m_color(Color::BrightWhite)
+    m_color(color)
 {
   objectType().uiColorBox = true;
 
@@ -4261,7 +4261,7 @@ uiColorComboBox::uiColorComboBox(uiWindow * parent, const Point & pos, const Siz
 {
   objectType().uiColorComboBox = true;
 
-  m_colorBox     = new uiColorBox(this, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), true, 0);
+  m_colorBox     = new uiColorBox(this, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), Color::BrightWhite, true, 0);
   m_colorListBox = new uiColorListBox(parent, Point(0, 0), Size(0, 0), false, 0);
 
   if (app()->style() && styleClassID)

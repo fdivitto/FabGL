@@ -1691,10 +1691,11 @@ public:
    * @param parent The parent window. A panel must always have a parent window
    * @param pos Top-left coordinates of the panel relative to the parent
    * @param size The panel size
+   * @param color Initial color
    * @param visible If true the panel is immediately visible
    * @param styleClassID Optional style class identifier
    */
-  uiColorBox(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
+  uiColorBox(uiWindow * parent, const Point & pos, const Size & size, Color color = Color::BrightWhite, bool visible = true, uint32_t styleClassID = 0);
 
   virtual ~uiColorBox();
 
