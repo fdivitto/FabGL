@@ -289,6 +289,27 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
 }
 
 
+void uiApp::asyncRunTask(void * arg)
+{
+  auto app = (uiApp*)arg;
+  app->run(app->m_displayController, app->m_keyboard, app->m_mouse);
+  vTaskDelete(NULL);
+}
+
+
+void uiApp::runAsync(BitmappedDisplayController * displayController, int taskStack, Keyboard * keyboard, Mouse * mouse)
+{
+  m_displayController = displayController;
+  m_keyboard          = keyboard;
+  m_mouse             = mouse;
+
+  if (CoreUsage::busiestCore() == -1)
+    xTaskCreate(&asyncRunTask, "", taskStack, this, 5, nullptr);
+  else
+    xTaskCreatePinnedToCore(&asyncRunTask, "", taskStack, this, 5, nullptr, CoreUsage::quietCore());
+}
+
+
 void uiApp::processEvents()
 {
   uiEvent event;

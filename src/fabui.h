@@ -2569,6 +2569,18 @@ public:
   int run(BitmappedDisplayController * displayController, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
 
   /**
+   * @brief Initializes application and executes asynchronously the main event loop
+   *
+   * @param displayController Specifies the display controller where to run the UI
+   * @param taskStack Specifies the task stack size
+   * @param keyboard The keyboard device. The default (nullptr) gets it from the PS2Controller
+   * @param mouse The mouse device. The default (nullptr) gets it from the PS2Controller
+   *
+   * @return exitCode specified calling uiApp.quit().
+   */
+  void runAsync(BitmappedDisplayController * displayController, int taskStack = 3000, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+
+  /**
    * @brief Terminates application and free resources
    *
    * @param exitCode Value returned by uiApp.run().
@@ -2954,6 +2966,8 @@ private:
   void filterModalEvent(uiEvent * event);
 
   static void timerFunc(TimerHandle_t xTimer);
+
+  static void asyncRunTask(void * arg);
 
   void blinkCaret(bool forceOFF = false);
   void suspendCaret(bool value);
