@@ -3836,22 +3836,24 @@ void uiCustomListBox::setScrollBar(uiOrientation orientation, int position, int 
 }
 
 
+// >= 0 : mouse point an item
+// -1   : mouse inside items area, but doesn't point an item (ie just below last item)
+// -2   : mouse outside items area (ie over vertical or horizontal scrollbar)
 int uiCustomListBox::getItemAtMousePos(int mouseX, int mouseY)
 {
   Rect cliRect = uiScrollableControl::clientRect(uiOrigin::Window);
   if (cliRect.contains(mouseX, mouseY)) {
     int idx = m_firstVisibleItem + (mouseY - cliRect.Y1) / m_listBoxStyle.itemHeight;
-    if (idx < items_getCount())
-      return idx;
+    return idx < items_getCount() ? idx : -1;
   }
-  return -1;
+  return -2;
 }
 
 
 void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
 {
   int idx = getItemAtMousePos(mouseX, mouseY);
-  if (idx > -1) {
+  if (idx >= 0) {
     if (app()->keyboard()->isVKDown(VK_LCTRL) || app()->keyboard()->isVKDown(VK_RCTRL)) {
       // CTRL is down
       items_select(idx, !items_selected(idx));
@@ -3860,8 +3862,10 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
       items_deselectAll();
       items_select(idx, true);
     }
-  } else
+  } else if (idx == -1)
     items_deselectAll();
+  else
+    return;
   onChange();
   repaint();
 }
