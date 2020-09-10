@@ -57,14 +57,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classfabgl_1_1_s_s_d1306_controller.html#a862a67352dd973a366e3b43dae5d0a91",
-"classfabgl_1_1ui_button.html#a93618eccc73d66e981f8c02170875226",
-"classfabgl_1_1ui_frame.html#a18735a70e697ff18647ce7034e9b480c",
-"classfabgl_1_1ui_scrollable_control.html#a089762995d65c9282f545a376810c055",
-"fabglconf_8h.html#a3dd5ee24424e059948701119687589e6",
-"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381ae181cdfdc85625d4cc9ca616bfe27ffe",
-"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381a4969ab390b445f8404d3f1290f43edd5",
-"structfabgl_1_1_r_g_b222.html"
+"classfabgl_1_1_noise_waveform_generator.html#aff943804948eae06f7509bf69ef51f05",
+"classfabgl_1_1_v_g_a16_controller.html#a8b25fa500a76153044da83d4f9133001",
+"classfabgl_1_1ui_color_combo_box.html#a089762995d65c9282f545a376810c055",
+"classfabgl_1_1ui_custom_list_box.html#a770f88193b45a54df6f944efe1fc25d5",
+"classfabgl_1_1ui_list_box.html#a770f88193b45a54df6f944efe1fc25d5",
+"classfabgl_1_1ui_text_edit.html#ad450ee092d4c00b44ec793bf4a1afbe4",
+"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a0c310d99f6850a9227c0630152edbb32",
+"globals_vars.html",
+"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381ab6cd38f077717c3bffaa1434002aeaad",
+"structfabgl_1_1ui_check_box_style.html#ac705850d6fd0e04aa7737fded0f18fea"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

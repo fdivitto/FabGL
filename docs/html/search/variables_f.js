@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['textcolor',['textColor',['../structfabgl_1_1ui_button_style.html#a085c062d58b2d90428c20189b34e1e0c',1,'fabgl::uiButtonStyle::textColor()'],['../structfabgl_1_1ui_text_edit_style.html#ace75eb16ed8dc9ecdd08cbe5ce3a091b',1,'fabgl::uiTextEditStyle::textColor()'],['../structfabgl_1_1ui_label_style.html#a9b02aa758aa2081538ce37cb26d98433',1,'fabgl::uiLabelStyle::textColor()'],['../structfabgl_1_1ui_list_box_style.html#ab1e61a484fcdefae2eb87766744aca6b',1,'fabgl::uiListBoxStyle::textColor()']]],
-  ['textfont',['textFont',['../structfabgl_1_1ui_button_style.html#a48c25169f3bba272b2939960bc9e1398',1,'fabgl::uiButtonStyle::textFont()'],['../structfabgl_1_1ui_text_edit_style.html#a2c896b861449c05273a03d9bba372b15',1,'fabgl::uiTextEditStyle::textFont()'],['../structfabgl_1_1ui_label_style.html#a85b7cdf5d088862f836e4e0ecf75e56b',1,'fabgl::uiLabelStyle::textFont()'],['../structfabgl_1_1ui_list_box_style.html#ae4bb5ff0c168cb0a96d995d38f75d856',1,'fabgl::uiListBoxStyle::textFont()']]],
-  ['titlebackgroundcolor',['titleBackgroundColor',['../structfabgl_1_1ui_frame_style.html#a4cd6d05766e056b06a2bf4e4f74772ba',1,'fabgl::uiFrameStyle']]],
-  ['titlecolor',['titleColor',['../structfabgl_1_1ui_frame_style.html#abcb17b064109ed166bbfbd616cc6c2b3',1,'fabgl::uiFrameStyle']]],
-  ['titlefont',['titleFont',['../structfabgl_1_1ui_frame_style.html#ac37195d5c6079b553bc65ab622775ae6',1,'fabgl::uiFrameStyle']]],
-  ['top',['top',['../structfabgl_1_1ui_anchors.html#a727fea7b3aa76ec6b2c5774c09408614',1,'fabgl::uiAnchors']]]
+  ['r',['R',['../structfabgl_1_1_r_g_b888.html#ae30e060e6464a8f44f1ab1cbb641d848',1,'fabgl::RGB888::R()'],['../structfabgl_1_1_r_g_b_a8888.html#a9ec97e9eeaf6e04ef3cd5fc7fdb62f1c',1,'fabgl::RGBA8888::R()'],['../structfabgl_1_1_r_g_b222.html#acf084add92ccf194d8be633ac4be28ff',1,'fabgl::RGB222::R()'],['../structfabgl_1_1_r_g_b_a2222.html#aa331d47ac869b021d3351aee4b01de36',1,'fabgl::RGBA2222::R()'],['../displaycontroller_8h.html#ad6dca68b61d96e60ca0062e00390ba9f',1,'R():&#160;displaycontroller.h']]],
+  ['ralt',['RALT',['../structfabgl_1_1ui_key_event_info.html#a7d40d59376d1c3f0423d066995186453',1,'fabgl::uiKeyEventInfo']]],
+  ['rangecolor',['rangeColor',['../structfabgl_1_1ui_slider_style.html#a79e02ade6b762e3c0af739a5ccbbfc8b',1,'fabgl::uiSliderStyle']]],
+  ['realtimereshaping',['realtimeReshaping',['../structfabgl_1_1ui_app_props.html#a8cdd820da137d3f5338e4b5129da1b2f',1,'fabgl::uiAppProps']]],
+  ['reduceluminosity',['reduceLuminosity',['../unionfabgl_1_1_glyph_options.html#adef7ccf23f62fbe65bd098a3454a5712',1,'fabgl::GlyphOptions::reduceLuminosity()'],['../displaycontroller_8h.html#a3b59c735745c810161faa9660ef88aac',1,'reduceLuminosity():&#160;displaycontroller.h']]],
+  ['reqvirtualkey',['reqVirtualKey',['../structfabgl_1_1_alt_virtual_key_def.html#a172ed979c81dce88b125a1de47306261',1,'fabgl::AltVirtualKeyDef']]],
+  ['resizeable',['resizeable',['../structfabgl_1_1ui_frame_props.html#a3d2713f441c75e36e7db8e1dc592a25b',1,'fabgl::uiFrameProps']]],
+  ['right',['right',['../structfabgl_1_1ui_anchors.html#a81d9e254c7b3be5e39deffa0836a622f',1,'fabgl::uiAnchors::right()'],['../structfabgl_1_1_mouse_buttons.html#a77015fe45bf18bf673ae0e10e7e40e76',1,'fabgl::MouseButtons::right()']]]
 ];

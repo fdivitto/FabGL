@@ -1,8 +1,12 @@
 var searchData=
 [
   ['backporch',['BackPorch',['../group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463aa2e3d51a4bdf436297de5d18f0fc7fc2',1,'fabgl']]],
+  ['bitmapped',['Bitmapped',['../group___enumerations.html#gga9bacc02df3145df2c15f847b56973003a11b133271f0260621154f094888bd83e',1,'fabgl']]],
   ['black',['Black',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0',1,'fabgl']]],
+  ['blank',['Blank',['../group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7baa999cbaf1818a72edcfe20beec0034c2',1,'fabgl']]],
+  ['blink',['Blink',['../group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7bac801bcb1900c6e0a30c4e66448ff8480',1,'fabgl']]],
   ['blue',['Blue',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3bab269b90a1d510bf6861b4584f7aa9720',1,'fabgl']]],
+  ['bold',['Bold',['../group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba5089484c34f7bcfedf45b0e659a628fc',1,'fabgl']]],
   ['brightblack',['BrightBlack',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba513021507e1e0ce9c952b4c3ebe40c8a',1,'fabgl']]],
   ['brightblue',['BrightBlue',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba5e8c133693ddc8c4fea104605f2154b8',1,'fabgl']]],
   ['brightcyan',['BrightCyan',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba1f4b29f56c50d016d9575b3be2976935',1,'fabgl']]],

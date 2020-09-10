@@ -1,7 +1,9 @@
 var searchData=
 [
+  ['activate',['activate',['../classfabgl_1_1_terminal.html#adfb044a6d998390fbfc6fb57fcee0a5c',1,'fabgl::Terminal']]],
   ['activewindow',['activeWindow',['../classfabgl_1_1ui_app.html#a93a96823b4a884c8cb4141383197837f',1,'fabgl::uiApp']]],
   ['addsprite',['addSprite',['../classfabgl_1_1_collision_detector.html#a90308afcec5448c888d4117842f0757a',1,'fabgl::CollisionDetector::addSprite()'],['../classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f',1,'fabgl::Scene::addSprite()']]],
+  ['adjustmapsize',['adjustMapSize',['../classfabgl_1_1_v_g_a_text_controller.html#aab6e3a3130a088e1c97ceb5d76ac5475',1,'fabgl::VGATextController']]],
   ['anchors',['anchors',['../classfabgl_1_1ui_window.html#a12aa63ec46d29c74b6db844a67a4132b',1,'fabgl::uiWindow']]],
   ['app',['app',['../classfabgl_1_1ui_evt_handler.html#a96d17d0396113602bd2367a7f0c09492',1,'fabgl::uiEvtHandler']]],
   ['appprops',['appProps',['../classfabgl_1_1ui_app.html#ac462bde3e4a0084396e727e2c3a85004',1,'fabgl::uiApp']]],

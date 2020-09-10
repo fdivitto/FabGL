@@ -8,6 +8,7 @@ var classfabgl_1_1_keyboard =
     [ "getNextScancode", "classfabgl_1_1_keyboard.html#ab9a808c325805665f8d252e8ab75a3bc", null ],
     [ "getNextVirtualKey", "classfabgl_1_1_keyboard.html#a9ba5171323a675524420ea40ab3acdf1", null ],
     [ "identify", "classfabgl_1_1_keyboard.html#a2b6250680121b58ad9787ff2cdea9671", null ],
+    [ "injectVirtualKey", "classfabgl_1_1_keyboard.html#a0b39247c50f768af27f3504cc708dbb3", null ],
     [ "isKeyboardAvailable", "classfabgl_1_1_keyboard.html#aadd5adf79f3b8d403d69db7f7753e1c5", null ],
     [ "isVKDown", "classfabgl_1_1_keyboard.html#aa551a4f1d2d86833ebc5e6dc467dc83d", null ],
     [ "lock", "classfabgl_1_1_keyboard.html#ad9c718ed1c4c1d29ad028bc945904b78", null ],
@@ -20,5 +21,6 @@ var classfabgl_1_1_keyboard =
     [ "suspendVirtualKeyGeneration", "classfabgl_1_1_keyboard.html#a01116e07850104c69490aac4895dc51b", null ],
     [ "unlock", "classfabgl_1_1_keyboard.html#a8f89f02a4a2684bce07ed264bbbf6773", null ],
     [ "virtualKeyAvailable", "classfabgl_1_1_keyboard.html#a0ff3a7ca455a076c8ae80da3d1806518", null ],
-    [ "virtualKeyToASCII", "classfabgl_1_1_keyboard.html#a818f1cf81f6a7532ce08ff91ca2531ba", null ]
+    [ "virtualKeyToASCII", "classfabgl_1_1_keyboard.html#a818f1cf81f6a7532ce08ff91ca2531ba", null ],
+    [ "onVirtualKey", "classfabgl_1_1_keyboard.html#a8803eb21bf4ebfdde60a529d055bc8dc", null ]
 ];

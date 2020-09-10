@@ -21,6 +21,7 @@ var searchData=
   ['vga_5f640x350_5f70hzalt1',['VGA_640x350_70HzAlt1',['../fabglconf_8h.html#ae913dffdd13bd77b79d1a253e88bf22f',1,'fabglconf.h']]],
   ['vga_5f640x382_5f60hz',['VGA_640x382_60Hz',['../fabglconf_8h.html#afe328eafdaa469a1c68be7c38059efb8',1,'fabglconf.h']]],
   ['vga_5f640x384_5f60hz',['VGA_640x384_60Hz',['../fabglconf_8h.html#aa6b2ada76eb9e786172122175d019582',1,'fabglconf.h']]],
+  ['vga_5f640x400_5f60hz',['VGA_640x400_60Hz',['../fabglconf_8h.html#ae4d29e8fc41688ff838f237359ec56bd',1,'fabglconf.h']]],
   ['vga_5f640x400_5f70hz',['VGA_640x400_70Hz',['../fabglconf_8h.html#a86b59f35df218823a6165d836cfc22c0',1,'fabglconf.h']]],
   ['vga_5f640x480_5f60hz',['VGA_640x480_60Hz',['../fabglconf_8h.html#a2d4571e9072b78877c36bf32bc9423f8',1,'fabglconf.h']]],
   ['vga_5f640x480_5f60hzalt1',['VGA_640x480_60HzAlt1',['../fabglconf_8h.html#a0a71a8ca2b76872336ace9a316dd8965',1,'fabglconf.h']]],

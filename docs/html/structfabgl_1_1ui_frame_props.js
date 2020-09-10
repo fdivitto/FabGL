@@ -1,5 +1,6 @@
 var structfabgl_1_1ui_frame_props =
 [
+    [ "fillBackground", "structfabgl_1_1ui_frame_props.html#a6cb630f278d514e4716eac69239b63fc", null ],
     [ "hasCloseButton", "structfabgl_1_1ui_frame_props.html#a4ac0f820686bd3e3672b02f24bc37e00", null ],
     [ "hasMaximizeButton", "structfabgl_1_1ui_frame_props.html#ad4288398695af48bc286228ce3ee4f41", null ],
     [ "hasMinimizeButton", "structfabgl_1_1ui_frame_props.html#a8c807b7a49be228194a9339448ec8120", null ],

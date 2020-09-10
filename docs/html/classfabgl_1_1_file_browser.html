@@ -108,51 +108,84 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af88fe56fb0df3ca3feb4623100b82781"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#af88fe56fb0df3ca3feb4623100b82781">count</a> ()</td></tr>
 <tr class="memdesc:af88fe56fb0df3ca3feb4623100b82781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines number of files in current directory.  <a href="#af88fe56fb0df3ca3feb4623100b82781">More...</a><br /></td></tr>
 <tr class="separator:af88fe56fb0df3ca3feb4623100b82781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af366ed56ea102ae306e7b6b0959f7956"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#af366ed56ea102ae306e7b6b0959f7956">createTempFilename</a> ()</td></tr>
+<tr class="memdesc:af366ed56ea102ae306e7b6b0959f7956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a random temporary filename, with absolute path.  <a href="#af366ed56ea102ae306e7b6b0959f7956">More...</a><br /></td></tr>
+<tr class="separator:af366ed56ea102ae306e7b6b0959f7956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92055a2079161d3bfefc52d5c779cf76"><td class="memItemLeft" align="right" valign="top">char const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a92055a2079161d3bfefc52d5c779cf76">directory</a> ()</td></tr>
 <tr class="memdesc:a92055a2079161d3bfefc52d5c779cf76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines absolute path of current directory.  <a href="#a92055a2079161d3bfefc52d5c779cf76">More...</a><br /></td></tr>
 <tr class="separator:a92055a2079161d3bfefc52d5c779cf76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62330831bbe65688d751664245a51420"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a62330831bbe65688d751664245a51420">exists</a> (char const *name)</td></tr>
-<tr class="memdesc:a62330831bbe65688d751664245a51420"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a file exists.  <a href="#a62330831bbe65688d751664245a51420">More...</a><br /></td></tr>
-<tr class="separator:a62330831bbe65688d751664245a51420"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3afaa28824f074481801fa2af71eb7c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a3afaa28824f074481801fa2af71eb7c3">exists</a> (char const *name, bool caseSensitive=true)</td></tr>
+<tr class="memdesc:a3afaa28824f074481801fa2af71eb7c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a file exists.  <a href="#a3afaa28824f074481801fa2af71eb7c3">More...</a><br /></td></tr>
+<tr class="separator:a3afaa28824f074481801fa2af71eb7c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a533cb6c665d63c10f46983a529c6e120"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a533cb6c665d63c10f46983a529c6e120">fileAccessDate</a> (char const *name, int *year, int *month, int *day, int *hour, int *minutes, int *seconds)</td></tr>
+<tr class="memdesc:a533cb6c665d63c10f46983a529c6e120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets file access date and time.  <a href="#a533cb6c665d63c10f46983a529c6e120">More...</a><br /></td></tr>
+<tr class="separator:a533cb6c665d63c10f46983a529c6e120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ec9dcd48267ae8d3fa21af5a2d49034"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a4ec9dcd48267ae8d3fa21af5a2d49034">fileCreationDate</a> (char const *name, int *year, int *month, int *day, int *hour, int *minutes, int *seconds)</td></tr>
+<tr class="memdesc:a4ec9dcd48267ae8d3fa21af5a2d49034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets file creation date and time.  <a href="#a4ec9dcd48267ae8d3fa21af5a2d49034">More...</a><br /></td></tr>
+<tr class="separator:a4ec9dcd48267ae8d3fa21af5a2d49034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea86f4f1064bc80911fe32c15db1f8c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a3ea86f4f1064bc80911fe32c15db1f8c">fileSize</a> (char const *name)</td></tr>
+<tr class="memdesc:a3ea86f4f1064bc80911fe32c15db1f8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines file size.  <a href="#a3ea86f4f1064bc80911fe32c15db1f8c">More...</a><br /></td></tr>
+<tr class="separator:a3ea86f4f1064bc80911fe32c15db1f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5246016216756220fb5caa3183c4c030"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a5246016216756220fb5caa3183c4c030">fileUpdateDate</a> (char const *name, int *year, int *month, int *day, int *hour, int *minutes, int *seconds)</td></tr>
+<tr class="memdesc:a5246016216756220fb5caa3183c4c030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets file update date and time.  <a href="#a5246016216756220fb5caa3183c4c030">More...</a><br /></td></tr>
+<tr class="separator:a5246016216756220fb5caa3183c4c030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af318c25a4f9790953af285970a0ed7ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_dir_item.html">DirItem</a> const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#af318c25a4f9790953af285970a0ed7ce">get</a> (int index)</td></tr>
 <tr class="memdesc:af318c25a4f9790953af285970a0ed7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets file/directory at index.  <a href="#af318c25a4f9790953af285970a0ed7ce">More...</a><br /></td></tr>
 <tr class="separator:af318c25a4f9790953af285970a0ed7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25ea0de0bbfd9053d5693d7aad277afe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a25ea0de0bbfd9053d5693d7aad277afe">getCurrentDriveType</a> ()</td></tr>
+<tr class="memdesc:a25ea0de0bbfd9053d5693d7aad277afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the drive type of current directory.  <a href="#a25ea0de0bbfd9053d5693d7aad277afe">More...</a><br /></td></tr>
+<tr class="separator:a25ea0de0bbfd9053d5693d7aad277afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa9477da9e33f303eb49adc1cbbbe635"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#aaa9477da9e33f303eb49adc1cbbbe635">getFullPath</a> (char const *name, char *outPath=nullptr, int maxlen=0)</td></tr>
-<tr class="memdesc:aaa9477da9e33f303eb49adc1cbbbe635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compose a full file path given a relative name.  <a href="#aaa9477da9e33f303eb49adc1cbbbe635">More...</a><br /></td></tr>
+<tr class="memdesc:aaa9477da9e33f303eb49adc1cbbbe635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Composes a full file path given a relative name.  <a href="#aaa9477da9e33f303eb49adc1cbbbe635">More...</a><br /></td></tr>
 <tr class="separator:aaa9477da9e33f303eb49adc1cbbbe635"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeff942e0f9ed753ae514cbeb2e1246d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#aaeff942e0f9ed753ae514cbeb2e1246d">makeDirectory</a> (char const *dirname)</td></tr>
 <tr class="memdesc:aaeff942e0f9ed753ae514cbeb2e1246d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a directory.  <a href="#aaeff942e0f9ed753ae514cbeb2e1246d">More...</a><br /></td></tr>
 <tr class="separator:aaeff942e0f9ed753ae514cbeb2e1246d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc55e9f45c4429b21fd6c7a72f33a18b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#acc55e9f45c4429b21fd6c7a72f33a18b">reload</a> ()</td></tr>
-<tr class="memdesc:acc55e9f45c4429b21fd6c7a72f33a18b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reloads directory content.  <a href="#acc55e9f45c4429b21fd6c7a72f33a18b">More...</a><br /></td></tr>
-<tr class="separator:acc55e9f45c4429b21fd6c7a72f33a18b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7d293e673d1661d3aa6d7d95b2692e0"><td class="memItemLeft" align="right" valign="top">FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#ab7d293e673d1661d3aa6d7d95b2692e0">openFile</a> (char const *filename, char const *mode)</td></tr>
+<tr class="memdesc:ab7d293e673d1661d3aa6d7d95b2692e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file from current directory.  <a href="#ab7d293e673d1661d3aa6d7d95b2692e0">More...</a><br /></td></tr>
+<tr class="separator:ab7d293e673d1661d3aa6d7d95b2692e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af952e3af811aca6d07db8d354b907032"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#af952e3af811aca6d07db8d354b907032">reload</a> ()</td></tr>
+<tr class="memdesc:af952e3af811aca6d07db8d354b907032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reloads directory content.  <a href="#af952e3af811aca6d07db8d354b907032">More...</a><br /></td></tr>
+<tr class="separator:af952e3af811aca6d07db8d354b907032"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab83743f55517d6d4ea47a16ccbadce34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#ab83743f55517d6d4ea47a16ccbadce34">remove</a> (char const *name)</td></tr>
 <tr class="memdesc:ab83743f55517d6d4ea47a16ccbadce34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a file or directory.  <a href="#ab83743f55517d6d4ea47a16ccbadce34">More...</a><br /></td></tr>
 <tr class="separator:ab83743f55517d6d4ea47a16ccbadce34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a371592986f622b4d11d31485a173128f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a371592986f622b4d11d31485a173128f">rename</a> (char const *oldName, char const *newName)</td></tr>
 <tr class="memdesc:a371592986f622b4d11d31485a173128f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renames a file.  <a href="#a371592986f622b4d11d31485a173128f">More...</a><br /></td></tr>
 <tr class="separator:a371592986f622b4d11d31485a173128f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac584293b227b5c89f212ff33215159f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#ac584293b227b5c89f212ff33215159f4">setDirectory</a> (const char *path)</td></tr>
-<tr class="memdesc:ac584293b227b5c89f212ff33215159f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets absolute directory path.  <a href="#ac584293b227b5c89f212ff33215159f4">More...</a><br /></td></tr>
-<tr class="separator:ac584293b227b5c89f212ff33215159f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af45891ecdda0be92e32a24499a1173b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#af45891ecdda0be92e32a24499a1173b2">setDirectory</a> (const char *path)</td></tr>
+<tr class="memdesc:af45891ecdda0be92e32a24499a1173b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets absolute directory path.  <a href="#af45891ecdda0be92e32a24499a1173b2">More...</a><br /></td></tr>
+<tr class="separator:af45891ecdda0be92e32a24499a1173b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a118d7dfa654286a6dfc6cd1267a99ced"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a118d7dfa654286a6dfc6cd1267a99ced">setSorted</a> (bool value)</td></tr>
 <tr class="memdesc:a118d7dfa654286a6dfc6cd1267a99ced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the items are sorted.  <a href="#a118d7dfa654286a6dfc6cd1267a99ced">More...</a><br /></td></tr>
 <tr class="separator:a118d7dfa654286a6dfc6cd1267a99ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ab187110a077405f9bd165e23c95a26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a4ab187110a077405f9bd165e23c95a26">truncate</a> (char const *name, size_t size)</td></tr>
+<tr class="memdesc:a4ab187110a077405f9bd165e23c95a26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Truncates a file to the specified size.  <a href="#a4ab187110a077405f9bd165e23c95a26">More...</a><br /></td></tr>
+<tr class="separator:a4ab187110a077405f9bd165e23c95a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a053d8434eec20eb218b6cc9a9f706b17"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a053d8434eec20eb218b6cc9a9f706b17">format</a> (<a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> driveType, int drive)</td></tr>
 <tr class="memdesc:a053d8434eec20eb218b6cc9a9f706b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Formats SPIFFS or SD Card.  <a href="#a053d8434eec20eb218b6cc9a9f706b17">More...</a><br /></td></tr>
 <tr class="separator:a053d8434eec20eb218b6cc9a9f706b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9bbba75b0f43635d9bbe0d07e3328c3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#ae9bbba75b0f43635d9bbe0d07e3328c3">getDriveType</a> (char const *path)</td></tr>
+<tr class="memdesc:ae9bbba75b0f43635d9bbe0d07e3328c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the drive type of specified path.  <a href="#ae9bbba75b0f43635d9bbe0d07e3328c3">More...</a><br /></td></tr>
+<tr class="separator:ae9bbba75b0f43635d9bbe0d07e3328c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a026474624a1f2e995d9173c753fcb501"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a026474624a1f2e995d9173c753fcb501">getFSInfo</a> (<a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> driveType, int drive, int64_t *total, int64_t *used)</td></tr>
 <tr class="memdesc:a026474624a1f2e995d9173c753fcb501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets total and free space on a filesystem.  <a href="#a026474624a1f2e995d9173c753fcb501">More...</a><br /></td></tr>
 <tr class="separator:a026474624a1f2e995d9173c753fcb501"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc0fcfd5302933ea31f50d0c043febcd"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#adc0fcfd5302933ea31f50d0c043febcd">mountSDCard</a> (bool formatOnFail, char const *mountPath, int maxFiles=4, int allocationUnitSize=16 *1024, int MISO=16, int MOSI=17, int CLK=14, int CS=13)</td></tr>
-<tr class="memdesc:adc0fcfd5302933ea31f50d0c043febcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SD Card.  <a href="#adc0fcfd5302933ea31f50d0c043febcd">More...</a><br /></td></tr>
-<tr class="separator:adc0fcfd5302933ea31f50d0c043febcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a924732a4696e35b6b9d27dfa0d08b451"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a924732a4696e35b6b9d27dfa0d08b451">mountSPIFFS</a> (bool formatOnFail, char const *mountPath, int maxFiles=4)</td></tr>
-<tr class="memdesc:a924732a4696e35b6b9d27dfa0d08b451"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SPIFFS (Flash)  <a href="#a924732a4696e35b6b9d27dfa0d08b451">More...</a><br /></td></tr>
-<tr class="separator:a924732a4696e35b6b9d27dfa0d08b451"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2e32016f547d6d30f9b20b0da1d5cd6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#aa2e32016f547d6d30f9b20b0da1d5cd6">mountSDCard</a> (bool formatOnFail, char const *mountPath, size_t maxFiles=4, int allocationUnitSize=16 *1024, int MISO=16, int MOSI=17, int CLK=14, int CS=13)</td></tr>
+<tr class="memdesc:aa2e32016f547d6d30f9b20b0da1d5cd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SD Card.  <a href="#aa2e32016f547d6d30f9b20b0da1d5cd6">More...</a><br /></td></tr>
+<tr class="separator:aa2e32016f547d6d30f9b20b0da1d5cd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3309dbe74291e890cb090bd2f2542e7c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a3309dbe74291e890cb090bd2f2542e7c">mountSPIFFS</a> (bool formatOnFail, char const *mountPath, size_t maxFiles=4)</td></tr>
+<tr class="memdesc:a3309dbe74291e890cb090bd2f2542e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mounts filesystem on SPIFFS (Flash)  <a href="#a3309dbe74291e890cb090bd2f2542e7c">More...</a><br /></td></tr>
+<tr class="separator:a3309dbe74291e890cb090bd2f2542e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71d1a3c20299298ea7e24a33e6459c0e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a71d1a3c20299298ea7e24a33e6459c0e">remountSDCard</a> ()</td></tr>
+<tr class="memdesc:a71d1a3c20299298ea7e24a33e6459c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remounts SDCard filesystem, using the same parameters.  <a href="#a71d1a3c20299298ea7e24a33e6459c0e">More...</a><br /></td></tr>
+<tr class="separator:a71d1a3c20299298ea7e24a33e6459c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf8c2d3584a29ebbff3d871798481916"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#acf8c2d3584a29ebbff3d871798481916">remountSPIFFS</a> ()</td></tr>
+<tr class="memdesc:acf8c2d3584a29ebbff3d871798481916"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remounts SPIFFS filesystem, using the same parameters.  <a href="#acf8c2d3584a29ebbff3d871798481916">More...</a><br /></td></tr>
+<tr class="separator:acf8c2d3584a29ebbff3d871798481916"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66b458b16e2ec8604970a9c4e57ce908"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_file_browser.html#a66b458b16e2ec8604970a9c4e57ce908">unmountSDCard</a> ()</td></tr>
 <tr class="memdesc:a66b458b16e2ec8604970a9c4e57ce908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unmounts filesystem on SD Card.  <a href="#a66b458b16e2ec8604970a9c4e57ce908">More...</a><br /></td></tr>
 <tr class="separator:a66b458b16e2ec8604970a9c4e57ce908"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,6 +195,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classfabgl_1_1_file_browser.html" title="FileBrowser allows basic file system operations (dir, mkdir, remove and rename) ">FileBrowser</a> allows basic file system operations (dir, mkdir, remove and rename) </p>
+<p>Note: SPIFFS filenames (including fullpath) cannot exceed SPIFFS_OBJ_NAME_LEN (32 bytes) size. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a764acf9477ff09e8dd0f21274045d5c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a764acf9477ff09e8dd0f21274045d5c8">&#9670;&nbsp;</a></span>changeDirectory()</h2>
@@ -217,6 +251,26 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="af366ed56ea102ae306e7b6b0959f7956"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af366ed56ea102ae306e7b6b0959f7956">&#9670;&nbsp;</a></span>createTempFilename()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * fabgl::FileBrowser::createTempFilename </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a random temporary filename, with absolute path. </p>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to temporary string. It must be freed using free(). </dd></dl>
+
+</div>
+</div>
 <a id="a92055a2079161d3bfefc52d5c779cf76"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92055a2079161d3bfefc52d5c779cf76">&#9670;&nbsp;</a></span>directory()</h2>
 
@@ -245,8 +299,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a62330831bbe65688d751664245a51420"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62330831bbe65688d751664245a51420">&#9670;&nbsp;</a></span>exists()</h2>
+<a id="a3afaa28824f074481801fa2af71eb7c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3afaa28824f074481801fa2af71eb7c3">&#9670;&nbsp;</a></span>exists()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,8 +309,18 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">bool fabgl::FileBrowser::exists </td>
           <td>(</td>
           <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>caseSensitive</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -264,11 +328,258 @@ Static Public Member Functions</h2></td></tr>
 <p>Determines if a file exists. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">name</td><td>Relative file or directory name</td></tr>
+    <tr><td class="paramname">name</td><td>Relative file or directory name </td></tr>
+    <tr><td class="paramname">caseSensitive</td><td>If true (default) comparison is case sensitive</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if the file exists </dd></dl>
+
+</div>
+</div>
+<a id="a533cb6c665d63c10f46983a529c6e120"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a533cb6c665d63c10f46983a529c6e120">&#9670;&nbsp;</a></span>fileAccessDate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::fileAccessDate </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>year</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>month</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>day</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>hour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>minutes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>seconds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets file access date and time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Relative file name </td></tr>
+    <tr><td class="paramname">year</td><td>Pointer to year </td></tr>
+    <tr><td class="paramname">month</td><td>Pointer to month (1..12) </td></tr>
+    <tr><td class="paramname">day</td><td>Pointer to day (1..31) </td></tr>
+    <tr><td class="paramname">hour</td><td>Pointer to hour (0..23) </td></tr>
+    <tr><td class="paramname">minutes</td><td>Pointer to minutes (0..59) </td></tr>
+    <tr><td class="paramname">seconds</td><td>Pointer to seconds (0..59, or 60)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success </dd></dl>
+
+</div>
+</div>
+<a id="a4ec9dcd48267ae8d3fa21af5a2d49034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ec9dcd48267ae8d3fa21af5a2d49034">&#9670;&nbsp;</a></span>fileCreationDate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::fileCreationDate </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>year</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>month</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>day</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>hour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>minutes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>seconds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets file creation date and time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Relative file name </td></tr>
+    <tr><td class="paramname">year</td><td>Pointer to year </td></tr>
+    <tr><td class="paramname">month</td><td>Pointer to month (1..12) </td></tr>
+    <tr><td class="paramname">day</td><td>Pointer to day (1..31) </td></tr>
+    <tr><td class="paramname">hour</td><td>Pointer to hour (0..23) </td></tr>
+    <tr><td class="paramname">minutes</td><td>Pointer to minutes (0..59) </td></tr>
+    <tr><td class="paramname">seconds</td><td>Pointer to seconds (0..59, or 60)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success </dd></dl>
+
+</div>
+</div>
+<a id="a3ea86f4f1064bc80911fe32c15db1f8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ea86f4f1064bc80911fe32c15db1f8c">&#9670;&nbsp;</a></span>fileSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t fabgl::FileBrowser::fileSize </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines file size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Relative file name</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>File size in bytes </dd></dl>
+
+</div>
+</div>
+<a id="a5246016216756220fb5caa3183c4c030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5246016216756220fb5caa3183c4c030">&#9670;&nbsp;</a></span>fileUpdateDate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::fileUpdateDate </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>year</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>month</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>day</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>hour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>minutes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>seconds</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets file update date and time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Relative file name </td></tr>
+    <tr><td class="paramname">year</td><td>Pointer to year </td></tr>
+    <tr><td class="paramname">month</td><td>Pointer to month (1..12) </td></tr>
+    <tr><td class="paramname">day</td><td>Pointer to day (1..31) </td></tr>
+    <tr><td class="paramname">hour</td><td>Pointer to hour (0..23) </td></tr>
+    <tr><td class="paramname">minutes</td><td>Pointer to minutes (0..59) </td></tr>
+    <tr><td class="paramname">seconds</td><td>Pointer to seconds (0..59, or 60)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success </dd></dl>
 
 </div>
 </div>
@@ -353,6 +664,61 @@ FileBrowser::mountSPIFFS(false, "/spiffs");</pre>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>File or directory specificator </dd></dl>
+
+</div>
+</div>
+<a id="a25ea0de0bbfd9053d5693d7aad277afe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25ea0de0bbfd9053d5693d7aad277afe">&#9670;&nbsp;</a></span>getCurrentDriveType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> fabgl::FileBrowser::getCurrentDriveType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the drive type of current directory. </p>
+<dl class="section return"><dt>Returns</dt><dd>Drive type. </dd></dl>
+
+</div>
+</div>
+<a id="ae9bbba75b0f43635d9bbe0d07e3328c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9bbba75b0f43635d9bbe0d07e3328c3">&#9670;&nbsp;</a></span>getDriveType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee">DriveType</a> fabgl::FileBrowser::getDriveType </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the drive type of specified path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Path</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Drive type. </dd></dl>
 
 </div>
 </div>
@@ -456,7 +822,7 @@ Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024
       </table>
 </div><div class="memdoc">
 
-<p>Compose a full file path given a relative name. </p>
+<p>Composes a full file path given a relative name. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>Relative file name </td></tr>
@@ -495,8 +861,8 @@ Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024
 
 </div>
 </div>
-<a id="adc0fcfd5302933ea31f50d0c043febcd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc0fcfd5302933ea31f50d0c043febcd">&#9670;&nbsp;</a></span>mountSDCard()</h2>
+<a id="aa2e32016f547d6d30f9b20b0da1d5cd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2e32016f547d6d30f9b20b0da1d5cd6">&#9670;&nbsp;</a></span>mountSDCard()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -519,7 +885,7 @@ Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>maxFiles</em> = <code>4</code>, </td>
         </tr>
         <tr>
@@ -584,8 +950,8 @@ Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024
 FileBrowser::mountSDCard(false, "/sdcard");</pre> 
 </div>
 </div>
-<a id="a924732a4696e35b6b9d27dfa0d08b451"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a924732a4696e35b6b9d27dfa0d08b451">&#9670;&nbsp;</a></span>mountSPIFFS()</h2>
+<a id="a3309dbe74291e890cb090bd2f2542e7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3309dbe74291e890cb090bd2f2542e7c">&#9670;&nbsp;</a></span>mountSPIFFS()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -608,7 +974,7 @@ FileBrowser::mountSDCard(false, "/sdcard");</pre>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>maxFiles</em> = <code>4</code>&#160;</td>
         </tr>
         <tr>
@@ -638,14 +1004,52 @@ FileBrowser::mountSDCard(false, "/sdcard");</pre>
 FileBrowser::mountSPIFFS(false, "/spiffs");</pre> 
 </div>
 </div>
-<a id="acc55e9f45c4429b21fd6c7a72f33a18b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc55e9f45c4429b21fd6c7a72f33a18b">&#9670;&nbsp;</a></span>reload()</h2>
+<a id="ab7d293e673d1661d3aa6d7d95b2692e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7d293e673d1661d3aa6d7d95b2692e0">&#9670;&nbsp;</a></span>openFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::FileBrowser::reload </td>
+          <td class="memname">FILE * fabgl::FileBrowser::openFile </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Opens a file from current directory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Name of file to open </td></tr>
+    <tr><td class="paramname">mode</td><td>Open mode (like the fopen mode)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Same result of fopen C function </dd></dl>
+
+</div>
+</div>
+<a id="af952e3af811aca6d07db8d354b907032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af952e3af811aca6d07db8d354b907032">&#9670;&nbsp;</a></span>reload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::reload </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -654,6 +1058,63 @@ FileBrowser::mountSPIFFS(false, "/spiffs");</pre>
 </div><div class="memdoc">
 
 <p>Reloads directory content. </p>
+<dl class="section return"><dt>Returns</dt><dd>True on successful reload. </dd></dl>
+
+</div>
+</div>
+<a id="a71d1a3c20299298ea7e24a33e6459c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71d1a3c20299298ea7e24a33e6459c0e">&#9670;&nbsp;</a></span>remountSDCard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::remountSDCard </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Remounts SDCard filesystem, using the same parameters. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success. </dd></dl>
+
+</div>
+</div>
+<a id="acf8c2d3584a29ebbff3d871798481916"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf8c2d3584a29ebbff3d871798481916">&#9670;&nbsp;</a></span>remountSPIFFS()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::remountSPIFFS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Remounts SPIFFS filesystem, using the same parameters. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns True on success. </dd></dl>
 
 </div>
 </div>
@@ -721,14 +1182,14 @@ FileBrowser::mountSPIFFS(false, "/spiffs");</pre>
 
 </div>
 </div>
-<a id="ac584293b227b5c89f212ff33215159f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac584293b227b5c89f212ff33215159f4">&#9670;&nbsp;</a></span>setDirectory()</h2>
+<a id="af45891ecdda0be92e32a24499a1173b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af45891ecdda0be92e32a24499a1173b2">&#9670;&nbsp;</a></span>setDirectory()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::FileBrowser::setDirectory </td>
+          <td class="memname">bool fabgl::FileBrowser::setDirectory </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -740,10 +1201,11 @@ FileBrowser::mountSPIFFS(false, "/spiffs");</pre>
 <p>Sets absolute directory path. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">path</td><td>Absolute directory path (ie "/spiffs") </td></tr>
+    <tr><td class="paramname">path</td><td>Absolute directory path (ie "/spiffs")</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>True on success </dd></dl>
 
 </div>
 </div>
@@ -770,6 +1232,44 @@ FileBrowser::mountSPIFFS(false, "/spiffs");</pre>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a4ab187110a077405f9bd165e23c95a26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ab187110a077405f9bd165e23c95a26">&#9670;&nbsp;</a></span>truncate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool fabgl::FileBrowser::truncate </td>
+          <td>(</td>
+          <td class="paramtype">char const *&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Truncates a file to the specified size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Relative file name </td></tr>
+    <tr><td class="paramname">size</td><td>New size in bytes</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true on success. </dd></dl>
 
 </div>
 </div>

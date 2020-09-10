@@ -1,6 +1,10 @@
 var searchData=
 [
+  ['fileaccessdate',['fileAccessDate',['../classfabgl_1_1_file_browser.html#a533cb6c665d63c10f46983a529c6e120',1,'fabgl::FileBrowser']]],
+  ['filecreationdate',['fileCreationDate',['../classfabgl_1_1_file_browser.html#a4ec9dcd48267ae8d3fa21af5a2d49034',1,'fabgl::FileBrowser']]],
   ['filename',['filename',['../classfabgl_1_1ui_file_browser.html#a8c7b7961acb24095bacee49868d20443',1,'fabgl::uiFileBrowser']]],
+  ['filesize',['fileSize',['../classfabgl_1_1_file_browser.html#a3ea86f4f1064bc80911fe32c15db1f8c',1,'fabgl::FileBrowser']]],
+  ['fileupdatedate',['fileUpdateDate',['../classfabgl_1_1_file_browser.html#a5246016216756220fb5caa3183c4c030',1,'fabgl::FileBrowser']]],
   ['fillbackground',['FillBackground',['../unionfabgl_1_1_glyph_options.html#ac24367a7567a01a2f42941e7444a56b7',1,'fabgl::GlyphOptions::FillBackground()'],['../displaycontroller_8h.html#a4054936031229707e9189e4f2c865e67',1,'FillBackground():&#160;displaycontroller.h']]],
   ['fillellipse',['fillEllipse',['../classfabgl_1_1_canvas.html#a6e27dfa23f59ea92609945addcfd4ebb',1,'fabgl::Canvas']]],
   ['fillpath',['fillPath',['../classfabgl_1_1_canvas.html#ad3fd9968381866706560eafbaac0656c',1,'fabgl::Canvas']]],

@@ -99,7 +99,9 @@ $(document).ready(function(){initNavTree('fabgl_8h.html','');});
 <code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="vgacontroller_8h_source.html">dispdrivers/vgacontroller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_s_s_d1306_controller_8h_source.html">dispdrivers/SSD1306Controller.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="_s_t7789_controller_8h_source.html">dispdrivers/ST7789Controller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_t_f_t_controller_specif_8h_source.html">dispdrivers/TFTControllerSpecif.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="vgatextcontroller_8h_source.html">dispdrivers/vgatextcontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="vga16controller_8h_source.html">dispdrivers/vga16controller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ps2controller_8h_source.html">comdrivers/ps2controller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="tsi2c_8h_source.html">comdrivers/tsi2c.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="keyboard_8h_source.html">devdrivers/keyboard.h</a>&quot;</code><br />
@@ -113,24 +115,24 @@ Include dependency graph for fabgl.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabgl_8h__incl.png" border="0" usemap="#fabgl_8h" alt=""/></div>
 <map name="fabgl_8h" id="fabgl_8h">
-<area shape="rect" id="node2" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="4255,299,4330,324"/>
-<area shape="rect" id="node4" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2103,225,2183,251"/>
-<area shape="rect" id="node31" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="5434,79,5514,104"/>
-<area shape="rect" id="node37" href="displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="4229,225,4357,251"/>
-<area shape="rect" id="node38" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="5335,225,5488,251"/>
-<area shape="rect" id="node41" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="3737,152,3913,177"/>
-<area shape="rect" id="node42" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="4316,152,4531,177"/>
-<area shape="rect" id="node43" href="tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="4999,225,5128,251"/>
-<area shape="rect" id="node44" href="_s_t7789_controller_8h.html" title="This file contains fabgl::ST7789Controller definition. " alt="" coords="3937,152,4142,177"/>
-<area shape="rect" id="node45" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="5152,225,5260,251"/>
-<area shape="rect" id="node46" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="4837,225,4975,251"/>
-<area shape="rect" id="node47" href="_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="4808,152,4954,177"/>
-<area shape="rect" id="node48" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="4671,79,4739,104"/>
-<area shape="rect" id="node49" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="4554,152,4682,177"/>
-<area shape="rect" id="node50" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="3845,225,4002,251"/>
-<area shape="rect" id="node5" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="4524,299,4611,324"/>
-<area shape="rect" id="node36" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="4217,152,4291,177"/>
-<area shape="rect" id="node39" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="5254,152,5334,177"/>
+<area shape="rect" id="node2" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="4565,325,4640,351"/>
+<area shape="rect" id="node5" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2492,79,2572,104"/>
+<area shape="rect" id="node36" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="6044,159,6124,184"/>
+<area shape="rect" id="node37" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="6222,245,6375,271"/>
+<area shape="rect" id="node38" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="5636,245,5792,271"/>
+<area shape="rect" id="node39" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="4488,245,4616,271"/>
+<area shape="rect" id="node40" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="4520,159,4696,184"/>
+<area shape="rect" id="node41" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="5391,159,5606,184"/>
+<area shape="rect" id="node42" href="tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="5918,245,6047,271"/>
+<area shape="rect" id="node43" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="4690,239,4862,277"/>
+<area shape="rect" id="node44" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="4498,79,4696,104"/>
+<area shape="rect" id="node45" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="4821,79,5013,104"/>
+<area shape="rect" id="node46" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4987,245,5095,271"/>
+<area shape="rect" id="node47" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="5119,245,5256,271"/>
+<area shape="rect" id="node48" href="_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="5799,159,5945,184"/>
+<area shape="rect" id="node49" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="5528,79,5596,104"/>
+<area shape="rect" id="node50" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="5240,159,5367,184"/>
+<area shape="rect" id="node6" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5428,325,5515,351"/>
 </map>
 </div>
 </div>

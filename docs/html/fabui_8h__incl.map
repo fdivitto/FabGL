@@ -1,7 +1,7 @@
 <map id="fabui.h" name="fabui.h">
-<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="528,225,614,251"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="379,225,454,251"/>
-<area shape="rect" id="node9" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="220,152,348,177"/>
-<area shape="rect" id="node10" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="71,79,146,104"/>
-<area shape="rect" id="node11" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2216,152,2296,177"/>
+<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="657,232,743,257"/>
+<area shape="rect" id="node9" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="559,232,634,257"/>
+<area shape="rect" id="node11" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="265,152,394,177"/>
+<area shape="rect" id="node13" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="108,79,183,104"/>
+<area shape="rect" id="node14" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="3300,152,3380,177"/>
 </map>

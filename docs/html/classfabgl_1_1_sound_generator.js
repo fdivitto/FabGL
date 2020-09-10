@@ -6,6 +6,8 @@ var classfabgl_1_1_sound_generator =
     [ "detach", "classfabgl_1_1_sound_generator.html#a5d7b92cd65efb7a15539c26ad9a77961", null ],
     [ "play", "classfabgl_1_1_sound_generator.html#ab31e4d9d389cc2ad096382c23d180016", null ],
     [ "playing", "classfabgl_1_1_sound_generator.html#a714564c341a4f009d8524a8bce72e02c", null ],
+    [ "playSamples", "classfabgl_1_1_sound_generator.html#ade53c7584b7e8928a711c32f8d763a57", null ],
+    [ "playSound", "classfabgl_1_1_sound_generator.html#ad82800e9bbe177e51f745ef2c4b1cf25", null ],
     [ "setVolume", "classfabgl_1_1_sound_generator.html#a9ed20af1abae00cd443f842b2f136308", null ],
     [ "volume", "classfabgl_1_1_sound_generator.html#a3e0020bc8087bd0c889404580859709f", null ]
 ];

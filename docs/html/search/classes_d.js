@@ -8,6 +8,5 @@ var searchData=
   ['soundgenerator',['SoundGenerator',['../classfabgl_1_1_sound_generator.html',1,'fabgl']]],
   ['sprite',['Sprite',['../structfabgl_1_1_sprite.html',1,'fabgl']]],
   ['squarewaveformgenerator',['SquareWaveformGenerator',['../classfabgl_1_1_square_waveform_generator.html',1,'fabgl']]],
-  ['ssd1306controller',['SSD1306Controller',['../classfabgl_1_1_s_s_d1306_controller.html',1,'fabgl']]],
-  ['st7789controller',['ST7789Controller',['../classfabgl_1_1_s_t7789_controller.html',1,'fabgl']]]
+  ['ssd1306controller',['SSD1306Controller',['../classfabgl_1_1_s_s_d1306_controller.html',1,'fabgl']]]
 ];

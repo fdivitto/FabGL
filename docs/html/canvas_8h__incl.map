@@ -1,5 +1,5 @@
 <map id="canvas.h" name="canvas.h">
-<area shape="rect" id="node4" href="$displaycontroller_8h.html" title="This file contains fabgl::DisplayController definition. " alt="" coords="181,79,310,104"/>
-<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="329,152,415,177"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="489,152,564,177"/>
+<area shape="rect" id="node4" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="223,79,351,104"/>
+<area shape="rect" id="node8" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="608,152,694,177"/>
+<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="187,152,262,177"/>
 </map>

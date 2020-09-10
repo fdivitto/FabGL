@@ -101,9 +101,9 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_scene.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a32344952745f52f7f14f496c0e71b17e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a32344952745f52f7f14f496c0e71b17e">Scene</a> (int maxSpritesCount, int updateTimeMS, int <a class="el" href="fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h.html#a777dd66f9609a587ee98ad50de301662">height</a>)</td></tr>
-<tr class="memdesc:a32344952745f52f7f14f496c0e71b17e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor.  <a href="#a32344952745f52f7f14f496c0e71b17e">More...</a><br /></td></tr>
-<tr class="separator:a32344952745f52f7f14f496c0e71b17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a6d396fb2847c1c6707e34365433d7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a0a6d396fb2847c1c6707e34365433d7e">Scene</a> (int maxSpritesCount, int updateTimeMS, int <a class="el" href="fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h.html#a777dd66f9609a587ee98ad50de301662">height</a>, int stackSize=FABGL_DEFAULT_SCENETASK_STACKSIZE)</td></tr>
+<tr class="memdesc:a0a6d396fb2847c1c6707e34365433d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor.  <a href="#a0a6d396fb2847c1c6707e34365433d7e">More...</a><br /></td></tr>
+<tr class="separator:a0a6d396fb2847c1c6707e34365433d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab28fe102bad4068e5d627ab66798fc3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f">addSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
 <tr class="memdesc:ab28fe102bad4068e5d627ab66798fc3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the specified sprite to collision detector.  <a href="#ab28fe102bad4068e5d627ab66798fc3f">More...</a><br /></td></tr>
 <tr class="separator:ab28fe102bad4068e5d627ab66798fc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,8 +141,8 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a32344952745f52f7f14f496c0e71b17e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32344952745f52f7f14f496c0e71b17e">&#9670;&nbsp;</a></span>Scene()</h2>
+<a id="a0a6d396fb2847c1c6707e34365433d7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a6d396fb2847c1c6707e34365433d7e">&#9670;&nbsp;</a></span>Scene()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,7 +169,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>height</em>&#160;</td>
+          <td class="paramname"><em>height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stackSize</em> = <code>FABGL_DEFAULT_SCENETASK_STACKSIZE</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -186,6 +192,7 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">updateTimeMS</td><td>Number of milliseconds between updates. <a class="el" href="classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e" title="This is an abstract method called whenever the scene needs to be updated. ">Scene.update()</a> is called whenever an update occurs. </td></tr>
     <tr><td class="paramname">width</td><td>The scene width in pixels. </td></tr>
     <tr><td class="paramname">height</td><td>The scene height in pixels. </td></tr>
+    <tr><td class="paramname">stackSize</td><td><a class="el" href="structfabgl_1_1_size.html" title="Represents a bidimensional size. ">Size</a> of update task stack. </td></tr>
   </table>
   </dd>
 </dl>

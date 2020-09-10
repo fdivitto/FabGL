@@ -2,6 +2,7 @@ var searchData=
 [
   ['a',['A',['../structfabgl_1_1_r_g_b_a8888.html#aaded41e4bb3ae3458712b6b75b0e691f',1,'fabgl::RGBA8888::A()'],['../structfabgl_1_1_r_g_b_a2222.html#a1791712b60e2a1ca212e70cf74a04c65',1,'fabgl::RGBA2222::A()']]],
   ['activable',['activable',['../structfabgl_1_1ui_window_props.html#ac6e1de46e51f00f0be806b07ff9ada83',1,'fabgl::uiWindowProps']]],
+  ['activate',['activate',['../classfabgl_1_1_terminal.html#adfb044a6d998390fbfc6fb57fcee0a5c',1,'fabgl::Terminal']]],
   ['active',['active',['../structfabgl_1_1ui_window_state.html#abdb53708ba30bc52f9ee182b228508b2',1,'fabgl::uiWindowState']]],
   ['activebordercolor',['activeBorderColor',['../structfabgl_1_1ui_window_style.html#a867722907e76a525522eba16646c9645',1,'fabgl::uiWindowStyle']]],
   ['activebuttoncolor',['activeButtonColor',['../structfabgl_1_1ui_frame_style.html#aa762f723bf985116b960b3eeea0dc997',1,'fabgl::uiFrameStyle']]],
@@ -9,6 +10,7 @@ var searchData=
   ['activetitlecolor',['activeTitleColor',['../structfabgl_1_1ui_frame_style.html#a7268f5f27ffbc818dbe36e0f4bba220e',1,'fabgl::uiFrameStyle']]],
   ['activewindow',['activeWindow',['../classfabgl_1_1ui_app.html#a93a96823b4a884c8cb4141383197837f',1,'fabgl::uiApp']]],
   ['addsprite',['addSprite',['../classfabgl_1_1_collision_detector.html#a90308afcec5448c888d4117842f0757a',1,'fabgl::CollisionDetector::addSprite()'],['../classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f',1,'fabgl::Scene::addSprite()']]],
+  ['adjustmapsize',['adjustMapSize',['../classfabgl_1_1_v_g_a_text_controller.html#aab6e3a3130a088e1c97ceb5d76ac5475',1,'fabgl::VGATextController']]],
   ['adm31',['ADM31',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda8ac06e0429ea3a6cd71f46c7d4525b95',1,'fabgl']]],
   ['adm3a',['ADM3A',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be',1,'fabgl']]],
   ['allowedit',['allowEdit',['../structfabgl_1_1ui_text_edit_props.html#a40dd3d18164faa30e077be0c48b0eb44',1,'fabgl::uiTextEditProps']]],
@@ -17,6 +19,7 @@ var searchData=
   ['altvirtualkeydef',['AltVirtualKeyDef',['../structfabgl_1_1_alt_virtual_key_def.html',1,'fabgl']]],
   ['anchors',['anchors',['../classfabgl_1_1ui_window.html#a12aa63ec46d29c74b6db844a67a4132b',1,'fabgl::uiWindow']]],
   ['ansi_5fvt',['ANSI_VT',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2',1,'fabgl']]],
+  ['ansilegacy',['ANSILegacy',['../group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf7bc7bfefc009fcde2d822215b8ae1bc',1,'fabgl']]],
   ['app',['app',['../classfabgl_1_1ui_evt_handler.html#a96d17d0396113602bd2367a7f0c09492',1,'fabgl::uiEvtHandler']]],
   ['appprops',['appProps',['../classfabgl_1_1ui_app.html#ac462bde3e4a0084396e727e2c3a85004',1,'fabgl::uiApp']]],
   ['attach',['attach',['../classfabgl_1_1_sound_generator.html#aa479e1bbd4b8978025fddfa8ea398770',1,'fabgl::SoundGenerator']]],

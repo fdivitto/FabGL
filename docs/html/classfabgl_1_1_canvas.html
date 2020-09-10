@@ -191,6 +191,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1149e1edc415ac5d41b0b8220f07644d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_canvas.html#a1149e1edc415ac5d41b0b8220f07644d">moveTo</a> (int <a class="el" href="fabutils_8h.html#aa6aba27bc1a89db9e350b50bbf881f57">X</a>, int <a class="el" href="fabutils_8h.html#abe4637362df8e341470401813999dd17">Y</a>)</td></tr>
 <tr class="memdesc:a1149e1edc415ac5d41b0b8220f07644d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves current pen position to the spcified coordinates.  <a href="#a1149e1edc415ac5d41b0b8220f07644d">More...</a><br /></td></tr>
 <tr class="separator:a1149e1edc415ac5d41b0b8220f07644d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a091e171a73af906561e0ab78461aa9a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_canvas.html#a091e171a73af906561e0ab78461aa9a1">reset</a> ()</td></tr>
+<tr class="memdesc:a091e171a73af906561e0ab78461aa9a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets paint state and other display controller settings.  <a href="#a091e171a73af906561e0ab78461aa9a1">More...</a><br /></td></tr>
+<tr class="separator:a091e171a73af906561e0ab78461aa9a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a945d0e4f71faef0c1589a435db861baa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_canvas.html#a945d0e4f71faef0c1589a435db861baa">resetGlyphOptions</a> ()</td></tr>
 <tr class="memdesc:a945d0e4f71faef0c1589a435db861baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets glyph options.  <a href="#a945d0e4f71faef0c1589a435db861baa">More...</a><br /></td></tr>
 <tr class="separator:a945d0e4f71faef0c1589a435db861baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,7 +285,7 @@ fabgl::Canvas cv(&amp;VGAController);
 cv.setPenColor(Color::BrightRed);
 cv.setBrushColor(Color::BrightGreen);
 cv.fillRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
-cv.drawRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_t7789__t_f_t_2240x240_2_double_buffer_2_double_buffer_8ino-example.html#_a1">ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#_a1">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#_a1">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#_a1">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+cv.drawRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_t7789__t_f_t_2240x240_2_double_buffer_2_double_buffer_8ino-example.html#_a0">ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#_a1">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#_a1">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#_a1">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl></div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac9eb60c3a0b979128de33049e665d43b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac9eb60c3a0b979128de33049e665d43b">&#9670;&nbsp;</a></span>beginUpdate()</h2>
@@ -1548,6 +1551,25 @@ Canvas.lineTo(30, 40);
 Canvas.lineTo(10, 12);</pre> 
 </div>
 </div>
+<a id="a091e171a73af906561e0ab78461aa9a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a091e171a73af906561e0ab78461aa9a1">&#9670;&nbsp;</a></span>reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fabgl::Canvas::reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resets paint state and other display controller settings. </p>
+
+</div>
+</div>
 <a id="a945d0e4f71faef0c1589a435db861baa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a945d0e4f71faef0c1589a435db861baa">&#9670;&nbsp;</a></span>resetGlyphOptions()</h2>
 
@@ -1869,7 +1891,7 @@ Canvas.drawLine(10, 10, 100, 10);</pre>
 </div><div class="memdoc">
 
 <p>Sets the axes origin. </p>
-<p>Setting axes origin will translate every coordinate by the specified value (expect for sprites).</p>
+<p>Setting axes origin will translate every coordinate by the specified value (except for sprites).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">X</td><td>Horizontal translation (0 = no translation). </td></tr>
@@ -1897,7 +1919,7 @@ Canvas.drawLine(10, 10, 100, 10);</pre>
 </div><div class="memdoc">
 
 <p>Sets the axes origin. </p>
-<p>Setting axes origin will translate every coordinate by the specified value (expect for sprites).</p>
+<p>Setting axes origin will translate every coordinate by the specified value (except for sprites).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">origin</td><td>Origin coordinates. </td></tr>

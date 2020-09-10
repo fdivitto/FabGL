@@ -24,6 +24,7 @@ var examples =
     [ "VGA/LoopbackTerminal/LoopbackTerminal.ino", "_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html", null ],
     [ "VGA/ModelineStudio/ModelineStudio.ino", "_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html", null ],
     [ "VGA/MouseOnScreen/MouseOnScreen.ino", "_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html", null ],
+    [ "VGA/MultitaskingCPM/MultitaskingCPM.ino", "_v_g_a_2_multitasking_c_p_m_2_multitasking_c_p_m_8ino-example.html", null ],
     [ "VGA/NetworkTerminal/NetworkTerminal.ino", "_v_g_a_2_network_terminal_2_network_terminal_8ino-example.html", null ],
     [ "VGA/SimpleTerminalOut/SimpleTerminalOut.ino", "_v_g_a_2_simple_terminal_out_2_simple_terminal_out_8ino-example.html", null ],
     [ "VGA/SpaceInvaders/SpaceInvaders.ino", "_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html", null ],

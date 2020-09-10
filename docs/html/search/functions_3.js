@@ -3,12 +3,16 @@ var searchData=
   ['dataavailable',['dataAvailable',['../classfabgl_1_1_p_s2_controller.html#a0689f3e86beb0108d90cfd26e73b13ae',1,'fabgl::PS2Controller']]],
   ['datetime',['datetime',['../classfabgl_1_1_d_s3231.html#a4ac5d06c26fb03250dcc28b66c2786ee',1,'fabgl::DS3231']]],
   ['datetimevalid',['dateTimeValid',['../classfabgl_1_1_d_s3231.html#a676aeab3aaafcb922df18e59e8617ef6',1,'fabgl::DS3231']]],
+  ['deactivate',['deactivate',['../classfabgl_1_1_terminal.html#a9c181b72e4a498f35ad95cd172a38cae',1,'fabgl::Terminal']]],
   ['deltaavailable',['deltaAvailable',['../classfabgl_1_1_mouse.html#abe8fff3545515f8c4889975acb98533c',1,'fabgl::Mouse']]],
   ['deselectall',['deselectAll',['../classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b',1,'fabgl::uiCustomListBox']]],
   ['destroywindow',['destroyWindow',['../classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952',1,'fabgl::uiApp']]],
   ['detach',['detach',['../classfabgl_1_1_sound_generator.html#a5d7b92cd65efb7a15539c26ad9a77961',1,'fabgl::SoundGenerator']]],
   ['detectcollision',['detectCollision',['../classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#a7716dbe8f5e5829523a44a0705f7ea0e',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['directory',['directory',['../classfabgl_1_1ui_file_browser.html#a6796a8a2afae8567070baf4080b0094b',1,'fabgl::uiFileBrowser::directory()'],['../classfabgl_1_1_file_browser.html#a92055a2079161d3bfefc52d5c779cf76',1,'fabgl::FileBrowser::directory()']]],
+  ['disablefabglsequences',['disableFabGLSequences',['../classfabgl_1_1_terminal_controller.html#a6ddbb589f0eacdac65a1b47ce0e4d932',1,'fabgl::TerminalController']]],
+  ['disableserialportrx',['disableSerialPortRX',['../classfabgl_1_1_terminal.html#a419155b2cf55a5b9a63da24a95917f31',1,'fabgl::Terminal']]],
+  ['disconnectlocally',['disconnectLocally',['../classfabgl_1_1_terminal.html#a162afd8a6f3cb1aa6f458dda05b0f47d',1,'fabgl::Terminal']]],
   ['doublewidth',['DoubleWidth',['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth()'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth():&#160;displaycontroller.h']]],
   ['down',['down',['../classfabgl_1_1ui_button.html#a1af6b3b72ee09464a86babf436f3121f',1,'fabgl::uiButton']]],
   ['drawbitmap',['drawBitmap',['../classfabgl_1_1_canvas.html#acf6eef1ebefb956d35d57b484a01093b',1,'fabgl::Canvas']]],
@@ -20,5 +24,6 @@ var searchData=
   ['drawrectangle',['drawRectangle',['../classfabgl_1_1_canvas.html#ab67cd4b3c5e82e1cb76da15f672d0cda',1,'fabgl::Canvas::drawRectangle(int X1, int Y1, int X2, int Y2)'],['../classfabgl_1_1_canvas.html#a66f4b32b06b50e389eae4862162f5225',1,'fabgl::Canvas::drawRectangle(Rect const &amp;rect)']]],
   ['drawtext',['drawText',['../classfabgl_1_1_canvas.html#abb7caa79337a166a40336f5f0803a898',1,'fabgl::Canvas::drawText(int X, int Y, char const *text, bool wrap=false)'],['../classfabgl_1_1_canvas.html#adcdb462a8ae72a11a306fe4f6ad4dc12',1,'fabgl::Canvas::drawText(FontInfo const *fontInfo, int X, int Y, char const *text, bool wrap=false)']]],
   ['drawtextfmt',['drawTextFmt',['../classfabgl_1_1_canvas.html#a2054cfee6efe88c31f681b45a2914509',1,'fabgl::Canvas']]],
-  ['drawtextwithellipsis',['drawTextWithEllipsis',['../classfabgl_1_1_canvas.html#ab3a20d15b929d3c5f491431a95f9189f',1,'fabgl::Canvas']]]
+  ['drawtextwithellipsis',['drawTextWithEllipsis',['../classfabgl_1_1_canvas.html#ab3a20d15b929d3c5f491431a95f9189f',1,'fabgl::Canvas']]],
+  ['duration',['duration',['../classfabgl_1_1_waveform_generator.html#a3997ed6c38469277ecb1f7aee3d1d16d',1,'fabgl::WaveformGenerator']]]
 ];

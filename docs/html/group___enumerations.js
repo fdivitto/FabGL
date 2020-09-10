@@ -1,5 +1,14 @@
 var group___enumerations =
 [
+    [ "CharStyle", "group___enumerations.html#gabfedaa59d48f756f7fe2cbc756771a7b", [
+      [ "Bold", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba5089484c34f7bcfedf45b0e659a628fc", null ],
+      [ "ReducedLuminosity", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7bac2e340f0155b15c426d731179ae6cee8", null ],
+      [ "Italic", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba4dfb7bb6cfd7b2eff2773230ebe1f448", null ],
+      [ "Underline", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba96c99f278ca6d44795a83a485e327738", null ],
+      [ "Blink", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7bac801bcb1900c6e0a30c4e66448ff8480", null ],
+      [ "Blank", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7baa999cbaf1818a72edcfe20beec0034c2", null ],
+      [ "Inverse", "group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba1248f28478ee2a50e1ff4e37e107f0e6", null ]
+    ] ],
     [ "Color", "group___enumerations.html#ga843f6f6094fb6666d0e726d7b0e06f3b", [
       [ "Black", "group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0", null ],
       [ "Red", "group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba484f8e53a97d2d8402fb3d7789833235", null ],
@@ -39,7 +48,12 @@ var group___enumerations =
       [ "CursorResize4", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc", null ],
       [ "CursorTextInput", "group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18", null ]
     ] ],
+    [ "DisplayControllerType", "group___enumerations.html#ga9bacc02df3145df2c15f847b56973003", [
+      [ "Textual", "group___enumerations.html#gga9bacc02df3145df2c15f847b56973003aa2fb9a703d274288448da0270a1eeb1a", null ],
+      [ "Bitmapped", "group___enumerations.html#gga9bacc02df3145df2c15f847b56973003a11b133271f0260621154f094888bd83e", null ]
+    ] ],
     [ "DriveType", "group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee", [
+      [ "None", "group___enumerations.html#gga9a469aacd095358acbe70b98e85bceeea6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "SPIFFS", "group___enumerations.html#gga9a469aacd095358acbe70b98e85bceeea146673cebceb52efdad49e33019dd764", null ],
       [ "SDCard", "group___enumerations.html#gga9a469aacd095358acbe70b98e85bceeea826ee4b27642806340fe4905532841e8", null ]
     ] ],
@@ -52,6 +66,10 @@ var group___enumerations =
       [ "GenerateVirtualKeys", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da14554899c6e943f788d3652c4c0e11e4", null ],
       [ "CreateVirtualKeysQueue", "group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97", null ]
     ] ],
+    [ "LineEditorSpecialChar", "group___enumerations.html#gad6fccf8ca9dcb5449240cd02a91137b6", [
+      [ "CursorUp", "group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a49176da75a1269d7cda14dd52331c7da", null ],
+      [ "CursorDown", "group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a3f96d33d45dfd7be341bf60569f3e623", null ]
+    ] ],
     [ "LineEnds", "group___enumerations.html#ga73114f8a303eb904d1fe4ad92a538586", [
       [ "None", "group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Circle", "group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3", null ]
@@ -63,7 +81,8 @@ var group___enumerations =
     [ "NativePixelFormat", "group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9", [
       [ "Mono", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
       [ "SBGR2222", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
-      [ "RGB565BE", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ]
+      [ "RGB565BE", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ],
+      [ "PALETTE16", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a2305a7e1bcc1d10f990698ed574363ac", null ]
     ] ],
     [ "PixelFormat", "group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
       [ "Undefined", "group___enumerations.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360", null ],
@@ -92,6 +111,10 @@ var group___enumerations =
       [ "ReverseVertical", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca0ffc124cf46fbd9cdc3b9c4b04230de0", null ],
       [ "Rotate180", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca371980c5d153a94cf022d6b4daa4d34c", null ]
     ] ],
+    [ "TerminalTransition", "group___enumerations.html#gaa05e86d2759d0ed2edd159ad66efee78", [
+      [ "LeftToRight", "group___enumerations.html#ggaa05e86d2759d0ed2edd159ad66efee78ad1e80c506f4c89e3c4fb1c1b4867a03c", null ],
+      [ "RightToLeft", "group___enumerations.html#ggaa05e86d2759d0ed2edd159ad66efee78ab7b0ea3028791689ea070674776855e2", null ]
+    ] ],
     [ "TermType", "group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd", [
       [ "ANSI_VT", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2", null ],
       [ "ADM3A", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be", null ],
@@ -99,7 +122,14 @@ var group___enumerations =
       [ "Hazeltine1500", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf2db09bec0ffa1ed3836fa85a0d82a05", null ],
       [ "Osborne", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda73e8beb31d6b2ea5697866df7dd578e2", null ],
       [ "Kaypro", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda90856a5022c37a3cbd6f9c5c04bc660b", null ],
-      [ "VT52", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80", null ]
+      [ "VT52", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80", null ],
+      [ "ANSILegacy", "group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf7bc7bfefc009fcde2d822215b8ae1bc", null ]
+    ] ],
+    [ "TFTOrientation", "group___enumerations.html#ga2c409526513a1d2bd2a03cba4e701ed7", [
+      [ "Rotate0", "group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a291b44223b90e70be1fade1eff8a55e0", null ],
+      [ "Rotate90", "group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a1d20b3969ea74725dd1a5b7669d60a98", null ],
+      [ "Rotate180", "group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a371980c5d153a94cf022d6b4daa4d34c", null ],
+      [ "Rotate270", "group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a59c609399b2fb3956ecac7df34a76c2f", null ]
     ] ],
     [ "uiButtonKind", "group___enumerations.html#ga4c87d379aaa2df71e97a84275fceeec3", [
       [ "Button", "group___enumerations.html#gga4c87d379aaa2df71e97a84275fceeec3a87b7760f14fbff78d8819291f36ab9a0", null ],

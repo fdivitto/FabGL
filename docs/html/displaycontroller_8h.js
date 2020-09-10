@@ -1,8 +1,9 @@
 var displaycontroller_8h =
 [
+    [ "BaseDisplayController", "classfabgl_1_1_base_display_controller.html", "classfabgl_1_1_base_display_controller" ],
     [ "Bitmap", "structfabgl_1_1_bitmap.html", "structfabgl_1_1_bitmap" ],
+    [ "BitmappedDisplayController", "classfabgl_1_1_bitmapped_display_controller.html", "classfabgl_1_1_bitmapped_display_controller" ],
     [ "Cursor", "structfabgl_1_1_cursor.html", "structfabgl_1_1_cursor" ],
-    [ "DisplayController", "classfabgl_1_1_display_controller.html", "classfabgl_1_1_display_controller" ],
     [ "Glyph", "structfabgl_1_1_glyph.html", "structfabgl_1_1_glyph" ],
     [ "GlyphOptions", "unionfabgl_1_1_glyph_options.html", "unionfabgl_1_1_glyph_options" ],
     [ "PaintOptions", "structfabgl_1_1_paint_options.html", "structfabgl_1_1_paint_options" ],
@@ -11,6 +12,7 @@ var displaycontroller_8h =
     [ "RGBA2222", "structfabgl_1_1_r_g_b_a2222.html", "structfabgl_1_1_r_g_b_a2222" ],
     [ "RGBA8888", "structfabgl_1_1_r_g_b_a8888.html", "structfabgl_1_1_r_g_b_a8888" ],
     [ "Sprite", "structfabgl_1_1_sprite.html", null ],
+    [ "TextualDisplayController", "classfabgl_1_1_textual_display_controller.html", "classfabgl_1_1_textual_display_controller" ],
     [ "Color", "displaycontroller_8h.html#ga843f6f6094fb6666d0e726d7b0e06f3b", [
       [ "Black", "displaycontroller_8h.html#gga843f6f6094fb6666d0e726d7b0e06f3bab097ba4cce4536843fc9a93b5d7a5af0", null ],
       [ "Red", "displaycontroller_8h.html#gga843f6f6094fb6666d0e726d7b0e06f3ba484f8e53a97d2d8402fb3d7789833235", null ],
@@ -50,6 +52,10 @@ var displaycontroller_8h =
       [ "CursorResize4", "displaycontroller_8h.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc", null ],
       [ "CursorTextInput", "displaycontroller_8h.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18", null ]
     ] ],
+    [ "DisplayControllerType", "displaycontroller_8h.html#ga9bacc02df3145df2c15f847b56973003", [
+      [ "Textual", "displaycontroller_8h.html#gga9bacc02df3145df2c15f847b56973003aa2fb9a703d274288448da0270a1eeb1a", null ],
+      [ "Bitmapped", "displaycontroller_8h.html#gga9bacc02df3145df2c15f847b56973003a11b133271f0260621154f094888bd83e", null ]
+    ] ],
     [ "LineEnds", "displaycontroller_8h.html#ga73114f8a303eb904d1fe4ad92a538586", [
       [ "None", "displaycontroller_8h.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Circle", "displaycontroller_8h.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3", null ]
@@ -57,7 +63,8 @@ var displaycontroller_8h =
     [ "NativePixelFormat", "displaycontroller_8h.html#gacafd29e9adc4dc4055558e61fd4599c9", [
       [ "Mono", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
       [ "SBGR2222", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
-      [ "RGB565BE", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ]
+      [ "RGB565BE", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ],
+      [ "PALETTE16", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a2305a7e1bcc1d10f990698ed574363ac", null ]
     ] ],
     [ "PixelFormat", "displaycontroller_8h.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
       [ "Undefined", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1aec0fc0100c4fc1ce4eea230c3dc10360", null ],
@@ -66,6 +73,7 @@ var displaycontroller_8h =
       [ "RGBA2222", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1ab24d28cf12130dc2957866674bc65ff7", null ],
       [ "RGBA8888", "displaycontroller_8h.html#gga9bb815bb6f1169481ef8ad44f351e1c1a165f06116e7b8d9b2481dfc805db4619", null ]
     ] ],
+    [ "Blank", "displaycontroller_8h.html#aeb1fc86856839744f17dbb757b3e8f0c", null ],
     [ "Bold", "displaycontroller_8h.html#ad03f06d4f3e36a9e80bd239d29fdb458", null ],
     [ "DoubleWidth", "displaycontroller_8h.html#aceea3df50e577272aa576027eede649d", null ],
     [ "FillBackground", "displaycontroller_8h.html#a4054936031229707e9189e4f2c865e67", null ],

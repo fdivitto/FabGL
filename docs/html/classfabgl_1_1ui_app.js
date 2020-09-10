@@ -29,12 +29,15 @@ var classfabgl_1_1ui_app =
     [ "resizeWindow", "classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73", null ],
     [ "resizeWindow", "classfabgl_1_1ui_app.html#a6ed22ad4af635c027637db8807b6a9af", null ],
     [ "rootWindow", "classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40", null ],
-    [ "run", "classfabgl_1_1ui_app.html#a318f23a1a4674557eeba218f360f784f", null ],
+    [ "run", "classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3", null ],
+    [ "runAsync", "classfabgl_1_1ui_app.html#a74260184a9dd8e9dfb3d2106feda9a7e", null ],
     [ "screenToWindow", "classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1", null ],
     [ "setActiveWindow", "classfabgl_1_1ui_app.html#ab716b086b3e3013a0967bd35a3a7e6d4", null ],
     [ "setFocusedWindow", "classfabgl_1_1ui_app.html#aaa42ff6a21e47f3fbb761c20347390a4", null ],
+    [ "setStyle", "classfabgl_1_1ui_app.html#aa9e48af5ad63a3cb3060ae3171a08969", null ],
     [ "setTimer", "classfabgl_1_1ui_app.html#a431860c2985484bf3d2f136075146d8c", null ],
     [ "showModalWindow", "classfabgl_1_1ui_app.html#a44b68bf7a9d9712c123eac4b5525d181", null ],
     [ "showWindow", "classfabgl_1_1ui_app.html#a720fa1bbd49df02213234328814ea0ff", null ],
+    [ "style", "classfabgl_1_1ui_app.html#a3b064db7d90f05a37fe70533811455ba", null ],
     [ "onTimer", "classfabgl_1_1ui_app.html#a28d5e0a0e711f84215f6435e29754c1d", null ]
 ];

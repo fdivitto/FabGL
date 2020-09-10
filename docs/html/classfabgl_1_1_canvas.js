@@ -30,6 +30,7 @@ var classfabgl_1_1_canvas =
     [ "invertRectangle", "classfabgl_1_1_canvas.html#a16e992f349d7094ffed9471848eaaf3f", null ],
     [ "lineTo", "classfabgl_1_1_canvas.html#a76bfbc5c6d88c9db77d519e5f9c372d7", null ],
     [ "moveTo", "classfabgl_1_1_canvas.html#a1149e1edc415ac5d41b0b8220f07644d", null ],
+    [ "reset", "classfabgl_1_1_canvas.html#a091e171a73af906561e0ab78461aa9a1", null ],
     [ "resetGlyphOptions", "classfabgl_1_1_canvas.html#a945d0e4f71faef0c1589a435db861baa", null ],
     [ "resetPaintOptions", "classfabgl_1_1_canvas.html#ad3e94f7f92db3411e67d2a206e7c3e0f", null ],
     [ "scroll", "classfabgl_1_1_canvas.html#a401edcef570c4692595d1a8d8206d5e2", null ],

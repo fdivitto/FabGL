@@ -1,3 +1,4 @@
 <map id="soundgen.h" name="soundgen.h">
-<area shape="rect" id="node2" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="20,79,82,104"/>
+<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="5,79,85,104"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="53,152,115,177"/>
 </map>

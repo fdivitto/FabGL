@@ -2,13 +2,19 @@ var hierarchy =
 [
     [ "fabgl::AltVirtualKeyDef", "structfabgl_1_1_alt_virtual_key_def.html", null ],
     [ "fabgl::AutoSuspendInterrupts", "structfabgl_1_1_auto_suspend_interrupts.html", null ],
+    [ "fabgl::BaseDisplayController", "classfabgl_1_1_base_display_controller.html", [
+      [ "fabgl::BitmappedDisplayController", "classfabgl_1_1_bitmapped_display_controller.html", null ],
+      [ "fabgl::TextualDisplayController", "classfabgl_1_1_textual_display_controller.html", [
+        [ "fabgl::VGATextController", "classfabgl_1_1_v_g_a_text_controller.html", null ]
+      ] ]
+    ] ],
     [ "fabgl::Bitmap", "structfabgl_1_1_bitmap.html", null ],
     [ "fabgl::Canvas", "classfabgl_1_1_canvas.html", null ],
     [ "fabgl::CollisionDetector", "classfabgl_1_1_collision_detector.html", null ],
+    [ "fabgl::CoreUsage", "structfabgl_1_1_core_usage.html", null ],
     [ "fabgl::Cursor", "structfabgl_1_1_cursor.html", null ],
     [ "fabgl::DateTime", "structfabgl_1_1_date_time.html", null ],
     [ "fabgl::DirItem", "structfabgl_1_1_dir_item.html", null ],
-    [ "fabgl::DisplayController", "classfabgl_1_1_display_controller.html", null ],
     [ "fabgl::DS3231", "classfabgl_1_1_d_s3231.html", null ],
     [ "fabgl::FileBrowser", "classfabgl_1_1_file_browser.html", null ],
     [ "fabgl::Glyph", "structfabgl_1_1_glyph.html", null ],
@@ -36,9 +42,9 @@ var hierarchy =
     [ "fabgl::SoundGenerator", "classfabgl_1_1_sound_generator.html", null ],
     [ "fabgl::Sprite", "structfabgl_1_1_sprite.html", null ],
     [ "fabgl::SSD1306Controller", "classfabgl_1_1_s_s_d1306_controller.html", null ],
-    [ "fabgl::ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", null ],
     [ "fabgl::Terminal", "classfabgl_1_1_terminal.html", null ],
     [ "fabgl::TerminalController", "classfabgl_1_1_terminal_controller.html", null ],
+    [ "fabgl::TFTController", "classfabgl_1_1_t_f_t_controller.html", null ],
     [ "fabgl::uiAnchors", "structfabgl_1_1ui_anchors.html", null ],
     [ "fabgl::uiAppProps", "structfabgl_1_1ui_app_props.html", null ],
     [ "fabgl::uiButtonStyle", "structfabgl_1_1ui_button_style.html", null ],
@@ -59,20 +65,24 @@ var hierarchy =
           [ "fabgl::uiControl", "classfabgl_1_1ui_control.html", [
             [ "fabgl::uiButton", "classfabgl_1_1ui_button.html", null ],
             [ "fabgl::uiCheckBox", "classfabgl_1_1ui_check_box.html", null ],
+            [ "fabgl::uiColorBox", "classfabgl_1_1ui_color_box.html", null ],
+            [ "fabgl::uiCustomComboBox", "classfabgl_1_1ui_custom_combo_box.html", [
+              [ "fabgl::uiColorComboBox", "classfabgl_1_1ui_color_combo_box.html", null ],
+              [ "fabgl::uiComboBox", "classfabgl_1_1ui_combo_box.html", null ]
+            ] ],
             [ "fabgl::uiImage", "classfabgl_1_1ui_image.html", null ],
             [ "fabgl::uiLabel", "classfabgl_1_1ui_label.html", null ],
             [ "fabgl::uiPanel", "classfabgl_1_1ui_panel.html", null ],
             [ "fabgl::uiScrollableControl", "classfabgl_1_1ui_scrollable_control.html", [
               [ "fabgl::uiCustomListBox", "classfabgl_1_1ui_custom_list_box.html", [
+                [ "fabgl::uiColorListBox", "classfabgl_1_1ui_color_list_box.html", null ],
                 [ "fabgl::uiFileBrowser", "classfabgl_1_1ui_file_browser.html", null ],
                 [ "fabgl::uiListBox", "classfabgl_1_1ui_list_box.html", null ]
               ] ],
               [ "fabgl::uiPaintBox", "classfabgl_1_1ui_paint_box.html", null ]
             ] ],
             [ "fabgl::uiSlider", "classfabgl_1_1ui_slider.html", null ],
-            [ "fabgl::uiTextEdit", "classfabgl_1_1ui_text_edit.html", [
-              [ "fabgl::uiComboBox", "classfabgl_1_1ui_combo_box.html", null ]
-            ] ]
+            [ "fabgl::uiTextEdit", "classfabgl_1_1ui_text_edit.html", null ]
           ] ],
           [ "fabgl::uiFrame", "classfabgl_1_1ui_frame.html", null ]
         ] ]
@@ -88,6 +98,7 @@ var hierarchy =
     [ "fabgl::uiWindowProps", "structfabgl_1_1ui_window_props.html", null ],
     [ "fabgl::uiWindowState", "structfabgl_1_1ui_window_state.html", null ],
     [ "fabgl::uiWindowStyle", "structfabgl_1_1ui_window_style.html", null ],
+    [ "fabgl::VGA16Controller", "classfabgl_1_1_v_g_a16_controller.html", null ],
     [ "fabgl::VGAController", "classfabgl_1_1_v_g_a_controller.html", null ],
     [ "fabgl::VGATimings", "structfabgl_1_1_v_g_a_timings.html", null ],
     [ "fabgl::VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ],
@@ -97,6 +108,7 @@ var hierarchy =
       [ "fabgl::SawtoothWaveformGenerator", "classfabgl_1_1_sawtooth_waveform_generator.html", null ],
       [ "fabgl::SineWaveformGenerator", "classfabgl_1_1_sine_waveform_generator.html", null ],
       [ "fabgl::SquareWaveformGenerator", "classfabgl_1_1_square_waveform_generator.html", null ],
-      [ "fabgl::TriangleWaveformGenerator", "classfabgl_1_1_triangle_waveform_generator.html", null ]
+      [ "fabgl::TriangleWaveformGenerator", "classfabgl_1_1_triangle_waveform_generator.html", null ],
+      [ "fabgl::VICNoiseGenerator", "classfabgl_1_1_v_i_c_noise_generator.html", null ]
     ] ]
 ];

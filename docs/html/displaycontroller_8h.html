@@ -96,12 +96,13 @@ $(document).ready(function(){initNavTree('displaycontroller_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>This file contains <a class="el" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. ">fabgl::DisplayController</a> definition.  
+<p>This file contains <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers. ">fabgl::BitmappedDisplayController</a> definition.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/queue.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -109,8 +110,8 @@ Include dependency graph for displaycontroller.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="displaycontroller_8h__incl.png" border="0" usemap="#displaycontroller_8h" alt=""/></div>
 <map name="displaycontroller_8h" id="displaycontroller_8h">
-<area shape="rect" id="node6" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="380,79,466,104"/>
-<area shape="rect" id="node7" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="489,79,564,104"/>
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="610,79,697,104"/>
+<area shape="rect" id="node9" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="509,79,584,104"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -119,17 +120,20 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="displaycontroller_8h__dep__incl.png" border="0" usemap="#displaycontroller_8hdep" alt=""/></div>
 <map name="displaycontroller_8hdep" id="displaycontroller_8hdep">
 <area shape="rect" id="node2" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="100,79,175,104"/>
-<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="283,445,344,471"/>
-<area shape="rect" id="node5" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="133,152,195,177"/>
-<area shape="rect" id="node9" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="300,299,428,324"/>
-<area shape="rect" id="node11" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="351,152,459,177"/>
-<area shape="rect" id="node12" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="483,152,629,177"/>
-<area shape="rect" id="node13" href="_s_t7789_controller_8h.html" title="This file contains fabgl::ST7789Controller definition. " alt="" coords="565,79,701,104"/>
+<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="355,445,416,471"/>
+<area shape="rect" id="node5" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="132,152,193,177"/>
+<area shape="rect" id="node9" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="322,299,449,324"/>
+<area shape="rect" id="node11" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="483,299,591,324"/>
+<area shape="rect" id="node13" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="649,372,772,397"/>
+<area shape="rect" id="node14" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="712,152,859,177"/>
+<area shape="rect" id="node15" href="_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="762,79,923,104"/>
 <area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="5,372,85,397"/>
 <area shape="rect" id="node6" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="40,225,128,251"/>
 <area shape="rect" id="node8" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="153,225,226,251"/>
 <area shape="rect" id="node7" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="44,299,124,324"/>
 <area shape="rect" id="node10" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="351,372,419,397"/>
+<area shape="rect" id="node12" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="495,372,625,397"/>
+<area shape="rect" id="node16" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="847,225,998,251"/>
 </map>
 </div>
 </div>
@@ -137,14 +141,17 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_base_display_controller.html">fabgl::BaseDisplayController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the base abstract class for all display controllers.  <a href="classfabgl_1_1_base_display_controller.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_bitmap.html">fabgl::Bitmap</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an image.  <a href="structfabgl_1_1_bitmap.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">fabgl::BitmappedDisplayController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the base abstract class for bitmapped display controllers.  <a href="classfabgl_1_1_bitmapped_display_controller.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_cursor.html">fabgl::Cursor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a cursor.  <a href="structfabgl_1_1_cursor.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_display_controller.html">fabgl::DisplayController</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the base abstract class for display controllers.  <a href="classfabgl_1_1_display_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_glyph.html">fabgl::Glyph</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a glyph position, size and binary data.  <a href="structfabgl_1_1_glyph.html#details">More...</a><br /></td></tr>
@@ -169,6 +176,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_sprite.html">fabgl::Sprite</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a sprite.  <a href="structfabgl_1_1_sprite.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_textual_display_controller.html">fabgl::TextualDisplayController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the base abstract class for textual display controllers.  <a href="classfabgl_1_1_textual_display_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -225,6 +235,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:gae9affb623792aa869a11e81f3f10a372"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a set of predefined mouse cursors.  <a href="group___enumerations.html#gae9affb623792aa869a11e81f3f10a372">More...</a><br /></td></tr>
 <tr class="separator:gae9affb623792aa869a11e81f3f10a372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9bacc02df3145df2c15f847b56973003"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga9bacc02df3145df2c15f847b56973003">fabgl::DisplayControllerType</a> { <a class="el" href="group___enumerations.html#gga9bacc02df3145df2c15f847b56973003aa2fb9a703d274288448da0270a1eeb1a">fabgl::DisplayControllerType::Textual</a>, 
+<a class="el" href="group___enumerations.html#gga9bacc02df3145df2c15f847b56973003a11b133271f0260621154f094888bd83e">fabgl::DisplayControllerType::Bitmapped</a>
+ }</td></tr>
+<tr class="memdesc:ga9bacc02df3145df2c15f847b56973003"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines types of display controllers.  <a href="group___enumerations.html#ga9bacc02df3145df2c15f847b56973003">More...</a><br /></td></tr>
+<tr class="separator:ga9bacc02df3145df2c15f847b56973003"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga73114f8a303eb904d1fe4ad92a538586"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga73114f8a303eb904d1fe4ad92a538586">fabgl::LineEnds</a> : uint8_t { <a class="el" href="group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a6adf97f83acf6453d4a6a4b1070f3754">fabgl::LineEnds::None</a>, 
 <a class="el" href="group___enumerations.html#gga73114f8a303eb904d1fe4ad92a538586a30954d90085f6eaaf5817917fc5fecb3">fabgl::LineEnds::Circle</a>
  }</td></tr>
@@ -232,7 +247,8 @@ Enumerations</h2></td></tr>
 <tr class="separator:ga73114f8a303eb904d1fe4ad92a538586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">fabgl::NativePixelFormat</a> : uint8_t { <a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086">fabgl::NativePixelFormat::Mono</a>, 
 <a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184">fabgl::NativePixelFormat::SBGR2222</a>, 
-<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358">fabgl::NativePixelFormat::RGB565BE</a>
+<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358">fabgl::NativePixelFormat::RGB565BE</a>, 
+<a class="el" href="group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a2305a7e1bcc1d10f990698ed574363ac">fabgl::NativePixelFormat::PALETTE16</a>
  }</td></tr>
 <tr class="memdesc:gacafd29e9adc4dc4055558e61fd4599c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines the display controller native pixel format.  <a href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">More...</a><br /></td></tr>
 <tr class="separator:gacafd29e9adc4dc4055558e61fd4599c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -250,6 +266,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:aeb1fc86856839744f17dbb757b3e8f0c"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#aeb1fc86856839744f17dbb757b3e8f0c">Blank</a> (uint8_t value)</td></tr>
+<tr class="memdesc:aeb1fc86856839744f17dbb757b3e8f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset foreground and background swapping.  <a href="#aeb1fc86856839744f17dbb757b3e8f0c">More...</a><br /></td></tr>
+<tr class="separator:aeb1fc86856839744f17dbb757b3e8f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="memItemLeft" align="right" valign="top">GlyphOptions &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="displaycontroller_8h.html#ad03f06d4f3e36a9e80bd239d29fdb458">Bold</a> (bool value)</td></tr>
 <tr class="memdesc:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method to set or reset bold.  <a href="#ad03f06d4f3e36a9e80bd239d29fdb458">More...</a><br /></td></tr>
 <tr class="separator:ad03f06d4f3e36a9e80bd239d29fdb458"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -293,8 +312,28 @@ Variables</h2></td></tr>
 <tr class="separator:abe4637362df8e341470401813999dd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_display_controller.html" title="Represents the base abstract class for display controllers. ">fabgl::DisplayController</a> definition. </p>
+<div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers. ">fabgl::BitmappedDisplayController</a> definition. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="aeb1fc86856839744f17dbb757b3e8f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb1fc86856839744f17dbb757b3e8f0c">&#9670;&nbsp;</a></span>Blank()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GlyphOptions&amp; __attribute__::Blank </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper method to set or reset foreground and background swapping. </p>
+
+</div>
+</div>
 <a id="ad03f06d4f3e36a9e80bd239d29fdb458"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad03f06d4f3e36a9e80bd239d29fdb458">&#9670;&nbsp;</a></span>Bold()</h2>
 
@@ -354,7 +393,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Helper method to set or reset fillBackground. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_t7789__t_f_t_2240x240_2_double_buffer_2_double_buffer_8ino-example.html#a5">ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a5">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a41">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a13">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a4">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_t7789__t_f_t_2240x240_2_double_buffer_2_double_buffer_8ino-example.html#a2">ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a5">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a41">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a13">VGA/MouseOnScreen/MouseOnScreen.ino</a>, and <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a4">VGA/SpaceInvaders/SpaceInvaders.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -476,7 +515,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Byte aligned binary data of the glyph. A 0 represents background or a transparent pixel. A 1 represents foreground. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a0">VGA/VIC20/VIC20.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_multitasking_c_p_m_2_multitasking_c_p_m_8ino-example.html#a14">VGA/MultitaskingCPM/MultitaskingCPM.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a0">VGA/VIC20/VIC20.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -537,7 +576,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Glyph vertical size </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a7">VGA/Audio/Audio.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a6">VGA/Audio/Audio.ino</a>.</dd>
 </dl>
 </div>
 </div>

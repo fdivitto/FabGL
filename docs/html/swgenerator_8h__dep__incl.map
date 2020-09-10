@@ -1,4 +1,6 @@
 <map id="swgenerator.h" name="swgenerator.h">
-<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="5,79,113,104"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="29,152,90,177"/>
+<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="119,79,227,104"/>
+<area shape="rect" id="node4" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="5,152,135,177"/>
+<area shape="rect" id="node5" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="210,152,333,177"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="142,225,203,251"/>
 </map>

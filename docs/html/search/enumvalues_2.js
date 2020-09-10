@@ -6,6 +6,7 @@ var searchData=
   ['createvirtualkeysqueue',['CreateVirtualKeysQueue',['../group___enumerations.html#gga0eff89ccbe1087e0390e5cae305ef06da382b3f9e2c83958197e451c23d848f97',1,'fabgl']]],
   ['cursorcross1',['CursorCross1',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa7fee58ccf7b3bb0f4bd95e3acbae422',1,'fabgl']]],
   ['cursorcross2',['CursorCross2',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9ef4c5d4c8d58c1c107edea14b5b041f',1,'fabgl']]],
+  ['cursordown',['CursorDown',['../group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a3f96d33d45dfd7be341bf60569f3e623',1,'fabgl']]],
   ['cursordownarrow',['CursorDownArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372aa4b544c8818fb1732882db741998de58',1,'fabgl']]],
   ['cursorleftarrow',['CursorLeftArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a4618b74175c970d70d5881fe7632babb',1,'fabgl']]],
   ['cursormove',['CursorMove',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a922d95253e530a5b23c30b12dfa015ea',1,'fabgl']]],
@@ -22,6 +23,7 @@ var searchData=
   ['cursorresize4',['CursorResize4',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ac570f30dda18834a577365036b3a87bc',1,'fabgl']]],
   ['cursorrightarrow',['CursorRightArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a9d14e52a3cca53b168f79449430e23f2',1,'fabgl']]],
   ['cursortextinput',['CursorTextInput',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372ab86f1dfdd29c0dc20ca59f8e122cce18',1,'fabgl']]],
+  ['cursorup',['CursorUp',['../group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a49176da75a1269d7cda14dd52331c7da',1,'fabgl']]],
   ['cursoruparrow',['CursorUpArrow',['../group___enumerations.html#ggae9affb623792aa869a11e81f3f10a372a8479a82edf7f92d5d7859478b1fa78bb',1,'fabgl']]],
   ['cyan',['Cyan',['../group___enumerations.html#gga843f6f6094fb6666d0e726d7b0e06f3ba3a80c537a99914e5b7f425c93f0b6f31',1,'fabgl']]]
 ];

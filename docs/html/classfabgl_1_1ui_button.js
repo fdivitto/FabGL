@@ -1,6 +1,6 @@
 var classfabgl_1_1ui_button =
 [
-    [ "uiButton", "classfabgl_1_1ui_button.html#afd0c4798fc05f1c0a5c70afcaed107f3", null ],
+    [ "uiButton", "classfabgl_1_1ui_button.html#a9004255d52a55f34ffa56731ac1add9d", null ],
     [ "anchors", "classfabgl_1_1ui_button.html#a12aa63ec46d29c74b6db844a67a4132b", null ],
     [ "app", "classfabgl_1_1ui_button.html#a96d17d0396113602bd2367a7f0c09492", null ],
     [ "bringAfter", "classfabgl_1_1ui_button.html#a3d60b8c35960cbfb6688aca9073784b7", null ],
@@ -21,6 +21,7 @@ var classfabgl_1_1ui_button =
     [ "next", "classfabgl_1_1ui_button.html#a2815a9866e3f3c11b4b9ca85d5cd858a", null ],
     [ "objectType", "classfabgl_1_1ui_button.html#a93618eccc73d66e981f8c02170875226", null ],
     [ "parent", "classfabgl_1_1ui_button.html#abcd9c544e7c4d62b0c2a092296f2dedb", null ],
+    [ "parentFrame", "classfabgl_1_1ui_button.html#aa333a558758b6c4ce97ccc9c92663dce", null ],
     [ "pos", "classfabgl_1_1ui_button.html#a816b2248826f6f182df7f0e804712784", null ],
     [ "prev", "classfabgl_1_1ui_button.html#acc966ed4cd8d335139580fcf9995db21", null ],
     [ "rect", "classfabgl_1_1ui_button.html#aba6b75880074a221f215486ebb675a6c", null ],
@@ -28,9 +29,12 @@ var classfabgl_1_1ui_button =
     [ "repaint", "classfabgl_1_1ui_button.html#ad1986d853fc82a7084467fea41e7a684", null ],
     [ "setDown", "classfabgl_1_1ui_button.html#a0f99de29b80538213ccbb22ee3cf7bdb", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_button.html#a90e462004b5bbd74d5d981ddcbf5a38a", null ],
+    [ "setParentProcessKbdEvents", "classfabgl_1_1ui_button.html#a9be2ddbe0bd611d553f11722297789ee", null ],
+    [ "setStyleClassID", "classfabgl_1_1ui_button.html#ad8348bf5ff940271dca5e42018c10025", null ],
     [ "setText", "classfabgl_1_1ui_button.html#ad4a6f53a4642fe6497ea7695b7812ea4", null ],
     [ "size", "classfabgl_1_1ui_button.html#a50f29dabe9a4c99dfdb01d252fa173f4", null ],
     [ "state", "classfabgl_1_1ui_button.html#a31846cbe8d90b9effac80a15bb541bb2", null ],
+    [ "styleClassID", "classfabgl_1_1ui_button.html#a2501acfdc9a197a1d1aae77c8c755bdb", null ],
     [ "text", "classfabgl_1_1ui_button.html#a7dda3febd65ff81f639eb07fa45c10be", null ],
     [ "transformRect", "classfabgl_1_1ui_button.html#ae16282f1881ec8ded65ad239f3d17735", null ],
     [ "windowProps", "classfabgl_1_1ui_button.html#a8723fdee4c289c10af882284d4f6c191", null ],

@@ -7,6 +7,7 @@ var searchData=
   ['datetimevalid',['dateTimeValid',['../classfabgl_1_1_d_s3231.html#a676aeab3aaafcb922df18e59e8617ef6',1,'fabgl::DS3231']]],
   ['dayofmonth',['dayOfMonth',['../structfabgl_1_1_date_time.html#a53c25a92a65021348ce43a56ead4946d',1,'fabgl::DateTime']]],
   ['dayofweek',['dayOfWeek',['../structfabgl_1_1_date_time.html#a5c840e4fcf7065e956cb7167f73e5d47',1,'fabgl::DateTime']]],
+  ['deactivate',['deactivate',['../classfabgl_1_1_terminal.html#a9c181b72e4a498f35ad95cd172a38cae',1,'fabgl::Terminal']]],
   ['defaultcursor',['defaultCursor',['../structfabgl_1_1ui_window_style.html#a51d7c83f0e70a1f8e78b2530129aa959',1,'fabgl::uiWindowStyle']]],
   ['deltaavailable',['deltaAvailable',['../classfabgl_1_1_mouse.html#abe8fff3545515f8c4889975acb98533c',1,'fabgl::Mouse']]],
   ['deltax',['deltaX',['../structfabgl_1_1_mouse_delta.html#a9bc2da13d599e5f58b2dae3e12c97fa2',1,'fabgl::MouseDelta']]],
@@ -18,10 +19,13 @@ var searchData=
   ['detectcollision',['detectCollision',['../classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, bool removeCollidingSprites=true)'],['../classfabgl_1_1_collision_detector.html#a7716dbe8f5e5829523a44a0705f7ea0e',1,'fabgl::CollisionDetector::detectCollision(Sprite *sprite, CollisionDetectionCallback callbackFunc, void *callbackObj)']]],
   ['directory',['directory',['../classfabgl_1_1ui_file_browser.html#a6796a8a2afae8567070baf4080b0094b',1,'fabgl::uiFileBrowser::directory()'],['../classfabgl_1_1_file_browser.html#a92055a2079161d3bfefc52d5c779cf76',1,'fabgl::FileBrowser::directory()']]],
   ['diritem',['DirItem',['../structfabgl_1_1_dir_item.html',1,'fabgl']]],
-  ['displaycontroller',['DisplayController',['../classfabgl_1_1_display_controller.html',1,'fabgl']]],
+  ['disablefabglsequences',['disableFabGLSequences',['../classfabgl_1_1_terminal_controller.html#a6ddbb589f0eacdac65a1b47ce0e4d932',1,'fabgl::TerminalController']]],
+  ['disableserialportrx',['disableSerialPortRX',['../classfabgl_1_1_terminal.html#a419155b2cf55a5b9a63da24a95917f31',1,'fabgl::Terminal']]],
+  ['disconnectlocally',['disconnectLocally',['../classfabgl_1_1_terminal.html#a162afd8a6f3cb1aa6f458dda05b0f47d',1,'fabgl::Terminal']]],
   ['displaycontroller_2eh',['displaycontroller.h',['../displaycontroller_8h.html',1,'']]],
+  ['displaycontrollertype',['DisplayControllerType',['../group___enumerations.html#ga9bacc02df3145df2c15f847b56973003',1,'fabgl']]],
   ['doubleclicktime',['doubleClickTime',['../structfabgl_1_1ui_app_props.html#a3e73fe6cd43fba3e5cb83385a889848e',1,'fabgl::uiAppProps']]],
-  ['doublewidth',['DoubleWidth',['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth(uint8_t value)'],['../unionfabgl_1_1_glyph_options.html#ae41af9a5a078f13ae9c14470d25fc3d8',1,'fabgl::GlyphOptions::doubleWidth()'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth(uint8_t value):&#160;displaycontroller.h'],['../displaycontroller_8h.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h']]],
+  ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options.html#ae41af9a5a078f13ae9c14470d25fc3d8',1,'fabgl::GlyphOptions::doubleWidth()'],['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth(uint8_t value)'],['../displaycontroller_8h.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth(uint8_t value):&#160;displaycontroller.h']]],
   ['down',['down',['../classfabgl_1_1ui_button.html#a1af6b3b72ee09464a86babf436f3121f',1,'fabgl::uiButton']]],
   ['downbackgroundcolor',['downBackgroundColor',['../structfabgl_1_1ui_button_style.html#ad77d1554235d711dcdb3cf826ea23aff',1,'fabgl::uiButtonStyle']]],
   ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style.html#a3f9d843e30cd210708f269b8aa8a348a',1,'fabgl::uiButtonStyle']]],
@@ -37,5 +41,6 @@ var searchData=
   ['drawtextwithellipsis',['drawTextWithEllipsis',['../classfabgl_1_1_canvas.html#ab3a20d15b929d3c5f491431a95f9189f',1,'fabgl::Canvas']]],
   ['drivetype',['DriveType',['../group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee',1,'fabgl']]],
   ['ds3231',['DS3231',['../classfabgl_1_1_d_s3231.html',1,'fabgl']]],
-  ['ds3231_2eh',['DS3231.h',['../_d_s3231_8h.html',1,'']]]
+  ['ds3231_2eh',['DS3231.h',['../_d_s3231_8h.html',1,'']]],
+  ['duration',['duration',['../classfabgl_1_1_waveform_generator.html#a3997ed6c38469277ecb1f7aee3d1d16d',1,'fabgl::WaveformGenerator']]]
 ];
