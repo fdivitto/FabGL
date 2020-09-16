@@ -4,7 +4,7 @@
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
 
-You can support development by purchasing my own [development board](https://www.tindie.com/products/fabgl/fabgl-development-board/).
+You can support development by purchasing my own [development board](https://www.tindie.com/products/18910/) and [Serial Terminal](https://www.tindie.com/products/21107/).
 
 This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
