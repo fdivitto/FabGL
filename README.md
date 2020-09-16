@@ -4,7 +4,7 @@
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
 
-You can support development by purchasing my own [development board](https://www.tindie.com/products/fabgl/fabgl-development-board/).
+You can support development by purchasing my own [development board](https://www.tindie.com/products/18910/) and [Serial Terminal](https://www.tindie.com/products/21107/).
 
 This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
@@ -31,6 +31,10 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 
 
 
+### Installation Tutorial - fabgl development board (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/F2f0_9_TJmM/hqdefault.jpg)](https://www.youtube.com/watch?v=F2f0_9_TJmM "")
+
 ### Installation Tutorial (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/8OTaPQlSTas/hqdefault.jpg)](https://www.youtube.com/watch?v=8OTaPQlSTas "")
@@ -38,6 +42,10 @@ Finally, there is a sound engine, with multiple channels mixed to a mono output.
 ### Space Invaders Example (click for video):
 
 [![Everything Is AWESOME](https://img.youtube.com/vi/LL8J7tjxeXA/hqdefault.jpg)](https://www.youtube.com/watch?v=LL8J7tjxeXA "")
+
+### Serial Terminal escape sequences for graphics and sound (click for video):
+
+[![Everything Is AWESOME](https://img.youtube.com/vi/1TjPOSc_RaI/hqdefault.jpg)](https://www.youtube.com/watch?v=1TjPOSc_RaI "")
 
 ### Serial Terminal for MBC2 Z80 Board (click for video):
 
