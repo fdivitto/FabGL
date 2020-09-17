@@ -22,8 +22,8 @@
 
 /*
  * Optional SD Card connections:
- *   MISO => GPIO 16
- *   MOSI => GPIO 17
+ *   MISO => GPIO 16  (2 for PICO-D4)
+ *   MOSI => GPIO 17  (12 for PICO-D4)
  *   CLK  => GPIO 14
  *   CS   => GPIO 13
  *

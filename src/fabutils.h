@@ -668,8 +668,8 @@ public:
    * @param mountPath Mount directory (ex. "/sdcard").
    * @param maxFiles Number of files that can be open at the time (default 4).
    * @param allocationUnitSize Allocation unit size (default 16K).
-   * @param MISO Pin for MISO signal (default 16).
-   * @param MOSI Pin for MOSI signal (default 17).
+   * @param MISO Pin for MISO signal (default 16 for WROOM-32, 2 for PICO-D4).
+   * @param MOSI Pin for MOSI signal (default 17 for WROOM-32, 12 for PICO-D4).
    * @param CLK Pin for CLK signal (default 14).
    * @param CS Pin for CS signal (default 13).
    *

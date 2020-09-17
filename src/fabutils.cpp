@@ -1101,8 +1101,10 @@ bool FileBrowser::format(DriveType driveType, int drive)
 
 bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
-  if (getChipPackage() == ChipPackage::ESP32PICOD4 && (MISO == 16 || MOSI == 17))
-    return false; // PICO-D4 uses pins 16 and 17 for Flash
+  if (getChipPackage() == ChipPackage::ESP32PICOD4) {
+    MISO = 2;
+    MOSI = 12;
+  }
 
   s_SDCardMountPath          = mountPath;
   s_SDCardMaxFiles           = maxFiles;
