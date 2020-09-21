@@ -204,6 +204,8 @@ public:
    */
   void begin();
 
+  void end();
+
   // abstract method of BitmappedDisplayController
   void suspendBackgroundPrimitiveExecution();
 
@@ -419,7 +421,7 @@ public:
 
 private:
 
-  void init(gpio_num_t VSyncGPIO);
+  void init();
 
   uint8_t packHVSync(bool HSync, bool VSync);
   uint8_t preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
@@ -490,7 +492,7 @@ private:
   // abstract method of BitmappedDisplayController
   int getBitmapSavePixelSize() { return 1; }
 
-  static void VSyncInterrupt();
+  static void VSyncInterrupt(void * arg);
 
   static void setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode);
 
@@ -503,6 +505,8 @@ private:
 
 
   static VGAController * s_instance;
+
+  intr_handle_t          m_isr_handle;
 
   volatile int           m_VSyncInterruptSuspended;             // 0 = enabled, >0 suspended
 
@@ -541,8 +545,6 @@ private:
   lldesc_t volatile *    m_DMABuffersVisible;
 
   int                    m_DMABuffersCount;
-
-  gpio_num_t             m_VSyncGPIO;
 
 };
 

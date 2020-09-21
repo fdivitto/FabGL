@@ -21,8 +21,6 @@
 
 
 
-#include "Arduino.h"
-
 #include <alloca.h>
 #include <stdarg.h>
 #include <math.h>
@@ -66,13 +64,13 @@ VGAController::VGAController()
 }
 
 
-void VGAController::init(gpio_num_t VSyncGPIO)
+void VGAController::init()
 {
+  m_isr_handle              = nullptr;
   m_DMABuffersHead          = nullptr;
   m_DMABuffers              = nullptr;
   m_DMABuffersVisible       = nullptr;
   m_DMABuffersCount         = 0;
-  m_VSyncGPIO               = VSyncGPIO;
   m_VSyncInterruptSuspended = 1; // >0 suspended
 
   m_GPIOStream.begin();
@@ -82,7 +80,7 @@ void VGAController::init(gpio_num_t VSyncGPIO)
 // initializer for 8 colors configuration
 void VGAController::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)
 {
-  init(VSyncGPIO);
+  init();
 
   // GPIO configuration for bit 0
   setupGPIO(redGPIO,   VGA_RED_BIT,   GPIO_MODE_OUTPUT);
@@ -91,7 +89,7 @@ void VGAController::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t b
 
   // GPIO configuration for VSync and HSync
   setupGPIO(HSyncGPIO, VGA_HSYNC_BIT, GPIO_MODE_OUTPUT);
-  setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_INPUT_OUTPUT);  // input/output so can be generated interrupt on falling/rising edge
+  setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_OUTPUT);
 
   RGB222::lowBitOnly = true;
   m_bitsPerChannel = 1;
@@ -120,6 +118,20 @@ void VGAController::begin()
 }
 
 
+void VGAController::end()
+{
+  if (m_DMABuffers) {
+    if (m_isr_handle) {
+      esp_intr_free(m_isr_handle);
+      m_isr_handle = nullptr;
+    }
+    suspendBackgroundPrimitiveExecution();
+    m_GPIOStream.stop();
+    freeBuffers();
+  }
+}
+
+
 void VGAController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
   PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
@@ -135,8 +147,10 @@ void VGAController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 void VGAController::suspendBackgroundPrimitiveExecution()
 {
   ++m_VSyncInterruptSuspended;
-  if (m_VSyncInterruptSuspended == 1)
-    detachInterrupt(digitalPinToInterrupt(m_VSyncGPIO));
+  if (m_VSyncInterruptSuspended == 1) {
+    I2S1.int_clr.val     = 0xFFFFFFFF;
+    I2S1.int_ena.out_eof = 0;
+  }
 }
 
 
@@ -145,8 +159,12 @@ void VGAController::suspendBackgroundPrimitiveExecution()
 void VGAController::resumeBackgroundPrimitiveExecution()
 {
   m_VSyncInterruptSuspended = tmax(0, m_VSyncInterruptSuspended - 1);
-  if (m_VSyncInterruptSuspended == 0)
-    attachInterrupt(digitalPinToInterrupt(m_VSyncGPIO), VSyncInterrupt, m_timings.VSyncLogic == '-' ? FALLING : RISING);
+  if (m_VSyncInterruptSuspended == 0) {
+    if (m_isr_handle == nullptr)
+      esp_intr_alloc(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, VSyncInterrupt, this, &m_isr_handle);
+    I2S1.int_clr.val     = 0xFFFFFFFF;
+    I2S1.int_ena.out_eof = 1;
+  }
 }
 
 
@@ -308,11 +326,7 @@ void VGAController::freeViewPort()
 
 void VGAController::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
-  if (m_DMABuffers) {
-    suspendBackgroundPrimitiveExecution();
-    m_GPIOStream.stop();
-    freeBuffers();
-  }
+  end();
 
   m_timings = timings;
   setDoubleBuffered(doubleBuffered);
@@ -359,7 +373,7 @@ void VGAController::setResolution(VGATimings const& timings, int viewPortWidth, 
   resetPaintState();
 
   // number of microseconds usable in VSynch ISR
-  m_maxVSyncISRTime = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VSyncPulse + m_timings.VBackPorch + m_viewPortRow));
+  m_maxVSyncISRTime = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VSyncPulse + m_timings.VBackPorch + m_timings.VFrontPorch + m_viewPortRow));
 
   m_GPIOStream.play(m_timings.frequency, m_DMABuffers);
   resumeBackgroundPrimitiveExecution();
@@ -444,7 +458,15 @@ void VGAController::fillVertBuffers(int offsetY)
 
       } else if (isVFrontPorch || isVBackPorch) {
 
-        setDMABufferBlank(DMABufIdx++, m_HBlankLine, m_HLineSize);
+        setDMABufferBlank(DMABufIdx, m_HBlankLine, m_HLineSize);
+
+        // generate interrupt at the beginning of vertical front porch
+        if (line == VFrontPorch_pos && scan == 0) {
+          m_DMABuffers[DMABufIdx].eof = 1;
+          m_DMABuffersVisible[DMABufIdx].eof = 1;
+        }
+
+        ++DMABufIdx;
 
       } else if (isVVisibleArea) {
 
@@ -694,23 +716,26 @@ int VGAController::fill(uint8_t volatile * buffer, int startPos, int length, uin
 }
 
 
-void IRAM_ATTR VGAController::VSyncInterrupt()
+void IRAM_ATTR VGAController::VSyncInterrupt(void * arg)
 {
-  auto VGACtrl = VGAController::instance();
-  int64_t startTime = VGACtrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
-  Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
-  do {
-    Primitive prim;
-    if (VGACtrl->getPrimitiveISR(&prim) == false)
-      break;
+  if (I2S1.int_st.out_eof) {
+    auto VGACtrl = (VGAController*)arg;
+    int64_t startTime = VGACtrl->backgroundPrimitiveTimeoutEnabled() ? esp_timer_get_time() : 0;
+    Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
+    do {
+      Primitive prim;
+      if (VGACtrl->getPrimitiveISR(&prim) == false)
+        break;
 
-    VGACtrl->execPrimitive(prim, updateRect, true);
+      VGACtrl->execPrimitive(prim, updateRect, true);
 
-    if (VGACtrl->m_VSyncInterruptSuspended)
-      break;
+      if (VGACtrl->m_VSyncInterruptSuspended)
+        break;
 
-  } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
-  VGACtrl->showSprites(updateRect);
+    } while (!VGACtrl->backgroundPrimitiveTimeoutEnabled() || (startTime + VGACtrl->m_maxVSyncISRTime > esp_timer_get_time()));
+    VGACtrl->showSprites(updateRect);
+  }
+  I2S1.int_clr.val = I2S1.int_st.val;
 }
 
 
