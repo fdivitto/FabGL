@@ -20,6 +20,9 @@
  */
 
 
+#ifdef ARDUINO
+
+
 #include "ICMP.h"
 
 #include "Arduino.h"
@@ -123,3 +126,7 @@ uint8_t ICMP::raw_recv_fn(void * arg, raw_pcb * pcb, pbuf * p, const ip_addr_t *
 
 
 }
+
+
+
+#endif // defined ARDUINO

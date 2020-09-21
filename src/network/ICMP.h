@@ -30,6 +30,8 @@
  */
 
 
+#ifdef ARDUINO
+
 
 #include "Client.h"
 
@@ -114,3 +116,6 @@ private:
 
 
 }
+
+
+#endif // defined ARDUINO
