@@ -15,7 +15,6 @@
 
 
 #ifdef VGATextController_PERFORMANCE_CHECK
-  #include "Arduino.h"
   volatile uint64_t s_cycles = 0;
 #endif
 
@@ -325,7 +324,7 @@ void VGATextController::fillDMABuffers()
 void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 {
   #ifdef VGATextController_PERFORMANCE_CHECK
-  auto s1 = ESP.getCycleCount();
+  auto s1 = getCycleCount();
   #endif
 
   VGATextController * ctrl = (VGATextController *) arg;
@@ -349,7 +348,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
       if (ctrl->m_map == nullptr) {
         I2S1.int_clr.val = I2S1.int_st.val;
         #ifdef VGATextController_PERFORMANCE_CHECK
-        s_cycles += ESP.getCycleCount() - s1;
+        s_cycles += getCycleCount() - s1;
         #endif
         return;
       }
@@ -358,7 +357,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
       // out of sync, wait for next frame
       I2S1.int_clr.val = I2S1.int_st.val;
       #ifdef VGATextController_PERFORMANCE_CHECK
-      s_cycles += ESP.getCycleCount() - s1;
+      s_cycles += getCycleCount() - s1;
       #endif
       return;
     }
@@ -467,7 +466,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
   }
 
   #ifdef VGATextController_PERFORMANCE_CHECK
-  s_cycles += ESP.getCycleCount() - s1;
+  s_cycles += getCycleCount() - s1;
   #endif
 
   I2S1.int_clr.val = I2S1.int_st.val;
