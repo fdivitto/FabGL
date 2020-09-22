@@ -75,7 +75,6 @@ namespace fabgl {
 *     // the default assigns GPIO22 and GPIO21 to Red, GPIO19 and GPIO18 to Green, GPIO5 and GPIO4 to Blue, GPIO23 to HSync and GPIO15 to VSync
 *     displayController.begin();
 *     displayController.setResolution(VGA_640x480_60Hz);
-
 */
 class VGA16Controller : public GenericBitmappedDisplayController {
 
@@ -84,7 +83,7 @@ public:
   VGA16Controller();
 
   // unwanted methods
-  VGA16Controller(VGA16Controller const&)   = delete;
+  VGA16Controller(VGA16Controller const&) = delete;
   void operator=(VGA16Controller const&)  = delete;
 
 

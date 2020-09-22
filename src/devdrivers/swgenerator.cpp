@@ -104,8 +104,7 @@ void GPIOStream::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
       WRITE_PERI_REG(PIN_CTRL, 0xF);
       PIN_FUNC_SELECT(GPIO_PIN_REG_0, FUNC_GPIO0_CLK_OUT1);
     } else {
-      PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-      gpio_set_direction(gpio, mode);
+      configureGPIO(gpio, mode);
       gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
     }
     

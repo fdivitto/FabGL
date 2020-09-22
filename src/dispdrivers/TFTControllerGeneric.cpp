@@ -120,21 +120,18 @@ TFTController::~TFTController()
 void TFTController::setupGPIO()
 {
   // DC GPIO
-  PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_DC], PIN_FUNC_GPIO);
-  gpio_set_direction(m_DC, GPIO_MODE_OUTPUT);
+  configureGPIO(m_DC, GPIO_MODE_OUTPUT);
   gpio_set_level(m_DC, 1);
 
   // reset GPIO
   if (m_RESX != GPIO_UNUSED) {
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_RESX], PIN_FUNC_GPIO);
-    gpio_set_direction(m_RESX, GPIO_MODE_OUTPUT);
+    configureGPIO(m_RESX, GPIO_MODE_OUTPUT);
     gpio_set_level(m_RESX, 1);
   }
 
   // CS GPIO
   if (m_CS != GPIO_UNUSED) {
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_CS], PIN_FUNC_GPIO);
-    gpio_set_direction(m_CS, GPIO_MODE_OUTPUT);
+    configureGPIO(m_CS, GPIO_MODE_OUTPUT);
     gpio_set_level(m_CS, 1);
   }
 }
@@ -254,8 +251,7 @@ void TFTController::hardReset()
   if (m_RESX != GPIO_UNUSED) {
     SPIBeginWrite();
 
-    PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[m_RESX], PIN_FUNC_GPIO);
-    gpio_set_direction(m_RESX, GPIO_MODE_OUTPUT);
+    configureGPIO(m_RESX, GPIO_MODE_OUTPUT);
     gpio_set_level(m_RESX, 1);
     vTaskDelay(5 / portTICK_PERIOD_MS);
     gpio_set_level(m_RESX, 0);

@@ -134,8 +134,7 @@ void VGAController::end()
 
 void VGAController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
-  PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-  gpio_set_direction(gpio, mode);
+  configureGPIO(gpio, mode);
   gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
 }
 
