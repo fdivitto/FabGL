@@ -215,7 +215,7 @@ void Terminal::activate(TerminalTransition transition)
               for (int y = 0; y < m_rows; ++y)
                 m_canvas->renderGlyphsBuffer(m_columns - x - 1, y, &m_glyphsBuffer);
               m_canvas->waitCompletion(false);
-              delayMicroseconds(2000);
+              vTaskDelay(2 / portTICK_PERIOD_MS);
             }
             break;
           case TerminalTransition::RightToLeft:
@@ -225,7 +225,7 @@ void Terminal::activate(TerminalTransition transition)
               for (int y = 0; y < m_rows; ++y)
                 m_canvas->renderGlyphsBuffer(x, y, &m_glyphsBuffer);
               m_canvas->waitCompletion(false);
-              delayMicroseconds(2000);
+              vTaskDelay(2 / portTICK_PERIOD_MS);
             }
             break;
           default:
@@ -369,7 +369,10 @@ bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, 
   m_defaultBackgroundColor = Color::Black;
   m_defaultForegroundColor = Color::White;
 
+  #ifdef ARDUINO
   m_serialPort = nullptr;
+  #endif
+
   m_keyboardReaderTaskHandle = nullptr;
   m_uart = false;
 
@@ -415,6 +418,7 @@ void Terminal::end()
 }
 
 
+#ifdef ARDUINO
 void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
 {
   if (m_serialPort)
@@ -431,6 +435,7 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
   if (m_autoXONOFF)
     send(ASCII_XON);
 }
+#endif
 
 
 // returns number of bytes received (in the UART2 rx fifo buffer)
@@ -485,7 +490,9 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
   if (initialSetup) {
     // uart not configured, configure now
 
+    #ifdef ARDUINO
     Serial2.end();
+    #endif
 
     m_uart = true;
 
@@ -497,8 +504,8 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     uartFlushRXFIFO();
 
     // TX/RX Pin direction
-    pinMode(rxPin, INPUT);
-    pinMode(txPin, OUTPUT);
+    configureGPIO(int2gpio(rxPin), GPIO_MODE_INPUT);
+    configureGPIO(int2gpio(txPin), GPIO_MODE_OUTPUT);
 
     // RX interrupt
     uart->conf1.rxfifo_full_thrhd = 1;  // an interrupt for each character received
@@ -535,8 +542,8 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
   }
 
   // TX/RX Pin logic
-  pinMatrixInAttach(rxPin, U2RXD_IN_IDX, inverted);
-  pinMatrixOutAttach(txPin, U2TXD_OUT_IDX, inverted, false);
+  gpio_matrix_in(rxPin, U2RXD_IN_IDX, inverted);
+  gpio_matrix_out(txPin, U2TXD_OUT_IDX, inverted, false);
 
   // Flow Control
   uart->flow_conf.sw_flow_con_en = 0;
@@ -1602,6 +1609,7 @@ void Terminal::flush()
 }
 
 
+#ifdef ARDUINO
 void Terminal::pollSerialPort()
 {
   while (true) {
@@ -1631,6 +1639,7 @@ void Terminal::pollSerialPort()
       write(r);
   }
 }
+#endif
 
 
 void IRAM_ATTR Terminal::uart_isr(void *arg)
@@ -1692,11 +1701,13 @@ void Terminal::send(uint8_t c)
   logFmt("=> %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
   #endif
 
+  #ifdef ARDUINO
   if (m_serialPort) {
     while (m_serialPort->availableForWrite() == 0)
       vTaskDelay(1 / portTICK_PERIOD_MS);
     m_serialPort->write(c);
   }
+  #endif
 
   if (m_uart) {
     uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
@@ -1712,6 +1723,7 @@ void Terminal::send(uint8_t c)
 // send a string to m_serialPort or m_outputQueue
 void Terminal::send(char const * str)
 {
+  #ifdef ARDUINO
   if (m_serialPort) {
     while (*str) {
       while (m_serialPort->availableForWrite() == 0)
@@ -1725,6 +1737,7 @@ void Terminal::send(char const * str)
       ++str;
     }
   }
+  #endif
 
   if (m_uart) {
     uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
@@ -1811,7 +1824,7 @@ size_t Terminal::write(uint8_t c)
 }
 
 
-int Terminal::write(const uint8_t * buffer, int size)
+size_t Terminal::write(const uint8_t * buffer, size_t size)
 {
   for (int i = 0; i < size; ++i)
     write(*(buffer++));
@@ -3737,8 +3750,7 @@ void Terminal::consumeFabGLSeq()
       }
       auto gpio = (gpio_num_t) extGetIntParam();
       extGetByteParam(); // FABGLEXT_ENDCODE
-      PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
-      gpio_set_direction(gpio, mode);
+      configureGPIO(gpio, mode);
       break;
     }
 
@@ -3932,7 +3944,7 @@ void Terminal::consumeFabGLSeq()
     {
       auto value = extGetIntParam();
       extGetByteParam();  // FABGLEXT_ENDCODE
-      delay(value);
+      vTaskDelay(value / portTICK_PERIOD_MS);
       send(FABGLEXT_REPLYCODE);
       break;
     }
