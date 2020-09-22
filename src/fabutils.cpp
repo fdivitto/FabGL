@@ -34,6 +34,7 @@
 #include "sdmmc_cmd.h"
 #include "esp_spiffs.h"
 #include "soc/efuse_reg.h"
+#include "soc/rtc.h"
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
@@ -202,6 +203,25 @@ adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio)
     default:
       return ADC1_CHANNEL_0;
   }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// configureGPIO
+void configureGPIO(gpio_num_t gpio, gpio_mode_t mode)
+{
+  PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
+  gpio_set_direction(gpio, mode);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// getApbFrequency
+uint32_t getApbFrequency()
+{
+  rtc_cpu_freq_config_t conf;
+  rtc_clk_cpu_freq_get_config(&conf);
+  return conf.freq_mhz >= 80 ? 80000000 : (conf.source_freq_mhz * 80000000 / conf.div);
 }
 
 

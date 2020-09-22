@@ -876,6 +876,18 @@ adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio);
 void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, void * arg, intr_handle_t * ret_handle, int core);
 
 
+// mode: GPIO_MODE_DISABLE,
+//       GPIO_MODE_INPUT,
+//       GPIO_MODE_OUTPUT,
+//       GPIO_MODE_OUTPUT_OD (open drain),
+//       GPIO_MODE_INPUT_OUTPUT_OD (open drain),
+//       GPIO_MODE_INPUT_OUTPUT
+void configureGPIO(gpio_num_t gpio, gpio_mode_t mode);
+
+
+uint32_t getApbFrequency();
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts
 
