@@ -308,6 +308,13 @@ struct RGBA2222 {
 };
 
 
+//   0 .. 63  => 0
+//  64 .. 127 => 1
+// 128 .. 191 => 2
+// 192 .. 255 => 3
+uint8_t RGB888toPackedRGB222(RGB888 const & rgb);
+
+
 /**
  * @brief Represents a glyph position, size and binary data.
  *
