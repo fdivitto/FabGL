@@ -1039,8 +1039,8 @@ void VGA16Controller::rawDrawBitmap_RGBA2222(int destX, int destY, Bitmap const 
 void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount)
 {
   genericRawDrawBitmap_RGBA8888(destX, destY, bitmap, (uint8_t*)saveBackground, X1, Y1, XCount, YCount,
-                                 [&] (int y)                                      { return (uint8_t*) s_viewPort[y]; },   // rawGetRow
-                                 [&] (uint8_t * row, int x)                       { return VGA_PIXELINROW(row, x); },     // rawGetPixelInRow
+                                 [&] (int y)                                      { return (uint8_t*) s_viewPort[y]; },     // rawGetRow
+                                 [&] (uint8_t * row, int x)                       { return VGA16_GETPIXELINROW(row, x); },  // rawGetPixelInRow
                                  [&] (uint8_t * row, int x, RGBA8888 const & src) { VGA16_SETPIXELINROW(row, x, RGB8888toPaletteIndex(src)); }   // rawSetPixelInRow
                                 );
 }
