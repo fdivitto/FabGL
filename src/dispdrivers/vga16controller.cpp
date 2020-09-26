@@ -100,11 +100,10 @@ VGA16Controller::VGA16Controller()
 }
 
 
-void VGA16Controller::init(gpio_num_t VSyncGPIO)
+void VGA16Controller::init()
 {
   m_DMABuffers                   = nullptr;
   m_DMABuffersCount              = 0;
-  m_VSyncGPIO                    = VSyncGPIO;
   m_primitiveProcessingSuspended = 1; // >0 suspended
   m_isr_handle                   = nullptr;
   m_taskProcessingPrimitives     = false;
@@ -118,7 +117,7 @@ void VGA16Controller::init(gpio_num_t VSyncGPIO)
 // initializer for 8 colors configuration
 void VGA16Controller::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)
 {
-  init(VSyncGPIO);
+  init();
 
   // GPIO configuration for bit 0
   setupGPIO(redGPIO,   VGA_RED_BIT,   GPIO_MODE_OUTPUT);
@@ -127,7 +126,7 @@ void VGA16Controller::begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t
 
   // GPIO configuration for VSync and HSync
   setupGPIO(HSyncGPIO, VGA_HSYNC_BIT, GPIO_MODE_OUTPUT);
-  setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_INPUT_OUTPUT);  // input/output so can be generated interrupt on falling/rising edge
+  setupGPIO(VSyncGPIO, VGA_VSYNC_BIT, GPIO_MODE_OUTPUT);
 
   RGB222::lowBitOnly = true;
   m_bitsPerChannel = 1;

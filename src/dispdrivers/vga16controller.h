@@ -290,7 +290,7 @@ private:
 
 
 
-  void init(gpio_num_t VSyncGPIO);
+  void init();
 
   uint8_t packHVSync(bool HSync, bool VSync);
   uint8_t preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
@@ -434,8 +434,6 @@ private:
   lldesc_t volatile *    m_DMABuffers;
 
   int                    m_DMABuffersCount;
-
-  gpio_num_t             m_VSyncGPIO;
 
   RGB222                 m_palette[16];
   uint8_t                m_packedRGB222_to_PaletteIndex[64];
