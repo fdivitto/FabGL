@@ -77,7 +77,7 @@ void setup()
   // Reduces some defaults to save RAM...
   fabgl::VGAController::queueSize                    = 128;
   fabgl::Terminal::inputQueueSize                    = 32;
-  fabgl::Terminal::inputConsumerTaskStackSize        = 1200;
+  fabgl::Terminal::inputConsumerTaskStackSize        = 1300;
   fabgl::Terminal::keyboardReaderTaskStackSize       = 800;
   fabgl::Keyboard::scancodeToVirtualKeyTaskStackSize = 1500;
 
