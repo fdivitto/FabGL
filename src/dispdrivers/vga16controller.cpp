@@ -223,7 +223,7 @@ void VGA16Controller::allocateViewPort()
   // allocate pools
   while (remainingLines > 0 && poolsCount < FABGLIB_VIEWPORT_MEMORY_POOL_COUNT) {
     int largestBlock = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
-    linesCount[poolsCount] = tmin(remainingLines, largestBlock / m_viewPortWidth / 2);
+    linesCount[poolsCount] = tmin(remainingLines, largestBlock / m_viewPortWidth * 2);
     if (linesCount[poolsCount] == 0)  // no more memory available for lines
       break;
     m_viewPortMemoryPool[poolsCount] = (uint8_t*) heap_caps_malloc(linesCount[poolsCount] * m_viewPortWidth / 2, MALLOC_CAP_8BIT);  // divided by 2 because each byte contains two pixels
