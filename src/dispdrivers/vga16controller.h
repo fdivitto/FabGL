@@ -100,12 +100,14 @@ public:
   void suspendBackgroundPrimitiveExecution();
 
   // abstract method of BitmappedDisplayController
-  NativePixelFormat nativePixelFormat() { return NativePixelFormat::PALETTE16; }
+  NativePixelFormat nativePixelFormat()               { return NativePixelFormat::PALETTE16; }
 
+  // import "modeline" v3rsion of setResolution
   using VGABaseController::setResolution;
 
   void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
+  // returns "static" version of m_viewPort
   static uint8_t * sgetScanline(int y)                { return (uint8_t*) s_viewPort[y]; }
 
   void readScreen(Rect const & rect, RGB888 * destBuf);
@@ -140,13 +142,16 @@ private:
 
   void init();
 
+  void onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow);
+  void allocateViewPort();
+  void freeViewPort();
+
+
   uint8_t RGB888toPaletteIndex(RGB888 const & rgb);
   uint8_t RGB2222toPaletteIndex(uint8_t value);
   uint8_t RGB8888toPaletteIndex(RGBA8888 value);
 
 
-  void allocateViewPort();
-  void freeViewPort();
 
   // abstract method of BitmappedDisplayController
   void setPixelAt(PixelDesc const & pixelDesc, Rect & updateRect);
@@ -215,8 +220,6 @@ private:
 
   void setupDefaultPalette();
   void updateRGB2PaletteLUT();
-
-  void onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow);
 
 
   static VGA16Controller *    s_instance;

@@ -292,10 +292,42 @@ public:
    */
   uint8_t * getScanline(int y)                { return (uint8_t*) m_viewPort[y]; }
 
+  /**
+   * @brief Creates a raw pixel to use with VGAController.setRawPixel
+   *
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   *
+   * @param rgb Pixel RGB222 color
+   *
+   * Example:
+   *
+   *     // Set color of pixel at 100, 100
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
+   */
+  uint8_t createRawPixel(RGB222 rgb)             { return preparePixel(rgb); }
+
+  /**
+   * @brief Sets a raw pixel prepared using VGAController.createRawPixel.
+   *
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   *
+   * @param x Horizontal pixel position
+   * @param y Vertical pixel position
+   * @param rgb Raw pixel color
+   *
+   * Example:
+   *
+   *     // Set color of pixel at 100, 100
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
+   */
+  void setRawPixel(int x, int y, uint8_t rgb)    { VGA_PIXEL(x, y) = rgb; }
+
 
 protected:
 
   static void setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode);
+
+  void startGPIOStream();
 
   void freeBuffers();
 
@@ -331,51 +363,61 @@ protected:
   void allocateViewPort(uint32_t allocCaps, int rowlen);
   virtual void allocateViewPort() = 0;
 
+  // abstract method of BitmappedDisplayController
+  virtual void swapBuffers();
 
-  lldesc_t volatile *    m_DMABuffers;
-  int                    m_DMABuffersCount;
+
+  // when double buffer is enabled the "drawing" view port is always m_viewPort, while the "visible" view port is always m_viewPortVisible
+  // when double buffer is not enabled then m_viewPort = m_viewPortVisible
+  volatile uint8_t * *   m_viewPort;
+  volatile uint8_t * *   m_viewPortVisible;
+
+  // true: double buffering is implemented in DMA
+  bool                   m_doubleBufferOverDMA;
 
   volatile int           m_primitiveProcessingSuspended;             // 0 = enabled, >0 suspended
 
+  volatile int16_t       m_viewPortWidth;
+  volatile int16_t       m_viewPortHeight;
+
   intr_handle_t          m_isr_handle;
 
-  GPIOStream             m_GPIOStream;
+  VGATimings             m_timings;
+  int16_t                m_HLineSize;
+
+  volatile int16_t       m_viewPortCol;
+  volatile int16_t       m_viewPortRow;
+
+  // contains H and V signals for visible line
+  volatile uint8_t       m_HVSync;
+
+
+private:
+
 
   // bits per channel on VGA output
   // 1 = 8 colors, 2 = 64 colors, set by begin()
   int                    m_bitsPerChannel;
 
-  // These buffers contains a full line, with FrontPorch, Sync, BackPorch and blank visible area, in the
-  // order specified by timings.HStartingBlock
-  volatile uint8_t *     m_HBlankLine_withVSync;
-  volatile uint8_t *     m_HBlankLine;
-  int16_t                m_HLineSize;
+  GPIOStream             m_GPIOStream;
+
+  lldesc_t volatile *    m_DMABuffers;
+  int                    m_DMABuffersCount;
 
   // when double buffer is enabled at DMA level the running DMA buffer is always m_DMABuffersVisible
   // when double buffer is not enabled then m_DMABuffers = m_DMABuffersVisible
   lldesc_t volatile *    m_DMABuffersHead;
   lldesc_t volatile *    m_DMABuffersVisible;
 
+  // These buffers contains a full line, with FrontPorch, Sync, BackPorch and blank visible area, in the
+  // order specified by timings.HStartingBlock
+  volatile uint8_t *     m_HBlankLine_withVSync;
+  volatile uint8_t *     m_HBlankLine;
+
   uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
 
-  // true: double buffering is implemented in DMA
-  bool                   m_doubleBufferOverDMA;
-
-  VGATimings             m_timings;
   int16_t                m_rawFrameHeight;
 
-  // contains H and V signals for visible line
-  volatile uint8_t       m_HVSync;
-
-  volatile int16_t       m_viewPortCol;
-  volatile int16_t       m_viewPortRow;
-  volatile int16_t       m_viewPortWidth;
-  volatile int16_t       m_viewPortHeight;
-
-  // when double buffer is enabled the "drawing" view port is always m_viewPort, while the "visible" view port is always m_viewPortVisible
-  // when double buffer is not enabled then m_viewPort = m_viewPortVisible
-  volatile uint8_t * *   m_viewPort;
-  volatile uint8_t * *   m_viewPortVisible;
 };
 
 

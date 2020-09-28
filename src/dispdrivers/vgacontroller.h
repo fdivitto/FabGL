@@ -110,6 +110,7 @@ public:
   // abstract method of BitmappedDisplayController
   NativePixelFormat nativePixelFormat() { return NativePixelFormat::SBGR2222; }
 
+  // import "modeline" v3rsion of setResolution
   using VGABaseController::setResolution;
 
   void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
@@ -172,42 +173,12 @@ public:
    */
   void writeScreen(Rect const & rect, RGB222 * srcBuf);
 
-  /**
-   * @brief Creates a raw pixel to use with VGAController.setRawPixel
-   *
-   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
-   *
-   * @param rgb Pixel RGB222 color
-   *
-   * Example:
-   *
-   *     // Set color of pixel at 100, 100
-   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
-   */
-  uint8_t createRawPixel(RGB222 rgb)             { return preparePixel(rgb); }
-
-  /**
-   * @brief Sets a raw pixel prepared using VGAController.createRawPixel.
-   *
-   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
-   *
-   * @param x Horizontal pixel position
-   * @param y Vertical pixel position
-   * @param rgb Raw pixel color
-   *
-   * Example:
-   *
-   *     // Set color of pixel at 100, 100
-   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
-   */
-  void setRawPixel(int x, int y, uint8_t rgb) { VGA_PIXEL(x, y) = rgb; }
 
 private:
 
   void init();
 
   void allocateViewPort();
-
   void onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow);
 
   // abstract method of BitmappedDisplayController
@@ -238,9 +209,6 @@ private:
   void swapFGBG(Rect const & rect, Rect & updateRect);
 
   // abstract method of BitmappedDisplayController
-  void swapBuffers();
-
-  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount);
 
   // abstract method of BitmappedDisplayController
@@ -268,6 +236,8 @@ private:
   int getBitmapSavePixelSize() { return 1; }
 
   static void VSyncInterrupt(void * arg);
+
+
 
   static VGAController * s_instance;
 

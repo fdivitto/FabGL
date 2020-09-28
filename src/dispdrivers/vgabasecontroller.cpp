@@ -322,6 +322,12 @@ void VGABaseController::resumeBackgroundPrimitiveExecution()
 }
 
 
+void VGABaseController::startGPIOStream()
+{
+  m_GPIOStream.play(m_timings.frequency, m_DMABuffers);
+}
+
+
 void VGABaseController::setResolution(char const * modeline, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
   VGATimings timings;
@@ -701,6 +707,18 @@ void VGABaseController::shrinkScreen(int shrinkX, int shrinkY)
 
   setResolution(*currTimings, m_viewPortWidth, m_viewPortHeight, isDoubleBuffered());
 }
+
+
+void IRAM_ATTR VGABaseController::swapBuffers()
+{
+  tswap(m_viewPort, m_viewPortVisible);
+  if (m_doubleBufferOverDMA) {
+    tswap(m_DMABuffers, m_DMABuffersVisible);
+    m_DMABuffersHead->qe.stqe_next = (lldesc_t*) &m_DMABuffersVisible[0];
+  }
+}
+
+
 
 
 } // end of namespace

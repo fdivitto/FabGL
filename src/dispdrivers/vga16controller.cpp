@@ -165,7 +165,7 @@ void VGA16Controller::setResolution(VGATimings const& timings, int viewPortWidth
   calculateAvailableCyclesForDrawings();
 
   // must be started before interrupt alloc
-  m_GPIOStream.play(m_timings.frequency, m_DMABuffers);
+  startGPIOStream();
 
   // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
   if (m_isr_handle == nullptr) {
@@ -608,7 +608,7 @@ void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const 
 
 void VGA16Controller::swapBuffers()
 {
-  tswap(m_viewPort, m_viewPortVisible);
+  VGABaseController::swapBuffers();
   s_viewPort        = m_viewPort;
   s_viewPortVisible = m_viewPortVisible;
 }

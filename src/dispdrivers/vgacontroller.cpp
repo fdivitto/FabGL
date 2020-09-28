@@ -111,7 +111,7 @@ void VGAController::setResolution(VGATimings const& timings, int viewPortWidth, 
   // number of microseconds usable in VSynch ISR
   m_maxVSyncISRTime = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VSyncPulse + m_timings.VBackPorch + m_timings.VFrontPorch + m_viewPortRow));
 
-  m_GPIOStream.play(m_timings.frequency, m_DMABuffers);
+  startGPIOStream();
   resumeBackgroundPrimitiveExecution();
 }
 
@@ -552,14 +552,6 @@ void IRAM_ATTR VGAController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitma
                                  [&] (uint8_t * row, int x)                       { return VGA_PIXELINROW(row, x); },     // rawGetPixelInRow
                                  [&] (uint8_t * row, int x, RGBA8888 const & src) { VGA_PIXELINROW(row, x) = m_HVSync | (src.R >> 6) | (src.G >> 6 << 2) | (src.B >> 6 << 4); }   // rawSetPixelInRow
                                 );
-}
-
-
-void IRAM_ATTR VGAController::swapBuffers()
-{
-  tswap(m_DMABuffers, m_DMABuffersVisible);
-  tswap(m_viewPort, m_viewPortVisible);
-  m_DMABuffersHead->qe.stqe_next = (lldesc_t*) &m_DMABuffersVisible[0];
 }
 
 
