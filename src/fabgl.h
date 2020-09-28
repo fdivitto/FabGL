@@ -286,6 +286,7 @@
 #include "dispdrivers/TFTControllerSpecif.h"
 #include "dispdrivers/vgatextcontroller.h"
 #include "dispdrivers/vga16controller.h"
+#include "dispdrivers/vgadirectcontroller.h"
 #include "comdrivers/ps2controller.h"
 #include "comdrivers/tsi2c.h"
 #include "devdrivers/keyboard.h"
