@@ -25,6 +25,7 @@ cmd        = sys.argv[2].lower()     # from/to
 serialPort = sys.argv[3]
 
 ser = serial.Serial(serialPort, baudrate=115200, timeout=None)
+ser.rts = False
 
 SECTOR_SIZE = 137
 TRACK_SIZE = 32

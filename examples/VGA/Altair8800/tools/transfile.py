@@ -4,6 +4,8 @@
 #
 # Requires XMODEM library:
 #   sudo pip install xmodem
+# Requires serial library:
+#   sudo pip install pyserial
 
 import sys
 import serial
@@ -35,7 +37,8 @@ filename   = sys.argv[1]
 cmd        = sys.argv[2].lower()     # from/to
 serialPort = sys.argv[3]
 
-ser = serial.Serial(serialPort, baudrate=115200, timeout=None)
+ser = serial.Serial(serialPort, baudrate=115200, timeout=None, rtscts=False, dsrdtr=False)
+ser.rts = False
 modem = XMODEM(getc, putc)
 
 if cmd == 'from':
