@@ -40,6 +40,8 @@ fabgl::Terminal                Terminal;
 #define UART_RX 34
 #define UART_TX 2
 
+#define RESET_PIN 12
+
 
 #include "confdialog.h"
 
@@ -54,6 +56,10 @@ void setup()
   Terminal.inputQueueSize = 2048; // 2048 good to pass vttest
 
   preferences.begin("AnsiTerminal", false);
+
+  pinMode(RESET_PIN, INPUT);
+  if (digitalRead(RESET_PIN) == 1)
+    preferences.clear();
 
   // because mouse is optional, don't re-try if it is not found (to speed-up boot)
   fabgl::Mouse::quickCheckHardware();

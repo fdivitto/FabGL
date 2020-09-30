@@ -374,6 +374,7 @@ struct ConfDialogApp : public uiApp {
       case 0:
         DisplayController = new fabgl::VGAController;
         break;
+      // VGA16Controller
       case 1:
         DisplayController = new fabgl::VGA16Controller;
         break;
