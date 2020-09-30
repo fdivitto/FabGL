@@ -772,7 +772,13 @@ void Terminal::loadFont(FontInfo const * font)
   freeGlyphsMap();
   m_glyphsBuffer.columns      = m_columns;
   m_glyphsBuffer.rows         = m_rows;
-  m_glyphsBuffer.map          = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+  while (true) {
+    m_glyphsBuffer.map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+    if (m_glyphsBuffer.map)
+      break;
+    // no enough memory, reduce m_rows
+    --m_rows;
+  }
 
   m_alternateMap = nullptr;
   m_alternateScreenBuffer = false;
