@@ -23,6 +23,9 @@
 #pragma once
 
 
+#ifdef ARDUINO
+
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -166,4 +169,6 @@ private:
 } // end of namespace
 
 
+
+#endif // #ifdef ARDUINO
 

@@ -20,6 +20,9 @@
  */
 
 
+#ifdef ARDUINO
+
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -189,3 +192,6 @@ void I2C::commTaskFunc(void * pvParameters)
 
 
 } // end of namespace
+
+
+#endif  // #ifdef ARDUINO

@@ -118,4 +118,4 @@ private:
 }
 
 
-#endif // defined ARDUINO
+#endif // #ifdef ARDUINO

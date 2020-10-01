@@ -24,6 +24,9 @@
 
 
 
+#ifdef ARDUINO
+
+
 /**
  * @file
  *
@@ -35,8 +38,6 @@
 #include <stddef.h>
 
 #include "freertos/FreeRTOS.h"
-
-#include "esp32-hal.h"
 
 #include "fabglconf.h"
 #include "fabutils.h"
@@ -318,6 +319,7 @@ private:
 
 
 
+#endif // #ifdef ARDUINO
 
 
 

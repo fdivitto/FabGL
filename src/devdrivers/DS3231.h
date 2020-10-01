@@ -31,6 +31,8 @@
 
 
 
+#ifdef ARDUINO
+
 
 #include <stdint.h>
 #include <stddef.h>
@@ -169,8 +171,7 @@ private:
 
 
 
+} // fabgl namespace
 
 
-
-
-}
+#endif  // #ifdef ARDUINO

@@ -38,7 +38,6 @@
 
 #include "freertos/FreeRTOS.h"
 
-#include "esp32-hal.h"
 #include "driver/spi_master.h"
 
 #include "fabglconf.h"

@@ -20,6 +20,9 @@
  */
 
 
+#ifdef ARDUINO
+
+
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
@@ -620,3 +623,7 @@ void SSD1306Controller::swapBuffers()
 
 
 } // end of namespace
+
+
+
+#endif // #ifdef ARDUINO

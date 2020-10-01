@@ -20,6 +20,10 @@
  */
 
 
+
+#ifdef ARDUINO
+
+
 #include <string.h>
 #include <time.h>
 
@@ -199,4 +203,6 @@ void DS3231::clockEnabled(bool value)
 }
 
 
-}
+} // fdv namespace
+
+#endif // #ifdef ARDUINO
