@@ -42,7 +42,7 @@
 namespace fabgl {
 
 
-////////////////////////////////////////////////////////////////////////////
+/**************************************************************/
 // Support for missing macros for operations on STAGE register
 
 #define ALU_SEL_STAGE_INC 0
@@ -52,6 +52,7 @@ namespace fabgl {
 #define SUB_OPCODE_STAGEB 2
 
 // Increment stage register by immediate value (8 bit)
+  
 #define I_STAGEINCI(imm_) { .alu_imm = { \
     .dreg = 0, \
     .sreg = 0, \
@@ -62,6 +63,7 @@ namespace fabgl {
     .opcode = OPCODE_ALU } }
 
 // Decrement stage register by immediate value (8 bit)
+  
 #define I_STAGEDECI(imm_) { .alu_imm = { \
     .dreg = 0, \
     .sreg = 0, \
@@ -72,6 +74,7 @@ namespace fabgl {
     .opcode = OPCODE_ALU } }
 
 // Reset stage register to zero
+  
 #define I_STAGERSTI() { .alu_imm = { \
     .dreg = 0, \
     .sreg = 0, \
@@ -82,6 +85,7 @@ namespace fabgl {
     .opcode = OPCODE_ALU } }
 
 // Branch relative if STAGE less than immediate value (8 bit)
+  
 #define I_STAGEBL(pc_offset, imm_value) { .b = { \
     .imm = imm_value, \
     .cmp = 0, \
@@ -91,6 +95,7 @@ namespace fabgl {
     .opcode = OPCODE_BRANCH } }
 
 // Branch relative if STAGE less or equal than immediate value (8 bit)
+  
 #define I_STAGEBLE(pc_offset, imm_value) { .b = { \
     .imm = imm_value, \
     .cmp = 1, \
@@ -108,9 +113,9 @@ namespace fabgl {
     .sub_opcode = SUB_OPCODE_STAGEB, \
     .opcode = OPCODE_BRANCH } }
 
-// STAGE register branches to labels.
-// ulp_process_macros_and_load() doesn't recognize labels on I_STAGEB## instructions, hence
-// we use more than one instruction
+/* STAGE register branches to labels.
+   ulp_process_macros_and_load() doesn't recognize labels on I_STAGEB## instructions, hence
+   we use more than one instruction*/
 
 #define M_STAGEBL(label_num, imm_value) \
     I_STAGEBGE(2, imm_value), \
@@ -126,10 +131,10 @@ namespace fabgl {
     M_BX(label_num)
 
 
-////////////////////////////////////////////////////////////////////////////
+/*************************************************************************************************/
 // placeholders
 
-#define OPCODE_PLACEHOLDER             12 // 12 is an unused ULP opcode we can use as placeholder
+#define OPCODE_PLACEHOLDER             12     // 12 is an unused ULP opcode we can use as placeholder
 
 #define SUB_OPCODE_DAT_ENABLE_OUTPUT    0
 #define SUB_OPCODE_DAT_ENABLE_INPUT     1
@@ -197,7 +202,7 @@ namespace fabgl {
     .opcode     = OPCODE_PLACEHOLDER } }
 
 
-////////////////////////////////////////////////////////////////////////////
+/**********************************************************************/
 // macro instructions
 
 // equivalent to rtc_gpio_set_direction(..., RTC_GPIO_MODE_INPUT_ONLY)
@@ -300,7 +305,7 @@ namespace fabgl {
     M_BX(label)
 
 
-////////////////////////////////////////////////////////////////////////////
+/********************************************************************/
 
 
 #define PORT0_RX_BUFFER_SIZE 128
@@ -381,7 +386,7 @@ const ulp_insn_t ULP_code[] = {
 
 M_LABEL(READY_TO_RECEIVE),
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************************/
   // PORT0 Initialization
 
   // port 0 enabled?
@@ -402,10 +407,10 @@ M_LABEL(READY_TO_RECEIVE),
   I_MOVI(R2, 0),                                            // R2 = 0
 
   //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*********************************************************************************************/
 
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*********************************************************************************************/
   // PORT1 Initialization
 
 M_LABEL(PORT1_INIT),
@@ -428,7 +433,7 @@ M_LABEL(PORT1_INIT),
   I_MOVI(R3, 0),                                            // R3 = 0
 
   //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*****************************************************************************************************/
 
 
 M_LABEL(MAIN_LOOP),
@@ -442,7 +447,7 @@ M_LABEL(MAIN_LOOP),
   M_LONG_BGE(PORT1_SEND_WORD, MODE_SEND),                   // jump to PORT1_SEND_WORD if R0 >= MODE_SEND
 
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************/
   // PORT0 Receive
 
   // port 0 enabled?
@@ -517,11 +522,11 @@ M_LABEL(PORT0_RECEIVE_WORD_READY),
   //M_BX(PORT1_RECEIVE),                                      // jump to PORT1_RECEIVE
 
   //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************/
 
 
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  //*******************************************************************************************/
   // PORT1 Receive
 
 M_LABEL(PORT1_RECEIVE),
@@ -598,10 +603,10 @@ M_LABEL(PORT1_RECEIVE_WORD_READY),
   M_BX(MAIN_LOOP),
 
   //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************/
 
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************/
   // PORT0 Send
 
 M_LABEL(PORT0_SEND_WORD),
@@ -682,12 +687,12 @@ M_LABEL(PORT0_SEND_WAIT_FOR_CLK_HIGH),
   // perform another job
   M_BX(READY_TO_RECEIVE),                              // jump to READY_TO_RECEIVE
 
-  //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  
+  /********************************************************************************************** /
 
 
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /**********************************************************************************************/
   // PORT1 SEND
 
 M_LABEL(PORT1_SEND_WORD),
@@ -769,7 +774,7 @@ M_LABEL(PORT1_SEND_WAIT_FOR_CLK_HIGH),
   M_BX(READY_TO_RECEIVE),                              // jump to READY_TO_RECEIVE
 
   //
-  /////////////////////////////////////////////////////////////////////////////////////////////
+  /*******************************************************************************************/
 
 };
 
