@@ -34,7 +34,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "SPI.h"
+#ifdef ARDUINO
+  #include "SPI.h"
+#endif
 
 #include "freertos/FreeRTOS.h"
 
@@ -113,7 +115,9 @@ public:
    *     DisplayController.begin(&SPI, GPIO_NUM_22, GPIO_NUM_21);
    *     DisplayController.setResolution(TFT_240x240);
    */
+  #ifdef ARDUINO
   void begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX = GPIO_UNUSED, gpio_num_t CS = GPIO_UNUSED);
+  #endif
 
   /**
    * @brief Initializes TFT display controller with Arduino style SPIClass object
@@ -132,7 +136,9 @@ public:
    *     DisplayController.begin(&SPI, 22, 21);
    *     DisplayController.setResolution(TFT_240x240);
    */
+  #ifdef ARDUINO
   void begin(SPIClass * spi, int DC, int RESX = -1, int CS = -1);
+  #endif
 
   /**
    * @brief Initializes TFT display controller
@@ -356,7 +362,9 @@ protected:
   void rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const * bitmap, void * saveBackground, int X1, int Y1, int XCount, int YCount);
 
 
+  #ifdef ARDUINO
   SPIClass *         m_spi;
+  #endif
 
   spi_host_device_t  m_SPIHost;
   gpio_num_t         m_SCK;

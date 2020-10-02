@@ -1,5 +1,5 @@
 
-COMPONENT_ADD_INCLUDEDIRS=FabGL/src FabGL/src/devdrivers FabGL/src/comdrivers FabGL/src/dispdrivers FabGL/src/fonts FabGL/src/images
-COMPONENT_SRCDIRS=FabGL/src FabGL/src/devdrivers FabGL/src/comdrivers FabGL/src/dispdrivers FabGL/src/fonts FabGL/src/images
+COMPONENT_ADD_INCLUDEDIRS=src src/devdrivers src/comdrivers src/dispdrivers src/fonts src/images
+COMPONENT_SRCDIRS=src src/devdrivers src/comdrivers src/dispdrivers src/fonts src/images
 CXXFLAGS += -O2
 
