@@ -887,6 +887,8 @@ void configureGPIO(gpio_num_t gpio, gpio_mode_t mode);
 
 uint32_t getApbFrequency();
 
+uint32_t getCPUFrequencyMHz();
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 // AutoSuspendInterrupts

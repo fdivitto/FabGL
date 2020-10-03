@@ -197,7 +197,7 @@ void VGA16Controller::calculateAvailableCyclesForDrawings()
     availtime_us /= 2;
   }
 
-  m_primitiveExecTimeoutCycles = F_CPU / 1000000 * availtime_us;  // at 250Mhz, there are 250 cycles every microsecond
+  m_primitiveExecTimeoutCycles = getCPUFrequencyMHz() * availtime_us;  // at 240Mhz, there are 240 cycles every microsecond
 }
 
 
