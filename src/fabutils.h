@@ -33,6 +33,7 @@
 
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 #include <driver/adc.h>
 
@@ -911,6 +912,18 @@ struct AutoSuspendInterrupts {
 
   bool suspended;
 };
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// AutoSemaphore
+
+struct AutoSemaphore {
+  AutoSemaphore(SemaphoreHandle_t mutex) : m_mutex(mutex) { xSemaphoreTake(m_mutex, portMAX_DELAY); }
+  ~AutoSemaphore()                                        { xSemaphoreGive(m_mutex); }
+private:
+  SemaphoreHandle_t m_mutex;
+};
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
