@@ -452,8 +452,11 @@ SoundGenerator::SoundGenerator(int sampleRate)
     m_channels(nullptr),
     m_sampleBuffer(nullptr),
     m_volume(100),
-    m_sampleRate(sampleRate)
+    m_sampleRate(sampleRate),
+    m_play(false),
+    m_state(SoundGeneratorState::Stop)
 {
+  m_mutex = xSemaphoreCreateMutex();
   i2s_audio_init();
 }
 
@@ -463,11 +466,13 @@ SoundGenerator::~SoundGenerator()
   clear();
   vTaskDelete(m_waveGenTaskHandle);
   free(m_sampleBuffer);
+  vSemaphoreDelete(m_mutex);
 }
 
 
 void SoundGenerator::clear()
 {
+  AutoSemaphore autoSemaphore(m_mutex);
   play(false);
   m_channels = nullptr;
 }
@@ -495,11 +500,13 @@ void SoundGenerator::i2s_audio_init()
 }
 
 
-// the same of suspendPlay, but fill also output DMA with 127s, making output mute (and making "bumping" effect)
+// the same of forcePlay(), but fill also output DMA with 127s, making output mute (and making "bumping" effect)
 bool SoundGenerator::play(bool value)
 {
-  if (playing() != value) {
-    bool r = suspendPlay(value);
+  AutoSemaphore autoSemaphore(m_mutex);
+  m_play = value;
+  if (actualPlaying() != value) {
+    bool r = forcePlay(value);
     if (!value)
       mutizeOutput();
     return r;
@@ -522,48 +529,50 @@ SamplesGenerator * SoundGenerator::playSamples(int8_t const * data, int length, 
 }
 
 
-bool SoundGenerator::suspendPlay(bool value)
+bool SoundGenerator::forcePlay(bool value)
 {
-  bool isPlaying = playing();
+  bool isPlaying = actualPlaying();
   if (value) {
     // play
     if (!isPlaying) {
-      if (m_waveGenTaskHandle)
-        vTaskResume(m_waveGenTaskHandle);
-      else
+      if (!m_waveGenTaskHandle)
         xTaskCreate(waveGenTask, "", WAVEGENTASK_STACK_SIZE, this, 5, &m_waveGenTaskHandle);
+      m_state = SoundGeneratorState::RequestToPlay;
+      xTaskNotifyGive(m_waveGenTaskHandle);
     }
   } else {
     // stop
     if (isPlaying) {
       // request task to suspend itself when possible
-      xTaskNotifyGive(m_waveGenTaskHandle);
+      m_state = SoundGeneratorState::RequestToStop;
       // wait for task switch to suspend state (TODO: is there a better way?)
-      while (eTaskGetState(m_waveGenTaskHandle) != eSuspended)
-        taskYIELD();
+      while (m_state != SoundGeneratorState::Stop)
+        vTaskDelay(1);
     }
   }
   return isPlaying;
 }
 
 
-bool SoundGenerator::playing()
+bool SoundGenerator::actualPlaying()
 {
-  return m_waveGenTaskHandle && eTaskGetState(m_waveGenTaskHandle) != eSuspended;
+  return m_waveGenTaskHandle && m_state == SoundGeneratorState::Playing;
 }
 
 
 // does NOT take ownership of the waveform generator
 void SoundGenerator::attach(WaveformGenerator * value)
 {
-  bool isPlaying = suspendPlay(false);
+  AutoSemaphore autoSemaphore(m_mutex);
+
+  bool isPlaying = forcePlay(false);
 
   value->setSampleRate(m_sampleRate);
 
   value->next = m_channels;
   m_channels = value;
 
-  suspendPlay(isPlaying);
+  forcePlay(isPlaying || m_play);
 }
 
 
@@ -571,9 +580,12 @@ void SoundGenerator::detach(WaveformGenerator * value)
 {
   if (!value)
     return;
-  bool isPlaying = suspendPlay(false);
+
+  AutoSemaphore autoSemaphore(m_mutex);
+
+  bool isPlaying = forcePlay(false);
   detachNoSuspend(value);
-  suspendPlay(isPlaying);
+  forcePlay(isPlaying);
 }
 
 
@@ -603,6 +615,21 @@ void SoundGenerator::waveGenTask(void * arg)
 
   while (true) {
 
+    // suspend?
+    if (soundGenerator->m_state == SoundGeneratorState::RequestToStop || soundGenerator->m_state == SoundGeneratorState::Stop) {
+      soundGenerator->m_state = SoundGeneratorState::Stop;
+      while (soundGenerator->m_state == SoundGeneratorState::Stop)
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  // wait for "give"
+    }
+    if (soundGenerator->m_channels == nullptr) {
+      soundGenerator->mutizeOutput();
+      soundGenerator->m_state = SoundGeneratorState::Stop;
+      while (soundGenerator->m_state == SoundGeneratorState::Stop)
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  // wait for "give"
+    }
+
+    soundGenerator->m_state = SoundGeneratorState::Playing;
+
     int mainVolume = soundGenerator->volume();
 
     for (int i = 0; i < FABGL_SAMPLE_BUFFER_SIZE; ++i) {
@@ -629,15 +656,6 @@ void SoundGenerator::waveGenTask(void * arg)
 
     size_t bytes_written;
     i2s_write(I2S_NUM_0, buf, FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
-
-    // suspend when there is a notify (from suspendPlay(true)) or when there aren't channels to play
-    if (ulTaskNotifyTake(true, 0)) {
-      vTaskSuspend(nullptr);
-    }
-    if (soundGenerator->m_channels == nullptr) {
-      soundGenerator->mutizeOutput();
-      vTaskSuspend(nullptr);
-    }
 
   }
 }

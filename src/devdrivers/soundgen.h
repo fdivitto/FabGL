@@ -310,6 +310,14 @@ private:
 };
 
 
+enum class SoundGeneratorState {
+  Stop,
+  RequestToPlay,
+  Playing,
+  RequestToStop,
+};
+
+
 /**
  * @brief SoundGenerator handles audio output
  *
@@ -407,7 +415,7 @@ public:
    *
    * @return True when playing, False otherwise
    */
-  bool playing();
+  bool playing() { return m_play; }
 
   WaveformGenerator * channels() { return m_channels; }
 
@@ -451,9 +459,10 @@ private:
 
   void i2s_audio_init();
   static void waveGenTask(void * arg);
-  bool suspendPlay(bool value);
+  bool forcePlay(bool value);
   void mutizeOutput();
   void detachNoSuspend(WaveformGenerator * value);
+  bool actualPlaying();
 
 
   TaskHandle_t        m_waveGenTaskHandle;
@@ -465,6 +474,10 @@ private:
   int8_t              m_volume;
 
   uint16_t            m_sampleRate;
+
+  bool                m_play;
+  SoundGeneratorState m_state;
+  SemaphoreHandle_t   m_mutex;
 
 };
 
