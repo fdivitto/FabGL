@@ -613,6 +613,9 @@ void SoundGenerator::waveGenTask(void * arg)
 
   uint16_t * buf = soundGenerator->m_sampleBuffer;
 
+  // number of mute (without channels to play) cycles
+  int muteCyclesCount = 0;
+
   while (true) {
 
     // suspend?
@@ -621,8 +624,9 @@ void SoundGenerator::waveGenTask(void * arg)
       while (soundGenerator->m_state == SoundGeneratorState::Stop)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  // wait for "give"
     }
-    if (soundGenerator->m_channels == nullptr) {
-      soundGenerator->mutizeOutput();
+
+    // mutize output?
+    if (soundGenerator->m_channels == nullptr && muteCyclesCount >= 8) {
       soundGenerator->m_state = SoundGeneratorState::Stop;
       while (soundGenerator->m_state == SoundGeneratorState::Stop)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  // wait for "give"
@@ -657,6 +661,7 @@ void SoundGenerator::waveGenTask(void * arg)
     size_t bytes_written;
     i2s_write(I2S_NUM_0, buf, FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), &bytes_written, portMAX_DELAY);
 
+    muteCyclesCount = soundGenerator->m_channels == nullptr ? muteCyclesCount + 1 : 0;
   }
 }
 
