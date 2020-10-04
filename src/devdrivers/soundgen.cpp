@@ -465,7 +465,7 @@ SoundGenerator::~SoundGenerator()
 {
   clear();
   vTaskDelete(m_waveGenTaskHandle);
-  free(m_sampleBuffer);
+  heap_caps_free(m_sampleBuffer);
   vSemaphoreDelete(m_mutex);
 }
 
@@ -496,7 +496,7 @@ void SoundGenerator::i2s_audio_init()
   // init DAC pad
   i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN); // GPIO25
 
-  m_sampleBuffer = (uint16_t*) malloc(FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t));
+  m_sampleBuffer = (uint16_t*) heap_caps_malloc(FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t), MALLOC_CAP_8BIT);
 }
 
 
