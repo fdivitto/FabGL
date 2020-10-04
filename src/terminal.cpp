@@ -4254,7 +4254,6 @@ void Terminal::consumeFabGLGraphicsSeq()
     //    FABGLEXT_GSPRITECOUNT COUNT FABGLEXT_ENDCODE
     // params:
     //    COUNT (text) : number of sprites that will be defined by FABGLEXT_GSPRITEDEF (0 = free memory)
-    //Serial.write("P1\n");
     int count = extGetIntParam();
     extGetByteParam();
     if (m_bitmappedDisplayController) {
@@ -4279,8 +4278,7 @@ void Terminal::consumeFabGLGraphicsSeq()
     //    R (text)           : red (0..255) when FORMAT is "MASK"
     //    G (text)           : green (0..255) when FORMAT is "MASK"
     //    B (text)           : blue (0..255) when FORMAT is "MASK"
-    //    DATA (text)        : 2 digits hex number
-    //Serial.write("P2\n");
+    //    DATA (text)        : 2 digits hex number    
     int sprite = extGetIntParam();
     extGetByteParam();
     int width = extGetIntParam();
@@ -4313,15 +4311,12 @@ void Terminal::consumeFabGLGraphicsSeq()
         break;
     }
     auto data = (uint8_t*) malloc(bytes);
-    //Serial.printf("expected %d\n", bytes);
     for (int i = 0; i < bytes + 1; ++i) { // +1 to include ending code
       auto c = extGetByteParam();
-      //Serial.printf("%d %c\n", i, c);
       if (c == FABGLEXT_ENDCODE)
         break;
       data[i] = hex2digit(tolower(c)) << 4;
       c = extGetByteParam();
-      //Serial.printf("%d %c\n", i, c);
       if (c == FABGLEXT_ENDCODE)
         break;
       data[i] |= hex2digit(tolower(c));
@@ -4330,12 +4325,10 @@ void Terminal::consumeFabGLGraphicsSeq()
       auto bitmap = new Bitmap(width, height, data, format, RGB888(r, g, b), false);
       m_sprites[sprite].addBitmap(bitmap);
       static_cast<BitmappedDisplayController*>(m_displayController)->setSprites(m_sprites, m_spritesCount);
-      //Serial.printf("def sprite %d w=%d h=%d f=%c r=%d g=%d b=%d\n", sprite, width, height, cformat, r, g, b);
     } else {
       // error
       free(data);
     }
-    //Serial.write("P3\n");
 
   } else if (strcmp(cmd, FABGLEXT_GSPRITESET) == 0) {
 
@@ -4348,7 +4341,6 @@ void Terminal::consumeFabGLGraphicsSeq()
     //    FRAME (text)       : frame index (0...)
     //    POSX (text)        : x position
     //    POSY (text)        : y position
-    //Serial.write("P3_1\n");
     int sprite = extGetIntParam();
     extGetByteParam();
     char visible = extGetByteParam();
@@ -4365,9 +4357,7 @@ void Terminal::consumeFabGLGraphicsSeq()
       m_sprites[sprite].x = posx;
       m_sprites[sprite].y = posy;
       static_cast<BitmappedDisplayController*>(m_displayController)->refreshSprites();
-      //Serial.printf("set sprite %d vis=%c frame=%d x=%d y=%d\n", sprite, visible, frame, posx, posy);
     }
-    //Serial.write("P3_2\n");
 
   } else {
     #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
