@@ -370,7 +370,7 @@ private:
   uint32_t *     m_selMap;
 
   // If true (default is false) all strings added (append/insert/set) are copied.
-  // Strings will be freed when no more used (destructor, clear(), etc...).
+  // Strings will be released when no more used (destructor, clear(), etc...).
   // This flag is permanently switched to True by takeStrings() call.
   bool           m_ownStrings;
 
@@ -602,7 +602,7 @@ public:
   /**
    * @brief Creates a random temporary filename, with absolute path
    *
-   * @return Pointer to temporary string. It must be freed using free().
+   * @return Pointer to temporary string. It must be released using free().
    */
   char * createTempFilename();
 

@@ -417,7 +417,7 @@ void BitmappedDisplayController::addPrimitive(Primitive & primitive)
 
 // some primitives require additional buffers (like drawPath and fillPath).
 // this function copies primitive data into an allocated buffer (using LightMemoryPool allocator) that
-// will be freed inside primitive drawing code.
+// will be released inside primitive drawing code.
 void BitmappedDisplayController::primitiveReplaceDynamicBuffers(Primitive & primitive)
 {
   switch (primitive.cmd) {
