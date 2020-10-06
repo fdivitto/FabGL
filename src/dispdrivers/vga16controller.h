@@ -51,7 +51,7 @@
 
 #define VGA16_LinesCount 4
 
-//#define VGATextController_PERFORMANCE_CHECK
+//#define VGA16Controller_PERFORMANCE_CHECK
 
 
 namespace fabgl {
