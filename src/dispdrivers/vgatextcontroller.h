@@ -56,7 +56,7 @@ namespace fabgl {
 
 #define VGATextController_MODELINE       VGA_640x480_60Hz
 
-//#define VGATextController_PERFORMANCE_CHECK
+//#define VGAXController_PERFORMANCE_CHECK
 
 
 

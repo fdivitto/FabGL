@@ -51,7 +51,7 @@
 
 #define VGA16_LinesCount 4
 
-//#define VGA16Controller_PERFORMANCE_CHECK
+//#define VGAXController_PERFORMANCE_CHECK
 
 
 namespace fabgl {
@@ -65,7 +65,7 @@ namespace fabgl {
 * by 4 bits, which is an index to a palette of 64 colors. Each byte of the frame buffer contains two pixels.
 * For example, a frame buffer of 640x480 requires about 153K of RAM.
 *
-* VGA16Controller output is very CPU intensive process and consumes up to 30% of one CPU core. Anyway this allows to have
+* VGA16Controller output is very CPU intensive process and consumes up to 30% of one CPU core (measured at 640x480x60Hz). Anyway this allows to have
 * more RAM free for your application.
 *
 *

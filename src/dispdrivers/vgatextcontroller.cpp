@@ -14,7 +14,7 @@
 #include "devdrivers/swgenerator.h"
 
 
-#ifdef VGATextController_PERFORMANCE_CHECK
+#ifdef VGAXController_PERFORMANCE_CHECK
   volatile uint64_t s_cycles = 0;
 #endif
 
@@ -322,7 +322,7 @@ void VGATextController::fillDMABuffers()
 
 void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 {
-  #ifdef VGATextController_PERFORMANCE_CHECK
+  #ifdef VGAXController_PERFORMANCE_CHECK
   auto s1 = getCycleCount();
   #endif
 
@@ -346,7 +346,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 
       if (ctrl->m_map == nullptr) {
         I2S1.int_clr.val = I2S1.int_st.val;
-        #ifdef VGATextController_PERFORMANCE_CHECK
+        #ifdef VGAXController_PERFORMANCE_CHECK
         s_cycles += getCycleCount() - s1;
         #endif
         return;
@@ -355,7 +355,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
     } else if (s_scanLine == 0) {
       // out of sync, wait for next frame
       I2S1.int_clr.val = I2S1.int_st.val;
-      #ifdef VGATextController_PERFORMANCE_CHECK
+      #ifdef VGAXController_PERFORMANCE_CHECK
       s_cycles += getCycleCount() - s1;
       #endif
       return;
@@ -464,7 +464,7 @@ void IRAM_ATTR VGATextController::I2SInterrupt(void * arg)
 
   }
 
-  #ifdef VGATextController_PERFORMANCE_CHECK
+  #ifdef VGAXController_PERFORMANCE_CHECK
   s_cycles += getCycleCount() - s1;
   #endif
 

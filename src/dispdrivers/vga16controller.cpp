@@ -44,7 +44,7 @@
 
 
 
-#ifdef VGA16Controller_PERFORMANCE_CHECK
+#ifdef VGAXController_PERFORMANCE_CHECK
   volatile uint64_t s_cycles = 0;
 #endif
 
@@ -616,7 +616,7 @@ void VGA16Controller::swapBuffers()
 
 void IRAM_ATTR VGA16Controller::I2SInterrupt(void * arg)
 {
-  #ifdef VGA16Controller_PERFORMANCE_CHECK
+  #ifdef VGAXController_PERFORMANCE_CHECK
   auto s1 = getCycleCount();
   #endif
 
@@ -667,7 +667,7 @@ void IRAM_ATTR VGA16Controller::I2SInterrupt(void * arg)
 
   }
 
-  #ifdef VGA16Controller_PERFORMANCE_CHECK
+  #ifdef VGAXController_PERFORMANCE_CHECK
   s_cycles += getCycleCount() - s1;
   #endif
 
