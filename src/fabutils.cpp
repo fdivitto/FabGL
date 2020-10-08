@@ -25,6 +25,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <math.h>
 
 #include "diskio.h"
 #include "ff.h"
@@ -384,6 +385,30 @@ Rect IRAM_ATTR Rect::merge(Rect const & rect) const
 Rect IRAM_ATTR Rect::intersection(Rect const & rect) const
 {
   return Rect(tmax(X1, rect.X1), tmax(Y1, rect.Y1), tmin(X2, rect.X2), tmin(Y2, rect.Y2));
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// rgb222_to_hsv
+// R, G, B in the 0..3 range
+int rgb222_to_hsv(int R, int G, int B, double * h, double * s, double * v)
+{
+  double r = R / 3.0;
+  double g = G / 3.0;
+  double b = B / 3.0;
+  double cmax = tmax<double>(tmax<double>(r, g), b);
+  double cmin = tmin<double>(tmin<double>(r, g), b);
+  double diff = cmax - cmin;
+  if (cmax == cmin)
+    *h = 0;
+  else if (cmax == r)
+    *h = fmod((60.0 * ((g - b) / diff) + 360.0), 360.0);
+  else if (cmax == g)
+    *h = fmod((60.0 * ((b - r) / diff) + 120.0), 360.0);
+  else if (cmax == b)
+    *h = fmod((60.0 * ((r - g) / diff) + 240.0), 360.0);
+  *s = cmax == 0 ? 0 : (diff / cmax) * 100.0;
+  *v = cmax * 100.0;
 }
 
 
