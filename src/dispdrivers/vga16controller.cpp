@@ -457,8 +457,8 @@ void VGA16Controller::HScroll(int scroll, Rect & updateRect)
             auto sc = s & ~1;
             auto sz = width & ~1;
             memmove(row, row + sc / 2, (sz - sc) / 2);
-            rawFillRow(y, X2 + 1 + scroll, X2, back4);
-            s -= sz;
+            rawFillRow(y, X2 - sc + 1, X2, back4);
+            s -= sc;
           } else if (s & 1) {
             // scroll left 1 pixel (uint16_t at the time = 4 pixels)
             // nibbles 0,1,2...  P is prev or background
@@ -495,8 +495,8 @@ void VGA16Controller::HScroll(int scroll, Rect & updateRect)
             auto sc = s & ~1;
             auto sz = width & ~1;
             memmove(row + sc / 2, row, (sz - sc) / 2);
-            rawFillRow(y, X1, X1 + scroll - 1, back4);
-            s -= sz;
+            rawFillRow(y, X1, X1 + sc - 1, back4);
+            s -= sc;
           } else if (s & 1) {
             // scroll right 1 pixel (uint16_t at the time = 4 pixels)
             // nibbles 0,1,2...  P is prev or background
