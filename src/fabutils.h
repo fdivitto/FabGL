@@ -120,6 +120,8 @@ T moveItems(T dest, T src, size_t n)
 }
 
 
+int rgb222_to_hsv(int R, int G, int B, double * h, double * s, double * v);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
