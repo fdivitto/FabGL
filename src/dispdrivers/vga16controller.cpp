@@ -245,11 +245,18 @@ void VGA16Controller::updateRGB2PaletteLUT()
   for (int r = 0; r < 4; ++r)
     for (int g = 0; g < 4; ++g)
       for (int b = 0; b < 4; ++b) {
+        double H1, S1, V1;
+        rgb222_to_hsv(r, g, b, &H1, &S1, &V1);
         int bestIdx = 0;
-        int bestDst = 1000;
+        int bestDst = 1000000000;
         for (int i = 0; i < 16; ++i) {
-          int dst = abs(r - m_palette[i].R) + abs(g - m_palette[i].G) + abs(b - m_palette[i].B);
-          if (dst < bestDst) {
+          double H2, S2, V2;
+          rgb222_to_hsv(m_palette[i].R, m_palette[i].G, m_palette[i].B, &H2, &S2, &V2);
+          double AH = H1 - H2;
+          double AS = S1 - S2;
+          double AV = V1 - V2;
+          int dst = AH * AH + AS * AS + AV * AV;
+          if (dst <= bestDst) {  // "<=" to prioritize higher indexes
             bestIdx = i;
             bestDst = dst;
             if (bestDst == 0)
