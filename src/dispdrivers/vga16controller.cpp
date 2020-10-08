@@ -149,6 +149,13 @@ void VGA16Controller::freeViewPort()
 }
 
 
+// make sure view port height is divisible by VGA16_LinesCount
+void VGA16Controller::checkViewPortSize()
+{
+  m_viewPortHeight &= ~(VGA16_LinesCount - 1);
+}
+
+
 void VGA16Controller::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
   VGABaseController::setResolution(timings, viewPortWidth, viewPortHeight, doubleBuffered);

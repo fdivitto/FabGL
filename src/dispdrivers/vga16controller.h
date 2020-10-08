@@ -144,6 +144,7 @@ private:
 
   void onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow);
   void allocateViewPort();
+  void checkViewPortSize();
   void freeViewPort();
 
 
