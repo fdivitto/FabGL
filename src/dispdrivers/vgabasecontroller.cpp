@@ -353,6 +353,9 @@ void VGABaseController::setResolution(VGATimings const& timings, int viewPortWid
   m_viewPortWidth  = ~3 & (viewPortWidth <= 0 || viewPortWidth >= m_timings.HVisibleArea ? m_timings.HVisibleArea : viewPortWidth); // view port width must be 32 bit aligned
   m_viewPortHeight = viewPortHeight <= 0 || viewPortHeight >= m_timings.VVisibleArea ? m_timings.VVisibleArea : viewPortHeight;
 
+  // adjust view port size if necessary
+  checkViewPortSize();
+
   // need to center viewport?
   m_viewPortCol = (m_timings.HVisibleArea - m_viewPortWidth) / 2;
   m_viewPortRow = (m_timings.VVisibleArea - m_viewPortHeight) / 2;
@@ -368,6 +371,9 @@ void VGABaseController::setResolution(VGATimings const& timings, int viewPortWid
 
   // allocate the viewport
   allocateViewPort();
+
+  // adjust again view port size if necessary
+  checkViewPortSize();
 
   // this may free space if m_viewPortHeight has been reduced
   setDMABuffersCount(calcRequiredDMABuffersCount(m_viewPortHeight));
