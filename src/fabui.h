@@ -729,10 +729,10 @@ struct uiFrameStyle {
   RGB888              titleBackgroundColor           = RGB888(128, 128, 128);  /**< Title background color */
   RGB888              activeTitleBackgroundColor     = RGB888(128, 128, 255);  /**< Title background color when active */
   RGB888              titleColor                     = RGB888(0, 0, 0);        /**< Title color */
-  RGB888              activeTitleColor               = RGB888(0, 0, 0);        /**< Title color when active */
+  RGB888              activeTitleColor               = RGB888(255, 255, 255);  /**< Title color when active */
   FontInfo const *    titleFont                      = &FONT_std_12;           /**< Title font */
   RGB888              buttonColor                    = RGB888(64, 64, 64);     /**< Color used to draw Close, Maximize and Minimize buttons */
-  RGB888              activeButtonColor              = RGB888(0, 0, 0);        /**< Color used to draw Close, Maximize and Minimize buttons */
+  RGB888              activeButtonColor              = RGB888(255, 255, 255);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);      /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
   RGB888              mouseOverButtonColor           = RGB888(255, 255, 255);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
 };
@@ -1151,9 +1151,9 @@ private:
 /** @brief Contains the button style */
 struct uiButtonStyle {
   RGB888           backgroundColor          = RGB888(128, 128, 128); /**< Background color */
-  RGB888           downBackgroundColor      = RGB888(128, 128, 255); /**< Background color when button is down */
-  RGB888           mouseOverBackgroundColor = RGB888(128, 128, 255); /**< Background color when mouse is over */
-  RGB888           mouseDownBackgroundColor = RGB888(255, 255, 255); /**< Background color when mouse is down */
+  RGB888           downBackgroundColor      = RGB888(255, 255, 255); /**< Background color when button is down */
+  RGB888           mouseOverBackgroundColor = RGB888(255, 255, 255); /**< Background color when mouse is over */
+  RGB888           mouseDownBackgroundColor = RGB888(128, 128, 255); /**< Background color when mouse is down */
   RGB888           textColor                = RGB888(0, 0, 0);       /**< Text color */
   FontInfo const * textFont                 = &FONT_std_14;          /**< Text font */
   uint8_t          bitmapTextSpace          = 4;                     /**< Spaces between image and text */
@@ -1278,7 +1278,7 @@ private:
  */
 struct uiTextEditStyle {
   RGB888           backgroundColor            = RGB888(128, 128, 128);     /**< Background color */
-  RGB888           mouseOverBackgroundColor   = RGB888(128, 128, 255);     /**< Background color when mouse is over */
+  RGB888           mouseOverBackgroundColor   = RGB888(255, 255, 255);     /**< Background color when mouse is over */
   RGB888           focusedBackgroundColor     = RGB888(255, 255, 255);     /**< Background color when focused */
   RGB888           textColor                  = RGB888(0, 0, 0);           /**< Text color */
   FontInfo const * textFont                   = &FONT_std_14;              /**< Text font */
@@ -1733,7 +1733,7 @@ private:
 struct uiListBoxStyle {
   RGB888           backgroundColor                = RGB888(128, 128, 128);   /**< Background color */
   RGB888           focusedBackgroundColor         = RGB888(255, 255, 255);   /**< Background color when focused */
-  RGB888           selectedBackgroundColor        = RGB888(0, 0, 128);       /**< Background color when selected */
+  RGB888           selectedBackgroundColor        = RGB888(0, 0, 255);       /**< Background color when selected */
   RGB888           focusedSelectedBackgroundColor = RGB888(0, 0, 255);       /**< Background color when selected and focused */
   int              itemHeight                     = 16;                      /**< Item height in pixels */
   FontInfo const * textFont                       = &FONT_std_14;            /**< Text font */
@@ -2274,7 +2274,7 @@ private:
 /** @brief Contains the checkbox style */
 struct uiCheckBoxStyle {
   RGB888              backgroundColor          = RGB888(128, 128, 128);  /**< Background color */
-  RGB888              checkedBackgroundColor   = RGB888(128, 128, 255);  /**< Background color when checked */
+  RGB888              checkedBackgroundColor   = RGB888(128, 128, 128);  /**< Background color when checked */
   RGB888              mouseOverBackgroundColor = RGB888(128, 128, 255);  /**< Background color when mouse is over */
   RGB888              foregroundColor          = RGB888(0, 0, 0);        /**< Foreground color */
 };
