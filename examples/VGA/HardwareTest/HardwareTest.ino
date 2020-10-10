@@ -60,7 +60,7 @@ struct TestApp : public uiApp {
 
   void init() {
 
-    rootWindow()->frameStyle().backgroundColor = Color::BrightBlue;
+    rootWindow()->frameStyle().backgroundColor = Color::Cyan;
     frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 420));
 
     int y = 30;
@@ -282,7 +282,7 @@ void setup()
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
-  DisplayController.queueSize = 128;  // trade UI speed with 10K of RAM required to run both WiFi and SD Card FS
+  DisplayController.queueSize = 350;  // trade UI speed using less RAM and allow both WiFi and SD Card FS
   DisplayController.begin();
   DisplayController.setResolution(VGA_640x480_60Hz, 640, 430);
 }
@@ -295,9 +295,3 @@ void loop()
   app.runAsync(&DisplayController);
   vTaskDelete(NULL);
 }
-
-
-
-
-
-
