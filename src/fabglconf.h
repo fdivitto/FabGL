@@ -251,8 +251,19 @@
 /** Modeline for 1024x768@75Hz resolution */
 #define SVGA_1024x768_75Hz "\"1024x768@75Hz\" 78.80 1024 1040 1136 1312 768 769 772 800 +HSync +VSync"
 
-/** Modeline for 1280x768@60Hz resolution */
-#define SVGA_1280x768_60Hz "\"1280x768@60Hz\" 68.25 1280 1328 1360 1440 768 771 778 790 +HSync +VSync"
+/** Modeline for 1280x600@60Hz resolution */
+#define SVGA_1280x600_60Hz "\"1280x600@60Hz\" 61.5 1280 1336 1464 1648 600 601 604 622 -HSync -VSync  FrontPorchBegins"
+
+/** Modeline for 1280x720@60Hz resolution */
+#define SVGA_1280x720_60Hz "\"1280x720@60Hz"\" 74.48 1280 1468 1604 1664 720 721 724 746 +hsync +vsync"
+
+/** Modeline for 1280x720@60Hz resolution */
+#define SVGA_1280x720_60HzAlt1 "\"1280x720@60HzAlt1"\" 73.78 1280 1312 1592 1624 720 735 742 757"
+
+/** Modeline for 1280x768@50Hz resolution */
+#define SVGA_1280x768_50Hz "\"1280x768@50Hz\" 64.050004 1280 1312 1552 1584 768 784 791 807 -HSync -VSync  FrontPorchBegins"
+
+
 
 /** Modeline for OLED 128x64 */
 #define OLED_128x64 "\"OLED_128x64\" 128 64"
