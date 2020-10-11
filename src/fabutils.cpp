@@ -126,36 +126,6 @@ void free32(void * ptr)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// suspendInterrupts
-// resumeInterrupts
-
-void suspendInterrupts()
-{
-  if (VGA2Controller::instance())
-    VGA2Controller::instance()->suspendBackgroundPrimitiveExecution();
-  if (VGA16Controller::instance())
-    VGA16Controller::instance()->suspendBackgroundPrimitiveExecution();
-  if (VGAController::instance())
-    VGAController::instance()->suspendBackgroundPrimitiveExecution();
-  if (PS2Controller::instance())
-    PS2Controller::instance()->suspend();
-}
-
-
-void resumeInterrupts()
-{
-  if (PS2Controller::instance())
-    PS2Controller::instance()->resume();
-  if (VGAController::instance())
-    VGAController::instance()->resumeBackgroundPrimitiveExecution();
-  if (VGA16Controller::instance())
-    VGA16Controller::instance()->resumeBackgroundPrimitiveExecution();
-  if (VGA2Controller::instance())
-    VGA2Controller::instance()->resumeBackgroundPrimitiveExecution();
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
 // msToTicks
 
 uint32_t msToTicks(int ms)

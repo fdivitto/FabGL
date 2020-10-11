@@ -379,7 +379,6 @@ using fabgl::FlowControl;
 using fabgl::LineEditorSpecialChar;
 using fabgl::LineEditor;
 using fabgl::TerminalController;
-using fabgl::AutoSuspendInterrupts;
 using fabgl::LineEnds;
 using fabgl::CharStyle;
 using fabgl::TerminalTransition;

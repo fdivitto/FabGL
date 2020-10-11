@@ -798,10 +798,6 @@ void * realloc32(void * ptr, size_t size);
 void free32(void * ptr);
 
 
-void suspendInterrupts();
-void resumeInterrupts();
-
-
 inline gpio_num_t int2gpio(int gpio)
 {
   return gpio == -1 ? GPIO_UNUSED : (gpio_num_t)gpio;
@@ -891,29 +887,6 @@ void configureGPIO(gpio_num_t gpio, gpio_mode_t mode);
 uint32_t getApbFrequency();
 
 uint32_t getCPUFrequencyMHz();
-
-
-///////////////////////////////////////////////////////////////////////////////////
-// AutoSuspendInterrupts
-
-
-/**
- * @brief Helper class to disable fabgl interrupts and automatically resume them on scope exit
- *
- * Example:
- *
- *     void func() {
- *       AutoSuspendInterrupts autoInt; // now fabgl interrupts are suspended
- *       ...do something...
- *     }  // on exit interrupts are resumed
- */
-struct AutoSuspendInterrupts {
-  AutoSuspendInterrupts() : suspended(true) { suspendInterrupts(); }
-  ~AutoSuspendInterrupts() { resume(); }
-  void resume() { if (suspended) resumeInterrupts(); suspended = false; }
-
-  bool suspended;
-};
 
 
 ///////////////////////////////////////////////////////////////////////////////////
