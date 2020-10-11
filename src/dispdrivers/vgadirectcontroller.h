@@ -77,9 +77,9 @@ public:
 
 
   /**
-   * @brief Returns the singleton instance of VGA16Controller class
+   * @brief Returns the singleton instance of VGADirectController class
    *
-   * @return A pointer to VGA16Controller singleton object
+   * @return A pointer to VGADirectController singleton object
    */
   static VGADirectController * instance() { return s_instance; }
 

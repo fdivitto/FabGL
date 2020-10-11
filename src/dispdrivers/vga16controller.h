@@ -62,7 +62,7 @@ namespace fabgl {
 * @brief Represents the VGA 16 colors bitmapped controller
 *
 * This VGA controller allows just 16 colors, but requires less (1/2) RAM than VGAController, at the same resolution. Each pixel is represented
-* by 4 bits, which is an index to a palette of 64 colors. Each byte of the frame buffer contains two pixels.
+* by 4 bits, which is an index to a palette of 16 colors. Each byte of the frame buffer contains two pixels.
 * For example, a frame buffer of 640x480 requires about 153K of RAM.
 *
 * VGA16Controller output is very CPU intensive process and consumes up to 30% of one CPU core (measured at 640x480x60Hz). Anyway this allows to have
