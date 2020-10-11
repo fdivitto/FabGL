@@ -34,6 +34,7 @@
 #include "driver/periph_ctrl.h"
 #include "rom/lldesc.h"
 #include "soc/rtc.h"
+#include "esp_spi_flash.h"
 
 #include "fabutils.h"
 #include "vgacontroller.h"
@@ -87,7 +88,7 @@ void VGAController::resumeBackgroundPrimitiveExecution()
   VGABaseController::resumeBackgroundPrimitiveExecution();
   if (m_primitiveProcessingSuspended == 0) {
     if (m_isr_handle == nullptr)
-      esp_intr_alloc(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, VSyncInterrupt, this, &m_isr_handle);
+      esp_intr_alloc(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1, VSyncInterrupt, this, &m_isr_handle);
     I2S1.int_clr.val     = 0xFFFFFFFF;
     I2S1.int_ena.out_eof = 1;
   }
