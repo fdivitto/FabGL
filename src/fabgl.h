@@ -71,6 +71,7 @@
  *
  * The main classes of FabGL library are:
  *    * fabgl::VGAController, device driver for VGA bitmapped output.
+ *    * fabgl::VGA2Controller, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).    
  *    * fabgl::VGA16Controller, device driver for VGA 16 colors bitmapped output (low RAM requirements, CPU intensive).
  *    * fabgl::VGATextController, device driver for VGA textual output (low RAM requirements, CPU intensive).
  *    * fabgl::SSD1306Controller, device driver for SSD1306 based OLED displays.
@@ -285,6 +286,7 @@
 #include "dispdrivers/SSD1306Controller.h"
 #include "dispdrivers/TFTControllerSpecif.h"
 #include "dispdrivers/vgatextcontroller.h"
+#include "dispdrivers/vga2controller.h"
 #include "dispdrivers/vga16controller.h"
 #include "dispdrivers/vgadirectcontroller.h"
 #include "comdrivers/ps2controller.h"
