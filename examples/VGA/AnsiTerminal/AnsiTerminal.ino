@@ -24,8 +24,8 @@
 
 
 fabgl::BitmappedDisplayController * DisplayController;
-fabgl::PS2Controller           PS2Controller;
-fabgl::Terminal                Terminal;
+fabgl::PS2Controller                PS2Controller;
+fabgl::Terminal                     Terminal;
 
 
 
@@ -57,6 +57,8 @@ void setup()
 
   preferences.begin("AnsiTerminal", false);
 
+  ConfDialogApp::checkVersion();
+
   pinMode(RESET_PIN, INPUT);
   if (digitalRead(RESET_PIN) == 1)
     preferences.clear();
@@ -85,6 +87,7 @@ void setup()
     Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
     Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
     Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+    Terminal.printf("Version            : %d.%d\r\n", TERMVERSION_MAJ, TERMVERSION_MIN);
     Terminal.write("\r\nPress F12 to change terminal configuration and CTRL-ALT-F12 to reset settings\r\n\n");
   } else if (ConfDialogApp::getBootInfo() == BOOTINFO_TEMPDISABLED) {
     preferences.putInt("BootInfo", BOOTINFO_ENABLED);

@@ -33,6 +33,9 @@
 Preferences preferences;
 
 
+#define TERMVERSION_MAJ 1
+#define TERMVERSION_MIN 1
+
 
 static const char * BAUDRATES_STR[] = { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "230400", "250000", "256000", "500000", "1000000", "2000000" };
 static const int    BAUDRATES_INT[] = { 110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 230400, 250000, 256000, 500000, 1000000, 2000000 };
@@ -43,10 +46,48 @@ static const char * PARITY_STR[]    = { "None", "Even", "Odd" };
 static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
 static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 
-static const char * RESOLUTIONS_STR[]      = { "640x480, 16 colors", "640x350, 64 colors", "512x384, 64 colors" };
-static const char * RESOLUTIONS_CMDSTR[]   = { "640x480x16",         "640x350x64",         "512x384x64"         };
-static const int    RESOLUTIONS_TYPE[]     = { 1, 0, 0 };   // 0 = VGAController, 1 = VGA16Controller
-static const char * RESOLUTIONS_MODELINE[] = { VGA_640x480_60Hz, VGA_640x350_70HzAlt1, VGA_512x384_60Hz };
+constexpr int RESOLUTION_DEFAULT = 5;
+static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
+                                               "1024x768, B&W",           // 1
+                                               "800x600, B&W",            // 2
+                                               "720x576, B&W",            // 3
+                                               "720x576, 16 colors",      // 4
+                                               "640x480, 16 colors",      // 5
+                                               "640x350, 64 colors",      // 6
+                                               "512x384, 64 colors",      // 7
+                                               "400x300, 64 colors",      // 8
+                                              };
+static const char * RESOLUTIONS_CMDSTR[]   = { "1280x768x2",              // 0
+                                               "1024x768x2",              // 1
+                                               "800x600x2",               // 2
+                                               "720x576x2",               // 3
+                                               "720x576x16",              // 4
+                                               "640x480x16",              // 5
+                                               "640x350x64",              // 6
+                                               "512x384x64",              // 7
+                                               "400x300x64",              // 8
+                                            };
+enum class ResolutionType { VGAController, VGA16Controller, VGA2Controller };
+static const ResolutionType RESOLUTIONS_TYPE[] = { ResolutionType::VGA2Controller,     // 0
+                                                   ResolutionType::VGA2Controller,     // 1
+                                                   ResolutionType::VGA2Controller,     // 2
+                                                   ResolutionType::VGA16Controller,    // 3
+                                                   ResolutionType::VGA16Controller,    // 4
+                                                   ResolutionType::VGA16Controller,    // 5
+                                                   ResolutionType::VGAController,      // 6
+                                                   ResolutionType::VGAController,      // 7
+                                                   ResolutionType::VGAController,      // 8
+                                                 };
+static const char * RESOLUTIONS_MODELINE[] = { SVGA_1280x768_50Hz,        // 0
+                                               SVGA_1024x768_75Hz,        // 1
+                                               SVGA_800x600_56Hz,         // 2
+                                               PAL_720x576_50Hz,          // 3
+                                               PAL_720x576_50Hz,          // 4
+                                               VGA_640x480_73Hz,          // 5
+                                               VGA_640x350_70HzAlt1,      // 6
+                                               VGA_512x384_60Hz,          // 7
+                                               VGA_400x300_60Hz,          // 8
+};
 constexpr int       RESOLUTIONS_COUNT      = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
 
 static const char *            FONTS_STR[]  = { "Auto", "VGA 4x6", "VGA 5x7", "VGA 5x8", "VGA 6x8", "VGA 6x9", "VGA 6x10", "VGA 6x12", "VGA 6x13",
@@ -339,7 +380,7 @@ struct ConfDialogApp : public uiApp {
   }
 
   static int getResolutionIndex() {
-    return preferences.getInt("Resolution", 0);             // default 0 = 640x480, 80x34, 16 colors
+    return preferences.getInt("Resolution", RESOLUTION_DEFAULT);
   }
 
   static int getTempResolutionIndex() {
@@ -362,6 +403,15 @@ struct ConfDialogApp : public uiApp {
     return preferences.getInt("BootInfo", BOOTINFO_ENABLED);
   }
 
+  // if version in preferences doesn't match, reset preferences
+  static void checkVersion() {
+    if (preferences.getInt("VerMaj", 0) != TERMVERSION_MAJ || preferences.getInt("VerMin", 0) != TERMVERSION_MIN) {
+      preferences.clear();
+      preferences.putInt("VerMaj", TERMVERSION_MAJ);
+      preferences.putInt("VerMin", TERMVERSION_MIN);
+    }
+  }
+
   static void setupDisplay() {
     // setup display controller
     auto res = getTempResolutionIndex();
@@ -370,13 +420,14 @@ struct ConfDialogApp : public uiApp {
     else
       preferences.putInt("TempResolution", -1);
     switch (RESOLUTIONS_TYPE[res]) {
-      // VGAController
-      case 0:
+      case ResolutionType::VGAController:
         DisplayController = new fabgl::VGAController;
         break;
-      // VGA16Controller
-      case 1:
+      case ResolutionType::VGA16Controller:
         DisplayController = new fabgl::VGA16Controller;
+        break;
+      case ResolutionType::VGA2Controller:
+        DisplayController = new fabgl::VGA2Controller;
         break;
     }
     DisplayController->begin();
