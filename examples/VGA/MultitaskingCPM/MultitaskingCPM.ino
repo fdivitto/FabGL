@@ -128,7 +128,6 @@ void setup()
         fb.makeDirectory(programs[i].path);
       fb.changeDirectory(programs[i].path);
       // copy file
-      AutoSuspendInterrupts autoInt;
       FILE * f = fb.openFile(programs[i].filename, "wb");
       if (f) {
         fwrite(programs[i].data, 1, programs[i].size, f);

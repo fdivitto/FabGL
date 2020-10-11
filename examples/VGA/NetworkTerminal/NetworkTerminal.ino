@@ -83,6 +83,10 @@ void exe_help()
   Terminal.write("\e[37m  Open telnet session with HOST (IP or host name) using PORT.\r\n");
   Terminal.write("\e[37m  Example:\r\n");
   Terminal.write("\e[37m    telnet towel.blinkenlights.nl\e[32m\r\n");
+  Terminal.write("\e[33mping HOST\r\n");
+  Terminal.write("\e[37m  Ping a HOST (IP or host name).\r\n");
+  Terminal.write("\e[37m  Example:\r\n");
+  Terminal.write("\e[37m    ping 8.8.8.8\e[32m\r\n");
   Terminal.write("\e[33mreboot\r\n");
   Terminal.write("\e[37m  Restart the system.\e[32m\r\n");
   error = false;
@@ -150,9 +154,7 @@ void exe_scan()
   static char const * ENC2STR[] = { "Open", "WEP", "WPA-PSK", "WPA2-PSK", "WPA/WPA2-PSK", "WPA-ENTERPRISE" };
   Terminal.write("Scanning...");
   Terminal.flush();
-  fabgl::suspendInterrupts();
   int networksCount = WiFi.scanNetworks();
-  fabgl::resumeInterrupts();
   Terminal.printf("%d network(s) found\r\n", networksCount);
   if (networksCount) {
     Terminal.write   ("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[32m\r\n");
@@ -176,7 +178,6 @@ void exe_wifi()
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
     Terminal.write("Connecting WiFi...");
     Terminal.flush();
-    AutoSuspendInterrupts autoInt;
     WiFi.disconnect(true, true);
     for (int i = 0; i < 2; ++i) {
       WiFi.begin(ssid, psw);

@@ -204,7 +204,6 @@ struct TestApp : public uiApp {
 
 
   void testSD() {
-    AutoSuspendInterrupts suspint;
     // mount test
     FileBrowser fb;
     fb.unmountSDCard();
@@ -256,9 +255,7 @@ struct TestApp : public uiApp {
   }
 
   void testWifi() {
-    fabgl::suspendInterrupts();
     auto r = WiFi.scanNetworks(false, true);
-    fabgl::resumeInterrupts();
     if (r == WIFI_SCAN_FAILED) {
       wifiResultLabel->labelStyle().textColor = Color::BrightRed;
       wifiResultLabel->setText("Wifi Scan Failed!");

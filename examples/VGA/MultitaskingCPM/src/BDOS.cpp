@@ -404,8 +404,6 @@ bool BDOS::execProgram(int drive, char const * filename, uint16_t parameters)
 
   FILE * fr = nullptr;
 
-  AutoSuspendInterrupts autoInt;
-
   // try current directory
   char fullpath[strlen(m_HAL->getDriveMountPath(drive)) + 1 + strlen(m_currentDir[drive]) + 1 + strlen(afilename) + 1];
   strcpy(fullpath, m_HAL->getDriveMountPath(drive));
@@ -502,8 +500,6 @@ bool BDOS::execProgram(int drive, char const * filename, uint16_t parameters)
 
   // set drive number where the program was loaded
   m_HAL->writeByte(PAGE0_LOADDRIVE, drive + 1);  // 1 = A
-
-  autoInt.resume(); // we need interrupt from here
 
   execLoadedProgram(size);
 
@@ -1833,7 +1829,6 @@ void BDOS::addFileToCache(uint16_t FCBaddr, FILE * file)
       }
     if (idx == -1) {
       // no more free items, close one (@TODO: chose a better algorithm!)
-      AutoSuspendInterrupts autoInt;
       idx = rand() % CPMMAXFILES;
       fclose(m_openFileCache[idx].file);
     }
@@ -1874,7 +1869,6 @@ void BDOS::closeAllFiles()
 {
   for (int i = 0; i < CPMMAXFILES; ++i)
     if (m_openFileCache[i].file) {
-      AutoSuspendInterrupts autoInt;
       fclose(m_openFileCache[i].file);
       m_openFileCache[i].file = nullptr;
     }
@@ -1904,7 +1898,6 @@ FILE * BDOS::openFile(uint16_t FCBaddr, bool create, bool tempext, int errFunc, 
       if (create) {
         // create a file that is already open: close it before!
         removeFileFromCache(f);
-        AutoSuspendInterrupts autoInt;
         fclose(f);
       } else
         return f;
@@ -1940,8 +1933,6 @@ FILE * BDOS::openFile(uint16_t FCBaddr, bool create, bool tempext, int errFunc, 
   char fullpath[fullpathLen];
   m_fileBrowser.getFullPath(filename, fullpath, fullpathLen);
 
-  AutoSuspendInterrupts autoInt;
-
   FILE * f = nullptr;
 
   if (create) {
@@ -1972,7 +1963,6 @@ void BDOS::closeFile(uint16_t FCBaddr)
   auto f = getFileFromCache(FCBaddr);
   if (f) {
     removeFileFromCache(f);
-    AutoSuspendInterrupts autoInt;
     fclose(f);
   }
 
@@ -2002,8 +1992,6 @@ void BDOS::BDOS_openFile()
   }
 
   if (f) {
-    AutoSuspendInterrupts autoInt;
-
     fseek(f, 0, SEEK_END);
     size_t size = ftell(f);
 
@@ -2148,8 +2136,6 @@ void BDOS::BDOS_readSequential()
 
   if (f) {
 
-    AutoSuspendInterrupts autoInt;
-
     // go to position identified by FCB_EX, FCB_S2 and FCB_CR
     size_t pos = getPosFCB(FCBaddr);
     fseek(f, pos, SEEK_SET);
@@ -2215,8 +2201,6 @@ void BDOS::BDOS_writeSequential()
   }
 
   if (f) {
-
-    AutoSuspendInterrupts autoInt;
 
     // go to position identified by FCB_EX, FCB_S2 and FCB_CR
     size_t pos = getPosFCB(FCBaddr);
@@ -2501,8 +2485,6 @@ void BDOS::BDOS_readRandom()
 
   if (f) {
 
-    AutoSuspendInterrupts autoInt;
-
     // go to position identified by R0, R1, R2
     size_t pos = getAbsolutePosFCB(FCBaddr);
     fseek(f, pos, SEEK_SET);
@@ -2567,8 +2549,6 @@ void BDOS::BDOS_writeRandom()
 
   if (f) {
 
-    AutoSuspendInterrupts autoInt;
-
     // go to position identified by R0, R1, R2
     size_t pos = getAbsolutePosFCB(FCBaddr);
     fseek(f, pos, SEEK_SET);
@@ -2615,8 +2595,6 @@ void BDOS::BDOS_computeFileSize()
   }
 
   if (f) {
-    AutoSuspendInterrupts autoInt;
-
     fseek(f, 0, SEEK_END);
     size_t size = ftell(f);
     closeFile(FCBaddr);
@@ -2885,7 +2863,6 @@ void BDOS::BDOS_loadOverlay()
     #endif
     CPUsetALBH(0xFF, 0x00);
   } else {
-    AutoSuspendInterrupts autoInt;
     fseek(f, 0, SEEK_END);
     size_t size = ftell(f);
     fseek(f, 0, SEEK_SET);
@@ -2982,7 +2959,6 @@ void BDOS::writeDirectoryLabel(int drive, uint16_t FCBaddr, int errfunc)
   strcpy(fullpath, m_HAL->getDriveMountPath(drive));
   strcat(fullpath, "/");
   strcat(fullpath, DIRLABEL_FILENAME);
-  AutoSuspendInterrupts autoInt;
   auto f = fopen(fullpath, "wb");
   fwrite(wFCB, 1, 32, f);
   fclose(f);
@@ -3002,7 +2978,6 @@ uint8_t BDOS::readDirectoryLabel(int drive, uint16_t FCBaddr, uint8_t * FCB)
   strcpy(fullpath, m_HAL->getDriveMountPath(drive));
   strcat(fullpath, "/");
   strcat(fullpath, DIRLABEL_FILENAME);
-  AutoSuspendInterrupts autoInt;
   auto f = fopen(fullpath, "rb");
   if (f) {
     for (int i = 0; i < 32; ++i) {
@@ -3242,7 +3217,6 @@ bool BDOS::fileMatchWithWildCards(char const * searchingName, char const * testi
 
 void BDOS::copyFile(FILE * src, FILE * dst)
 {
-  AutoSuspendInterrupts autoInt;
   void * buffer = malloc(COPYFILE_BUFFERSIZE);
   while (true) {
     auto r = fread(buffer, 1, COPYFILE_BUFFERSIZE, src);
@@ -3478,8 +3452,6 @@ void BDOS::BDOS_copyFile()
       auto diritem = m_fileBrowser.get(i);
       if (!diritem->isDir && fileMatchWithWildCards(srcFilename, diritem->name)) {
         // name match
-
-        AutoSuspendInterrupts autoInt;
 
         // compose dest path
         char * dstActualFullPath;

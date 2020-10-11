@@ -107,7 +107,6 @@ class MyApp : public uiApp {
         int len = fileBrowser->content().getFullPath(filename);
         char fullpath[len];
         fileBrowser->content().getFullPath(filename, fullpath, len);
-        AutoSuspendInterrupts autoInt;
         FILE * f = fopen(fullpath, "wb");
         fclose(f);
         updateBrowser();
@@ -151,7 +150,6 @@ class MyApp : public uiApp {
       char psw[32]  = "";
       if (inputBox("WiFi Connect", "Network Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
           inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        AutoSuspendInterrupts autoInt;
         preferences.putString("SSID", SSID);
         preferences.putString("WiFiPsw", psw);
         connectWiFi();
@@ -191,7 +189,6 @@ class MyApp : public uiApp {
     WiFiStatusLbl->setText("WiFi Not Connected");
     WiFiStatusLbl->labelStyle().textColor = RGB888(255, 0, 0);
     char SSID[32], psw[32];
-    AutoSuspendInterrupts autoInt;
     if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
       WiFi.begin(SSID, psw);
       for (int i = 0; i < 16 && WiFi.status() != WL_CONNECTED; ++i) {
@@ -230,14 +227,12 @@ class MyApp : public uiApp {
           size_t size = stream->available();
           if (size) {
             int c = stream->readBytes(buf, fabgl::imin(sizeof(buf), size));
-            AutoSuspendInterrupts autoInt;
             fwrite(buf, c, 1, f);
             if (len > 0)
               len -= c;
           }
         }
 
-        AutoSuspendInterrupts autoInt;
         fclose(f);
 
         updateBrowser();

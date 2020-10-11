@@ -1313,9 +1313,7 @@ bool CCP::cmd_WIFISCAN(uint16_t paramsAddr)
   m_HAL->setTerminalType(TermType::ANSILegacy);
   consoleOut("Scanning...");
   delay(100); // give time to display last terminal msg, because we will suspend interrupts...
-  fabgl::suspendInterrupts();
   int networksCount = WiFi.scanNetworks();
-  fabgl::resumeInterrupts();
   consoleOutFmt("%d network(s) found\r\n", networksCount);
   if (networksCount) {
     consoleOut("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[32m\r\n");
@@ -1359,8 +1357,6 @@ bool CCP::cmd_WIFI(uint16_t paramsAddr)
   char psw[MAX_PSW_SIZE + 1] = {0};
   if (sscanf(param, "%32s %32s", ssid, psw) >= 1) {
     consoleOut("Connecting WiFi...");
-    delay(100);
-    AutoSuspendInterrupts autoInt;
     WiFi.disconnect(true, true);
     for (int i = 0; i < 2; ++i) {
       WiFi.begin(ssid, psw);

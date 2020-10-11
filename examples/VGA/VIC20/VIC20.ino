@@ -374,7 +374,6 @@ class Menu : public uiApp {
       char psw[32]  = "";
       if (inputBox("WiFi Connect", "WiFi Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
           inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        AutoSuspendInterrupts autoInt;
         preferences.putString("SSID", SSID);
         preferences.putString("WiFiPsw", psw);
       }
@@ -611,7 +610,6 @@ class Menu : public uiApp {
 
   // return true if WiFi is connected
   bool WiFiConnected() {
-    AutoSuspendInterrupts autoInt;
     bool r = WiFi.status() == WL_CONNECTED;
     return r;
   }
@@ -619,7 +617,6 @@ class Menu : public uiApp {
   // connect to wifi using SSID and PSW from Preferences
   void connectWiFi()
   {
-    fabgl::suspendInterrupts();
     char SSID[32], psw[32];
     if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
       WiFi.begin(SSID, psw);
@@ -630,7 +627,6 @@ class Menu : public uiApp {
     }
     WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB888(0, 255, 0) : RGB888(128, 128, 128));
     WiFiStatusLbl->update();
-    fabgl::resumeInterrupts();
     if (WiFi.status() != WL_CONNECTED)
       messageBox("Network Error", "Failed to connect WiFi. Try again!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
   }
@@ -641,7 +637,6 @@ class Menu : public uiApp {
     static char const * DOWNDIR = "List";
     FileBrowser & dir = fileBrowser->content();
 
-    AutoSuspendInterrupts autoInt;
     dir.setDirectory(basepath);
     dir.makeDirectory(DOWNDIR);
     dir.changeDirectory(DOWNDIR);
@@ -651,7 +646,6 @@ class Menu : public uiApp {
   // ret nullptr on fail
   char * downloadList()
   {
-    AutoSuspendInterrupts autoInt;
     auto list = (char*) malloc(MAXLISTSIZE);
     auto dest = list;
     HTTPClient http;
@@ -709,10 +703,8 @@ class Menu : public uiApp {
   // download specified filename from URL
   bool downloadURL(char const * URL, char const * filename)
   {
-    AutoSuspendInterrupts autoInt;
     FileBrowser & dir = fileBrowser->content();
     if (dir.exists(filename)) {
-      fabgl::resumeInterrupts();
       return true;
     }
     bool success = false;

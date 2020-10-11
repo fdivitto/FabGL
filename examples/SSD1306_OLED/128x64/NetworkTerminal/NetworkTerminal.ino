@@ -177,9 +177,7 @@ void exe_scan()
   static char const * ENC2STR[] = { "Open", "WEP", "WPA-PSK", "WPA2-PSK", "WPA/WPA2-PSK", "WPA-ENTERPRISE" };
   Terminal.write("Scanning...\r\n");
   Terminal.flush();
-  fabgl::suspendInterrupts();
   int networksCount = WiFi.scanNetworks();
-  fabgl::resumeInterrupts();
   Terminal.printf("%d network(s)\r\n", networksCount);
   if (networksCount) {
     for (int i = 0; i < networksCount; ++i)
@@ -202,7 +200,6 @@ void exe_wifi()
   if (sscanf(inputLine, "wifi %32s %32s", ssid, psw) >= 1) {
     Terminal.write("Connecting WiFi...");
     Terminal.flush();
-    AutoSuspendInterrupts autoInt;
     WiFi.disconnect(true, true);
     for (int i = 0; i < 2; ++i) {
       WiFi.begin(ssid, psw);

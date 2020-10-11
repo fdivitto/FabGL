@@ -884,7 +884,6 @@ void Machine::VIA2PortIn(MOS6522 * via, VIAPort port)
 
 void Machine::loadPRG(char const * filename, bool resetRequired, bool execRun)
 {
-  AutoSuspendInterrupts autoInt;
   FILE * f = fopen(filename, "rb");
   if (f) {
 
@@ -959,7 +958,6 @@ void Machine::loadPRG(char const * filename, bool resetRequired, bool execRun)
 // return effective load address
 int Machine::loadCRT(char const * filename, bool reset, int address)
 {
-  AutoSuspendInterrupts autoInt;
   FILE * f = fopen(filename, "rb");
   if (f) {
 

@@ -83,7 +83,6 @@ constexpr int bufferedFileDataSize = 4388;//4388;
 void diskFlush(FILE * file = nullptr)
 {
   // flush bufferedFile
-  AutoSuspendInterrupts autoInt;
   if (bufferedFileChanged && bufferedFile && bufferedFileDataPos != -1) {
     fseek(bufferedFile, bufferedFileDataPos, SEEK_SET);
     //fprintf(stderr, "fseek(%d) fwrite(%d)\n", bufferedFileDataPos, bufferedFileDataSize);
@@ -111,7 +110,6 @@ void fetchFileData(FILE * file, int position, int size)
     bufferedFile = file;
   }
   if (bufferedFileDataPos == -1 || position < bufferedFileDataPos || position + size >= bufferedFileDataPos + bufferedFileDataSize) {
-    AutoSuspendInterrupts autoInt;
     diskFlush();
     fseek(file, position, SEEK_SET);
     //fprintf(stderr, "fseek(%d) fread(%d)\n", position, bufferedFileDataSize);
@@ -145,7 +143,6 @@ void diskWrite(int position, void * buffer, int size, FILE * file)
 
 void diskRead(int position, void * buffer, int size, FILE * file)
 {
-  AutoSuspendInterrupts autoInt;
   fseek(file, position, SEEK_SET);
   fread(buffer, size, 1, file);
 }
@@ -153,14 +150,12 @@ void diskRead(int position, void * buffer, int size, FILE * file)
 
 void diskWrite(int position, void * buffer, int size, FILE * file)
 {
-  AutoSuspendInterrupts autoInt;
   fseek(file, position, SEEK_SET);
   fwrite(buffer, size, 1, file);
 }
 
 void diskFlush(FILE * file = nullptr)
 {
-  AutoSuspendInterrupts autoInt;
   fflush(file);
   fsync(fileno(file));  // workaround from forums...
 }
@@ -417,7 +412,6 @@ void Mits88Disk::detach(int drive)
   if (m_readOnlyBuffer[drive]) {
     m_readOnlyBuffer[drive] = nullptr;
   } else if (m_file[drive]) {
-    AutoSuspendInterrupts autoInt;
     fclose(m_file[drive]);
     m_file[drive] = nullptr;
     delete [] m_fileSectorBuffer[drive];
@@ -438,8 +432,6 @@ void Mits88Disk::attachFile(int drive, char const * filename)
   detach(drive);
 
   m_fileSectorBuffer[drive] = new uint8_t[SECTOR_SIZE];
-
-  AutoSuspendInterrupts autoInt;
 
   // file exists?
   struct stat st;
