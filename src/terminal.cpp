@@ -206,7 +206,6 @@ void Terminal::activate(TerminalTransition transition)
       if (m_bitmappedDisplayController) {
         // bitmapped controller, use Canvas to perform the animation
         s_activeTerminal = nullptr;
-        AutoSuspendInterrupts autoInt;
         switch (transition) {
           case TerminalTransition::LeftToRight:
             for (int x = 0; x < m_columns; ++x) {

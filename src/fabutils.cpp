@@ -697,7 +697,6 @@ int FileBrowser::countDirEntries(int * namesLength)
 
     *namesLength = 0;
     if (m_dir) {
-      AutoSuspendInterrupts autoInt;
       auto dirp = opendir(m_dir);
       while (dirp) {
         auto dp = readdir(dirp);
@@ -738,7 +737,6 @@ size_t FileBrowser::fileSize(char const * name)
   size_t size = 0;
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
-  AutoSuspendInterrupts autoInt;
   auto fr = fopen(fullpath, "rb");
   if (fr) {
     fseek(fr, 0, SEEK_END);
@@ -753,7 +751,6 @@ bool FileBrowser::fileCreationDate(char const * name, int * year, int * month, i
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
-  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
@@ -772,7 +769,6 @@ bool FileBrowser::fileUpdateDate(char const * name, int * year, int * month, int
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
-  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
@@ -791,7 +787,6 @@ bool FileBrowser::fileAccessDate(char const * name, int * year, int * month, int
 {
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
-  AutoSuspendInterrupts autoInt;
   struct stat s;
   if (stat(fullpath, &s))
     return false;
@@ -850,7 +845,6 @@ bool FileBrowser::reload()
     m_items[0].isDir = true;
     ++m_count;
 
-    AutoSuspendInterrupts autoInt;
     int hiddenFilesCount = 0;
     auto dirp = opendir(m_dir);
     while (dirp) {
@@ -910,7 +904,6 @@ void FileBrowser::makeDirectory(char const * dirname)
 {
   int dirnameLen = strlen(dirname);
   if (dirnameLen > 0) {
-    AutoSuspendInterrupts autoInt;
     if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory, puts an hidden placeholder
       char fullpath[strlen(m_dir) + 3 + 2 * dirnameLen + 1];
@@ -951,8 +944,6 @@ void FileBrowser::makeDirectory(char const * dirname)
 // "name" is not a path, just a file or directory name inside "m_dir"
 void FileBrowser::remove(char const * name)
 {
-  AutoSuspendInterrupts autoInt;
-
   char fullpath[strlen(m_dir) + 1 + strlen(name) + 1];
   sprintf(fullpath, "%s/%s", m_dir, name);
   int r = unlink(fullpath);
@@ -991,8 +982,6 @@ void FileBrowser::remove(char const * name)
 // works only for files
 void FileBrowser::rename(char const * oldName, char const * newName)
 {
-  AutoSuspendInterrupts autoInt;
-
   char oldfullpath[strlen(m_dir) + 1 + strlen(oldName) + 1];
   sprintf(oldfullpath, "%s/%s", m_dir, oldName);
 
@@ -1030,8 +1019,6 @@ bool FileBrowser::truncate(char const * name, size_t size)
   //::truncate(name, size);
 
   bool retval = false;
-
-  AutoSuspendInterrupts autoInt;
 
   // for now...
   char * tempFilename = createTempFilename();
@@ -1079,8 +1066,6 @@ int FileBrowser::getFullPath(char const * name, char * outPath, int maxlen)
 
 FILE * FileBrowser::openFile(char const * filename, char const * mode)
 {
-  AutoSuspendInterrupts autoInt;
-  
   char fullpath[strlen(m_dir) + 1 + strlen(filename) + 1];
   strcpy(fullpath, m_dir);
   strcat(fullpath, "/");
@@ -1112,8 +1097,6 @@ DriveType FileBrowser::getDriveType(char const * path)
 
 bool FileBrowser::format(DriveType driveType, int drive)
 {
-  AutoSuspendInterrupts autoSuspendInt;
-
   esp_task_wdt_init(45, false);
 
   if (driveType == DriveType::SDCard && s_SDCardMounted) {
@@ -1216,7 +1199,6 @@ bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t 
       .max_files              = maxFiles,
       .format_if_mount_failed = true
   };
-  AutoSuspendInterrupts autoSuspendInt;
   s_SPIFFSMounted = (esp_vfs_spiffs_register(&conf) == ESP_OK);
   return s_SPIFFSMounted;
 }
@@ -1225,7 +1207,6 @@ bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t 
 void FileBrowser::unmountSPIFFS()
 {
   if (s_SPIFFSMounted) {
-    AutoSuspendInterrupts autoSuspendInt;
     esp_vfs_spiffs_unregister(nullptr);
     s_SPIFFSMounted = false;
   }
