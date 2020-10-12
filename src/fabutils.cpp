@@ -366,7 +366,7 @@ Rect IRAM_ATTR Rect::intersection(Rect const & rect) const
 ///////////////////////////////////////////////////////////////////////////////////
 // rgb222_to_hsv
 // R, G, B in the 0..3 range
-int rgb222_to_hsv(int R, int G, int B, double * h, double * s, double * v)
+void rgb222_to_hsv(int R, int G, int B, double * h, double * s, double * v)
 {
   double r = R / 3.0;
   double g = G / 3.0;
