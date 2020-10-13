@@ -429,6 +429,7 @@ enum class NativePixelFormat : uint8_t {
   RGB565BE,   /**< 16 bit per pixel: RGB565 big endian. */
   PALETTE16,  /**< 4 bit palette (16 colors), packed as two pixels per byte. */
   PALETTE2,   /**< 1 bit palette (2 colors), packed as 8 pixels per byte. */
+  PALETTE4,   /**< 2 bit palette (4 colors), packed as 4 pixels per byte. */
 };
 
 
