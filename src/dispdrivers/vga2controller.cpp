@@ -657,8 +657,9 @@ void IRAM_ATTR VGA2Controller::I2SInterrupt(void * arg)
       auto src  = (uint8_t const *) VGA2Controller::s_viewPortVisible[scanLine];
       auto dest = (uint64_t*) ctrl->m_lines[lineIndex];
 
-      // optimizazion warn: horizontal resolution must be a multiple of 8!
-      for (int col = 0; col < width; col += 8) {
+      // optimizazion warn: horizontal resolution must be a multiple of 16!
+      for (int col = 0; col < width; col += 16) {
+        *dest++ = packedPaletteIndexOctet_to_signals[*src++];
         *dest++ = packedPaletteIndexOctet_to_signals[*src++];
       }
 
