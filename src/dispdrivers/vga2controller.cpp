@@ -55,25 +55,22 @@ namespace fabgl {
 
 
 
-static const uint8_t VGA2_BITMSK[] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-
-
 static inline __attribute__((always_inline)) void VGA2_SETPIXELINROW(uint8_t * row, int x, int value) {
   int brow = x >> 3;
-  row[brow] ^= (-value ^ row[brow]) & VGA2_BITMSK[x & 7];
+  row[brow] ^= (-value ^ row[brow]) & (0x80 >> (x & 7));
 }
 
 static inline __attribute__((always_inline)) int VGA2_GETPIXELINROW(uint8_t * row, int x) {
   int brow = x >> 3;
-  return (row[brow] & VGA2_BITMSK[x & 7]) != 0;
+  return (row[brow] & (0x80 >> (x & 7))) != 0;
 }
 
-#define VGA2_INVERTPIXELINROW(row, x)       (row)[(x) >> 3] ^= VGA2_BITMSK[(x) & 7]
+#define VGA2_INVERTPIXELINROW(row, x)       (row)[(x) >> 3] ^= (0x80 >> ((x) & 7))
 
 static inline __attribute__((always_inline)) void VGA2_SETPIXEL(int x, int y, int value) {
   auto row = (uint8_t*) VGA2Controller::sgetScanline(y);
   int brow = x >> 3;
-  row[brow] ^= (-value ^ row[brow]) & VGA2_BITMSK[x & 7];
+  row[brow] ^= (-value ^ row[brow]) & (0x80 >> (x & 7));
 }
 
 #define VGA2_GETPIXEL(x, y)                 VGA2_GETPIXELINROW((uint8_t*)VGA2Controller::s_viewPort[(y)], (x))
