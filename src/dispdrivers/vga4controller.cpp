@@ -661,8 +661,11 @@ void IRAM_ATTR VGA4Controller::I2SInterrupt(void * arg)
       auto src  = (uint8_t const *) VGA4Controller::s_viewPortVisible[scanLine];
       auto dest = (uint32_t*) ctrl->m_lines[lineIndex];
 
-      // optimizazion warn: horizontal resolution must be a multiple of 4!
-      for (int col = 0; col < width; col += 4) {
+      // optimizazion warn: horizontal resolution must be a multiple of 16!
+      for (int col = 0; col < width; col += 16) {
+        *dest++ = packedPaletteIndexQuad_to_signals[*src++];
+        *dest++ = packedPaletteIndexQuad_to_signals[*src++];
+        *dest++ = packedPaletteIndexQuad_to_signals[*src++];
         *dest++ = packedPaletteIndexQuad_to_signals[*src++];
       }
 
