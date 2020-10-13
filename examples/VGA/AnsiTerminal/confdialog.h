@@ -34,7 +34,7 @@ Preferences preferences;
 
 
 #define TERMVERSION_MAJ 1
-#define TERMVERSION_MIN 1
+#define TERMVERSION_MIN 2
 
 
 static const char * BAUDRATES_STR[] = { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "230400", "250000", "256000", "500000", "1000000", "2000000" };
@@ -46,47 +46,43 @@ static const char * PARITY_STR[]    = { "None", "Even", "Odd" };
 static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
 static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 
-constexpr int RESOLUTION_DEFAULT = 5;
+constexpr int RESOLUTION_DEFAULT = 4;
 static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
-                                               "1024x768, B&W",           // 1
-                                               "800x600, B&W",            // 2
-                                               "720x576, B&W",            // 3
-                                               "720x576, 16 colors",      // 4
-                                               "640x480, 16 colors",      // 5
-                                               "640x350, 64 colors",      // 6
-                                               "512x384, 64 colors",      // 7
-                                               "400x300, 64 colors",      // 8
+                                               "1024x768, 4 colors",      // 1
+                                               "800x600, 4 colors",       // 2
+                                               "720x576, 16 colors",      // 3
+                                               "640x480, 16 colors",      // 4
+                                               "640x350, 64 colors",      // 5
+                                               "512x384, 64 colors",      // 6
+                                               "400x300, 64 colors",      // 7
                                               };
 static const char * RESOLUTIONS_CMDSTR[]   = { "1280x768x2",              // 0
-                                               "1024x768x2",              // 1
-                                               "800x600x2",               // 2
-                                               "720x576x2",               // 3
-                                               "720x576x16",              // 4
-                                               "640x480x16",              // 5
-                                               "640x350x64",              // 6
-                                               "512x384x64",              // 7
-                                               "400x300x64",              // 8
+                                               "1024x768x4",              // 1
+                                               "800x600x4",               // 2
+                                               "720x576x16",              // 3
+                                               "640x480x16",              // 4
+                                               "640x350x64",              // 5
+                                               "512x384x64",              // 6
+                                               "400x300x64",              // 7
                                             };
-enum class ResolutionType { VGAController, VGA16Controller, VGA2Controller };
+enum class ResolutionType { VGAController, VGA16Controller, VGA2Controller, VGA4Controller };
 static const ResolutionType RESOLUTIONS_TYPE[] = { ResolutionType::VGA2Controller,     // 0
-                                                   ResolutionType::VGA2Controller,     // 1
-                                                   ResolutionType::VGA2Controller,     // 2
+                                                   ResolutionType::VGA4Controller,     // 1
+                                                   ResolutionType::VGA4Controller,     // 2
                                                    ResolutionType::VGA16Controller,    // 3
                                                    ResolutionType::VGA16Controller,    // 4
-                                                   ResolutionType::VGA16Controller,    // 5
+                                                   ResolutionType::VGAController,      // 5
                                                    ResolutionType::VGAController,      // 6
                                                    ResolutionType::VGAController,      // 7
-                                                   ResolutionType::VGAController,      // 8
                                                  };
 static const char * RESOLUTIONS_MODELINE[] = { SVGA_1280x768_50Hz,        // 0
                                                SVGA_1024x768_75Hz,        // 1
                                                SVGA_800x600_56Hz,         // 2
                                                PAL_720x576_50Hz,          // 3
-                                               PAL_720x576_50Hz,          // 4
-                                               VGA_640x480_73Hz,          // 5
-                                               VGA_640x350_70HzAlt1,      // 6
-                                               VGA_512x384_60Hz,          // 7
-                                               VGA_400x300_60Hz,          // 8
+                                               VGA_640x480_73Hz,          // 4
+                                               VGA_640x350_70HzAlt1,      // 5
+                                               VGA_512x384_60Hz,          // 6
+                                               VGA_400x300_60Hz,          // 7
 };
 constexpr int       RESOLUTIONS_COUNT      = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
 
@@ -428,6 +424,9 @@ struct ConfDialogApp : public uiApp {
         break;
       case ResolutionType::VGA2Controller:
         DisplayController = new fabgl::VGA2Controller;
+        break;
+      case ResolutionType::VGA4Controller:
+        DisplayController = new fabgl::VGA4Controller;
         break;
     }
     DisplayController->begin();
