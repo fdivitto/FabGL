@@ -81,7 +81,7 @@ void VGATextController::init(gpio_num_t VSyncGPIO)
 
   // load font into RAM
   int charDataSize = 256 * FONT_8x14.height * ((FONT_8x14.width + 7) / 8);
-  m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT);
+  m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
   memcpy(m_charData, FONT_8x14.data, charDataSize);
 }
 
@@ -246,7 +246,7 @@ void VGATextController::setResolution(VGATimings const& timings)
   s_blankPatternDWord = m_HVSync | (m_HVSync << 8) | (m_HVSync << 16) | (m_HVSync << 24);
 
   if (s_fgbgPattern == nullptr) {
-    s_fgbgPattern = (uint32_t*) heap_caps_malloc(16384, MALLOC_CAP_8BIT);
+    s_fgbgPattern = (uint32_t*) heap_caps_malloc(16384, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
     for (int i = 0; i < 16; ++i)
       for (int fg = 0; fg < 16; ++fg)
         for (int bg = 0; bg < 16; ++bg) {

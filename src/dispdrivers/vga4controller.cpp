@@ -98,7 +98,7 @@ volatile uint8_t * * VGA4Controller::s_viewPortVisible;
 VGA4Controller::VGA4Controller()
 {
   s_instance = this;
-  m_packedPaletteIndexQuad_to_signals = (uint32_t *) heap_caps_malloc(256 * sizeof(uint32_t), MALLOC_CAP_8BIT);
+  m_packedPaletteIndexQuad_to_signals = (uint32_t *) heap_caps_malloc(256 * sizeof(uint32_t), MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
 }
 
 
@@ -139,7 +139,7 @@ void VGA4Controller::suspendBackgroundPrimitiveExecution()
 
 void VGA4Controller::allocateViewPort()
 {
-  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT, m_viewPortWidth / 4);
+  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL, m_viewPortWidth / 4);
 
   for (int i = 0; i < VGA4_LinesCount; ++i)
     m_lines[i] = (uint8_t*) heap_caps_malloc(m_viewPortWidth, MALLOC_CAP_DMA);

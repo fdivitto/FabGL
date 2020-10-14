@@ -417,9 +417,9 @@ void VGABaseController::allocateViewPort(uint32_t allocCaps, int rowlen)
   // fill m_viewPort[] with line pointers
   if (isDoubleBuffered()) {
     m_viewPortHeight /= 2;
-    m_viewPortVisible = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT);
+    m_viewPortVisible = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
   }
-  m_viewPort = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT);
+  m_viewPort = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
   if (!isDoubleBuffered())
     m_viewPortVisible = m_viewPort;
   for (int p = 0, l = 0; p < poolsCount; ++p) {

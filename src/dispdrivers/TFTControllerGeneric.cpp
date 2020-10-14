@@ -553,7 +553,7 @@ void TFTController::sendScreenBuffer(Rect updateRect)
 
 void TFTController::allocViewPort()
 {
-  m_viewPort = (uint16_t**) heap_caps_malloc(m_viewPortHeight * sizeof(uint16_t*), MALLOC_CAP_32BIT);
+  m_viewPort = (uint16_t**) heap_caps_malloc(m_viewPortHeight * sizeof(uint16_t*), MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
   for (int i = 0; i < m_viewPortHeight; ++i) {
     m_viewPort[i] = (uint16_t*) heap_caps_malloc(m_viewPortWidth * sizeof(uint16_t), MALLOC_CAP_DMA);
     memset(m_viewPort[i], 0, m_viewPortWidth * sizeof(uint16_t));

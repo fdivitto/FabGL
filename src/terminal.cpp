@@ -233,7 +233,7 @@ void Terminal::activate(TerminalTransition transition)
       } else {
         // textual controller, use temporary buffer to perform animation
         auto txtCtrl = static_cast<TextualDisplayController*>(m_displayController);
-        auto map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+        auto map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
         memcpy(map, s_activeTerminal->m_glyphsBuffer.map, sizeof(uint32_t) * m_columns * m_rows);
         txtCtrl->enableCursor(false);
         txtCtrl->setTextMap(map, m_rows);
@@ -772,7 +772,7 @@ void Terminal::loadFont(FontInfo const * font)
   m_glyphsBuffer.columns      = m_columns;
   m_glyphsBuffer.rows         = m_rows;
   while (true) {
-    m_glyphsBuffer.map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+    m_glyphsBuffer.map = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
     if (m_glyphsBuffer.map)
       break;
     // no enough memory, reduce m_rows
@@ -1515,7 +1515,7 @@ void Terminal::useAlternateScreenBuffer(bool value)
     m_alternateScreenBuffer = value;
     if (!m_alternateMap) {
       // first usage, need to setup the alternate screen
-      m_alternateMap = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT);
+      m_alternateMap = (uint32_t*) heap_caps_malloc(sizeof(uint32_t) * m_columns * m_rows, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
       clearMap(m_alternateMap);
       m_alternateCursorX = 1;
       m_alternateCursorY = 1;

@@ -131,7 +131,7 @@ void VGA16Controller::suspendBackgroundPrimitiveExecution()
 
 void VGA16Controller::allocateViewPort()
 {
-  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT, m_viewPortWidth / 2);
+  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL, m_viewPortWidth / 2);
 
   for (int i = 0; i < VGA16_LinesCount; ++i)
     m_lines[i] = (uint8_t*) heap_caps_malloc(m_viewPortWidth, MALLOC_CAP_DMA);
