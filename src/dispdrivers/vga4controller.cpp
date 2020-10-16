@@ -157,7 +157,7 @@ void VGA4Controller::freeViewPort()
 }
 
 
-// make sure view port height is divisible by VGA16_LinesCount
+// make sure view port height is divisible by VGA4_LinesCount
 void VGA4Controller::checkViewPortSize()
 {
   m_viewPortHeight &= ~(VGA4_LinesCount - 1);

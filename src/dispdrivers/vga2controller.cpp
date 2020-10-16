@@ -154,7 +154,7 @@ void VGA2Controller::freeViewPort()
 }
 
 
-// make sure view port height is divisible by VGA16_LinesCount
+// make sure view port height is divisible by VGA2_LinesCount
 void VGA2Controller::checkViewPortSize()
 {
   m_viewPortHeight &= ~(VGA2_LinesCount - 1);
@@ -452,7 +452,6 @@ void VGA2Controller::HScroll(int scroll, Rect & updateRect)
 
   int width = X2 - X1 + 1;
   bool HScrolllingRegionAligned = ((X1 & 7) == 0 && (width & 7) == 0);  // 8 pixels aligned
-  //Serial.printf("%d %d -> %d %d\n", X1, width, X1 & 7, width & 7);
 
   if (scroll < 0) {
     // scroll left
