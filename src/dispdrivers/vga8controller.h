@@ -51,7 +51,7 @@
 
 #define VGA8_LinesCount 4
 
-#define VGAXController_PERFORMANCE_CHECK
+//#define VGAXController_PERFORMANCE_CHECK
 
 
 namespace fabgl {
