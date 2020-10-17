@@ -26,13 +26,16 @@
 const char * PresetResolutions[] = {
   VGA_256x384_60Hz,
   VGA_320x200_75Hz,
+  VGA_320x200_75HzRetro,
   QVGA_320x240_60Hz,
   VGA_400x300_60Hz,
   VGA_480x300_75Hz,
+  VGA_512x192_60Hz,
   VGA_512x384_60Hz,
   VGA_512x448_60Hz,
   VGA_512x512_58Hz,
   VGA_640x200_70Hz,
+  VGA_640x200_70HzRetro,
   VGA_640x240_60Hz,
   VGA_640x350_70Hz,
   VGA_640x350_70HzAlt1,
@@ -40,6 +43,7 @@ const char * PresetResolutions[] = {
   VGA_640x382_60Hz,
   VGA_640x384_60Hz,
   VGA_640x400_70Hz,
+  VGA_640x400_60Hz,
   VGA_640x480_60Hz,
   VGA_640x480_60HzAlt1,
   VGA_640x480_60HzD,
@@ -51,18 +55,26 @@ const char * PresetResolutions[] = {
   SVGA_800x300_60Hz,
   SVGA_800x600_56Hz,
   SVGA_800x600_60Hz,
+  SVGA_960x540_60Hz,
+  SVGA_1024x768_60Hz,
+  SVGA_1024x768_70Hz,
+  SVGA_1024x768_75Hz,
+  SVGA_1280x600_60Hz,
+  SVGA_1280x720_60Hz,
+  SVGA_1280x720_60HzAlt1,
+  SVGA_1280x768_50Hz,
 };
 
 
 
-int currentResolution = 11;  // VGA_640x350_70HzAlt1
+int currentResolution = 24;  // VESA_640x480_75Hz
 int moveX = 0;
 int moveY = 0;
 int shrinkX = 0;
 int shrinkY = 0;
 
 
-fabgl::VGAController VGAController;
+fabgl::VGA2Controller VGAController;
 
 
 
@@ -131,29 +143,24 @@ void printInfo()
 void updateScreen()
 {
   Canvas cv(&VGAController);
-  cv.setPenColor(Color::BrightRed);
-  cv.setBrushColor(Color::BrightBlue);
+  cv.setPenColor(Color::White);
+  cv.setBrushColor(Color::Black);
   cv.clear();
   cv.fillRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
   cv.drawRectangle(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
 
-  cv.setPenColor(Color::Black);
-  cv.setBrushColor(Color::BrightYellow);
   cv.selectFont(&fabgl::FONT_8x8);
   cv.setGlyphOptions(GlyphOptions().FillBackground(true).DoubleWidth(1));
   cv.drawText(40, 20, VGAController.getResolutionTimings()->label);
 
   cv.setGlyphOptions(GlyphOptions());
-  cv.setPenColor(Color::BrightWhite);
-  cv.setBrushColor(Color::BrightBlue);
   cv.drawTextFmt(40, 40, "Screen Size   : %d x %d", VGAController.getScreenWidth(), VGAController.getScreenHeight());
   cv.drawTextFmt(40, 60, "Viewport Size : %d x %d", cv.getWidth(), cv.getHeight());
   cv.drawText(40, 80,    "Commands (More on UART):");
   cv.drawText(40, 100,   "  w = Move Up    z = Move Down");
   cv.drawText(40, 120,   "  a = Move Left  s = Move Right");
   cv.drawText(40, 140,   "  + = Next Resolution");
-  cv.setPenColor(Color::BrightGreen);
-  cv.drawRectangle(35, 15, 295, 155);
+  cv.drawRectangle(35, 15, 310, 155);
 }
 
 
