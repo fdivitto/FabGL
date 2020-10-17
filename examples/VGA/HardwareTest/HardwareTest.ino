@@ -28,7 +28,7 @@
 
 
 fabgl::VGA16Controller DisplayController;
-fabgl::PS2Controller PS2Controller;
+fabgl::PS2Controller   PS2Controller;
 
 
 
@@ -60,7 +60,7 @@ struct TestApp : public uiApp {
 
   void init() {
 
-    rootWindow()->frameStyle().backgroundColor = Color::Cyan;
+    rootWindow()->frameStyle().backgroundColor = Color::Black;
     frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 420));
 
     int y = 30;
@@ -281,7 +281,7 @@ void setup()
 
   DisplayController.queueSize = 350;  // trade UI speed using less RAM and allow both WiFi and SD Card FS
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x480_60Hz, 640, 430);
+  DisplayController.setResolution(VESA_640x480_75Hz, 640, 430);
 }
 
 
