@@ -49,7 +49,7 @@ static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 constexpr int RESOLUTION_DEFAULT = 4;
 static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
                                                "1024x768, 4 colors",      // 1
-                                               "800x600, 4 colors",       // 2
+                                               "800x600, 8 colors",       // 2
                                                "720x576, 16 colors",      // 3
                                                "640x480, 16 colors",      // 4
                                                "640x350, 64 colors",      // 5
@@ -58,23 +58,23 @@ static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
                                               };
 static const char * RESOLUTIONS_CMDSTR[]   = { "1280x768x2",              // 0
                                                "1024x768x4",              // 1
-                                               "800x600x4",               // 2
+                                               "800x600x8",               // 2
                                                "720x576x16",              // 3
                                                "640x480x16",              // 4
                                                "640x350x64",              // 5
                                                "512x384x64",              // 6
                                                "400x300x64",              // 7
                                             };
-enum class ResolutionType { VGAController, VGA16Controller, VGA2Controller, VGA4Controller };
-static const ResolutionType RESOLUTIONS_TYPE[] = { ResolutionType::VGA2Controller,     // 0
-                                                   ResolutionType::VGA4Controller,     // 1
-                                                   ResolutionType::VGA4Controller,     // 2
-                                                   ResolutionType::VGA16Controller,    // 3
-                                                   ResolutionType::VGA16Controller,    // 4
-                                                   ResolutionType::VGAController,      // 5
-                                                   ResolutionType::VGAController,      // 6
-                                                   ResolutionType::VGAController,      // 7
-                                                 };
+enum class ResolutionController { VGAController, VGA16Controller, VGA8Controller, VGA2Controller, VGA4Controller };
+static const ResolutionController RESOLUTIONS_CONTROLLER[] = { ResolutionController::VGA2Controller,     // 0
+                                                               ResolutionController::VGA4Controller,     // 1
+                                                               ResolutionController::VGA8Controller,     // 2
+                                                               ResolutionController::VGA16Controller,    // 3
+                                                               ResolutionController::VGA16Controller,    // 4
+                                                               ResolutionController::VGAController,      // 5
+                                                               ResolutionController::VGAController,      // 6
+                                                               ResolutionController::VGAController,      // 7
+                                                             };
 static const char * RESOLUTIONS_MODELINE[] = { SVGA_1280x768_50Hz,        // 0
                                                SVGA_1024x768_75Hz,        // 1
                                                SVGA_800x600_56Hz,         // 2
@@ -415,18 +415,21 @@ struct ConfDialogApp : public uiApp {
       res = getResolutionIndex();
     else
       preferences.putInt("TempResolution", -1);
-    switch (RESOLUTIONS_TYPE[res]) {
-      case ResolutionType::VGAController:
+    switch (RESOLUTIONS_CONTROLLER[res]) {
+      case ResolutionController::VGAController:
         DisplayController = new fabgl::VGAController;
         break;
-      case ResolutionType::VGA16Controller:
+      case ResolutionController::VGA16Controller:
         DisplayController = new fabgl::VGA16Controller;
         break;
-      case ResolutionType::VGA2Controller:
+      case ResolutionController::VGA2Controller:
         DisplayController = new fabgl::VGA2Controller;
         break;
-      case ResolutionType::VGA4Controller:
+      case ResolutionController::VGA4Controller:
         DisplayController = new fabgl::VGA4Controller;
+        break;
+      case ResolutionController::VGA8Controller:
+        DisplayController = new fabgl::VGA8Controller;
         break;
     }
     DisplayController->begin();
