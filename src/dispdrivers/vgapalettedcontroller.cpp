@@ -203,8 +203,9 @@ int VGAPalettedController::getPaletteSize()
       return 8;
     case NativePixelFormat::PALETTE16:
       return 16;
+    default:
+      return 0;
   }
-  return 0;
 }
 
 

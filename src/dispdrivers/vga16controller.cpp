@@ -455,21 +455,24 @@ void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 
   if (I2S1.int_st.out_eof) {
 
-    auto desc = (volatile lldesc_t*) I2S1.out_eof_des_addr;
+    auto const desc = (lldesc_t*) I2S1.out_eof_des_addr;
 
     if (desc == s_frameResetDesc)
       s_scanLine = 0;
 
-    auto const width = ctrl->m_viewPortWidth;
+    auto const width  = ctrl->m_viewPortWidth;
+    auto const height = ctrl->m_viewPortHeight;
     auto const packedPaletteIndexPair_to_signals = (uint16_t const *) ctrl->m_packedPaletteIndexPair_to_signals;
-    int scanLine = (s_scanLine + VGA16_LinesCount / 2) % ctrl->m_viewPortHeight;
+    auto const lines  = ctrl->m_lines;
 
-    auto lineIndex = scanLine % VGA16_LinesCount;
+    int scanLine = (s_scanLine + VGA16_LinesCount / 2) % height;
+
+    auto lineIndex = scanLine & (VGA16_LinesCount - 1);
 
     for (int i = 0; i < VGA16_LinesCount / 2; ++i) {
 
-      auto src  = (uint8_t const *) VGA16Controller::s_viewPortVisible[scanLine];
-      auto dest = (uint16_t*) ctrl->m_lines[lineIndex];
+      auto src  = (uint8_t const *) s_viewPortVisible[scanLine];
+      auto dest = (uint16_t*) lines[lineIndex];
 
       // optimizazion warn: horizontal resolution must be a multiple of 16!
       for (int col = 0; col < width; col += 16) {
@@ -490,7 +493,7 @@ void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 
     s_scanLine += VGA16_LinesCount / 2;
 
-    if (scanLine >= ctrl->m_viewPortHeight && !ctrl->m_primitiveProcessingSuspended && spi_flash_cache_enabled()) {
+    if (scanLine >= height && !ctrl->m_primitiveProcessingSuspended && spi_flash_cache_enabled()) {
       // vertical sync, unlock primitive execution task
       // warn: don't use vTaskSuspendAll() in primitive drawing, otherwise vTaskNotifyGiveFromISR may be blocked and screen will flick!
       vTaskNotifyGiveFromISR(ctrl->m_primitiveExecTask, NULL);

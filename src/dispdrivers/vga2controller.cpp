@@ -456,7 +456,7 @@ void IRAM_ATTR VGA2Controller::ISRHandler(void * arg)
 
   if (I2S1.int_st.out_eof) {
 
-    auto desc = (volatile lldesc_t*) I2S1.out_eof_des_addr;
+    auto const desc = (lldesc_t*) I2S1.out_eof_des_addr;
 
     if (desc == s_frameResetDesc)
       s_scanLine = 0;
@@ -472,7 +472,7 @@ void IRAM_ATTR VGA2Controller::ISRHandler(void * arg)
 
     for (int i = 0; i < VGA2_LinesCount / 2; ++i) {
 
-      auto src  = (uint8_t const *) VGA2Controller::s_viewPortVisible[scanLine];
+      auto src  = (uint8_t const *) s_viewPortVisible[scanLine];
       auto dest = (uint64_t*) lines[lineIndex];
 
       // optimizazion warn: horizontal resolution must be a multiple of 16!

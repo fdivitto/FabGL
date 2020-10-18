@@ -167,10 +167,11 @@ private:
 
   // configuration
   int                         m_linesCount;
+  NativePixelFormat           m_nativePixelFormat;
   int                         m_viewPortRatioDiv;
   int                         m_viewPortRatioMul;
   intr_handler_t              m_isrHandler;
-  NativePixelFormat           m_nativePixelFormat;
+
 
 };
 

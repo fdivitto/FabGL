@@ -65,7 +65,7 @@ namespace fabgl {
 * by 2 bits, which is an index to a palette of 4 colors. Each byte of the frame buffer contains four pixels.
 * For example, a frame buffer of 640x480 requires about 75K of RAM.
 *
-* VGA4Controller output is very CPU intensive process and consumes up to 15% of one CPU core (measured at 640x480x60Hz). Anyway this allows to have
+* VGA4Controller output is very CPU intensive process and consumes up to 16% of one CPU core (measured at 640x480x60Hz). Anyway this allows to have
 * more RAM free for your application.
 *
 *
