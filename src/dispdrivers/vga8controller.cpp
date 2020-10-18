@@ -44,9 +44,6 @@
 
 
 
-#ifdef VGAXController_PERFORMANCE_CHECK
-  volatile uint64_t s_cycles = 0;
-#endif
 
 
 
@@ -94,15 +91,13 @@ static inline __attribute__((always_inline)) void VGA8_SETPIXEL(int x, int y, in
 /* VGA8Controller definitions */
 
 
-VGA8Controller *     VGA8Controller::s_instance = nullptr;
-volatile int         VGA8Controller::s_scanLine;
-lldesc_t volatile *  VGA8Controller::s_frameResetDesc;
-volatile uint8_t * * VGA8Controller::s_viewPort;
-volatile uint8_t * * VGA8Controller::s_viewPortVisible;
+VGA8Controller * VGA8Controller::s_instance = nullptr;
+
 
 
 
 VGA8Controller::VGA8Controller()
+  : VGAPalettedController(VGA8_LinesCount, NativePixelFormat::PALETTE8, 8, 3, ISRHandler)
 {
   s_instance = this;
   m_packedPaletteIndexPair_to_signals = (uint16_t *) heap_caps_malloc(256 * sizeof(uint16_t), MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
@@ -112,129 +107,6 @@ VGA8Controller::VGA8Controller()
 VGA8Controller::~VGA8Controller()
 {
   heap_caps_free((void *)m_packedPaletteIndexPair_to_signals);
-}
-
-
-void VGA8Controller::init()
-{
-  VGABaseController::init();
-
-  m_doubleBufferOverDMA      = false;
-  m_taskProcessingPrimitives = false;
-  m_processPrimitivesOnBlank = false;
-  m_primitiveExecTask        = nullptr;
-}
-
-
-void VGA8Controller::end()
-{
-  if (m_primitiveExecTask) {
-    vTaskDelete(m_primitiveExecTask);
-    m_primitiveExecTask = nullptr;
-  }
-  VGABaseController::end();
-}
-
-
-void VGA8Controller::suspendBackgroundPrimitiveExecution()
-{
-  VGABaseController::suspendBackgroundPrimitiveExecution();
-  while (m_taskProcessingPrimitives)
-    ;
-}
-
-
-void VGA8Controller::allocateViewPort()
-{
-  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL, m_viewPortWidth / 8 * 3);
-
-  for (int i = 0; i < VGA8_LinesCount; ++i)
-    m_lines[i] = (uint8_t*) heap_caps_malloc(m_viewPortWidth, MALLOC_CAP_DMA);
-}
-
-
-void VGA8Controller::freeViewPort()
-{
-  VGABaseController::freeViewPort();
-
-  for (int i = 0; i < VGA8_LinesCount; ++i) {
-    heap_caps_free((void*)m_lines[i]);
-    m_lines[i] = nullptr;
-  }
-}
-
-
-// make sure view port height is divisible by VGA8_LinesCount
-void VGA8Controller::checkViewPortSize()
-{
-  m_viewPortHeight &= ~(VGA8_LinesCount - 1);
-}
-
-
-void VGA8Controller::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
-{
-  VGABaseController::setResolution(timings, viewPortWidth, viewPortHeight, doubleBuffered);
-
-  s_viewPort        = m_viewPort;
-  s_viewPortVisible = m_viewPortVisible;
-
-  // fill view port
-  for (int i = 0; i < m_viewPortHeight; ++i)
-    memset((void*)(m_viewPort[i]), 0, m_viewPortWidth / 8 * 3);
-
-  setupDefaultPalette();
-
-  calculateAvailableCyclesForDrawings();
-
-  // must be started before interrupt alloc
-  startGPIOStream();
-
-  // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
-  if (m_isr_handle == nullptr) {
-    CoreUsage::setBusiestCore(FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
-    esp_intr_alloc_pinnedToCore(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, I2SInterrupt, this, &m_isr_handle, FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
-    I2S1.int_clr.val     = 0xFFFFFFFF;
-    I2S1.int_ena.out_eof = 1;
-  }
-
-  if (m_primitiveExecTask == nullptr) {
-    xTaskCreatePinnedToCore(primitiveExecTask, "" , 1024, this, 5, &m_primitiveExecTask, CoreUsage::quietCore());
-  }
-
-  resumeBackgroundPrimitiveExecution();
-}
-
-
-// calculates number of CPU cycles usable to draw primitives
-void VGA8Controller::calculateAvailableCyclesForDrawings()
-{
-  int availtime_us;
-
-  if (m_processPrimitivesOnBlank) {
-    // allowed time to process primitives is limited to the vertical blank. Slow, but avoid flickering
-    availtime_us = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (VGA8_LinesCount / 2 + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch + m_viewPortRow));
-  } else {
-    // allowed time is the half of an entire frame. Fast, but may flick
-    availtime_us = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch));
-    availtime_us /= 2;
-  }
-
-  m_primitiveExecTimeoutCycles = getCPUFrequencyMHz() * availtime_us;  // at 240Mhz, there are 240 cycles every microsecond
-}
-
-
-void VGA8Controller::onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow)
-{
-  if (isVisible) {
-    buffer->buf = (uint8_t *) m_lines[visibleRow % VGA8_LinesCount];
-
-    // generate interrupt every half VGA8_LinesCount
-    if ((scan == 0 && (visibleRow % (VGA8_LinesCount / 2)) == 0)) {
-      if (visibleRow == 0)
-        s_frameResetDesc = buffer;
-      buffer->eof = 1;
-    }
-  }
 }
 
 
@@ -248,7 +120,6 @@ void VGA8Controller::setupDefaultPalette()
   setPaletteItem(5, RGB888(0, 255, 0));     // 5: bright green
   setPaletteItem(6, RGB888(0, 0, 255));     // 6: bright blue
   setPaletteItem(7, RGB888(255, 255, 255)); // 7: white
-  updateRGB2PaletteLUT();
 }
 
 
@@ -263,52 +134,6 @@ void VGA8Controller::setPaletteItem(int index, RGB888 const & color)
     m_packedPaletteIndexPair_to_signals[(i << 3) | index] &= 0x00FF;
     m_packedPaletteIndexPair_to_signals[(i << 3) | index] |= (m_HVSync | packed222) << 8;
   }
-}
-
-
-// rebuild m_packedRGB222_to_PaletteIndex
-void VGA8Controller::updateRGB2PaletteLUT()
-{
-  for (int r = 0; r < 4; ++r)
-    for (int g = 0; g < 4; ++g)
-      for (int b = 0; b < 4; ++b) {
-        double H1, S1, V1;
-        rgb222_to_hsv(r, g, b, &H1, &S1, &V1);
-        int bestIdx = 0;
-        int bestDst = 1000000000;
-        for (int i = 0; i < 8; ++i) {
-          double H2, S2, V2;
-          rgb222_to_hsv(m_palette[i].R, m_palette[i].G, m_palette[i].B, &H2, &S2, &V2);
-          double AH = H1 - H2;
-          double AS = S1 - S2;
-          double AV = V1 - V2;
-          int dst = AH * AH + AS * AS + AV * AV;
-          if (dst <= bestDst) {  // "<=" to prioritize higher indexes
-            bestIdx = i;
-            bestDst = dst;
-            if (bestDst == 0)
-              break;
-          }
-        }
-        m_packedRGB222_to_PaletteIndex[r | (g << 2) | (b << 4)] = bestIdx;
-      }
-}
-
-
-uint8_t VGA8Controller::RGB888toPaletteIndex(RGB888 const & rgb)
-{
-  return m_packedRGB222_to_PaletteIndex[RGB888toPackedRGB222(rgb)];
-}
-
-uint8_t VGA8Controller::RGB2222toPaletteIndex(uint8_t value)
-{
-  return m_packedRGB222_to_PaletteIndex[value & 0b00111111];
-}
-
-
-uint8_t VGA8Controller::RGB8888toPaletteIndex(RGBA8888 value)
-{
-  return RGB888toPaletteIndex(RGB888(value.R, value.G, value.B));
 }
 
 
@@ -419,16 +244,8 @@ void VGA8Controller::VScroll(int scroll, Rect & updateRect)
 // todo: optimize!
 void VGA8Controller::HScroll(int scroll, Rect & updateRect)
 {
-  /*
-  genericHScroll(scroll, updateRect,
-                 [&] (RGB888 const & color)      { return RGB888toPaletteIndex(color); },   // preparePixel
-                 [&] (int y)                     { return (uint8_t*) m_viewPort[y]; },      // rawGetRow
-                 VGA8_GETPIXELINROW,                                                        // rawGetPixelInRow
-                 VGA8_SETPIXELINROW                                                         // rawSetPixelInRow
-                );
-                */
   hideSprites(updateRect);
-  uint8_t back  = RGB888toPaletteIndex(getActualBrushColor());
+  uint8_t back = RGB888toPaletteIndex(getActualBrushColor());
 
   int Y1 = paintState().scrollingRegion.Y1;
   int Y2 = paintState().scrollingRegion.Y2;
@@ -582,17 +399,9 @@ void VGA8Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const *
 }
 
 
-void VGA8Controller::swapBuffers()
+void IRAM_ATTR VGA8Controller::ISRHandler(void * arg)
 {
-  VGABaseController::swapBuffers();
-  s_viewPort        = m_viewPort;
-  s_viewPortVisible = m_viewPortVisible;
-}
-
-
-void IRAM_ATTR VGA8Controller::I2SInterrupt(void * arg)
-{
-  #ifdef VGAXController_PERFORMANCE_CHECK
+  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
   auto s1 = getCycleCount();
   #endif
 
@@ -645,42 +454,14 @@ void IRAM_ATTR VGA8Controller::I2SInterrupt(void * arg)
 
   }
 
-  #ifdef VGAXController_PERFORMANCE_CHECK
-  s_cycles += getCycleCount() - s1;
+  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
+  s_vgapalctrlcycles += getCycleCount() - s1;
   #endif
 
   I2S1.int_clr.val = I2S1.int_st.val;
 }
 
 
-// we can use getCycleCount here because primitiveExecTask is pinned to a specific core (so cycle counter is the same)
-// getCycleCount() requires 0.07us, while esp_timer_get_time() requires 0.78us
-void VGA8Controller::primitiveExecTask(void * arg)
-{
-  auto ctrl = (VGA8Controller *) arg;
-
-  while (true) {
-    if (!ctrl->m_primitiveProcessingSuspended) {
-      auto startCycle = ctrl->backgroundPrimitiveTimeoutEnabled() ? getCycleCount() : 0;
-      Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
-      ctrl->m_taskProcessingPrimitives = true;
-      do {
-        Primitive prim;
-        if (ctrl->getPrimitive(&prim, 0) == false)
-          break;
-        ctrl->execPrimitive(prim, updateRect, false);
-        if (ctrl->m_primitiveProcessingSuspended)
-          break;
-      } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startCycle + ctrl->m_primitiveExecTimeoutCycles > getCycleCount()));
-      ctrl->showSprites(updateRect);
-      ctrl->m_taskProcessingPrimitives = false;
-    }
-
-    // wait for vertical sync
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-  }
-
-}
 
 
 

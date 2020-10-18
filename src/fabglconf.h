@@ -128,6 +128,15 @@
 #define FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE (WIFI_TASK_CORE_ID ^ 1) // using the same core of WiFi may cause flickering
 
 
+/** Stack size of primitives drawing task of paletted based VGA controllers */
+#define FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_STACK_SIZE 1024
+
+
+/** Priority of primitives drawing task of paletted based VGA controllers */
+#define FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_PRIORITY 5
+
+
+
 // debug options
 #define FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES       0
 #define FABGLIB_TERMINAL_DEBUG_REPORT_INQUEUE_CODES  0  // use as alternative to FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES when write() is called inside isr
@@ -138,7 +147,7 @@
 #define FABGLIB_TERMINAL_DEBUG_REPORT_OSC_CONTENT    0
 #define FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT      1
 #define FABGLIB_TERMINAL_DEBUG_REPORT_ERRORS         1
-
+#define FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK     1
 
 
 /************ Preset Resolution Modelines ************/

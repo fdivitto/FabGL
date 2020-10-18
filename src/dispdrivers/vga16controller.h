@@ -45,13 +45,13 @@
 #include "fabutils.h"
 #include "devdrivers/swgenerator.h"
 #include "displaycontroller.h"
-#include "dispdrivers/vgabasecontroller.h"
+#include "dispdrivers/vgapalettedcontroller.h"
 
 
 
 #define VGA16_LinesCount 4
 
-//#define VGAXController_PERFORMANCE_CHECK
+
 
 
 namespace fabgl {
@@ -76,7 +76,7 @@ namespace fabgl {
 *     displayController.begin();
 *     displayController.setResolution(VGA_640x480_60Hz);
 */
-class VGA16Controller : public VGABaseController {
+class VGA16Controller : public VGAPalettedController {
 
 public:
 
@@ -94,22 +94,6 @@ public:
    */
   static VGA16Controller * instance() { return s_instance; }
 
-  void end();
-
-  // abstract method of BitmappedDisplayController
-  void suspendBackgroundPrimitiveExecution();
-
-  // abstract method of BitmappedDisplayController
-  NativePixelFormat nativePixelFormat()               { return NativePixelFormat::PALETTE16; }
-
-  // import "modeline" v3rsion of setResolution
-  using VGABaseController::setResolution;
-
-  void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
-
-  // returns "static" version of m_viewPort
-  static uint8_t * sgetScanline(int y)                { return (uint8_t*) s_viewPort[y]; }
-
   void readScreen(Rect const & rect, RGB888 * destBuf);
 
   /**
@@ -125,33 +109,13 @@ public:
    */
   void setPaletteItem(int index, RGB888 const & color);
 
-  /**
-   * @brief Determines the maximum time allowed to process primitives
-   *
-   * Primitives processing is always started at the beginning of vertical blank.
-   * Unfortunately this time is limited and not all primitive may be processed, so processing all primitives may required more frames.
-   * This method expands the allowed time to half of a frame. This increase drawing speed but may show some flickering.
-   *
-   * The default is False (fast drawings, possible flickering).
-   *
-   * @param value True = allowed time to process primitives is limited to the vertical blank. Slow, but avoid flickering. False = allowed time is the half of an entire frame. Fast, but may flick.
-   */
-  void setProcessPrimitivesOnBlank(bool value)          { m_processPrimitivesOnBlank = value; }
+
+protected:
+
+  void setupDefaultPalette();
+
 
 private:
-
-  void init();
-
-  void onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow);
-  void allocateViewPort();
-  void checkViewPortSize();
-  void freeViewPort();
-
-
-  uint8_t RGB888toPaletteIndex(RGB888 const & rgb);
-  uint8_t RGB2222toPaletteIndex(uint8_t value);
-  uint8_t RGB8888toPaletteIndex(RGBA8888 value);
-
 
 
   // abstract method of BitmappedDisplayController
@@ -182,9 +146,6 @@ private:
   void swapFGBG(Rect const & rect, Rect & updateRect);
 
   // abstract method of BitmappedDisplayController
-  void swapBuffers();
-
-  // abstract method of BitmappedDisplayController
   void rawDrawBitmap_Native(int destX, int destY, Bitmap const * bitmap, int X1, int Y1, int XCount, int YCount);
 
   // abstract method of BitmappedDisplayController
@@ -198,7 +159,6 @@ private:
 
   // abstract method of BitmappedDisplayController
   void rawFillRow(int y, int x1, int x2, RGB888 color);
-
   void rawFillRow(int y, int x1, int x2, uint8_t colorIndex);
 
   void rawInvertRow(int y, int x1, int x2);
@@ -213,39 +173,12 @@ private:
   // abstract method of BitmappedDisplayController
   int getBitmapSavePixelSize() { return 1; }
 
-  static void I2SInterrupt(void * arg);
-
-  static void primitiveExecTask(void * arg);
-
-  void calculateAvailableCyclesForDrawings();
-
-  void setupDefaultPalette();
-  void updateRGB2PaletteLUT();
+  static void ISRHandler(void * arg);
 
 
   static VGA16Controller *    s_instance;
-  static volatile int         s_scanLine;
-  static lldesc_t volatile *  s_frameResetDesc;
 
-  TaskHandle_t                m_primitiveExecTask;
-
-  volatile uint32_t           m_primitiveExecTimeoutCycles; // Maximum time (in CPU cycles) available for primitives drawing
-
-  // true = allowed time to process primitives is limited to the vertical blank. Slow, but avoid flickering
-  // false = allowed time is the half of an entire frame. Fast, but may flick
-  bool                        m_processPrimitivesOnBlank;
-
-  // optimization: clones of m_viewPort and m_viewPortVisible
-  static volatile uint8_t * * s_viewPort;
-  static volatile uint8_t * * s_viewPortVisible;
-
-  volatile uint8_t *          m_lines[VGA16_LinesCount];
-
-  RGB222                      m_palette[16];
-  uint8_t                     m_packedRGB222_to_PaletteIndex[64];
   volatile uint16_t           m_packedPaletteIndexPair_to_signals[256];
-
-  volatile bool               m_taskProcessingPrimitives;
 
 };
 

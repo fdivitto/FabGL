@@ -160,7 +160,7 @@ private:
   // abstract method of BitmappedDisplayController
   int getBitmapSavePixelSize() { return 1; }
 
-  static void I2SInterrupt(void * arg);
+  static void ISRHandler(void * arg);
 
 
   static VGADirectController * s_instance;

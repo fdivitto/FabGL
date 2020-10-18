@@ -44,9 +44,6 @@
 
 
 
-#ifdef VGAXController_PERFORMANCE_CHECK
-  volatile uint64_t s_cycles = 0;
-#endif
 
 
 
@@ -86,140 +83,14 @@ static inline __attribute__((always_inline)) void VGA16_SETPIXEL(int x, int y, i
 /* VGA16Controller definitions */
 
 
-VGA16Controller *    VGA16Controller::s_instance = nullptr;
-volatile int         VGA16Controller::s_scanLine;
-lldesc_t volatile *  VGA16Controller::s_frameResetDesc;
-volatile uint8_t * * VGA16Controller::s_viewPort;
-volatile uint8_t * * VGA16Controller::s_viewPortVisible;
+VGA16Controller * VGA16Controller::s_instance = nullptr;
 
 
 
 VGA16Controller::VGA16Controller()
+  : VGAPalettedController(VGA16_LinesCount, NativePixelFormat::PALETTE16, 2, 1, ISRHandler)
 {
   s_instance = this;
-}
-
-
-void VGA16Controller::init()
-{
-  VGABaseController::init();
-
-  m_doubleBufferOverDMA      = false;
-  m_taskProcessingPrimitives = false;
-  m_processPrimitivesOnBlank = false;
-  m_primitiveExecTask        = nullptr;
-}
-
-
-void VGA16Controller::end()
-{
-  if (m_primitiveExecTask) {
-    vTaskDelete(m_primitiveExecTask);
-    m_primitiveExecTask = nullptr;
-  }
-  VGABaseController::end();
-}
-
-
-void VGA16Controller::suspendBackgroundPrimitiveExecution()
-{
-  VGABaseController::suspendBackgroundPrimitiveExecution();
-  while (m_taskProcessingPrimitives)
-    ;
-}
-
-
-void VGA16Controller::allocateViewPort()
-{
-  VGABaseController::allocateViewPort(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL, m_viewPortWidth / 2);
-
-  for (int i = 0; i < VGA16_LinesCount; ++i)
-    m_lines[i] = (uint8_t*) heap_caps_malloc(m_viewPortWidth, MALLOC_CAP_DMA);
-}
-
-
-void VGA16Controller::freeViewPort()
-{
-  VGABaseController::freeViewPort();
-
-  for (int i = 0; i < VGA16_LinesCount; ++i) {
-    heap_caps_free((void*)m_lines[i]);
-    m_lines[i] = nullptr;
-  }
-}
-
-
-// make sure view port height is divisible by VGA16_LinesCount
-void VGA16Controller::checkViewPortSize()
-{
-  m_viewPortHeight &= ~(VGA16_LinesCount - 1);
-}
-
-
-void VGA16Controller::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
-{
-  VGABaseController::setResolution(timings, viewPortWidth, viewPortHeight, doubleBuffered);
-
-  s_viewPort        = m_viewPort;
-  s_viewPortVisible = m_viewPortVisible;
-
-  // fill view port
-  for (int i = 0; i < m_viewPortHeight; ++i)
-    memset((void*)(m_viewPort[i]), 0, m_viewPortWidth / 2);
-
-  setupDefaultPalette();
-
-  calculateAvailableCyclesForDrawings();
-
-  // must be started before interrupt alloc
-  startGPIOStream();
-
-  // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
-  if (m_isr_handle == nullptr) {
-    CoreUsage::setBusiestCore(FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
-    esp_intr_alloc_pinnedToCore(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, I2SInterrupt, this, &m_isr_handle, FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
-    I2S1.int_clr.val     = 0xFFFFFFFF;
-    I2S1.int_ena.out_eof = 1;
-  }
-
-  if (m_primitiveExecTask == nullptr) {
-    xTaskCreatePinnedToCore(primitiveExecTask, "" , 1024, this, 5, &m_primitiveExecTask, CoreUsage::quietCore());
-  }
-
-  resumeBackgroundPrimitiveExecution();
-}
-
-
-// calculates number of CPU cycles usable to draw primitives
-void VGA16Controller::calculateAvailableCyclesForDrawings()
-{
-  int availtime_us;
-
-  if (m_processPrimitivesOnBlank) {
-    // allowed time to process primitives is limited to the vertical blank. Slow, but avoid flickering
-    availtime_us = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (VGA16_LinesCount / 2 + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch + m_viewPortRow));
-  } else {
-    // allowed time is the half of an entire frame. Fast, but may flick
-    availtime_us = ceil(1000000.0 / m_timings.frequency * m_timings.scanCount * m_HLineSize * (m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch));
-    availtime_us /= 2;
-  }
-
-  m_primitiveExecTimeoutCycles = getCPUFrequencyMHz() * availtime_us;  // at 240Mhz, there are 240 cycles every microsecond
-}
-
-
-void VGA16Controller::onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow)
-{
-  if (isVisible) {
-    buffer->buf = (uint8_t *) m_lines[visibleRow % VGA16_LinesCount];
-
-    // generate interrupt every half VGA16_LinesCount
-    if ((scan == 0 && (visibleRow % (VGA16_LinesCount / 2)) == 0)) {
-      if (visibleRow == 0)
-        s_frameResetDesc = buffer;
-      buffer->eof = 1;
-    }
-  }
 }
 
 
@@ -229,12 +100,12 @@ void VGA16Controller::setupDefaultPalette()
     RGB888 rgb888((Color)colorIndex);
     setPaletteItem(colorIndex, rgb888);
   }
-  updateRGB2PaletteLUT();
 }
 
 
 void VGA16Controller::setPaletteItem(int index, RGB888 const & color)
 {
+  index %= 16;
   m_palette[index] = color;
   auto packed222 = RGB888toPackedRGB222(color);
   for (int i = 0; i < 16; ++i) {
@@ -243,52 +114,6 @@ void VGA16Controller::setPaletteItem(int index, RGB888 const & color)
     m_packedPaletteIndexPair_to_signals[(i << 4) | index] &= 0x00FF;
     m_packedPaletteIndexPair_to_signals[(i << 4) | index] |= (m_HVSync | packed222) << 8;
   }
-}
-
-
-// rebuild m_packedRGB222_to_PaletteIndex
-void VGA16Controller::updateRGB2PaletteLUT()
-{
-  for (int r = 0; r < 4; ++r)
-    for (int g = 0; g < 4; ++g)
-      for (int b = 0; b < 4; ++b) {
-        double H1, S1, V1;
-        rgb222_to_hsv(r, g, b, &H1, &S1, &V1);
-        int bestIdx = 0;
-        int bestDst = 1000000000;
-        for (int i = 0; i < 16; ++i) {
-          double H2, S2, V2;
-          rgb222_to_hsv(m_palette[i].R, m_palette[i].G, m_palette[i].B, &H2, &S2, &V2);
-          double AH = H1 - H2;
-          double AS = S1 - S2;
-          double AV = V1 - V2;
-          int dst = AH * AH + AS * AS + AV * AV;
-          if (dst <= bestDst) {  // "<=" to prioritize higher indexes
-            bestIdx = i;
-            bestDst = dst;
-            if (bestDst == 0)
-              break;
-          }
-        }
-        m_packedRGB222_to_PaletteIndex[r | (g << 2) | (b << 4)] = bestIdx;
-      }
-}
-
-
-uint8_t VGA16Controller::RGB888toPaletteIndex(RGB888 const & rgb)
-{
-  return m_packedRGB222_to_PaletteIndex[RGB888toPackedRGB222(rgb)];
-}
-
-uint8_t VGA16Controller::RGB2222toPaletteIndex(uint8_t value)
-{
-  return m_packedRGB222_to_PaletteIndex[value & 0b00111111];
-}
-
-
-uint8_t VGA16Controller::RGB8888toPaletteIndex(RGBA8888 value)
-{
-  return RGB888toPaletteIndex(RGB888(value.R, value.G, value.B));
 }
 
 
@@ -435,7 +260,7 @@ void VGA16Controller::VScroll(int scroll, Rect & updateRect)
 void VGA16Controller::HScroll(int scroll, Rect & updateRect)
 {
   hideSprites(updateRect);
-  uint8_t  back4 = RGB888toPaletteIndex(getActualBrushColor());
+  uint8_t back4 = RGB888toPaletteIndex(getActualBrushColor());
 
   int Y1 = paintState().scrollingRegion.Y1;
   int Y2 = paintState().scrollingRegion.Y2;
@@ -620,17 +445,9 @@ void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const 
 }
 
 
-void VGA16Controller::swapBuffers()
+void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 {
-  VGABaseController::swapBuffers();
-  s_viewPort        = m_viewPort;
-  s_viewPortVisible = m_viewPortVisible;
-}
-
-
-void IRAM_ATTR VGA16Controller::I2SInterrupt(void * arg)
-{
-  #ifdef VGAXController_PERFORMANCE_CHECK
+  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
   auto s1 = getCycleCount();
   #endif
 
@@ -681,41 +498,11 @@ void IRAM_ATTR VGA16Controller::I2SInterrupt(void * arg)
 
   }
 
-  #ifdef VGAXController_PERFORMANCE_CHECK
-  s_cycles += getCycleCount() - s1;
+  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
+  s_vgapalctrlcycles += getCycleCount() - s1;
   #endif
 
   I2S1.int_clr.val = I2S1.int_st.val;
-}
-
-
-// we can use getCycleCount here because primitiveExecTask is pinned to a specific core (so cycle counter is the same)
-// getCycleCount() requires 0.07us, while esp_timer_get_time() requires 0.78us
-void VGA16Controller::primitiveExecTask(void * arg)
-{
-  auto ctrl = (VGA16Controller *) arg;
-
-  while (true) {
-    if (!ctrl->m_primitiveProcessingSuspended) {
-      auto startCycle = ctrl->backgroundPrimitiveTimeoutEnabled() ? getCycleCount() : 0;
-      Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
-      ctrl->m_taskProcessingPrimitives = true;
-      do {
-        Primitive prim;
-        if (ctrl->getPrimitive(&prim, 0) == false)
-          break;
-        ctrl->execPrimitive(prim, updateRect, false);
-        if (ctrl->m_primitiveProcessingSuspended)
-          break;
-      } while (!ctrl->backgroundPrimitiveTimeoutEnabled() || (startCycle + ctrl->m_primitiveExecTimeoutCycles > getCycleCount()));
-      ctrl->showSprites(updateRect);
-      ctrl->m_taskProcessingPrimitives = false;
-    }
-
-    // wait for vertical sync
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-  }
-
 }
 
 

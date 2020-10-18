@@ -103,7 +103,7 @@ void VGADirectController::setResolution(VGATimings const& timings, int viewPortW
   // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
   if (m_isr_handle == nullptr) {
     CoreUsage::setBusiestCore(FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
-    esp_intr_alloc_pinnedToCore(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, I2SInterrupt, this, &m_isr_handle, FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
+    esp_intr_alloc_pinnedToCore(ETS_I2S1_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1 | ESP_INTR_FLAG_IRAM, ISRHandler, this, &m_isr_handle, FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
     I2S1.int_clr.val     = 0xFFFFFFFF;
     I2S1.int_ena.out_eof = 1;
   }
@@ -225,7 +225,7 @@ void VGADirectController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap co
 }
 
 
-void IRAM_ATTR VGADirectController::I2SInterrupt(void * arg)
+void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
 {
   auto ctrl = (VGADirectController *) arg;
 

@@ -56,7 +56,7 @@ namespace fabgl {
 
 #define VGATextController_MODELINE       VGA_640x480_60Hz
 
-//#define VGAXController_PERFORMANCE_CHECK
+
 
 
 
@@ -186,7 +186,7 @@ private:
 
   uint8_t IRAM_ATTR preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
 
-  static void I2SInterrupt(void * arg);
+  static void ISRHandler(void * arg);
 
 
   static volatile int        s_scanLine;
