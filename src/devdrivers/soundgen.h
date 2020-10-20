@@ -331,6 +331,7 @@ enum class SoundGeneratorState {
  * - TriangleWaveformGenerator
  * - SawtoothWaveformGenerator
  * - NoiseWaveformGenerator
+ * - VICNoiseGenerator
  * - SamplesGenerator
  */
 class SoundGenerator {
