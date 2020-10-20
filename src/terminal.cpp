@@ -104,40 +104,43 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGLEXT_REPLYCODE          '$'
 
 
-// sub commands of FABGLEXT_STARTCODE
-#define FABGLEXT_GETCURSORPOS   'a'
-#define FABGLEXT_GETCURSORCOL   'b'
-#define FABGLEXT_GETCURSORROW   'c'
-#define FABGLEXT_SETCURSORPOS   'd'
-#define FABGLEXT_INSERTSPACE    'e'
-#define FABGLEXT_DELETECHAR     'f'
-#define FABGLEXT_CURSORLEFT     'g'
-#define FABGLEXT_CURSORRIGHT    'h'
-#define FABGLEXT_SETCHAR        'i'
-#define FABGLEXT_DISABLEFABSEQ  'j'
-#define FABGLEXT_SETTERMTYPE    'k'
-#define FABGLEXT_SETFGCOLOR     'l'
-#define FABGLEXT_SETBGCOLOR     'm'
-#define FABGLEXT_SETCHARSTYLE   'n'
-#define FABGLEXT_ISVKDOWN       'K'
-#define FABGLEXT_CLEAR          'B'
-#define FABGLEXT_ENABLECURSOR   'E'
-#define FABGLEXT_SETUPGPIO      'D'
-#define FABGLEXT_SETGPIO        'W'
-#define FABGLEXT_GETGPIO        'R'
-#define FABGLEXT_SETUPADC       'A'
-#define FABGLEXT_READADC        'C'
-#define FABGLEXT_SOUND          'S'
-#define FABGLEXT_GRAPHICSCMD    'G'
-#define FABGLEXT_SHOWMOUSE      'H'
-#define FABGLEXT_GETMOUSEPOS    'M'
-#define FABGLEXT_DELAY          'Y'
+// sub commands of FABGLEXT_STARTCODE (user command):
 #define FABGLEXT_USERSEQ        '#'
+// sub commands of FABGLEXT_STARTCODE (binary encoded parameters):
+#define FABGLEXTB_GETCURSORPOS   'a'
+#define FABGLEXTB_GETCURSORCOL   'b'
+#define FABGLEXTB_GETCURSORROW   'c'
+#define FABGLEXTB_SETCURSORPOS   'd'
+#define FABGLEXTB_INSERTSPACE    'e'
+#define FABGLEXTB_DELETECHAR     'f'
+#define FABGLEXTB_CURSORLEFT     'g'
+#define FABGLEXTB_CURSORRIGHT    'h'
+#define FABGLEXTB_SETCHAR        'i'
+#define FABGLEXTB_DISABLEFABSEQ  'j'
+#define FABGLEXTB_SETTERMTYPE    'k'
+#define FABGLEXTB_ISVKDOWN       'K'
+#define FABGLEXTB_SETFGCOLOR     'l'
+#define FABGLEXTB_SETBGCOLOR     'm'
+#define FABGLEXTB_SETCHARSTYLE   'n'
+// sub commands of FABGLEXT_STARTCODE (text encoded parameters):
+#define FABGLEXTX_SETUPADC       'A'
+#define FABGLEXTX_CLEAR          'B'
+#define FABGLEXTX_READADC        'C'
+#define FABGLEXTX_SETUPGPIO      'D'
+#define FABGLEXTX_ENABLECURSOR   'E'
+#define FABGLEXTX_SETCURSORPOS   'F'
+#define FABGLEXTX_GRAPHICSCMD    'G'
+#define FABGLEXTX_SHOWMOUSE      'H'
+#define FABGLEXTX_GETMOUSEPOS    'M'
+#define FABGLEXTX_GETGPIO        'R'
+#define FABGLEXTX_SOUND          'S'
+#define FABGLEXTX_SETGPIO        'W'
+#define FABGLEXTX_DELAY          'Y'
 
 // maximum length of sub commands (includes ending zero)
 #define FABGLEXT_MAXSUBCMDLEN   16
 
-// sub commands of FABGLEXT_GRAPHICSCMD
+// sub commands of FABGLEXTX_GRAPHICSCMD
 #define FABGLEXT_GCLEAR         "CLEAR"
 #define FABGLEXT_GSETBRUSHCOLOR "BRUSH"
 #define FABGLEXT_GSETPENCOLOR   "PEN"
@@ -3464,10 +3467,10 @@ void Terminal::consumeFabGLSeq()
 
     // Clear terminal area
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_CLEAR FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTX_CLEAR FABGLEXT_ENDCODE
     // params:
     //   none
-    case FABGLEXT_CLEAR:
+    case FABGLEXTX_CLEAR:
       extGetByteParam(); // FABGLEXT_ENDCODE
       syncDisplayController();
       erase(1, 1, m_columns, m_rows, ASCII_SPC, false, false);
@@ -3475,23 +3478,23 @@ void Terminal::consumeFabGLSeq()
 
     // Enable/disable cursor
     // Seq:
-    //  ESC FABGLEXT_STARTCODE FABGLEXT_ENABLECURSOR STATE FABGLEXT_ENDCODE
+    //  ESC FABGLEXT_STARTCODE FABGLEXTX_ENABLECURSOR STATE FABGLEXT_ENDCODE
     // params:
     //  STATE (byte): '0' = disable (and others), '1' = enable
-    case FABGLEXT_ENABLECURSOR:
+    case FABGLEXTX_ENABLECURSOR:
       m_prevCursorEnabled = (extGetByteParam() == '1');
       extGetByteParam(); // FABGLEXT_ENDCODE
       break;
 
     // Get cursor horizontal position (1 = leftmost pos)
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETCURSORCOL FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTB_GETCURSORCOL FABGLEXT_ENDCODE
     // params:
     //    none
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    byte: column
-    case FABGLEXT_GETCURSORCOL:
+    case FABGLEXTB_GETCURSORCOL:
       extGetByteParam(); // FABGLEXT_ENDCODE
       send(FABGLEXT_REPLYCODE);
       send(m_emuState.cursorX);
@@ -3499,13 +3502,13 @@ void Terminal::consumeFabGLSeq()
 
     // Get cursor vertical position (1 = topmost pos)
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETCURSORROW FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTB_GETCURSORROW FABGLEXT_ENDCODE
     // params:
     //    none
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    byte: row
-    case FABGLEXT_GETCURSORROW:
+    case FABGLEXTB_GETCURSORROW:
       extGetByteParam(); // FABGLEXT_ENDCODE
       send(FABGLEXT_REPLYCODE);
       send(m_emuState.cursorY);
@@ -3513,14 +3516,14 @@ void Terminal::consumeFabGLSeq()
 
     // Get cursor position
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETCURSORPOS FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTB_GETCURSORPOS FABGLEXT_ENDCODE
     // params:
     //    none
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    byte: column
     //    byte: row
-    case FABGLEXT_GETCURSORPOS:
+    case FABGLEXTB_GETCURSORPOS:
       extGetByteParam(); // FABGLEXT_ENDCODE
       send(FABGLEXT_REPLYCODE);
       send(m_emuState.cursorX);
@@ -3529,11 +3532,11 @@ void Terminal::consumeFabGLSeq()
 
     // Set cursor position
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_SETCURSORPOS COL ROW FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_SETCURSORPOS COL ROW FABGLEXT_ENDCODE
     // params:
     //   COL (byte): column (1 = first column)
     //   ROW (byte): row (1 = first row)
-    case FABGLEXT_SETCURSORPOS:
+    case FABGLEXTB_SETCURSORPOS:
     {
       uint8_t col = extGetByteParam();
       uint8_t row = extGetByteParam();
@@ -3542,17 +3545,33 @@ void Terminal::consumeFabGLSeq()
       break;
     }
 
+    // Set cursor position (textual parameters)
+    // Seq:
+    //   ESC FABGLEXT_STARTCODE FABGLEXTX_SETCURSORPOS COL ';' ROW FABGLEXT_ENDCODE
+    // params:
+    //   COL (text): column (1 = first column)
+    //   ROW (text): row (1 = first row)
+    case FABGLEXTX_SETCURSORPOS:
+    {
+      uint8_t col = extGetIntParam();
+      extGetByteParam();  // ';'
+      uint8_t row = extGetIntParam();
+      extGetByteParam();  // FABGLEXT_ENDCODE
+      setCursorPos(col, getAbsoluteRow(row));
+      break;
+    }
+
     // Insert a blank space at current position, moving next CHARSTOMOVE characters to the right (even on multiple lines).
     // Advances cursor by one position. Characters after CHARSTOMOVE length are overwritter.
     // Vertical scroll may occurs.
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_INSERTSPACE CHARSTOMOVE_L CHARSTOMOVE_H FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_INSERTSPACE CHARSTOMOVE_L CHARSTOMOVE_H FABGLEXT_ENDCODE
     // params:
     //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the right by one position
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
-    case FABGLEXT_INSERTSPACE:
+    case FABGLEXTB_INSERTSPACE:
     {
       uint8_t charsToMove_L = extGetByteParam();
       uint8_t charsToMove_H = extGetByteParam();
@@ -3566,10 +3585,10 @@ void Terminal::consumeFabGLSeq()
     // Delete character at current position, moving next CHARSTOMOVE characters to the left (even on multiple lines).
     // Characters after CHARSTOMOVE are filled with spaces.
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_DELETECHAR CHARSTOMOVE_L CHARSTOMOVE_H FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_DELETECHAR CHARSTOMOVE_L CHARSTOMOVE_H FABGLEXT_ENDCODE
     // params:
     //   CHARSTOMOVE_L, CHARSTOMOVE_H (byte): number of chars to move to the left by one position
-    case FABGLEXT_DELETECHAR:
+    case FABGLEXTB_DELETECHAR:
     {
       uint8_t charsToMove_L = extGetByteParam();
       uint8_t charsToMove_H = extGetByteParam();
@@ -3580,10 +3599,10 @@ void Terminal::consumeFabGLSeq()
 
     // Move cursor at left, wrapping lines if necessary
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_CURSORLEFT COUNT_L COUNT_H FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_CURSORLEFT COUNT_L COUNT_H FABGLEXT_ENDCODE
     // params:
     //   COUNT_L, COUNT_H (byte): number of positions to move to the left
-    case FABGLEXT_CURSORLEFT:
+    case FABGLEXTB_CURSORLEFT:
     {
       uint8_t count_L = extGetByteParam();
       uint8_t count_H = extGetByteParam();
@@ -3594,10 +3613,10 @@ void Terminal::consumeFabGLSeq()
 
     // Move cursor at right, wrapping lines if necessary
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_CURSORRIGHT COUNT_L COUNT_H FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_CURSORRIGHT COUNT_L COUNT_H FABGLEXT_ENDCODE
     // params:
     //   COUNT (byte): number of positions to move to the right
-    case FABGLEXT_CURSORRIGHT:
+    case FABGLEXTB_CURSORRIGHT:
     {
       uint8_t count_L = extGetByteParam();
       uint8_t count_H = extGetByteParam();
@@ -3609,13 +3628,13 @@ void Terminal::consumeFabGLSeq()
     // Sets char CHAR at current position and advance one position. Scroll if necessary.
     // This do not interpret character as a special code, but just sets it.
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_SETCHAR CHAR FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_SETCHAR CHAR FABGLEXT_ENDCODE
     // params:
     //   CHAR (byte): character to set
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    byte: 0 = vertical scroll not occurred, 1 = vertical scroll occurred
-    case FABGLEXT_SETCHAR:
+    case FABGLEXTB_SETCHAR:
     {
       bool scroll = setChar(extGetByteParam());
       extGetByteParam(); // FABGLEXT_ENDCODE
@@ -3626,13 +3645,13 @@ void Terminal::consumeFabGLSeq()
 
     // Return virtual key state
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_ISVKDOWN VKCODE FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTB_ISVKDOWN VKCODE FABGLEXT_ENDCODE
     // params:
     //    VKCODE : virtual key code to check
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    char: '0' = key is up, '1' = key is down
-    case FABGLEXT_ISVKDOWN:
+    case FABGLEXTB_ISVKDOWN:
     {
       VirtualKey vk = (VirtualKey) extGetByteParam();
       extGetByteParam(); // FABGLEXT_ENDCODE
@@ -3643,18 +3662,18 @@ void Terminal::consumeFabGLSeq()
 
     // Disable FabGL sequences
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_DISABLEFABSEQ FABGLEXT_ENDCODE
-    case FABGLEXT_DISABLEFABSEQ:
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_DISABLEFABSEQ FABGLEXT_ENDCODE
+    case FABGLEXTB_DISABLEFABSEQ:
       extGetByteParam(); // FABGLEXT_ENDCODE
       enableFabGLSequences(false);
       break;
 
     // Set terminal type
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SETTERMTYPE TERMINDEX FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTB_SETTERMTYPE TERMINDEX FABGLEXT_ENDCODE
     // params:
     //    TERMINDEX : index of terminal to emulate (TermType)
-    case FABGLEXT_SETTERMTYPE:
+    case FABGLEXTB_SETTERMTYPE:
     {
       auto termType = (TermType) extGetByteParam();
       extGetByteParam(); // FABGLEXT_ENDCODE
@@ -3664,31 +3683,31 @@ void Terminal::consumeFabGLSeq()
 
     // Set foreground color
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_SETFGCOLOR COLORINDEX FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_SETFGCOLOR COLORINDEX FABGLEXT_ENDCODE
     // params:
     //   COLORINDEX : 0..15 (index of Color enum)
-    case FABGLEXT_SETFGCOLOR:
+    case FABGLEXTB_SETFGCOLOR:
       int_setForegroundColor((Color) extGetByteParam());
       extGetByteParam(); // FABGLEXT_ENDCODE
       break;
 
     // Set background color
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_SETBGCOLOR COLORINDEX FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_SETBGCOLOR COLORINDEX FABGLEXT_ENDCODE
     // params:
     //   COLORINDEX : 0..15 (index of Color enum)
-    case FABGLEXT_SETBGCOLOR:
+    case FABGLEXTB_SETBGCOLOR:
       int_setBackgroundColor((Color) extGetByteParam());
       extGetByteParam(); // FABGLEXT_ENDCODE
       break;
 
     // Set char style
     // Seq:
-    //   ESC FABGLEXT_STARTCODE FABGLEXT_SETCHARSTYLE STYLEINDEX ENABLE FABGLEXT_ENDCODE
+    //   ESC FABGLEXT_STARTCODE FABGLEXTB_SETCHARSTYLE STYLEINDEX ENABLE FABGLEXT_ENDCODE
     // params:
     //   STYLEINDEX : 0 = bold, 1 = reduce luminosity, 2 = italic, 3 = underline, 4 = blink, 5 = blank, 6 = inverse
     //   ENABLE     : 0 = disable, 1 = enable
-    case FABGLEXT_SETCHARSTYLE:
+    case FABGLEXTB_SETCHARSTYLE:
     {
       int idx = extGetByteParam();
       int val = extGetByteParam();
@@ -3723,7 +3742,7 @@ void Terminal::consumeFabGLSeq()
 
     // Setup GPIO
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SETUPGPIO MODE GPIONUM FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_SETUPGPIO MODE GPIONUM FABGLEXT_ENDCODE
     // params:
     //    MODE (char) :
     //              '-' = disable input/output
@@ -3733,7 +3752,7 @@ void Terminal::consumeFabGLSeq()
     //              'E' = output and input with open-drain
     //              'X' = output and input
     //    GPIONUM (text) : '0'-'39' (not all usable!)
-    case FABGLEXT_SETUPGPIO:
+    case FABGLEXTX_SETUPGPIO:
     {
       auto mode = GPIO_MODE_DISABLE;
       switch (extGetByteParam()) {
@@ -3761,11 +3780,11 @@ void Terminal::consumeFabGLSeq()
 
     // Set GPIO
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SETGPIO VALUE GPIONUM FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_SETGPIO VALUE GPIONUM FABGLEXT_ENDCODE
     // params:
     //    VALUE (char)   : 0 or '0' or 'L' = low (and others), 1 or '1' or 'H' = high
     //    GPIONUM (text) : '0'-'39' (not all usable!)
-    case FABGLEXT_SETGPIO:
+    case FABGLEXTX_SETGPIO:
     {
       auto l = extGetByteParam();
       auto level = (l == 1 || l == '1' || l == 'H') ? 1 : 0;
@@ -3777,13 +3796,13 @@ void Terminal::consumeFabGLSeq()
 
     // Get GPIO
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETGPIO GPIONUM FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_GETGPIO GPIONUM FABGLEXT_ENDCODE
     // params:
     //    GPIONUM (text) : '0'-'39' (not all usable!)
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
     //    char: '0' = low, '1' = high
-    case FABGLEXT_GETGPIO:
+    case FABGLEXTX_GETGPIO:
     {
       auto gpio = (gpio_num_t) extGetIntParam();
       extGetByteParam(); // FABGLEXT_ENDCODE
@@ -3794,7 +3813,7 @@ void Terminal::consumeFabGLSeq()
 
     // Setup ADC
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SETUPADC RESOLUTION ';' ATTENUATION ';' GPIONUM FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_SETUPADC RESOLUTION ';' ATTENUATION ';' GPIONUM FABGLEXT_ENDCODE
     // params:
     //    RESOLUTION (text)  : '9', '10', '11', '12'
     //    ATTENUATION (text) :
@@ -3803,7 +3822,7 @@ void Terminal::consumeFabGLSeq()
     //                   '2' = 6dB   (reduced to 1/2), full-scale voltage 2.2 V, accurate between 150 to 1750 mV
     //                   '3' = 11dB  (reduced to 1/3.6), full-scale voltage 3.9 V (maximum volatage is still 3.3V!!), accurate between 150 to 2450 mV
     //    GPIONUM (text)     : '32'...'39'
-    case FABGLEXT_SETUPADC:
+    case FABGLEXTX_SETUPADC:
     {
       auto width   = (adc_bits_width_t) (extGetIntParam() - 9);
       extGetByteParam();  // ';'
@@ -3818,7 +3837,7 @@ void Terminal::consumeFabGLSeq()
 
     // Read ADC
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_READADC GPIONUM FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_READADC GPIONUM FABGLEXT_ENDCODE
     // params:
     //    GPIONUM (text) : '32'...'39'
     // return:
@@ -3831,7 +3850,7 @@ void Terminal::consumeFabGLSeq()
     //       '0'
     //       'A'
     //       '0'
-    case FABGLEXT_READADC:
+    case FABGLEXTX_READADC:
     {
       auto val = adc1_get_raw(ADC1_GPIO2Channel((gpio_num_t)extGetIntParam()));
       extGetByteParam(); // FABGLEXT_ENDCODE
@@ -3844,13 +3863,13 @@ void Terminal::consumeFabGLSeq()
 
     // Sound
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SOUND WAVEFORM ';' FREQUENCY ';' DURATION ';' VOLUME FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_SOUND WAVEFORM ';' FREQUENCY ';' DURATION ';' VOLUME FABGLEXT_ENDCODE
     // params:
     //    WAVEFORM (char)  : '0' = SINE, '1' = SQUARE, '2' = TRIANGLE, '3' = SAWTOOTH, '4' = NOISE, '5' = VIC NOISE
     //    FREQUENCY (text) : frequency in Hertz
     //    DURATION (text)  : duration in milliseconds
     //    VOLUME (text)    : volume (max is 127)
-    case FABGLEXT_SOUND:
+    case FABGLEXTX_SOUND:
     {
       char waveform      = extGetByteParam();
       extGetByteParam();  // ';'
@@ -3866,17 +3885,17 @@ void Terminal::consumeFabGLSeq()
 
     // Begin of a graphics command
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GRAPHICSCMD ...
-    case FABGLEXT_GRAPHICSCMD:
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_GRAPHICSCMD ...
+    case FABGLEXTX_GRAPHICSCMD:
       consumeFabGLGraphicsSeq();
       break;
 
     // Show or hide mouse pointer
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_SHOWMOUSE VALUE FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_SHOWMOUSE VALUE FABGLEXT_ENDCODE
     // params:
     //    VALUE (char) : '1' show mouse, '0' (and others) hide mouse
-    case FABGLEXT_SHOWMOUSE:
+    case FABGLEXTX_SHOWMOUSE:
     {
       bool value = (extGetByteParam() == '1');
       if (m_bitmappedDisplayController) {
@@ -3898,7 +3917,7 @@ void Terminal::consumeFabGLSeq()
 
     // Get mouse position
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_GETMOUSEPOS FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_GETMOUSEPOS FABGLEXT_ENDCODE
     // params:
     //    none
     // return:
@@ -3910,7 +3929,7 @@ void Terminal::consumeFabGLSeq()
     //    1 hex digit : scroll wheel delta (0..15)
     //    char: ';'
     //    1 hex digit : pressed button (bit 1 = left button, bit 2 = middle button, bit 3 = right button)
-    case FABGLEXT_GETMOUSEPOS:
+    case FABGLEXTX_GETMOUSEPOS:
     {
       extGetByteParam();  // FABGLEXT_ENDCODE
       if (m_bitmappedDisplayController) {
@@ -3940,12 +3959,12 @@ void Terminal::consumeFabGLSeq()
 
     // Delay for milliseconds (return FABGLEXT_REPLYCODE when time is elapsed)
     // Seq:
-    //    ESC FABGLEXT_STARTCODE FABGLEXT_DELAY VALUE FABGLEXT_ENDCODE
+    //    ESC FABGLEXT_STARTCODE FABGLEXTX_DELAY VALUE FABGLEXT_ENDCODE
     // params:
     //    VALUE (text) : number (milliseconds)
     // return:
     //    byte: FABGLEXT_REPLYCODE   (reply tag)
-    case FABGLEXT_DELAY:
+    case FABGLEXTX_DELAY:
     {
       auto value = extGetIntParam();
       extGetByteParam();  // FABGLEXT_ENDCODE
@@ -3998,7 +4017,7 @@ void Terminal::freeSprites()
 
 
 
-// already received: ESC FABGLEXT_STARTCODE FABGLEXT_GRAPHICSCMD
+// already received: ESC FABGLEXT_STARTCODE FABGLEXTX_GRAPHICSCMD
 void Terminal::consumeFabGLGraphicsSeq()
 {
   char cmd[FABGLEXT_MAXSUBCMDLEN];
@@ -4200,9 +4219,9 @@ void Terminal::consumeFabGLGraphicsSeq()
 
   } else if (strcmp(cmd, FABGLEXT_GPATH) == 0) {
 
-    // Graphics fill path
+    // Graphics draw path
     // Seq:
-    //    FABGLEXT_GPATH X1 ';' Y1 ; X2 ';' Y2 [';' Xn ';' Yn...] FABGLEXT_ENDCODE
+    //    FABGLEXT_GPATH X1 ';' Y1 ';' X2 ';' Y2 [';' Xn ';' Yn...] FABGLEXT_ENDCODE
     // params:
     //    X (text)      : number
     //    Y (text)      : number
@@ -4360,7 +4379,7 @@ void Terminal::consumeFabGLGraphicsSeq()
 
   } else {
     #if FABGLIB_TERMINAL_DEBUG_REPORT_UNSUPPORT
-    logFmt("Unknown: ESC FABGLEXT_STARTCODE FABGLEXT_GRAPHICSCMD %s\n", cmd);
+    logFmt("Unknown: ESC FABGLEXT_STARTCODE FABGLEXTX_GRAPHICSCMD %s\n", cmd);
     #endif
   }
 }
@@ -4805,7 +4824,7 @@ void TerminalController::waitFor(int value)
 void TerminalController::clear()
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_CLEAR);
+  write(FABGLEXTX_CLEAR);
   write(FABGLEXT_ENDCODE);
 }
 
@@ -4813,7 +4832,7 @@ void TerminalController::clear()
 void TerminalController::enableCursor(bool value)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_ENABLECURSOR);
+  write(FABGLEXTX_ENABLECURSOR);
   write(value ? '1' : '0');
   write(FABGLEXT_ENDCODE);
 }
@@ -4822,7 +4841,7 @@ void TerminalController::enableCursor(bool value)
 void TerminalController::setCursorPos(int col, int row)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETCURSORPOS);
+  write(FABGLEXTB_SETCURSORPOS);
   write(col);
   write(row);
   write(FABGLEXT_ENDCODE);
@@ -4832,7 +4851,7 @@ void TerminalController::setCursorPos(int col, int row)
 void TerminalController::cursorLeft(int count)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_CURSORLEFT);
+  write(FABGLEXTB_CURSORLEFT);
   write(count & 0xff);
   write(count >> 8);
   write(FABGLEXT_ENDCODE);
@@ -4842,7 +4861,7 @@ void TerminalController::cursorLeft(int count)
 void TerminalController::cursorRight(int count)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_CURSORRIGHT);
+  write(FABGLEXTB_CURSORRIGHT);
   write(count & 0xff);
   write(count >> 8);
   write(FABGLEXT_ENDCODE);
@@ -4852,7 +4871,7 @@ void TerminalController::cursorRight(int count)
 void TerminalController::getCursorPos(int * col, int * row)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_GETCURSORPOS);
+  write(FABGLEXTB_GETCURSORPOS);
   write(FABGLEXT_ENDCODE);
   waitFor(FABGLEXT_REPLYCODE);
   *col = read();
@@ -4863,7 +4882,7 @@ void TerminalController::getCursorPos(int * col, int * row)
 int TerminalController::getCursorCol()
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_GETCURSORCOL);
+  write(FABGLEXTB_GETCURSORCOL);
   write(FABGLEXT_ENDCODE);
   waitFor(FABGLEXT_REPLYCODE);
   return read();
@@ -4873,7 +4892,7 @@ int TerminalController::getCursorCol()
 int TerminalController::getCursorRow()
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_GETCURSORROW);
+  write(FABGLEXTB_GETCURSORROW);
   write(FABGLEXT_ENDCODE);
   waitFor(FABGLEXT_REPLYCODE);
   return read();
@@ -4883,7 +4902,7 @@ int TerminalController::getCursorRow()
 bool TerminalController::multilineInsertChar(int charsToMove)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_INSERTSPACE);
+  write(FABGLEXTB_INSERTSPACE);
   write(charsToMove & 0xff);
   write(charsToMove >> 8);
   write(FABGLEXT_ENDCODE);
@@ -4895,7 +4914,7 @@ bool TerminalController::multilineInsertChar(int charsToMove)
 void TerminalController::multilineDeleteChar(int charsToMove)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_DELETECHAR);
+  write(FABGLEXTB_DELETECHAR);
   write(charsToMove & 0xff);
   write(charsToMove >> 8);
   write(FABGLEXT_ENDCODE);
@@ -4905,7 +4924,7 @@ void TerminalController::multilineDeleteChar(int charsToMove)
 bool TerminalController::setChar(uint8_t c)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETCHAR);
+  write(FABGLEXTB_SETCHAR);
   write(c);
   write(FABGLEXT_ENDCODE);
   waitFor(FABGLEXT_REPLYCODE);
@@ -4916,7 +4935,7 @@ bool TerminalController::setChar(uint8_t c)
 bool TerminalController::isVKDown(VirtualKey vk)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_ISVKDOWN);
+  write(FABGLEXTB_ISVKDOWN);
   write((uint8_t)vk);
   write(FABGLEXT_ENDCODE);
   waitFor(FABGLEXT_REPLYCODE);
@@ -4927,7 +4946,7 @@ bool TerminalController::isVKDown(VirtualKey vk)
 void TerminalController::disableFabGLSequences()
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_DISABLEFABSEQ);
+  write(FABGLEXTB_DISABLEFABSEQ);
   write(FABGLEXT_ENDCODE);
 }
 
@@ -4935,7 +4954,7 @@ void TerminalController::disableFabGLSequences()
 void TerminalController::setTerminalType(TermType value)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETTERMTYPE);
+  write(FABGLEXTB_SETTERMTYPE);
   write((int)value);
   write(FABGLEXT_ENDCODE);
 }
@@ -4944,7 +4963,7 @@ void TerminalController::setTerminalType(TermType value)
 void TerminalController::setForegroundColor(Color value)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETFGCOLOR);
+  write(FABGLEXTB_SETFGCOLOR);
   write((int)value);
   write(FABGLEXT_ENDCODE);
 }
@@ -4953,7 +4972,7 @@ void TerminalController::setForegroundColor(Color value)
 void TerminalController::setBackgroundColor(Color value)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETBGCOLOR);
+  write(FABGLEXTB_SETBGCOLOR);
   write((int)value);
   write(FABGLEXT_ENDCODE);
 }
@@ -4962,7 +4981,7 @@ void TerminalController::setBackgroundColor(Color value)
 void TerminalController::setCharStyle(CharStyle style, bool enabled)
 {
   write(FABGLEXT_CMD);
-  write(FABGLEXT_SETCHARSTYLE);
+  write(FABGLEXTB_SETCHARSTYLE);
   write((int)style);
   write(enabled ? 1 : 0);
   write(FABGLEXT_ENDCODE);
