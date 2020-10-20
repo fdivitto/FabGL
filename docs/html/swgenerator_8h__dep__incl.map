@@ -1,6 +1,12 @@
 <map id="swgenerator.h" name="swgenerator.h">
-<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="119,79,227,104"/>
-<area shape="rect" id="node4" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="5,152,135,177"/>
-<area shape="rect" id="node5" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="210,152,333,177"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="142,225,203,251"/>
+<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="113,152,221,177"/>
+<area shape="rect" id="node4" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="5,225,135,251"/>
+<area shape="rect" id="node5" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="210,225,325,251"/>
+<area shape="rect" id="node6" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="350,225,465,251"/>
+<area shape="rect" id="node7" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="490,225,605,251"/>
+<area shape="rect" id="node8" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="629,225,752,251"/>
+<area shape="rect" id="node9" href="$vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="597,152,738,177"/>
+<area shape="rect" id="node10" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="398,79,535,104"/>
+<area shape="rect" id="node11" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="363,152,519,177"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="377,299,438,324"/>
 </map>

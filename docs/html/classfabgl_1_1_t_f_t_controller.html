@@ -106,14 +106,8 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_t_f_t_controller.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a230f5190b7e17eef37424a9f5ee1e204"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html#a230f5190b7e17eef37424a9f5ee1e204">begin</a> (SPIClass *spi, gpio_num_t DC, gpio_num_t RESX=GPIO_UNUSED, gpio_num_t CS=GPIO_UNUSED)</td></tr>
-<tr class="memdesc:a230f5190b7e17eef37424a9f5ee1e204"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="#a230f5190b7e17eef37424a9f5ee1e204">More...</a><br /></td></tr>
-<tr class="separator:a230f5190b7e17eef37424a9f5ee1e204"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40adbcc9ae4c12d005ec1e2e943b084c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html#a40adbcc9ae4c12d005ec1e2e943b084c">begin</a> (SPIClass *spi, int DC, int RESX=-1, int CS=-1)</td></tr>
-<tr class="memdesc:a40adbcc9ae4c12d005ec1e2e943b084c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="#a40adbcc9ae4c12d005ec1e2e943b084c">More...</a><br /></td></tr>
-<tr class="separator:a40adbcc9ae4c12d005ec1e2e943b084c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa01dea3a8d83534d871c7e4ef6b124b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html#aa01dea3a8d83534d871c7e4ef6b124b2">begin</a> (int SCK, int MOSI, int DC, int RESX, int CS, int host)</td></tr>
-<tr class="memdesc:aa01dea3a8d83534d871c7e4ef6b124b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller.  <a href="#aa01dea3a8d83534d871c7e4ef6b124b2">More...</a><br /></td></tr>
+<tr class="memdesc:aa01dea3a8d83534d871c7e4ef6b124b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="#aa01dea3a8d83534d871c7e4ef6b124b2">More...</a><br /></td></tr>
 <tr class="separator:aa01dea3a8d83534d871c7e4ef6b124b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b256a1afee62066110fbbb052583946"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html#a1b256a1afee62066110fbbb052583946">begin</a> ()</td></tr>
 <tr class="memdesc:a1b256a1afee62066110fbbb052583946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller.  <a href="#a1b256a1afee62066110fbbb052583946">More...</a><br /></td></tr>
@@ -217,120 +211,8 @@ void setup() {
   cv.clear();
   cv.drawText(0, 0, "Hello World!");
 }</pre> </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a230f5190b7e17eef37424a9f5ee1e204"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a230f5190b7e17eef37424a9f5ee1e204">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::TFTController::begin </td>
-          <td>(</td>
-          <td class="paramtype">SPIClass *&#160;</td>
-          <td class="paramname"><em>spi</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpio_num_t&#160;</td>
-          <td class="paramname"><em>DC</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpio_num_t&#160;</td>
-          <td class="paramname"><em>RESX</em> = <code>GPIO_UNUSED</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">gpio_num_t&#160;</td>
-          <td class="paramname"><em>CS</em> = <code>GPIO_UNUSED</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes TFT display controller with Arduino style SPIClass object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">spi</td><td>SPIClass object. </td></tr>
-    <tr><td class="paramname">DC</td><td>GPIO of D/C signal (Data/Command). </td></tr>
-    <tr><td class="paramname">RESX</td><td>GPIO of Reset signal (can be GPIO_UNUSED). </td></tr>
-    <tr><td class="paramname">CS</td><td>GPIO of Optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Example: </p><pre class="fragment">fabgl::ST7789Controller DisplayController;
-
-// SCK = 18, MOSI = 23, D/C = 22, RESX = 21
-SPI.begin(18, -1, 23);
-DisplayController.begin(&amp;SPI, GPIO_NUM_22, GPIO_NUM_21);
-DisplayController.setResolution(TFT_240x240);</pre> 
-</div>
-</div>
-<a id="a40adbcc9ae4c12d005ec1e2e943b084c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40adbcc9ae4c12d005ec1e2e943b084c">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::TFTController::begin </td>
-          <td>(</td>
-          <td class="paramtype">SPIClass *&#160;</td>
-          <td class="paramname"><em>spi</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>DC</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>RESX</em> = <code>-1</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>CS</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes TFT display controller with Arduino style SPIClass object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">spi</td><td>SPIClass object. </td></tr>
-    <tr><td class="paramname">DC</td><td>GPIO of D/C signal (Data/Command). </td></tr>
-    <tr><td class="paramname">RESX</td><td>GPIO of Reset signal (can be GPIO_UNUSED). </td></tr>
-    <tr><td class="paramname">CS</td><td>GPIO of optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Example: </p><pre class="fragment">fabgl::ST7789Controller DisplayController;
-
-// SCK = 18, MOSI = 23, D/C = 22, RESX = 21
-SPI.begin(18, -1, 23);
-DisplayController.begin(&amp;SPI, 22, 21);
-DisplayController.setResolution(TFT_240x240);</pre> 
-</div>
-</div>
 <a id="aa01dea3a8d83534d871c7e4ef6b124b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa01dea3a8d83534d871c7e4ef6b124b2">&#9670;&nbsp;</a></span>begin() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa01dea3a8d83534d871c7e4ef6b124b2">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -379,7 +261,37 @@ DisplayController.setResolution(TFT_240x240);</pre>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes TFT display controller. </p>
+<p>Initializes TFT display controller with Arduino style SPIClass object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spi</td><td>SPIClass object. </td></tr>
+    <tr><td class="paramname">DC</td><td>GPIO of D/C signal (Data/Command). </td></tr>
+    <tr><td class="paramname">RESX</td><td>GPIO of Reset signal (can be GPIO_UNUSED). </td></tr>
+    <tr><td class="paramname">CS</td><td>GPIO of Optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: </p><pre class="fragment">fabgl::ST7789Controller DisplayController;
+
+// SCK = 18, MOSI = 23, D/C = 22, RESX = 21
+SPI.begin(18, -1, 23);
+DisplayController.begin(&amp;SPI, GPIO_NUM_22, GPIO_NUM_21);
+DisplayController.setResolution(TFT_240x240);</pre><p>Initializes TFT display controller with Arduino style SPIClass object</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">spi</td><td>SPIClass object. </td></tr>
+    <tr><td class="paramname">DC</td><td>GPIO of D/C signal (Data/Command). </td></tr>
+    <tr><td class="paramname">RESX</td><td>GPIO of Reset signal (can be GPIO_UNUSED). </td></tr>
+    <tr><td class="paramname">CS</td><td>GPIO of optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Example: </p><pre class="fragment">fabgl::ST7789Controller DisplayController;
+
+// SCK = 18, MOSI = 23, D/C = 22, RESX = 21
+SPI.begin(18, -1, 23);
+DisplayController.begin(&amp;SPI, 22, 21);
+DisplayController.setResolution(TFT_240x240);</pre><p>Initializes TFT display controller</p>
 <p>This initializer uses SDK API to get access to the SPI channel.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -399,7 +311,7 @@ DisplayController.setResolution(TFT_240x240);</pre>
 </div>
 </div>
 <a id="a1b256a1afee62066110fbbb052583946"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b256a1afee62066110fbbb052583946">&#9670;&nbsp;</a></span>begin() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b256a1afee62066110fbbb052583946">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -763,7 +675,7 @@ DisplayController.setResolution(TFT_240x240);</pre>
 <p>Screen is automatically updated whenever a primitive is painted (look at <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">Canvas</a>).<br />
  When a sprite updates its image or its position (or any other property) it is required to force a refresh using this method.<br />
  <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#af5488939dfd5c3fe1481bc6f87c707b3" title="Forces the sprites to be updated. ">BitmappedDisplayController.refreshSprites()</a> is required also when using the double buffered mode, to paint sprites. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a6">VGA/Sprites/Sprites.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a2">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -940,7 +852,7 @@ DisplayController.setResolution(TFT_240x240);</pre>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a11">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a10">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1258,7 +1170,7 @@ struct MySprite : Sprite {
 
 static MySprite sprites[10];
 
-VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
+VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a3">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>

@@ -87,8 +87,7 @@ $(document).ready(function(){initNavTree('vgacontroller_8h.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
 <div class="title">vgacontroller.h File Reference</div>  </div>
 </div><!--header-->
@@ -107,15 +106,17 @@ $(document).ready(function(){initNavTree('vgacontroller_8h.html','');});
 <code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="swgenerator_8h_source.html">devdrivers/swgenerator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="vgabasecontroller_8h_source.html">dispdrivers/vgabasecontroller.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for vgacontroller.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="vgacontroller_8h__incl.png" border="0" usemap="#vgacontroller_8h" alt=""/></div>
 <map name="vgacontroller_8h" id="vgacontroller_8h">
-<area shape="rect" id="node9" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="194,152,281,177"/>
-<area shape="rect" id="node11" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="668,152,743,177"/>
-<area shape="rect" id="node13" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="152,79,322,104"/>
-<area shape="rect" id="node14" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="567,79,695,104"/>
+<area shape="rect" id="node9" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="368,225,455,251"/>
+<area shape="rect" id="node11" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="270,225,345,251"/>
+<area shape="rect" id="node14" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="524,152,694,177"/>
+<area shape="rect" id="node15" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="820,152,948,177"/>
+<area shape="rect" id="node17" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="341,79,546,104"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -123,9 +124,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="vgacontroller_8h__dep__incl.png" border="0" usemap="#vgacontroller_8hdep" alt=""/></div>
 <map name="vgacontroller_8hdep" id="vgacontroller_8hdep">
-<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="55,152,117,177"/>
-<area shape="rect" id="node3" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="21,79,151,104"/>
-<area shape="rect" id="node4" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="175,79,298,104"/>
+<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="29,152,90,177"/>
+<area shape="rect" id="node3" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="47,79,176,104"/>
 </map>
 </div>
 </div>
@@ -136,19 +136,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the VGA bitmapped controller.  <a href="classfabgl_1_1_v_g_a_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_v_g_a_timings.html">fabgl::VGATimings</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the VGA timings. This is a modeline decoded.  <a href="structfabgl_1_1_v_g_a_timings.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463">fabgl::VGAScanStart</a> { <a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a8a10612c141004c5f2986050c23a349d">fabgl::FrontPorch</a>, 
-<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a3883a8f6a8d0924e5083674b04d162e1">fabgl::Sync</a>, 
-<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463aa2e3d51a4bdf436297de5d18f0fc7fc2">fabgl::BackPorch</a>, 
-<a class="el" href="group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a9eb43f64e3e327a4e68f4537db8e0582">fabgl::VisibleArea</a>
- }</td></tr>
-<tr class="memdesc:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents one of the four blocks of horizontal or vertical line.  <a href="group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463">More...</a><br /></td></tr>
-<tr class="separator:gab8d4ce9d78f7f7068101e6eb5b231463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA bitmapped controller. ">fabgl::VGAController</a> definition. </p>

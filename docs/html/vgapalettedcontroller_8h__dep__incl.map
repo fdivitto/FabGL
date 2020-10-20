@@ -1,0 +1,7 @@
+<map id="vgapalettedcontroller.h" name="vgapalettedcontroller.h">
+<area shape="rect" id="node2" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="5,79,121,104"/>
+<area shape="rect" id="node4" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="145,79,261,104"/>
+<area shape="rect" id="node5" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="285,79,401,104"/>
+<area shape="rect" id="node6" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="424,79,547,104"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="242,152,303,177"/>
+</map>

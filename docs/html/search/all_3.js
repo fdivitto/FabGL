@@ -3,10 +3,6 @@ var searchData=
   ['data',['data',['../structfabgl_1_1_glyph.html#aaf87f9924c508aea88fe90afbae753c0',1,'fabgl::Glyph::data()'],['../structfabgl_1_1_bitmap.html#ac314d4af777bc333a5908c3d745a39e6',1,'fabgl::Bitmap::data()'],['../displaycontroller_8h.html#a96db82e580e46e24e2b39dd6c5bf7c21',1,'data():&#160;displaycontroller.h']]],
   ['dataallocated',['dataAllocated',['../structfabgl_1_1_bitmap.html#ac5d3361bf7c9c63efae5d024694aa725',1,'fabgl::Bitmap']]],
   ['dataavailable',['dataAvailable',['../classfabgl_1_1_p_s2_controller.html#a0689f3e86beb0108d90cfd26e73b13ae',1,'fabgl::PS2Controller']]],
-  ['datetime',['DateTime',['../structfabgl_1_1_date_time.html',1,'fabgl::DateTime'],['../classfabgl_1_1_d_s3231.html#a4ac5d06c26fb03250dcc28b66c2786ee',1,'fabgl::DS3231::datetime()']]],
-  ['datetimevalid',['dateTimeValid',['../classfabgl_1_1_d_s3231.html#a676aeab3aaafcb922df18e59e8617ef6',1,'fabgl::DS3231']]],
-  ['dayofmonth',['dayOfMonth',['../structfabgl_1_1_date_time.html#a53c25a92a65021348ce43a56ead4946d',1,'fabgl::DateTime']]],
-  ['dayofweek',['dayOfWeek',['../structfabgl_1_1_date_time.html#a5c840e4fcf7065e956cb7167f73e5d47',1,'fabgl::DateTime']]],
   ['deactivate',['deactivate',['../classfabgl_1_1_terminal.html#a9c181b72e4a498f35ad95cd172a38cae',1,'fabgl::Terminal']]],
   ['defaultcursor',['defaultCursor',['../structfabgl_1_1ui_window_style.html#a51d7c83f0e70a1f8e78b2530129aa959',1,'fabgl::uiWindowStyle']]],
   ['deltaavailable',['deltaAvailable',['../classfabgl_1_1_mouse.html#abe8fff3545515f8c4889975acb98533c',1,'fabgl::Mouse']]],
@@ -25,7 +21,7 @@ var searchData=
   ['displaycontroller_2eh',['displaycontroller.h',['../displaycontroller_8h.html',1,'']]],
   ['displaycontrollertype',['DisplayControllerType',['../group___enumerations.html#ga9bacc02df3145df2c15f847b56973003',1,'fabgl']]],
   ['doubleclicktime',['doubleClickTime',['../structfabgl_1_1ui_app_props.html#a3e73fe6cd43fba3e5cb83385a889848e',1,'fabgl::uiAppProps']]],
-  ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options.html#ae41af9a5a078f13ae9c14470d25fc3d8',1,'fabgl::GlyphOptions::doubleWidth()'],['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth(uint8_t value)'],['../displaycontroller_8h.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth(uint8_t value):&#160;displaycontroller.h']]],
+  ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options.html#ae41af9a5a078f13ae9c14470d25fc3d8',1,'fabgl::GlyphOptions::doubleWidth()'],['../unionfabgl_1_1_glyph_options.html#a6ba9b159ecf657f56987bf45129723c5',1,'fabgl::GlyphOptions::DoubleWidth(uint8_t value)'],['../displaycontroller_8h.html#aceea3df50e577272aa576027eede649d',1,'DoubleWidth(uint8_t value):&#160;displaycontroller.h'],['../displaycontroller_8h.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h']]],
   ['down',['down',['../classfabgl_1_1ui_button.html#a1af6b3b72ee09464a86babf436f3121f',1,'fabgl::uiButton']]],
   ['downbackgroundcolor',['downBackgroundColor',['../structfabgl_1_1ui_button_style.html#ad77d1554235d711dcdb3cf826ea23aff',1,'fabgl::uiButtonStyle']]],
   ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style.html#a3f9d843e30cd210708f269b8aa8a348a',1,'fabgl::uiButtonStyle']]],
@@ -40,7 +36,6 @@ var searchData=
   ['drawtextfmt',['drawTextFmt',['../classfabgl_1_1_canvas.html#a2054cfee6efe88c31f681b45a2914509',1,'fabgl::Canvas']]],
   ['drawtextwithellipsis',['drawTextWithEllipsis',['../classfabgl_1_1_canvas.html#ab3a20d15b929d3c5f491431a95f9189f',1,'fabgl::Canvas']]],
   ['drivetype',['DriveType',['../group___enumerations.html#ga9a469aacd095358acbe70b98e85bceee',1,'fabgl']]],
-  ['ds3231',['DS3231',['../classfabgl_1_1_d_s3231.html',1,'fabgl']]],
   ['ds3231_2eh',['DS3231.h',['../_d_s3231_8h.html',1,'']]],
   ['duration',['duration',['../classfabgl_1_1_waveform_generator.html#a3997ed6c38469277ecb1f7aee3d1d16d',1,'fabgl::WaveformGenerator']]]
 ];

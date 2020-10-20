@@ -30,6 +30,7 @@ var NAVTREE =
     [ "Configuring Audio port", "conf_audio.html", null ],
     [ "Generic Circuit Diagram", "gen_schema.html", null ],
     [ "VTTEST VT100/VT102 Compatibility Test Score Sheet", "vttest.html", null ],
+    [ "FabGL Specific Terminal Sequences", "special_term_escapes.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -57,16 +58,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classfabgl_1_1_noise_waveform_generator.html#aff943804948eae06f7509bf69ef51f05",
-"classfabgl_1_1_v_g_a16_controller.html#a8b25fa500a76153044da83d4f9133001",
-"classfabgl_1_1ui_color_combo_box.html#a089762995d65c9282f545a376810c055",
-"classfabgl_1_1ui_custom_list_box.html#a770f88193b45a54df6f944efe1fc25d5",
-"classfabgl_1_1ui_list_box.html#a770f88193b45a54df6f944efe1fc25d5",
-"classfabgl_1_1ui_text_edit.html#ad450ee092d4c00b44ec793bf4a1afbe4",
-"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381a0c310d99f6850a9227c0630152edbb32",
-"globals_vars.html",
-"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381ab6cd38f077717c3bffaa1434002aeaad",
-"structfabgl_1_1ui_check_box_style.html#ac705850d6fd0e04aa7737fded0f18fea"
+"classfabgl_1_1_samples_generator.html#a748a2471c112f1c9174c98ef7e3b5a4a",
+"classfabgl_1_1_v_g_a4_controller.html#a6b608bd508f49d1cf8b63ec575f4cbd5",
+"classfabgl_1_1ui_check_box.html#a2815a9866e3f3c11b4b9ca85d5cd858a",
+"classfabgl_1_1ui_control.html#aa333a558758b6c4ce97ccc9c92663dce",
+"classfabgl_1_1ui_image.html#a9be2ddbe0bd611d553f11722297789ee",
+"classfabgl_1_1ui_slider.html#a07eb42c02d4aac312cce5e02dd10417d",
+"fabglconf_8h.html#a82f3c24fd89e8698ef7a729e0711690e",
+"fabutils_8h.html#ggae12c31a33f64281cba424d993a8a4381aed2f9bfb13d913d030bf15ed01ab7dce",
+"group___enumerations.html#ggae12c31a33f64281cba424d993a8a4381a301894ff89df93f329ea700b5078d730",
+"structfabgl_1_1_mouse_status.html#a5ec5e7febf054e05c2f1e5f0e62b9bad"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

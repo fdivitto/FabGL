@@ -1,7 +1,6 @@
 var hierarchy =
 [
     [ "fabgl::AltVirtualKeyDef", "structfabgl_1_1_alt_virtual_key_def.html", null ],
-    [ "fabgl::AutoSuspendInterrupts", "structfabgl_1_1_auto_suspend_interrupts.html", null ],
     [ "fabgl::BaseDisplayController", "classfabgl_1_1_base_display_controller.html", [
       [ "fabgl::BitmappedDisplayController", "classfabgl_1_1_bitmapped_display_controller.html", null ],
       [ "fabgl::TextualDisplayController", "classfabgl_1_1_textual_display_controller.html", [
@@ -13,13 +12,10 @@ var hierarchy =
     [ "fabgl::CollisionDetector", "classfabgl_1_1_collision_detector.html", null ],
     [ "fabgl::CoreUsage", "structfabgl_1_1_core_usage.html", null ],
     [ "fabgl::Cursor", "structfabgl_1_1_cursor.html", null ],
-    [ "fabgl::DateTime", "structfabgl_1_1_date_time.html", null ],
     [ "fabgl::DirItem", "structfabgl_1_1_dir_item.html", null ],
-    [ "fabgl::DS3231", "classfabgl_1_1_d_s3231.html", null ],
     [ "fabgl::FileBrowser", "classfabgl_1_1_file_browser.html", null ],
     [ "fabgl::Glyph", "structfabgl_1_1_glyph.html", null ],
     [ "fabgl::GlyphOptions", "unionfabgl_1_1_glyph_options.html", null ],
-    [ "fabgl::I2C", "classfabgl_1_1_i2_c.html", null ],
     [ "fabgl::KeyboardLayout", "structfabgl_1_1_keyboard_layout.html", null ],
     [ "fabgl::LineEditor", "classfabgl_1_1_line_editor.html", null ],
     [ "fabgl::MouseButtons", "structfabgl_1_1_mouse_buttons.html", null ],
@@ -41,7 +37,6 @@ var hierarchy =
     [ "fabgl::Size", "structfabgl_1_1_size.html", null ],
     [ "fabgl::SoundGenerator", "classfabgl_1_1_sound_generator.html", null ],
     [ "fabgl::Sprite", "structfabgl_1_1_sprite.html", null ],
-    [ "fabgl::SSD1306Controller", "classfabgl_1_1_s_s_d1306_controller.html", null ],
     [ "fabgl::Terminal", "classfabgl_1_1_terminal.html", null ],
     [ "fabgl::TerminalController", "classfabgl_1_1_terminal_controller.html", null ],
     [ "fabgl::TFTController", "classfabgl_1_1_t_f_t_controller.html", null ],
@@ -98,8 +93,14 @@ var hierarchy =
     [ "fabgl::uiWindowProps", "structfabgl_1_1ui_window_props.html", null ],
     [ "fabgl::uiWindowState", "structfabgl_1_1ui_window_state.html", null ],
     [ "fabgl::uiWindowStyle", "structfabgl_1_1ui_window_style.html", null ],
-    [ "fabgl::VGA16Controller", "classfabgl_1_1_v_g_a16_controller.html", null ],
     [ "fabgl::VGAController", "classfabgl_1_1_v_g_a_controller.html", null ],
+    [ "fabgl::VGADirectController", "classfabgl_1_1_v_g_a_direct_controller.html", null ],
+    [ "fabgl::VGAPalettedController", "classfabgl_1_1_v_g_a_paletted_controller.html", [
+      [ "fabgl::VGA16Controller", "classfabgl_1_1_v_g_a16_controller.html", null ],
+      [ "fabgl::VGA2Controller", "classfabgl_1_1_v_g_a2_controller.html", null ],
+      [ "fabgl::VGA4Controller", "classfabgl_1_1_v_g_a4_controller.html", null ],
+      [ "fabgl::VGA8Controller", "classfabgl_1_1_v_g_a8_controller.html", null ]
+    ] ],
     [ "fabgl::VGATimings", "structfabgl_1_1_v_g_a_timings.html", null ],
     [ "fabgl::VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ],
     [ "fabgl::WaveformGenerator", "classfabgl_1_1_waveform_generator.html", [

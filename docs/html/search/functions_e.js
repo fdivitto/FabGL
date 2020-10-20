@@ -9,7 +9,6 @@ var searchData=
   ['playing',['playing',['../classfabgl_1_1_sound_generator.html#a714564c341a4f009d8524a8bce72e02c',1,'fabgl::SoundGenerator']]],
   ['playsamples',['playSamples',['../classfabgl_1_1_sound_generator.html#ade53c7584b7e8928a711c32f8d763a57',1,'fabgl::SoundGenerator']]],
   ['playsound',['playSound',['../classfabgl_1_1_sound_generator.html#ad82800e9bbe177e51f745ef2c4b1cf25',1,'fabgl::SoundGenerator']]],
-  ['pollserialport',['pollSerialPort',['../classfabgl_1_1_terminal.html#a3fa34ccc4d268265ad7688850209245e',1,'fabgl::Terminal']]],
   ['pos',['pos',['../classfabgl_1_1ui_window.html#a816b2248826f6f182df7f0e804712784',1,'fabgl::uiWindow']]],
   ['position',['position',['../classfabgl_1_1ui_slider.html#af78a09a3aceb7c23a577e97d93026bd3',1,'fabgl::uiSlider']]],
   ['postevent',['postEvent',['../classfabgl_1_1ui_app.html#ac656798fd31a27213c2f8bf5f0433bfa',1,'fabgl::uiApp']]],

@@ -7,7 +7,6 @@ var searchData=
   ['scrollbarbackgroundcolor',['scrollBarBackgroundColor',['../structfabgl_1_1ui_scrollable_control_style.html#a51f450af2e2f3cd0e64cd5744f693c0d',1,'fabgl::uiScrollableControlStyle']]],
   ['scrollbarforegroundcolor',['scrollBarForegroundColor',['../structfabgl_1_1ui_scrollable_control_style.html#ac2ddbdd97a2cc6d06a557747ab97def0',1,'fabgl::uiScrollableControlStyle']]],
   ['scrollbarsize',['scrollBarSize',['../structfabgl_1_1ui_scrollable_control_style.html#a616c64c7d5bf9e5f87990f9c245ab4e7',1,'fabgl::uiScrollableControlStyle']]],
-  ['seconds',['seconds',['../structfabgl_1_1_date_time.html#ab8c89f0f3554fe4217ee6b930d8caec7',1,'fabgl::DateTime']]],
   ['selectedbackgroundcolor',['selectedBackgroundColor',['../structfabgl_1_1ui_list_box_style.html#a7a44c2027a2f782388e32a65bdea0d2b',1,'fabgl::uiListBoxStyle']]],
   ['selectedtextcolor',['selectedTextColor',['../structfabgl_1_1ui_list_box_style.html#ada2e6f1abb67ada4cfcfc429bc37bc2f',1,'fabgl::uiListBoxStyle']]],
   ['shift',['shift',['../structfabgl_1_1_alt_virtual_key_def.html#aed18e598aedfdcc1f9b62d3daf613d80',1,'fabgl::AltVirtualKeyDef::shift()'],['../structfabgl_1_1ui_key_event_info.html#a8c0061d1ea840f572c50f944bea56a8e',1,'fabgl::uiKeyEventInfo::SHIFT()']]],

@@ -101,61 +101,49 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_v_g_a_controller.html',
 
 <p><code>#include &lt;<a class="el" href="vgacontroller_8h_source.html">vgacontroller.h</a>&gt;</code></p>
 
-<p>Inherits fabgl::GenericBitmappedDisplayController.</p>
+<p>Inherits fabgl::VGABaseController.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a10e3b1a7467ff759302462216162fe70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a10e3b1a7467ff759302462216162fe70">begin</a> (gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
-<tr class="memdesc:a10e3b1a7467ff759302462216162fe70"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 8 colors (5 GPIOs) initializer.  <a href="#a10e3b1a7467ff759302462216162fe70">More...</a><br /></td></tr>
-<tr class="separator:a10e3b1a7467ff759302462216162fe70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11b70942a5879a6241dea608b28a65b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a11b70942a5879a6241dea608b28a65b8">begin</a> (gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t green1GPIO, gpio_num_t green0GPIO, gpio_num_t blue1GPIO, gpio_num_t blue0GPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
-<tr class="memdesc:a11b70942a5879a6241dea608b28a65b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer.  <a href="#a11b70942a5879a6241dea608b28a65b8">More...</a><br /></td></tr>
-<tr class="separator:a11b70942a5879a6241dea608b28a65b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaaf0f6e938018660ab0b15d073e5821"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#abaaf0f6e938018660ab0b15d073e5821">begin</a> ()</td></tr>
-<tr class="memdesc:abaaf0f6e938018660ab0b15d073e5821"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer using default pinout.  <a href="#abaaf0f6e938018660ab0b15d073e5821">More...</a><br /></td></tr>
-<tr class="separator:abaaf0f6e938018660ab0b15d073e5821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b608bd508f49d1cf8b63ec575f4cbd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
+<tr class="memdesc:a6b608bd508f49d1cf8b63ec575f4cbd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 8 colors (5 GPIOs) initializer.  <a href="#a6b608bd508f49d1cf8b63ec575f4cbd5">More...</a><br /></td></tr>
+<tr class="separator:a6b608bd508f49d1cf8b63ec575f4cbd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63abf033d383f080c82375ff67e3de49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (gpio_num_t red1GPIO, gpio_num_t red0GPIO, gpio_num_t green1GPIO, gpio_num_t green0GPIO, gpio_num_t blue1GPIO, gpio_num_t blue0GPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
+<tr class="memdesc:a63abf033d383f080c82375ff67e3de49"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer.  <a href="#a63abf033d383f080c82375ff67e3de49">More...</a><br /></td></tr>
+<tr class="separator:a63abf033d383f080c82375ff67e3de49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad809b00c2fe795c03438ffc77577aa9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
+<tr class="memdesc:ad809b00c2fe795c03438ffc77577aa9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer using default pinout.  <a href="#ad809b00c2fe795c03438ffc77577aa9e">More...</a><br /></td></tr>
+<tr class="separator:ad809b00c2fe795c03438ffc77577aa9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1feb3cc90f3460ebaa677fb959523d00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#ga9bacc02df3145df2c15f847b56973003">DisplayControllerType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#a1feb3cc90f3460ebaa677fb959523d00">controllerType</a> ()</td></tr>
 <tr class="memdesc:a1feb3cc90f3460ebaa677fb959523d00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the display controller type.  <a href="#a1feb3cc90f3460ebaa677fb959523d00">More...</a><br /></td></tr>
 <tr class="separator:a1feb3cc90f3460ebaa677fb959523d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaae49991e2b9cb391cf97786612f59c1"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaae49991e2b9cb391cf97786612f59c1">createRawPixel</a> (<a class="el" href="structfabgl_1_1_r_g_b222.html">RGB222</a> rgb)</td></tr>
-<tr class="memdesc:aaae49991e2b9cb391cf97786612f59c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a raw pixel to use with <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac16c89bbf7ab603912b73cf2e0624d1a" title="Sets a raw pixel prepared using VGAController.createRawPixel. ">VGAController.setRawPixel</a>.  <a href="#aaae49991e2b9cb391cf97786612f59c1">More...</a><br /></td></tr>
-<tr class="separator:aaae49991e2b9cb391cf97786612f59c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa67322c9b9795a4716ec9e8074917224"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>createRawPixel</b> (<a class="el" href="structfabgl_1_1_r_g_b222.html">RGB222</a> rgb)</td></tr>
+<tr class="memdesc:aa67322c9b9795a4716ec9e8074917224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a raw pixel to use with VGAController.setRawPixel.  <a href="#aa67322c9b9795a4716ec9e8074917224">More...</a><br /></td></tr>
+<tr class="separator:aa67322c9b9795a4716ec9e8074917224"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5889bb0a66166d713ccbc4adf21e82d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#a5889bb0a66166d713ccbc4adf21e82d4">enableBackgroundPrimitiveExecution</a> (bool value)</td></tr>
 <tr class="memdesc:a5889bb0a66166d713ccbc4adf21e82d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables drawings inside vertical retracing time.  <a href="#a5889bb0a66166d713ccbc4adf21e82d4">More...</a><br /></td></tr>
 <tr class="separator:a5889bb0a66166d713ccbc4adf21e82d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd008a0de0eaec247e4810d1a9afb924"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#afd008a0de0eaec247e4810d1a9afb924">enableBackgroundPrimitiveTimeout</a> (bool value)</td></tr>
 <tr class="memdesc:afd008a0de0eaec247e4810d1a9afb924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables execution time limitation inside vertical retracing interrupt.  <a href="#afd008a0de0eaec247e4810d1a9afb924">More...</a><br /></td></tr>
 <tr class="separator:afd008a0de0eaec247e4810d1a9afb924"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ebecec3224ffb2ae98ab0cf358d23e6"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a4ebecec3224ffb2ae98ab0cf358d23e6">getBitsPerChannel</a> ()</td></tr>
-<tr class="memdesc:a4ebecec3224ffb2ae98ab0cf358d23e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets number of bits allocated for each channel.  <a href="#a4ebecec3224ffb2ae98ab0cf358d23e6">More...</a><br /></td></tr>
-<tr class="separator:a4ebecec3224ffb2ae98ab0cf358d23e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0ec3b010db626bc0014f93119a46f8f"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#aa0ec3b010db626bc0014f93119a46f8f">getScanline</a> (int y)</td></tr>
-<tr class="memdesc:aa0ec3b010db626bc0014f93119a46f8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a raw scanline pointer.  <a href="#aa0ec3b010db626bc0014f93119a46f8f">More...</a><br /></td></tr>
-<tr class="separator:aa0ec3b010db626bc0014f93119a46f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54d7923d1beec800077e93769cf8a38b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a54d7923d1beec800077e93769cf8a38b">getScreenHeight</a> ()</td></tr>
-<tr class="memdesc:a54d7923d1beec800077e93769cf8a38b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the screen height in pixels.  <a href="#a54d7923d1beec800077e93769cf8a38b">More...</a><br /></td></tr>
-<tr class="separator:a54d7923d1beec800077e93769cf8a38b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1714be70aa7c740976cd3a5a6d7457c2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a1714be70aa7c740976cd3a5a6d7457c2">getScreenWidth</a> ()</td></tr>
-<tr class="memdesc:a1714be70aa7c740976cd3a5a6d7457c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the screen width in pixels.  <a href="#a1714be70aa7c740976cd3a5a6d7457c2">More...</a><br /></td></tr>
-<tr class="separator:a1714be70aa7c740976cd3a5a6d7457c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cb70db85d96d99e7dd709e2e0231aac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a5cb70db85d96d99e7dd709e2e0231aac">getViewPortCol</a> ()</td></tr>
-<tr class="memdesc:a5cb70db85d96d99e7dd709e2e0231aac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines horizontal position of the viewport.  <a href="#a5cb70db85d96d99e7dd709e2e0231aac">More...</a><br /></td></tr>
-<tr class="separator:a5cb70db85d96d99e7dd709e2e0231aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a299c2bfe3660c0a8bc6ce38525f61788"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a299c2bfe3660c0a8bc6ce38525f61788">getViewPortHeight</a> ()</td></tr>
-<tr class="memdesc:a299c2bfe3660c0a8bc6ce38525f61788"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines vertical size of the viewport.  <a href="#a299c2bfe3660c0a8bc6ce38525f61788">More...</a><br /></td></tr>
-<tr class="separator:a299c2bfe3660c0a8bc6ce38525f61788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa736ad5f187de5c21088de98acafcb02"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#aa736ad5f187de5c21088de98acafcb02">getViewPortRow</a> ()</td></tr>
-<tr class="memdesc:aa736ad5f187de5c21088de98acafcb02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines vertical position of the viewport.  <a href="#aa736ad5f187de5c21088de98acafcb02">More...</a><br /></td></tr>
-<tr class="separator:aa736ad5f187de5c21088de98acafcb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62aed395da993973e820ffa87d2ce6ce"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a62aed395da993973e820ffa87d2ce6ce">getViewPortWidth</a> ()</td></tr>
-<tr class="memdesc:a62aed395da993973e820ffa87d2ce6ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines horizontal size of the viewport.  <a href="#a62aed395da993973e820ffa87d2ce6ce">More...</a><br /></td></tr>
-<tr class="separator:a62aed395da993973e820ffa87d2ce6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68093d4fb31b08590495b4821c1f472d"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getBitsPerChannel</b> ()</td></tr>
+<tr class="memdesc:a68093d4fb31b08590495b4821c1f472d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets number of bits allocated for each channel.  <a href="#a68093d4fb31b08590495b4821c1f472d">More...</a><br /></td></tr>
+<tr class="separator:a68093d4fb31b08590495b4821c1f472d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a353f12677df0c1d192931c52dac55b1c"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>getScanline</b> (int y)</td></tr>
+<tr class="memdesc:a353f12677df0c1d192931c52dac55b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a raw scanline pointer.  <a href="#a353f12677df0c1d192931c52dac55b1c">More...</a><br /></td></tr>
+<tr class="separator:a353f12677df0c1d192931c52dac55b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5f69692d6d60043676313083c4581ed"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><b>getViewPortCol</b> ()</td></tr>
+<tr class="memdesc:aa5f69692d6d60043676313083c4581ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines horizontal position of the viewport.  <a href="#aa5f69692d6d60043676313083c4581ed">More...</a><br /></td></tr>
+<tr class="separator:aa5f69692d6d60043676313083c4581ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4d20b70f97bad6f74203ac394729f86"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><b>getViewPortRow</b> ()</td></tr>
+<tr class="memdesc:ac4d20b70f97bad6f74203ac394729f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines vertical position of the viewport.  <a href="#ac4d20b70f97bad6f74203ac394729f86">More...</a><br /></td></tr>
+<tr class="separator:ac4d20b70f97bad6f74203ac394729f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5ce66824aa948074c07002b8edf4b62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#ac5ce66824aa948074c07002b8edf4b62">isDoubleBuffered</a> ()</td></tr>
 <tr class="memdesc:ac5ce66824aa948074c07002b8edf4b62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers. ">BitmappedDisplayController</a> is on double buffered mode.  <a href="#ac5ce66824aa948074c07002b8edf4b62">More...</a><br /></td></tr>
 <tr class="separator:ac5ce66824aa948074c07002b8edf4b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e315e01651c743b29840a36641e196f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a0e315e01651c743b29840a36641e196f">moveScreen</a> (int offsetX, int offsetY)</td></tr>
-<tr class="memdesc:a0e315e01651c743b29840a36641e196f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves screen by specified horizontal and vertical offset.  <a href="#a0e315e01651c743b29840a36641e196f">More...</a><br /></td></tr>
-<tr class="separator:a0e315e01651c743b29840a36641e196f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dd4521d2c3211e702024b7b329cc6aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>moveScreen</b> (int offsetX, int offsetY)</td></tr>
+<tr class="memdesc:a4dd4521d2c3211e702024b7b329cc6aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves screen by specified horizontal and vertical offset.  <a href="#a4dd4521d2c3211e702024b7b329cc6aa">More...</a><br /></td></tr>
+<tr class="separator:a4dd4521d2c3211e702024b7b329cc6aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab261f12432eea2de7530e3787412586d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#gacafd29e9adc4dc4055558e61fd4599c9">NativePixelFormat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#ab261f12432eea2de7530e3787412586d">nativePixelFormat</a> ()</td></tr>
 <tr class="memdesc:ab261f12432eea2de7530e3787412586d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the native pixel format used by this display.  <a href="#ab261f12432eea2de7530e3787412586d">More...</a><br /></td></tr>
 <tr class="separator:ab261f12432eea2de7530e3787412586d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,19 +171,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8dfff3e791759134e96813c465abc767"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#a8dfff3e791759134e96813c465abc767">setMouseCursorPos</a> (int <a class="el" href="fabutils_8h.html#aa6aba27bc1a89db9e350b50bbf881f57">X</a>, int <a class="el" href="fabutils_8h.html#abe4637362df8e341470401813999dd17">Y</a>)</td></tr>
 <tr class="memdesc:a8dfff3e791759134e96813c465abc767"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor position.  <a href="#a8dfff3e791759134e96813c465abc767">More...</a><br /></td></tr>
 <tr class="separator:a8dfff3e791759134e96813c465abc767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac16c89bbf7ab603912b73cf2e0624d1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac16c89bbf7ab603912b73cf2e0624d1a">setRawPixel</a> (int x, int y, uint8_t rgb)</td></tr>
-<tr class="memdesc:ac16c89bbf7ab603912b73cf2e0624d1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a raw pixel prepared using <a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaae49991e2b9cb391cf97786612f59c1" title="Creates a raw pixel to use with VGAController.setRawPixel. ">VGAController.createRawPixel</a>.  <a href="#ac16c89bbf7ab603912b73cf2e0624d1a">More...</a><br /></td></tr>
-<tr class="separator:ac16c89bbf7ab603912b73cf2e0624d1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a7a0081752e32ea318eb93dea8d337e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a9a7a0081752e32ea318eb93dea8d337e">setResolution</a> (char const *modeline, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</td></tr>
-<tr class="memdesc:a9a7a0081752e32ea318eb93dea8d337e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current resolution using linux-like modeline.  <a href="#a9a7a0081752e32ea318eb93dea8d337e">More...</a><br /></td></tr>
-<tr class="separator:a9a7a0081752e32ea318eb93dea8d337e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44c0adef7c84bb2d2df20e5bf555ef04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>setRawPixel</b> (int x, int y, uint8_t rgb)</td></tr>
+<tr class="memdesc:a44c0adef7c84bb2d2df20e5bf555ef04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a raw pixel prepared using VGAController.createRawPixel.  <a href="#a44c0adef7c84bb2d2df20e5bf555ef04">More...</a><br /></td></tr>
+<tr class="separator:a44c0adef7c84bb2d2df20e5bf555ef04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1242ec0f1504ac28e7916e25281ccbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>setResolution</b> (char const *modeline, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</td></tr>
+<tr class="memdesc:ab1242ec0f1504ac28e7916e25281ccbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current resolution using linux-like modeline.  <a href="#ab1242ec0f1504ac28e7916e25281ccbd">More...</a><br /></td></tr>
+<tr class="separator:ab1242ec0f1504ac28e7916e25281ccbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6044d318c3b5dfbf9cd16cfa2dbe7bf4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a6044d318c3b5dfbf9cd16cfa2dbe7bf4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#a6044d318c3b5dfbf9cd16cfa2dbe7bf4">setSprites</a> (T *sprites, int count)</td></tr>
 <tr class="memdesc:a6044d318c3b5dfbf9cd16cfa2dbe7bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the list of active sprites.  <a href="#a6044d318c3b5dfbf9cd16cfa2dbe7bf4">More...</a><br /></td></tr>
 <tr class="separator:a6044d318c3b5dfbf9cd16cfa2dbe7bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a885f286b5f21b9ca89b626f9c40a0b00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#a885f286b5f21b9ca89b626f9c40a0b00">shrinkScreen</a> (int shrinkX, int shrinkY)</td></tr>
-<tr class="memdesc:a885f286b5f21b9ca89b626f9c40a0b00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces or expands screen size by the specified horizontal and vertical offset.  <a href="#a885f286b5f21b9ca89b626f9c40a0b00">More...</a><br /></td></tr>
-<tr class="separator:a885f286b5f21b9ca89b626f9c40a0b00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9c0963df9946c0947558dcef5ad77dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>shrinkScreen</b> (int shrinkX, int shrinkY)</td></tr>
+<tr class="memdesc:ac9c0963df9946c0947558dcef5ad77dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces or expands screen size by the specified horizontal and vertical offset.  <a href="#ac9c0963df9946c0947558dcef5ad77dd">More...</a><br /></td></tr>
+<tr class="separator:ac9c0963df9946c0947558dcef5ad77dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1080e32a32fc6b8339575223c5e6574"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac1080e32a32fc6b8339575223c5e6574">suspendBackgroundPrimitiveExecution</a> ()</td></tr>
 <tr class="memdesc:ac1080e32a32fc6b8339575223c5e6574"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends drawings.  <a href="#ac1080e32a32fc6b8339575223c5e6574">More...</a><br /></td></tr>
 <tr class="separator:ac1080e32a32fc6b8339575223c5e6574"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,16 +219,19 @@ VGAController.setResolution(VGA_640x350_70Hz);
 VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
 
 // Set 640x350@70Hz resolution
-VGAController.setResolution(VGA_640x350_70Hz);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#_a7">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#_a0">VGA/Audio/Audio.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#_a0">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#_a0">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_file_browser_2_file_browser_8ino-example.html#_a0">VGA/FileBrowser/FileBrowser.ino</a>, <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html#_a0">VGA/GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#_a27">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#_a0">VGA/MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#_a0">VGA/SpaceInvaders/SpaceInvaders.ino</a>, <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#_a0">VGA/Sprites/Sprites.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#_a1">VGA/VIC20/VIC20.ino</a>.</dd>
+VGAController.setResolution(VGA_640x350_70Hz);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#_a7">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#_a0">VGA/Audio/Audio.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#_a0">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#_a0">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_file_browser_2_file_browser_8ino-example.html#_a0">VGA/FileBrowser/FileBrowser.ino</a>, <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html#_a0">VGA/GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#_a0">VGA/MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#_a0">VGA/SpaceInvaders/SpaceInvaders.ino</a>, <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#_a0">VGA/Sprites/Sprites.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#_a1">VGA/VIC20/VIC20.ino</a>.</dd>
 </dl></div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a10e3b1a7467ff759302462216162fe70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10e3b1a7467ff759302462216162fe70">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/3]</span></h2>
+<a id="a6b608bd508f49d1cf8b63ec575f4cbd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b608bd508f49d1cf8b63ec575f4cbd5">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::begin </td>
+          <td class="memname">void fabgl::VGABaseController::begin </td>
           <td>(</td>
           <td class="paramtype">gpio_num_t&#160;</td>
           <td class="paramname"><em>redGPIO</em>, </td>
@@ -275,6 +266,11 @@ VGAController.setResolution(VGA_640x350_70Hz);</pre> <dl><dt><b>Examples: </b></
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>This is the 8 colors (5 GPIOs) initializer. </p>
@@ -289,19 +285,21 @@ VGAController.setResolution(VGA_640x350_70Hz);</pre> <dl><dt><b>Examples: </b></
   </table>
   </dd>
 </dl>
-<p>Example: </p><pre class="fragment">// Use GPIO 22 for red, GPIO 21 for green, GPIO 19 for blue, GPIO 18 for HSync and GPIO 5 for VSync
-VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a21">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a3">VGA/Audio/Audio.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a7">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a2">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_file_browser_2_file_browser_8ino-example.html#a3">VGA/FileBrowser/FileBrowser.ino</a>, <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a3">VGA/GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a45">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a5">VGA/MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a20">VGA/SpaceInvaders/SpaceInvaders.ino</a>, <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a1">VGA/Sprites/Sprites.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a15">VGA/VIC20/VIC20.ino</a>.</dd>
-</dl>
+<p>Example: </p><pre class="fragment">// Use GPIO 22 for red, GPIO 19 for green, GPIO 5 for blue, GPIO 23 for HSync and GPIO 15 for VSync
+VGAController.begin(GPIO_NUM_22, GPIO_NUM_19, GPIO_NUM_5, GPIO_NUM_23, GPIO_NUM_15);</pre> 
 </div>
 </div>
-<a id="a11b70942a5879a6241dea608b28a65b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11b70942a5879a6241dea608b28a65b8">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/3]</span></h2>
+<a id="a63abf033d383f080c82375ff67e3de49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63abf033d383f080c82375ff67e3de49">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::begin </td>
+          <td class="memname">void fabgl::VGABaseController::begin </td>
           <td>(</td>
           <td class="paramtype">gpio_num_t&#160;</td>
           <td class="paramname"><em>red1GPIO</em>, </td>
@@ -354,6 +352,11 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>This is the 64 colors (8 GPIOs) initializer. </p>
@@ -375,8 +378,8 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);</pre> 
 </div>
 </div>
-<a id="abaaf0f6e938018660ab0b15d073e5821"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abaaf0f6e938018660ab0b15d073e5821">&#9670;&nbsp;</a></span>begin() <span class="overload">[3/3]</span></h2>
+<a id="ad809b00c2fe795c03438ffc77577aa9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad809b00c2fe795c03438ffc77577aa9e">&#9670;&nbsp;</a></span>begin() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -385,7 +388,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::begin </td>
+          <td class="memname">void fabgl::VGABaseController::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -393,7 +396,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -401,8 +404,6 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 <p>This is the 64 colors (8 GPIOs) initializer using default pinout. </p>
 <p>Two GPIOs per channel, plus horizontal and vertical sync signals. Use GPIO 22-21 for red, GPIO 19-18 for green, GPIO 5-4 for blue, GPIO 23 for HSync and GPIO 15 for VSync</p>
 <p>Example: </p><pre class="fragment">VGAController.begin();</pre> 
-<p>Implements <a class="el" href="classfabgl_1_1_base_display_controller.html">fabgl::BaseDisplayController</a>.</p>
-
 </div>
 </div>
 <a id="a1feb3cc90f3460ebaa677fb959523d00"></a>
@@ -435,8 +436,8 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
 
 </div>
 </div>
-<a id="aaae49991e2b9cb391cf97786612f59c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaae49991e2b9cb391cf97786612f59c1">&#9670;&nbsp;</a></span>createRawPixel()</h2>
+<a id="aa67322c9b9795a4716ec9e8074917224"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa67322c9b9795a4716ec9e8074917224">&#9670;&nbsp;</a></span>createRawPixel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -445,7 +446,7 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t fabgl::VGAController::createRawPixel </td>
+          <td class="memname">uint8_t fabgl::VGABaseController::createRawPixel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structfabgl_1_1_r_g_b222.html">RGB222</a>&#160;</td>
           <td class="paramname"><em>rgb</em></td><td>)</td>
@@ -454,12 +455,12 @@ VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Creates a raw pixel to use with <a class="el" href="classfabgl_1_1_v_g_a_controller.html#ac16c89bbf7ab603912b73cf2e0624d1a" title="Sets a raw pixel prepared using VGAController.createRawPixel. ">VGAController.setRawPixel</a>. </p>
+<p>Creates a raw pixel to use with VGAController.setRawPixel. </p>
 <p>A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -542,8 +543,8 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
 
 </div>
 </div>
-<a id="a4ebecec3224ffb2ae98ab0cf358d23e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ebecec3224ffb2ae98ab0cf358d23e6">&#9670;&nbsp;</a></span>getBitsPerChannel()</h2>
+<a id="a68093d4fb31b08590495b4821c1f472d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68093d4fb31b08590495b4821c1f472d">&#9670;&nbsp;</a></span>getBitsPerChannel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -552,7 +553,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t fabgl::VGAController::getBitsPerChannel </td>
+          <td class="memname">uint8_t fabgl::VGABaseController::getBitsPerChannel </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -560,19 +561,19 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Gets number of bits allocated for each channel. </p>
-<p>Number of bits depends by which <a class="el" href="classfabgl_1_1_v_g_a_controller.html#abaaf0f6e938018660ab0b15d073e5821" title="This is the 64 colors (8 GPIOs) initializer using default pinout. ">begin()</a> initializer has been called.</p>
+<p>Number of bits depends by which begin() initializer has been called.</p>
 <dl class="section return"><dt>Returns</dt><dd>1 (8 colors) or 2 (64 colors). </dd></dl>
 
 </div>
 </div>
-<a id="aa0ec3b010db626bc0014f93119a46f8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0ec3b010db626bc0014f93119a46f8f">&#9670;&nbsp;</a></span>getScanline()</h2>
+<a id="a353f12677df0c1d192931c52dac55b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a353f12677df0c1d192931c52dac55b1c">&#9670;&nbsp;</a></span>getScanline()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -581,7 +582,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t* fabgl::VGAController::getScanline </td>
+          <td class="memname">uint8_t* fabgl::VGABaseController::getScanline </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>y</em></td><td>)</td>
@@ -590,13 +591,13 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Gets a raw scanline pointer. </p>
-<p>A raw scanline must be filled with raw pixel colors. Use <a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaae49991e2b9cb391cf97786612f59c1" title="Creates a raw pixel to use with VGAController.setRawPixel. ">VGAController.createRawPixel</a> to create raw pixel colors. A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals. Pixels are arranged in 32 bit packes as follows: pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 : pixel : 0 1 2 3 4 5 6 7 8 9 10 11 ...etc... byte : 2 3 0 1 6 7 4 5 10 11 8 9 ...etc... dword : 0 1 2 ...etc...</p>
+<p>A raw scanline must be filled with raw pixel colors. Use VGAController.createRawPixel to create raw pixel colors. A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals. Pixels are arranged in 32 bit packes as follows: pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 : pixel : 0 1 2 3 4 5 6 7 8 9 10 11 ...etc... byte : 2 3 0 1 6 7 4 5 10 11 8 9 ...etc... dword : 0 1 2 ...etc...</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">y</td><td>Vertical scanline position (0 = top row) </td></tr>
@@ -606,8 +607,8 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
 
 </div>
 </div>
-<a id="a54d7923d1beec800077e93769cf8a38b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54d7923d1beec800077e93769cf8a38b">&#9670;&nbsp;</a></span>getScreenHeight()</h2>
+<a id="aa5f69692d6d60043676313083c4581ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5f69692d6d60043676313083c4581ed">&#9670;&nbsp;</a></span>getViewPortCol()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -616,7 +617,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int fabgl::VGAController::getScreenHeight </td>
+          <td class="memname">int fabgl::VGABaseController::getViewPortCol </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -624,69 +625,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines the screen height in pixels. </p>
-<dl class="section return"><dt>Returns</dt><dd>Screen height in pixels. </dd></dl>
-
-<p>Implements <a class="el" href="classfabgl_1_1_base_display_controller.html#a17b82284e218b5f3b9aa29a6450a86d9">fabgl::BaseDisplayController</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a34">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
-</dl>
-</div>
-</div>
-<a id="a1714be70aa7c740976cd3a5a6d7457c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1714be70aa7c740976cd3a5a6d7457c2">&#9670;&nbsp;</a></span>getScreenWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::VGAController::getScreenWidth </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines the screen width in pixels. </p>
-<dl class="section return"><dt>Returns</dt><dd>Screen width in pixels. </dd></dl>
-
-<p>Implements <a class="el" href="classfabgl_1_1_base_display_controller.html#a100241a4f73c0eef0701c76e2e9f3b0c">fabgl::BaseDisplayController</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a33">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
-</dl>
-</div>
-</div>
-<a id="a5cb70db85d96d99e7dd709e2e0231aac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5cb70db85d96d99e7dd709e2e0231aac">&#9670;&nbsp;</a></span>getViewPortCol()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::VGAController::getViewPortCol </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -696,8 +635,8 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
 
 </div>
 </div>
-<a id="a299c2bfe3660c0a8bc6ce38525f61788"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a299c2bfe3660c0a8bc6ce38525f61788">&#9670;&nbsp;</a></span>getViewPortHeight()</h2>
+<a id="ac4d20b70f97bad6f74203ac394729f86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4d20b70f97bad6f74203ac394729f86">&#9670;&nbsp;</a></span>getViewPortRow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -706,7 +645,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int fabgl::VGAController::getViewPortHeight </td>
+          <td class="memname">int fabgl::VGABaseController::getViewPortRow </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -714,38 +653,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines vertical size of the viewport. </p>
-<dl class="section return"><dt>Returns</dt><dd>Vertical size of the viewport. </dd></dl>
-
-<p>Implements <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#ac75b37243bb97b7520f7a88347992601">fabgl::BitmappedDisplayController</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a3">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a36">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
-</dl>
-</div>
-</div>
-<a id="aa736ad5f187de5c21088de98acafcb02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa736ad5f187de5c21088de98acafcb02">&#9670;&nbsp;</a></span>getViewPortRow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::VGAController::getViewPortRow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -753,37 +661,6 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
 <p>Determines vertical position of the viewport. </p>
 <dl class="section return"><dt>Returns</dt><dd>Vertical position of the viewport (in case viewport height is less than screen height). </dd></dl>
 
-</div>
-</div>
-<a id="a62aed395da993973e820ffa87d2ce6ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62aed395da993973e820ffa87d2ce6ce">&#9670;&nbsp;</a></span>getViewPortWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::VGAController::getViewPortWidth </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines horizontal size of the viewport. </p>
-<dl class="section return"><dt>Returns</dt><dd>Horizontal size of the viewport. </dd></dl>
-
-<p>Implements <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#acdba19ad2cc3f0cf5a6d3d51fa5271ea">fabgl::BitmappedDisplayController</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a2">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a35">VGA/ModelineStudio/ModelineStudio.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a5">VGA/Sprites/Sprites.ino</a>.</dd>
-</dl>
 </div>
 </div>
 <a id="af7b0b2f874e6e97db692625f0ee4b525"></a>
@@ -842,14 +719,17 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
 
 </div>
 </div>
-<a id="a0e315e01651c743b29840a36641e196f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e315e01651c743b29840a36641e196f">&#9670;&nbsp;</a></span>moveScreen()</h2>
+<a id="a4dd4521d2c3211e702024b7b329cc6aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dd4521d2c3211e702024b7b329cc6aa">&#9670;&nbsp;</a></span>moveScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::moveScreen </td>
+          <td class="memname">void fabgl::VGABaseController::moveScreen </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>offsetX</em>, </td>
@@ -866,6 +746,11 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Moves screen by specified horizontal and vertical offset. </p>
@@ -878,8 +763,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   </dd>
 </dl>
 <p>Example: </p><pre class="fragment">// Move screen 4 pixels right, 1 pixel left
-VGAController.moveScreen(4, -1);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a10">VGA/CollisionDetection/CollisionDetection.ino</a>, and <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a48">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
-</dl>
+VGAController.moveScreen(4, -1);</pre> 
 </div>
 </div>
 <a id="ab261f12432eea2de7530e3787412586d"></a>
@@ -1020,7 +904,7 @@ delete buf;</pre>
 <p>Screen is automatically updated whenever a primitive is painted (look at <a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">Canvas</a>).<br />
  When a sprite updates its image or its position (or any other property) it is required to force a refresh using this method.<br />
  <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html#af5488939dfd5c3fe1481bc6f87c707b3" title="Forces the sprites to be updated. ">BitmappedDisplayController.refreshSprites()</a> is required also when using the double buffered mode, to paint sprites. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a5">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a4">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a6">VGA/Sprites/Sprites.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a2">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a18">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1114,7 +998,7 @@ delete buf;</pre>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a11">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a10">VGA/MouseOnScreen/MouseOnScreen.ino</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1197,8 +1081,8 @@ delete buf;</pre>
 
 </div>
 </div>
-<a id="ac16c89bbf7ab603912b73cf2e0624d1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac16c89bbf7ab603912b73cf2e0624d1a">&#9670;&nbsp;</a></span>setRawPixel()</h2>
+<a id="a44c0adef7c84bb2d2df20e5bf555ef04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44c0adef7c84bb2d2df20e5bf555ef04">&#9670;&nbsp;</a></span>setRawPixel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1207,7 +1091,7 @@ delete buf;</pre>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::setRawPixel </td>
+          <td class="memname">void fabgl::VGABaseController::setRawPixel </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -1232,12 +1116,12 @@ delete buf;</pre>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Sets a raw pixel prepared using <a class="el" href="classfabgl_1_1_v_g_a_controller.html#aaae49991e2b9cb391cf97786612f59c1" title="Creates a raw pixel to use with VGAController.setRawPixel. ">VGAController.createRawPixel</a>. </p>
+<p>Sets a raw pixel prepared using VGAController.createRawPixel. </p>
 <p>A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1251,8 +1135,8 @@ delete buf;</pre>
 VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));</pre> 
 </div>
 </div>
-<a id="a9a7a0081752e32ea318eb93dea8d337e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a7a0081752e32ea318eb93dea8d337e">&#9670;&nbsp;</a></span>setResolution()</h2>
+<a id="ab1242ec0f1504ac28e7916e25281ccbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1242ec0f1504ac28e7916e25281ccbd">&#9670;&nbsp;</a></span>setResolution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1261,7 +1145,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::setResolution </td>
+          <td class="memname">void fabgl::VGABaseController::setResolution </td>
           <td>(</td>
           <td class="paramtype">char const *&#160;</td>
           <td class="paramname"><em>modeline</em>, </td>
@@ -1292,7 +1176,7 @@ VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0)
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1317,9 +1201,6 @@ VGAController.setResolution("\"640x480@60Hz\" 25.175 640 656 752 800 480 490 492
 
 // Set 640x382@60Hz but limit the viewport to 640x350
 VGAController.setResolution(VGA_640x382_60Hz, 640, 350);</pre> 
-<p>Implements <a class="el" href="classfabgl_1_1_base_display_controller.html">fabgl::BaseDisplayController</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#a22">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html#a4">VGA/Audio/Audio.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a8">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html#a3">VGA/DoubleBuffer/DoubleBuffer.ino</a>, <a class="el" href="_v_g_a_2_file_browser_2_file_browser_8ino-example.html#a4">VGA/FileBrowser/FileBrowser.ino</a>, <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html#a4">VGA/GraphicalUserInterface/GraphicalUserInterface.ino</a>, <a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a46">VGA/ModelineStudio/ModelineStudio.ino</a>, <a class="el" href="_v_g_a_2_mouse_on_screen_2_mouse_on_screen_8ino-example.html#a6">VGA/MouseOnScreen/MouseOnScreen.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a21">VGA/SpaceInvaders/SpaceInvaders.ino</a>, <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a2">VGA/Sprites/Sprites.ino</a>, and <a class="el" href="_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html#a16">VGA/VIC20/VIC20.ino</a>.</dd>
-</dl>
 </div>
 </div>
 <a id="a6044d318c3b5dfbf9cd16cfa2dbe7bf4"></a>
@@ -1377,18 +1258,21 @@ struct MySprite : Sprite {
 
 static MySprite sprites[10];
 
-VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_s_s_d1306__o_l_e_d_2128x32_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_s_s_d1306__o_l_e_d_2128x64_2_collision_detection_2_collision_detection_8ino-example.html#a2">SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a4">VGA/Sprites/Sprites.ino</a>.</dd>
+VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html#a1">VGA/CollisionDetection/CollisionDetection.ino</a>, <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html#a13">VGA/SpaceInvaders/SpaceInvaders.ino</a>, and <a class="el" href="_v_g_a_2_sprites_2_sprites_8ino-example.html#a3">VGA/Sprites/Sprites.ino</a>.</dd>
 </dl>
 </div>
 </div>
-<a id="a885f286b5f21b9ca89b626f9c40a0b00"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a885f286b5f21b9ca89b626f9c40a0b00">&#9670;&nbsp;</a></span>shrinkScreen()</h2>
+<a id="ac9c0963df9946c0947558dcef5ad77dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9c0963df9946c0947558dcef5ad77dd">&#9670;&nbsp;</a></span>shrinkScreen()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void fabgl::VGAController::shrinkScreen </td>
+          <td class="memname">void fabgl::VGABaseController::shrinkScreen </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>shrinkX</em>, </td>
@@ -1405,6 +1289,11 @@ VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Reduces or expands screen size by the specified horizontal and vertical offset. </p>
@@ -1418,8 +1307,7 @@ VGAController.setSprites(sprites, 10);</pre> <dl><dt><b>Examples: </b></dt><dd><
 </dl>
 <p>Example: </p><pre class="fragment">// Shrink screen by 8 pixels and move by 8 pixels to the left
 VGAController.shrinkScreen(8, 0);
-VGAController.moveScreen(8, 0);</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_modeline_studio_2_modeline_studio_8ino-example.html#a52">VGA/ModelineStudio/ModelineStudio.ino</a>.</dd>
-</dl>
+VGAController.moveScreen(8, 0);</pre> 
 </div>
 </div>
 <a id="ac1080e32a32fc6b8339575223c5e6574"></a>
@@ -1529,7 +1417,7 @@ delete buf;</pre>
 </div><div class="memdoc">
 
 <p><a class="el" href="structfabgl_1_1_size.html" title="Represents a bidimensional size. ">Size</a> of display controller primitives queue. </p>
-<p>Application should change before <a class="el" href="classfabgl_1_1_v_g_a_controller.html#abaaf0f6e938018660ab0b15d073e5821" title="This is the 64 colors (8 GPIOs) initializer using default pinout. ">begin()</a> method.</p>
+<p>Application should change before begin() method.</p>
 <p>Default value is FABGLIB_DEFAULT_DISPLAYCONTROLLER_QUEUE_SIZE (defined in <a class="el" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors...">fabglconf.h</a>) </p>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_multitasking_c_p_m_2_multitasking_c_p_m_8ino-example.html#a2">VGA/MultitaskingCPM/MultitaskingCPM.ino</a>.</dd>
 </dl>

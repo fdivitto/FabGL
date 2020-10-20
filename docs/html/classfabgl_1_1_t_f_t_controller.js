@@ -1,7 +1,5 @@
 var classfabgl_1_1_t_f_t_controller =
 [
-    [ "begin", "classfabgl_1_1_t_f_t_controller.html#a230f5190b7e17eef37424a9f5ee1e204", null ],
-    [ "begin", "classfabgl_1_1_t_f_t_controller.html#a40adbcc9ae4c12d005ec1e2e943b084c", null ],
     [ "begin", "classfabgl_1_1_t_f_t_controller.html#aa01dea3a8d83534d871c7e4ef6b124b2", null ],
     [ "begin", "classfabgl_1_1_t_f_t_controller.html#a1b256a1afee62066110fbbb052583946", null ],
     [ "controllerType", "classfabgl_1_1_t_f_t_controller.html#a1feb3cc90f3460ebaa677fb959523d00", null ],

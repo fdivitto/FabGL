@@ -1,0 +1,27 @@
+var classfabgl_1_1_v_g_a_direct_controller =
+[
+    [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#a6b608bd508f49d1cf8b63ec575f4cbd5", null ],
+    [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#a63abf033d383f080c82375ff67e3de49", null ],
+    [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#ad809b00c2fe795c03438ffc77577aa9e", null ],
+    [ "controllerType", "classfabgl_1_1_v_g_a_direct_controller.html#a1feb3cc90f3460ebaa677fb959523d00", null ],
+    [ "createRawPixel", "classfabgl_1_1_v_g_a_direct_controller.html#aa67322c9b9795a4716ec9e8074917224", null ],
+    [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_direct_controller.html#a5889bb0a66166d713ccbc4adf21e82d4", null ],
+    [ "enableBackgroundPrimitiveTimeout", "classfabgl_1_1_v_g_a_direct_controller.html#afd008a0de0eaec247e4810d1a9afb924", null ],
+    [ "getBitsPerChannel", "classfabgl_1_1_v_g_a_direct_controller.html#a68093d4fb31b08590495b4821c1f472d", null ],
+    [ "getScanline", "classfabgl_1_1_v_g_a_direct_controller.html#a353f12677df0c1d192931c52dac55b1c", null ],
+    [ "getViewPortCol", "classfabgl_1_1_v_g_a_direct_controller.html#aa5f69692d6d60043676313083c4581ed", null ],
+    [ "getViewPortRow", "classfabgl_1_1_v_g_a_direct_controller.html#ac4d20b70f97bad6f74203ac394729f86", null ],
+    [ "isDoubleBuffered", "classfabgl_1_1_v_g_a_direct_controller.html#ac5ce66824aa948074c07002b8edf4b62", null ],
+    [ "moveScreen", "classfabgl_1_1_v_g_a_direct_controller.html#a4dd4521d2c3211e702024b7b329cc6aa", null ],
+    [ "nativePixelFormat", "classfabgl_1_1_v_g_a_direct_controller.html#a2348a5dbca3ba1806a5cf9b0f98c81e5", null ],
+    [ "processPrimitives", "classfabgl_1_1_v_g_a_direct_controller.html#a387538792224c2a84be34d8621b41111", null ],
+    [ "refreshSprites", "classfabgl_1_1_v_g_a_direct_controller.html#af5488939dfd5c3fe1481bc6f87c707b3", null ],
+    [ "removeSprites", "classfabgl_1_1_v_g_a_direct_controller.html#a470fa64af60a3f689e263587a5fc5560", null ],
+    [ "setMouseCursor", "classfabgl_1_1_v_g_a_direct_controller.html#ae5843958fc71b17ee900fbd4297acdcd", null ],
+    [ "setMouseCursor", "classfabgl_1_1_v_g_a_direct_controller.html#a999c2b67a3b1320909211feb5e647217", null ],
+    [ "setMouseCursorPos", "classfabgl_1_1_v_g_a_direct_controller.html#a8dfff3e791759134e96813c465abc767", null ],
+    [ "setRawPixel", "classfabgl_1_1_v_g_a_direct_controller.html#a44c0adef7c84bb2d2df20e5bf555ef04", null ],
+    [ "setResolution", "classfabgl_1_1_v_g_a_direct_controller.html#ab1242ec0f1504ac28e7916e25281ccbd", null ],
+    [ "setSprites", "classfabgl_1_1_v_g_a_direct_controller.html#a6044d318c3b5dfbf9cd16cfa2dbe7bf4", null ],
+    [ "shrinkScreen", "classfabgl_1_1_v_g_a_direct_controller.html#ac9c0963df9946c0947558dcef5ad77dd", null ]
+];

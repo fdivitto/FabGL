@@ -1,6 +1,5 @@
 var fabutils_8h =
 [
-    [ "AutoSuspendInterrupts", "structfabgl_1_1_auto_suspend_interrupts.html", null ],
     [ "CoreUsage", "structfabgl_1_1_core_usage.html", null ],
     [ "DirItem", "structfabgl_1_1_dir_item.html", "structfabgl_1_1_dir_item" ],
     [ "FileBrowser", "classfabgl_1_1_file_browser.html", "classfabgl_1_1_file_browser" ],

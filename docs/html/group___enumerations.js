@@ -82,6 +82,9 @@ var group___enumerations =
       [ "Mono", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
       [ "SBGR2222", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
       [ "RGB565BE", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ],
+      [ "PALETTE2", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9ab4b9dd494783e3c156b72596ce15ff17", null ],
+      [ "PALETTE4", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a3ad9f499f52bd79815ec9efb1c0a11ad", null ],
+      [ "PALETTE8", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a2c2e91aa769aa411b0db57883d167601", null ],
       [ "PALETTE16", "group___enumerations.html#ggacafd29e9adc4dc4055558e61fd4599c9a2305a7e1bcc1d10f990698ed574363ac", null ]
     ] ],
     [ "PixelFormat", "group___enumerations.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
@@ -104,12 +107,6 @@ var group___enumerations =
       [ "KeyboardPort0_MousePort1", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a930833460d824d9daf937c25c8b7ed74", null ],
       [ "KeyboardPort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017a140efa5bba007b81c709c0dc5f443ef7", null ],
       [ "MousePort0", "group___enumerations.html#gga8c7bd5a9bf2e9dfc8871892efcc80017ab315933e6f8a71499678887626ae5fd4", null ]
-    ] ],
-    [ "SSD1306Orientation", "group___enumerations.html#gac52359a56bef8cb992b0ecd0e50d543c", [
-      [ "Normal", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca960b44c579bc2f6818d2daaf9e4c16f0", null ],
-      [ "ReverseHorizontal", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543cac3b9e126f88f9f8df2fd2be6e8a32559", null ],
-      [ "ReverseVertical", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca0ffc124cf46fbd9cdc3b9c4b04230de0", null ],
-      [ "Rotate180", "group___enumerations.html#ggac52359a56bef8cb992b0ecd0e50d543ca371980c5d153a94cf022d6b4daa4d34c", null ]
     ] ],
     [ "TerminalTransition", "group___enumerations.html#gaa05e86d2759d0ed2edd159ad66efee78", [
       [ "LeftToRight", "group___enumerations.html#ggaa05e86d2759d0ed2edd159ad66efee78ad1e80c506f4c89e3c4fb1c1b4867a03c", null ],

@@ -2,8 +2,6 @@ var searchData=
 [
   ['data',['data',['../structfabgl_1_1_glyph.html#aaf87f9924c508aea88fe90afbae753c0',1,'fabgl::Glyph::data()'],['../structfabgl_1_1_bitmap.html#ac314d4af777bc333a5908c3d745a39e6',1,'fabgl::Bitmap::data()'],['../displaycontroller_8h.html#a96db82e580e46e24e2b39dd6c5bf7c21',1,'data():&#160;displaycontroller.h']]],
   ['dataallocated',['dataAllocated',['../structfabgl_1_1_bitmap.html#ac5d3361bf7c9c63efae5d024694aa725',1,'fabgl::Bitmap']]],
-  ['dayofmonth',['dayOfMonth',['../structfabgl_1_1_date_time.html#a53c25a92a65021348ce43a56ead4946d',1,'fabgl::DateTime']]],
-  ['dayofweek',['dayOfWeek',['../structfabgl_1_1_date_time.html#a5c840e4fcf7065e956cb7167f73e5d47',1,'fabgl::DateTime']]],
   ['defaultcursor',['defaultCursor',['../structfabgl_1_1ui_window_style.html#a51d7c83f0e70a1f8e78b2530129aa959',1,'fabgl::uiWindowStyle']]],
   ['deltax',['deltaX',['../structfabgl_1_1_mouse_delta.html#a9bc2da13d599e5f58b2dae3e12c97fa2',1,'fabgl::MouseDelta']]],
   ['deltay',['deltaY',['../structfabgl_1_1_mouse_delta.html#a2616a9b0b07e87b53cb75ebd7e694071',1,'fabgl::MouseDelta']]],

@@ -120,22 +120,25 @@ $(document).ready(function(){initNavTree('index.html','');});
 <hr/>
 <p>The main classes of FabGL library are:</p><ul>
 <li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA bitmapped controller. ">fabgl::VGAController</a>, device driver for VGA bitmapped output.</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller. ">fabgl::VGA2Controller</a>, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller. ">fabgl::VGA4Controller</a>, device driver for VGA 4 colors bitmapped output (low RAM requirements, CPU intensive).</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller. ">fabgl::VGA8Controller</a>, device driver for VGA 8 colors bitmapped output (low RAM requirements, CPU intensive).</li>
 <li><a class="el" href="classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller. ">fabgl::VGA16Controller</a>, device driver for VGA 16 colors bitmapped output (low RAM requirements, CPU intensive).</li>
 <li><a class="el" href="classfabgl_1_1_v_g_a_text_controller.html" title="Represents the VGA text-only controller. ">fabgl::VGATextController</a>, device driver for VGA textual output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, device driver for SSD1306 based OLED displays.</li>
+<li>fabgl::SSD1306Controller, device driver for SSD1306 based OLED displays.</li>
 <li>fabgl::ST7789Controller, device driver for ST7789 based TFT displays.</li>
 <li>fabgl::ILI9341Controller, device driver for ILI9341 based TFT displays.</li>
 <li><a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a>, that provides a set of drawing primitives (lines, rectangles, text...).</li>
-<li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102 and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
+<li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102/etc and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
 <li><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a>, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
-<li><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a> (instanced as <b>Mouse</b>), that controls a PS2 mouse.</li>
+<li><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a>, that controls a PS2 mouse.</li>
 <li><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">fabgl::Scene</a> abstract class that handles sprites, timings and collision detection.</li>
 <li><a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">fabgl::uiApp</a> base class to build Graphical User Interface applications</li>
 <li><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output. ">fabgl::SoundGenerator</a> to generate sound and music.</li>
 </ul>
 <p>Other classes are:</p><ul>
-<li><a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a>, thread safe I2C (Wire) class</li>
-<li><a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">fabgl::DS3231</a>, Real Time Clock driver which uses the thread safe <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a> library</li>
+<li>fabgl::I2C, thread safe I2C (Wire) class</li>
+<li>fabgl::DS3231, Real Time Clock driver which uses the thread safe fabgl::I2C library</li>
 </ul>
 <p>See <a class="el" href="conf_v_g_a.html">Configuring VGA outputs</a> for VGA connection sample schema.</p>
 <p>See <a class="el" href="conf_p_s2.html">Configuring PS/2 port</a> for PS/2 connection sample schema.</p>

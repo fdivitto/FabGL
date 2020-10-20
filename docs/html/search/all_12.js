@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['temperature',['temperature',['../classfabgl_1_1_d_s3231.html#aa1fef8672fe5e18fba61079aa650a3b9',1,'fabgl::DS3231']]],
   ['terminal',['Terminal',['../classfabgl_1_1_terminal.html',1,'fabgl']]],
   ['terminal_2eh',['terminal.h',['../terminal_8h.html',1,'']]],
   ['terminalcontroller',['TerminalController',['../classfabgl_1_1_terminal_controller.html',1,'fabgl::TerminalController'],['../classfabgl_1_1_terminal_controller.html#a45a06022708792cda12ecd6187bc3dd9',1,'fabgl::TerminalController::TerminalController()']]],
@@ -23,7 +22,6 @@ var searchData=
   ['tftcontrollergeneric_2eh',['TFTControllerGeneric.h',['../_t_f_t_controller_generic_8h.html',1,'']]],
   ['tftcontrollerspecif_2eh',['TFTControllerSpecif.h',['../_t_f_t_controller_specif_8h.html',1,'']]],
   ['tftorientation',['TFTOrientation',['../group___enumerations.html#ga2c409526513a1d2bd2a03cba4e701ed7',1,'fabgl']]],
-  ['timestamp',['timestamp',['../structfabgl_1_1_date_time.html#af216dffa62d3b91221f269997e935d23',1,'fabgl::DateTime']]],
   ['title',['title',['../classfabgl_1_1ui_frame.html#add07566cca01a56f6fc5b292c4a34d40',1,'fabgl::uiFrame']]],
   ['titlebackgroundcolor',['titleBackgroundColor',['../structfabgl_1_1ui_frame_style.html#a4cd6d05766e056b06a2bf4e4f74772ba',1,'fabgl::uiFrameStyle']]],
   ['titlecolor',['titleColor',['../structfabgl_1_1ui_frame_style.html#abcb17b064109ed166bbfbd616cc6c2b3',1,'fabgl::uiFrameStyle']]],
@@ -32,6 +30,5 @@ var searchData=
   ['transformrect',['transformRect',['../classfabgl_1_1ui_window.html#ae16282f1881ec8ded65ad239f3d17735',1,'fabgl::uiWindow']]],
   ['trianglewaveformgenerator',['TriangleWaveformGenerator',['../classfabgl_1_1_triangle_waveform_generator.html',1,'fabgl']]],
   ['truncate',['truncate',['../classfabgl_1_1_file_browser.html#a4ab187110a077405f9bd165e23c95a26',1,'fabgl::FileBrowser']]],
-  ['tsi2c_2eh',['tsi2c.h',['../tsi2c_8h.html',1,'']]],
   ['typetext',['typeText',['../classfabgl_1_1_line_editor.html#a01ac2be3b26bb1c018d7d2536d7074f4',1,'fabgl::LineEditor']]]
 ];

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['i2c',['I2C',['../classfabgl_1_1_i2_c.html#aaafe4e794ce77c6cd762faf3b6d5f43c',1,'fabgl::I2C']]],
   ['identify',['identify',['../classfabgl_1_1_p_s2_device.html#a2b6250680121b58ad9787ff2cdea9671',1,'fabgl::PS2Device']]],
   ['imagestyle',['imageStyle',['../classfabgl_1_1ui_image.html#a0a07e55d1b7ed0cbbafebbca2532884d',1,'fabgl::uiImage']]],
   ['init',['init',['../classfabgl_1_1ui_app.html#a77aa2e78b40ecf2f29e8180b30272d84',1,'fabgl::uiApp::init()'],['../classfabgl_1_1_scene.html#adfd5f4a75070bc82a324cf3f449f5a3d',1,'fabgl::Scene::init()']]],
@@ -9,8 +8,8 @@ var searchData=
   ['injectvirtualkey',['injectVirtualKey',['../classfabgl_1_1_keyboard.html#a0b39247c50f768af27f3504cc708dbb3',1,'fabgl::Keyboard']]],
   ['inputbox',['inputBox',['../classfabgl_1_1ui_app.html#a1b38652b37ee1438d6832660a824a9e7',1,'fabgl::uiApp']]],
   ['insertevent',['insertEvent',['../classfabgl_1_1ui_app.html#a8d59a05eaedc8f165178fc412e475394',1,'fabgl::uiApp']]],
-  ['instance',['instance',['../classfabgl_1_1_p_s2_controller.html#a3f3f77947a352e9046fa556b3b4863ff',1,'fabgl::PS2Controller::instance()'],['../classfabgl_1_1_v_g_a16_controller.html#abbcbccdb4ffb7f4ea8dfd10e33723d35',1,'fabgl::VGA16Controller::instance()'],['../classfabgl_1_1_v_g_a_controller.html#af7b0b2f874e6e97db692625f0ee4b525',1,'fabgl::VGAController::instance()']]],
-  ['invert',['invert',['../classfabgl_1_1_s_s_d1306_controller.html#a0673957752592fe8956d2b0a5cf3a570',1,'fabgl::SSD1306Controller::invert()'],['../unionfabgl_1_1_glyph_options.html#ae1e4f574b930780b0728c8f501c01a8e',1,'fabgl::GlyphOptions::Invert()'],['../displaycontroller_8h.html#a999881d9ade277b973d3064f113d71b9',1,'Invert():&#160;displaycontroller.h']]],
+  ['instance',['instance',['../classfabgl_1_1_p_s2_controller.html#a3f3f77947a352e9046fa556b3b4863ff',1,'fabgl::PS2Controller::instance()'],['../classfabgl_1_1_v_g_a16_controller.html#abbcbccdb4ffb7f4ea8dfd10e33723d35',1,'fabgl::VGA16Controller::instance()'],['../classfabgl_1_1_v_g_a2_controller.html#ac4c02148b07d8f79137d1c9e6efb0ecf',1,'fabgl::VGA2Controller::instance()'],['../classfabgl_1_1_v_g_a4_controller.html#af1a9fe4d77f85f993df695699562044d',1,'fabgl::VGA4Controller::instance()'],['../classfabgl_1_1_v_g_a8_controller.html#a1ea27d34db66eaa25fd313812c4dc8da',1,'fabgl::VGA8Controller::instance()'],['../classfabgl_1_1_v_g_a_controller.html#af7b0b2f874e6e97db692625f0ee4b525',1,'fabgl::VGAController::instance()'],['../classfabgl_1_1_v_g_a_direct_controller.html#a5c1fc77c28b503914993baf1cdceb4fb',1,'fabgl::VGADirectController::instance()']]],
+  ['invert',['Invert',['../unionfabgl_1_1_glyph_options.html#ae1e4f574b930780b0728c8f501c01a8e',1,'fabgl::GlyphOptions::Invert()'],['../displaycontroller_8h.html#a999881d9ade277b973d3064f113d71b9',1,'Invert():&#160;displaycontroller.h']]],
   ['invertrectangle',['invertRectangle',['../classfabgl_1_1_canvas.html#a13644b3ad5102afdeaf5fd01ae6302e9',1,'fabgl::Canvas::invertRectangle(int X1, int Y1, int X2, int Y2)'],['../classfabgl_1_1_canvas.html#a16e992f349d7094ffed9471848eaaf3f',1,'fabgl::Canvas::invertRectangle(Rect const &amp;rect)']]],
   ['isactive',['isActive',['../classfabgl_1_1_terminal.html#abb86a401253b7950326cf74d8644df10',1,'fabgl::Terminal']]],
   ['isdirectory',['isDirectory',['../classfabgl_1_1ui_file_browser.html#a7c0df313d9d929139261010bee89c53c',1,'fabgl::uiFileBrowser']]],

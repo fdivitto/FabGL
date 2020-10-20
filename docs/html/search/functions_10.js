@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['read',['read',['../classfabgl_1_1_terminal.html#aa9616caef016ab57cfd703457d8aeaf1',1,'fabgl::Terminal::read()'],['../classfabgl_1_1_terminal.html#a6312936832cd581f14d5ed137ab00287',1,'fabgl::Terminal::read(int timeOutMS)'],['../classfabgl_1_1_i2_c.html#ae8b1d7d5d44ae89fcc953a76c04c7d78',1,'fabgl::I2C::read()']]],
+  ['read',['read',['../classfabgl_1_1_terminal.html#aa9616caef016ab57cfd703457d8aeaf1',1,'fabgl::Terminal::read()'],['../classfabgl_1_1_terminal.html#a6312936832cd581f14d5ed137ab00287',1,'fabgl::Terminal::read(int timeOutMS)']]],
   ['readscreen',['readScreen',['../classfabgl_1_1_v_g_a_controller.html#a0d6de0c7ee0601e9b0f61873df56baa9',1,'fabgl::VGAController']]],
   ['rect',['rect',['../classfabgl_1_1ui_window.html#aba6b75880074a221f215486ebb675a6c',1,'fabgl::uiWindow']]],
   ['refreshsprites',['refreshSprites',['../classfabgl_1_1_bitmapped_display_controller.html#af5488939dfd5c3fe1481bc6f87c707b3',1,'fabgl::BitmappedDisplayController']]],
@@ -20,7 +20,7 @@ var searchData=
   ['reshapewindow',['reshapeWindow',['../classfabgl_1_1ui_app.html#a2827139ff542f663753683dd90ae1c16',1,'fabgl::uiApp']]],
   ['resizewindow',['resizeWindow',['../classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73',1,'fabgl::uiApp::resizeWindow(uiWindow *window, int width, int height)'],['../classfabgl_1_1ui_app.html#a6ed22ad4af635c027637db8807b6a9af',1,'fabgl::uiApp::resizeWindow(uiWindow *window, Size size)']]],
   ['resume',['resume',['../classfabgl_1_1_p_s2_controller.html#a47f48f4bd2701d7358cded1389382474',1,'fabgl::PS2Controller']]],
-  ['resumebackgroundprimitiveexecution',['resumeBackgroundPrimitiveExecution',['../classfabgl_1_1_bitmapped_display_controller.html#ad411ba603268dc83767df22cee6aad21',1,'fabgl::BitmappedDisplayController::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_s_s_d1306_controller.html#ad7d0fe367a5a580ffaaca45bf6c6e9cc',1,'fabgl::SSD1306Controller::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_t_f_t_controller.html#a6d5575bf1fb5d0375e42dd15656fe1d2',1,'fabgl::TFTController::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_v_g_a16_controller.html#abb21f56cbf682423f7cdc4ce8656b017',1,'fabgl::VGA16Controller::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_v_g_a_controller.html#aaa2d1522cce88d3ca2717db380f2e692',1,'fabgl::VGAController::resumeBackgroundPrimitiveExecution()']]],
+  ['resumebackgroundprimitiveexecution',['resumeBackgroundPrimitiveExecution',['../classfabgl_1_1_bitmapped_display_controller.html#ad411ba603268dc83767df22cee6aad21',1,'fabgl::BitmappedDisplayController::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_t_f_t_controller.html#a6d5575bf1fb5d0375e42dd15656fe1d2',1,'fabgl::TFTController::resumeBackgroundPrimitiveExecution()'],['../classfabgl_1_1_v_g_a_controller.html#aaa2d1522cce88d3ca2717db380f2e692',1,'fabgl::VGAController::resumeBackgroundPrimitiveExecution()']]],
   ['rootwindow',['rootWindow',['../classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40',1,'fabgl::uiApp']]],
   ['run',['run',['../classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3',1,'fabgl::uiApp']]],
   ['runasync',['runAsync',['../classfabgl_1_1ui_app.html#a74260184a9dd8e9dfb3d2106feda9a7e',1,'fabgl::uiApp']]]

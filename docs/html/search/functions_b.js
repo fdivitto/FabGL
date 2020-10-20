@@ -12,7 +12,6 @@ var searchData=
   ['mousedownpos',['mouseDownPos',['../classfabgl_1_1ui_window.html#a98f5b2828f58c2dcf9832ed7a52669b1',1,'fabgl::uiWindow']]],
   ['movefocus',['moveFocus',['../classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d',1,'fabgl::uiApp']]],
   ['movementacceleration',['movementAcceleration',['../classfabgl_1_1_mouse.html#a0a5271998bb760fd3f41f96b033f2eab',1,'fabgl::Mouse']]],
-  ['movescreen',['moveScreen',['../classfabgl_1_1_v_g_a16_controller.html#aa0fc0548ecde92597745b8fd6b513eb6',1,'fabgl::VGA16Controller::moveScreen()'],['../classfabgl_1_1_v_g_a_controller.html#a0e315e01651c743b29840a36641e196f',1,'fabgl::VGAController::moveScreen()']]],
   ['moveto',['moveTo',['../classfabgl_1_1_canvas.html#a1149e1edc415ac5d41b0b8220f07644d',1,'fabgl::Canvas']]],
   ['movewindow',['moveWindow',['../classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0',1,'fabgl::uiApp']]],
   ['multilinedeletechar',['multilineDeleteChar',['../classfabgl_1_1_terminal_controller.html#a64fecfaf2cb82e2031a589741802357c',1,'fabgl::TerminalController']]],

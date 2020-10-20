@@ -9,7 +9,6 @@ var searchData=
   ['hfrontporch',['HFrontPorch',['../structfabgl_1_1_v_g_a_timings.html#ac4b72d4c1284294edf055fc5b640b31f',1,'fabgl::VGATimings']]],
   ['hotspotx',['hotspotX',['../structfabgl_1_1_cursor.html#ae40bc3f57be9b5147851a542364f02a9',1,'fabgl::Cursor']]],
   ['hotspoty',['hotspotY',['../structfabgl_1_1_cursor.html#a5152c6cf0f0af8aa8f01944ab28af54b',1,'fabgl::Cursor']]],
-  ['hours',['hours',['../structfabgl_1_1_date_time.html#a4b15bac6435f11e904c3791c2431c4c9',1,'fabgl::DateTime']]],
   ['hstartingblock',['HStartingBlock',['../structfabgl_1_1_v_g_a_timings.html#ae7df8e162527fe62ffdb434a4eff5e2e',1,'fabgl::VGATimings']]],
   ['hsynclogic',['HSyncLogic',['../structfabgl_1_1_v_g_a_timings.html#a0518f31373be9ce02fd4ec5a839b4749',1,'fabgl::VGATimings']]],
   ['hsyncpulse',['HSyncPulse',['../structfabgl_1_1_v_g_a_timings.html#a72e6dfddc01c96ccfbcb73517ca1883f',1,'fabgl::VGATimings']]],

@@ -21,6 +21,8 @@ var searchData=
   ['fabglib_5fterminal_5foutput_5fqueue_5fsize',['FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE',['../fabglconf_8h.html#a0904a4c56bb853cd14ad75ed9c89550f',1,'fabglconf.h']]],
   ['fabglib_5funderline_5fposition',['FABGLIB_UNDERLINE_POSITION',['../fabglconf_8h.html#a6d8d65c6f9d580f607cd2ff361955c00',1,'fabglconf.h']]],
   ['fabglib_5fuse_5fapll_5fab_5fcoef',['FABGLIB_USE_APLL_AB_COEF',['../fabglconf_8h.html#aa14f2e047e477a9064f3c38b4b67b4e6',1,'fabglconf.h']]],
+  ['fabglib_5fvgapalettedcontroller_5fprimtask_5fpriority',['FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_PRIORITY',['../fabglconf_8h.html#a07d5320881f69a2537e5ee14788e1b53',1,'fabglconf.h']]],
+  ['fabglib_5fvgapalettedcontroller_5fprimtask_5fstack_5fsize',['FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_STACK_SIZE',['../fabglconf_8h.html#a91ceddd39f026c4f78b41ef8353d245b',1,'fabglconf.h']]],
   ['fabglib_5fvideo_5fcpuintensive_5ftasks_5fcore',['FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE',['../fabglconf_8h.html#a447d700c9e4cb4889f3517928ecfac31',1,'fabglconf.h']]],
   ['fabglib_5fviewport_5fmemory_5fpool_5fcount',['FABGLIB_VIEWPORT_MEMORY_POOL_COUNT',['../fabglconf_8h.html#a1ab4da26b781d3790348f83fe5c88f70',1,'fabglconf.h']]],
   ['fabglib_5fxtal',['FABGLIB_XTAL',['../fabglconf_8h.html#aa53fb2fcd9e8b5430c83a58928892f2c',1,'fabglconf.h']]],
@@ -53,5 +55,6 @@ var searchData=
   ['framestyle',['frameStyle',['../classfabgl_1_1ui_frame.html#a178f4833d3d093cf9c6e6dbeec788ab7',1,'fabgl::uiFrame']]],
   ['frequency',['frequency',['../structfabgl_1_1_v_g_a_timings.html#a0e0492d0765a6bf64f6b4843d41e3977',1,'fabgl::VGATimings']]],
   ['frontporch',['FrontPorch',['../group___enumerations.html#ggab8d4ce9d78f7f7068101e6eb5b231463a8a10612c141004c5f2986050c23a349d',1,'fabgl']]],
-  ['fabgl_20library',['FabGL Library',['../index.html',1,'']]]
+  ['fabgl_20library',['FabGL Library',['../index.html',1,'']]],
+  ['fabgl_20specific_20terminal_20sequences',['FabGL Specific Terminal Sequences',['../special_term_escapes.html',1,'']]]
 ];

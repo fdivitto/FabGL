@@ -13,7 +13,6 @@ var searchData=
   ['horizontal',['Horizontal',['../group___enumerations.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f',1,'fabgl']]],
   ['hotspotx',['hotspotX',['../structfabgl_1_1_cursor.html#ae40bc3f57be9b5147851a542364f02a9',1,'fabgl::Cursor']]],
   ['hotspoty',['hotspotY',['../structfabgl_1_1_cursor.html#a5152c6cf0f0af8aa8f01944ab28af54b',1,'fabgl::Cursor']]],
-  ['hours',['hours',['../structfabgl_1_1_date_time.html#a4b15bac6435f11e904c3791c2431c4c9',1,'fabgl::DateTime']]],
   ['hscrollbarpos',['HScrollBarPos',['../classfabgl_1_1ui_scrollable_control.html#a9f03e3dafd0929fe989c27f6bc125bcc',1,'fabgl::uiScrollableControl']]],
   ['hscrollbarrange',['HScrollBarRange',['../classfabgl_1_1ui_scrollable_control.html#aff78823073d6545e98f30db3e7abef6a',1,'fabgl::uiScrollableControl']]],
   ['hscrollbarvisible',['HScrollBarVisible',['../classfabgl_1_1ui_scrollable_control.html#a205442303d62c106943db8fadacc0e9f',1,'fabgl::uiScrollableControl']]],

@@ -267,7 +267,7 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a random temporary filename, with absolute path. </p>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to temporary string. It must be freed using free(). </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to temporary string. It must be released using free(). </dd></dl>
 
 </div>
 </div>
@@ -938,8 +938,8 @@ Serial.printf("%lld KiB used, %lld KiB free", used / 1024, (total - used) / 1024
     <tr><td class="paramname">mountPath</td><td>Mount directory (ex. "/sdcard"). </td></tr>
     <tr><td class="paramname">maxFiles</td><td>Number of files that can be open at the time (default 4). </td></tr>
     <tr><td class="paramname">allocationUnitSize</td><td>Allocation unit size (default 16K). </td></tr>
-    <tr><td class="paramname">MISO</td><td>Pin for MISO signal (default 16). </td></tr>
-    <tr><td class="paramname">MOSI</td><td>Pin for MOSI signal (default 17). </td></tr>
+    <tr><td class="paramname">MISO</td><td>Pin for MISO signal (default 16 for WROOM-32, 2 for PICO-D4). </td></tr>
+    <tr><td class="paramname">MOSI</td><td>Pin for MOSI signal (default 17 for WROOM-32, 12 for PICO-D4). </td></tr>
     <tr><td class="paramname">CLK</td><td>Pin for CLK signal (default 14). </td></tr>
     <tr><td class="paramname">CS</td><td>Pin for CS signal (default 13).</td></tr>
   </table>

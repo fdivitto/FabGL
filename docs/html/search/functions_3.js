@@ -1,8 +1,6 @@
 var searchData=
 [
   ['dataavailable',['dataAvailable',['../classfabgl_1_1_p_s2_controller.html#a0689f3e86beb0108d90cfd26e73b13ae',1,'fabgl::PS2Controller']]],
-  ['datetime',['datetime',['../classfabgl_1_1_d_s3231.html#a4ac5d06c26fb03250dcc28b66c2786ee',1,'fabgl::DS3231']]],
-  ['datetimevalid',['dateTimeValid',['../classfabgl_1_1_d_s3231.html#a676aeab3aaafcb922df18e59e8617ef6',1,'fabgl::DS3231']]],
   ['deactivate',['deactivate',['../classfabgl_1_1_terminal.html#a9c181b72e4a498f35ad95cd172a38cae',1,'fabgl::Terminal']]],
   ['deltaavailable',['deltaAvailable',['../classfabgl_1_1_mouse.html#abe8fff3545515f8c4889975acb98533c',1,'fabgl::Mouse']]],
   ['deselectall',['deselectAll',['../classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b',1,'fabgl::uiCustomListBox']]],

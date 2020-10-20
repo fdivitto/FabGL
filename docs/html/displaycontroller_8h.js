@@ -64,6 +64,9 @@ var displaycontroller_8h =
       [ "Mono", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a5d9b47bd3b65072e0d5daf55f01da086", null ],
       [ "SBGR2222", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a0727ac3bf47006f125ad171d6ca18184", null ],
       [ "RGB565BE", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9af5b6b419fa27f5fa080c74870b404358", null ],
+      [ "PALETTE2", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9ab4b9dd494783e3c156b72596ce15ff17", null ],
+      [ "PALETTE4", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a3ad9f499f52bd79815ec9efb1c0a11ad", null ],
+      [ "PALETTE8", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a2c2e91aa769aa411b0db57883d167601", null ],
       [ "PALETTE16", "displaycontroller_8h.html#ggacafd29e9adc4dc4055558e61fd4599c9a2305a7e1bcc1d10f990698ed574363ac", null ]
     ] ],
     [ "PixelFormat", "displaycontroller_8h.html#ga9bb815bb6f1169481ef8ad44f351e1c1", [
