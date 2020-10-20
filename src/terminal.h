@@ -217,6 +217,480 @@
  */
 
 
+ /**
+ * @page specialTermEscapes FabGL Specific Terminal Sequences
+ *
+ * This is a list of FabGL specific terminal sequences. These are used to get access to features like graphics/audio/etc not else available using standard escape sequences.<br>
+ * Specific sequences are also useful when you don't know which terminal emulation has been set and you still want to control screen using known escape sequences.<br>
+ * Specific sequences begin with an ESC (ASCII 27h, 0x1B) plus an underscore ("_", ASCII 90h, 0x5f). Follows the actual command which is composed by a single letter.<br>
+ * After the command letter it is possible to specify parameters (if required) separated by semicolons (";"). An ending dollar sign ($, ASCII 36h, 0x24) ends the escape sequence.<br>
+ * Some commands return a response sequence: this has a fixed length and starts with a dollar sign ($).<br><br>
+ *
+ * <br>
+ * <hr>
+ *
+ * <br> <b> Setup Analog to Digital Converter (ADC) </b>
+ *
+ *     Sequence:
+ *       ESC "_A" resolution ";" attenuation ";" gpio "$"
+ *
+ *     Parameters:
+ *       resolution:
+ *           "9", "10", "11", "12"
+ *       attenuation:
+ *           "0" = 0dB   (reduced to 1/1), full-scale voltage 1.1 V, accurate between 100 and 950 mV
+ *           "1" = 2.5dB (reduced to 1/1.34), full-scale voltage 1.5 V, accurate between 100 and 1250 mV
+ *           "2" = 6dB   (reduced to 1/2), full-scale voltage 2.2 V, accurate between 150 to 1750 mV
+ *           "3" = 11dB  (reduced to 1/3.6), full-scale voltage 3.9 V (maximum volatage is still 3.3V!!), accurate between 150 to 2450 mV
+ *       gpio:
+ *           "32"..."39"
+ *
+ *     Example:
+ *       // setup GPIO number 36 as analog input, 11dB attenuation (3) and 12 bit resolution
+ *       Terminal.write("\e_A12;3;36$");
+ *
+ * <br> <b> Read analog input (ADC) from specified gpio </b>
+ *
+ *     Sequence:
+ *       ESC "_C" gpio "$"
+ *
+ *     Parameters:
+ *       gpio:
+ *           "32"..."39"
+ *
+ *     Returns:
+ *       "$"
+ *       hex value (3 characters)
+ *
+ *     Example:
+ *       // Request to read ADC from GPIO number 36
+ *       Terminal.write("\e_C36$");  // will return something like "$1A5" (value 421)
+ *
+ * <br> <b> Setup digital pin for input or output </b>
+ *
+ *     Sequence:
+ *       ESC "_D" mode gpio "$"
+ *
+ *     Parameters:
+ *       mode:
+ *           "-" = disable input/output
+ *           "I" = input only
+ *           "O" = output only
+ *           "D" = output only with open-drain
+ *           "E" = output and input with open-drain
+ *           "X" = output and input
+ *       gpio:
+ *           "0"..."39" (not all usable!)
+ *
+ *     Example:
+ *       // Setup gpio number 12 as output (O)
+ *       Terminal.write("\e_DO12$");
+ *
+ * <br> <b> Set digital output pin state </b>
+ *
+ *     Sequence:
+ *       ESC "_W" value gpio "$"
+ *
+ *     Parameters:
+ *       value:
+ *           0 or '0' or 'L' = low (and others)
+ *           1 or '1' or 'H' = high
+ *       gpio:
+ *           "0"..."39" (not all usable!)
+ *
+ *     Example:
+ *       // Set gpio 12 to High
+ *       Terminal.write("\e_WH12$");
+ *       // Set gpio 12 to Low
+ *       Terminal.write("\e_WL12$");
+ *
+ * <br> <b> Read digital input pin state </b>
+ *
+ *     Sequence:
+ *       ESC "_R" gpio "$"
+ *
+ *     Parameters:
+ *       gpio:
+ *           "0"..."39" (not all usable!)
+ *
+ *     Returns:
+ *       "$"
+ *       '0' = low, '1' = high
+ *
+ *     Example:
+ *       // Read state of gpio 12
+ *       Terminal.write("\e_R12$");  // you will get "$0" or "$1"
+ *
+ * <br> <b> Clear terminal area with background color </b>
+ *
+ *     Sequence:
+ *       ESC "_B" "$"
+ *
+ *     Example:
+ *       // Clear terminal area
+ *       Terminal.write("\e_B$");
+ *
+ * <br> <b> Enable or disable cursor </b>
+ *
+ *     Sequence:
+ *       ESC "_E" state "$"
+ *
+ *     Parameters:
+ *       state:
+ *           "0" = disable cursor
+ *           "1" = enable cursor
+ *
+ *     Example:
+ *       // Disable cursor
+ *       Terminal.write("\e_E0$");
+ *
+ * <br> <b> Set cursor position </b>
+ *
+ *     Sequence:
+ *       ESC "_F" column ";" row "$"
+ *
+ *     Parameters:
+ *       column:
+ *           column (1 = first column)
+ *       row:
+ *           row (1 = first row)
+ *
+ *     Example:
+ *       // Print "Hello" at column 1 of row 10
+ *       Terminal.write("\e_F1;10$");
+ *       Terminal.write("Hello");
+ *
+ * <br> <b> Enable/disable mouse </b>
+ *
+ *     Sequence:
+ *       ESC "_H" value "$"
+ *
+ *     Parameters:
+ *       value:
+ *           '0' (and others) = enable mouse
+ *           '1' = disable mouse
+ *
+ *     Example:
+ *       // Enable mouse
+ *       Terminal.write("\e_H1$");
+ *
+ * <br> <b> Get mouse position </b>
+ *
+ *     Sequence:
+ *       ESC "_M" "$"
+ *
+ *     Returns:
+ *       "$"
+ *       X position: 3 hex digits
+ *       ";"
+ *       Y position: 3 hex digits
+ *       ";"
+ *       Scroll wheel delta: 1 hex digit (0..F)
+ *       ";"
+ *       Pressed buttons: 1 hex digit, composed as follow:
+ *           bit 1 = left button
+ *           bit 2 = middle button
+ *           bit 3 = right button
+ *
+ *     Example:
+ *       // Get mouse status
+ *       Terminal.write("\e_M$"); // you will get something like "$1AB;08A;0;1$"
+ *
+ * <br> <b> Delay milliseconds </b>
+ *
+ *     Sequence:
+ *       ESC "_Y" value "$"
+ *
+ *     Parameters:
+ *       value:
+ *           number (milliseconds)
+ *
+ *     Returns:
+ *       "$": returns the dollar sign after specified number of milliseconds
+ *
+ *     Example:
+ *       // Get mouse status
+ *       Terminal.write("\e_Y500$"); // you will get "$" after 500 milliseconds
+ *
+ * <br> <b> Play sound </b>
+ *
+ *     Sequence:
+ *       ESC "_S" waveform ";" frequency ";" duration ";" volume "$"
+ *
+ *     Parameters:
+ *       waveform:
+ *           "0" = SINE
+ *           "1" = SQUARE
+ *           "2" = TRIANGLE
+ *           "3" = SAWTOOTH
+ *           "4" = NOISE
+ *           "5" = VIC NOISE
+ *       frequency:
+ *           frequency in Hertz
+ *       duration:
+ *           duration in milliseconds
+ *       volume:
+ *           volume (min is 0, max is 127)
+ *
+ *     Example:
+ *       // play Sine waveform at 800 Hz, for 1000ms at volume 100
+ *       Terminal.write("\e_S0;800;1000;100$");
+ *
+ * <br> <b> Clear graphics screen with background color and reset scrolling region </b>
+ *
+ *     Sequence:
+ *       ESC "_GCLEAR" "$"
+ *
+ *     Example:
+ *       // clear graphics screen, filling with dark blue
+ *       Terminal.write("\e_GBRUSH0;0;128$");
+ *       Terminal.write("\e_GCLEAR$");
+ *
+ * <br> <b> Set brush color for graphics </b>
+ *
+ *     Sequence:
+ *       ESC "_GBRUSH" red ";" green ";" blue "$"
+ *
+ *     Parameters:
+ *       red:   '0'..'255'
+ *       green: '0'..'255'
+ *       blue:  '0'..'255'
+ *
+ *     Example:
+ *       // set pure red (255,0,0) as background color for graphics
+ *       Terminal.write("\e_GBRUSH255;0;0$");
+ *
+ * <br> <b> Set pen color for graphics </b>
+ *
+ *     Sequence:
+ *       ESC "_GPEN" red ";" green ";" blue "$"
+ *
+ *     Parameters:
+ *       red:   '0'..'255'
+ *       green: '0'..'255'
+ *       blue:  '0'..'255'
+ *
+ *     Example:
+ *       // set yellow (255,255,0) as pen color for graphics
+ *       Terminal.write("\e_GPEN255;255;0$");
+ *
+ * <br> <b> Set pen width </b>
+ *
+ *     Sequence:
+ *       ESC "_GPENW" width "$"
+ *
+ *     Parameters:
+ *       width: pen width (from 1)
+ *
+ *     Example:
+ *       // set pen width to 2
+ *       Terminal.write("\e_GPENW2$");
+ *
+ * <br> <b> Set specified pixel using pen color </b>
+ *
+ *     Sequence:
+ *       ESC "_GPIXEL" X ";" Y "$"
+ *
+ *     Parameters:
+ *       X: horizontal coordinate
+ *       Y: vertical coordinate
+ *
+ *     Example:
+ *       // set pixel at 89, 31 to blue
+ *       Terminal.write("\e_GPEN0;0;255$"); // pen = blue
+ *       Terminal.write("\e_GPIXEL89;31$"); // draw pixel
+ *
+ * <br> <b> Draw a line using pen color</b>
+ *
+ *     Sequence:
+ *       ESC "_GLINE" X1 ";" Y1 ";" X2 ";" Y2 "$"
+ *
+ *     Parameters:
+ *       X1: starting horizontal coordinate
+ *       Y1: starting vertical coordinate
+ *       X2: ending horizontal coordinate
+ *       Y2: ending vertical coordinate
+ *
+ *     Example:
+ *       // draw a red line from 10, 10 to 150,150
+ *       Terminal.write("\e_GPEN255;0;0$");        // pen = red
+ *       Terminal.write("\e_GLINE10;10;150;150$"); // draw line
+ *
+ * <br> <b> Draw a rectangle using pen color</b>
+ *
+ *     Sequence:
+ *       ESC "_GRECT" X1 ";" Y1 ";" X2 ";" Y2 "$"
+ *
+ *     Parameters:
+ *       X1: starting horizontal coordinate
+ *       Y1: starting vertical coordinate
+ *       X2: ending horizontal coordinate
+ *       Y2: ending vertical coordinate
+ *
+ *     Example:
+ *       // draw a white rectangle from 10, 10 to 150,150
+ *       Terminal.write("\e_GPEN255;255;255$");    // pen = white
+ *       Terminal.write("\e_GRECT10;10;150;150$"); // draw rectangle
+ *
+ * <br> <b> Fill a rectangle using brush color</b>
+ *
+ *     Sequence:
+ *       ESC "_GFILLRECT" X1 ";" Y1 ";" X2 ";" Y2 "$"
+ *
+ *     Parameters:
+ *       X1: starting horizontal coordinate
+ *       Y1: starting vertical coordinate
+ *       X2: ending horizontal coordinate
+ *       Y2: ending vertical coordinate
+ *
+ *     Example:
+ *       // fill a yellow rectangle from 10, 10 to 150,150
+ *       Terminal.write("\e_GBRUSH255;255;0$");         // brush = yellow
+ *       Terminal.write("\e_GFILLRECT10;10;150;150$");  // fill rectangle
+ *
+ * <br> <b> Draw an ellipse using pen color</b>
+ *
+ *     Sequence:
+ *       ESC "_GELLIPSE" X ";" Y ";" width ";" height "$"
+ *
+ *     Parameters:
+ *       X:      horizontal coordinate of ellipse center
+ *       Y:      vertical coordinate of ellipse center
+ *       with:   ellipse width
+ *       height: ellipse height
+ *
+ *     Example:
+ *       // draw a green ellipse at 100,120 with 50 horizontal size and 80 vertical size
+ *       Terminal.write("\e_GPEN0;255;0$");            // pen = green
+ *       Terminal.write("\e_GELLIPSE100;120;50;80$");  // draw ellipse
+ *
+ * <br> <b> Fill an ellipse using brush color</b>
+ *
+ *     Sequence:
+ *       ESC "_GFILLELLIPSE" X ";" Y ";" width ";" height "$"
+ *
+ *     Parameters:
+ *       X:      horizontal coordinate of ellipse center
+ *       Y:      vertical coordinate of ellipse center
+ *       with:   ellipse width
+ *       height: ellipse height
+ *
+ *     Example:
+ *       // fill a red ellipse at 100,120 with 50 horizontal size and 80 vertical size
+ *       Terminal.write("\e_GBRUSH255;0;0$");              // brush = red
+ *       Terminal.write("\e_GFILLELLIPSE100;120;50;80$");  // fill ellipse
+ *
+ * <br> <b> Draw a polygon (path) using pen color</b>
+ *
+ *     Sequence:
+ *       ESC "_GPATH" X1 ";" Y1 ";" X2 ";" Y2 [";" Xn ";" Yn...] "$"
+ *
+ *     Parameters:
+ *       X1: first horizontal coordinate
+ *       Y1: first vertical coordinate
+ *       X2: second horizontal coordinate
+ *       Y2: second vertical coordinate
+ *       Xn: optional "n" horizontal coordinate
+ *       Yn: optional "n" vertical coordinate
+ *
+ *     Notes:
+ *       Maximum number of points is 32 (configurable in terminal.h)
+ *
+ *     Example:
+ *       // draw a red triangle at (5,5)-(12,18)-(6,16)
+ *       Terminal.write("\e_GPEN255;0;0$");                // pen = red
+ *       Terminal.write("\e_GPATH5;5;12;18;6;16$");        // draw path
+ *
+ * <br> <b> Fill a polygon (path) using brush color </b>
+ *
+ *     Sequence:
+ *       ESC "_GFILLPATH" X1 ";" Y1 ";" X2 ";" Y2 [";" Xn ";" Yn...] "$"
+ *
+ *     Parameters:
+ *       X1: first horizontal coordinate
+ *       Y1: first vertical coordinate
+ *       X2: second horizontal coordinate
+ *       Y2: second vertical coordinate
+ *     [Xn]: optional "n" horizontal coordinate
+ *     [Yn]: optional "n" vertical coordinate
+ *
+ *     Notes:
+ *       Maximum number of points is 32 (configurable in terminal.h)
+ *
+ *     Example:
+ *       // fill a green triangle at (5,5)-(12,18)-(6,16)
+ *       Terminal.write("\e_GBRUSH0;255;0$");              // brush = green
+ *       Terminal.write("\e_GFILLPATH5;5;12;18;6;16$");    // fill path
+ *
+ * <br> <b> Set number of sprites to allocate </b>
+ *
+ *     Sequence:
+ *       ESC "_GSPRITECOUNT" count "$"
+ *
+ *     Parameters:
+ *       count: number of sprites that will be defined by "_GSPRITEDEF"
+ *
+ *     Example:
+ *       // allocates two sprites
+ *       Terminal.write("\e_GSPRITECOUNT2$");
+ *
+ * <br> <b> Add a bitmap to an allocated sprite </b>
+ *
+ *     Sequence:
+ *       ESC "_GSPRITEDEF" spriteIndex ";" width ";" height ";" format ";" [R ";" G ";" B ";"] data... "$"
+ *
+ *     Parameters:
+ *       spriteIndex: sprite index (0...)
+ *       width:       bitmap width
+ *       height:      bitmap height
+ *       format:
+ *           "M" = bitmap format is monochrome (1 bit per pixel)
+ *           "2" = bitmap format is 64 colors (6 bits per pixel, 2 bits per channel with transparency)
+ *           "8" = bitmap format is true color (32 bits per pixel, 8 bits per channel with transparency)
+ *      [R]:          red channel when bitmap format is monochrome
+ *      [G]:          green channel when bitmap format is monochrome
+ *      [B]:          blue channel when bitmap format is monochrome
+ *       data:        bitmap data data as a sequence of 2 digits hex numbers (ie 002A3BFF2C...).
+ *                    each bitmap row is always byte aligned
+ *
+ *     Example:
+ *       // allocates one sprite and assign a 8x4 monochrome bitmap, colored with red
+ *       Terminal.write("\e_GSPRITECOUNT1$");
+ *       Terminal.write("\e_GSPRITEDEF0;8;4;M;255;0;0;AABBCCDD$");
+ *
+ * <br> <b> Set sprite visibility, position and current frame (bitmap) </b>
+ *
+ *     Sequence:
+ *       ESC "_GSPRITESET" spriteIndex ";" visible ";" frameIndex ";" X ";" Y "$"
+ *
+ *     Parameters:
+ *       spriteIndex: sprite index (0...)
+ *       visible:     "H" = hidden, "V" = visible
+ *       frameIndex:  current frame (bitmap) to show (0...)
+ *       X:           horizontal position
+ *       Y:           vertical position
+ *
+ *     Example:
+ *       // make sprite 0 visible at position 50,120 with first added bitmap
+ *       Terminal.write("\e_GSPRITESET0;V;0;50;120$");
+ *
+ * <br> <b> Scroll screen at pixel level </b>
+ *
+ *     Sequence:
+ *       ESC "_GSCROLL" offsetX ";" offsetY "$"
+ *
+ *     Parameters:
+ *       offsetX: number of pixels to scroll (<0 = scroll left, >0 scroll right)
+ *       offsetY: nunber of pixels to scroll (<0 = scroll up, >0 scroll down)
+ *
+ *     Example:
+ *       // scroll left by 8 pixels
+ *       Terminal.write("\e_GSCROLL-8;0$");
+ *
+ * <br><br>
+ */
+
+
 namespace fabgl {
 
 
