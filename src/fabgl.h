@@ -71,7 +71,7 @@
  *
  * The main classes of FabGL library are:
  *    * fabgl::VGAController, device driver for VGA bitmapped output.
- *    * fabgl::VGA2Controller, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).    
+ *    * fabgl::VGA2Controller, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).
  *    * fabgl::VGA4Controller, device driver for VGA 4 colors bitmapped output (low RAM requirements, CPU intensive).
  *    * fabgl::VGA8Controller, device driver for VGA 8 colors bitmapped output (low RAM requirements, CPU intensive).
  *    * fabgl::VGA16Controller, device driver for VGA 16 colors bitmapped output (low RAM requirements, CPU intensive).
@@ -80,9 +80,9 @@
  *    * fabgl::ST7789Controller, device driver for ST7789 based TFT displays.
  *    * fabgl::ILI9341Controller, device driver for ILI9341 based TFT displays.
  *    * fabgl::Canvas, that provides a set of drawing primitives (lines, rectangles, text...).
- *    * fabgl::Terminal, that emulates an ANSI/VT100/VT102 and up terminal (look at @ref vttest "vttest score").
+ *    * fabgl::Terminal, that emulates an ANSI/VT100/VT102/etc and up terminal (look at @ref vttest "vttest score").
  *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.
- *    * fabgl::Mouse (instanced as \b Mouse), that controls a PS2 mouse.
+ *    * fabgl::Mouse, that controls a PS2 mouse.
  *    * fabgl::Scene abstract class that handles sprites, timings and collision detection.
  *    * fabgl::uiApp base class to build Graphical User Interface applications
  *    * fabgl::SoundGenerator to generate sound and music.
@@ -178,7 +178,7 @@
  *
  *     VGAController.begin(GPIO_NUM_22, GPIO_NUM_21, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_5, GPIO_NUM_4, GPIO_NUM_23, GPIO_NUM_15);
  *
- * Note: Do not connect GPIO_NUM_2 (led) to the VGA signals.
+ * Note: Do not use GPIO_NUM_2 (LED) for VGA signals.
  *
  */
 
