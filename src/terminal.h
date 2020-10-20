@@ -394,7 +394,7 @@
  *
  *     Example:
  *       // Get mouse status
- *       Terminal.write("\e_M$"); // you will get something like "$1AB;08A;0;1$"
+ *       Terminal.write("\e_M$"); // you will get something like "$1AB;08A;0;1"
  *
  * <br> <b> Delay milliseconds </b>
  *
