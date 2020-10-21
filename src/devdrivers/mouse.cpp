@@ -124,6 +124,9 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
   for (int i = 0; i < packetSize; ++i) {
     while (true) {
       rcv[i] = getData(timeOutMS);
+      if (parityError()) {
+        return false;
+      }
       if (rcv[i] == -1 && requestResendOnTimeOut) {
         requestToResendLastByte();
         continue;
