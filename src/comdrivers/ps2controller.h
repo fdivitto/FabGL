@@ -188,6 +188,8 @@ public:
 
   void warmInit();
 
+  bool parityError(int PS2Port) { return m_parityError[PS2Port]; }
+
 private:
 
   static void IRAM_ATTR rtc_isr(void * arg);
@@ -211,6 +213,9 @@ private:
   intr_handle_t         m_isrHandle;
 
   int16_t               m_suspendCount;       // 0 = not suspended, >0 suspended
+
+  // true if last call to getData() had a parity error
+  bool                  m_parityError[2];
 };
 
 

@@ -985,11 +985,13 @@ int PS2Controller::getData(int PS2Port)
       warmInit();
       sendData(0xFE, PS2Port);  // request to resend last byte
       data = -1;
+      m_parityError[PS2Port] = true;
     } else {
       // parity OK
       ++m_readPos[PS2Port];
       if (m_readPos[PS2Port] == RTCMEM_PORTX_BUFFER_END)
         m_readPos[PS2Port] = RTCMEM_PORTX_BUFFER_START;
+      m_parityError[PS2Port] = false;
     }
   }
 
@@ -1018,6 +1020,9 @@ void PS2Controller::warmInit()
 
   // delay required to take ULP time to resume
   vTaskDelay(20 / portTICK_PERIOD_MS);
+
+  m_parityError[0] = false;
+  m_parityError[1] = false;
 }
 
 
