@@ -126,7 +126,7 @@ int PS2Device::getData(int timeOutMS)
     lock(-1);
     ret = PS2Controller::instance()->getData(m_PS2Port);
     unlock();
-    if (ret > -1)
+    if (ret > -1 || parityError())
       break;
     lock(-1);
     PS2Controller::instance()->waitData((timeOutMS > -1 ? timeOutMS : m_cmdSubTimeOut), m_PS2Port);
