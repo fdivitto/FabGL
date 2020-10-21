@@ -112,6 +112,12 @@ int PS2Device::dataAvailable()
 }
 
 
+bool PS2Device::parityError()
+{
+  return PS2Controller::instance()->parityError(m_PS2Port);
+}
+
+
 int PS2Device::getData(int timeOutMS)
 {
   TimeOut timeout;

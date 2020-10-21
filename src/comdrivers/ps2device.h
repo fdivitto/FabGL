@@ -88,6 +88,8 @@ public:
    */
   void unlock();
 
+  bool parityError();
+
 protected:
 
   PS2Device();
