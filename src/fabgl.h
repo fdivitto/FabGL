@@ -239,22 +239,28 @@
 
 
 /**
- * @example VGA/AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
- * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
- * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example VGA/Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
- * @example VGA/MultitaskingCPM/MultitaskingCPM.ino Multitasking - Multisession CP/M 3 compatible system. Supports directories and FAT32 file system with SD Cards.
- * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
+ * @example VGA/AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
+ * @example VGA/Audio/Audio.ino Audio demo with GUI
+ * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
+ * @example VGA/DirectVGA/DirectVGA.ino Sample usage of VGADirectController base class for direct VGA control
+ * @example VGA/DirectVGA/DirectVGA_ElMuro.ino Sample breakout-style game using VGADirectController base class
+ * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
+ * @example VGA/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
+ * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
+ * @example VGA/HardwareTest/HardwareTest.ino Hardware test with GUI
  * @example VGA/LoopbackTerminal/LoopbackTerminal.ino Loopback VT/ANSI Terminal
  * @example VGA/ModelineStudio/ModelineStudio.ino Test VGA output at predefined resolutions or custom resolution by specifying linux-like modelines
  * @example VGA/MouseOnScreen/MouseOnScreen.ino PS/2 mouse and mouse pointer on screen
+ * @example VGA/MultitaskingCPM/MultitaskingCPM.ino Multitasking - Multisession CP/M 3 compatible system. Supports directories and FAT32 file system with SD Cards.
  * @example VGA/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
  * @example VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
+ * @example VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino Simple terminal text-only mode - output only
+ * @example VGA/Songs/Songs.ino Music and sound demo
  * @example VGA/SpaceInvaders/SpaceInvaders.ino Space invaders full game
- * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
- * @example VGA/Audio/Audio.ino Audio demo with GUI
- * @example VGA/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
  * @example VGA/Sprites/Sprites.ino Simple sprites animation
+ * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
+ *
  * @example SSD1306_OLED/128x32/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example SSD1306_OLED/128x32/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example SSD1306_OLED/128x64/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
