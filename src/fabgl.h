@@ -242,9 +242,10 @@
  * @example VGA/Altair8800/Altair8800.ino Altair 8800 Emulator - with ADM-31, ADM-3A, Kaypro, Hazeltine 1500 and Osborne I terminal emulation
  * @example VGA/AnsiTerminal/AnsiTerminal.ino Serial VT/ANSI Terminal
  * @example VGA/Audio/Audio.ino Audio demo with GUI
+ * @example VGA/ClassicRacer/ClassicRacer.ino Racer game, from Carles Oriol
  * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example VGA/DirectVGA/DirectVGA.ino Sample usage of VGADirectController base class for direct VGA control
- * @example VGA/DirectVGA/DirectVGA_ElMuro.ino Sample breakout-style game using VGADirectController base class
+ * @example VGA/DirectVGA/DirectVGA_ElMuro.ino Sample breakout-style game using VGADirectController base class, from Carles Oriol
  * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example VGA/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
  * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo
@@ -256,7 +257,7 @@
  * @example VGA/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
  * @example VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino Simple terminal text-only mode - output only
- * @example VGA/Songs/Songs.ino Music and sound demo
+ * @example VGA/Songs/Songs.ino Music and sound demo, from Carles Oriol
  * @example VGA/SpaceInvaders/SpaceInvaders.ino Space invaders full game
  * @example VGA/Sprites/Sprites.ino Simple sprites animation
  * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
