@@ -243,7 +243,8 @@ void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
 
     for (int i = 0; i < VGAD_LinesCount / 2; ++i) {
 
-      ctrl->drawScanline((uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
+      if (spi_flash_cache_enabled())
+        ctrl->drawScanline((uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
 
       ++lineIndex;
       ++scanLine;
