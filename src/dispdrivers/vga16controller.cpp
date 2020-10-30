@@ -445,6 +445,7 @@ void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const 
 }
 
 
+#pragma GCC optimize ("O2")
 void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 {
   #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
@@ -476,15 +477,38 @@ void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 
       // optimizazion warn: horizontal resolution must be a multiple of 16!
       for (int col = 0; col < width; col += 16) {
-        *(dest + 1) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest    ) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 3) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 2) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 5) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 4) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 7) = packedPaletteIndexPair_to_signals[*src++];
-        *(dest + 6) = packedPaletteIndexPair_to_signals[*src++];
+
+        auto src1 = *(src + 0);
+        auto src2 = *(src + 1);
+        auto src3 = *(src + 2);
+        auto src4 = *(src + 3);
+        auto src5 = *(src + 4);
+        auto src6 = *(src + 5);
+        auto src7 = *(src + 6);
+        auto src8 = *(src + 7);
+
+
+        auto v1 = packedPaletteIndexPair_to_signals[src1];
+        auto v2 = packedPaletteIndexPair_to_signals[src2];
+        auto v3 = packedPaletteIndexPair_to_signals[src3];
+        auto v4 = packedPaletteIndexPair_to_signals[src4];
+        auto v5 = packedPaletteIndexPair_to_signals[src5];
+        auto v6 = packedPaletteIndexPair_to_signals[src6];
+        auto v7 = packedPaletteIndexPair_to_signals[src7];
+        auto v8 = packedPaletteIndexPair_to_signals[src8];
+
+        *(dest + 1) = v1;
+        *(dest    ) = v2;
+        *(dest + 3) = v3;
+        *(dest + 2) = v4;
+        *(dest + 5) = v5;
+        *(dest + 4) = v6;
+        *(dest + 7) = v7;
+        *(dest + 6) = v8;
+
         dest += 8;
+        src += 8;
+
       }
 
       ++lineIndex;
