@@ -270,13 +270,13 @@ void Bitmap::allocate()
     case PixelFormat::Native:
       break;
     case PixelFormat::Mask:
-      data = (uint8_t*) malloc((width + 7) / 8 * height);
+      data = (uint8_t*) heap_caps_malloc((width + 7) / 8 * height, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
       break;
     case PixelFormat::RGBA2222:
-      data = (uint8_t*) malloc(width * height);
+      data = (uint8_t*) heap_caps_malloc(width * height, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
       break;
     case PixelFormat::RGBA8888:
-      data = (uint8_t*) malloc(width * height * 4);
+      data = (uint8_t*) heap_caps_malloc(width * height * 4, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
       break;
   }
 }
@@ -355,7 +355,7 @@ int Bitmap::getAlpha(int x, int y)
 Bitmap::~Bitmap()
 {
   if (dataAllocated)
-    free((void*)data);
+    heap_caps_free((void*)data);
 }
 
 
