@@ -1254,14 +1254,14 @@ bool LightMemoryPool::isFree(int pos)
 LightMemoryPool::LightMemoryPool(int poolSize)
 {
   m_poolSize = poolSize + 2;
-  m_mem = (uint8_t*) malloc(m_poolSize);
+  m_mem = (uint8_t*) heap_caps_malloc(m_poolSize, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
   mark(0, m_poolSize - 2, false);
 }
 
 
 LightMemoryPool::~LightMemoryPool()
 {
-  ::free(m_mem);
+  heap_caps_free(m_mem);
 }
 
 
