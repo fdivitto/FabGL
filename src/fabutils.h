@@ -320,7 +320,7 @@ struct Delegate {
   template <typename Func>
   void operator=(Func f) {
     m_closure = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
-    m_func = heap_caps_malloc(sizeof(Func), MALLOC_CAP_32BIT);
+    m_func = heap_caps_malloc(sizeof(Func), MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
     moveItems<uint32_t*>((uint32_t*)m_func, (uint32_t*)&f, sizeof(Func) / sizeof(uint32_t));
   }
 
