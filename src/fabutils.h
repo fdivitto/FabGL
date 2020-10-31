@@ -45,6 +45,30 @@ namespace fabgl {
 #define GPIO_UNUSED GPIO_NUM_MAX
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+// PSRAM_HACK
+// ESP32 Revision 1 has following bug: "When the CPU accesses external SRAM through cache, under certain conditions read and write errors occur"
+// A workaround is done by the compiler, so whenever PSRAM is enabled the workaround is automatically applied (-mfix-esp32-psram-cache-issue compiler option).
+// Unfortunately this workaround reduces performance, even when SRAM is not access, like in VGAXController interrupt handler. This is unacceptable for the interrupt routine.
+// In order to confuse the compiler and prevent the workaround from being applied, a "nop" is added between load and store instructions (PSRAM_HACK).
+
+#ifdef ARDUINO
+  #ifdef BOARD_HAS_PSRAM
+    #define FABGL_NEED_PSRAM_DISABLE_HACK
+  #endif
+#else
+  #ifdef CONFIG_SPIRAM_SUPPORT
+    #define FABGL_NEED_PSRAM_DISABLE_HACK
+  #endif
+#endif
+
+#ifdef FABGL_NEED_PSRAM_DISABLE_HACK
+  #define PSRAM_HACK asm(" nop")
+#else
+  #define PSRAM_HACK
+#endif
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 

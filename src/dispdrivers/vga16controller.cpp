@@ -446,6 +446,8 @@ void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const 
 
 
 #pragma GCC optimize ("O2")
+
+
 void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
 {
   #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
@@ -487,6 +489,7 @@ void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
         auto src7 = *(src + 6);
         auto src8 = *(src + 7);
 
+        PSRAM_HACK;
 
         auto v1 = packedPaletteIndexPair_to_signals[src1];
         auto v2 = packedPaletteIndexPair_to_signals[src2];

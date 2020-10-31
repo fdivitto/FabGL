@@ -438,6 +438,8 @@ void IRAM_ATTR VGA8Controller::ISRHandler(void * arg)
         auto w2 = *((uint16_t*)(src + 2));  // hi B:55666777, lo A:00011122
         auto w3 = *((uint16_t*)(src + 4));  // hi B:00011122, lo B:23334445
 
+        PSRAM_HACK;
+
         auto src1 = w1 | (w2 << 16);
         auto src2 = (w2 >> 8) | (w3 << 8);
 

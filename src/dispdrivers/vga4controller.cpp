@@ -491,6 +491,8 @@ void IRAM_ATTR VGA4Controller::ISRHandler(void * arg)
         auto src3 = *(src + 2);
         auto src4 = *(src + 3);
 
+        PSRAM_HACK;
+
         auto v1 = packedPaletteIndexQuad_to_signals[src1];
         auto v2 = packedPaletteIndexQuad_to_signals[src2];
         auto v3 = packedPaletteIndexQuad_to_signals[src3];
