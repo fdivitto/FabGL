@@ -399,6 +399,9 @@ void VGA8Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const *
 }
 
 
+#pragma GCC optimize ("O2")
+
+
 void IRAM_ATTR VGA8Controller::ISRHandler(void * arg)
 {
   #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
@@ -430,17 +433,35 @@ void IRAM_ATTR VGA8Controller::ISRHandler(void * arg)
 
       // optimizazion warn: horizontal resolution must be a multiple of 16!
       for (int col = 0; col < width; col += 16) {
-        uint64_t bits48 = *((uint64_t*)src);
-        *(dest + 2) = packedPaletteIndexPair_to_signals[(bits48 >>  0) & 0x3f];  // pixels 0, 1
-        *(dest + 3) = packedPaletteIndexPair_to_signals[(bits48 >>  6) & 0x3f];  // pixels 2, 3
-        *(dest + 0) = packedPaletteIndexPair_to_signals[(bits48 >> 12) & 0x3f];  // pixels 4, 5
-        *(dest + 1) = packedPaletteIndexPair_to_signals[(bits48 >> 18) & 0x3f];  // pixels 6, 7
-        *(dest + 6) = packedPaletteIndexPair_to_signals[(bits48 >> 24) & 0x3f];  // pixels 8, 9
-        *(dest + 7) = packedPaletteIndexPair_to_signals[(bits48 >> 30) & 0x3f];  // pixels 10, 11
-        *(dest + 4) = packedPaletteIndexPair_to_signals[(bits48 >> 36) & 0x3f];  // pixels 12, 13
-        *(dest + 5) = packedPaletteIndexPair_to_signals[(bits48 >> 42) & 0x3f];  // pixels 14, 15
+
+        auto w1 = *((uint16_t*)(src    ));  // hi A:23334445, lo A:55666777
+        auto w2 = *((uint16_t*)(src + 2));  // hi B:55666777, lo A:00011122
+        auto w3 = *((uint16_t*)(src + 4));  // hi B:00011122, lo B:23334445
+
+        auto src1 = w1 | (w2 << 16);
+        auto src2 = (w2 >> 8) | (w3 << 8);
+
+        auto v1 = packedPaletteIndexPair_to_signals[(src1      ) & 0x3f];  // pixels 0, 1
+        auto v2 = packedPaletteIndexPair_to_signals[(src1 >>  6) & 0x3f];  // pixels 2, 3
+        auto v3 = packedPaletteIndexPair_to_signals[(src1 >> 12) & 0x3f];  // pixels 4, 5
+        auto v4 = packedPaletteIndexPair_to_signals[(src1 >> 18) & 0x3f];  // pixels 6, 7
+        auto v5 = packedPaletteIndexPair_to_signals[(src2      ) & 0x3f];  // pixels 8, 9
+        auto v6 = packedPaletteIndexPair_to_signals[(src2 >>  6) & 0x3f];  // pixels 10, 11
+        auto v7 = packedPaletteIndexPair_to_signals[(src2 >> 12) & 0x3f];  // pixels 12, 13
+        auto v8 = packedPaletteIndexPair_to_signals[(src2 >> 18) & 0x3f];  // pixels 14, 15
+
+        *(dest + 2) = v1;
+        *(dest + 3) = v2;
+        *(dest + 0) = v3;
+        *(dest + 1) = v4;
+        *(dest + 6) = v5;
+        *(dest + 7) = v6;
+        *(dest + 4) = v7;
+        *(dest + 5) = v8;
+
         dest += 8;
         src += 6;
+
       }
 
       ++lineIndex;
