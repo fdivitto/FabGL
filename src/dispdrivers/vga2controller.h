@@ -67,7 +67,7 @@ namespace fabgl {
 * For example, a frame buffer of 640x480 requires about 40K of RAM.
 * This controller also allows higher resolutions, up to 1280x768.
 *
-* VGA2Controller output consumes up to 12% of one CPU core (measured at 640x480x60Hz).
+* VGA2Controller output consumes up to 10% of one CPU core (measured at 640x480x60Hz).
 *
 *
 * This example initializes VGA Controller with 64 colors (2 visible at the same time) at 640x480:

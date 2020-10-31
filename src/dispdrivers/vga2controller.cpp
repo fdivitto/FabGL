@@ -446,6 +446,9 @@ void VGA2Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const *
 }
 
 
+#pragma GCC optimize ("O2")
+
+
 void IRAM_ATTR VGA2Controller::ISRHandler(void * arg)
 {
   #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
@@ -477,8 +480,19 @@ void IRAM_ATTR VGA2Controller::ISRHandler(void * arg)
 
       // optimizazion warn: horizontal resolution must be a multiple of 16!
       for (int col = 0; col < width; col += 16) {
-        *dest++ = packedPaletteIndexOctet_to_signals[*src++];
-        *dest++ = packedPaletteIndexOctet_to_signals[*src++];
+
+        auto src1 = *(src + 0);
+        auto src2 = *(src + 1);
+
+        auto v1 = packedPaletteIndexOctet_to_signals[src1];
+        auto v2 = packedPaletteIndexOctet_to_signals[src2];
+
+        *(dest + 0) = v1;
+        *(dest + 1) = v2;
+
+        dest += 2;
+        src += 2;
+        
       }
 
       ++lineIndex;
