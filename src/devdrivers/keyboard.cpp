@@ -142,6 +142,7 @@ const KeyboardLayout USLayout {
     { 0x14, VK_RCTRL },
     { 0x11, VK_RALT },
     { 0x1F, VK_LGUI },
+    { 0x27, VK_RGUI },
     { 0x2F, VK_APPLICATION },
     { 0x70, VK_INSERT },
     { 0x71, VK_DELETE },
