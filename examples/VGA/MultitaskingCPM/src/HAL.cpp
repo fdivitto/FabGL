@@ -23,6 +23,8 @@
 
 #include <sys/time.h>
 
+#include "driver/gpio.h"
+#include <driver/dac.h>
 
 
 #include "HAL.h"
@@ -45,6 +47,8 @@ HAL::HAL()
 
   m_serialStream[0] = nullptr;
   m_serialStream[1] = nullptr;
+
+  dac_output_enable(DAC_CHANNEL_1);
 
   CPU_reset();
 }
@@ -390,6 +394,9 @@ void HAL::writeIO(uint16_t addr, uint8_t value)
   #if MSGDEBUG & DEBUG_HAL
   logf("writeIO(%04x, %02x)\r\n", addr, value);
   #endif
+  if (addr == 0x50) {
+    dac_output_voltage(DAC_CHANNEL_1, value);
+  }
 }
 
 
