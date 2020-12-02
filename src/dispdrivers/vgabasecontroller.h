@@ -209,12 +209,6 @@ public:
 
   virtual void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
-  // abstract method of BitmappedDisplayController
-  int getScreenWidth()    { return m_timings.HVisibleArea; }
-
-  // abstract method of BitmappedDisplayController
-  int getScreenHeight()   { return m_timings.VVisibleArea; }
-
   /**
    * @brief Determines horizontal position of the viewport.
    *

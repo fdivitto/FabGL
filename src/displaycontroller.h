@@ -675,14 +675,25 @@ public:
    *
    * @return Screen width in pixels.
    */
-  virtual int getScreenWidth() = 0;
+  int getScreenWidth()                         { return m_screenWidth; }
 
   /**
    * @brief Determines the screen height in pixels.
    *
    * @return Screen height in pixels.
    */
-  virtual int getScreenHeight() = 0;
+  int getScreenHeight()                        { return m_screenHeight; }
+
+protected:
+
+  // inherited classes should call setScreenSize once display size is known
+  void setScreenSize(int width, int height)    { m_screenWidth = width; m_screenHeight = height; }
+
+private:
+
+  // we store here these info to avoid to have virtual methods (due the -vtables in flash- problem)
+  int16_t m_screenWidth;
+  int16_t m_screenHeight;
 };
 
 

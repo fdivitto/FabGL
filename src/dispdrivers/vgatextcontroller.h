@@ -160,9 +160,6 @@ public:
    */
   void adjustMapSize(int * columns, int * rows);
 
-  int getScreenWidth()    { return m_timings.HVisibleArea; }
-  int getScreenHeight()   { return m_timings.VVisibleArea; }
-
   int getColumns()        { return VGATextController_COLUMNS; }
   int getRows()           { return VGATextController_ROWS; }
 

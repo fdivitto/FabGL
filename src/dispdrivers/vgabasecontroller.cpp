@@ -341,6 +341,9 @@ void VGABaseController::setResolution(VGATimings const& timings, int viewPortWid
   end();
 
   m_timings = timings;
+
+  setScreenSize(m_timings.HVisibleArea, m_timings.VVisibleArea);
+
   setDoubleBuffered(doubleBuffered);
 
   m_HVSync = packHVSync(false, false);

@@ -154,12 +154,6 @@ public:
   // abstract method of BitmappedDisplayController
   int getViewPortHeight() { return m_viewPortHeight; }
 
-  // abstract method of BitmappedDisplayController
-  int getScreenWidth()    { return m_screenWidth; }
-
-  // abstract method of BitmappedDisplayController
-  int getScreenHeight()   { return m_screenHeight; }
-
   /**
    * @brief Set initial left column of the viewport
    *

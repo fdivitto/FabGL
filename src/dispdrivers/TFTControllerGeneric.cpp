@@ -215,6 +215,8 @@ void TFTController::setResolution(char const * modeline, int viewPortWidth, int 
   m_screenCol    = 0;
   m_screenRow    = 0;
 
+  setScreenSize(m_screenWidth, m_screenHeight);
+
   setDoubleBuffered(doubleBuffered);
 
   m_viewPortWidth  = viewPortWidth < 0 ? m_screenWidth : viewPortWidth;

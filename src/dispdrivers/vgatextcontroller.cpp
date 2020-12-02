@@ -166,6 +166,8 @@ void VGATextController::setResolution(VGATimings const& timings)
 
   m_timings = timings;
 
+  setScreenSize(m_timings.HVisibleArea, m_timings.VVisibleArea);
+
   m_HVSync = packHVSync(false, false);
 
   m_DMABuffersCount = 2 * m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch;
