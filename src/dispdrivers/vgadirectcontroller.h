@@ -55,13 +55,21 @@
 
 namespace fabgl {
 
+/**
+ * @brief Callback used when VGADirectController needs to prepare a new scanline to be sent to the VGA output.
+ *
+ * @param arg Parameter arg passed to VGADirectController::setDrawScanlineCallback()
+ * @param dest Buffer to fill with raw pixels
+ * @param scanLine Line index (0 to screen height - 1)
+ */
+typedef void (*DrawScanlineCallback)(void * arg, uint8_t * dest, int scanLine);
 
 
 /**
  * @brief Represents an base abstract class for direct draw VGA controller
  *
  * A direct draw VGA controller draws paint the screen in real time, for each scanline. Every two scanlines an interrupt is generated.
- * Put your drawing code inside this interrupt, implementing abstract method drawScanline().
+ * Put your drawing code inside a callback and call setDrawScanlineCallback() to assign it.
  *
  * See DirectVGA.ino example.
  */
@@ -93,7 +101,13 @@ public:
 
   void readScreen(Rect const & rect, RGB888 * destBuf);
 
-  virtual void IRAM_ATTR drawScanline(uint8_t * dest, int scanLine) = 0;
+  /**
+   * @brief Sets the callback used when VGADirectController needs to prepare a new scanline to be sent to the VGA output.
+   *
+   * @param drawScanlineCallback The callback to call
+   * @param arg Argument to pass to the callback
+   */
+  void setDrawScanlineCallback(DrawScanlineCallback drawScanlineCallback, void * arg = nullptr) { m_drawScanlineCallback = drawScanlineCallback; m_drawScanlineArg = arg; }
 
 private:
 
@@ -168,7 +182,12 @@ private:
   static lldesc_t volatile *   s_frameResetDesc;
 
 
-  volatile uint8_t *          m_lines[VGAD_LinesCount];
+  volatile uint8_t *           m_lines[VGAD_LinesCount];
+
+  // here we use callbacks in place of virtual methods because vtables are stored in Flash and
+  // so it would not have been possible to put ISR into IRAM.
+  DrawScanlineCallback         m_drawScanlineCallback;
+  void *                       m_drawScanlineArg;
 
 };
 

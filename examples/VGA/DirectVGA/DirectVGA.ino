@@ -23,6 +23,8 @@
 #include "fabgl.h"
 
 
+fabgl::VGADirectController DisplayController;
+
 
 volatile double      objX    = 300;
 volatile double      objY    = 200;
@@ -39,13 +41,6 @@ volatile int objIntX;
 volatile int objIntY;
 
 
-struct MyDirectDrawVGAController : public fabgl::VGADirectController {
-
-  void IRAM_ATTR drawScanline(uint8_t * dest, int scanLine);
-
-} DisplayController;
-
-
 inline int fastRandom()
 {
   bgParkMillerState = (uint64_t)bgParkMillerState * 48271 % 0x7fffffff;
@@ -53,16 +48,16 @@ inline int fastRandom()
 }
 
 
-void IRAM_ATTR MyDirectDrawVGAController::drawScanline(uint8_t * dest, int scanLine)
+void IRAM_ATTR drawScanline(void * arg, uint8_t * dest, int scanLine)
 {
-  auto fgcolor = createRawPixel(RGB222(3, 0, 0)); // red
-  auto bgcolor = createRawPixel(RGB222(0, 0, 2)); // blue
+  auto fgcolor = DisplayController.createRawPixel(RGB222(3, 0, 0)); // red
+  auto bgcolor = DisplayController.createRawPixel(RGB222(0, 0, 2)); // blue
 
   // fill upper and lower border with random background color
-  if (scanLine < borderSize || scanLine > getScreenHeight() - borderSize)
-    bgcolor = createRawPixel(RGB222(fastRandom(), fastRandom(), fastRandom()));
+  if (scanLine < borderSize || scanLine > DisplayController.getScreenHeight() - borderSize)
+    bgcolor = DisplayController.createRawPixel(RGB222(fastRandom(), fastRandom(), fastRandom()));
 
-  auto width = getScreenWidth();
+  auto width = DisplayController.getScreenWidth();
 
   // fill line with background color
   memset(dest, bgcolor, width);
@@ -76,7 +71,7 @@ void IRAM_ATTR MyDirectDrawVGAController::drawScanline(uint8_t * dest, int scanL
     }
   }
 
-  if (scanLine == getScreenHeight() - 1) {
+  if (scanLine == DisplayController.getScreenHeight() - 1) {
     // signal end of screen
     vTaskNotifyGiveFromISR(mainTaskHandle, NULL);
   }
@@ -90,6 +85,7 @@ void setup()
   mainTaskHandle = xTaskGetCurrentTaskHandle();
 
   DisplayController.begin();
+  DisplayController.setDrawScanlineCallback(drawScanline);
   DisplayController.setResolution(VGA_640x480_60Hz);
 }
 
@@ -112,6 +108,4 @@ void loop()
 
   // wait for vertical sync
   ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-
-  //delayMicroseconds(1500);
 }

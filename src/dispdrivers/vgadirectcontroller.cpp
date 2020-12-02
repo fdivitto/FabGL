@@ -63,6 +63,7 @@ lldesc_t volatile *      VGADirectController::s_frameResetDesc;
 
 
 VGADirectController::VGADirectController()
+  : m_drawScanlineCallback(nullptr)
 {
   s_instance = this;
 }
@@ -95,6 +96,10 @@ void VGADirectController::freeViewPort()
 
 void VGADirectController::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
+  // fail if setDrawScanlineCallback() has not been called
+  if (!m_drawScanlineCallback)
+    return;
+
   VGABaseController::setResolution(timings, viewPortWidth, viewPortHeight, doubleBuffered);
 
   // must be started before interrupt alloc
@@ -236,15 +241,13 @@ void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
     if (desc == s_frameResetDesc)
       s_scanLine = 0;
 
-    //auto const width = ctrl->m_viewPortWidth;
     int scanLine = (s_scanLine + VGAD_LinesCount / 2) % ctrl->m_viewPortHeight;
 
     auto lineIndex = scanLine % VGAD_LinesCount;
 
     for (int i = 0; i < VGAD_LinesCount / 2; ++i) {
 
-      if (spi_flash_cache_enabled())
-        ctrl->drawScanline((uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
+      ctrl->m_drawScanlineCallback(ctrl->m_drawScanlineArg, (uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
 
       ++lineIndex;
       ++scanLine;

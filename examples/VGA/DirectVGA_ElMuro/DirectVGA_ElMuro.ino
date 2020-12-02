@@ -22,9 +22,10 @@
 
 #include "fabgl.h"
 
-fabgl::PS2Controller PS2Controller;
-SoundGenerator       soundGenerator;
-SquareWaveformGenerator swg;
+fabgl::VGADirectController DisplayController;
+fabgl::PS2Controller       PS2Controller;
+SoundGenerator             soundGenerator;
+SquareWaveformGenerator    swg;
 
 #include "controllers.h"
 #include "soundchip.h"
@@ -58,12 +59,6 @@ int nPaddles = PADDLES;
 GameControllerMouse      cMouse;
 GameControllerKeys       cKeysArrows;
 
-struct MyDirectDrawVGAController : public fabgl::VGADirectController {
-
-  void IRAM_ATTR drawScanline(uint8_t * dest, int scanLine);
-
-} DisplayController;
-
 
 inline int fastRandom()
 {
@@ -72,38 +67,38 @@ inline int fastRandom()
 }
 
 
-void IRAM_ATTR MyDirectDrawVGAController::drawScanline(uint8_t * dest, int scanLine)
+void IRAM_ATTR drawScanline(void * arg, uint8_t * dest, int scanLine)
 {
-  auto fgcolor = createRawPixel(RGB222(3, 3, 3));   
-  auto white = createRawPixel(RGB222(3, 3, 3));   
-  auto black = createRawPixel(RGB222(0, 0, 0));   
-  auto bgcolor = createRawPixel(RGB222(0, 0, 0)); 
+  auto fgcolor = DisplayController.createRawPixel(RGB222(3, 3, 3));   
+  auto white = DisplayController.createRawPixel(RGB222(3, 3, 3));   
+  auto black = DisplayController.createRawPixel(RGB222(0, 0, 0));   
+  auto bgcolor = DisplayController.createRawPixel(RGB222(0, 0, 0)); 
 
   if( scanLine >= 32 )
   {
     if(scanLine < 32+16)
     {
-      bgcolor = createRawPixel(RGB222(1, 0, 0));
-      fgcolor = createRawPixel(RGB222(3, 0, 0));
+      bgcolor = DisplayController.createRawPixel(RGB222(1, 0, 0));
+      fgcolor = DisplayController.createRawPixel(RGB222(3, 0, 0));
     }
     else if(scanLine < 32+16+16)
     {
-      bgcolor = createRawPixel(RGB222(1, 0, 1));
-      fgcolor = createRawPixel(RGB222(3, 0, 3));
+      bgcolor = DisplayController.createRawPixel(RGB222(1, 0, 1));
+      fgcolor = DisplayController.createRawPixel(RGB222(3, 0, 3));
     }
     else if(scanLine < 32+16+16+16)
     {
-      bgcolor = createRawPixel(RGB222(0, 1, 0));     
-      fgcolor = createRawPixel(RGB222(0, 3, 0));     
+      bgcolor = DisplayController.createRawPixel(RGB222(0, 1, 0));     
+      fgcolor = DisplayController.createRawPixel(RGB222(0, 3, 0));     
     }
     else if(scanLine < 32+16+16+16+16)
     {
-      bgcolor = createRawPixel(RGB222(1, 1, 0));    
-      fgcolor = createRawPixel(RGB222(3, 3, 0));     
+      bgcolor = DisplayController.createRawPixel(RGB222(1, 1, 0));    
+      fgcolor = DisplayController.createRawPixel(RGB222(3, 3, 0));     
     }
   }
 
-  auto width = getScreenWidth();
+  auto width = DisplayController.getScreenWidth();
 
   // fill line with background color
   if( scanLine < TOPMARGIN)
@@ -146,7 +141,7 @@ void IRAM_ATTR MyDirectDrawVGAController::drawScanline(uint8_t * dest, int scanL
       for( int x = 0; x < 10; x++)
         VGA_PIXELINROW(dest, 300 - x - p*14) = white;
   
-  if (scanLine == getScreenHeight() - 1) {
+  if (scanLine == DisplayController.getScreenHeight() - 1) {
     // signal end of screen
     vTaskNotifyGiveFromISR(mainTaskHandle, NULL);
   }
@@ -176,6 +171,7 @@ void setup()
   mainTaskHandle = xTaskGetCurrentTaskHandle();
 
   DisplayController.begin();
+  DisplayController.setDrawScanlineCallback(drawScanline);
   DisplayController.setResolution(VGA_320x200_75Hz);
   soundGenerator.setVolume(127);
   soundGenerator.play(true);
