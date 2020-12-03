@@ -61,9 +61,9 @@ struct TestApp : public uiApp {
   void init() {
 
     rootWindow()->frameStyle().backgroundColor = Color::Black;
-    frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 420));
+    frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 350));
 
-    int y = 30;
+    int y = 20;
 
     // colors
     new uiLabel(frame, "COLORS TEST:", Point(10, y));
@@ -80,13 +80,13 @@ struct TestApp : public uiApp {
       new uiColorBox(frame, Point(left + i * hspc, y + 15 + vspc), Size(50, 14), (Color)(i+ 8));
     }
 
-    y += 90;
+    y += 80;
 
     // keyboard test
     new uiLabel(frame, "KEYBOARD TEST:", Point(10, y));
     new uiTextEdit(frame, "Please type something", Point(120, y - 3), Size(450, 20));
 
-    y += 50;
+    y += 40;
 
     // sound test
     soundGenerator = new SoundGenerator;
@@ -102,7 +102,7 @@ struct TestApp : public uiApp {
       }
     };
 
-    y += 50;
+    y += 40;
 
     // SD Card test
     new uiLabel(frame, "SDCARD TEST:", Point(10, y));
@@ -112,7 +112,7 @@ struct TestApp : public uiApp {
     };
     sdResultLabel = new uiLabel(frame, "", Point(210, y));
 
-    y += 54;
+    y += 44;
 
     // GPIO test
     static const int GPIOS_IN[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18, 34, 35, 36, 39 };
@@ -155,7 +155,7 @@ struct TestApp : public uiApp {
 
     gpioTimer = setTimer(frame, 100);
 
-    y += 50;
+    y += 40;
 
     // wifi
     new uiLabel(frame, "WIFI TEST:", Point(10, y));
@@ -177,8 +177,8 @@ struct TestApp : public uiApp {
     };
 
 
-    new uiLabel(frame, "FabGL - Copyright 2019-2020 by Fabrizio Di Vittorio", Point(175, 383));
-    new uiLabel(frame, "WWW.FABGL.COM", Point(260, 400));
+    new uiLabel(frame, "FabGL - Copyright 2019-2020 by Fabrizio Di Vittorio", Point(175, 313));
+    new uiLabel(frame, "WWW.FABGL.COM", Point(260, 330));
 
   }
 
@@ -281,7 +281,7 @@ void setup()
 
   DisplayController.queueSize = 350;  // trade UI speed using less RAM and allow both WiFi and SD Card FS
   DisplayController.begin();
-  DisplayController.setResolution(VESA_640x480_75Hz, 640, 430);
+  DisplayController.setResolution(VESA_640x480_75Hz, 640, 360);
 }
 
 
