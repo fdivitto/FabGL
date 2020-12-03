@@ -338,10 +338,12 @@ void VGABaseController::setResolution(char const * modeline, int viewPortWidth, 
 
 void VGABaseController::setResolution(VGATimings const& timings, int viewPortWidth, int viewPortHeight, bool doubleBuffered)
 {
+  // just in case setResolution() was called before
   end();
 
   m_timings = timings;
 
+  // inform base class about screen size
   setScreenSize(m_timings.HVisibleArea, m_timings.VVisibleArea);
 
   setDoubleBuffered(doubleBuffered);

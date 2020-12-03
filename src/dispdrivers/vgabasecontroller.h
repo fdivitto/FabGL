@@ -49,13 +49,13 @@
 
 
 
-#define VGA_RED_BIT   0
-#define VGA_GREEN_BIT 2
-#define VGA_BLUE_BIT  4
-#define VGA_HSYNC_BIT 6
-#define VGA_VSYNC_BIT 7
+#define VGA_RED_BIT    0
+#define VGA_GREEN_BIT  2
+#define VGA_BLUE_BIT   4
+#define VGA_HSYNC_BIT  6
+#define VGA_VSYNC_BIT  7
 
-#define VGA_SYNC_MASK ((1 << VGA_HSYNC_BIT) | (1 << VGA_VSYNC_BIT))
+#define VGA_SYNC_MASK  ((1 << VGA_HSYNC_BIT) | (1 << VGA_VSYNC_BIT))
 
 
 // pixel 0 = byte 2, pixel 1 = byte 3, pixel 2 = byte 0, pixel 3 = byte 1 :
@@ -63,11 +63,11 @@
 // byte  : 2  3  0  1  6  7  4  5 10 11  8  9 ...etc...
 // dword : 0           1           2          ...etc...
 // Thanks to https://github.com/paulscottrobson for the new macro. Before was: (row[((X) & 0xFFFC) + ((2 + (X)) & 3)])
-#define VGA_PIXELINROW(row, X) (row[(X) ^ 2])
+#define VGA_PIXELINROW(row, X)   (row[(X) ^ 2])
 
 // requires variables: m_viewPort
-#define VGA_PIXEL(X, Y)    VGA_PIXELINROW(m_viewPort[(Y)], X)
-#define VGA_INVERT_PIXEL(X, Y) { auto px = &VGA_PIXEL((X), (Y)); *px = ~(*px ^ VGA_SYNC_MASK); }
+#define VGA_PIXEL(X, Y)          VGA_PIXELINROW(m_viewPort[(Y)], X)
+#define VGA_INVERT_PIXEL(X, Y)   { auto px = &VGA_PIXEL((X), (Y)); *px = ~(*px ^ VGA_SYNC_MASK); }
 
 
 
@@ -214,20 +214,20 @@ public:
    *
    * @return Horizontal position of the viewport (in case viewport width is less than screen width).
    */
-  int getViewPortCol()    { return m_viewPortCol; }
+  int getViewPortCol()                             { return m_viewPortCol; }
 
   /**
    * @brief Determines vertical position of the viewport.
    *
    * @return Vertical position of the viewport (in case viewport height is less than screen height).
    */
-  int getViewPortRow()    { return m_viewPortRow; }
+  int getViewPortRow()                             { return m_viewPortRow; }
 
   // abstract method of BitmappedDisplayController
-  int getViewPortWidth()  { return m_viewPortWidth; }
+  int getViewPortWidth()                           { return m_viewPortWidth; }
 
   // abstract method of BitmappedDisplayController
-  int getViewPortHeight() { return m_viewPortHeight; }
+  int getViewPortHeight()                          { return m_viewPortHeight; }
 
   /**
    * @brief Moves screen by specified horizontal and vertical offset.
@@ -260,7 +260,7 @@ public:
    */
   void shrinkScreen(int shrinkX, int shrinkY);
 
-  VGATimings * getResolutionTimings() { return &m_timings; }
+  VGATimings * getResolutionTimings()             { return &m_timings; }
 
   /**
    * @brief Gets number of bits allocated for each channel.
@@ -269,7 +269,7 @@ public:
    *
    * @return 1 (8 colors) or 2 (64 colors).
    */
-  uint8_t getBitsPerChannel() { return m_bitsPerChannel; }
+  uint8_t getBitsPerChannel()                     { return m_bitsPerChannel; }
 
   /**
    * @brief Gets a raw scanline pointer.
@@ -284,7 +284,7 @@ public:
    *
    * @param y Vertical scanline position (0 = top row)
    */
-  uint8_t * getScanline(int y)                { return (uint8_t*) m_viewPort[y]; }
+  uint8_t * getScanline(int y)                    { return (uint8_t*) m_viewPort[y]; }
 
   /**
    * @brief Creates a raw pixel to use with VGAController.setRawPixel

@@ -159,6 +159,7 @@ void VGATextController::setResolution(char const * modeline, int viewPortWidth, 
 
 void VGATextController::setResolution(VGATimings const& timings)
 {
+  // setResolution() already called? If so, stop and free buffers
   if (m_DMABuffers) {
     m_GPIOStream.stop();
     freeBuffers();
@@ -166,6 +167,7 @@ void VGATextController::setResolution(VGATimings const& timings)
 
   m_timings = timings;
 
+  // inform base class about screen size
   setScreenSize(m_timings.HVisibleArea, m_timings.VVisibleArea);
 
   m_HVSync = packHVSync(false, false);

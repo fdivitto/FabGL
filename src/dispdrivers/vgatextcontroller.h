@@ -160,8 +160,8 @@ public:
    */
   void adjustMapSize(int * columns, int * rows);
 
-  int getColumns()        { return VGATextController_COLUMNS; }
-  int getRows()           { return VGATextController_ROWS; }
+  int getColumns()                         { return VGATextController_COLUMNS; }
+  int getRows()                            { return VGATextController_ROWS; }
 
   void enableCursor(bool value)            { m_cursorEnabled = value; }
   void setCursorPos(int row, int col)      { m_cursorRow = row; m_cursorCol = col; m_cursorCounter = 0; }
@@ -193,36 +193,36 @@ private:
   static bool                s_upperRow;
   static lldesc_t volatile * s_frameResetDesc;
 
-  VGATimings             m_timings;
+  VGATimings                 m_timings;
 
-  GPIOStream             m_GPIOStream;
-  int                    m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
-  lldesc_t volatile *    m_DMABuffers;
-  int                    m_DMABuffersCount;
+  GPIOStream                 m_GPIOStream;
+  int                        m_bitsPerChannel;  // 1 = 8 colors, 2 = 64 colors, set by begin()
+  lldesc_t volatile *        m_DMABuffers;
+  int                        m_DMABuffersCount;
 
-  uint32_t *             m_lines;
+  uint32_t *                 m_lines;
 
-  int                    m_rows;
+  int                        m_rows;
 
-  volatile uint8_t *     m_blankLine; // for vertical porch lines
-  volatile uint8_t *     m_syncLine;  // for vertical sync lines
+  volatile uint8_t *         m_blankLine; // for vertical porch lines
+  volatile uint8_t *         m_syncLine;  // for vertical sync lines
 
-  intr_handle_t          m_isr_handle;
+  intr_handle_t              m_isr_handle;
 
   // contains H and V signals for visible line
-  volatile uint8_t       m_HVSync;
+  volatile uint8_t           m_HVSync;
 
-  uint8_t *              m_charData;
-  uint32_t const *       m_map;
+  uint8_t *                  m_charData;
+  uint32_t const *           m_map;
 
   // cursor props
-  bool                   m_cursorEnabled;
-  int                    m_cursorCounter; // trip from -m_cursorSpeed to +m_cursorSpeed (>= cursor is visible)
-  int                    m_cursorSpeed;
-  int                    m_cursorRow;
-  int                    m_cursorCol;
-  uint8_t                m_cursorForeground;
-  uint8_t                m_cursorBackground;
+  bool                       m_cursorEnabled;
+  int                        m_cursorCounter; // trip from -m_cursorSpeed to +m_cursorSpeed (>= cursor is visible)
+  int                        m_cursorSpeed;
+  int                        m_cursorRow;
+  int                        m_cursorCol;
+  uint8_t                    m_cursorForeground;
+  uint8_t                    m_cursorBackground;
 
 };
 

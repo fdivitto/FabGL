@@ -168,6 +168,7 @@ void SSD1306Controller::setResolution(char const * modeline, int viewPortWidth, 
   m_screenCol    = 0;
   m_screenRow    = 0;
 
+  // inform base class about screen size
   setScreenSize(m_screenWidth, m_screenHeight);
 
   setDoubleBuffered(doubleBuffered);
