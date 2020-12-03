@@ -333,7 +333,8 @@ protected:
 
   uint8_t packHVSync(bool HSync, bool VSync);
 
-  uint8_t preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
+  uint8_t inline __attribute__((always_inline)) preparePixel(RGB222 rgb) { return m_HVSync | (rgb.B << VGA_BLUE_BIT) | (rgb.G << VGA_GREEN_BIT) | (rgb.R << VGA_RED_BIT); }
+
   uint8_t preparePixelWithSync(RGB222 rgb, bool HSync, bool VSync);
 
   void fillVertBuffers(int offsetY);
