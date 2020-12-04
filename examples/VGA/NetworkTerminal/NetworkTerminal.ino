@@ -30,10 +30,23 @@
 
 
 char const * AUTOEXEC = "info\r"
+                        "keyb us\r"
                         "scan\r";
 
 
-enum class State { Prompt, PromptInput, UnknownCommand, Help, Info, Wifi, TelnetInit, Telnet, Scan, Ping, Reset };
+enum class State { Prompt,
+                   PromptInput,
+                   UnknownCommand,
+                   Help,
+                   Info,
+                   Wifi,
+                   TelnetInit,
+                   Telnet,
+                   Scan,
+                   Ping,
+                   Reset,
+                   Keyb
+                 };
 
 
 State        state = State::Prompt;
@@ -50,18 +63,17 @@ fabgl::LineEditor        LineEditor(&Terminal);
 
 void exe_info()
 {
-  Terminal.write("\e[37m* * FabGL - Network VT/ANSI Terminal\r\n");
-  Terminal.write("\e[34m* * 2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\e[32m\r\n\n");
-  Terminal.printf("\e[32mScreen Size        :\e[33m %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
-  Terminal.printf("\e[32mTerminal Size      :\e[33m %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
-  Terminal.printf("\e[32mKeyboard           :\e[33m %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? "OK" : "Error");
-  Terminal.printf("\e[32mFree DMA Memory    :\e[33m %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
-  Terminal.printf("\e[32mFree 32 bit Memory :\e[33m %d\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+  Terminal.write("\e[97m* * FabGL - Network VT/ANSI Terminal\r\n");
+  Terminal.write("\e[94m* * 2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\e[92m\r\n\n");
+  Terminal.printf("\e[92mScreen Size        :\e[93m %d x %d\r\n", DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+  Terminal.printf("\e[92mTerminal Size      :\e[93m %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
+  Terminal.printf("\e[92mFree DMA Memory    :\e[93m %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
+  Terminal.printf("\e[92mFree 32 bit Memory :\e[93m %d\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
   if (WiFi.status() == WL_CONNECTED) {
-    Terminal.printf("\e[32mWiFi SSID          :\e[33m %s\r\n", WiFi.SSID().c_str());
-    Terminal.printf("\e[32mCurrent IP         :\e[33m %s\r\n", WiFi.localIP().toString().c_str());
+    Terminal.printf("\e[92mWiFi SSID          :\e[93m %s\r\n", WiFi.SSID().c_str());
+    Terminal.printf("\e[92mCurrent IP         :\e[93m %s\r\n", WiFi.localIP().toString().c_str());
   }
-  Terminal.write("\n\e[32mType \e[33mhelp\e[32m to print all available commands.\r\n");
+  Terminal.write("\n\e[92mType \e[93mhelp\e[92m to print all available commands.\r\n");
   error = false;
   state = State::Prompt;
 }
@@ -69,26 +81,30 @@ void exe_info()
 
 void exe_help()
 {
-  Terminal.write("\e[33mhelp\e[92m\r\n");
-  Terminal.write("\e[37m  Shows this help.\r\n");
-  Terminal.write("\e[33minfo\r\n");
-  Terminal.write("\e[37m  Shows system info.\r\n");
-  Terminal.write("\e[33mscan\r\n");
-  Terminal.write("\e[37m  Scan for WiFi networks.\r\n");
-  Terminal.write("\e[33mwifi [SSID PASSWORD]\r\n");
-  Terminal.write("\e[37m  Connect to SSID using PASSWORD.\r\n");
-  Terminal.write("\e[37m  Example:\r\n");
-  Terminal.write("\e[37m    wifi MyWifi MyPassword\r\n");
-  Terminal.write("\e[33mtelnet HOST [PORT]\r\n");
-  Terminal.write("\e[37m  Open telnet session with HOST (IP or host name) using PORT.\r\n");
-  Terminal.write("\e[37m  Example:\r\n");
-  Terminal.write("\e[37m    telnet towel.blinkenlights.nl\e[32m\r\n");
-  Terminal.write("\e[33mping HOST\r\n");
-  Terminal.write("\e[37m  Ping a HOST (IP or host name).\r\n");
-  Terminal.write("\e[37m  Example:\r\n");
-  Terminal.write("\e[37m    ping 8.8.8.8\e[32m\r\n");
-  Terminal.write("\e[33mreboot\r\n");
-  Terminal.write("\e[37m  Restart the system.\e[32m\r\n");
+  Terminal.write("\e[93mhelp\e[92m\r\n");
+  Terminal.write("\e[97m  Shows this help.\r\n");
+  Terminal.write("\e[93minfo\r\n");
+  Terminal.write("\e[97m  Shows system info.\r\n");
+  Terminal.write("\e[93mscan\r\n");
+  Terminal.write("\e[97m  Scan for WiFi networks.\r\n");
+  Terminal.write("\e[93mwifi [SSID PASSWORD]\r\n");
+  Terminal.write("\e[97m  Connect to SSID using PASSWORD.\r\n");
+  Terminal.write("\e[97m  Example:\r\n");
+  Terminal.write("\e[97m    wifi MyWifi MyPassword\r\n");
+  Terminal.write("\e[93mtelnet HOST [PORT]\r\n");
+  Terminal.write("\e[97m  Open telnet session with HOST (IP or host name) using PORT.\r\n");
+  Terminal.write("\e[97m  Example:\r\n");
+  Terminal.write("\e[97m    telnet towel.blinkenlights.nl\e[92m\r\n");
+  Terminal.write("\e[93mping HOST\r\n");
+  Terminal.write("\e[97m  Ping a HOST (IP or host name).\r\n");
+  Terminal.write("\e[97m  Example:\r\n");
+  Terminal.write("\e[97m    ping 8.8.8.8\e[92m\r\n");
+  Terminal.write("\e[93mreboot\r\n");
+  Terminal.write("\e[97m  Restart the system.\e[92m\r\n");
+  Terminal.write("\e[93mkeyb LAYOUT\r\n");
+  Terminal.write("\e[97m  Set keyboard layout. LAYOUT can be 'us', 'uk', 'de', 'it' or 'es'\r\n");
+  Terminal.write("\e[97m  Example:\r\n");
+  Terminal.write("\e[97m    keyb de\e[92m\r\n");
   error = false;
   state = State::Prompt;
 }
@@ -111,8 +127,10 @@ void decode_command()
     state = State::Scan;
   else if (strncmp(inputLine, "ping", 4) == 0)
     state = State::Ping;
-  else if (strncmp(inputLine, "reboot", 4) == 0)
+  else if (strncmp(inputLine, "reboot", 6) == 0)
     state = State::Reset;
+  else if (strncmp(inputLine, "keyb", 4) == 0)
+    state = State::Keyb;
   else
     state = State::UnknownCommand;
 }
@@ -157,9 +175,9 @@ void exe_scan()
   int networksCount = WiFi.scanNetworks();
   Terminal.printf("%d network(s) found\r\n", networksCount);
   if (networksCount) {
-    Terminal.write   ("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[32m\r\n");
+    Terminal.write   ("\e[90m #\e[4GSSID\e[45GRSSI\e[55GCh\e[60GEncryption\e[92m\r\n");
     for (int i = 0; i < networksCount; ++i)
-      Terminal.printf("\e[33m %d\e[4G%s\e[33m\e[45G%d dBm\e[55G%d\e[60G%s\e[32m\r\n", i + 1, WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i), ENC2STR[WiFi.encryptionType(i)]);
+      Terminal.printf("\e[93m %d\e[4G%s\e[93m\e[45G%d dBm\e[55G%d\e[60G%s\e[92m\r\n", i + 1, WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i), ENC2STR[WiFi.encryptionType(i)]);
   }
   WiFi.scanDelete();
   error = false;
@@ -315,6 +333,36 @@ void exe_ping()
 }
 
 
+void exe_keyb()
+{
+  if (PS2Controller.keyboard()->isKeyboardAvailable()) {
+    char layout[3];
+    auto inputLine = LineEditor.get();
+    if (sscanf(inputLine, "keyb %2s", layout) == 1) {
+      if (strcasecmp(layout, "US") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::USLayout);
+      else if (strcasecmp(layout, "UK") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::UKLayout);
+      else if (strcasecmp(layout, "DE") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::GermanLayout);
+      else if (strcasecmp(layout, "IT") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::ItalianLayout);
+      else if (strcasecmp(layout, "ES") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::SpanishLayout);
+      else {
+        Terminal.printf("Error! Invalid keyboard layout.\r\n");
+        state = State::Prompt;
+        return;
+      }
+    }
+    Terminal.printf("\r\nKeyboard layout is : \e[93m%s\e[92m\r\n\r\n", Terminal.keyboard()->getLayout()->name);
+  } else {
+    Terminal.printf("No keyboard present\r\n");
+  }
+  state = State::Prompt;
+}
+
+
 void setup()
 {
   //Serial.begin(115200); // DEBUG ONLY
@@ -331,9 +379,6 @@ void setup()
   Terminal.setBackgroundColor(Color::Black);
   Terminal.setForegroundColor(Color::BrightGreen);
   Terminal.clear();
-
-  // just to align the screen
-  //Terminal.write("1234567890123456789012345678901234567890123456789012345678901234567890123456789X\r\n");
 
   Terminal.enableCursor(true);
 
@@ -383,6 +428,10 @@ void loop()
 
     case State::Reset:
       ESP.restart();
+      break;
+
+    case State::Keyb:
+      exe_keyb();
       break;
 
     case State::UnknownCommand:
