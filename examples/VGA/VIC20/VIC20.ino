@@ -172,14 +172,61 @@ void copyEmbeddedPrograms()
 }
 
 
+enum { STYLE_NONE, STYLE_LABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};
+
+
+#define BACKGROUND_COLOR RGB888(0, 0, 0)
+
+
+struct DialogStyle : uiStyle {
+  void setStyle(uiObject * object, uint32_t styleClassID) {
+    switch (styleClassID) {
+      case STYLE_LABEL:
+        ((uiLabel*)object)->labelStyle().textFont                           = &fabgl::FONT_std_12;
+        ((uiLabel*)object)->labelStyle().backgroundColor                    = BACKGROUND_COLOR;
+        ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 255, 255);
+        break;
+      case STYLE_LABELGROUP:
+        ((uiLabel*)object)->labelStyle().textFont                           = &fabgl::FONT_std_12;
+        ((uiLabel*)object)->labelStyle().backgroundColor                    = BACKGROUND_COLOR;
+        ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 255, 0);
+        break;
+      case STYLE_BUTTON:
+        ((uiButton*)object)->windowStyle().borderColor                      = RGB888(255, 255, 255);
+        ((uiButton*)object)->buttonStyle().backgroundColor                  = RGB888(128, 128, 128);
+        break;
+      case STYLE_COMBOBOX:
+        ((uiFrame*)object)->windowStyle().borderColor                       = RGB888(255, 255, 255);
+        ((uiFrame*)object)->windowStyle().borderSize                        = 1;
+        break;
+      case STYLE_CHECKBOX:
+        ((uiFrame*)object)->windowStyle().borderColor                       = RGB888(255, 255, 255);
+        break;
+      case STYLE_FILEBROWSER:
+        ((uiListBox*)object)->windowStyle().borderColor                     = RGB888(128, 128, 128);
+        ((uiListBox*)object)->windowStyle().focusedBorderColor              = RGB888(255, 255, 255);
+        ((uiListBox*)object)->listBoxStyle().backgroundColor                = RGB888(0, 255, 255);
+        ((uiListBox*)object)->listBoxStyle().focusedBackgroundColor         = RGB888(0, 255, 255);
+        ((uiListBox*)object)->listBoxStyle().selectedBackgroundColor        = RGB888(128, 128, 128);
+        ((uiListBox*)object)->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 255, 255);
+        ((uiListBox*)object)->listBoxStyle().textColor                      = RGB888(0, 0, 64);
+        ((uiListBox*)object)->listBoxStyle().selectedTextColor              = RGB888(0, 0, 128);
+        ((uiListBox*)object)->listBoxStyle().textFont                       = &fabgl::FONT_SLANT_8x14;
+        break;
+    }
+  }
+} dialogStyle;
+
+
+
 struct DownloadProgressFrame : public uiFrame {
 
-  uiLabel * label1;
-  uiLabel * label2;
+  uiLabel *  label1;
+  uiLabel *  label2;
   uiButton * button;
 
   DownloadProgressFrame(uiFrame * parent)
-    : uiFrame(parent, "Download", Point(50, 100), Size(150, 110), false) {
+    : uiFrame(parent, "Download", UIWINDOW_PARENTCENTER, Size(150, 110), false) {
     frameProps().resizeable        = false;
     frameProps().moveable          = false;
     frameProps().hasCloseButton    = false;
@@ -199,7 +246,7 @@ struct DownloadProgressFrame : public uiFrame {
 struct HelpFame : public uiFrame {
 
   HelpFame(uiFrame * parent)
-    : uiFrame(parent, "Help", Point(50, 95), Size(160, 210), false) {
+    : uiFrame(parent, "Help", UIWINDOW_PARENTCENTER, Size(160, 210), false) {
 
     auto button = new uiButton(this, "OK", Point(57, 180), Size(50, 20));
     button->onClick = [&]() { exitModal(0); };
@@ -212,9 +259,9 @@ struct HelpFame : public uiFrame {
       cv->setPenColor(Color::Green);
       cv->drawText(x, y += 14, "Keyboard Shortcuts:");
       cv->setPenColor(Color::Black);
-      cv->drawText(x, y += 14, "   F12: Switch Emulator and Menu");
+      cv->drawText(x, y += 14, "   F12: Switch Emulator <-> Config");
       cv->drawText(x, y += 14, "   DEL: Delete File or Folder");
-      cv->drawText(x, y += 14, "   ALT + A-S-W-Z: Move Screen");
+      cv->drawText(x, y += 14, "   ALT + A S W Z: Move Screen");
       cv->setPenColor(Color::Blue);
       cv->drawText(x, y += 18, "\"None\" Joystick Mode:");
       cv->setPenColor(Color::Black);
@@ -246,29 +293,23 @@ class Menu : public uiApp {
   void init() {
     machine = new Machine(&DisplayController);
 
-    rootWindow()->frameStyle().backgroundColor = RGB888(255, 255, 255);
+    setStyle(&dialogStyle);
+
+    rootWindow()->frameStyle().backgroundColor = BACKGROUND_COLOR;
 
     // some static text
     rootWindow()->onPaint = [&]() {
       auto cv = canvas();
       cv->selectFont(&fabgl::FONT_std_12);
-      cv->setPenColor(RGB888(255, 64, 64));
+      cv->setPenColor(RGB888(0, 255, 255));
       cv->drawText(155, 345, "V I C 2 0  Emulator");
-      cv->setPenColor(RGB888(128, 64, 64));
+      cv->setPenColor(RGB888(0, 128, 128));
       cv->drawText(167, 357, "www.fabgl.com");
       cv->drawText(130, 371, "2019/20 by Fabrizio Di Vittorio");
     };
 
     // programs list
-    fileBrowser = new uiFileBrowser(rootWindow(), Point(5, 10), Size(140, 290));
-    fileBrowser->listBoxStyle().backgroundColor = RGB888(0, 255, 0);
-
-    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB888(255, 0, 0);
-    fileBrowser->listBoxStyle().selectedBackgroundColor = RGB888(128, 0, 0);
-    fileBrowser->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 0, 0);
-    fileBrowser->windowStyle().focusedBorderColor = RGB888(255, 0, 0);
-
-    fileBrowser->listBoxStyle().focusedBackgroundColor = RGB888(0, 255, 0);
+    fileBrowser = new uiFileBrowser(rootWindow(), Point(5, 10), Size(140, 290), true, STYLE_FILEBROWSER);
     fileBrowser->setDirectory(basepath);
     fileBrowser->onChange = [&]() {
       setSelectedProgramConf();
@@ -299,27 +340,27 @@ class Menu : public uiApp {
     int x = 168;
 
     // "Back to VIC" button - run the VIC20
-    auto VIC20Button = new uiButton(rootWindow(), "Back to VIC", Point(x, 10), Size(65, 19));
+    auto VIC20Button = new uiButton(rootWindow(), "Back to VIC", Point(x, 10), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     VIC20Button->onClick = [&]() {
       runVIC20();
     };
 
     // "Load" button
-    auto loadButton = new uiButton(rootWindow(), "Load", Point(x, 35), Size(65, 19));
+    auto loadButton = new uiButton(rootWindow(), "Load", Point(x, 35), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     loadButton->onClick = [&]() {
       if (loadSelectedProgram())
         runVIC20();
     };
 
     // "reset" button
-    auto resetButton = new uiButton(rootWindow(), "Soft Reset", Point(x, 60), Size(65, 19));
+    auto resetButton = new uiButton(rootWindow(), "Soft Reset", Point(x, 60), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     resetButton->onClick = [&]() {
       machine->reset();
       runVIC20();
     };
 
     // "Hard Reset" button
-    auto hresetButton = new uiButton(rootWindow(), "Hard Reset", Point(x, 85), Size(65, 19));
+    auto hresetButton = new uiButton(rootWindow(), "Hard Reset", Point(x, 85), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     hresetButton->onClick = [&]() {
       machine->removeCRT();
       machine->reset();
@@ -327,7 +368,7 @@ class Menu : public uiApp {
     };
 
     // "help" button
-    auto helpButton = new uiButton(rootWindow(), "Help", Point(x, 282), Size(65, 19));
+    auto helpButton = new uiButton(rootWindow(), "Help", Point(x, 282), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     helpButton->onClick = [&]() {
       auto hframe = new HelpFame(rootWindow());
       showModalWindow(hframe);
@@ -336,9 +377,8 @@ class Menu : public uiApp {
 
     // RAM expansion options
     int y = 120;
-    auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y));
-    lbl->labelStyle().textColor = RGB888(64, 64, 255);
-    RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(85, 19), 130);
+    auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(85, 19), 130, true, STYLE_COMBOBOX);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
       RAMExpComboBox->items().append(RAMOPTS[i]);
@@ -349,14 +389,13 @@ class Menu : public uiApp {
 
     // joystick emulation options
     y += 50;
-    lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y));
-    lbl->labelStyle().textColor = RGB888(64, 64, 255);
-    new uiLabel(rootWindow(), "None", Point(180, y + 20));
-    auto radioJNone = new uiCheckBox(rootWindow(), Point(160, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton);
-    new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 40));
-    auto radioJCurs = new uiCheckBox(rootWindow(), Point(160, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton);
-    new uiLabel(rootWindow(), "Mouse", Point(180, y + 60));
-    auto radioJMous = new uiCheckBox(rootWindow(), Point(160, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton);
+    lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiLabel(rootWindow(), "None", Point(180, y + 20), Size(0, 0), true, STYLE_LABEL);
+    auto radioJNone = new uiCheckBox(rootWindow(), Point(160, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
+    new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 40), Size(0, 0), true, STYLE_LABEL);
+    auto radioJCurs = new uiCheckBox(rootWindow(), Point(160, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
+    new uiLabel(rootWindow(), "Mouse", Point(180, y + 60), Size(0, 0), true, STYLE_LABEL);
+    auto radioJMous = new uiCheckBox(rootWindow(), Point(160, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     radioJNone->setGroupIndex(1);
     radioJCurs->setGroupIndex(1);
     radioJMous->setGroupIndex(1);
@@ -368,7 +407,7 @@ class Menu : public uiApp {
     radioJMous->onChange = [&]() { machine->setJoyEmu(JE_Mouse); };
 
     // setup wifi button
-    auto setupWifiBtn = new uiButton(rootWindow(), "Setup", Point(28, 330), Size(40, 19));
+    auto setupWifiBtn = new uiButton(rootWindow(), "Setup", Point(28, 330), Size(40, 19), uiButtonKind::Button, true, STYLE_COMBOBOX);
     setupWifiBtn->onClick = [&]() {
       char SSID[32] = "";
       char psw[32]  = "";
@@ -380,26 +419,25 @@ class Menu : public uiApp {
     };
 
     // ON wifi button
-    auto onWiFiBtn = new uiButton(rootWindow(), "On", Point(72, 330), Size(40, 19));
+    auto onWiFiBtn = new uiButton(rootWindow(), "On", Point(72, 330), Size(40, 19), uiButtonKind::Button, true, STYLE_COMBOBOX);
     onWiFiBtn->onClick = [&]() {
       connectWiFi();
     };
 
     // free space label
-    freeSpaceLbl = new uiLabel(rootWindow(), "", Point(5, 305));
+    freeSpaceLbl = new uiLabel(rootWindow(), "", Point(5, 305), Size(0, 0), true, STYLE_LABEL);
     updateFreeSpaceLabel();
 
     // WiFi Status label
-    WiFiStatusLbl = new uiLabel(rootWindow(), "WiFi", Point(5, 332));
-    WiFiStatusLbl->labelStyle().textColor = RGB888(128, 128, 128);
+    WiFiStatusLbl = new uiLabel(rootWindow(), "WiFi", Point(5, 333), Size(0, 0), true, STYLE_LABEL);
+    WiFiStatusLbl->labelStyle().textColor = RGB888(128, 128, 0);
 
     // "Download From" label
-    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 354));
-    downloadFromLbl->labelStyle().textColor = RGB888(64, 64, 255);
+    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 355), Size(0, 0), true, STYLE_LABELGROUP);
     downloadFromLbl->labelStyle().textFont = &fabgl::FONT_std_12;
 
     // Download List button (download programs listed and linked in LIST_URL)
-    auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19));
+    auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     downloadProgsBtn->onClick = [&]() {
       if (!WiFiConnected()) {
         messageBox("Network Error", "Please activate WiFi", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
@@ -437,7 +475,7 @@ class Menu : public uiApp {
     };
 
     // Download from URL
-    auto downloadURLBtn = new uiButton(rootWindow(), "URL", Point(107, 352), Size(27, 19));
+    auto downloadURLBtn = new uiButton(rootWindow(), "URL", Point(107, 352), Size(27, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     downloadURLBtn->onClick = [&]() {
       char * URL = new char[128];
       char * filename = new char[25];
@@ -625,7 +663,7 @@ class Menu : public uiApp {
         delay(1000);
       }
     }
-    WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB888(0, 255, 0) : RGB888(128, 128, 128));
+    WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB888(0, 255, 0) : RGB888(128, 128, 0));
     WiFiStatusLbl->update();
     if (WiFi.status() != WL_CONNECTED)
       messageBox("Network Error", "Failed to connect WiFi. Try again!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
