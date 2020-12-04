@@ -519,7 +519,7 @@ public:
   DirItem const * get(int index) { return m_items + index; }
 
   /**
-   * @brief Determines if a file exists
+   * @brief Determines if a file or directory exists
    *
    * @param name Relative file or directory name
    * @param caseSensitive If true (default) comparison is case sensitive
