@@ -210,7 +210,7 @@ struct DialogStyle : uiStyle {
         ((uiListBox*)object)->windowStyle().focusedBorderColor              = RGB888(255, 255, 255);
         ((uiListBox*)object)->listBoxStyle().backgroundColor                = RGB888(0, 255, 255);
         ((uiListBox*)object)->listBoxStyle().focusedBackgroundColor         = RGB888(0, 255, 255);
-        ((uiListBox*)object)->listBoxStyle().selectedBackgroundColor        = RGB888(128, 128, 128);
+        ((uiListBox*)object)->listBoxStyle().selectedBackgroundColor        = RGB888(128, 64, 0);
         ((uiListBox*)object)->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 128, 0);
         ((uiListBox*)object)->listBoxStyle().textColor                      = RGB888(0, 0, 128);
         ((uiListBox*)object)->listBoxStyle().selectedTextColor              = RGB888(0, 0, 255);
@@ -286,6 +286,7 @@ class Menu : public uiApp {
 
   uiFileBrowser * fileBrowser;
   uiComboBox *    RAMExpComboBox;
+  uiComboBox *    kbdComboBox;
   uiLabel *       freeSpaceLbl;
 
   // Main machine
@@ -373,15 +374,26 @@ class Menu : public uiApp {
     };
 
     // "help" button
-    auto helpButton = new uiButton(rootWindow(), "Help", Point(x, 282), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto helpButton = new uiButton(rootWindow(), "Help", Point(x, 110), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     helpButton->onClick = [&]() {
       auto hframe = new HelpFame(rootWindow());
       showModalWindow(hframe);
       destroyWindow(hframe);
     };
 
+    // select keyboard layout
+    int y = 145;
+    new uiLabel(rootWindow(), "Keyboard Layout:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    kbdComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 20), 70, true, STYLE_COMBOBOX);
+    kbdComboBox->items().append(SupportedLayouts::names(), SupportedLayouts::count());
+    kbdComboBox->onChange = [&]() {
+      preferences.putInt("kbdLayout", kbdComboBox->selectedItem());
+      updateKbdLayout();
+    };
+    kbdComboBox->selectItem(updateKbdLayout());
+
     // RAM expansion options
-    int y = 120;
+    y += 50;
     auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
     RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(85, 19), 130, true, STYLE_COMBOBOX);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
@@ -396,11 +408,11 @@ class Menu : public uiApp {
     y += 50;
     lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
     new uiLabel(rootWindow(), "None", Point(180, y + 21), Size(0, 0), true, STYLE_LABEL);
-    auto radioJNone = new uiCheckBox(rootWindow(), Point(160, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
+    auto radioJNone = new uiCheckBox(rootWindow(), Point(158, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 41), Size(0, 0), true, STYLE_LABEL);
-    auto radioJCurs = new uiCheckBox(rootWindow(), Point(160, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
+    auto radioJCurs = new uiCheckBox(rootWindow(), Point(158, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     new uiLabel(rootWindow(), "Mouse", Point(180, y + 61), Size(0, 0), true, STYLE_LABEL);
-    auto radioJMous = new uiCheckBox(rootWindow(), Point(160, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
+    auto radioJMous = new uiCheckBox(rootWindow(), Point(158, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     radioJNone->setGroupIndex(1);
     radioJCurs->setGroupIndex(1);
     radioJMous->setGroupIndex(1);
@@ -772,6 +784,11 @@ class Menu : public uiApp {
     freeSpaceLbl->update();
   }
 
+  int updateKbdLayout() {
+    auto curLayoutIdx = preferences.getInt("kbdLayout", 3); // default US
+    PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[curLayoutIdx]);
+    return curLayoutIdx;
+  }
 
 
 };
@@ -791,12 +808,15 @@ void setup()
   #endif
 
   preferences.begin("VIC20", false);
+  //preferences.clear();
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::CreateVirtualKeysQueue);
-  PS2Controller.keyboard()->setLayout(&fabgl::UKLayout);
 
   DisplayController.begin();
   DisplayController.setResolution(VGA_256x384_60Hz);
+
+  // this improves user interface speed - check possible drawbacks before enabling definitively
+  //DisplayController.enableBackgroundPrimitiveExecution(false);
 
   // adjust this to center screen in your monitor
   //DisplayController.moveScreen(20, -2);

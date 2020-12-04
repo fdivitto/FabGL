@@ -192,7 +192,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
 {
   m_displayController = displayController;
 
-  m_canvas            = new Canvas(m_displayController);
+  m_canvas = new Canvas(m_displayController);
 
   m_keyboard = keyboard;
   m_mouse    = mouse;
