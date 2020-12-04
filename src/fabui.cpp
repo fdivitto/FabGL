@@ -3978,6 +3978,14 @@ void uiFileBrowser::setDirectory(char const * path)
 }
 
 
+void uiFileBrowser::changeDirectory(char const * path)
+{
+  m_dir.changeDirectory(path);
+  m_selected = m_dir.count() > 0 ? 0 : -1;
+  repaint();
+}
+
+
 char const * uiFileBrowser::filename()
 {
   return m_selected >= 0 ? m_dir.get(m_selected)->name : nullptr;

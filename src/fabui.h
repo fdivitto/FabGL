@@ -1908,13 +1908,22 @@ public:
   uiFileBrowser(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
 
   /**
-   * @brief Sets current directory
+   * @brief Sets current directory as absolute path
    *
    * Path can include subdirectories (even SPIFFS emulated directories).
    *
    * @param path Absolute path. It musts include filesystem path (ie "/spiffs")
    */
   void setDirectory(char const * path);
+
+  /**
+   * @brief Changes current directory as relative path
+   *
+   * Path can include subdirectories (even SPIFFS emulated directories).
+   *
+   * @param path Relative path (ie '..\subdir')
+   */
+  void changeDirectory(char const * path);
 
   /**
    * @brief Determines current directory
