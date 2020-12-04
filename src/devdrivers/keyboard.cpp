@@ -231,7 +231,15 @@ const KeyboardLayout USLayout {
     { VK_x,            { 0, 0, 1, 1, 0 }, VK_X },
     { VK_y,            { 0, 0, 1, 1, 0 }, VK_Y },
     { VK_z,            { 0, 0, 1, 1, 0 }, VK_Z },
-  }
+  },
+  
+  // deadkeys
+  {
+  },
+
+  // deadkeys translation
+  {
+  },
 };
 
 
@@ -264,7 +272,15 @@ const KeyboardLayout UKLayout {
     { VK_QUOTE,       { 0, 0, 1, 0, 0 }, VK_AT },           // SHIFT "'" = "@"
     { VK_HASH,        { 0, 0, 1, 0, 0 }, VK_TILDE },        // SHIFT "#" = "~"
     { VK_BACKSLASH,   { 0, 0, 1, 0, 0 }, VK_VERTICALBAR },  // SHIFT "\" = "|"
-  }
+  },
+
+  // deadkeys
+  {
+  },
+
+  // deadkeys translation
+  {
+  },
 };
 
 
@@ -326,7 +342,15 @@ const KeyboardLayout GermanLayout {
     { VK_e,           { 0, 1, 0, 0, 0 }, VK_EURO },         // ALT "e"   = "€"
     { VK_PLUS,        { 0, 1, 0, 0, 0 }, VK_TILDE },        // ALT "+"   = "~"
     { VK_LESS,        { 0, 1, 0, 0, 0 }, VK_VERTICALBAR },  // ALT "<"   = "|"
-  }
+  },
+
+  // deadkeys
+  {
+  },
+
+  // deadkeys translation
+  {
+  },
 };
 
 
@@ -389,7 +413,15 @@ const KeyboardLayout ItalianLayout {
     { VK_GRAVE_a,   { 0, 1, 0, 0, 0 }, VK_HASH },         // ALT "à"   = "#"
     { VK_GRAVE_e,   { 0, 1, 1, 0, 0 }, VK_LEFTBRACE },    // SHIFT ALT "è" = "{"
     { VK_PLUS,      { 0, 1, 1, 0, 0 }, VK_RIGHTBRACE },   // SHIFT ALT "+" = "}"
-  }
+  },
+
+  // deadkeys
+  {
+  },
+
+  // deadkeys translation
+  {
+  },
 };
 
 
@@ -399,7 +431,8 @@ int Keyboard::scancodeToVirtualKeyTaskStackSize = FABGLIB_DEFAULT_SCODETOVK_TASK
 
 
 Keyboard::Keyboard()
-  : m_keyboardAvailable(false)
+  : m_keyboardAvailable(false),
+    m_lastDeadKey(VK_NONE)
 {
 }
 
@@ -973,6 +1006,24 @@ VirtualKey Keyboard::blockingGetVirtualKey(bool * keyDown)
 
   if (keyDown)
     *keyDown = kdown;
+    
+  // manage dead keys - Implemented by Carles Oriol (https://github.com/carlesoriol)
+  for (VirtualKey const * dk = m_layout->deadKeysVK; *dk != VK_NONE; ++dk) {
+    if (vk == *dk) {
+      m_lastDeadKey = vk;
+      vk = VK_NONE;
+    }
+  }
+  if (vk != m_lastDeadKey && vk != VK_NONE) {
+    for (DeadKeyVirtualKeyDef const * dk = m_layout->deadkeysToVK; dk->deadKey != VK_NONE; ++dk) {
+      if (vk == dk->reqVirtualKey && m_lastDeadKey == dk->deadKey) {
+        vk = dk->virtualKey;
+        break;
+      }
+    }
+    if (!kdown && (vk != m_lastDeadKey) && (vk != VK_RSHIFT) && (vk != VK_LSHIFT))
+      m_lastDeadKey = VK_NONE;
+  }
 
   return vk;
 }
