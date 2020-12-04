@@ -86,7 +86,10 @@ char const * basepath = nullptr;
 
 
 // name of embedded programs directory
-char const * EMBDIR = "Free";
+char const * EMBDIR  = "Free";
+
+// name of downloaded programs directory
+char const * DOWNDIR = "List";
 
 
 #define DEBUG 0
@@ -155,7 +158,7 @@ void copyEmbeddedPrograms()
   auto dir = FileBrowser();
   dir.setDirectory(basepath);
   if (!dir.exists(EMBDIR)) {
-    // there isn't a EMBDIR folder, let's create and populate it
+    // there isn't a EMBDIR folder, create and populate it
     dir.makeDirectory(EMBDIR);
     dir.changeDirectory(EMBDIR);
     for (int i = 0; i < sizeof(embeddedProgs) / sizeof(EmbeddedProgDef); ++i) {
@@ -189,7 +192,7 @@ struct DialogStyle : uiStyle {
       case STYLE_LABELGROUP:
         ((uiLabel*)object)->labelStyle().textFont                           = &fabgl::FONT_std_12;
         ((uiLabel*)object)->labelStyle().backgroundColor                    = BACKGROUND_COLOR;
-        ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 255, 0);
+        ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 128, 0);
         break;
       case STYLE_BUTTON:
         ((uiButton*)object)->windowStyle().borderColor                      = RGB888(255, 255, 255);
@@ -208,9 +211,9 @@ struct DialogStyle : uiStyle {
         ((uiListBox*)object)->listBoxStyle().backgroundColor                = RGB888(0, 255, 255);
         ((uiListBox*)object)->listBoxStyle().focusedBackgroundColor         = RGB888(0, 255, 255);
         ((uiListBox*)object)->listBoxStyle().selectedBackgroundColor        = RGB888(128, 128, 128);
-        ((uiListBox*)object)->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 255, 255);
-        ((uiListBox*)object)->listBoxStyle().textColor                      = RGB888(0, 0, 64);
-        ((uiListBox*)object)->listBoxStyle().selectedTextColor              = RGB888(0, 0, 128);
+        ((uiListBox*)object)->listBoxStyle().focusedSelectedBackgroundColor = RGB888(255, 128, 0);
+        ((uiListBox*)object)->listBoxStyle().textColor                      = RGB888(0, 0, 128);
+        ((uiListBox*)object)->listBoxStyle().selectedTextColor              = RGB888(0, 0, 255);
         ((uiListBox*)object)->listBoxStyle().textFont                       = &fabgl::FONT_SLANT_8x14;
         break;
     }
@@ -233,7 +236,7 @@ struct DownloadProgressFrame : public uiFrame {
     frameProps().hasMaximizeButton = false;
     frameProps().hasMinimizeButton = false;
 
-    label1 = new uiLabel(this, "", Point(10, 25));
+    label1 = new uiLabel(this, "Connecting...", Point(10, 25));
     label2 = new uiLabel(this, "", Point(10, 45));
     button = new uiButton(this, "Abort", Point(50, 75), Size(50, 20));
     button->onClick = [&]() { exitModal(1); };
@@ -283,7 +286,6 @@ class Menu : public uiApp {
 
   uiFileBrowser * fileBrowser;
   uiComboBox *    RAMExpComboBox;
-  uiLabel *       WiFiStatusLbl;
   uiLabel *       freeSpaceLbl;
 
   // Main machine
@@ -300,17 +302,20 @@ class Menu : public uiApp {
     // some static text
     rootWindow()->onPaint = [&]() {
       auto cv = canvas();
+      cv->selectFont(&fabgl::FONT_SLANT_8x14);
+      cv->setPenColor(RGB888(0, 128, 255));
+      cv->drawText(136, 345, "VIC20 Emulator");
+
       cv->selectFont(&fabgl::FONT_std_12);
-      cv->setPenColor(RGB888(0, 255, 255));
-      cv->drawText(155, 345, "V I C 2 0  Emulator");
-      cv->setPenColor(RGB888(0, 128, 128));
-      cv->drawText(167, 357, "www.fabgl.com");
+      cv->setPenColor(RGB888(255, 128, 0));
+      cv->drawText(160, 358, "www.fabgl.com");
       cv->drawText(130, 371, "2019/20 by Fabrizio Di Vittorio");
     };
 
     // programs list
     fileBrowser = new uiFileBrowser(rootWindow(), Point(5, 10), Size(140, 290), true, STYLE_FILEBROWSER);
-    fileBrowser->setDirectory(basepath);
+    fileBrowser->setDirectory(basepath);  // set absolute path
+    fileBrowser->changeDirectory( fileBrowser->content().exists(DOWNDIR) ? DOWNDIR : EMBDIR ); // set relative path
     fileBrowser->onChange = [&]() {
       setSelectedProgramConf();
     };
@@ -390,11 +395,11 @@ class Menu : public uiApp {
     // joystick emulation options
     y += 50;
     lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
-    new uiLabel(rootWindow(), "None", Point(180, y + 20), Size(0, 0), true, STYLE_LABEL);
+    new uiLabel(rootWindow(), "None", Point(180, y + 21), Size(0, 0), true, STYLE_LABEL);
     auto radioJNone = new uiCheckBox(rootWindow(), Point(160, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
-    new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 40), Size(0, 0), true, STYLE_LABEL);
+    new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 41), Size(0, 0), true, STYLE_LABEL);
     auto radioJCurs = new uiCheckBox(rootWindow(), Point(160, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
-    new uiLabel(rootWindow(), "Mouse", Point(180, y + 60), Size(0, 0), true, STYLE_LABEL);
+    new uiLabel(rootWindow(), "Mouse", Point(180, y + 61), Size(0, 0), true, STYLE_LABEL);
     auto radioJMous = new uiCheckBox(rootWindow(), Point(160, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     radioJNone->setGroupIndex(1);
     radioJCurs->setGroupIndex(1);
@@ -406,42 +411,17 @@ class Menu : public uiApp {
     radioJCurs->onChange = [&]() { machine->setJoyEmu(JE_CursorKeys); };
     radioJMous->onChange = [&]() { machine->setJoyEmu(JE_Mouse); };
 
-    // setup wifi button
-    auto setupWifiBtn = new uiButton(rootWindow(), "Setup", Point(28, 330), Size(40, 19), uiButtonKind::Button, true, STYLE_COMBOBOX);
-    setupWifiBtn->onClick = [&]() {
-      char SSID[32] = "";
-      char psw[32]  = "";
-      if (inputBox("WiFi Connect", "WiFi Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
-          inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        preferences.putString("SSID", SSID);
-        preferences.putString("WiFiPsw", psw);
-      }
-    };
-
-    // ON wifi button
-    auto onWiFiBtn = new uiButton(rootWindow(), "On", Point(72, 330), Size(40, 19), uiButtonKind::Button, true, STYLE_COMBOBOX);
-    onWiFiBtn->onClick = [&]() {
-      connectWiFi();
-    };
-
     // free space label
-    freeSpaceLbl = new uiLabel(rootWindow(), "", Point(5, 305), Size(0, 0), true, STYLE_LABEL);
+    freeSpaceLbl = new uiLabel(rootWindow(), "", Point(5, 304), Size(0, 0), true, STYLE_LABEL);
     updateFreeSpaceLabel();
 
-    // WiFi Status label
-    WiFiStatusLbl = new uiLabel(rootWindow(), "WiFi", Point(5, 333), Size(0, 0), true, STYLE_LABEL);
-    WiFiStatusLbl->labelStyle().textColor = RGB888(128, 128, 0);
-
     // "Download From" label
-    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 355), Size(0, 0), true, STYLE_LABELGROUP);
-    downloadFromLbl->labelStyle().textFont = &fabgl::FONT_std_12;
+    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 326), Size(0, 0), true, STYLE_LABELGROUP);
 
     // Download List button (download programs listed and linked in LIST_URL)
-    auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(75, 352), Size(27, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(13, 345), Size(27, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     downloadProgsBtn->onClick = [&]() {
-      if (!WiFiConnected()) {
-        messageBox("Network Error", "Please activate WiFi", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
-      } else if (messageBox("Download Programs listed in \"LIST_URL\"", "Check your local laws for restrictions", "OK", "Cancel", nullptr, uiMessageBoxIcon::Warning) == uiMessageBoxResult::Button1) {
+      if (checkWiFi() && messageBox("Download Programs listed in \"LIST_URL\"", "Check your local laws for restrictions", "OK", "Cancel", nullptr, uiMessageBoxIcon::Warning) == uiMessageBoxResult::Button1) {
         auto pframe = new DownloadProgressFrame(rootWindow());
         auto modalStatus = initModalWindow(pframe);
         processModalWindowEvents(modalStatus, 100);
@@ -475,27 +455,29 @@ class Menu : public uiApp {
     };
 
     // Download from URL
-    auto downloadURLBtn = new uiButton(rootWindow(), "URL", Point(107, 352), Size(27, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto downloadURLBtn = new uiButton(rootWindow(), "URL", Point(48, 345), Size(27, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     downloadURLBtn->onClick = [&]() {
-      char * URL = new char[128];
-      char * filename = new char[25];
-      strcpy(URL, "http://");
-      if (inputBox("Download From URL", "URL", URL, 127, "OK", "Cancel") == uiMessageBoxResult::Button1) {
-        char * lastslash = strrchr(URL, '/');
-        if (lastslash) {
-          strcpy(filename, lastslash + 1);
-          if (inputBox("Download From URL", "Filename", filename, 24, "OK", "Cancel") == uiMessageBoxResult::Button1) {
-            if (downloadURL(URL, filename)) {
-              messageBox("Success", "Download OK!", "OK", nullptr, nullptr);
-              fileBrowser->update();
-              updateFreeSpaceLabel();
-            } else
-              messageBox("Error", "Download Failed!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
+      if (checkWiFi()) {
+        char * URL = new char[128];
+        char * filename = new char[25];
+        strcpy(URL, "http://");
+        if (inputBox("Download From URL", "URL", URL, 127, "OK", "Cancel") == uiMessageBoxResult::Button1) {
+          char * lastslash = strrchr(URL, '/');
+          if (lastslash) {
+            strcpy(filename, lastslash + 1);
+            if (inputBox("Download From URL", "Filename", filename, 24, "OK", "Cancel") == uiMessageBoxResult::Button1) {
+              if (downloadURL(URL, filename)) {
+                messageBox("Success", "Download OK!", "OK", nullptr, nullptr);
+                fileBrowser->update();
+                updateFreeSpaceLabel();
+              } else
+                messageBox("Error", "Download Failed!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
+            }
           }
         }
+        delete [] filename;
+        delete [] URL;
       }
-      delete [] filename;
-      delete [] URL;
     };
 
     // process ESC and F12: boths run the emulator
@@ -646,35 +628,38 @@ class Menu : public uiApp {
     return backToVIC;
   }
 
-  // return true if WiFi is connected
-  bool WiFiConnected() {
-    bool r = WiFi.status() == WL_CONNECTED;
-    return r;
-  }
-
-  // connect to wifi using SSID and PSW from Preferences
-  void connectWiFi()
-  {
-    char SSID[32], psw[32];
-    if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
-      WiFi.begin(SSID, psw);
-      for (int i = 0; i < 6 && WiFi.status() != WL_CONNECTED; ++i) {
-        WiFi.reconnect();
-        delay(1000);
-      }
+  // true if WiFi is has been connected
+  bool checkWiFi() {
+    if (WiFi.status() == WL_CONNECTED)
+      return true;
+    char SSID[32] = "";
+    char psw[32]  = "";
+    if (!preferences.getString("SSID", SSID, sizeof(SSID)) || !preferences.getString("WiFiPsw", psw, sizeof(psw))) {
+      // ask user for SSID and password
+      if (inputBox("WiFi Connect", "WiFi Name", SSID, sizeof(SSID), "OK", "Cancel") == uiMessageBoxResult::Button1 &&
+          inputBox("WiFi Connect", "Password", psw, sizeof(psw), "OK", "Cancel") == uiMessageBoxResult::Button1) {
+        preferences.putString("SSID", SSID);
+        preferences.putString("WiFiPsw", psw);
+      } else
+        return false;
     }
-    WiFiStatusLbl->labelStyle().textColor = (WiFi.status() == WL_CONNECTED ? RGB888(0, 255, 0) : RGB888(128, 128, 0));
-    WiFiStatusLbl->update();
-    if (WiFi.status() != WL_CONNECTED)
+    WiFi.begin(SSID, psw);
+    for (int i = 0; i < 6 && WiFi.status() != WL_CONNECTED; ++i) {
+      WiFi.reconnect();
+      delay(1000);
+    }
+    bool connected = (WiFi.status() == WL_CONNECTED);
+    if (!connected) {
       messageBox("Network Error", "Failed to connect WiFi. Try again!", "OK", nullptr, nullptr, uiMessageBoxIcon::Error);
+      preferences.remove("WiFiPsw");
+    }
+    return connected;
   }
 
   // creates List folder and makes it current
   void prepareForDownload()
   {
-    static char const * DOWNDIR = "List";
     FileBrowser & dir = fileBrowser->content();
-
     dir.setDirectory(basepath);
     dir.makeDirectory(DOWNDIR);
     dir.changeDirectory(DOWNDIR);
