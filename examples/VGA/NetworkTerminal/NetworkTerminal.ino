@@ -355,7 +355,7 @@ void exe_keyb()
         return;
       }
     }
-    Terminal.printf("\r\nKeyboard layout is : \e[93m%s\e[92m\r\n\r\n", Terminal.keyboard()->getLayout()->name);
+    Terminal.printf("\r\nKeyboard layout is : \e[93m%s\e[92m\r\n\r\n", Terminal.keyboard()->getLayout()->desc);
   } else {
     Terminal.printf("No keyboard present\r\n");
   }
