@@ -100,19 +100,37 @@ extern const KeyboardLayout GermanLayout;
 /** @brief Italian keyboard layout */
 extern const KeyboardLayout ItalianLayout;
 
+/** @brief Spanish keyboard layout */
+extern const KeyboardLayout SpanishLayout;
+
 
 struct SupportedLayouts {
-  static int count()            { return 4; }
+  static int count()               { return 5; }
   static char const * * names() {
-    static char const * NAMES[] = { "German", "Italian", "UK British", "US English" };
+    static char const * NAMES[] =  {
+        "German",
+        "Italian",
+        "UK British",
+        "US English",
+        "Spanish" };
     return NAMES;
   }
   static char const * * shortNames() {
-    static char const * SNAMES[] = { "DE", "IT", "UK", "US" };
+    static char const * SNAMES[] = {
+        "DE",
+        "IT",
+        "UK",
+        "US",
+        "ES" };
     return SNAMES;
   }
   static const KeyboardLayout * * layouts() {
-    static KeyboardLayout const * LAYOUTS[] = { &GermanLayout, &ItalianLayout, &UKLayout, &USLayout };
+    static KeyboardLayout const * LAYOUTS[] = {
+        &GermanLayout,
+        &ItalianLayout,
+        &UKLayout,
+        &USLayout,
+        &SpanishLayout };
     return LAYOUTS;
   }
 };
@@ -127,7 +145,7 @@ struct SupportedLayouts {
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
  * <br>
  * It is possible to specify an international keyboard layout. The default is US-layout.<br>
- * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German) and IT (Italian). Other layout can be added
+ * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian) and ES (Spanish). Other layout can be added
  * inheriting from US or from any other layout.
  *
  * Applications do not need to create an instance of Keyboard because an instance named Keyboard is created automatically.
