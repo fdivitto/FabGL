@@ -521,7 +521,10 @@ char const * Keyboard::virtualKeyToString(VirtualKey virtualKey)
                              "VK_SCROLLLOCK", "VK_NUMLOCK", "VK_CAPSLOCK", "VK_TAB", "VK_RETURN", "VK_KP_ENTER", "VK_APPLICATION", "VK_PAGEUP", "VK_KP_PAGEUP", "VK_PAGEDOWN", "VK_KP_PAGEDOWN", "VK_UP", "VK_KP_UP",
                              "VK_DOWN", "VK_KP_DOWN", "VK_LEFT", "VK_KP_LEFT", "VK_RIGHT", "VK_KP_RIGHT", "VK_KP_CENTER", "VK_F1", "VK_F2", "VK_F3", "VK_F4", "VK_F5", "VK_F6", "VK_F7", "VK_F8", "VK_F9", "VK_F10", "VK_F11", "VK_F12",
                              "VK_GRAVE_a", "VK_GRAVE_e", "VK_ACUTE_e", "VK_GRAVE_i", "VK_GRAVE_o", "VK_GRAVE_u", "VK_CEDILLA_c", "VK_ESZETT", "VK_UMLAUT_u",
-                             "VK_UMLAUT_o", "VK_UMLAUT_a" };
+                             "VK_UMLAUT_o", "VK_UMLAUT_a", "VK_CEDILLA_C", "VK_TILDE_n", "VK_TILDE_N", "VK_UPPER_a", "VK_ACUTE_a", "VK_ACUTE_i", "VK_ACUTE_o", "VK_ACUTE_u", "VK_UMLAUT_i", "VK_EXCLAIM_INV", "VK_QUESTION_INV",
+                             "VK_ACUTE_A","VK_ACUTE_E","VK_ACUTE_I","VK_ACUTE_O","VK_ACUTE_U", "VK_GRAVE_A","VK_GRAVE_E","VK_GRAVE_I","VK_GRAVE_O","VK_GRAVE_U", "VK_INTERPUNCT", "VK_DIAERESIS",
+                             "VK_UMLAUT_e", "VK_UMLAUT_A", "VK_UMLAUT_E", "VK_UMLAUT_I", "VK_UMLAUT_O", "VK_UMLAUT_U", "VK_CARET_a", "VK_CARET_e", "VK_CARET_i", "VK_CARET_o", "VK_CARET_u", "VK_CARET_A", "VK_CARET_E","VK_CARET_I","VK_CARET_O","VK_CARET_U",
+                          };
   return VKTOSTR[virtualKey];
 }
 #endif
@@ -718,6 +721,122 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
     case VK_SCROLLLOCK:
       return m_SCROLLLOCK ? ASCII_XOFF : ASCII_XON;
 
+    // spanish and catalan symbols
+
+    case VK_CEDILLA_C:
+      return 0x80; // 'Ç'
+
+    case VK_TILDE_n:
+      return 0xA4; // 'ñ'
+
+    case VK_TILDE_N:
+      return 0xA5; // 'Ñ'
+
+    case VK_UPPER_a:
+      return 0xA6; // 'ª'
+
+    case VK_ACUTE_a:
+      return 0xA0; // 'á'
+
+    case VK_ACUTE_o:
+      return 0xA2; // 'ó'
+
+    case VK_ACUTE_u:
+      return 0xA3; // 'ú'
+
+    case VK_UMLAUT_i:
+      return 0x8B; // 'ï'
+
+    case VK_EXCLAIM_INV:
+      return 0xAD; // '¡'
+
+    case VK_QUESTION_INV:
+      return 0xA8; // '¿'
+
+    case VK_ACUTE_A:
+      return 0xB5; // 'Á'
+
+    case VK_ACUTE_E:
+      return 0x90; // 'É'
+
+    case VK_ACUTE_I:
+      return 0xD6; // 'Í'
+
+    case VK_ACUTE_O:
+      return 0xE0; // 'Ó'
+
+    case VK_ACUTE_U:
+      return 0xE9; // 'Ú'
+
+    case VK_GRAVE_A:
+      return 0xB7; // 'À'
+
+    case VK_GRAVE_E:
+      return 0xD4; // 'È'
+
+    case VK_GRAVE_I:
+      return 0xDE; // 'Ì'
+
+    case VK_GRAVE_O:
+      return 0xE3; // 'Ò'
+
+    case VK_GRAVE_U:
+      return 0xEB; // 'Ù'
+
+    case VK_INTERPUNCT:
+      return 0xFA; // '·'
+
+    case VK_DIAERESIS: // '¨'
+      return '"';
+
+    case VK_UMLAUT_e: // 'ë'
+      return 0xEB;
+
+    case VK_UMLAUT_A: // 'Ä'
+      return 0XC4;
+
+    case VK_UMLAUT_E:  // 'Ë'
+      return 0XCB;
+
+    case VK_UMLAUT_I:  // 'Ï'
+      return  0XCF;
+
+    case VK_UMLAUT_O:  // 'Ö'
+      return  0XD6;
+
+    case VK_UMLAUT_U:  // 'Ü'
+      return 0XDC;
+
+    case VK_CARET_a:   // 'â'
+      return 0XE2;
+
+    case VK_CARET_e:   // 'ê'
+      return 0XEA;
+
+    case VK_CARET_i:   // 'î'
+      return 0XEE;
+
+    case VK_CARET_o:   // 'ô'
+      return 0xF6;
+
+    case VK_CARET_u:   // 'û'
+      return 0xFC;
+
+    case VK_CARET_A:   // 'Â'
+      return 0XC2;
+
+    case VK_CARET_E:  // 'Ê'
+      return 0XCA;
+
+    case VK_CARET_I:   // 'Î'
+      return 0XCE;
+
+    case VK_CARET_O:   // 'Ô'
+      return 0XD4;
+
+    case VK_CARET_U:  // 'Û'
+      return 0XDB;
+		
     default:
       return -1;
   }
