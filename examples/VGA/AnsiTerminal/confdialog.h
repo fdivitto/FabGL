@@ -143,7 +143,7 @@ struct ConfDialogApp : public uiApp {
 
     rootWindow()->frameProps().fillBackground = false;
 
-    frame = new uiFrame(rootWindow(), "Terminal Configuration", UIWINDOW_PARENTCENTER, Size(380, 275), true, STYLE_FRAME_ID);
+    frame = new uiFrame(rootWindow(), "Terminal Configuration", UIWINDOW_PARENTCENTER, Size(380, 275), true, STYLE_FRAME);
     frameRect = frame->rect(fabgl::uiOrigin::Screen);
 
     frame->frameProps().resizeable        = false;
@@ -168,31 +168,31 @@ struct ConfDialogApp : public uiApp {
     int y = 19;
 
     // little help
-    new uiLabel(frame, "Press TAB key to move between fields", Point(100, y), Size(0, 0), true, STYLE_LABELHELP_ID);
-    new uiLabel(frame, "Outside this dialog press CTRL-ALT-F12 to reset settings", Point(52, y + 12), Size(0, 0), true, STYLE_LABELHELP_ID);
+    new uiLabel(frame, "Press TAB key to move between fields", Point(100, y), Size(0, 0), true, STYLE_LABELHELP);
+    new uiLabel(frame, "Outside this dialog press CTRL-ALT-F12 to reset settings", Point(52, y + 12), Size(0, 0), true, STYLE_LABELHELP);
 
 
     y += 34;
 
     // select terminal emulation combobox
-    new uiLabel(frame, "Terminal Type", Point(10,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Terminal Type", Point(10,  y), Size(0, 0), true, STYLE_LABEL);
     termComboBox = new uiComboBox(frame, Point(10, y + 12), Size(85, 20), 80, true, STYLE_COMBOBOX);
     termComboBox->items().append(SupportedTerminals::names(), SupportedTerminals::count());
     termComboBox->selectItem((int)getTermType());
 
     // select keyboard layout
-    new uiLabel(frame, "Keyboard Layout", Point(110, y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Keyboard Layout", Point(110, y), Size(0, 0), true, STYLE_LABEL);
     kbdComboBox = new uiComboBox(frame, Point(110, y + 12), Size(75, 20), 70, true, STYLE_COMBOBOX);
     kbdComboBox->items().append(SupportedLayouts::names(), SupportedLayouts::count());
     kbdComboBox->selectItem(getKbdLayoutIndex());
 
     // background color
-    new uiLabel(frame, "Background Color", Point(200,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Background Color", Point(200,  y), Size(0, 0), true, STYLE_LABEL);
     bgColorComboBox = new uiColorComboBox(frame, Point(200, y + 12), Size(75, 20), 70, true, STYLE_COMBOBOX);
     bgColorComboBox->selectColor(getBGColor());
 
     // foreground color
-    new uiLabel(frame, "Foreground Color", Point(290,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Foreground Color", Point(290,  y), Size(0, 0), true, STYLE_LABEL);
     fgColorComboBox = new uiColorComboBox(frame, Point(290, y + 12), Size(75, 20), 70, true, STYLE_COMBOBOX);
     fgColorComboBox->selectColor(getFGColor());
 
@@ -200,31 +200,31 @@ struct ConfDialogApp : public uiApp {
     y += 48;
 
     // baud rate
-    new uiLabel(frame, "Baud Rate", Point(10,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Baud Rate", Point(10,  y), Size(0, 0), true, STYLE_LABEL);
     baudRateComboBox = new uiComboBox(frame, Point(10, y + 12), Size(70, 20), 70, true, STYLE_COMBOBOX);
     baudRateComboBox->items().append(BAUDRATES_STR, BAUDRATES_COUNT);
     baudRateComboBox->selectItem(getBaudRateIndex());
 
     // data length
-    new uiLabel(frame, "Data Length", Point(95,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Data Length", Point(95,  y), Size(0, 0), true, STYLE_LABEL);
     datalenComboBox = new uiComboBox(frame, Point(95, y + 12), Size(60, 20), 70, true, STYLE_COMBOBOX);
     datalenComboBox->items().append(DATALENS_STR, 4);
     datalenComboBox->selectItem(getDataLenIndex());
 
     // parity
-    new uiLabel(frame, "Parity", Point(170,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Parity", Point(170,  y), Size(0, 0), true, STYLE_LABEL);
     parityComboBox = new uiComboBox(frame, Point(170, y + 12), Size(45, 20), 50, true, STYLE_COMBOBOX);
     parityComboBox->items().append(PARITY_STR, 3);
     parityComboBox->selectItem(getParityIndex());
 
     // stop bits
-    new uiLabel(frame, "Stop Bits", Point(230,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Stop Bits", Point(230,  y), Size(0, 0), true, STYLE_LABEL);
     stopBitsComboBox = new uiComboBox(frame, Point(230, y + 12), Size(55, 20), 50, true, STYLE_COMBOBOX);
     stopBitsComboBox->items().append(STOPBITS_STR, 3);
     stopBitsComboBox->selectItem(getStopBitsIndex() - 1);
 
     // flow control
-    new uiLabel(frame, "Flow Control", Point(300,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Flow Control", Point(300,  y), Size(0, 0), true, STYLE_LABEL);
     flowCtrlComboBox = new uiComboBox(frame, Point(300, y + 12), Size(65, 20), 35, true, STYLE_COMBOBOX);
     flowCtrlComboBox->items().append(FLOWCTRL_STR, 2);
     flowCtrlComboBox->selectItem((int)getFlowCtrl());
@@ -233,25 +233,25 @@ struct ConfDialogApp : public uiApp {
     y += 48;
 
     // resolution
-    new uiLabel(frame, "Resolution", Point(10, y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Resolution", Point(10, y), Size(0, 0), true, STYLE_LABEL);
     resolutionComboBox = new uiComboBox(frame, Point(10, y + 12), Size(119, 20), 53, true, STYLE_COMBOBOX);
     resolutionComboBox->items().append(RESOLUTIONS_STR, RESOLUTIONS_COUNT);
     resolutionComboBox->selectItem(getResolutionIndex());
 
     // font
-    new uiLabel(frame, "Font", Point(144,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Font", Point(144,  y), Size(0, 0), true, STYLE_LABEL);
     fontComboBox = new uiComboBox(frame, Point(144, y + 12), Size(110, 20), 70, true, STYLE_COMBOBOX);
     fontComboBox->items().append(FONTS_STR, FONTS_COUNT);
     fontComboBox->selectItem(getFontIndex());
 
     // columns
-    new uiLabel(frame, "Columns", Point(269,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Columns", Point(269,  y), Size(0, 0), true, STYLE_LABEL);
     columnsComboBox = new uiComboBox(frame, Point(269, y + 12), Size(40, 20), 50, true, STYLE_COMBOBOX);
     columnsComboBox->items().append(COLUMNS_STR, COLUMNS_COUNT);
     columnsComboBox->selectItem(getColumnsIndex());
 
     // rows
-    new uiLabel(frame, "Rows", Point(325,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Rows", Point(325,  y), Size(0, 0), true, STYLE_LABEL);
     rowsComboBox = new uiComboBox(frame, Point(324, y + 12), Size(40, 20), 50, true, STYLE_COMBOBOX);
     rowsComboBox->items().append(ROWS_STR, ROWS_COUNT);
     rowsComboBox->selectItem(getRowsIndex());
@@ -260,7 +260,7 @@ struct ConfDialogApp : public uiApp {
     y += 48;
 
     // show boot info
-    new uiLabel(frame, "Show Boot Info", Point(10, y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(frame, "Show Boot Info", Point(10, y), Size(0, 0), true, STYLE_LABEL);
     infoCheckBox = new uiCheckBox(frame, Point(80, y - 2), Size(16, 16), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
     infoCheckBox->setChecked(getBootInfo() == BOOTINFO_ENABLED);
 
@@ -268,20 +268,20 @@ struct ConfDialogApp : public uiApp {
     y += 48;
 
     // exit without save button
-    auto exitNoSaveButton = new uiButton(frame, "Quit [ESC]", Point(10, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto exitNoSaveButton = new uiButton(frame, "Quit [ESC]", Point(10, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     exitNoSaveButton->onClick = [&]() {
       quit(0);
     };
 
     // exit with save button
-    auto exitSaveButton = new uiButton(frame, "Save & Quit [F10]", Point(110, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto exitSaveButton = new uiButton(frame, "Save & Quit [F10]", Point(110, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     exitSaveButton->onClick = [&]() {
       saveProps();
       quit(0);
     };
 
     // install a program
-    auto installButton = new uiButton(frame, "Install Programs", Point(278, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto installButton = new uiButton(frame, "Install Programs", Point(278, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     installButton->onClick = [&]() {
       progToInstall = -1;
       auto progsDialog = new ProgsDialog(rootWindow());

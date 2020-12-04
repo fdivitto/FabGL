@@ -37,7 +37,7 @@
 
 
   ProgsDialog(uiFrame * parent)
-    : uiFrame(parent, "Programs installer", UIWINDOW_PARENTCENTER, Size(330, 130), true, STYLE_FRAME_ID) {
+    : uiFrame(parent, "Programs installer", UIWINDOW_PARENTCENTER, Size(330, 130), true, STYLE_FRAME) {
     frameProps().resizeable        = false;
     frameProps().moveable          = false;
     frameProps().hasMaximizeButton = false;
@@ -51,13 +51,13 @@
     int y = 24;
 
     // help labels
-    helpLabel1 = new uiLabel(this, "", Point(120, y + 15), Size(0, 0), true, STYLE_LABELHELP_ID);
+    helpLabel1 = new uiLabel(this, "", Point(120, y + 15), Size(0, 0), true, STYLE_LABELHELP);
     helpLabel1->setText(PROGRAMS_HELP[0]);
-    helpLabel2 = new uiLabel(this, "", Point(120, y + 30), Size(0, 0), true, STYLE_LABELHELP_ID);
+    helpLabel2 = new uiLabel(this, "", Point(120, y + 30), Size(0, 0), true, STYLE_LABELHELP);
     helpLabel2->setText(PROGRAMS_HELP[1]);
 
     // select program
-    new uiLabel(this, "Program", Point(10,  y), Size(0, 0), true, STYLE_LABEL_ID);
+    new uiLabel(this, "Program", Point(10,  y), Size(0, 0), true, STYLE_LABEL);
     progComboBox = new uiComboBox(this, Point(10, y + 12), Size(100, 20), 66, true, STYLE_COMBOBOX);
     progComboBox->items().append(PROGRAMS_NAME, PROGRAMS_COUNT);
     progComboBox->selectItem(0);
@@ -72,13 +72,13 @@
     y += 70;
 
     // Install
-    auto installButton = new uiButton(this, "Install", Point(10, y), Size(70, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto installButton = new uiButton(this, "Install", Point(10, y), Size(70, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     installButton->onClick = [&]() {
       exitModal(1);
     };
 
     // Cancel
-    auto cancelButton = new uiButton(this, "Cancel", Point(90, y), Size(70, 20), uiButtonKind::Button, true, STYLE_BUTTON_ID);
+    auto cancelButton = new uiButton(this, "Cancel", Point(90, y), Size(70, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     cancelButton->onClick = [&]() {
       exitModal(0);
     };
