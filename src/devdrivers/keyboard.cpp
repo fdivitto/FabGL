@@ -568,7 +568,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return 0xF9;  // ù
 
     case VK_CEDILLA_c:
-      return 0xE7;  // ç
+      return 0x87;  // ç
 
     case VK_ESZETT:
       return 0xDF;  // ß
@@ -586,7 +586,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return 0x60;  // "`"
 
     case VK_ACUTEACCENT:
-      return 0xB4;  // "´"
+      return '\'';  // 0xB4
 
     case VK_QUOTE:
       return '\'';  // "'"
@@ -690,7 +690,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '_';
 
     case VK_DEGREE:
-      return 0xB0;  // '°'
+      return 0xf8;  // in  ISO/IEC 8859 it should 0xB0, but in code page 437 it is 0xF8
 
     case VK_SECTION:
       return 0xA7;  // "§"
@@ -699,7 +699,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return m_CTRL ? ASCII_RS : '~';   // CTRL ~ = RS, otherwise "~"
 
     case VK_NEGATION:
-      return 0xAC;  // "¬"
+      return 0xAA;  // "¬"
 
     case VK_BACKSPACE:
       return ASCII_BS;
