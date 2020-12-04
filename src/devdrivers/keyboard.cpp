@@ -44,6 +44,9 @@ const KeyboardLayout USLayout {
   // name
   "US",
 
+  // desc
+  "US English",
+
   // inherited layout
   nullptr,
 
@@ -250,6 +253,9 @@ const KeyboardLayout UKLayout {
   // name
   "UK",
 
+  // desc
+  "UK British",
+
   // inherited layout
   &USLayout,
 
@@ -289,6 +295,9 @@ const KeyboardLayout UKLayout {
 /**************************************************************************************/
 const KeyboardLayout GermanLayout {
   // name
+  "DE",
+
+  // desc
   "German",
 
   // inherited layout
@@ -359,6 +368,9 @@ const KeyboardLayout GermanLayout {
 /**************************************************************************************/
 const KeyboardLayout ItalianLayout {
   // name
+  "IT",
+
+  // desc
   "Italian",
 
   // inherited layout
@@ -432,6 +444,9 @@ const KeyboardLayout ItalianLayout {
 /**************************************************************************************/
 const KeyboardLayout SpanishLayout {
   // name
+  "ES",
+
+  // desc
   "Spanish",
 
   // inherited layout

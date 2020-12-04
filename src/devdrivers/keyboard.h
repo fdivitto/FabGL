@@ -78,6 +78,7 @@ struct DeadKeyVirtualKeyDef {
 /** @brief All in one structure to fully represent a keyboard layout */
 struct KeyboardLayout {
   const char *             name;                /**< Layout name. */
+  const char *             desc;                /**< Layout description. */
   KeyboardLayout const *   inherited;           /**< Inherited layout. Useful to avoid to repeat the same scancode-virtualkeys associations. */
   VirtualKeyDef            scancodeToVK[92];    /**< Direct one-byte-scancode->virtualkey associations. */
   VirtualKeyDef            exScancodeToVK[32];  /**< Direct extended-scancode->virtualkey associations. Extended scancodes begin with 0xE0. */
@@ -108,20 +109,20 @@ struct SupportedLayouts {
   static int count()               { return 5; }
   static char const * * names() {
     static char const * NAMES[] =  {
-        "German",
-        "Italian",
-        "UK British",
-        "US English",
-        "Spanish" };
+        GermanLayout.desc,
+        ItalianLayout.desc,
+        UKLayout.desc,
+        USLayout.desc,
+        SpanishLayout.desc };
     return NAMES;
   }
   static char const * * shortNames() {
     static char const * SNAMES[] = {
-        "DE",
-        "IT",
-        "UK",
-        "US",
-        "ES" };
+        GermanLayout.name,
+        ItalianLayout.name,
+        UKLayout.name,
+        USLayout.name,
+        SpanishLayout.name };
     return SNAMES;
   }
   static const KeyboardLayout * * layouts() {
