@@ -172,7 +172,7 @@ void copyEmbeddedPrograms()
 }
 
 
-enum { STYLE_NONE, STYLE_LABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};
+enum { STYLE_NONE, STYLE_LABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_BUTTONHELP, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};
 
 
 #define BACKGROUND_COLOR RGB888(0, 0, 0)
@@ -194,6 +194,10 @@ struct DialogStyle : uiStyle {
       case STYLE_BUTTON:
         ((uiButton*)object)->windowStyle().borderColor                      = RGB888(255, 255, 255);
         ((uiButton*)object)->buttonStyle().backgroundColor                  = RGB888(128, 128, 128);
+        break;
+      case STYLE_BUTTONHELP:
+        ((uiButton*)object)->windowStyle().borderColor                      = RGB888(255, 255, 255);
+        ((uiButton*)object)->buttonStyle().backgroundColor                  = RGB888(255, 255, 128);
         break;
       case STYLE_COMBOBOX:
         ((uiFrame*)object)->windowStyle().borderColor                       = RGB888(255, 255, 255);
@@ -246,32 +250,44 @@ struct DownloadProgressFrame : public uiFrame {
 struct HelpFame : public uiFrame {
 
   HelpFame(uiFrame * parent)
-    : uiFrame(parent, "Help", UIWINDOW_PARENTCENTER, Size(160, 210), false) {
+    : uiFrame(parent, "Help", UIWINDOW_PARENTCENTER, Size(218, 335), false) {
 
-    auto button = new uiButton(this, "OK", Point(57, 180), Size(50, 20));
+    auto button = new uiButton(this, "OK", Point(84, 305), Size(50, 20));
     button->onClick = [&]() { exitModal(0); };
 
     onPaint = [&]() {
       auto cv = canvas();
-      cv->selectFont(&fabgl::FONT_std_12);
-      int x = 10;
+      cv->selectFont(&fabgl::FONT_6x8);
+      int x = 4;
       int y = 10;
       cv->setPenColor(Color::Green);
       cv->drawText(x, y += 14, "Keyboard Shortcuts:");
       cv->setPenColor(Color::Black);
-      cv->drawText(x, y += 14, "   F12: Switch Emulator <-> Config");
-      cv->drawText(x, y += 14, "   DEL: Delete File or Folder");
-      cv->drawText(x, y += 14, "   ALT + A S W Z: Move Screen");
+      cv->setBrushColor(Color::White);
+      cv->drawText(x, y += 14, "  F12          > Run or Config");
+      cv->drawText(x, y += 14, "  DEL          > Delete File/Folder");
+      cv->drawText(x, y += 14, "  ALT + ASWZ   > Move Screen");
       cv->setPenColor(Color::Blue);
       cv->drawText(x, y += 18, "\"None\" Joystick Mode:");
       cv->setPenColor(Color::Black);
-      cv->drawText(x, y += 14, "   ALT + MENU: Joystick Fire");
-      cv->drawText(x, y += 14, "   ALT + CURSOR: Joystick Move");
+      cv->drawText(x, y += 14, "  ALT + MENU   > Joystick Fire");
+      cv->drawText(x, y += 14, "  ALT + CURSOR > Joystick Move");
       cv->setPenColor(Color::Red);
       cv->drawText(x, y += 18, "\"Cursor Keys\" Joystick Mode:");
       cv->setPenColor(Color::Black);
-      cv->drawText(x, y += 14, "   MENU: Joystick Fire");
-      cv->drawText(x, y += 14, "   CURSOR: Joystick Move");
+      cv->drawText(x, y += 14, "  MENU         > Joystick Fire");
+      cv->drawText(x, y += 14, "  CURSOR       > Joystick Move");
+      cv->setPenColor(Color::Magenta);
+      cv->drawText(x, y += 18, "Emulated keyboard:");
+      cv->setPenColor(Color::Black);
+      cv->drawText(x, y += 14, "  HOME         > CLR/HOME");
+      cv->drawText(x, y += 14, "  ESC          > RUN/STOP");
+      cv->drawText(x, y += 14, "  Left Win Key > CBM");
+      cv->drawText(x, y += 14, "  DELETE       > RESTORE");
+      cv->drawText(x, y += 14, "  BACKSPACE    > INST/DEL");
+      cv->drawText(x, y += 14, "  Caret ^      > UP ARROW");
+      cv->drawText(x, y += 14, "  Underscore _ > LEFT ARROW");
+      cv->drawText(x, y += 14, "  Tilde ~      > PI");
     };
   }
 
@@ -319,18 +335,40 @@ class Menu : public uiApp {
     };
 
     // handles following keys:
-    //   RETURN -> load selected program and return to vic
-    fileBrowser->onKeyUp = [&](uiKeyEventInfo key) {
-      if (key.VK == VirtualKey::VK_RETURN) {
-        if (!fileBrowser->isDirectory() && loadSelectedProgram())
+    //  F1         ->  show help
+    //  ESC or F12 ->  run the emulator
+    rootWindow()->onKeyUp = [&](uiKeyEventInfo key) {
+      switch (key.VK) {
+        // F1
+        case VirtualKey::VK_F1:
+          showHelp();
+          break;
+        // ESC or F12
+        case VirtualKey::VK_ESCAPE:
+        case VirtualKey::VK_F12:
           runVIC20();
-      } else if (key.VK == VirtualKey::VK_DELETE) {
-        // delete file or directory
-        if (messageBox("Delete Item", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
-          fileBrowser->content().remove( fileBrowser->filename() );
-          fileBrowser->update();
-          updateFreeSpaceLabel();
-        }
+          break;
+      }
+    };
+
+    // handles following keys in filebrowser:
+    //   RETURN -> load selected program and return to vic
+    //   DELETE -> remove selected dir or file
+    fileBrowser->onKeyUp = [&](uiKeyEventInfo key) {
+      switch (key.VK) {
+        // RETURN
+        case VirtualKey::VK_RETURN:
+          if (!fileBrowser->isDirectory() && loadSelectedProgram())
+            runVIC20();
+          break;
+        // DELETE
+        case VirtualKey::VK_DELETE:
+          if (messageBox("Delete Item", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
+            fileBrowser->content().remove( fileBrowser->filename() );
+            fileBrowser->update();
+            updateFreeSpaceLabel();
+          }
+          break;
       }
     };
 
@@ -340,30 +378,30 @@ class Menu : public uiApp {
         runVIC20();
     };
 
-    int x = 168;
+    int x = 158;
 
-    // "Back to VIC" button - run the VIC20
-    auto VIC20Button = new uiButton(rootWindow(), "Back to VIC", Point(x, 10), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    // "Run" button - run the VIC20
+    auto VIC20Button = new uiButton(rootWindow(), "Run [F12]", Point(x, 10), Size(75, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     VIC20Button->onClick = [&]() {
       runVIC20();
     };
 
     // "Load" button
-    auto loadButton = new uiButton(rootWindow(), "Load", Point(x, 35), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto loadButton = new uiButton(rootWindow(), "Load", Point(x, 35), Size(75, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     loadButton->onClick = [&]() {
       if (loadSelectedProgram())
         runVIC20();
     };
 
     // "reset" button
-    auto resetButton = new uiButton(rootWindow(), "Soft Reset", Point(x, 60), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto resetButton = new uiButton(rootWindow(), "Soft Reset", Point(x, 60), Size(75, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     resetButton->onClick = [&]() {
       machine->reset();
       runVIC20();
     };
 
     // "Hard Reset" button
-    auto hresetButton = new uiButton(rootWindow(), "Hard Reset", Point(x, 85), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto hresetButton = new uiButton(rootWindow(), "Hard Reset", Point(x, 85), Size(75, 19), uiButtonKind::Button, true, STYLE_BUTTON);
     hresetButton->onClick = [&]() {
       machine->removeCRT();
       machine->reset();
@@ -371,11 +409,9 @@ class Menu : public uiApp {
     };
 
     // "help" button
-    auto helpButton = new uiButton(rootWindow(), "Help", Point(x, 110), Size(65, 19), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto helpButton = new uiButton(rootWindow(), "HELP [F1]", Point(x, 110), Size(75, 19), uiButtonKind::Button, true, STYLE_BUTTONHELP);
     helpButton->onClick = [&]() {
-      auto hframe = new HelpFame(rootWindow());
-      showModalWindow(hframe);
-      destroyWindow(hframe);
+      showHelp();
     };
 
     // select keyboard layout
@@ -392,7 +428,7 @@ class Menu : public uiApp {
     // RAM expansion options
     y += 50;
     auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
-    RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(85, 19), 130, true, STYLE_COMBOBOX);
+    RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 19), 130, true, STYLE_COMBOBOX);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
       RAMExpComboBox->items().append(RAMOPTS[i]);
@@ -487,12 +523,6 @@ class Menu : public uiApp {
         delete [] filename;
         delete [] URL;
       }
-    };
-
-    // process ESC and F12: boths run the emulator
-    rootWindow()->onKeyUp = [&](uiKeyEventInfo key) {
-      if (key.VK == VirtualKey::VK_ESCAPE || key.VK == VirtualKey::VK_F12)
-        runVIC20();
     };
 
     // focus on programs list
@@ -785,6 +815,12 @@ class Menu : public uiApp {
     auto curLayoutIdx = preferences.getInt("kbdLayout", 3); // default US
     PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[curLayoutIdx]);
     return curLayoutIdx;
+  }
+
+  void showHelp() {
+    auto hframe = new HelpFame(rootWindow());
+    showModalWindow(hframe);
+    destroyWindow(hframe);
   }
 
 
