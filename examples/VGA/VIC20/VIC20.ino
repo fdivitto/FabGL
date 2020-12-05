@@ -92,9 +92,6 @@ char const * EMBDIR  = "Free";
 char const * DOWNDIR = "List";
 
 
-#define DEBUG 0
-
-
 struct EmbeddedProgDef {
   char const *    filename;
   uint8_t const * data;
@@ -132,7 +129,7 @@ const EmbeddedProgDef embeddedProgs[] = {
 };
 
 
-#if DEBUG
+#if DEBUGMACHINE
 static volatile int  scycles = 0;
 static volatile bool restart = false;
 void vTimerCallback1SecExpired(xTimerHandle pxTimer)
@@ -519,7 +516,7 @@ class Menu : public uiApp {
     bool run = true;
     while (run) {
 
-      #if DEBUG
+      #if DEBUGMACHINE
         int cycles = machine->run();
         if (restart) {
           scycles = cycles;
@@ -841,7 +838,7 @@ void setup()
 
 void loop()
 {
-  #if DEBUG
+  #if DEBUGMACHINE
   TimerHandle_t xtimer = xTimerCreate("", pdMS_TO_TICKS(5000), pdTRUE, (void*)0, vTimerCallback1SecExpired);
   xTimerStart(xtimer, 0);
   #endif

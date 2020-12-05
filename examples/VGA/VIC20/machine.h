@@ -27,7 +27,14 @@
 #include "MOS6502.h"
 
 
-#define DEBUGMSG 0
+#define DEBUGMACHINE 0
+#define DEBUG6522    0
+#define DEBUG6561    0
+
+#if DEBUGMACHINE || DEBUG6522 || DEBUG6561
+#define DEBUG
+#endif
+
 
 class Machine;
 
@@ -122,7 +129,7 @@ public:
 
   uint8_t tag()                      { return m_tag; }
 
-  #if DEBUGMSG
+  #if DEBUG6522
   void dump();
   #endif
 

@@ -62,7 +62,7 @@ Machine::~Machine()
 
 void Machine::reset()
 {
-  #if DEBUGMSG
+  #if DEBUGMACHINE
   printf("Reset\n");
   #endif
 
@@ -431,42 +431,88 @@ void Machine::busWrite(int addr, uint8_t value)
 }
 
 
-// TODO: check all keys!!!
+/*
+   VIC      |  PS/2
+   ---------+----------
+   CLR/HOME |  HOME
+   RUNSTOP  |  ESC
+   CBM      |  LGUI      (Left Windows Key)
+   RESTORE  |  DELETE    (CANC)
+   INST/DEL |  ⌫         (BACKSPACE)
+   ↑        |  ^         (caret)
+   ←        |  _         (underscore)
+   π        |  ~         (tilde)
+
+   Still TODO (when to produce these symbols you need to press SHIFT on your keyboard):
+     SHIFT or CBM + @ .... produce graphic chars
+     SHIFT or CBM + ↑ .... produce graphic chars
+     SHIFT or CBM + + .... produce graphic chars
+     SHIFT or CBM + - .... produce graphic chars
+     SHIFT or CBM + £ .... produce graphic chars
+     SHIFT or CBM + * .... produce graphic chars
+     SHIFT or CBM + ↑ .... produce graphic chars
+*/
 void Machine::setKeyboard(VirtualKey key, bool down)
 {
   auto keyboard = fabgl::PS2Controller::instance()->keyboard();
 
+  #if DEBUGMACHINE
+  Serial.printf("VirtualKey = %s %s\n", keyboard->virtualKeyToString(key), down ? "DN" : "UP");
+  #endif
+
   switch (key) {
+
+    // 0
     case VirtualKey::VK_0:
       m_KBD[4][7] = down;
       break;
+
+    // 1
     case VirtualKey::VK_1:
       m_KBD[0][0] = down;
       break;
+
+    // 2
     case VirtualKey::VK_2:
       m_KBD[0][7] = down;
       break;
+
+    // 3
     case VirtualKey::VK_3:
       m_KBD[1][0] = down;
       break;
+
+    // 4
     case VirtualKey::VK_4:
       m_KBD[1][7] = down;
       break;
+
+    // 5
     case VirtualKey::VK_5:
       m_KBD[2][0] = down;
       break;
+
+    // 6
     case VirtualKey::VK_6:
       m_KBD[2][7] = down;
       break;
+
+    // 7
     case VirtualKey::VK_7:
       m_KBD[3][0] = down;
       break;
+
+    // 8
     case VirtualKey::VK_8:
       m_KBD[3][7] = down;
       break;
+
+    // 9
     case VirtualKey::VK_9:
       m_KBD[4][0] = down;
       break;
+
+    // w
     case VirtualKey::VK_w:
       if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // LALT-W move screen up
@@ -479,18 +525,58 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[1][1] = down;
       break;
+
+    // W
+    case VirtualKey::VK_W:
+      m_KBD[1][1] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // r
     case VirtualKey::VK_r:
       m_KBD[2][1] = down;
       break;
+
+    // R
+    case VirtualKey::VK_R:
+      m_KBD[2][1] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // y
     case VirtualKey::VK_y:
       m_KBD[3][1] = down;
       break;
+
+    // Y
+    case VirtualKey::VK_Y:
+      m_KBD[3][1] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // i
     case VirtualKey::VK_i:
       m_KBD[4][1] = down;
       break;
+
+    // I
+    case VirtualKey::VK_I:
+      m_KBD[4][1] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // p
     case VirtualKey::VK_p:
       m_KBD[5][1] = down;
       break;
+
+    // P
+    case VirtualKey::VK_P:
+      m_KBD[5][1] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // a
     case VirtualKey::VK_a:
       if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-A move screen left
@@ -503,27 +589,91 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[1][2] = down;
       break;
+
+    // A
+    case VirtualKey::VK_A:
+      m_KBD[1][2] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // d
     case VirtualKey::VK_d:
       m_KBD[2][2] = down;
       break;
+
+    // D
+    case VirtualKey::VK_D:
+      m_KBD[2][2] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // g
     case VirtualKey::VK_g:
       m_KBD[3][2] = down;
       break;
+
+    // H
+    case VirtualKey::VK_G:
+      m_KBD[3][2] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // j
     case VirtualKey::VK_j:
       m_KBD[4][2] = down;
       break;
+
+    // J
+    case VirtualKey::VK_J:
+      m_KBD[4][2] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // l
     case VirtualKey::VK_l:
       m_KBD[5][2] = down;
       break;
+
+    // L
+    case VirtualKey::VK_L:
+      m_KBD[5][2] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // x
     case VirtualKey::VK_x:
       m_KBD[2][3] = down;
       break;
+
+    // X
+    case VirtualKey::VK_X:
+      m_KBD[2][3] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // v
     case VirtualKey::VK_v:
       m_KBD[3][3] = down;
       break;
+
+    // V
+    case VirtualKey::VK_V:
+      m_KBD[3][3] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // n
     case VirtualKey::VK_n:
       m_KBD[4][3] = down;
       break;
+
+    // N
+    case VirtualKey::VK_N:
+      m_KBD[4][3] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // z
     case VirtualKey::VK_z:
       if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-Z move screen down
@@ -536,15 +686,47 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[1][4] = down;
       break;
+
+    // Z
+    case VirtualKey::VK_Z:
+      m_KBD[1][4] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // c
     case VirtualKey::VK_c:
       m_KBD[2][4] = down;
       break;
+
+    // C
+    case VirtualKey::VK_C:
+      m_KBD[2][4] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // b
     case VirtualKey::VK_b:
       m_KBD[3][4] = down;
       break;
+
+    // B
+    case VirtualKey::VK_B:
+      m_KBD[3][4] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // m
     case VirtualKey::VK_m:
       m_KBD[4][4] = down;
       break;
+
+    // M
+    case VirtualKey::VK_M:
+      m_KBD[4][4] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // s
     case VirtualKey::VK_s:
       if (keyboard->isVKDown(VirtualKey::VK_LALT)) {
         // ALT-S move screen right
@@ -557,205 +739,366 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[1][5] = down;
       break;
+
+    // S
+    case VirtualKey::VK_S:
+      m_KBD[1][5] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // f
     case VirtualKey::VK_f:
       m_KBD[2][5] = down;
       break;
+
+    // F
+    case VirtualKey::VK_F:
+      m_KBD[2][5] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // h
     case VirtualKey::VK_h:
       m_KBD[3][5] = down;
       break;
+
+    // H
+    case VirtualKey::VK_H:
+      m_KBD[3][5] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // k
     case VirtualKey::VK_k:
       m_KBD[4][5] = down;
       break;
+
+    // K
+    case VirtualKey::VK_K:
+      m_KBD[4][5] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // q
     case VirtualKey::VK_q:
       m_KBD[0][6] = down;
       break;
+
+    // Q
+    case VirtualKey::VK_Q:
+      m_KBD[0][6] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // e
     case VirtualKey::VK_e:
       m_KBD[1][6] = down;
       break;
+
+    // E
+    case VirtualKey::VK_E:
+      m_KBD[1][6] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // t
     case VirtualKey::VK_t:
       m_KBD[2][6] = down;
       break;
+
+    // T
+    case VirtualKey::VK_T:
+      m_KBD[2][6] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // u
     case VirtualKey::VK_u:
       m_KBD[3][6] = down;
       break;
+
+    // U
+    case VirtualKey::VK_U:
+      m_KBD[3][6] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // o
     case VirtualKey::VK_o:
       m_KBD[4][6] = down;
       break;
+
+    // O
+    case VirtualKey::VK_O:
+      m_KBD[4][6] = down;
+      m_KBD[1][3] = down; // press LSHIFT
+      break;
+
+    // SPACE
     case VirtualKey::VK_SPACE:
       m_KBD[0][4] = down;
       break;
+
+    // BACKSPACE -> INST/DEL
     case VirtualKey::VK_BACKSPACE:
       m_KBD[7][0] = down;
       break;
+
+    // RETURN
     case VirtualKey::VK_RETURN:
       m_KBD[7][1] = down;
       break;
-    case VirtualKey::VK_LCTRL:
-    case VirtualKey::VK_RCTRL:
-      m_KBD[0][2] = down;
-      break;
+
+    // HOME -> CLR/HOME
     case VirtualKey::VK_HOME:
       // HOME
       m_KBD[6][7] = down;
       break;
+
+    // ESC -> RUNSTOP
     case VirtualKey::VK_ESCAPE:
-      // ESC => RUNSTOP
       m_KBD[0][3] = down;
       break;
+
+    // LCTRL, RCTRL
+    case VirtualKey::VK_LCTRL:
+    case VirtualKey::VK_RCTRL:
+      m_KBD[0][2] = down;
+      break;
+
+    // LSHIFT
     case VirtualKey::VK_LSHIFT:
       m_KBD[1][3] = down;
       break;
-    case VirtualKey::VK_LGUI:
-      // LGUI => CBM
-      m_KBD[0][5] = down;
-      break;
+
+    // RSHIFT
     case VirtualKey::VK_RSHIFT:
       m_KBD[6][4] = down;
       break;
+
+    // LGUI -> CBM
+    case VirtualKey::VK_LGUI:
+      m_KBD[0][5] = down;
+      break;
+
+    // F1
     case VirtualKey::VK_F1:
       m_KBD[7][4] = down;
       break;
+
+    // F2
     case VirtualKey::VK_F2:
       m_KBD[7][4] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // F3
     case VirtualKey::VK_F3:
       m_KBD[7][5] = down;
       break;
+
+    // F4
     case VirtualKey::VK_F4:
       m_KBD[7][5] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // F5
     case VirtualKey::VK_F5:
       m_KBD[7][6] = down;
       break;
+
+    // F6
     case VirtualKey::VK_F6:
       m_KBD[7][6] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // F7
     case VirtualKey::VK_F7:
       m_KBD[7][7] = down;
       break;
+
+    // F8
     case VirtualKey::VK_F8:
       m_KBD[7][7] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // DELETE (CANC) -> RESTORE
     case VirtualKey::VK_DELETE:
-      // DELETE (CANC) = RESTORE
       VIA1().setCA1(!down);
       break;
+
+    // ^ -> ↑
     case VirtualKey::VK_CARET:
       // '^' => UP ARROW (same ASCII of '^')
       m_KBD[6][6] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // ~ -> π
     case VirtualKey::VK_TILDE:
       // '~' => pi
       m_KBD[6][6] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // =
     case VirtualKey::VK_EQUALS:
       m_KBD[6][5] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // £
     case VirtualKey::VK_POUND:
       m_KBD[6][0] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // /
     case VirtualKey::VK_SLASH:
       m_KBD[6][3] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // !
     case VirtualKey::VK_EXCLAIM:
       m_KBD[0][0] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // $
     case VirtualKey::VK_DOLLAR:
       m_KBD[1][7] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // %
     case VirtualKey::VK_PERCENT:
       m_KBD[2][0] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // &
     case VirtualKey::VK_AMPERSAND:
       m_KBD[2][7] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // (
     case VirtualKey::VK_LEFTPAREN:
       m_KBD[3][7] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // )
     case VirtualKey::VK_RIGHTPAREN:
       m_KBD[4][0] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // '
     case VirtualKey::VK_QUOTE:
       m_KBD[3][0] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // "
     case VirtualKey::VK_QUOTEDBL:
       m_KBD[0][7] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // @
     case VirtualKey::VK_AT:
       m_KBD[5][6] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // ;
     case VirtualKey::VK_SEMICOLON:
       m_KBD[6][2] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // ,
     case VirtualKey::VK_COMMA:
       m_KBD[5][3] = down;
       break;
+
+    // _
     case VirtualKey::VK_UNDERSCORE:
       // '_' => LEFT-ARROW (same ASCII of UNDERSCORE)
       m_KBD[0][1] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // -
     case VirtualKey::VK_MINUS:
       m_KBD[5][7] = down;
       break;
+
+    // [
     case VirtualKey::VK_LEFTBRACKET:
       m_KBD[5][5] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // ]
     case VirtualKey::VK_RIGHTBRACKET:
       m_KBD[6][2] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // *
     case VirtualKey::VK_ASTERISK:
       m_KBD[6][1] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // +
     case VirtualKey::VK_PLUS:
       m_KBD[5][0] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // #
     case VirtualKey::VK_HASH:
       m_KBD[1][0] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // >
     case VirtualKey::VK_GREATER:
       m_KBD[5][4] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // <
     case VirtualKey::VK_LESS:
       m_KBD[5][3] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // ?
     case VirtualKey::VK_QUESTION:
       m_KBD[6][3] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // :
     case VirtualKey::VK_COLON:
       m_KBD[5][5] = down;
       m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
+
+    // .
     case VirtualKey::VK_PERIOD:
       m_KBD[5][4] = down;
       break;
+
+    // LEFT
     case VirtualKey::VK_LEFT:
       if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-LEFT move joystick left
@@ -765,6 +1108,8 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[7][2] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // RIGHT
     case VirtualKey::VK_RIGHT:
       if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-RIGHT move joystick right
@@ -773,6 +1118,8 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[7][2] = down;
       break;
+
+    // UP
     case VirtualKey::VK_UP:
       if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-UP move joystick up
@@ -782,6 +1129,8 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[7][3] = down;
       m_KBD[1][3] = down; // press LSHIFT
       break;
+
+    // DOWN
     case VirtualKey::VK_DOWN:
       if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-DOWN move joystick down
@@ -790,6 +1139,8 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       }
       m_KBD[7][3] = down;
       break;
+
+    // RMENU -> JOYSTICK FIRE
     case VirtualKey::VK_APPLICATION:  // also called MENU key
       if (m_joyEmu == JE_CursorKeys || keyboard->isVKDown(VirtualKey::VK_RALT)) {
         // RALT-MENU fires joystick
@@ -797,9 +1148,21 @@ void Machine::setKeyboard(VirtualKey key, bool down)
         break;
       }
       break;
+
     default:
       break;
   }
+
+  #if DEBUGMACHINE
+  if (down) {
+    for (int y = 7; y >= 0; --y) {
+      for (int x = 7; x >= 0; --x) {
+        Serial.printf("%02X ", m_KBD[y][x]);
+      }
+      Serial.printf("\n");
+    }
+  }
+  #endif
 
 }
 
@@ -1041,7 +1404,7 @@ void MOS6522::reset()
 }
 
 
-#if DEBUGMSG
+#if DEBUG6522
 void MOS6522::dump()
 {
   for (int i = 0; i < 16; ++i)
@@ -1052,7 +1415,7 @@ void MOS6522::dump()
 
 void MOS6522::writeReg(int reg, int value)
 {
-  #if DEBUGMSG
+  #if DEBUG6522
   printf("VIA %d, writeReg 0x%02x = 0x%02x\n", m_tag, reg, value);
   #endif
   m_regs[reg] = value;
@@ -1182,7 +1545,7 @@ void MOS6522::writeReg(int reg, int value)
 
 int MOS6522::readReg(int reg)
 {
-  #if DEBUGMSG
+  #if DEBUG6522
   printf("VIA %d, readReg 0x%02x\n", m_tag, reg);
   #endif
   switch (reg) {
@@ -1584,7 +1947,7 @@ int MOS6561::readReg(int reg)
       m_regs[0x4] = (m_scanY >> 1) & 0xff;
       break;
   }
-  #if DEBUGMSG
+  #if DEBUG6561
   printf("VIC, read reg 0x%02x, val = 0x%02x\n", reg, m_regs[reg]);
   #endif
   return m_regs[reg];
