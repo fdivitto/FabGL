@@ -41,7 +41,7 @@
 #include "fabgl.h"
 #include "fabutils.h"
 
-#include "machine.h"
+#include "src/machine.h"
 
 
 
@@ -855,7 +855,7 @@ void setup()
   //DisplayController.moveScreen(20, -2);
 
   Canvas cv(&DisplayController);
-  cv.selectFont(&fabgl::FONT_8x8);
+  cv.selectFont(&fabgl::FONT_6x8);
 
   cv.clear();
   cv.drawText(25, 10, "Initializing...");
