@@ -612,7 +612,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
       m_KBD[3][2] = down;
       break;
 
-    // H
+    // G
     case VirtualKey::VK_G:
       m_KBD[3][2] = down;
       m_KBD[1][3] = down; // press LSHIFT
