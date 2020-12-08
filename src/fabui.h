@@ -1921,7 +1921,7 @@ public:
    *
    * Path can include subdirectories (even SPIFFS emulated directories).
    *
-   * @param path Relative path (ie '..\subdir')
+   * @param path Relative path (ie '../subdir')
    */
   void changeDirectory(char const * path);
 

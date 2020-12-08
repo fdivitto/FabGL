@@ -301,7 +301,7 @@ public:
   void setPenWidth(int value);
 
   /**
-   * @nrief Sets line ends shape
+   * @brief Sets line ends shape
    *
    * @param value Line ends shape.
    *

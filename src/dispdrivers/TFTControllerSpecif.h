@@ -45,12 +45,46 @@ namespace fabgl {
 
 
 
+/**
+ * @brief Implements ST7789 display driver controller.
+ *
+ * Example:
+ *
+ *     fabgl::ST7789Controller DisplayController;
+ *
+ *     void setup() {
+ *       // SCK = 18, MOSI = 23, D/C = 22, RESET = 21, no CS  (WARN: disconnect VGA connector!!)
+ *       DisplayController.begin(18, 23, 22, 21, -1, VSPI_HOST);
+ *       DisplayController.setResolution(TFT_240x240);
+ *
+ *       Canvas cv(&DisplayController);
+ *       cv.clear();
+ *       cv.drawText(0, 0, "Hello World!");
+ *     }
+ */
 class ST7789Controller : public TFTController {
 protected:
   void softReset();
 };
 
 
+/**
+ * @brief Implements ILI9341 display driver controller.
+ *
+ * Example:
+ *
+ *     fabgl::ILI9341Controller DisplayController;
+ *
+ *     void setup() {
+ *       // SCK = 18, MOSI = 23, D/C = 22, RESET = 21, no CS  (WARN: disconnect VGA connector!!)
+ *       DisplayController.begin(18, 23, 22, 21, -1, VSPI_HOST);
+ *       DisplayController.setResolution(TFT_240x240);
+ *
+ *       Canvas cv(&DisplayController);
+ *       cv.clear();
+ *       cv.drawText(0, 0, "Hello World!");
+ *     }
+ */
 class ILI9341Controller : public TFTController {
 protected:
   void softReset();

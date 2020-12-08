@@ -42,6 +42,8 @@
  *
  * [www.FabGL.com](http://www.fabgl.com) - 2019-2020 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
  *
+ * [Demos and Tutorials](https://www.youtube.com/user/fdivitto/videos)
+ *
  * - - -
  *
  * FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br>
@@ -245,7 +247,7 @@
  * @example VGA/ClassicRacer/ClassicRacer.ino Racer game, from Carles Oriol
  * @example VGA/CollisionDetection/CollisionDetection.ino fabgl::Scene, sprites and collision detection example
  * @example VGA/DirectVGA/DirectVGA.ino Sample usage of VGADirectController base class for direct VGA control
- * @example VGA/DirectVGA/DirectVGA_ElMuro.ino Sample breakout-style game using VGADirectController base class, from Carles Oriol
+ * @example VGA/DirectVGA_ElMuro/DirectVGA_ElMuro.ino Sample breakout-style game using VGADirectController base class, from Carles Oriol
  * @example VGA/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  * @example VGA/FileBrowser/FileBrowser.ino File browser (SPIFFS and SDCard) with GUI
  * @example VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI demo

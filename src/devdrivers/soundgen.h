@@ -85,7 +85,7 @@ public:
   /**
    * @brief Sets autodetach mode
    *
-   * @value if true: this object needs to be detached from the sound generator when there are no more samples to play.
+   * @param value if true: this object needs to be detached from the sound generator when there are no more samples to play.
    */
   void setAutoDetach(bool value) { m_autoDetach = value; }
 
@@ -94,7 +94,7 @@ public:
   /**
    * @brief Sets autodestroy mode
    *
-   * @value if true: this object needs to be destroyed by the sound generat or when there are no more samples to play. This will set also setAutoDetach(true).
+   * @param value if true: this object needs to be destroyed by the sound generat or when there are no more samples to play. This will set also setAutoDetach(true).
    */
   void setAutoDestroy(bool value) { m_autoDestroy = value; m_autoDetach |= value; }
 
