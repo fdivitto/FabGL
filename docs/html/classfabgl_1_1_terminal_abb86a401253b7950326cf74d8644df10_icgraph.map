@@ -1,0 +1,4 @@
+<map id="fabgl::Terminal::isActive" name="fabgl::Terminal::isActive">
+<area shape="rect" id="node2" href="$classfabgl_1_1_terminal.html#a4b3a945144b19add7f6dedeeaa977aad" title="Finalizes the terminal. " alt="" coords="219,5,355,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_terminal.html#ae0f5882488bc3d8b81f1641513a70a0a" title="Waits for all codes sent to the display has been processed. " alt="" coords="216,56,359,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="fabgl::CollisionDetector::detectCollision" name="fabgl::CollisionDetector::detectCollision">
+<area shape="rect" id="node2" href="$classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403" title="Updates collision detector and detect collision with the specified sprite. " alt="" coords="212,5,393,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae" title="Updates collision detector and generate collision events. " alt="" coords="441,5,617,47"/>
+</map>

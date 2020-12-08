@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vgascanstart',['VGAScanStart',['../group___enumerations.html#gab8d4ce9d78f7f7068101e6eb5b231463',1,'fabgl']]],
-  ['virtualkey',['VirtualKey',['../group___enumerations.html#gae12c31a33f64281cba424d993a8a4381',1,'fabgl']]]
+  ['vgascanstart',['VGAScanStart',['../group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#gac2082e5f1e16f3780b8e7d796ea10632',1,'fabgl']]],
+  ['virtualkey',['VirtualKey',['../group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02',1,'fabgl']]]
 ];

@@ -1,0 +1,4 @@
+<map id="fabgl::I2C::read" name="fabgl::I2C::read">
+<area shape="rect" id="node2" href="$classfabgl_1_1_d_s3231.html#a4ac5d06c26fb03250dcc28b66c2786ee" title="Queries DS3231 for current date and time. " alt="" coords="175,5,338,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_d_s3231.html#aa1fef8672fe5e18fba61079aa650a3b9" title="Forces DS3231 to read current temperature. " alt="" coords="165,56,348,83"/>
+</map>

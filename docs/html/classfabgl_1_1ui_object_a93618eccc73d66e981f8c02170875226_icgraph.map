@@ -1,0 +1,4 @@
+<map id="fabgl::uiObject::objectType" name="fabgl::uiObject::objectType">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html#aa333a558758b6c4ce97ccc9c92663dce" title="Determines the parent frame. " alt="" coords="231,5,427,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d" title="Move focus to a control with current focus index plus a delta. " alt="" coords="475,5,641,32"/>
+</map>

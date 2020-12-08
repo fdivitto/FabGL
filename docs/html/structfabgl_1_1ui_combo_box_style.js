@@ -1,5 +1,5 @@
 var structfabgl_1_1ui_combo_box_style =
 [
-    [ "buttonBackgroundColor", "structfabgl_1_1ui_combo_box_style.html#ac11f5e5e0b2fcde2ce56a7e5cc0873a8", null ],
-    [ "buttonColor", "structfabgl_1_1ui_combo_box_style.html#a7cb62df2b59631273fba8ed950bc9165", null ]
+    [ "buttonBackgroundColor", "structfabgl_1_1ui_combo_box_style_a2d8f2e20fa676c1c104a68013adc387b.html#a2d8f2e20fa676c1c104a68013adc387b", null ],
+    [ "buttonColor", "structfabgl_1_1ui_combo_box_style_a30b2eed0d38d32c61f9a05134e5a3d73.html#a30b2eed0d38d32c61f9a05134e5a3d73", null ]
 ];

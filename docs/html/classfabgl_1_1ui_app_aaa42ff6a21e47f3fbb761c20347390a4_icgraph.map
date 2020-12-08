@@ -1,0 +1,8 @@
+<map id="fabgl::uiApp::setFocusedWindow" name="fabgl::uiApp::setFocusedWindow">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d" title="Move focus to a control with current focus index plus a delta. " alt="" coords="238,5,405,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. " alt="" coords="222,56,421,83"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625" title="Ends modal window processing. " alt="" coords="220,107,423,133"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952" title="Destroys a window. " alt="" coords="227,157,416,184"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_app.html#a44b68bf7a9d9712c123eac4b5525d181" title="Makes a window visible and handles it has a modal window. " alt="" coords="471,81,683,108"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. " alt="" coords="517,157,637,184"/>
+</map>

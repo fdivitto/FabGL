@@ -1,0 +1,4 @@
+<map id="fabgl::Keyboard::setLayout" name="fabgl::Keyboard::setLayout">
+<area shape="rect" id="node2" href="$classfabgl_1_1_keyboard.html#ac723dd4536ffe3160540305598b6248d" title="Sends a Reset command to the keyboard. " alt="" coords="232,5,383,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_keyboard.html#a9bf57b24239a1acfc1bb49f187492d10" title="Initializes Keyboard without initializing the PS/2 controller. " alt="" coords="431,5,583,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="fabgl::uiApp::setActiveWindow" name="fabgl::uiApp::setActiveWindow">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. " alt="" coords="257,5,455,32"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625" title="Ends modal window processing. " alt="" coords="255,56,457,83"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952" title="Destroys a window. " alt="" coords="261,107,451,133"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a44b68bf7a9d9712c123eac4b5525d181" title="Makes a window visible and handles it has a modal window. " alt="" coords="505,31,717,57"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. " alt="" coords="551,107,671,133"/>
+</map>

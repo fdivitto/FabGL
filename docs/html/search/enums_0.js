@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['charstyle',['CharStyle',['../group___enumerations.html#gabfedaa59d48f756f7fe2cbc756771a7b',1,'fabgl']]],
-  ['color',['Color',['../group___enumerations.html#ga843f6f6094fb6666d0e726d7b0e06f3b',1,'fabgl']]],
-  ['cursorname',['CursorName',['../group___enumerations.html#gae9affb623792aa869a11e81f3f10a372',1,'fabgl']]]
+  ['charstyle',['CharStyle',['../group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#ga58734f6595a1eefb555afc0f1897fc3f',1,'fabgl']]],
+  ['color',['Color',['../group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#gab87bacfdad76e61b9412d7124be44c1c',1,'fabgl']]],
+  ['cursorname',['CursorName',['../group___enumerations_gab91da6221ce0fc3b24f077fb4b775b2c.html#gab91da6221ce0fc3b24f077fb4b775b2c',1,'fabgl']]]
 ];

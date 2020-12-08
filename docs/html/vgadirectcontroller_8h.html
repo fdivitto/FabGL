@@ -87,7 +87,8 @@ $(document).ready(function(){initNavTree('vgadirectcontroller_8h.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">vgadirectcontroller.h File Reference</div>  </div>
 </div><!--header-->
@@ -95,56 +96,32 @@ $(document).ready(function(){initNavTree('vgadirectcontroller_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">fabgl::VGADirectController</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &lt;atomic&gt;</code><br />
-<code>#include &quot;rom/lldesc.h&quot;</code><br />
-<code>#include &quot;driver/gpio.h&quot;</code><br />
-<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;freertos/queue.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="swgenerator_8h_source.html">devdrivers/swgenerator.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="vgabasecontroller_8h_source.html">dispdrivers/vgabasecontroller.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for vgadirectcontroller.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="vgadirectcontroller_8h__incl.png" border="0" usemap="#vgadirectcontroller_8h" alt=""/></div>
-<map name="vgadirectcontroller_8h" id="vgadirectcontroller_8h">
-<area shape="rect" id="node9" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="368,225,455,251"/>
-<area shape="rect" id="node11" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="270,225,345,251"/>
-<area shape="rect" id="node14" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="524,152,694,177"/>
-<area shape="rect" id="node15" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="820,152,948,177"/>
-<area shape="rect" id="node17" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="341,79,546,104"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="vgadirectcontroller_8h__dep__incl.png" border="0" usemap="#vgadirectcontroller_8hdep" alt=""/></div>
-<map name="vgadirectcontroller_8hdep" id="vgadirectcontroller_8hdep">
-<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="45,79,106,104"/>
-</map>
-</div>
-</div>
+
 <p><a href="vgadirectcontroller_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html">fabgl::VGADirectController</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html">VGADirectController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents an base abstract class for direct draw VGA controller.  <a href="classfabgl_1_1_v_g_a_direct_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a04b3b9bd6028ea949f5596a52b203777"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vgadirectcontroller_8h_a04b3b9bd6028ea949f5596a52b203777.html#a04b3b9bd6028ea949f5596a52b203777">DrawScanlineCallback</a>) (void *arg, uint8_t *dest, int scanLine)</td></tr>
+<tr class="memdesc:a04b3b9bd6028ea949f5596a52b203777"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback used when <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">VGADirectController</a> needs to prepare a new scanline to be sent to the VGA output.  <a href="vgadirectcontroller_8h_a04b3b9bd6028ea949f5596a52b203777.html#a04b3b9bd6028ea949f5596a52b203777">More...</a><br /></td></tr>
+<tr class="separator:a04b3b9bd6028ea949f5596a52b203777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">fabgl::VGADirectController</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="vgadirectcontroller_8h_source.html">vgadirectcontroller.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_10a80204b5b551c852b7cab5e1f7cbce.html">dispdrivers</a></li><li class="navelem"><a class="el" href="vgadirectcontroller_8h.html">vgadirectcontroller.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

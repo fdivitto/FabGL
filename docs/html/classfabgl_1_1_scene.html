@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FabGL: fabgl::Scene Class Reference</title>
+<title>FabGL: Scene Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_scene.html','');});
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classfabgl_1_1_scene-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">fabgl::Scene Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">Scene Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -101,462 +101,50 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_scene.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0a6d396fb2847c1c6707e34365433d7e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a0a6d396fb2847c1c6707e34365433d7e">Scene</a> (int maxSpritesCount, int updateTimeMS, int <a class="el" href="fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h.html#a777dd66f9609a587ee98ad50de301662">height</a>, int stackSize=FABGL_DEFAULT_SCENETASK_STACKSIZE)</td></tr>
-<tr class="memdesc:a0a6d396fb2847c1c6707e34365433d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor.  <a href="#a0a6d396fb2847c1c6707e34365433d7e">More...</a><br /></td></tr>
-<tr class="separator:a0a6d396fb2847c1c6707e34365433d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab28fe102bad4068e5d627ab66798fc3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f">addSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
-<tr class="memdesc:ab28fe102bad4068e5d627ab66798fc3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the specified sprite to collision detector.  <a href="#ab28fe102bad4068e5d627ab66798fc3f">More...</a><br /></td></tr>
-<tr class="separator:ab28fe102bad4068e5d627ab66798fc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae800fd30381835b16422e11dda20ce3f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#ae800fd30381835b16422e11dda20ce3f">collisionDetected</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *spriteA, <a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *spriteB, <a class="el" href="structfabgl_1_1_point.html">Point</a> collisionPoint)=0</td></tr>
-<tr class="memdesc:ae800fd30381835b16422e11dda20ce3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called whenever a collision has been detected.  <a href="#ae800fd30381835b16422e11dda20ce3f">More...</a><br /></td></tr>
-<tr class="separator:ae800fd30381835b16422e11dda20ce3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a047709070bfc20546ee0a293ca36a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a0a047709070bfc20546ee0a293ca36a1">getHeight</a> ()</td></tr>
-<tr class="memdesc:a0a047709070bfc20546ee0a293ca36a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines scene height.  <a href="#a0a047709070bfc20546ee0a293ca36a1">More...</a><br /></td></tr>
-<tr class="separator:a0a047709070bfc20546ee0a293ca36a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36775e223edbeabb4d4ff76643f7d403"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a36775e223edbeabb4d4ff76643f7d403">getWidth</a> ()</td></tr>
-<tr class="memdesc:a36775e223edbeabb4d4ff76643f7d403"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines scene width.  <a href="#a36775e223edbeabb4d4ff76643f7d403">More...</a><br /></td></tr>
-<tr class="separator:a36775e223edbeabb4d4ff76643f7d403"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfd5f4a75070bc82a324cf3f449f5a3d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#adfd5f4a75070bc82a324cf3f449f5a3d">init</a> ()=0</td></tr>
-<tr class="memdesc:adfd5f4a75070bc82a324cf3f449f5a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called when the scene needs to be initialized.  <a href="#adfd5f4a75070bc82a324cf3f449f5a3d">More...</a><br /></td></tr>
-<tr class="separator:adfd5f4a75070bc82a324cf3f449f5a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac12a6954552cd33a4bba2d941f80c5ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#ac12a6954552cd33a4bba2d941f80c5ef">removeSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
-<tr class="memdesc:ac12a6954552cd33a4bba2d941f80c5ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified sprite from collision detector.  <a href="#ac12a6954552cd33a4bba2d941f80c5ef">More...</a><br /></td></tr>
-<tr class="separator:ac12a6954552cd33a4bba2d941f80c5ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c5acf26b15302803310196d5790bf19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a5c5acf26b15302803310196d5790bf19">start</a> (bool suspendTask=true)</td></tr>
-<tr class="memdesc:a5c5acf26b15302803310196d5790bf19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts scene updates and suspends current task.  <a href="#a5c5acf26b15302803310196d5790bf19">More...</a><br /></td></tr>
-<tr class="separator:a5c5acf26b15302803310196d5790bf19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af79e1508d140532cc5395e0ee690850e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#af79e1508d140532cc5395e0ee690850e">stop</a> ()</td></tr>
-<tr class="memdesc:af79e1508d140532cc5395e0ee690850e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops scene updates and resumes suspended task.  <a href="#af79e1508d140532cc5395e0ee690850e">More...</a><br /></td></tr>
-<tr class="separator:af79e1508d140532cc5395e0ee690850e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a441224c11f0a765030ee3d2675b6449e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e">update</a> (int updateCount)=0</td></tr>
-<tr class="memdesc:a441224c11f0a765030ee3d2675b6449e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called whenever the scene needs to be updated.  <a href="#a441224c11f0a765030ee3d2675b6449e">More...</a><br /></td></tr>
-<tr class="separator:a441224c11f0a765030ee3d2675b6449e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720d69034a232eab2a25792eef8119c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7">updateSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
-<tr class="memdesc:a720d69034a232eab2a25792eef8119c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates collision detector.  <a href="#a720d69034a232eab2a25792eef8119c7">More...</a><br /></td></tr>
-<tr class="separator:a720d69034a232eab2a25792eef8119c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af957f22190d563dcd16aab3147caf0ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae">updateSpriteAndDetectCollisions</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
-<tr class="memdesc:af957f22190d563dcd16aab3147caf0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates collision detector and generate collision events.  <a href="#af957f22190d563dcd16aab3147caf0ae">More...</a><br /></td></tr>
-<tr class="separator:af957f22190d563dcd16aab3147caf0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0287feb4e8bfbb20a2e3436c99388fa7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a0287feb4e8bfbb20a2e3436c99388fa7.html#a0287feb4e8bfbb20a2e3436c99388fa7">Scene</a> (int maxSpritesCount, int updateTimeMS, int <a class="el" href="fabutils_8h_ae0ffb42440f0305b6d22a1c6106b6e6f.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662">height</a>, int stackSize=FABGL_DEFAULT_SCENETASK_STACKSIZE)</td></tr>
+<tr class="memdesc:a0287feb4e8bfbb20a2e3436c99388fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor.  <a href="classfabgl_1_1_scene_a0287feb4e8bfbb20a2e3436c99388fa7.html#a0287feb4e8bfbb20a2e3436c99388fa7">More...</a><br /></td></tr>
+<tr class="separator:a0287feb4e8bfbb20a2e3436c99388fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48b03f63e22824a043e5df322ecebd3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a48b03f63e22824a043e5df322ecebd3c.html#a48b03f63e22824a043e5df322ecebd3c">addSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
+<tr class="memdesc:a48b03f63e22824a043e5df322ecebd3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the specified sprite to collision detector.  <a href="classfabgl_1_1_scene_a48b03f63e22824a043e5df322ecebd3c.html#a48b03f63e22824a043e5df322ecebd3c">More...</a><br /></td></tr>
+<tr class="separator:a48b03f63e22824a043e5df322ecebd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2278cb01916711b1d637ca375659b1ad"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a2278cb01916711b1d637ca375659b1ad.html#a2278cb01916711b1d637ca375659b1ad">collisionDetected</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *spriteA, <a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *spriteB, <a class="el" href="structfabgl_1_1_point.html">Point</a> collisionPoint)=0</td></tr>
+<tr class="memdesc:a2278cb01916711b1d637ca375659b1ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called whenever a collision has been detected.  <a href="classfabgl_1_1_scene_a2278cb01916711b1d637ca375659b1ad.html#a2278cb01916711b1d637ca375659b1ad">More...</a><br /></td></tr>
+<tr class="separator:a2278cb01916711b1d637ca375659b1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07efb2a4e9a982688c8bb3c3f21d1092"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a07efb2a4e9a982688c8bb3c3f21d1092.html#a07efb2a4e9a982688c8bb3c3f21d1092">getHeight</a> ()</td></tr>
+<tr class="memdesc:a07efb2a4e9a982688c8bb3c3f21d1092"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines scene height.  <a href="classfabgl_1_1_scene_a07efb2a4e9a982688c8bb3c3f21d1092.html#a07efb2a4e9a982688c8bb3c3f21d1092">More...</a><br /></td></tr>
+<tr class="separator:a07efb2a4e9a982688c8bb3c3f21d1092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a0997183f24da19b776d96c1052998"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a67a0997183f24da19b776d96c1052998.html#a67a0997183f24da19b776d96c1052998">getWidth</a> ()</td></tr>
+<tr class="memdesc:a67a0997183f24da19b776d96c1052998"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines scene width.  <a href="classfabgl_1_1_scene_a67a0997183f24da19b776d96c1052998.html#a67a0997183f24da19b776d96c1052998">More...</a><br /></td></tr>
+<tr class="separator:a67a0997183f24da19b776d96c1052998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5be7e5a13ea77d59aac45d21dceb6a0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_ab5be7e5a13ea77d59aac45d21dceb6a0.html#ab5be7e5a13ea77d59aac45d21dceb6a0">init</a> ()=0</td></tr>
+<tr class="memdesc:ab5be7e5a13ea77d59aac45d21dceb6a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called when the scene needs to be initialized.  <a href="classfabgl_1_1_scene_ab5be7e5a13ea77d59aac45d21dceb6a0.html#ab5be7e5a13ea77d59aac45d21dceb6a0">More...</a><br /></td></tr>
+<tr class="separator:ab5be7e5a13ea77d59aac45d21dceb6a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefc081299e5e20cd9b6d900de8559248"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_aefc081299e5e20cd9b6d900de8559248.html#aefc081299e5e20cd9b6d900de8559248">removeSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
+<tr class="memdesc:aefc081299e5e20cd9b6d900de8559248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified sprite from collision detector.  <a href="classfabgl_1_1_scene_aefc081299e5e20cd9b6d900de8559248.html#aefc081299e5e20cd9b6d900de8559248">More...</a><br /></td></tr>
+<tr class="separator:aefc081299e5e20cd9b6d900de8559248"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7c67f44d6c720c52b1e538ab95aaa9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_ad7c67f44d6c720c52b1e538ab95aaa9d.html#ad7c67f44d6c720c52b1e538ab95aaa9d">start</a> (bool suspendTask=true)</td></tr>
+<tr class="memdesc:ad7c67f44d6c720c52b1e538ab95aaa9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts scene updates and suspends current task.  <a href="classfabgl_1_1_scene_ad7c67f44d6c720c52b1e538ab95aaa9d.html#ad7c67f44d6c720c52b1e538ab95aaa9d">More...</a><br /></td></tr>
+<tr class="separator:ad7c67f44d6c720c52b1e538ab95aaa9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c528baf37154d347366083f0f816846"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a8c528baf37154d347366083f0f816846.html#a8c528baf37154d347366083f0f816846">stop</a> ()</td></tr>
+<tr class="memdesc:a8c528baf37154d347366083f0f816846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops scene updates and resumes suspended task.  <a href="classfabgl_1_1_scene_a8c528baf37154d347366083f0f816846.html#a8c528baf37154d347366083f0f816846">More...</a><br /></td></tr>
+<tr class="separator:a8c528baf37154d347366083f0f816846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f037fffe3ee2f7b0ded5bcbadffae1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_ae1f037fffe3ee2f7b0ded5bcbadffae1.html#ae1f037fffe3ee2f7b0ded5bcbadffae1">update</a> (int updateCount)=0</td></tr>
+<tr class="memdesc:ae1f037fffe3ee2f7b0ded5bcbadffae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an abstract method called whenever the scene needs to be updated.  <a href="classfabgl_1_1_scene_ae1f037fffe3ee2f7b0ded5bcbadffae1.html#ae1f037fffe3ee2f7b0ded5bcbadffae1">More...</a><br /></td></tr>
+<tr class="separator:ae1f037fffe3ee2f7b0ded5bcbadffae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e3cc34d6b070f957120fa1015e8cae5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a7e3cc34d6b070f957120fa1015e8cae5.html#a7e3cc34d6b070f957120fa1015e8cae5">updateSprite</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
+<tr class="memdesc:a7e3cc34d6b070f957120fa1015e8cae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates collision detector.  <a href="classfabgl_1_1_scene_a7e3cc34d6b070f957120fa1015e8cae5.html#a7e3cc34d6b070f957120fa1015e8cae5">More...</a><br /></td></tr>
+<tr class="separator:a7e3cc34d6b070f957120fa1015e8cae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61cfb64defe5bf06c623b25ecaeaf349"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_scene_a61cfb64defe5bf06c623b25ecaeaf349.html#a61cfb64defe5bf06c623b25ecaeaf349">updateSpriteAndDetectCollisions</a> (<a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *sprite)</td></tr>
+<tr class="memdesc:a61cfb64defe5bf06c623b25ecaeaf349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates collision detector and generate collision events.  <a href="classfabgl_1_1_scene_a61cfb64defe5bf06c623b25ecaeaf349.html#a61cfb64defe5bf06c623b25ecaeaf349">More...</a><br /></td></tr>
+<tr class="separator:a61cfb64defe5bf06c623b25ecaeaf349"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0a6d396fb2847c1c6707e34365433d7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a6d396fb2847c1c6707e34365433d7e">&#9670;&nbsp;</a></span>Scene()</h2>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">fabgl::Scene::Scene </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxSpritesCount</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>updateTimeMS</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>width</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>stackSize</em> = <code>FABGL_DEFAULT_SCENETASK_STACKSIZE</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>The <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">maxSpritesCount</td><td>Specifies maximum number of sprites. This is required to size the collision detector object. </td></tr>
-    <tr><td class="paramname">updateTimeMS</td><td>Number of milliseconds between updates. <a class="el" href="classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e" title="This is an abstract method called whenever the scene needs to be updated. ">Scene.update()</a> is called whenever an update occurs. </td></tr>
-    <tr><td class="paramname">width</td><td>The scene width in pixels. </td></tr>
-    <tr><td class="paramname">height</td><td>The scene height in pixels. </td></tr>
-    <tr><td class="paramname">stackSize</td><td><a class="el" href="structfabgl_1_1_size.html" title="Represents a bidimensional size. ">Size</a> of update task stack. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab28fe102bad4068e5d627ab66798fc3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab28fe102bad4068e5d627ab66798fc3f">&#9670;&nbsp;</a></span>addSprite()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::addSprite </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>sprite</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Adds the specified sprite to collision detector. </p>
-<p>The collision detector is updated calling <a class="el" href="classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7" title="Updates collision detector. ">Scene.updateSprite()</a> or <a class="el" href="classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae" title="Updates collision detector and generate collision events. ">updateSpriteAndDetectCollisions()</a>.<br />
- The number of sprites cannot exceed the value specified in <a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> constructor.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">sprite</td><td>The sprite to add. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae800fd30381835b16422e11dda20ce3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae800fd30381835b16422e11dda20ce3f">&#9670;&nbsp;</a></span>collisionDetected()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void fabgl::Scene::collisionDetected </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>spriteA</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>spriteB</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_point.html">Point</a>&#160;</td>
-          <td class="paramname"><em>collisionPoint</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This is an abstract method called whenever a collision has been detected. </p>
-<p>This method is called one o more times as a result of calling <a class="el" href="classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae" title="Updates collision detector and generate collision events. ">Scene.updateSpriteAndDetectCollisions()</a> method when one o more collisions has been detected.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">spriteA</td><td>One of the two sprites collided. This is the same sprite specified in <a class="el" href="classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae" title="Updates collision detector and generate collision events. ">Scene.updateSpriteAndDetectCollisions()</a> call. </td></tr>
-    <tr><td class="paramname">spriteB</td><td>One of the two sprites collided. </td></tr>
-    <tr><td class="paramname">collisionPoint</td><td>Coordinates of a collision point. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a0a047709070bfc20546ee0a293ca36a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a047709070bfc20546ee0a293ca36a1">&#9670;&nbsp;</a></span>getHeight()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::Scene::getHeight </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines scene height. </p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> height in pixels. </dd></dl>
-
-</div>
-</div>
-<a id="a36775e223edbeabb4d4ff76643f7d403"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36775e223edbeabb4d4ff76643f7d403">&#9670;&nbsp;</a></span>getWidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::Scene::getWidth </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines scene width. </p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">Scene</a> width in pixels. </dd></dl>
-
-</div>
-</div>
-<a id="adfd5f4a75070bc82a324cf3f449f5a3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd5f4a75070bc82a324cf3f449f5a3d">&#9670;&nbsp;</a></span>init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void fabgl::Scene::init </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This is an abstract method called when the scene needs to be initialized. </p>
-
-</div>
-</div>
-<a id="ac12a6954552cd33a4bba2d941f80c5ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac12a6954552cd33a4bba2d941f80c5ef">&#9670;&nbsp;</a></span>removeSprite()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::removeSprite </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>sprite</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Removes the specified sprite from collision detector. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">sprite</td><td>The sprite to remove. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a5c5acf26b15302803310196d5790bf19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c5acf26b15302803310196d5790bf19">&#9670;&nbsp;</a></span>start()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::start </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>suspendTask</em> = <code>true</code></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Starts scene updates and suspends current task. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">suspendTask</td><td>If true (default) current calling task is suspended immeditaly.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Example: </p><pre class="fragment">void loop()
-{
-  GameScene gameScene;
-  gameScene.start();
-}</pre> 
-</div>
-</div>
-<a id="af79e1508d140532cc5395e0ee690850e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af79e1508d140532cc5395e0ee690850e">&#9670;&nbsp;</a></span>stop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::stop </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Stops scene updates and resumes suspended task. </p>
-
-</div>
-</div>
-<a id="a441224c11f0a765030ee3d2675b6449e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a441224c11f0a765030ee3d2675b6449e">&#9670;&nbsp;</a></span>update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void fabgl::Scene::update </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>updateCount</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This is an abstract method called whenever the scene needs to be updated. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">updateCount</td><td>Indicates number of times Scane.update() has been called. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a720d69034a232eab2a25792eef8119c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a720d69034a232eab2a25792eef8119c7">&#9670;&nbsp;</a></span>updateSprite()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::updateSprite </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>sprite</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Updates collision detector. </p>
-<p>When a sprite changes its position or size it is necessary to update the collision detector.<br />
- This method just updates the detector without generate collision events.<br />
- To generate collision events call <a class="el" href="classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae" title="Updates collision detector and generate collision events. ">Scene.updateSpriteAndDetectCollisions</a> instead.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">sprite</td><td>The sprite to update. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="af957f22190d563dcd16aab3147caf0ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af957f22190d563dcd16aab3147caf0ae">&#9670;&nbsp;</a></span>updateSpriteAndDetectCollisions()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::Scene::updateSpriteAndDetectCollisions </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_sprite.html">Sprite</a> *&#160;</td>
-          <td class="paramname"><em>sprite</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Updates collision detector and generate collision events. </p>
-<p>When a sprite changes its position or size it is necessary to update the collision detector.<br />
- This method updates the detector and generates collision events accordly.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">sprite</td><td>The sprite to update and to check for collisions. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<p class="definition">Definition at line <a class="el" href="scene_8h_source.html#l00051">51</a> of file <a class="el" href="scene_8h_source.html">scene.h</a>.</p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="scene_8h_source.html">scene.h</a></li>
-<li>scene.cpp</li>
+<li><a class="el" href="scene_8cpp_source.html">scene.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -564,7 +152,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_scene.html">Scene</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:11 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

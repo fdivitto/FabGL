@@ -1,12 +1,12 @@
 var structfabgl_1_1ui_button_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_button_style.html#a6a7fc0c38ee7a301eba56226a9ad54ba", null ],
-    [ "bitmap", "structfabgl_1_1ui_button_style.html#aac54dba4035c4ae512382bb4e9a74dfe", null ],
-    [ "bitmapTextSpace", "structfabgl_1_1ui_button_style.html#aea1600f01c0b1e0fbed11a2babb550cd", null ],
-    [ "downBackgroundColor", "structfabgl_1_1ui_button_style.html#ad77d1554235d711dcdb3cf826ea23aff", null ],
-    [ "downBitmap", "structfabgl_1_1ui_button_style.html#a3f9d843e30cd210708f269b8aa8a348a", null ],
-    [ "mouseDownBackgroundColor", "structfabgl_1_1ui_button_style.html#a597d236bea0d70f31c662376e49683eb", null ],
-    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_button_style.html#a21b947c43c79f3530cd546a48101e20a", null ],
-    [ "textColor", "structfabgl_1_1ui_button_style.html#a085c062d58b2d90428c20189b34e1e0c", null ],
-    [ "textFont", "structfabgl_1_1ui_button_style.html#a48c25169f3bba272b2939960bc9e1398", null ]
+    [ "backgroundColor", "structfabgl_1_1ui_button_style_ae4f3cff9a6921c6ff7a56e9d2380d150.html#ae4f3cff9a6921c6ff7a56e9d2380d150", null ],
+    [ "bitmap", "structfabgl_1_1ui_button_style_a408da1f50d04f7f5e766af1772baaf07.html#a408da1f50d04f7f5e766af1772baaf07", null ],
+    [ "bitmapTextSpace", "structfabgl_1_1ui_button_style_a4b26029b25ba9daecbdf64632162a4c9.html#a4b26029b25ba9daecbdf64632162a4c9", null ],
+    [ "downBackgroundColor", "structfabgl_1_1ui_button_style_ad030d951c454d9a353c1d1fcc206b9cc.html#ad030d951c454d9a353c1d1fcc206b9cc", null ],
+    [ "downBitmap", "structfabgl_1_1ui_button_style_a28a83a5f7d4066995791678c57411fdb.html#a28a83a5f7d4066995791678c57411fdb", null ],
+    [ "mouseDownBackgroundColor", "structfabgl_1_1ui_button_style_a0d9e9a978ddf231016210e8ef988c39f.html#a0d9e9a978ddf231016210e8ef988c39f", null ],
+    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_button_style_aaba0c1279d11cbfdb065822d53e277eb.html#aaba0c1279d11cbfdb065822d53e277eb", null ],
+    [ "textColor", "structfabgl_1_1ui_button_style_a437394b11e5eafcefb12fd72f2b1fce5.html#a437394b11e5eafcefb12fd72f2b1fce5", null ],
+    [ "textFont", "structfabgl_1_1ui_button_style_a1fe6af026a48e25c9368e7e045d59b2d.html#a1fe6af026a48e25c9368e7e045d59b2d", null ]
 ];

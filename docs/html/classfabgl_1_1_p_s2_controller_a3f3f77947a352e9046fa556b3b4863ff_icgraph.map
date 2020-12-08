@@ -1,0 +1,8 @@
+<map id="fabgl::PS2Controller::instance" name="fabgl::PS2Controller::instance">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3" title="Initializes application and executes the main event loop. " alt="" coords="225,5,342,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_keyboard.html#ac234f00edca9023a9cea87cc47b05dd1" title="Initializes Keyboard specifying CLOCK and DATA GPIOs. " alt="" coords="207,56,359,83"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_mouse.html#acd3f7f907e5eaa02686684cc62ed273f" title="Initializes Mouse specifying CLOCK and DATA GPIOs. " alt="" coords="215,107,351,133"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1_mouse.html#a3137f152cd3c9bc2e1cd35a9f2471669" title="Gets a mouse movement from the queue. " alt="" coords="192,157,375,184"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1_terminal.html#ae537edef83d9485ccfc8eed21392e8c1" title="Initializes the terminal. " alt="" coords="210,208,357,235"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_p_s2_controller.html#afdf49e36312eb8ad33e427bf4391e9a5" title="Initializes PS2 device controller using default GPIOs. " alt="" coords="423,74,561,115"/>
+</map>

@@ -1,8 +1,8 @@
 var structfabgl_1_1ui_text_edit_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_text_edit_style.html#a9c3c9667bd91876b05ebf511a9fbe1e6", null ],
-    [ "focusedBackgroundColor", "structfabgl_1_1ui_text_edit_style.html#a2d515d507e5d7ceef2b30ec569c231c9", null ],
-    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_text_edit_style.html#ac556f2edd1dc383c8e5e198bbc3402c2", null ],
-    [ "textColor", "structfabgl_1_1ui_text_edit_style.html#ace75eb16ed8dc9ecdd08cbe5ce3a091b", null ],
-    [ "textFont", "structfabgl_1_1ui_text_edit_style.html#a2c896b861449c05273a03d9bba372b15", null ]
+    [ "backgroundColor", "structfabgl_1_1ui_text_edit_style_ae4f3cff9a6921c6ff7a56e9d2380d150.html#ae4f3cff9a6921c6ff7a56e9d2380d150", null ],
+    [ "focusedBackgroundColor", "structfabgl_1_1ui_text_edit_style_afdab263979e95f14f213ae0d404241ff.html#afdab263979e95f14f213ae0d404241ff", null ],
+    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_text_edit_style_aaba0c1279d11cbfdb065822d53e277eb.html#aaba0c1279d11cbfdb065822d53e277eb", null ],
+    [ "textColor", "structfabgl_1_1ui_text_edit_style_a437394b11e5eafcefb12fd72f2b1fce5.html#a437394b11e5eafcefb12fd72f2b1fce5", null ],
+    [ "textFont", "structfabgl_1_1ui_text_edit_style_a1fe6af026a48e25c9368e7e045d59b2d.html#a1fe6af026a48e25c9368e7e045d59b2d", null ]
 ];

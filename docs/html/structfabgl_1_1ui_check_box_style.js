@@ -1,7 +1,7 @@
 var structfabgl_1_1ui_check_box_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_check_box_style.html#a917aedcd2adebf4f3b8f72afd65a47cd", null ],
-    [ "checkedBackgroundColor", "structfabgl_1_1ui_check_box_style.html#ac705850d6fd0e04aa7737fded0f18fea", null ],
-    [ "foregroundColor", "structfabgl_1_1ui_check_box_style.html#abc672fa617b42cb9d89bfdc7b52ae6d3", null ],
-    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_check_box_style.html#a30edbff567b1e6134b8f990b12cd8410", null ]
+    [ "backgroundColor", "structfabgl_1_1ui_check_box_style_ae4f3cff9a6921c6ff7a56e9d2380d150.html#ae4f3cff9a6921c6ff7a56e9d2380d150", null ],
+    [ "checkedBackgroundColor", "structfabgl_1_1ui_check_box_style_a878aa7c4dd5601df4d038edc93fa2ffe.html#a878aa7c4dd5601df4d038edc93fa2ffe", null ],
+    [ "foregroundColor", "structfabgl_1_1ui_check_box_style_a40bc2241c1ab98232e200c5d492a68b0.html#a40bc2241c1ab98232e200c5d492a68b0", null ],
+    [ "mouseOverBackgroundColor", "structfabgl_1_1ui_check_box_style_aaba0c1279d11cbfdb065822d53e277eb.html#aaba0c1279d11cbfdb065822d53e277eb", null ]
 ];

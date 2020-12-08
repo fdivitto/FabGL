@@ -1,13 +1,13 @@
 var terminfo_8h =
 [
-    [ "TermType", "terminfo_8h.html#ga2d726f689f0c7c127a9327262181bbbd", [
-      [ "ANSI_VT", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2", null ],
-      [ "ADM3A", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be", null ],
-      [ "ADM31", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbda8ac06e0429ea3a6cd71f46c7d4525b95", null ],
-      [ "Hazeltine1500", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbdaf2db09bec0ffa1ed3836fa85a0d82a05", null ],
-      [ "Osborne", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbda73e8beb31d6b2ea5697866df7dd578e2", null ],
-      [ "Kaypro", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbda90856a5022c37a3cbd6f9c5c04bc660b", null ],
-      [ "VT52", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80", null ],
-      [ "ANSILegacy", "terminfo_8h.html#gga2d726f689f0c7c127a9327262181bbbdaf7bc7bfefc009fcde2d822215b8ae1bc", null ]
+    [ "TermType", "terminfo_8h.html#ga67edd9a04814c247a553dfde047e6f62", [
+      [ "ANSI_VT", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62ae932beee86a50089d63ac0bb1c480cae", null ],
+      [ "ADM3A", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62a14ceba0d771609decce2a2bca361ec20", null ],
+      [ "ADM31", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62af2a4ec17a361c2143dff0ad78e9a3c57", null ],
+      [ "Hazeltine1500", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62a40e0f1b332fd17171a30aa39461877b2", null ],
+      [ "Osborne", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62a108a576e87babb484f7af94772834609", null ],
+      [ "Kaypro", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62aa8b8337fb3761c8a2e4793dd591b91d6", null ],
+      [ "VT52", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62a1b7a113f22fdb18c0f32345e711b81d6", null ],
+      [ "ANSILegacy", "terminfo_8h.html#gga67edd9a04814c247a553dfde047e6f62aae8007304090df4db995e4bbea0704af", null ]
     ] ]
 ];

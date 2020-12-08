@@ -1,7 +1,7 @@
 var structfabgl_1_1ui_scrollable_control_style =
 [
-    [ "mouseOverScrollBarForegroundColor", "structfabgl_1_1ui_scrollable_control_style.html#a2821825fff59036cb082273c8720459f", null ],
-    [ "scrollBarBackgroundColor", "structfabgl_1_1ui_scrollable_control_style.html#a51f450af2e2f3cd0e64cd5744f693c0d", null ],
-    [ "scrollBarForegroundColor", "structfabgl_1_1ui_scrollable_control_style.html#ac2ddbdd97a2cc6d06a557747ab97def0", null ],
-    [ "scrollBarSize", "structfabgl_1_1ui_scrollable_control_style.html#a616c64c7d5bf9e5f87990f9c245ab4e7", null ]
+    [ "mouseOverScrollBarForegroundColor", "structfabgl_1_1ui_scrollable_control_style_a6dfff8a622dd31c0bfed98fbecf96821.html#a6dfff8a622dd31c0bfed98fbecf96821", null ],
+    [ "scrollBarBackgroundColor", "structfabgl_1_1ui_scrollable_control_style_a9812042b7f672086aaeb6aadc821a37d.html#a9812042b7f672086aaeb6aadc821a37d", null ],
+    [ "scrollBarForegroundColor", "structfabgl_1_1ui_scrollable_control_style_aa716a22e7982e26396f99a5b712cdc4e.html#aa716a22e7982e26396f99a5b712cdc4e", null ],
+    [ "scrollBarSize", "structfabgl_1_1ui_scrollable_control_style_ae6153d7a5e1d72d4d3b6d167165fc71b.html#ae6153d7a5e1d72d4d3b6d167165fc71b", null ]
 ];

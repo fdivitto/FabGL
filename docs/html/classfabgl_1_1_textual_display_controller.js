@@ -1,6 +1,6 @@
 var classfabgl_1_1_textual_display_controller =
 [
-    [ "controllerType", "classfabgl_1_1_textual_display_controller.html#a7efa04f1999f53ee90adde56e032f9b4", null ],
-    [ "getScreenHeight", "classfabgl_1_1_textual_display_controller.html#a17b82284e218b5f3b9aa29a6450a86d9", null ],
-    [ "getScreenWidth", "classfabgl_1_1_textual_display_controller.html#a100241a4f73c0eef0701c76e2e9f3b0c", null ]
+    [ "controllerType", "classfabgl_1_1_textual_display_controller_a2337a67770ebd18e0ced22ba40d79d24.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
+    [ "getScreenHeight", "classfabgl_1_1_textual_display_controller.html#a0872427e4a351bb3590e8d00096e9cba", null ],
+    [ "getScreenWidth", "classfabgl_1_1_textual_display_controller.html#a749df909b39fd096bf6e2813f2f5324c", null ]
 ];

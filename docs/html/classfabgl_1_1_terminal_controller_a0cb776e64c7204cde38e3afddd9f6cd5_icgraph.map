@@ -1,0 +1,4 @@
+<map id="fabgl::TerminalController::setChar" name="fabgl::TerminalController::setChar">
+<area shape="rect" id="node2" href="$classfabgl_1_1_line_editor.html#ad533d2883db221189a2c776fa8361c10" title="Sets initial text specifying length. " alt="" coords="227,5,351,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_line_editor.html#a16d3c77d676fe214551a919641b22c6f" title="Reads user input and return the inserted line. " alt="" coords="216,71,361,98"/>
+</map>

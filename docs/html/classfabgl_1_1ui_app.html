@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FabGL: fabgl::uiApp Class Reference</title>
+<title>FabGL: uiApp Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1ui_app.html','');});
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classfabgl_1_1ui_app-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">fabgl::uiApp Class Reference</div>  </div>
+<div class="title">uiApp Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -100,1467 +100,149 @@ $(document).ready(function(){initNavTree('classfabgl_1_1ui_app.html','');});
 
 <p><code>#include &lt;<a class="el" href="fabui_8h_source.html">fabui.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for fabgl::uiApp:</div>
+Inheritance diagram for uiApp:</div>
 <div class="dyncontent">
-<div class="center"><img src="classfabgl_1_1ui_app__inherit__graph.png" border="0" usemap="#fabgl_1_1ui_app_inherit__map" alt="Inheritance graph"/></div>
-<map name="fabgl_1_1ui_app_inherit__map" id="fabgl_1_1ui_app_inherit__map">
-<area shape="rect" id="node2" href="classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="5,79,139,104"/>
-<area shape="rect" id="node3" href="classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="19,5,126,31"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for fabgl::uiApp:</div>
-<div class="dyncontent">
-<div class="center"><img src="classfabgl_1_1ui_app__coll__graph.png" border="0" usemap="#fabgl_1_1ui_app_coll__map" alt="Collaboration graph"/></div>
-<map name="fabgl_1_1ui_app_coll__map" id="fabgl_1_1ui_app_coll__map">
-<area shape="rect" id="node2" href="classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="5,79,139,104"/>
-<area shape="rect" id="node3" href="classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="19,5,126,31"/>
+<div class="center"><img src="classfabgl_1_1ui_app__inherit__graph.png" border="0" usemap="#ui_app_inherit__map" alt="Inheritance graph"/></div>
+<map name="ui_app_inherit__map" id="ui_app_inherit__map">
+<area shape="rect" id="node2" href="classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="5,80,103,107"/>
+<area shape="rect" id="node3" href="classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="19,5,89,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a93a96823b4a884c8cb4141383197837f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a93a96823b4a884c8cb4141383197837f">activeWindow</a> ()</td></tr>
-<tr class="memdesc:a93a96823b4a884c8cb4141383197837f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the currently active window.  <a href="#a93a96823b4a884c8cb4141383197837f">More...</a><br /></td></tr>
-<tr class="separator:a93a96823b4a884c8cb4141383197837f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96d17d0396113602bd2367a7f0c09492"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_evt_handler.html#a96d17d0396113602bd2367a7f0c09492">app</a> ()</td></tr>
-<tr class="memdesc:a96d17d0396113602bd2367a7f0c09492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the app that owns this object.  <a href="#a96d17d0396113602bd2367a7f0c09492">More...</a><br /></td></tr>
-<tr class="separator:a96d17d0396113602bd2367a7f0c09492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac462bde3e4a0084396e727e2c3a85004"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1ui_app_props.html">uiAppProps</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ac462bde3e4a0084396e727e2c3a85004">appProps</a> ()</td></tr>
-<tr class="memdesc:ac462bde3e4a0084396e727e2c3a85004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets or gets application properties.  <a href="#ac462bde3e4a0084396e727e2c3a85004">More...</a><br /></td></tr>
-<tr class="separator:ac462bde3e4a0084396e727e2c3a85004"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0192d896b39a2c0265b87c7f39d32b59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a0192d896b39a2c0265b87c7f39d32b59">capturedMouseWindow</a> ()</td></tr>
-<tr class="memdesc:a0192d896b39a2c0265b87c7f39d32b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which window is capturing mouse.  <a href="#a0192d896b39a2c0265b87c7f39d32b59">More...</a><br /></td></tr>
-<tr class="separator:a0192d896b39a2c0265b87c7f39d32b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05a6271de5e4925cff22073bf48f7952"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952">destroyWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
-<tr class="memdesc:a05a6271de5e4925cff22073bf48f7952"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a window.  <a href="#a05a6271de5e4925cff22073bf48f7952">More...</a><br /></td></tr>
-<tr class="separator:a05a6271de5e4925cff22073bf48f7952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d9e0d168144bdc2d838fcd43aa7c9aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a5d9e0d168144bdc2d838fcd43aa7c9aa">enableKeyboardAndMouseEvents</a> (bool value)</td></tr>
-<tr class="memdesc:a5d9e0d168144bdc2d838fcd43aa7c9aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables mouse and keyboard events.  <a href="#a5d9e0d168144bdc2d838fcd43aa7c9aa">More...</a><br /></td></tr>
-<tr class="separator:a5d9e0d168144bdc2d838fcd43aa7c9aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaa73b91e36c97bbbee6a8b1b989f625"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625">endModalWindow</a> (ModalWindowState *state)</td></tr>
-<tr class="memdesc:aeaa73b91e36c97bbbee6a8b1b989f625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends modal window processing.  <a href="#aeaa73b91e36c97bbbee6a8b1b989f625">More...</a><br /></td></tr>
-<tr class="separator:aeaa73b91e36c97bbbee6a8b1b989f625"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4ee677b3ec3ee727ede27010cae8798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ae4ee677b3ec3ee727ede27010cae8798">focusedWindow</a> ()</td></tr>
-<tr class="memdesc:ae4ee677b3ec3ee727ede27010cae8798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the focused window (control)  <a href="#ae4ee677b3ec3ee727ede27010cae8798">More...</a><br /></td></tr>
-<tr class="separator:ae4ee677b3ec3ee727ede27010cae8798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77aa2e78b40ecf2f29e8180b30272d84"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a77aa2e78b40ecf2f29e8180b30272d84">init</a> ()</td></tr>
-<tr class="memdesc:a77aa2e78b40ecf2f29e8180b30272d84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to inherit to implement an application.  <a href="#a77aa2e78b40ecf2f29e8180b30272d84">More...</a><br /></td></tr>
-<tr class="separator:a77aa2e78b40ecf2f29e8180b30272d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1dc4b980216c98b8a693ba15bf87065"><td class="memItemLeft" align="right" valign="top">ModalWindowState *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065">initModalWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
-<tr class="memdesc:aa1dc4b980216c98b8a693ba15bf87065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins modal window processing.  <a href="#aa1dc4b980216c98b8a693ba15bf87065">More...</a><br /></td></tr>
-<tr class="separator:aa1dc4b980216c98b8a693ba15bf87065"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b38652b37ee1438d6832660a824a9e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996">uiMessageBoxResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a1b38652b37ee1438d6832660a824a9e7">inputBox</a> (char const *title, char const *text, char *inOutString, int maxLength, char const *button1Text, char const *button2Text=nullptr)</td></tr>
-<tr class="memdesc:a1b38652b37ee1438d6832660a824a9e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays a modal dialog box with a text, a text edit and up to two buttons.  <a href="#a1b38652b37ee1438d6832660a824a9e7">More...</a><br /></td></tr>
-<tr class="separator:a1b38652b37ee1438d6832660a824a9e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d59a05eaedc8f165178fc412e475394"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a8d59a05eaedc8f165178fc412e475394">insertEvent</a> (uiEvent const *event)</td></tr>
-<tr class="memdesc:a8d59a05eaedc8f165178fc412e475394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts (first position) an event in the event queue and returns without waiting for the receiver to process the event.  <a href="#a8d59a05eaedc8f165178fc412e475394">More...</a><br /></td></tr>
-<tr class="separator:a8d59a05eaedc8f165178fc412e475394"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba04179c4fc7e695c58022629b3983da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aba04179c4fc7e695c58022629b3983da">killTimer</a> (uiTimerHandle handle)</td></tr>
-<tr class="memdesc:aba04179c4fc7e695c58022629b3983da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kills a timer.  <a href="#aba04179c4fc7e695c58022629b3983da">More...</a><br /></td></tr>
-<tr class="separator:aba04179c4fc7e695c58022629b3983da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5d4a0245850056343938ef814726407"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ae5d4a0245850056343938ef814726407">maximizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
-<tr class="memdesc:ae5d4a0245850056343938ef814726407"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximizes or restores a window.  <a href="#ae5d4a0245850056343938ef814726407">More...</a><br /></td></tr>
-<tr class="separator:ae5d4a0245850056343938ef814726407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add1a241eb65b95232d28a469c025e46c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996">uiMessageBoxResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#add1a241eb65b95232d28a469c025e46c">messageBox</a> (char const *title, char const *text, char const *button1Text, char const *button2Text=nullptr, char const *button3Text=nullptr, <a class="el" href="group___enumerations.html#gaf2f79b5a07ca9d7f44f264b12d986c65">uiMessageBoxIcon</a> icon=<a class="el" href="group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65aa97ea56b0e00b2379736ae60869ff66a">uiMessageBoxIcon::Question</a>)</td></tr>
-<tr class="memdesc:add1a241eb65b95232d28a469c025e46c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays a modal dialog box with an icon, text and some buttons.  <a href="#add1a241eb65b95232d28a469c025e46c">More...</a><br /></td></tr>
-<tr class="separator:add1a241eb65b95232d28a469c025e46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7e36716653703be98d54d3ec55d1aaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ad7e36716653703be98d54d3ec55d1aaa">minimizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
-<tr class="memdesc:ad7e36716653703be98d54d3ec55d1aaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimizes or restores a window.  <a href="#ad7e36716653703be98d54d3ec55d1aaa">More...</a><br /></td></tr>
-<tr class="separator:ad7e36716653703be98d54d3ec55d1aaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88d9a7c51e4ef93b617d3dc483fa293d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a88d9a7c51e4ef93b617d3dc483fa293d">moveFocus</a> (int delta)</td></tr>
-<tr class="memdesc:a88d9a7c51e4ef93b617d3dc483fa293d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move focus to a control with current focus index plus a delta.  <a href="#a88d9a7c51e4ef93b617d3dc483fa293d">More...</a><br /></td></tr>
-<tr class="separator:a88d9a7c51e4ef93b617d3dc483fa293d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bda82c9f53c538ab1fb3edb7d6f25d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0">moveWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, int x, int y)</td></tr>
-<tr class="memdesc:a8bda82c9f53c538ab1fb3edb7d6f25d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves a window.  <a href="#a8bda82c9f53c538ab1fb3edb7d6f25d0">More...</a><br /></td></tr>
-<tr class="separator:a8bda82c9f53c538ab1fb3edb7d6f25d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93618eccc73d66e981f8c02170875226"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1ui_object_type.html">uiObjectType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_object.html#a93618eccc73d66e981f8c02170875226">objectType</a> ()</td></tr>
-<tr class="memdesc:a93618eccc73d66e981f8c02170875226"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the object type.  <a href="#a93618eccc73d66e981f8c02170875226">More...</a><br /></td></tr>
-<tr class="separator:a93618eccc73d66e981f8c02170875226"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac656798fd31a27213c2f8bf5f0433bfa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ac656798fd31a27213c2f8bf5f0433bfa">postEvent</a> (uiEvent const *event)</td></tr>
-<tr class="memdesc:ac656798fd31a27213c2f8bf5f0433bfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Places an event in the event queue and returns without waiting for the receiver to process the event.  <a href="#ac656798fd31a27213c2f8bf5f0433bfa">More...</a><br /></td></tr>
-<tr class="separator:ac656798fd31a27213c2f8bf5f0433bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ff4ce4e13be33ca40959adfd7c3edb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a7ff4ce4e13be33ca40959adfd7c3edb8">processEvents</a> ()</td></tr>
-<tr class="memdesc:a7ff4ce4e13be33ca40959adfd7c3edb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes all events in queue.  <a href="#a7ff4ce4e13be33ca40959adfd7c3edb8">More...</a><br /></td></tr>
-<tr class="separator:a7ff4ce4e13be33ca40959adfd7c3edb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d02447c5bc871d783d5d7ba57483929"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a9d02447c5bc871d783d5d7ba57483929">processModalWindowEvents</a> (ModalWindowState *state, int timeout)</td></tr>
-<tr class="memdesc:a9d02447c5bc871d783d5d7ba57483929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes all messages from modal window.  <a href="#a9d02447c5bc871d783d5d7ba57483929">More...</a><br /></td></tr>
-<tr class="separator:a9d02447c5bc871d783d5d7ba57483929"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadc98d9de237a32bcff2f63a9b3129f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2">quit</a> (int exitCode)</td></tr>
-<tr class="memdesc:aadc98d9de237a32bcff2f63a9b3129f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Terminates application and free resources.  <a href="#aadc98d9de237a32bcff2f63a9b3129f2">More...</a><br /></td></tr>
-<tr class="separator:aadc98d9de237a32bcff2f63a9b3129f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68077cf2afc33bb423e924fa5bcfa4f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a68077cf2afc33bb423e924fa5bcfa4f8">repaintRect</a> (<a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;rect)</td></tr>
-<tr class="memdesc:a68077cf2afc33bb423e924fa5bcfa4f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repaints a screen area.  <a href="#a68077cf2afc33bb423e924fa5bcfa4f8">More...</a><br /></td></tr>
-<tr class="separator:a68077cf2afc33bb423e924fa5bcfa4f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ae6a6ec628a81da2c936deb63d9ca0e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a9ae6a6ec628a81da2c936deb63d9ca0e">repaintWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
-<tr class="memdesc:a9ae6a6ec628a81da2c936deb63d9ca0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repaints a window.  <a href="#a9ae6a6ec628a81da2c936deb63d9ca0e">More...</a><br /></td></tr>
-<tr class="separator:a9ae6a6ec628a81da2c936deb63d9ca0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2827139ff542f663753683dd90ae1c16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a2827139ff542f663753683dd90ae1c16">reshapeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, <a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;rect)</td></tr>
-<tr class="memdesc:a2827139ff542f663753683dd90ae1c16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reshapes a window.  <a href="#a2827139ff542f663753683dd90ae1c16">More...</a><br /></td></tr>
-<tr class="separator:a2827139ff542f663753683dd90ae1c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dd886b08dc0cd588edff12ca093ed73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73">resizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, int <a class="el" href="fabutils_8h.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h.html#a777dd66f9609a587ee98ad50de301662">height</a>)</td></tr>
-<tr class="memdesc:a3dd886b08dc0cd588edff12ca093ed73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes a window.  <a href="#a3dd886b08dc0cd588edff12ca093ed73">More...</a><br /></td></tr>
-<tr class="separator:a3dd886b08dc0cd588edff12ca093ed73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ed22ad4af635c027637db8807b6a9af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a6ed22ad4af635c027637db8807b6a9af">resizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, <a class="el" href="structfabgl_1_1_size.html">Size</a> size)</td></tr>
-<tr class="memdesc:a6ed22ad4af635c027637db8807b6a9af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes a window.  <a href="#a6ed22ad4af635c027637db8807b6a9af">More...</a><br /></td></tr>
-<tr class="separator:a6ed22ad4af635c027637db8807b6a9af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd745cf2c678274d91003403433b5a40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_frame.html">uiFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#abd745cf2c678274d91003403433b5a40">rootWindow</a> ()</td></tr>
-<tr class="memdesc:abd745cf2c678274d91003403433b5a40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the root window.  <a href="#abd745cf2c678274d91003403433b5a40">More...</a><br /></td></tr>
-<tr class="separator:abd745cf2c678274d91003403433b5a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2c90364f95b06bccc5ac585da94b1c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3">run</a> (<a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *displayController, <a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *keyboard=nullptr, <a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *mouse=nullptr)</td></tr>
-<tr class="memdesc:ad2c90364f95b06bccc5ac585da94b1c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes the main event loop.  <a href="#ad2c90364f95b06bccc5ac585da94b1c3">More...</a><br /></td></tr>
-<tr class="separator:ad2c90364f95b06bccc5ac585da94b1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74260184a9dd8e9dfb3d2106feda9a7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a74260184a9dd8e9dfb3d2106feda9a7e">runAsync</a> (<a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *displayController, int taskStack=3000, <a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *keyboard=nullptr, <a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *mouse=nullptr)</td></tr>
-<tr class="memdesc:a74260184a9dd8e9dfb3d2106feda9a7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes asynchronously the main event loop.  <a href="#a74260184a9dd8e9dfb3d2106feda9a7e">More...</a><br /></td></tr>
-<tr class="separator:a74260184a9dd8e9dfb3d2106feda9a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55fabea8349dd5282b80ace47dd5fda1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1">screenToWindow</a> (<a class="el" href="structfabgl_1_1_point.html">Point</a> &amp;point)</td></tr>
-<tr class="memdesc:a55fabea8349dd5282b80ace47dd5fda1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which window a point belongs to.  <a href="#a55fabea8349dd5282b80ace47dd5fda1">More...</a><br /></td></tr>
-<tr class="separator:a55fabea8349dd5282b80ace47dd5fda1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab716b086b3e3013a0967bd35a3a7e6d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#ab716b086b3e3013a0967bd35a3a7e6d4">setActiveWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *value)</td></tr>
-<tr class="memdesc:ab716b086b3e3013a0967bd35a3a7e6d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the active window.  <a href="#ab716b086b3e3013a0967bd35a3a7e6d4">More...</a><br /></td></tr>
-<tr class="separator:ab716b086b3e3013a0967bd35a3a7e6d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa42ff6a21e47f3fbb761c20347390a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aaa42ff6a21e47f3fbb761c20347390a4">setFocusedWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *value)</td></tr>
-<tr class="memdesc:aaa42ff6a21e47f3fbb761c20347390a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the focused window (control)  <a href="#aaa42ff6a21e47f3fbb761c20347390a4">More...</a><br /></td></tr>
-<tr class="separator:aaa42ff6a21e47f3fbb761c20347390a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9e48af5ad63a3cb3060ae3171a08969"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#aa9e48af5ad63a3cb3060ae3171a08969">setStyle</a> (uiStyle *value)</td></tr>
-<tr class="memdesc:aa9e48af5ad63a3cb3060ae3171a08969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets application controls style.  <a href="#aa9e48af5ad63a3cb3060ae3171a08969">More...</a><br /></td></tr>
-<tr class="separator:aa9e48af5ad63a3cb3060ae3171a08969"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a431860c2985484bf3d2f136075146d8c"><td class="memItemLeft" align="right" valign="top">uiTimerHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a431860c2985484bf3d2f136075146d8c">setTimer</a> (<a class="el" href="classfabgl_1_1ui_evt_handler.html">uiEvtHandler</a> *dest, int periodMS)</td></tr>
-<tr class="memdesc:a431860c2985484bf3d2f136075146d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setups a timer.  <a href="#a431860c2985484bf3d2f136075146d8c">More...</a><br /></td></tr>
-<tr class="separator:a431860c2985484bf3d2f136075146d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44b68bf7a9d9712c123eac4b5525d181"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a44b68bf7a9d9712c123eac4b5525d181">showModalWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
-<tr class="memdesc:a44b68bf7a9d9712c123eac4b5525d181"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a window visible and handles it has a modal window.  <a href="#a44b68bf7a9d9712c123eac4b5525d181">More...</a><br /></td></tr>
-<tr class="separator:a44b68bf7a9d9712c123eac4b5525d181"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720fa1bbd49df02213234328814ea0ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a720fa1bbd49df02213234328814ea0ff">showWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
-<tr class="memdesc:a720fa1bbd49df02213234328814ea0ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a window visible or invisible.  <a href="#a720fa1bbd49df02213234328814ea0ff">More...</a><br /></td></tr>
-<tr class="separator:a720fa1bbd49df02213234328814ea0ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b064db7d90f05a37fe70533811455ba"><td class="memItemLeft" align="right" valign="top">uiStyle *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a3b064db7d90f05a37fe70533811455ba">style</a> ()</td></tr>
-<tr class="memdesc:a3b064db7d90f05a37fe70533811455ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current application controls style.  <a href="#a3b064db7d90f05a37fe70533811455ba">More...</a><br /></td></tr>
-<tr class="separator:a3b064db7d90f05a37fe70533811455ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8abc25e39b6ac1cb85f08791d30d46c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a8abc25e39b6ac1cb85f08791d30d46c8.html#a8abc25e39b6ac1cb85f08791d30d46c8">activeWindow</a> ()</td></tr>
+<tr class="memdesc:a8abc25e39b6ac1cb85f08791d30d46c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the currently active window.  <a href="classfabgl_1_1ui_app_a8abc25e39b6ac1cb85f08791d30d46c8.html#a8abc25e39b6ac1cb85f08791d30d46c8">More...</a><br /></td></tr>
+<tr class="separator:a8abc25e39b6ac1cb85f08791d30d46c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4455286247a0091d1de3f40977105fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_evt_handler_ae4455286247a0091d1de3f40977105fb.html#ae4455286247a0091d1de3f40977105fb">app</a> ()</td></tr>
+<tr class="memdesc:ae4455286247a0091d1de3f40977105fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the app that owns this object.  <a href="classfabgl_1_1ui_evt_handler_ae4455286247a0091d1de3f40977105fb.html#ae4455286247a0091d1de3f40977105fb">More...</a><br /></td></tr>
+<tr class="separator:ae4455286247a0091d1de3f40977105fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14473f06d1aa56cd3ec7dcd1990d383"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1ui_app_props.html">uiAppProps</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ae14473f06d1aa56cd3ec7dcd1990d383.html#ae14473f06d1aa56cd3ec7dcd1990d383">appProps</a> ()</td></tr>
+<tr class="memdesc:ae14473f06d1aa56cd3ec7dcd1990d383"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets or gets application properties.  <a href="classfabgl_1_1ui_app_ae14473f06d1aa56cd3ec7dcd1990d383.html#ae14473f06d1aa56cd3ec7dcd1990d383">More...</a><br /></td></tr>
+<tr class="separator:ae14473f06d1aa56cd3ec7dcd1990d383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa14ef7e19fb108ccc8fab7ede23e7015"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_aa14ef7e19fb108ccc8fab7ede23e7015.html#aa14ef7e19fb108ccc8fab7ede23e7015">capturedMouseWindow</a> ()</td></tr>
+<tr class="memdesc:aa14ef7e19fb108ccc8fab7ede23e7015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which window is capturing mouse.  <a href="classfabgl_1_1ui_app_aa14ef7e19fb108ccc8fab7ede23e7015.html#aa14ef7e19fb108ccc8fab7ede23e7015">More...</a><br /></td></tr>
+<tr class="separator:aa14ef7e19fb108ccc8fab7ede23e7015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d4d3b4ae3d8de70de4ffeea318a3b72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a1d4d3b4ae3d8de70de4ffeea318a3b72.html#a1d4d3b4ae3d8de70de4ffeea318a3b72">destroyWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
+<tr class="memdesc:a1d4d3b4ae3d8de70de4ffeea318a3b72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a window.  <a href="classfabgl_1_1ui_app_a1d4d3b4ae3d8de70de4ffeea318a3b72.html#a1d4d3b4ae3d8de70de4ffeea318a3b72">More...</a><br /></td></tr>
+<tr class="separator:a1d4d3b4ae3d8de70de4ffeea318a3b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76392c5042fdbc0a177f72b2dda85055"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a76392c5042fdbc0a177f72b2dda85055.html#a76392c5042fdbc0a177f72b2dda85055">enableKeyboardAndMouseEvents</a> (bool value)</td></tr>
+<tr class="memdesc:a76392c5042fdbc0a177f72b2dda85055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables mouse and keyboard events.  <a href="classfabgl_1_1ui_app_a76392c5042fdbc0a177f72b2dda85055.html#a76392c5042fdbc0a177f72b2dda85055">More...</a><br /></td></tr>
+<tr class="separator:a76392c5042fdbc0a177f72b2dda85055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a671d421f94b3548eed565e47cc738ce4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a671d421f94b3548eed565e47cc738ce4.html#a671d421f94b3548eed565e47cc738ce4">endModalWindow</a> (ModalWindowState *state)</td></tr>
+<tr class="memdesc:a671d421f94b3548eed565e47cc738ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends modal window processing.  <a href="classfabgl_1_1ui_app_a671d421f94b3548eed565e47cc738ce4.html#a671d421f94b3548eed565e47cc738ce4">More...</a><br /></td></tr>
+<tr class="separator:a671d421f94b3548eed565e47cc738ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7addd587890938bf08c635560b627a5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a7addd587890938bf08c635560b627a5c.html#a7addd587890938bf08c635560b627a5c">focusedWindow</a> ()</td></tr>
+<tr class="memdesc:a7addd587890938bf08c635560b627a5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the focused window (control)  <a href="classfabgl_1_1ui_app_a7addd587890938bf08c635560b627a5c.html#a7addd587890938bf08c635560b627a5c">More...</a><br /></td></tr>
+<tr class="separator:a7addd587890938bf08c635560b627a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02fd73d861ef2e4aabb38c0c9ff82947"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a02fd73d861ef2e4aabb38c0c9ff82947.html#a02fd73d861ef2e4aabb38c0c9ff82947">init</a> ()</td></tr>
+<tr class="memdesc:a02fd73d861ef2e4aabb38c0c9ff82947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to inherit to implement an application.  <a href="classfabgl_1_1ui_app_a02fd73d861ef2e4aabb38c0c9ff82947.html#a02fd73d861ef2e4aabb38c0c9ff82947">More...</a><br /></td></tr>
+<tr class="separator:a02fd73d861ef2e4aabb38c0c9ff82947"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783f985b11bd0e7a965790c2ba6178ee"><td class="memItemLeft" align="right" valign="top">ModalWindowState *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a783f985b11bd0e7a965790c2ba6178ee.html#a783f985b11bd0e7a965790c2ba6178ee">initModalWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
+<tr class="memdesc:a783f985b11bd0e7a965790c2ba6178ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins modal window processing.  <a href="classfabgl_1_1ui_app_a783f985b11bd0e7a965790c2ba6178ee.html#a783f985b11bd0e7a965790c2ba6178ee">More...</a><br /></td></tr>
+<tr class="separator:a783f985b11bd0e7a965790c2ba6178ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a655f17076c2a5b777e938e4bb0bec6b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#ga78d47ab4ff34b1ed9fb7db4c3a98789e">uiMessageBoxResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a655f17076c2a5b777e938e4bb0bec6b5.html#a655f17076c2a5b777e938e4bb0bec6b5">inputBox</a> (char const *title, char const *text, char *inOutString, int maxLength, char const *button1Text, char const *button2Text=nullptr)</td></tr>
+<tr class="memdesc:a655f17076c2a5b777e938e4bb0bec6b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays a modal dialog box with a text, a text edit and up to two buttons.  <a href="classfabgl_1_1ui_app_a655f17076c2a5b777e938e4bb0bec6b5.html#a655f17076c2a5b777e938e4bb0bec6b5">More...</a><br /></td></tr>
+<tr class="separator:a655f17076c2a5b777e938e4bb0bec6b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af667cdcdd8da6844aa694b5b13dbdda4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_af667cdcdd8da6844aa694b5b13dbdda4.html#af667cdcdd8da6844aa694b5b13dbdda4">insertEvent</a> (uiEvent const *event)</td></tr>
+<tr class="memdesc:af667cdcdd8da6844aa694b5b13dbdda4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts (first position) an event in the event queue and returns without waiting for the receiver to process the event.  <a href="classfabgl_1_1ui_app_af667cdcdd8da6844aa694b5b13dbdda4.html#af667cdcdd8da6844aa694b5b13dbdda4">More...</a><br /></td></tr>
+<tr class="separator:af667cdcdd8da6844aa694b5b13dbdda4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a028b2191c2f561c8a5ac1ae3460a40ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a028b2191c2f561c8a5ac1ae3460a40ec.html#a028b2191c2f561c8a5ac1ae3460a40ec">killTimer</a> (uiTimerHandle handle)</td></tr>
+<tr class="memdesc:a028b2191c2f561c8a5ac1ae3460a40ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kills a timer.  <a href="classfabgl_1_1ui_app_a028b2191c2f561c8a5ac1ae3460a40ec.html#a028b2191c2f561c8a5ac1ae3460a40ec">More...</a><br /></td></tr>
+<tr class="separator:a028b2191c2f561c8a5ac1ae3460a40ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ef29530e5139d9fdc9776d0fa1bf0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a82ef29530e5139d9fdc9776d0fa1bf0d.html#a82ef29530e5139d9fdc9776d0fa1bf0d">maximizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
+<tr class="memdesc:a82ef29530e5139d9fdc9776d0fa1bf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximizes or restores a window.  <a href="classfabgl_1_1ui_app_a82ef29530e5139d9fdc9776d0fa1bf0d.html#a82ef29530e5139d9fdc9776d0fa1bf0d">More...</a><br /></td></tr>
+<tr class="separator:a82ef29530e5139d9fdc9776d0fa1bf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a497f4d275a00138ea8e40cae63c18946"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#ga78d47ab4ff34b1ed9fb7db4c3a98789e">uiMessageBoxResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a497f4d275a00138ea8e40cae63c18946.html#a497f4d275a00138ea8e40cae63c18946">messageBox</a> (char const *title, char const *text, char const *button1Text, char const *button2Text=nullptr, char const *button3Text=nullptr, <a class="el" href="group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#gaae85628862e3db5a13e7c21a90589c1d">uiMessageBoxIcon</a> icon=<a class="el" href="group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#ggaae85628862e3db5a13e7c21a90589c1daa97ea56b0e00b2379736ae60869ff66a">uiMessageBoxIcon::Question</a>)</td></tr>
+<tr class="memdesc:a497f4d275a00138ea8e40cae63c18946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays a modal dialog box with an icon, text and some buttons.  <a href="classfabgl_1_1ui_app_a497f4d275a00138ea8e40cae63c18946.html#a497f4d275a00138ea8e40cae63c18946">More...</a><br /></td></tr>
+<tr class="separator:a497f4d275a00138ea8e40cae63c18946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac02d4322b836f25a620748f1f9c0dbf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ac02d4322b836f25a620748f1f9c0dbf8.html#ac02d4322b836f25a620748f1f9c0dbf8">minimizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
+<tr class="memdesc:ac02d4322b836f25a620748f1f9c0dbf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimizes or restores a window.  <a href="classfabgl_1_1ui_app_ac02d4322b836f25a620748f1f9c0dbf8.html#ac02d4322b836f25a620748f1f9c0dbf8">More...</a><br /></td></tr>
+<tr class="separator:ac02d4322b836f25a620748f1f9c0dbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f52f4d7f6204fae82eb1ef378fa69bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a3f52f4d7f6204fae82eb1ef378fa69bb.html#a3f52f4d7f6204fae82eb1ef378fa69bb">moveFocus</a> (int delta)</td></tr>
+<tr class="memdesc:a3f52f4d7f6204fae82eb1ef378fa69bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move focus to a control with current focus index plus a delta.  <a href="classfabgl_1_1ui_app_a3f52f4d7f6204fae82eb1ef378fa69bb.html#a3f52f4d7f6204fae82eb1ef378fa69bb">More...</a><br /></td></tr>
+<tr class="separator:a3f52f4d7f6204fae82eb1ef378fa69bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2176937e3010d08c8ab59e9f70208ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_af2176937e3010d08c8ab59e9f70208ef.html#af2176937e3010d08c8ab59e9f70208ef">moveWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, int x, int y)</td></tr>
+<tr class="memdesc:af2176937e3010d08c8ab59e9f70208ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves a window.  <a href="classfabgl_1_1ui_app_af2176937e3010d08c8ab59e9f70208ef.html#af2176937e3010d08c8ab59e9f70208ef">More...</a><br /></td></tr>
+<tr class="separator:af2176937e3010d08c8ab59e9f70208ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dc2ed52df2ea2acf6b131ec8fc0861f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1ui_object_type.html">uiObjectType</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_object_a2dc2ed52df2ea2acf6b131ec8fc0861f.html#a2dc2ed52df2ea2acf6b131ec8fc0861f">objectType</a> ()</td></tr>
+<tr class="memdesc:a2dc2ed52df2ea2acf6b131ec8fc0861f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the object type.  <a href="classfabgl_1_1ui_object_a2dc2ed52df2ea2acf6b131ec8fc0861f.html#a2dc2ed52df2ea2acf6b131ec8fc0861f">More...</a><br /></td></tr>
+<tr class="separator:a2dc2ed52df2ea2acf6b131ec8fc0861f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17b03b92f0606f56dcf3b61b6c85c48e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a17b03b92f0606f56dcf3b61b6c85c48e.html#a17b03b92f0606f56dcf3b61b6c85c48e">postEvent</a> (uiEvent const *event)</td></tr>
+<tr class="memdesc:a17b03b92f0606f56dcf3b61b6c85c48e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Places an event in the event queue and returns without waiting for the receiver to process the event.  <a href="classfabgl_1_1ui_app_a17b03b92f0606f56dcf3b61b6c85c48e.html#a17b03b92f0606f56dcf3b61b6c85c48e">More...</a><br /></td></tr>
+<tr class="separator:a17b03b92f0606f56dcf3b61b6c85c48e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5473b44af17c41807bd98b6d1da298b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ad5473b44af17c41807bd98b6d1da298b.html#ad5473b44af17c41807bd98b6d1da298b">processEvents</a> ()</td></tr>
+<tr class="memdesc:ad5473b44af17c41807bd98b6d1da298b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes all events in queue.  <a href="classfabgl_1_1ui_app_ad5473b44af17c41807bd98b6d1da298b.html#ad5473b44af17c41807bd98b6d1da298b">More...</a><br /></td></tr>
+<tr class="separator:ad5473b44af17c41807bd98b6d1da298b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afea25cf256f8d6b7e505552637a18cba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_afea25cf256f8d6b7e505552637a18cba.html#afea25cf256f8d6b7e505552637a18cba">processModalWindowEvents</a> (ModalWindowState *state, int timeout)</td></tr>
+<tr class="memdesc:afea25cf256f8d6b7e505552637a18cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes all messages from modal window.  <a href="classfabgl_1_1ui_app_afea25cf256f8d6b7e505552637a18cba.html#afea25cf256f8d6b7e505552637a18cba">More...</a><br /></td></tr>
+<tr class="separator:afea25cf256f8d6b7e505552637a18cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f6ed83ac3ae9bb9867b0594c186b59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a76f6ed83ac3ae9bb9867b0594c186b59.html#a76f6ed83ac3ae9bb9867b0594c186b59">quit</a> (int exitCode)</td></tr>
+<tr class="memdesc:a76f6ed83ac3ae9bb9867b0594c186b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Terminates application and free resources.  <a href="classfabgl_1_1ui_app_a76f6ed83ac3ae9bb9867b0594c186b59.html#a76f6ed83ac3ae9bb9867b0594c186b59">More...</a><br /></td></tr>
+<tr class="separator:a76f6ed83ac3ae9bb9867b0594c186b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c4d855ce804191698c7a92fd95e6b37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a4c4d855ce804191698c7a92fd95e6b37.html#a4c4d855ce804191698c7a92fd95e6b37">repaintRect</a> (<a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;rect)</td></tr>
+<tr class="memdesc:a4c4d855ce804191698c7a92fd95e6b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repaints a screen area.  <a href="classfabgl_1_1ui_app_a4c4d855ce804191698c7a92fd95e6b37.html#a4c4d855ce804191698c7a92fd95e6b37">More...</a><br /></td></tr>
+<tr class="separator:a4c4d855ce804191698c7a92fd95e6b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abef642ce3885cca20e50bf710901c24e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_abef642ce3885cca20e50bf710901c24e.html#abef642ce3885cca20e50bf710901c24e">repaintWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
+<tr class="memdesc:abef642ce3885cca20e50bf710901c24e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repaints a window.  <a href="classfabgl_1_1ui_app_abef642ce3885cca20e50bf710901c24e.html#abef642ce3885cca20e50bf710901c24e">More...</a><br /></td></tr>
+<tr class="separator:abef642ce3885cca20e50bf710901c24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4fb154553bcfd5fec29549928bd386d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ae4fb154553bcfd5fec29549928bd386d.html#ae4fb154553bcfd5fec29549928bd386d">reshapeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, <a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;rect)</td></tr>
+<tr class="memdesc:ae4fb154553bcfd5fec29549928bd386d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reshapes a window.  <a href="classfabgl_1_1ui_app_ae4fb154553bcfd5fec29549928bd386d.html#ae4fb154553bcfd5fec29549928bd386d">More...</a><br /></td></tr>
+<tr class="separator:ae4fb154553bcfd5fec29549928bd386d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17aba5d17a9ac61de3f413359f90ab9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a17aba5d17a9ac61de3f413359f90ab9e.html#a17aba5d17a9ac61de3f413359f90ab9e">resizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, int <a class="el" href="fabutils_8h_ae0ffb42440f0305b6d22a1c6106b6e6f.html#ae0ffb42440f0305b6d22a1c6106b6e6f">width</a>, int <a class="el" href="fabutils_8h_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662">height</a>)</td></tr>
+<tr class="memdesc:a17aba5d17a9ac61de3f413359f90ab9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes a window.  <a href="classfabgl_1_1ui_app_a17aba5d17a9ac61de3f413359f90ab9e.html#a17aba5d17a9ac61de3f413359f90ab9e">More...</a><br /></td></tr>
+<tr class="separator:a17aba5d17a9ac61de3f413359f90ab9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef9946e0f15ed33767ed577e57146a82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_aef9946e0f15ed33767ed577e57146a82.html#aef9946e0f15ed33767ed577e57146a82">resizeWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, <a class="el" href="structfabgl_1_1_size.html">Size</a> size)</td></tr>
+<tr class="memdesc:aef9946e0f15ed33767ed577e57146a82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes a window.  <a href="classfabgl_1_1ui_app_aef9946e0f15ed33767ed577e57146a82.html#aef9946e0f15ed33767ed577e57146a82">More...</a><br /></td></tr>
+<tr class="separator:aef9946e0f15ed33767ed577e57146a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d2fb84052499f76e83d002ceaf34a71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_frame.html">uiFrame</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a3d2fb84052499f76e83d002ceaf34a71.html#a3d2fb84052499f76e83d002ceaf34a71">rootWindow</a> ()</td></tr>
+<tr class="memdesc:a3d2fb84052499f76e83d002ceaf34a71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the root window.  <a href="classfabgl_1_1ui_app_a3d2fb84052499f76e83d002ceaf34a71.html#a3d2fb84052499f76e83d002ceaf34a71">More...</a><br /></td></tr>
+<tr class="separator:a3d2fb84052499f76e83d002ceaf34a71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07dcf556fc74c9216516270bf081e06e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a07dcf556fc74c9216516270bf081e06e.html#a07dcf556fc74c9216516270bf081e06e">run</a> (<a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *displayController, <a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *keyboard=nullptr, <a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *mouse=nullptr)</td></tr>
+<tr class="memdesc:a07dcf556fc74c9216516270bf081e06e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes the main event loop.  <a href="classfabgl_1_1ui_app_a07dcf556fc74c9216516270bf081e06e.html#a07dcf556fc74c9216516270bf081e06e">More...</a><br /></td></tr>
+<tr class="separator:a07dcf556fc74c9216516270bf081e06e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab68dc957dd0c4c21df1d6e2d690c0f68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ab68dc957dd0c4c21df1d6e2d690c0f68.html#ab68dc957dd0c4c21df1d6e2d690c0f68">runAsync</a> (<a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *displayController, int taskStack=3000, <a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *keyboard=nullptr, <a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *mouse=nullptr)</td></tr>
+<tr class="memdesc:ab68dc957dd0c4c21df1d6e2d690c0f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes application and executes asynchronously the main event loop.  <a href="classfabgl_1_1ui_app_ab68dc957dd0c4c21df1d6e2d690c0f68.html#ab68dc957dd0c4c21df1d6e2d690c0f68">More...</a><br /></td></tr>
+<tr class="separator:ab68dc957dd0c4c21df1d6e2d690c0f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7632a605e00388de8ba061901366ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a2e7632a605e00388de8ba061901366ce.html#a2e7632a605e00388de8ba061901366ce">screenToWindow</a> (<a class="el" href="structfabgl_1_1_point.html">Point</a> &amp;point)</td></tr>
+<tr class="memdesc:a2e7632a605e00388de8ba061901366ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines which window a point belongs to.  <a href="classfabgl_1_1ui_app_a2e7632a605e00388de8ba061901366ce.html#a2e7632a605e00388de8ba061901366ce">More...</a><br /></td></tr>
+<tr class="separator:a2e7632a605e00388de8ba061901366ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4d4d5b8d7eff75da70ba876a77fe403"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_ad4d4d5b8d7eff75da70ba876a77fe403.html#ad4d4d5b8d7eff75da70ba876a77fe403">setActiveWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *value)</td></tr>
+<tr class="memdesc:ad4d4d5b8d7eff75da70ba876a77fe403"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the active window.  <a href="classfabgl_1_1ui_app_ad4d4d5b8d7eff75da70ba876a77fe403.html#ad4d4d5b8d7eff75da70ba876a77fe403">More...</a><br /></td></tr>
+<tr class="separator:ad4d4d5b8d7eff75da70ba876a77fe403"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70df5474cd77aa30087780f616629e2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a70df5474cd77aa30087780f616629e2c.html#a70df5474cd77aa30087780f616629e2c">setFocusedWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *value)</td></tr>
+<tr class="memdesc:a70df5474cd77aa30087780f616629e2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the focused window (control)  <a href="classfabgl_1_1ui_app_a70df5474cd77aa30087780f616629e2c.html#a70df5474cd77aa30087780f616629e2c">More...</a><br /></td></tr>
+<tr class="separator:a70df5474cd77aa30087780f616629e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe5345f02e694e8de8eaa8bc0dfaf147"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_abe5345f02e694e8de8eaa8bc0dfaf147.html#abe5345f02e694e8de8eaa8bc0dfaf147">setStyle</a> (uiStyle *value)</td></tr>
+<tr class="memdesc:abe5345f02e694e8de8eaa8bc0dfaf147"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets application controls style.  <a href="classfabgl_1_1ui_app_abe5345f02e694e8de8eaa8bc0dfaf147.html#abe5345f02e694e8de8eaa8bc0dfaf147">More...</a><br /></td></tr>
+<tr class="separator:abe5345f02e694e8de8eaa8bc0dfaf147"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cfc7871d5779bd73c9f731d14a0a152"><td class="memItemLeft" align="right" valign="top">uiTimerHandle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a7cfc7871d5779bd73c9f731d14a0a152.html#a7cfc7871d5779bd73c9f731d14a0a152">setTimer</a> (<a class="el" href="classfabgl_1_1ui_evt_handler.html">uiEvtHandler</a> *dest, int periodMS)</td></tr>
+<tr class="memdesc:a7cfc7871d5779bd73c9f731d14a0a152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setups a timer.  <a href="classfabgl_1_1ui_app_a7cfc7871d5779bd73c9f731d14a0a152.html#a7cfc7871d5779bd73c9f731d14a0a152">More...</a><br /></td></tr>
+<tr class="separator:a7cfc7871d5779bd73c9f731d14a0a152"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e13971dd3a3170e01b8df4c7f68b62c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a3e13971dd3a3170e01b8df4c7f68b62c.html#a3e13971dd3a3170e01b8df4c7f68b62c">showModalWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window)</td></tr>
+<tr class="memdesc:a3e13971dd3a3170e01b8df4c7f68b62c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a window visible and handles it has a modal window.  <a href="classfabgl_1_1ui_app_a3e13971dd3a3170e01b8df4c7f68b62c.html#a3e13971dd3a3170e01b8df4c7f68b62c">More...</a><br /></td></tr>
+<tr class="separator:a3e13971dd3a3170e01b8df4c7f68b62c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40524a6c585af26197d17053edd19136"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_a40524a6c585af26197d17053edd19136.html#a40524a6c585af26197d17053edd19136">showWindow</a> (<a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *window, bool value)</td></tr>
+<tr class="memdesc:a40524a6c585af26197d17053edd19136"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a window visible or invisible.  <a href="classfabgl_1_1ui_app_a40524a6c585af26197d17053edd19136.html#a40524a6c585af26197d17053edd19136">More...</a><br /></td></tr>
+<tr class="separator:a40524a6c585af26197d17053edd19136"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba8a729860116f0e6c8ea57be5e938d6"><td class="memItemLeft" align="right" valign="top">uiStyle *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_aba8a729860116f0e6c8ea57be5e938d6.html#aba8a729860116f0e6c8ea57be5e938d6">style</a> ()</td></tr>
+<tr class="memdesc:aba8a729860116f0e6c8ea57be5e938d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current application controls style.  <a href="classfabgl_1_1ui_app_aba8a729860116f0e6c8ea57be5e938d6.html#aba8a729860116f0e6c8ea57be5e938d6">More...</a><br /></td></tr>
+<tr class="separator:aba8a729860116f0e6c8ea57be5e938d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a28d5e0a0e711f84215f6435e29754c1d"><td class="memItemLeft" align="right" valign="top">Delegate&lt; uiTimerHandle &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app.html#a28d5e0a0e711f84215f6435e29754c1d">onTimer</a></td></tr>
-<tr class="memdesc:a28d5e0a0e711f84215f6435e29754c1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer event delegate.  <a href="#a28d5e0a0e711f84215f6435e29754c1d">More...</a><br /></td></tr>
-<tr class="separator:a28d5e0a0e711f84215f6435e29754c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa4260c51f15d6781af112019dc5c632"><td class="memItemLeft" align="right" valign="top">Delegate&lt; uiTimerHandle &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_app_aaa4260c51f15d6781af112019dc5c632.html#aaa4260c51f15d6781af112019dc5c632">onTimer</a></td></tr>
+<tr class="memdesc:aaa4260c51f15d6781af112019dc5c632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timer event delegate.  <a href="classfabgl_1_1ui_app_aaa4260c51f15d6781af112019dc5c632.html#aaa4260c51f15d6781af112019dc5c632">More...</a><br /></td></tr>
+<tr class="separator:aaa4260c51f15d6781af112019dc5c632"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the whole application base class. </p>
-<p>FabGL UI apps must inherit from <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a>, create UI elements in <a class="el" href="classfabgl_1_1ui_app.html#a77aa2e78b40ecf2f29e8180b30272d84" title="Method to inherit to implement an application. ">uiApp.init()</a> method, and finally call <a class="el" href="classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3" title="Initializes application and executes the main event loop. ">uiApp.run()</a> to start the application. <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a> is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a93a96823b4a884c8cb4141383197837f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93a96823b4a884c8cb4141383197837f">&#9670;&nbsp;</a></span>activeWindow()</h2>
+<p>FabGL UI apps must inherit from <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a>, create UI elements in <a class="el" href="classfabgl_1_1ui_app_a02fd73d861ef2e4aabb38c0c9ff82947.html#a02fd73d861ef2e4aabb38c0c9ff82947" title="Method to inherit to implement an application. ">uiApp.init()</a> method, and finally call <a class="el" href="classfabgl_1_1ui_app_a07dcf556fc74c9216516270bf081e06e.html#a07dcf556fc74c9216516270bf081e06e" title="Initializes application and executes the main event loop. ">uiApp.run()</a> to start the application. <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a> is responsible for events queue handling, windows manager, windows and controls lifecycle and memory management. </p>
 
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a>* fabgl::uiApp::activeWindow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets a pointer to the currently active window. </p>
-<p>There is only one active window at the time. Active window is the foreground window and receives (along with focused control) all keyboard events. To set the active window call <a class="el" href="classfabgl_1_1ui_app.html#ab716b086b3e3013a0967bd35a3a7e6d4" title="Sets the active window. ">uiApp.setActiveWindow()</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>The active window, or nullptr if there isn't one </dd></dl>
-
-</div>
-</div>
-<a id="a96d17d0396113602bd2367a7f0c09492"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96d17d0396113602bd2367a7f0c09492">&#9670;&nbsp;</a></span>app()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a>* fabgl::uiEvtHandler::app </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines the app that owns this object. </p>
-<dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">uiApp</a> object. </dd></dl>
-
-</div>
-</div>
-<a id="ac462bde3e4a0084396e727e2c3a85004"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac462bde3e4a0084396e727e2c3a85004">&#9670;&nbsp;</a></span>appProps()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structfabgl_1_1ui_app_props.html">uiAppProps</a>&amp; fabgl::uiApp::appProps </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets or gets application properties. </p>
-<dl class="section return"><dt>Returns</dt><dd>L-value representing some application properties </dd></dl>
-
-</div>
-</div>
-<a id="a0192d896b39a2c0265b87c7f39d32b59"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0192d896b39a2c0265b87c7f39d32b59">&#9670;&nbsp;</a></span>capturedMouseWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a>* fabgl::uiApp::capturedMouseWindow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines which window is capturing mouse. </p>
-<p><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> is captured by a window when mouse is dragged (left button down while moving mouse) starting from window area.</p>
-<dl class="section return"><dt>Returns</dt><dd>Window that captured mouse </dd></dl>
-
-</div>
-</div>
-<a id="a05a6271de5e4925cff22073bf48f7952"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05a6271de5e4925cff22073bf48f7952">&#9670;&nbsp;</a></span>destroyWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::destroyWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Destroys a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to destroy </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a5d9e0d168144bdc2d838fcd43aa7c9aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d9e0d168144bdc2d838fcd43aa7c9aa">&#9670;&nbsp;</a></span>enableKeyboardAndMouseEvents()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::enableKeyboardAndMouseEvents </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Enables or disables mouse and keyboard events. </p>
-<p>For default mouse and keyboard events are enabled.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>True to enable events, False to disable events </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aeaa73b91e36c97bbbee6a8b1b989f625"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeaa73b91e36c97bbbee6a8b1b989f625">&#9670;&nbsp;</a></span>endModalWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::uiApp::endModalWindow </td>
-          <td>(</td>
-          <td class="paramtype">ModalWindowState *&#160;</td>
-          <td class="paramname"><em>state</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Ends modal window processing. </p>
-<p>Ends the modal window status. After this other windows can receive input. This method should be always called when <a class="el" href="classfabgl_1_1ui_app.html#a9d02447c5bc871d783d5d7ba57483929" title="Processes all messages from modal window. ">processModalWindowEvents()</a> returns False, or when modal window must be anyway closed.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">state</td><td>This parameter comes from <a class="el" href="classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. ">initModalWindow()</a> and is used internally to maintain modal window status.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The same value specified calling <a class="el" href="classfabgl_1_1ui_window.html#ade72949808b8fc1c345dc696b31e33bf" title="Exits from a modal window. ">uiWindow.exitModal()</a> </dd></dl>
-
-</div>
-</div>
-<a id="ae4ee677b3ec3ee727ede27010cae8798"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4ee677b3ec3ee727ede27010cae8798">&#9670;&nbsp;</a></span>focusedWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a>* fabgl::uiApp::focusedWindow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets the focused window (control) </p>
-<p>There is only one focused window or control at the time. Focused window is also the active window (or its parent is the active window). Focused window receives (along with active window) all keyboard events. Focused window can have a blinking caret. Finally, a focused window partecipates to the TAB "trip", respecting the tab-order (see <a class="el" href="classfabgl_1_1ui_window.html#affd6f6e94bee7b5e370a3f772173d895" title="Determines the focus index (aka tab-index) ">uiWindow.focusIndex()</a>).</p>
-<p>To set the focoused window use <a class="el" href="classfabgl_1_1ui_app.html#aaa42ff6a21e47f3fbb761c20347390a4" title="Sets the focused window (control) ">uiApp.setFocusedWindow()</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>Focused window or nullptr if there isn't one </dd></dl>
-
-</div>
-</div>
-<a id="a77aa2e78b40ecf2f29e8180b30272d84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a77aa2e78b40ecf2f29e8180b30272d84">&#9670;&nbsp;</a></span>init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::init </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Method to inherit to implement an application. </p>
-
-</div>
-</div>
-<a id="aa1dc4b980216c98b8a693ba15bf87065"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1dc4b980216c98b8a693ba15bf87065">&#9670;&nbsp;</a></span>initModalWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">ModalWindowState * fabgl::uiApp::initModalWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Begins modal window processing. </p>
-<p><a class="el" href="classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. ">initModalWindow()</a>, <a class="el" href="classfabgl_1_1ui_app.html#a9d02447c5bc871d783d5d7ba57483929" title="Processes all messages from modal window. ">processModalWindowEvents()</a> and <a class="el" href="classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625" title="Ends modal window processing. ">endModalWindow()</a> are useful when a long processing operation is necessary inside a modal window.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>The form to use as modal window</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Modal window status. This value must be passed to <a class="el" href="classfabgl_1_1ui_app.html#a9d02447c5bc871d783d5d7ba57483929" title="Processes all messages from modal window. ">processModalWindowEvents()</a> and <a class="el" href="classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625" title="Ends modal window processing. ">endModalWindow()</a> to maintain modal window state. </dd></dl>
-
-</div>
-</div>
-<a id="a1b38652b37ee1438d6832660a824a9e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b38652b37ee1438d6832660a824a9e7">&#9670;&nbsp;</a></span>inputBox()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996">uiMessageBoxResult</a> fabgl::uiApp::inputBox </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>title</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>inOutString</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>button1Text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>button2Text</em> = <code>nullptr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Displays a modal dialog box with a text, a text edit and up to two buttons. </p>
-<p>Pressing ENTER (RETURN) equals to press first button. Pressing ESC cancels the dialog box.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">title</td><td>The dialog box title. If nullptr the messaebox has no title bar </td></tr>
-    <tr><td class="paramname">text</td><td>The message to be displayed </td></tr>
-    <tr><td class="paramname">inOutString</td><td>Initial string of the text edit </td></tr>
-    <tr><td class="paramname">maxLength</td><td>Maximum length of inOutString buffer (ending zero not included) </td></tr>
-    <tr><td class="paramname">button1Text</td><td>Left button text </td></tr>
-    <tr><td class="paramname">button2Text</td><td>Right button text (may be nullptr, if not present)</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Message box result </dd></dl>
-
-</div>
-</div>
-<a id="a8d59a05eaedc8f165178fc412e475394"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d59a05eaedc8f165178fc412e475394">&#9670;&nbsp;</a></span>insertEvent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool fabgl::uiApp::insertEvent </td>
-          <td>(</td>
-          <td class="paramtype">uiEvent const *&#160;</td>
-          <td class="paramname"><em>event</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Inserts (first position) an event in the event queue and returns without waiting for the receiver to process the event. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>Event to insert. A copy of the event is sent.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the event is correctly placed. False if there is no available space in the event queue </dd></dl>
-
-</div>
-</div>
-<a id="aba04179c4fc7e695c58022629b3983da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba04179c4fc7e695c58022629b3983da">&#9670;&nbsp;</a></span>killTimer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::killTimer </td>
-          <td>(</td>
-          <td class="paramtype">uiTimerHandle&#160;</td>
-          <td class="paramname"><em>handle</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Kills a timer. </p>
-<p>To create a timer use <a class="el" href="classfabgl_1_1ui_app.html#a431860c2985484bf3d2f136075146d8c" title="Setups a timer. ">uiApp.setTimer()</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">handle</td><td>Handle identifying the timer to destroy </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae5d4a0245850056343938ef814726407"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5d4a0245850056343938ef814726407">&#9670;&nbsp;</a></span>maximizeWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::maximizeWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Maximizes or restores a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be maximized or restored </td></tr>
-    <tr><td class="paramname">value</td><td>True maximizes the window, False restores it from maximized state </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="add1a241eb65b95232d28a469c025e46c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add1a241eb65b95232d28a469c025e46c">&#9670;&nbsp;</a></span>messageBox()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group___enumerations.html#gaffcd6ee067ff3ac7adbe28eb192cd996">uiMessageBoxResult</a> fabgl::uiApp::messageBox </td>
-          <td>(</td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>title</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>button1Text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>button2Text</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char const *&#160;</td>
-          <td class="paramname"><em>button3Text</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group___enumerations.html#gaf2f79b5a07ca9d7f44f264b12d986c65">uiMessageBoxIcon</a>&#160;</td>
-          <td class="paramname"><em>icon</em> = <code><a class="el" href="group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65aa97ea56b0e00b2379736ae60869ff66a">uiMessageBoxIcon::Question</a></code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Displays a modal dialog box with an icon, text and some buttons. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">title</td><td>The dialog box title. If nullptr the messaebox has no title bar </td></tr>
-    <tr><td class="paramname">text</td><td>The message to be displayed </td></tr>
-    <tr><td class="paramname">button1Text</td><td>Left button text </td></tr>
-    <tr><td class="paramname">button2Text</td><td>Middle button text (may be nullptr, if not present) </td></tr>
-    <tr><td class="paramname">button3Text</td><td>Right button text (may be nullptr, if not present) </td></tr>
-    <tr><td class="paramname">icon</td><td>Icon to be displayed</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Message box result </dd></dl>
-
-</div>
-</div>
-<a id="ad7e36716653703be98d54d3ec55d1aaa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7e36716653703be98d54d3ec55d1aaa">&#9670;&nbsp;</a></span>minimizeWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::minimizeWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Minimizes or restores a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be minimized or restored </td></tr>
-    <tr><td class="paramname">value</td><td>True minimizes the window, False restores it from minimized state </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a88d9a7c51e4ef93b617d3dc483fa293d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88d9a7c51e4ef93b617d3dc483fa293d">&#9670;&nbsp;</a></span>moveFocus()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> * fabgl::uiApp::moveFocus </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>delta</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Move focus to a control with current focus index plus a delta. </p>
-<p>A focused window partecipates to the TAB "trip", respecting the tab-order (see <a class="el" href="classfabgl_1_1ui_window.html#affd6f6e94bee7b5e370a3f772173d895" title="Determines the focus index (aka tab-index) ">uiWindow.focusIndex()</a>). Calling moveFocus(1) is the same of pressing TAB. Calling moveFocus(-1) is the same of pressing SHIFT-TAB.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">delta</td><td>Specifies how many controls pass (1 = next control, -1 = previous control)</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Previous focused window </dd></dl>
-
-</div>
-</div>
-<a id="a8bda82c9f53c538ab1fb3edb7d6f25d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bda82c9f53c538ab1fb3edb7d6f25d0">&#9670;&nbsp;</a></span>moveWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::moveWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Moves a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be moved </td></tr>
-    <tr><td class="paramname">x</td><td>New horizontal coordinate, relative to parent window </td></tr>
-    <tr><td class="paramname">y</td><td>New vertical coordinate, relative to parent window </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a93618eccc73d66e981f8c02170875226"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93618eccc73d66e981f8c02170875226">&#9670;&nbsp;</a></span>objectType()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structfabgl_1_1ui_object_type.html">uiObjectType</a>&amp; fabgl::uiObject::objectType </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determines the object type. </p>
-<dl class="section return"><dt>Returns</dt><dd>Object type. </dd></dl>
-
-</div>
-</div>
-<a id="ac656798fd31a27213c2f8bf5f0433bfa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac656798fd31a27213c2f8bf5f0433bfa">&#9670;&nbsp;</a></span>postEvent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool fabgl::uiApp::postEvent </td>
-          <td>(</td>
-          <td class="paramtype">uiEvent const *&#160;</td>
-          <td class="paramname"><em>event</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Places an event in the event queue and returns without waiting for the receiver to process the event. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>Event to send. A copy of the event is sent.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the event is correctly placed. False if there is no available space in the event queue </dd></dl>
-
-</div>
-</div>
-<a id="a7ff4ce4e13be33ca40959adfd7c3edb8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ff4ce4e13be33ca40959adfd7c3edb8">&#9670;&nbsp;</a></span>processEvents()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::processEvents </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Processes all events in queue. </p>
-<p>This method is useful to update UI while running long time tasks. </p>
-
-</div>
-</div>
-<a id="a9d02447c5bc871d783d5d7ba57483929"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d02447c5bc871d783d5d7ba57483929">&#9670;&nbsp;</a></span>processModalWindowEvents()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool fabgl::uiApp::processModalWindowEvents </td>
-          <td>(</td>
-          <td class="paramtype">ModalWindowState *&#160;</td>
-          <td class="paramname"><em>state</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>timeout</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Processes all messages from modal window. </p>
-<p>This method must be called whenever UI needs to be updated.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">state</td><td>This parameter comes from <a class="el" href="classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. ">initModalWindow()</a> and is used internally to maintain modal window status. </td></tr>
-    <tr><td class="paramname">timeout</td><td>Timeout in milliseconds to wait for messages. -1 = infinite timeout, 0 = no timeout.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>False: EXIT or CLOSE received, modal window should close (call endModalWindow). True = other processModalWindowEvents required, continue outer loop. </dd></dl>
-
-</div>
-</div>
-<a id="aadc98d9de237a32bcff2f63a9b3129f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aadc98d9de237a32bcff2f63a9b3129f2">&#9670;&nbsp;</a></span>quit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::quit </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>exitCode</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Terminates application and free resources. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">exitCode</td><td>Value returned by <a class="el" href="classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3" title="Initializes application and executes the main event loop. ">uiApp.run()</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a68077cf2afc33bb423e924fa5bcfa4f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68077cf2afc33bb423e924fa5bcfa4f8">&#9670;&nbsp;</a></span>repaintRect()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::repaintRect </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;&#160;</td>
-          <td class="paramname"><em>rect</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Repaints a screen area. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rect</td><td>Rectangle to be repainted (in screen coordiantes) </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a9ae6a6ec628a81da2c936deb63d9ca0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ae6a6ec628a81da2c936deb63d9ca0e">&#9670;&nbsp;</a></span>repaintWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::repaintWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Repaints a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>The window to be repainted </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a2827139ff542f663753683dd90ae1c16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2827139ff542f663753683dd90ae1c16">&#9670;&nbsp;</a></span>reshapeWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::reshapeWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_rect.html">Rect</a> const &amp;&#160;</td>
-          <td class="paramname"><em>rect</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reshapes a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be reshaped </td></tr>
-    <tr><td class="paramname">rect</td><td>New window bounding box, relative to the parent window </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3dd886b08dc0cd588edff12ca093ed73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3dd886b08dc0cd588edff12ca093ed73">&#9670;&nbsp;</a></span>resizeWindow() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::resizeWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>width</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>height</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Resizes a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be resized </td></tr>
-    <tr><td class="paramname">width</td><td>New horizontal size </td></tr>
-    <tr><td class="paramname">height</td><td>New vertical size </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a6ed22ad4af635c027637db8807b6a9af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ed22ad4af635c027637db8807b6a9af">&#9670;&nbsp;</a></span>resizeWindow() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::resizeWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_size.html">Size</a>&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Resizes a window. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be resized </td></tr>
-    <tr><td class="paramname">size</td><td>New window size </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="abd745cf2c678274d91003403433b5a40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd745cf2c678274d91003403433b5a40">&#9670;&nbsp;</a></span>rootWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_frame.html">uiFrame</a>* fabgl::uiApp::rootWindow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets a pointer to the root window. </p>
-<p>The root window is the first window created and covers the whole screen. All windows and controls must have the root window as parent, or as ancestor.</p>
-<dl class="section return"><dt>Returns</dt><dd>The root window pointer </dd></dl>
-
-</div>
-</div>
-<a id="ad2c90364f95b06bccc5ac585da94b1c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2c90364f95b06bccc5ac585da94b1c3">&#9670;&nbsp;</a></span>run()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::uiApp::run </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *&#160;</td>
-          <td class="paramname"><em>displayController</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *&#160;</td>
-          <td class="paramname"><em>keyboard</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *&#160;</td>
-          <td class="paramname"><em>mouse</em> = <code>nullptr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes application and executes the main event loop. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">displayController</td><td>Specifies the display controller where to run the UI </td></tr>
-    <tr><td class="paramname">keyboard</td><td>The keyboard device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a> </td></tr>
-    <tr><td class="paramname">mouse</td><td>The mouse device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>exitCode specified calling <a class="el" href="classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. ">uiApp.quit()</a>. </dd></dl>
-
-</div>
-</div>
-<a id="a74260184a9dd8e9dfb3d2106feda9a7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74260184a9dd8e9dfb3d2106feda9a7e">&#9670;&nbsp;</a></span>runAsync()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::runAsync </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_bitmapped_display_controller.html">BitmappedDisplayController</a> *&#160;</td>
-          <td class="paramname"><em>displayController</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>taskStack</em> = <code>3000</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a> *&#160;</td>
-          <td class="paramname"><em>keyboard</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1_mouse.html">Mouse</a> *&#160;</td>
-          <td class="paramname"><em>mouse</em> = <code>nullptr</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes application and executes asynchronously the main event loop. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">displayController</td><td>Specifies the display controller where to run the UI </td></tr>
-    <tr><td class="paramname">taskStack</td><td>Specifies the task stack size </td></tr>
-    <tr><td class="paramname">keyboard</td><td>The keyboard device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a> </td></tr>
-    <tr><td class="paramname">mouse</td><td>The mouse device. The default (nullptr) gets it from the <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">PS2Controller</a></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>exitCode specified calling <a class="el" href="classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. ">uiApp.quit()</a>. </dd></dl>
-
-</div>
-</div>
-<a id="a55fabea8349dd5282b80ace47dd5fda1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55fabea8349dd5282b80ace47dd5fda1">&#9670;&nbsp;</a></span>screenToWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> * fabgl::uiApp::screenToWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structfabgl_1_1_point.html">Point</a> &amp;&#160;</td>
-          <td class="paramname"><em>point</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Determines which window a point belongs to. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">point</td><td>A point relative to the screen</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A window </dd></dl>
-
-</div>
-</div>
-<a id="ab716b086b3e3013a0967bd35a3a7e6d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab716b086b3e3013a0967bd35a3a7e6d4">&#9670;&nbsp;</a></span>setActiveWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> * fabgl::uiApp::setActiveWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the active window. </p>
-<p>There is only one active window at the time. Active window is the foreground window and receives (along with focused control) all keyboard events.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>Pointer of the active window. nullptr to set no active window</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Previous active window </dd></dl>
-
-</div>
-</div>
-<a id="aaa42ff6a21e47f3fbb761c20347390a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaa42ff6a21e47f3fbb761c20347390a4">&#9670;&nbsp;</a></span>setFocusedWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> * fabgl::uiApp::setFocusedWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the focused window (control) </p>
-<p>There is only one focused window or control at the time. Focused window is also the active window (or its parent is the active window). Focused window receives (along with active window) all keyboard events. Focused window can have a blinking caret. Finally, a focused window partecipates to the TAB "trip", respecting the tab-order (see <a class="el" href="classfabgl_1_1ui_window.html#affd6f6e94bee7b5e370a3f772173d895" title="Determines the focus index (aka tab-index) ">uiWindow.focusIndex()</a>).</p>
-<dl class="section return"><dt>Returns</dt><dd>Previous focused window </dd></dl>
-
-</div>
-</div>
-<a id="aa9e48af5ad63a3cb3060ae3171a08969"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9e48af5ad63a3cb3060ae3171a08969">&#9670;&nbsp;</a></span>setStyle()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::setStyle </td>
-          <td>(</td>
-          <td class="paramtype">uiStyle *&#160;</td>
-          <td class="paramname"><em>value</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets application controls style. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">value</td><td>Style class descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a431860c2985484bf3d2f136075146d8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a431860c2985484bf3d2f136075146d8c">&#9670;&nbsp;</a></span>setTimer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uiTimerHandle fabgl::uiApp::setTimer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_evt_handler.html">uiEvtHandler</a> *&#160;</td>
-          <td class="paramname"><em>dest</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>periodMS</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setups a timer. </p>
-<p>A timer fires <a class="el" href="classfabgl_1_1ui_app.html#a28d5e0a0e711f84215f6435e29754c1d" title="Timer event delegate. ">uiApp.onTimer</a> or <a class="el" href="classfabgl_1_1ui_frame.html#a4b83f94ef3e8b943e2c9ada8e212fa31" title="Timer event delegate. ">uiFrame.onTimer</a> delegate. To destroy a timer use <a class="el" href="classfabgl_1_1ui_app.html#aba04179c4fc7e695c58022629b3983da" title="Kills a timer. ">uiApp.killTimer()</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">dest</td><td>Destination window or app </td></tr>
-    <tr><td class="paramname">periodMS</td><td>Timer period in milliseconds</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Handle identifying the new timer </dd></dl>
-
-</div>
-</div>
-<a id="a44b68bf7a9d9712c123eac4b5525d181"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44b68bf7a9d9712c123eac4b5525d181">&#9670;&nbsp;</a></span>showModalWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int fabgl::uiApp::showModalWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Makes a window visible and handles it has a modal window. </p>
-<p>A modal window disables the main window but keeps it visible. Users must interact with the modal window before they can return to the parent window. A modal window exits from modal state using <a class="el" href="classfabgl_1_1ui_window.html#ade72949808b8fc1c345dc696b31e33bf" title="Exits from a modal window. ">uiWindow.exitModal()</a>. <a class="el" href="classfabgl_1_1ui_app.html#a44b68bf7a9d9712c123eac4b5525d181" title="Makes a window visible and handles it has a modal window. ">showModalWindow()</a> is the combination of <a class="el" href="classfabgl_1_1ui_app.html#aa1dc4b980216c98b8a693ba15bf87065" title="Begins modal window processing. ">initModalWindow()</a>, <a class="el" href="classfabgl_1_1ui_app.html#a9d02447c5bc871d783d5d7ba57483929" title="Processes all messages from modal window. ">processModalWindowEvents()</a> and <a class="el" href="classfabgl_1_1ui_app.html#aeaa73b91e36c97bbbee6a8b1b989f625" title="Ends modal window processing. ">endModalWindow()</a> called in sequence.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be made visible and modal</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The same value specified calling <a class="el" href="classfabgl_1_1ui_window.html#ade72949808b8fc1c345dc696b31e33bf" title="Exits from a modal window. ">uiWindow.exitModal()</a> </dd></dl>
-
-</div>
-</div>
-<a id="a720fa1bbd49df02213234328814ea0ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a720fa1bbd49df02213234328814ea0ff">&#9670;&nbsp;</a></span>showWindow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void fabgl::uiApp::showWindow </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classfabgl_1_1ui_window.html">uiWindow</a> *&#160;</td>
-          <td class="paramname"><em>window</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Makes a window visible or invisible. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>Window to be made visible </td></tr>
-    <tr><td class="paramname">value</td><td>If true the window will be shown, if false the window will be hidden </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3b064db7d90f05a37fe70533811455ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b064db7d90f05a37fe70533811455ba">&#9670;&nbsp;</a></span>style()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uiStyle* fabgl::uiApp::style </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets current application controls style. </p>
-<dl class="section return"><dt>Returns</dt><dd>Current style (nullptr = default). </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a28d5e0a0e711f84215f6435e29754c1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28d5e0a0e711f84215f6435e29754c1d">&#9670;&nbsp;</a></span>onTimer</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Delegate&lt;uiTimerHandle&gt; fabgl::uiApp::onTimer</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Timer event delegate. </p>
-<p>This delegate is called when the timer expires. To create a timer use <a class="el" href="classfabgl_1_1ui_app.html#a431860c2985484bf3d2f136075146d8c" title="Setups a timer. ">uiApp.setTimer()</a>. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<p class="definition">Definition at line <a class="el" href="fabui_8h_source.html#l02561">2561</a> of file <a class="el" href="fabui_8h_source.html">fabui.h</a>.</p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="fabui_8h_source.html">fabui.h</a></li>
-<li>fabui.cpp</li>
+<li><a class="el" href="fabui_8cpp_source.html">fabui.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -1568,7 +250,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1ui_app.html">uiApp</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:12 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

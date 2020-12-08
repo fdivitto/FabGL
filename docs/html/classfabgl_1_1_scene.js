@@ -1,15 +1,15 @@
 var classfabgl_1_1_scene =
 [
-    [ "Scene", "classfabgl_1_1_scene.html#a0a6d396fb2847c1c6707e34365433d7e", null ],
-    [ "addSprite", "classfabgl_1_1_scene.html#ab28fe102bad4068e5d627ab66798fc3f", null ],
-    [ "collisionDetected", "classfabgl_1_1_scene.html#ae800fd30381835b16422e11dda20ce3f", null ],
-    [ "getHeight", "classfabgl_1_1_scene.html#a0a047709070bfc20546ee0a293ca36a1", null ],
-    [ "getWidth", "classfabgl_1_1_scene.html#a36775e223edbeabb4d4ff76643f7d403", null ],
-    [ "init", "classfabgl_1_1_scene.html#adfd5f4a75070bc82a324cf3f449f5a3d", null ],
-    [ "removeSprite", "classfabgl_1_1_scene.html#ac12a6954552cd33a4bba2d941f80c5ef", null ],
-    [ "start", "classfabgl_1_1_scene.html#a5c5acf26b15302803310196d5790bf19", null ],
-    [ "stop", "classfabgl_1_1_scene.html#af79e1508d140532cc5395e0ee690850e", null ],
-    [ "update", "classfabgl_1_1_scene.html#a441224c11f0a765030ee3d2675b6449e", null ],
-    [ "updateSprite", "classfabgl_1_1_scene.html#a720d69034a232eab2a25792eef8119c7", null ],
-    [ "updateSpriteAndDetectCollisions", "classfabgl_1_1_scene.html#af957f22190d563dcd16aab3147caf0ae", null ]
+    [ "Scene", "classfabgl_1_1_scene_a0287feb4e8bfbb20a2e3436c99388fa7.html#a0287feb4e8bfbb20a2e3436c99388fa7", null ],
+    [ "addSprite", "classfabgl_1_1_scene_a48b03f63e22824a043e5df322ecebd3c.html#a48b03f63e22824a043e5df322ecebd3c", null ],
+    [ "collisionDetected", "classfabgl_1_1_scene_a2278cb01916711b1d637ca375659b1ad.html#a2278cb01916711b1d637ca375659b1ad", null ],
+    [ "getHeight", "classfabgl_1_1_scene_a07efb2a4e9a982688c8bb3c3f21d1092.html#a07efb2a4e9a982688c8bb3c3f21d1092", null ],
+    [ "getWidth", "classfabgl_1_1_scene_a67a0997183f24da19b776d96c1052998.html#a67a0997183f24da19b776d96c1052998", null ],
+    [ "init", "classfabgl_1_1_scene_ab5be7e5a13ea77d59aac45d21dceb6a0.html#ab5be7e5a13ea77d59aac45d21dceb6a0", null ],
+    [ "removeSprite", "classfabgl_1_1_scene_aefc081299e5e20cd9b6d900de8559248.html#aefc081299e5e20cd9b6d900de8559248", null ],
+    [ "start", "classfabgl_1_1_scene_ad7c67f44d6c720c52b1e538ab95aaa9d.html#ad7c67f44d6c720c52b1e538ab95aaa9d", null ],
+    [ "stop", "classfabgl_1_1_scene_a8c528baf37154d347366083f0f816846.html#a8c528baf37154d347366083f0f816846", null ],
+    [ "update", "classfabgl_1_1_scene_ae1f037fffe3ee2f7b0ded5bcbadffae1.html#ae1f037fffe3ee2f7b0ded5bcbadffae1", null ],
+    [ "updateSprite", "classfabgl_1_1_scene_a7e3cc34d6b070f957120fa1015e8cae5.html#a7e3cc34d6b070f957120fa1015e8cae5", null ],
+    [ "updateSpriteAndDetectCollisions", "classfabgl_1_1_scene_a61cfb64defe5bf06c623b25ecaeaf349.html#a61cfb64defe5bf06c623b25ecaeaf349", null ]
 ];

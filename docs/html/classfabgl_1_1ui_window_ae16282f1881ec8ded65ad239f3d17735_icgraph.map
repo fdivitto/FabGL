@@ -1,0 +1,15 @@
+<map id="fabgl::uiWindow::transformRect" name="fabgl::uiWindow::transformRect">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html#aba6b75880074a221f215486ebb675a6c" title="Determines the window bounding box. " alt="" coords="260,107,405,133"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1" title="Determines which window a point belongs to. " alt="" coords="687,157,885,184"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_app.html#a9ae6a6ec628a81da2c936deb63d9ca0e" title="Repaints a window. " alt="" coords="453,56,639,83"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73" title="Resizes a window. " alt="" coords="455,5,637,32"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_window.html#ad1986d853fc82a7084467fea41e7a684" title="Repaints this window. " alt="" coords="465,107,627,133"/>
+<area shape="rect" id="node10" href="$classfabgl_1_1ui_window.html#a906aa0c527b912e79c4ebbc0ca2b7a74" title="Determines the client area bounding box. " alt="" coords="455,233,637,260"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="713,23,859,49"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b" title="Deselects all selected items. " alt="" coords="707,91,865,133"/>
+<area shape="rect" id="node9" href="$classfabgl_1_1ui_custom_combo_box.html#acc87ab0cd10e3444b372762fd9265a66" title="Selects an item. " alt="" coords="933,91,1112,133"/>
+<area shape="rect" id="node11" href="$classfabgl_1_1ui_window.html#ac2c887ae821ce1a3f64f5888408c121e" title="Determines the client area size. " alt="" coords="696,376,876,403"/>
+<area shape="rect" id="node12" href="$classfabgl_1_1ui_window.html#a770f88193b45a54df6f944efe1fc25d5" title="Determines position of the client area. " alt="" coords="697,208,875,235"/>
+<area shape="rect" id="node13" href="$classfabgl_1_1ui_frame.html#a541be8117157ce54d58b020bdb703618" title="Determines the client area bounding box. " alt="" coords="700,259,872,285"/>
+<area shape="rect" id="node14" href="$classfabgl_1_1ui_scrollable_control.html#a3ad10b6346f1da2122f08185db94863d" title="Determines the client area bounding box. " alt="" coords="703,310,869,351"/>
+</map>

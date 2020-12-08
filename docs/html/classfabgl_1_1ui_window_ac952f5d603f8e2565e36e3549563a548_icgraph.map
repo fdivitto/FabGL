@@ -1,0 +1,8 @@
+<map id="fabgl::uiWindow::hasFocus" name="fabgl::uiWindow::hasFocus">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html#a906aa0c527b912e79c4ebbc0ca2b7a74" title="Determines the client area bounding box. " alt="" coords="233,107,416,133"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1" title="Determines which window a point belongs to. " alt="" coords="464,5,663,32"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html#ac2c887ae821ce1a3f64f5888408c121e" title="Determines the client area size. " alt="" coords="473,56,653,83"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_window.html#a770f88193b45a54df6f944efe1fc25d5" title="Determines position of the client area. " alt="" coords="475,107,652,133"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_frame.html#a541be8117157ce54d58b020bdb703618" title="Determines the client area bounding box. " alt="" coords="477,157,649,184"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_scrollable_control.html#a3ad10b6346f1da2122f08185db94863d" title="Determines the client area bounding box. " alt="" coords="480,209,647,250"/>
+</map>

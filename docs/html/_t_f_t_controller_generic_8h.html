@@ -96,60 +96,36 @@ $(document).ready(function(){initNavTree('_t_f_t_controller_generic_8h.html','')
 
 <p>This file contains <a class="el" href="classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection. ">fabgl::TFTController</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;driver/spi_master.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for TFTControllerGeneric.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="_t_f_t_controller_generic_8h__incl.png" border="0" usemap="#_t_f_t_controller_generic_8h" alt=""/></div>
-<map name="_t_f_t_controller_generic_8h" id="_t_f_t_controller_generic_8h">
-<area shape="rect" id="node6" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5,152,92,177"/>
-<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="694,152,769,177"/>
-<area shape="rect" id="node11" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="425,79,553,104"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="_t_f_t_controller_generic_8h__dep__incl.png" border="0" usemap="#_t_f_t_controller_generic_8hdep" alt=""/></div>
-<map name="_t_f_t_controller_generic_8hdep" id="_t_f_t_controller_generic_8hdep">
-<area shape="rect" id="node2" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="10,79,162,104"/>
-<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="55,152,117,177"/>
-</map>
-</div>
-</div>
+
 <p><a href="_t_f_t_controller_generic_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html">fabgl::TFTController</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller.html">TFTController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base abstract class for TFT drivers with SPI connection.  <a href="classfabgl_1_1_t_f_t_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ga2c409526513a1d2bd2a03cba4e701ed7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga2c409526513a1d2bd2a03cba4e701ed7">fabgl::TFTOrientation</a> { <a class="el" href="group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a291b44223b90e70be1fade1eff8a55e0">fabgl::TFTOrientation::Rotate0</a>, 
-<a class="el" href="group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a1d20b3969ea74725dd1a5b7669d60a98">fabgl::TFTOrientation::Rotate90</a>, 
-<a class="el" href="group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a371980c5d153a94cf022d6b4daa4d34c">fabgl::TFTOrientation::Rotate180</a>, 
-<a class="el" href="group___enumerations.html#gga2c409526513a1d2bd2a03cba4e701ed7a59c609399b2fb3956ecac7df34a76c2f">fabgl::TFTOrientation::Rotate270</a>
+<tr class="memitem:ga74f510e97d94644d4fc7a3cfd736e59d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#ga74f510e97d94644d4fc7a3cfd736e59d">TFTOrientation</a> { <a class="el" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da291b44223b90e70be1fade1eff8a55e0">Rotate0</a>, 
+<a class="el" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da1d20b3969ea74725dd1a5b7669d60a98">Rotate90</a>, 
+<a class="el" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da371980c5d153a94cf022d6b4daa4d34c">Rotate180</a>, 
+<a class="el" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da59c609399b2fb3956ecac7df34a76c2f">Rotate270</a>
  }</td></tr>
-<tr class="memdesc:ga2c409526513a1d2bd2a03cba4e701ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines TFT orientation.  <a href="group___enumerations.html#ga2c409526513a1d2bd2a03cba4e701ed7">More...</a><br /></td></tr>
-<tr class="separator:ga2c409526513a1d2bd2a03cba4e701ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:ga74f510e97d94644d4fc7a3cfd736e59d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines TFT orientation.  <a href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#ga74f510e97d94644d4fc7a3cfd736e59d">More...</a><br /></td></tr>
+<tr class="separator:ga74f510e97d94644d4fc7a3cfd736e59d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection. ">fabgl::TFTController</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="_t_f_t_controller_generic_8h_source.html">TFTControllerGeneric.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_10a80204b5b551c852b7cab5e1f7cbce.html">dispdrivers</a></li><li class="navelem"><a class="el" href="_t_f_t_controller_generic_8h.html">TFTControllerGeneric.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

@@ -1,0 +1,4 @@
+<map id="fabgl::Terminal::write" name="fabgl::Terminal::write">
+<area shape="rect" id="node2" href="$classfabgl_1_1_terminal.html#a3fa34ccc4d268265ad7688850209245e" title="Pools the serial port for incoming data. " alt="" coords="196,5,388,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_terminal.html#a76e255b4575abf9636fff95766b691c8" title="Sends a single code to the display. " alt="" coords="221,56,363,83"/>
+</map>

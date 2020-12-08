@@ -1,0 +1,5 @@
+<map id="fabgl::Canvas::textExtent" name="fabgl::Canvas::textExtent">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#add1a241eb65b95232d28a469c025e46c" title="Displays a modal dialog box with an icon, text and some buttons. " alt="" coords="224,5,399,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a1b38652b37ee1438d6832660a824a9e7" title="Displays a modal dialog box with a text, a text edit and up to two buttons. " alt="" coords="236,56,387,83"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="238,107,385,133"/>
+</map>

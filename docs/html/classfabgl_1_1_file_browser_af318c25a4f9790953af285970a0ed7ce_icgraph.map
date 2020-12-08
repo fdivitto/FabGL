@@ -1,0 +1,4 @@
+<map id="fabgl::FileBrowser::get" name="fabgl::FileBrowser::get">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_file_browser.html#a8c7b7961acb24095bacee49868d20443" title="Currently selected filename. " alt="" coords="207,5,344,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_file_browser.html#a7c0df313d9d929139261010bee89c53c" title="Determines whether currently selected item is a directory. " alt="" coords="207,71,344,112"/>
+</map>

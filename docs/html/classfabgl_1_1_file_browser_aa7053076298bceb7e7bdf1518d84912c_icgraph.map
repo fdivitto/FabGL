@@ -1,0 +1,4 @@
+<map id="fabgl::FileBrowser::unmountSPIFFS" name="fabgl::FileBrowser::unmountSPIFFS">
+<area shape="rect" id="node2" href="$classfabgl_1_1_file_browser.html#acf8c2d3584a29ebbff3d871798481916" title="Remounts SPIFFS filesystem, using the same parameters. " alt="" coords="180,5,307,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_file_browser.html#a053d8434eec20eb218b6cc9a9f706b17" title="Formats SPIFFS or SD Card. " alt="" coords="355,5,481,47"/>
+</map>

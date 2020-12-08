@@ -1,6 +1,6 @@
 var structfabgl_1_1_mouse_buttons =
 [
-    [ "left", "structfabgl_1_1_mouse_buttons.html#a9f7c527787126f970314e6857590f793", null ],
-    [ "middle", "structfabgl_1_1_mouse_buttons.html#a38281721b12fe50ae1229460bc4b3d67", null ],
-    [ "right", "structfabgl_1_1_mouse_buttons.html#a77015fe45bf18bf673ae0e10e7e40e76", null ]
+    [ "left", "structfabgl_1_1_mouse_buttons_a70cfd618738e7ccc6476c05b5ec2490e.html#a70cfd618738e7ccc6476c05b5ec2490e", null ],
+    [ "middle", "structfabgl_1_1_mouse_buttons_a7b197ff052f8e1d25bfed56da9fa0450.html#a7b197ff052f8e1d25bfed56da9fa0450", null ],
+    [ "right", "structfabgl_1_1_mouse_buttons_a61938d8fca0e953d39df2d9e06f55b10.html#a61938d8fca0e953d39df2d9e06f55b10", null ]
 ];

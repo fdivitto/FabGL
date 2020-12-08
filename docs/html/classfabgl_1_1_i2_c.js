@@ -1,8 +1,8 @@
 var classfabgl_1_1_i2_c =
 [
-    [ "I2C", "classfabgl_1_1_i2_c.html#aaafe4e794ce77c6cd762faf3b6d5f43c", null ],
-    [ "begin", "classfabgl_1_1_i2_c.html#ab96049b11b40c765a430895216f09f8c", null ],
-    [ "getMaxBufferLength", "classfabgl_1_1_i2_c.html#a2f3726c7e187bf3fbd6ca381afd2659f", null ],
-    [ "read", "classfabgl_1_1_i2_c.html#ae8b1d7d5d44ae89fcc953a76c04c7d78", null ],
-    [ "write", "classfabgl_1_1_i2_c.html#a70c8d0af90172f7ad7af8a395d1cf36c", null ]
+    [ "I2C", "classfabgl_1_1_i2_c_a93f66e29e22bca7a9f5d8e3d5af2d6a2.html#a93f66e29e22bca7a9f5d8e3d5af2d6a2", null ],
+    [ "begin", "classfabgl_1_1_i2_c_abdd72a91fee181ca1b9eb05120e60a28.html#abdd72a91fee181ca1b9eb05120e60a28", null ],
+    [ "getMaxBufferLength", "classfabgl_1_1_i2_c_a798669caf759c63cfa1e67cfb9d35874.html#a798669caf759c63cfa1e67cfb9d35874", null ],
+    [ "read", "classfabgl_1_1_i2_c_aee6d332047f3429253a95c94c59cccd9.html#aee6d332047f3429253a95c94c59cccd9", null ],
+    [ "write", "classfabgl_1_1_i2_c_a5683609bed861f2c075c25d935029e3f.html#a5683609bed861f2c075c25d935029e3f", null ]
 ];

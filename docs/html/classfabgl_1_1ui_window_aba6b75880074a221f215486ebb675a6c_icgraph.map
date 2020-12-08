@@ -1,0 +1,14 @@
+<map id="fabgl::uiWindow::rect" name="fabgl::uiWindow::rect">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1" title="Determines which window a point belongs to. " alt="" coords="432,157,631,184"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a9ae6a6ec628a81da2c936deb63d9ca0e" title="Repaints a window. " alt="" coords="199,56,384,83"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73" title="Resizes a window. " alt="" coords="201,5,382,32"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_window.html#ad1986d853fc82a7084467fea41e7a684" title="Repaints this window. " alt="" coords="210,107,373,133"/>
+<area shape="rect" id="node9" href="$classfabgl_1_1ui_window.html#a906aa0c527b912e79c4ebbc0ca2b7a74" title="Determines the client area bounding box. " alt="" coords="200,233,383,260"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="458,23,605,49"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b" title="Deselects all selected items. " alt="" coords="452,91,611,133"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_custom_combo_box.html#acc87ab0cd10e3444b372762fd9265a66" title="Selects an item. " alt="" coords="679,91,857,133"/>
+<area shape="rect" id="node10" href="$classfabgl_1_1ui_window.html#ac2c887ae821ce1a3f64f5888408c121e" title="Determines the client area size. " alt="" coords="441,376,621,403"/>
+<area shape="rect" id="node11" href="$classfabgl_1_1ui_window.html#a770f88193b45a54df6f944efe1fc25d5" title="Determines position of the client area. " alt="" coords="443,208,620,235"/>
+<area shape="rect" id="node12" href="$classfabgl_1_1ui_frame.html#a541be8117157ce54d58b020bdb703618" title="Determines the client area bounding box. " alt="" coords="445,259,617,285"/>
+<area shape="rect" id="node13" href="$classfabgl_1_1ui_scrollable_control.html#a3ad10b6346f1da2122f08185db94863d" title="Determines the client area bounding box. " alt="" coords="448,310,615,351"/>
+</map>

@@ -1,13 +1,13 @@
 var structfabgl_1_1ui_frame_style =
 [
-    [ "activeButtonColor", "structfabgl_1_1ui_frame_style.html#aa762f723bf985116b960b3eeea0dc997", null ],
-    [ "activeTitleBackgroundColor", "structfabgl_1_1ui_frame_style.html#a3421d68d5fc4d694c0747594841fe354", null ],
-    [ "activeTitleColor", "structfabgl_1_1ui_frame_style.html#a7268f5f27ffbc818dbe36e0f4bba220e", null ],
-    [ "backgroundColor", "structfabgl_1_1ui_frame_style.html#a18bea7841be19cf5d0a4f62ede0dba2f", null ],
-    [ "buttonColor", "structfabgl_1_1ui_frame_style.html#a375a020e1fdc27e6c2b2a467852caf0e", null ],
-    [ "mouseOverBackgroundButtonColor", "structfabgl_1_1ui_frame_style.html#a62a3ddb5d83f1f5f3a88c9d92af4dce7", null ],
-    [ "mouseOverButtonColor", "structfabgl_1_1ui_frame_style.html#a547e3f447fd892f3cdd0ea3b3a9e4ed1", null ],
-    [ "titleBackgroundColor", "structfabgl_1_1ui_frame_style.html#a4cd6d05766e056b06a2bf4e4f74772ba", null ],
-    [ "titleColor", "structfabgl_1_1ui_frame_style.html#abcb17b064109ed166bbfbd616cc6c2b3", null ],
-    [ "titleFont", "structfabgl_1_1ui_frame_style.html#ac37195d5c6079b553bc65ab622775ae6", null ]
+    [ "activeButtonColor", "structfabgl_1_1ui_frame_style_ade1f7f42a9d7d89649fbe2993de807a5.html#ade1f7f42a9d7d89649fbe2993de807a5", null ],
+    [ "activeTitleBackgroundColor", "structfabgl_1_1ui_frame_style_a6ad317dd2061eb1fdcadda6df58ebace.html#a6ad317dd2061eb1fdcadda6df58ebace", null ],
+    [ "activeTitleColor", "structfabgl_1_1ui_frame_style_a729cb15b9ffe573d76491210bd53ddf5.html#a729cb15b9ffe573d76491210bd53ddf5", null ],
+    [ "backgroundColor", "structfabgl_1_1ui_frame_style_ae4f3cff9a6921c6ff7a56e9d2380d150.html#ae4f3cff9a6921c6ff7a56e9d2380d150", null ],
+    [ "buttonColor", "structfabgl_1_1ui_frame_style_a30b2eed0d38d32c61f9a05134e5a3d73.html#a30b2eed0d38d32c61f9a05134e5a3d73", null ],
+    [ "mouseOverBackgroundButtonColor", "structfabgl_1_1ui_frame_style_a89d78d62a5f04cbbf0ce6a1488d45f53.html#a89d78d62a5f04cbbf0ce6a1488d45f53", null ],
+    [ "mouseOverButtonColor", "structfabgl_1_1ui_frame_style_a459bfe8f3acd7e0644244edd92a8eb2c.html#a459bfe8f3acd7e0644244edd92a8eb2c", null ],
+    [ "titleBackgroundColor", "structfabgl_1_1ui_frame_style_aff235babdab26b3fa5156719456995a0.html#aff235babdab26b3fa5156719456995a0", null ],
+    [ "titleColor", "structfabgl_1_1ui_frame_style_ac7943d8a4d8edbca2d20f9d051e12ba2.html#ac7943d8a4d8edbca2d20f9d051e12ba2", null ],
+    [ "titleFont", "structfabgl_1_1ui_frame_style_aa3a3c7a39d0eb31adef87ef642107253.html#aa3a3c7a39d0eb31adef87ef642107253", null ]
 ];

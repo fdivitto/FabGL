@@ -1,0 +1,4 @@
+<map id="fabgl::FileBrowser::reload" name="fabgl::FileBrowser::reload">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_file_browser.html#a5a660405a8b4b86d2ec8e651206d4a88" title="Reloads current directory content and repaints. " alt="" coords="180,5,317,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_file_browser.html#a764acf9477ff09e8dd0f21274045d5c8" title="Sets relative directory path. " alt="" coords="185,71,312,112"/>
+</map>

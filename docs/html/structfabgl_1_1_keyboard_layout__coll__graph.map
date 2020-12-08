@@ -1,4 +1,4 @@
 <map id="fabgl::KeyboardLayout" name="fabgl::KeyboardLayout">
-<area shape="rect" id="node2" href="$structfabgl_1_1_virtual_key_def.html" title="Associates scancode to virtualkey. " alt="" coords="5,5,144,31"/>
-<area shape="rect" id="node3" href="$structfabgl_1_1_alt_virtual_key_def.html" title="Associates a virtualkey and various shift states (ctrl, alt, etc..) to another virtualkey. " alt="" coords="168,5,323,31"/>
+<area shape="rect" id="node2" href="$structfabgl_1_1_virtual_key_def.html" title="Associates scancode to virtualkey. " alt="" coords="5,5,144,32"/>
+<area shape="rect" id="node3" href="$structfabgl_1_1_alt_virtual_key_def.html" title="Associates a virtualkey and various shift states (ctrl, alt, etc..) to another virtualkey. " alt="" coords="168,5,323,32"/>
 </map>

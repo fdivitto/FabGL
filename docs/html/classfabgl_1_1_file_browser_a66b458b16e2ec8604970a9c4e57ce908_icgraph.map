@@ -1,0 +1,4 @@
+<map id="fabgl::FileBrowser::unmountSDCard" name="fabgl::FileBrowser::unmountSDCard">
+<area shape="rect" id="node2" href="$classfabgl_1_1_file_browser.html#a71d1a3c20299298ea7e24a33e6459c0e" title="Remounts SDCard filesystem, using the same parameters. " alt="" coords="180,5,307,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_file_browser.html#a053d8434eec20eb218b6cc9a9f706b17" title="Formats SPIFFS or SD Card. " alt="" coords="355,5,481,47"/>
+</map>

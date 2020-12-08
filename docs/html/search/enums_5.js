@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mousetype',['MouseType',['../group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c',1,'fabgl']]]
+  ['mousetype',['MouseType',['../group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#ga1a15f1712ba14a6877038ffe9c6f7708',1,'fabgl']]]
 ];

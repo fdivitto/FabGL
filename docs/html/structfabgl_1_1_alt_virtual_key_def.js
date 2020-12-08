@@ -1,10 +1,10 @@
 var structfabgl_1_1_alt_virtual_key_def =
 [
-    [ "alt", "structfabgl_1_1_alt_virtual_key_def.html#a29af1c7718f5fb6d7b5cb59be2f64327", null ],
-    [ "capslock", "structfabgl_1_1_alt_virtual_key_def.html#a97a6a2c7a040bcc5e8f7fddd65ee6d18", null ],
-    [ "ctrl", "structfabgl_1_1_alt_virtual_key_def.html#ab02395031f5bb91e07e616b1b2ece505", null ],
-    [ "numlock", "structfabgl_1_1_alt_virtual_key_def.html#aee0ebb2c26b431d1f448e675ecd8c03e", null ],
-    [ "reqVirtualKey", "structfabgl_1_1_alt_virtual_key_def.html#a172ed979c81dce88b125a1de47306261", null ],
-    [ "shift", "structfabgl_1_1_alt_virtual_key_def.html#aed18e598aedfdcc1f9b62d3daf613d80", null ],
-    [ "virtualKey", "structfabgl_1_1_alt_virtual_key_def.html#ae40f79d3e4c8886ef109349980b94b82", null ]
+    [ "alt", "structfabgl_1_1_alt_virtual_key_def_a187098745ba3ac9dec616db7873d32cc.html#a187098745ba3ac9dec616db7873d32cc", null ],
+    [ "capslock", "structfabgl_1_1_alt_virtual_key_def_a10806c92d8876196db7e0f1899dd1bb6.html#a10806c92d8876196db7e0f1899dd1bb6", null ],
+    [ "ctrl", "structfabgl_1_1_alt_virtual_key_def_a4c56f2979393f841cffb950a90315e82.html#a4c56f2979393f841cffb950a90315e82", null ],
+    [ "numlock", "structfabgl_1_1_alt_virtual_key_def_a74b159be2574aac5de9359c74b60c934.html#a74b159be2574aac5de9359c74b60c934", null ],
+    [ "reqVirtualKey", "structfabgl_1_1_alt_virtual_key_def_a1a08ee11c9ad32b8cd9edbcf2591f622.html#a1a08ee11c9ad32b8cd9edbcf2591f622", null ],
+    [ "shift", "structfabgl_1_1_alt_virtual_key_def_a28ac534ad4b71a6f265826746888e43e.html#a28ac534ad4b71a6f265826746888e43e", null ],
+    [ "virtualKey", "structfabgl_1_1_alt_virtual_key_def_a9a49d6e8115ca008d08edd19819118e8.html#a9a49d6e8115ca008d08edd19819118e8", null ]
 ];

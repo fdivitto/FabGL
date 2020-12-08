@@ -96,64 +96,37 @@ $(document).ready(function(){initNavTree('mouse_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;freertos/timers.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="ps2device_8h_source.html">comdrivers/ps2device.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabui_8h_source.html">fabui.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for mouse.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="mouse_8h__incl.png" border="0" usemap="#mouse_8h" alt=""/></div>
-<map name="mouse_8h" id="mouse_8h">
-<area shape="rect" id="node4" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="759,305,846,331"/>
-<area shape="rect" id="node6" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="376,305,451,331"/>
-<area shape="rect" id="node9" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="177,152,338,177"/>
-<area shape="rect" id="node12" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="649,79,711,104"/>
-<area shape="rect" id="node10" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="230,225,338,251"/>
-<area shape="rect" id="node16" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="515,225,643,251"/>
-<area shape="rect" id="node17" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="717,152,792,177"/>
-<area shape="rect" id="node18" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="3145,225,3225,251"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="mouse_8h__dep__incl.png" border="0" usemap="#mouse_8hdep" alt=""/></div>
-<map name="mouse_8hdep" id="mouse_8hdep">
-<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="11,79,72,104"/>
-</map>
-</div>
-</div>
+
 <p><a href="mouse_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html">fabgl::Mouse</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse.html">Mouse</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PS2 <a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> controller class.  <a href="classfabgl_1_1_mouse.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_mouse_delta.html">fabgl::MouseDelta</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_mouse_delta.html">MouseDelta</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes mouse movement and buttons status.  <a href="structfabgl_1_1_mouse_delta.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:gaa42dc1b02d34a4a2a3a831fcf3b5ba2c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c">fabgl::MouseType</a> { <a class="el" href="group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5">fabgl::LegacyMouse</a>, 
-<a class="el" href="group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca">fabgl::Intellimouse</a>
+<tr class="memitem:ga1a15f1712ba14a6877038ffe9c6f7708"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#ga1a15f1712ba14a6877038ffe9c6f7708">MouseType</a> { <a class="el" href="group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#gga1a15f1712ba14a6877038ffe9c6f7708a64426cb7833b3604fe0ab5d0eec32edf">LegacyMouse</a>, 
+<a class="el" href="group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#gga1a15f1712ba14a6877038ffe9c6f7708a2e71c963cb7659a2783aa306391051ec">Intellimouse</a>
  }</td></tr>
-<tr class="memdesc:gaa42dc1b02d34a4a2a3a831fcf3b5ba2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes mouse type.  <a href="group___enumerations.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c">More...</a><br /></td></tr>
-<tr class="separator:gaa42dc1b02d34a4a2a3a831fcf3b5ba2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:ga1a15f1712ba14a6877038ffe9c6f7708"><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes mouse type.  <a href="group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#ga1a15f1712ba14a6877038ffe9c6f7708">More...</a><br /></td></tr>
+<tr class="separator:ga1a15f1712ba14a6877038ffe9c6f7708"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="mouse_8h_source.html">mouse.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_82e8a5453e51b0b6168db3257bd0eaab.html">devdrivers</a></li><li class="navelem"><a class="el" href="mouse_8h.html">mouse.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

@@ -1,0 +1,4 @@
+<map id="fabgl::Mouse::setSampleRate" name="fabgl::Mouse::setSampleRate">
+<area shape="rect" id="node2" href="$classfabgl_1_1_mouse.html#af4b05e231fe127d429b976f864d393d2" title="Sends a Reset command to the mouse. " alt="" coords="248,5,383,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_mouse.html#a8a337c8e916520c5879d657a73ed8f80" title="Initializes Mouse without initializing the PS/2 controller. " alt="" coords="431,5,567,32"/>
+</map>

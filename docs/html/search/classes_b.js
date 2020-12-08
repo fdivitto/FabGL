@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['rect',['Rect',['../structfabgl_1_1_rect.html',1,'fabgl']]],
-  ['rgb222',['RGB222',['../structfabgl_1_1_r_g_b222.html',1,'fabgl']]],
-  ['rgb888',['RGB888',['../structfabgl_1_1_r_g_b888.html',1,'fabgl']]],
-  ['rgba2222',['RGBA2222',['../structfabgl_1_1_r_g_b_a2222.html',1,'fabgl']]],
-  ['rgba8888',['RGBA8888',['../structfabgl_1_1_r_g_b_a8888.html',1,'fabgl']]]
+  ['paintoptions',['PaintOptions',['../structfabgl_1_1_paint_options.html',1,'fabgl']]],
+  ['point',['Point',['../structfabgl_1_1_point.html',1,'fabgl']]],
+  ['ps2controller',['PS2Controller',['../classfabgl_1_1_p_s2_controller.html',1,'fabgl']]],
+  ['ps2device',['PS2Device',['../classfabgl_1_1_p_s2_device.html',1,'fabgl']]]
 ];

@@ -1,0 +1,8 @@
+<map id="fabgl::FileBrowser::getDriveType" name="fabgl::FileBrowser::getDriveType">
+<area shape="rect" id="node2" href="$classfabgl_1_1_file_browser.html#af952e3af811aca6d07db8d354b907032" title="Reloads directory content. " alt="" coords="192,71,319,112"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_file_browser.html#a25ea0de0bbfd9053d5693d7aad277afe" title="Returns the drive type of current directory. " alt="" coords="180,136,331,177"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_file_browser.html#a5a660405a8b4b86d2ec8e651206d4a88" title="Reloads current directory content and repaints. " alt="" coords="379,5,516,47"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_file_browser.html#a764acf9477ff09e8dd0f21274045d5c8" title="Sets relative directory path. " alt="" coords="384,71,511,112"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1_file_browser.html#aaeff942e0f9ed753ae514cbeb2e1246d" title="Creates a directory. " alt="" coords="384,136,511,177"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1_file_browser.html#ab83743f55517d6d4ea47a16ccbadce34" title="Removes a file or directory. " alt="" coords="384,201,511,243"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="fabgl::uiEvtHandler::app" name="fabgl::uiEvtHandler::app">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html#ad1986d853fc82a7084467fea41e7a684" title="Repaints this window. " alt="" coords="225,63,387,89"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="462,5,609,32"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_window.html#ac952f5d603f8e2565e36e3549563a548" title="Determines whether this window or control has focus. " alt="" coords="216,117,396,144"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b" title="Deselects all selected items. " alt="" coords="456,57,615,98"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_custom_combo_box.html#acc87ab0cd10e3444b372762fd9265a66" title="Selects an item. " alt="" coords="685,18,863,59"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_window.html#a906aa0c527b912e79c4ebbc0ca2b7a74" title="Determines the client area bounding box. " alt="" coords="444,160,627,187"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1" title="Determines which window a point belongs to. " alt="" coords="675,84,873,111"/>
+<area shape="rect" id="node9" href="$classfabgl_1_1ui_window.html#ac2c887ae821ce1a3f64f5888408c121e" title="Determines the client area size. " alt="" coords="684,135,864,161"/>
+<area shape="rect" id="node10" href="$classfabgl_1_1ui_window.html#a770f88193b45a54df6f944efe1fc25d5" title="Determines position of the client area. " alt="" coords="685,185,863,212"/>
+<area shape="rect" id="node11" href="$classfabgl_1_1ui_frame.html#a541be8117157ce54d58b020bdb703618" title="Determines the client area bounding box. " alt="" coords="688,236,860,263"/>
+<area shape="rect" id="node12" href="$classfabgl_1_1ui_scrollable_control.html#a3ad10b6346f1da2122f08185db94863d" title="Determines the client area bounding box. " alt="" coords="691,287,857,329"/>
+</map>

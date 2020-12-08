@@ -46,34 +46,34 @@ var fabui_8h =
     [ "uiWindowProps", "structfabgl_1_1ui_window_props.html", "structfabgl_1_1ui_window_props" ],
     [ "uiWindowState", "structfabgl_1_1ui_window_state.html", "structfabgl_1_1ui_window_state" ],
     [ "uiWindowStyle", "structfabgl_1_1ui_window_style.html", "structfabgl_1_1ui_window_style" ],
-    [ "uiButtonKind", "fabui_8h.html#ga4c87d379aaa2df71e97a84275fceeec3", [
-      [ "Button", "fabui_8h.html#gga4c87d379aaa2df71e97a84275fceeec3a87b7760f14fbff78d8819291f36ab9a0", null ],
-      [ "Switch", "fabui_8h.html#gga4c87d379aaa2df71e97a84275fceeec3abbc155fb2b111bf61c4f5ff892915e6b", null ]
+    [ "uiButtonKind", "fabui_8h.html#ga04e30fac21360b66bd2bfd587f9092be", [
+      [ "Button", "fabui_8h.html#gga04e30fac21360b66bd2bfd587f9092bea87b7760f14fbff78d8819291f36ab9a0", null ],
+      [ "Switch", "fabui_8h.html#gga04e30fac21360b66bd2bfd587f9092beabbc155fb2b111bf61c4f5ff892915e6b", null ]
     ] ],
-    [ "uiCheckBoxKind", "fabui_8h.html#ga107cf534808867ce4023d92c15ef699e", [
-      [ "CheckBox", "fabui_8h.html#gga107cf534808867ce4023d92c15ef699ea7ea0f1332ade5b23b34502a3bfe715a2", null ],
-      [ "RadioButton", "fabui_8h.html#gga107cf534808867ce4023d92c15ef699eaccf0503df958552a245a3593e1063cd8", null ]
+    [ "uiCheckBoxKind", "fabui_8h.html#gacfde9a9ea22383d7dab2856f9319bec9", [
+      [ "CheckBox", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9a7ea0f1332ade5b23b34502a3bfe715a2", null ],
+      [ "RadioButton", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9accf0503df958552a245a3593e1063cd8", null ]
     ] ],
-    [ "uiMessageBoxIcon", "fabui_8h.html#gaf2f79b5a07ca9d7f44f264b12d986c65", [
-      [ "None", "fabui_8h.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a6adf97f83acf6453d4a6a4b1070f3754", null ],
-      [ "Question", "fabui_8h.html#ggaf2f79b5a07ca9d7f44f264b12d986c65aa97ea56b0e00b2379736ae60869ff66a", null ],
-      [ "Info", "fabui_8h.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a4059b0251f66a18cb56f544728796875", null ],
-      [ "Warning", "fabui_8h.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a0eaadb4fcb48a0a0ed7bc9868be9fbaa", null ],
-      [ "Error", "fabui_8h.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a902b0d55fddef6f8d651fe1035b7d4bd", null ]
+    [ "uiMessageBoxIcon", "fabui_8h.html#gaae85628862e3db5a13e7c21a90589c1d", [
+      [ "None", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1da6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Question", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1daa97ea56b0e00b2379736ae60869ff66a", null ],
+      [ "Info", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1da4059b0251f66a18cb56f544728796875", null ],
+      [ "Warning", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1da0eaadb4fcb48a0a0ed7bc9868be9fbaa", null ],
+      [ "Error", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1da902b0d55fddef6f8d651fe1035b7d4bd", null ]
     ] ],
-    [ "uiMessageBoxResult", "fabui_8h.html#gaffcd6ee067ff3ac7adbe28eb192cd996", [
-      [ "Cancel", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996aea4788705e6873b424c65e91c2846b19", null ],
-      [ "Button1", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996a6475a3746209a62a6ce6289a3741d07e", null ],
-      [ "Button2", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996ae165925a7c2d5ea94209b91389aa189f", null ],
-      [ "Button3", "fabui_8h.html#ggaffcd6ee067ff3ac7adbe28eb192cd996a6d0c69e60d65a93dd244ae95f90e679c", null ]
+    [ "uiMessageBoxResult", "fabui_8h.html#ga78d47ab4ff34b1ed9fb7db4c3a98789e", [
+      [ "Cancel", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eaea4788705e6873b424c65e91c2846b19", null ],
+      [ "Button1", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6475a3746209a62a6ce6289a3741d07e", null ],
+      [ "Button2", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eae165925a7c2d5ea94209b91389aa189f", null ],
+      [ "Button3", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6d0c69e60d65a93dd244ae95f90e679c", null ]
     ] ],
-    [ "uiOrientation", "fabui_8h.html#ga688c8791e9a7560496e3c6e7c465c5d2", [
-      [ "Vertical", "fabui_8h.html#gga688c8791e9a7560496e3c6e7c465c5d2a06ce2a25e5d12c166a36f654dbea6012", null ],
-      [ "Horizontal", "fabui_8h.html#gga688c8791e9a7560496e3c6e7c465c5d2ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
+    [ "uiOrientation", "fabui_8h.html#gaabef129474b75f60ee5d3ee1ee1f8890", [
+      [ "Vertical", "fabui_8h.html#ggaabef129474b75f60ee5d3ee1ee1f8890a06ce2a25e5d12c166a36f654dbea6012", null ],
+      [ "Horizontal", "fabui_8h.html#ggaabef129474b75f60ee5d3ee1ee1f8890ac1b5fa03ecdb95d4a45dd1c40b02527f", null ]
     ] ],
-    [ "uiOrigin", "fabui_8h.html#gaddf4af7208ffb7af1f5674e9bfb58fdc", [
-      [ "Screen", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca2fc3359e12b2a9104121dcf04246f6a0", null ],
-      [ "Parent", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdca30269022e9d8f51beaabb52e5d0de2b7", null ],
-      [ "Window", "fabui_8h.html#ggaddf4af7208ffb7af1f5674e9bfb58fdcac89686a387d2b12b3c729ce35a0bcb5b", null ]
+    [ "uiOrigin", "fabui_8h.html#gae0a6bb526c02e563aee7e7ccd4df7212", [
+      [ "Screen", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212a2fc3359e12b2a9104121dcf04246f6a0", null ],
+      [ "Parent", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212a30269022e9d8f51beaabb52e5d0de2b7", null ],
+      [ "Window", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212ac89686a387d2b12b3c729ce35a0bcb5b", null ]
     ] ]
 ];

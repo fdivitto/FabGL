@@ -2,8 +2,8 @@ var mouse_8h =
 [
     [ "Mouse", "classfabgl_1_1_mouse.html", "classfabgl_1_1_mouse" ],
     [ "MouseDelta", "structfabgl_1_1_mouse_delta.html", "structfabgl_1_1_mouse_delta" ],
-    [ "MouseType", "mouse_8h.html#gaa42dc1b02d34a4a2a3a831fcf3b5ba2c", [
-      [ "LegacyMouse", "mouse_8h.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca8b9e989ac39c6cc9923d407899c870d5", null ],
-      [ "Intellimouse", "mouse_8h.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca", null ]
+    [ "MouseType", "mouse_8h.html#ga1a15f1712ba14a6877038ffe9c6f7708", [
+      [ "LegacyMouse", "mouse_8h.html#gga1a15f1712ba14a6877038ffe9c6f7708a64426cb7833b3604fe0ab5d0eec32edf", null ],
+      [ "Intellimouse", "mouse_8h.html#gga1a15f1712ba14a6877038ffe9c6f7708a2e71c963cb7659a2783aa306391051ec", null ]
     ] ]
 ];

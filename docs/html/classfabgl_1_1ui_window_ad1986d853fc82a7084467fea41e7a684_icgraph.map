@@ -1,0 +1,5 @@
+<map id="fabgl::uiWindow::repaint" name="fabgl::uiWindow::repaint">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="222,5,369,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_custom_list_box.html#a9ca421aec1747f4cca306a1d4462451b" title="Deselects all selected items. " alt="" coords="216,57,375,98"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_custom_combo_box.html#acc87ab0cd10e3444b372762fd9265a66" title="Selects an item. " alt="" coords="423,57,601,98"/>
+</map>

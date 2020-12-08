@@ -1,15 +1,15 @@
 var classfabgl_1_1_waveform_generator =
 [
-    [ "duration", "classfabgl_1_1_waveform_generator.html#a3997ed6c38469277ecb1f7aee3d1d16d", null ],
-    [ "enable", "classfabgl_1_1_waveform_generator.html#a3f07b1ecc429aca6a2f6bc4fac58aeda", null ],
-    [ "enabled", "classfabgl_1_1_waveform_generator.html#a9ed2561601ab702b0f0cc7f91da83f88", null ],
-    [ "getSample", "classfabgl_1_1_waveform_generator.html#a41fcee4e8dec08daca32045ad41e9f53", null ],
-    [ "sampleRate", "classfabgl_1_1_waveform_generator.html#ad6154860ff73ddc630c45d1824baf00c", null ],
-    [ "setAutoDestroy", "classfabgl_1_1_waveform_generator.html#a991950a06c627d12eb907be8f72a2fec", null ],
-    [ "setAutoDetach", "classfabgl_1_1_waveform_generator.html#a748a2471c112f1c9174c98ef7e3b5a4a", null ],
-    [ "setDuration", "classfabgl_1_1_waveform_generator.html#ae1b07155e13f5e82581c05d9cb4fe71e", null ],
-    [ "setFrequency", "classfabgl_1_1_waveform_generator.html#ac6f831361d9087d2e52e36b5eafed967", null ],
-    [ "setSampleRate", "classfabgl_1_1_waveform_generator.html#aaa38bc65bc96ee15966b8bca6d50cb62", null ],
-    [ "setVolume", "classfabgl_1_1_waveform_generator.html#a82e33967b946c874baa79fb8f44d4092", null ],
-    [ "volume", "classfabgl_1_1_waveform_generator.html#aff943804948eae06f7509bf69ef51f05", null ]
+    [ "duration", "classfabgl_1_1_waveform_generator_a996f2f6c960641738fc46d3f39f6ef6f.html#a996f2f6c960641738fc46d3f39f6ef6f", null ],
+    [ "enable", "classfabgl_1_1_waveform_generator_a4d003299b7939c5c2a6fd8cee4fe7504.html#a4d003299b7939c5c2a6fd8cee4fe7504", null ],
+    [ "enabled", "classfabgl_1_1_waveform_generator_acafb7271189f6d844921794d61cd608a.html#acafb7271189f6d844921794d61cd608a", null ],
+    [ "getSample", "classfabgl_1_1_waveform_generator_af6efc18f13f1cd2aeb2fb810b103b356.html#af6efc18f13f1cd2aeb2fb810b103b356", null ],
+    [ "sampleRate", "classfabgl_1_1_waveform_generator_abc395029362d9990b5dad44dfafe9d63.html#abc395029362d9990b5dad44dfafe9d63", null ],
+    [ "setAutoDestroy", "classfabgl_1_1_waveform_generator_a2670d55a6f6725717133799223effc61.html#a2670d55a6f6725717133799223effc61", null ],
+    [ "setAutoDetach", "classfabgl_1_1_waveform_generator_ace43e846a26854aa34091e3eabd07f24.html#ace43e846a26854aa34091e3eabd07f24", null ],
+    [ "setDuration", "classfabgl_1_1_waveform_generator_aae62a0a75472fde81f63cd0f9d9288c2.html#aae62a0a75472fde81f63cd0f9d9288c2", null ],
+    [ "setFrequency", "classfabgl_1_1_waveform_generator_a6d3ded07c8e0000d3f20c12ed801db7b.html#a6d3ded07c8e0000d3f20c12ed801db7b", null ],
+    [ "setSampleRate", "classfabgl_1_1_waveform_generator_a85fa2eb2cf3e487be53c8b2625bdce69.html#a85fa2eb2cf3e487be53c8b2625bdce69", null ],
+    [ "setVolume", "classfabgl_1_1_waveform_generator_a77a669d4f95b8abf529a7d3183acb432.html#a77a669d4f95b8abf529a7d3183acb432", null ],
+    [ "volume", "classfabgl_1_1_waveform_generator_a56fd55a21e8060769938c33ac16ee4f2.html#a56fd55a21e8060769938c33ac16ee4f2", null ]
 ];

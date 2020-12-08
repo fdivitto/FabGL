@@ -1,4 +1,4 @@
 <map id="fabgl::uiMouseEventInfo" name="fabgl::uiMouseEventInfo">
-<area shape="rect" id="node2" href="$structfabgl_1_1_mouse_status.html" title="Describes mouse absolute position, scroll wheel delta and buttons status. " alt="" coords="20,92,155,117"/>
-<area shape="rect" id="node3" href="$structfabgl_1_1_mouse_buttons.html" title="Describes mouse buttons status. " alt="" coords="16,5,159,31"/>
+<area shape="rect" id="node2" href="$structfabgl_1_1_mouse_status.html" title="Describes mouse absolute position, scroll wheel delta and buttons status. " alt="" coords="19,95,154,121"/>
+<area shape="rect" id="node3" href="$structfabgl_1_1_mouse_buttons.html" title="Describes mouse buttons status. " alt="" coords="15,5,158,32"/>
 </map>

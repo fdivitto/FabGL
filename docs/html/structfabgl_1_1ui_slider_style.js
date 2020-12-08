@@ -1,7 +1,7 @@
 var structfabgl_1_1ui_slider_style =
 [
-    [ "backgroundColor", "structfabgl_1_1ui_slider_style.html#af2cc3cfe6301a119943fdc22eb253a70", null ],
-    [ "gripColor", "structfabgl_1_1ui_slider_style.html#af6479ec6f6f10ff018e408d19ba370bc", null ],
-    [ "rangeColor", "structfabgl_1_1ui_slider_style.html#a79e02ade6b762e3c0af739a5ccbbfc8b", null ],
-    [ "slideColor", "structfabgl_1_1ui_slider_style.html#ac2217ab0392aaa554d653407dee8a50d", null ]
+    [ "backgroundColor", "structfabgl_1_1ui_slider_style_ae4f3cff9a6921c6ff7a56e9d2380d150.html#ae4f3cff9a6921c6ff7a56e9d2380d150", null ],
+    [ "gripColor", "structfabgl_1_1ui_slider_style_a0f60611a19c7ff026d39c7156e392489.html#a0f60611a19c7ff026d39c7156e392489", null ],
+    [ "rangeColor", "structfabgl_1_1ui_slider_style_a0dfdd6da205a5c6ae1ac00521aaa74e3.html#a0dfdd6da205a5c6ae1ac00521aaa74e3", null ],
+    [ "slideColor", "structfabgl_1_1ui_slider_style_a6be318f54b466b7317c6efcece81031a.html#a6be318f54b466b7317c6efcece81031a", null ]
 ];

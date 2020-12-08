@@ -1,0 +1,9 @@
+<map id="fabgl::WaveformGenerator::volume" name="fabgl::WaveformGenerator::volume">
+<area shape="rect" id="node2" href="$classfabgl_1_1_sine_waveform_generator.html#ad7ea3ee09721ff47ee7ec8b0e0b0e409" title="Gets next sample. " alt="" coords="243,5,443,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_square_waveform_generator.html#acb5be33eb39aed74ac35239f9b713506" title="Gets next sample. " alt="" coords="235,71,450,112"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_triangle_waveform_generator.html#a5df54beee5586b0fd090c6604610525b" title="Gets next sample. " alt="" coords="233,136,453,177"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_sawtooth_waveform_generator.html#a6924c3da8ed2c533a0666c6aca4020a1" title="Gets next sample. " alt="" coords="228,201,457,243"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1_noise_waveform_generator.html#a55747e9c27f59da8b1fbcb86948db9f5" title="Gets next sample. " alt="" coords="239,267,447,308"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1_v_i_c_noise_generator.html#aeb019e42701d54a43c8bb0e33488e967" title="Gets next sample. " alt="" coords="257,332,429,373"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1_samples_generator.html#aec5ce84a7d93c7892b8cdb978a0f8d31" title="Gets next sample. " alt="" coords="259,397,426,439"/>
+</map>

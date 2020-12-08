@@ -1,4 +1,4 @@
 <map id="fabgl::Cursor" name="fabgl::Cursor">
-<area shape="rect" id="node2" href="$structfabgl_1_1_bitmap.html" title="Represents an image. " alt="" coords="10,92,109,117"/>
-<area shape="rect" id="node3" href="$structfabgl_1_1_r_g_b888.html" title="Represents a 24 bit RGB color. " alt="" coords="5,5,114,31"/>
+<area shape="rect" id="node2" href="$structfabgl_1_1_bitmap.html" title="Represents an image. " alt="" coords="10,95,109,121"/>
+<area shape="rect" id="node3" href="$structfabgl_1_1_r_g_b888.html" title="Represents a 24 bit RGB color. " alt="" coords="5,5,113,32"/>
 </map>

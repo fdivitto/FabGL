@@ -1,4 +1,4 @@
 <map id="fabgl::uiButtonStyle" name="fabgl::uiButtonStyle">
-<area shape="rect" id="node2" href="$structfabgl_1_1_r_g_b888.html" title="Represents a 24 bit RGB color. " alt="" coords="19,5,128,31"/>
-<area shape="rect" id="node3" href="$structfabgl_1_1_bitmap.html" title="Represents an image. " alt="" coords="257,113,356,138"/>
+<area shape="rect" id="node2" href="$structfabgl_1_1_r_g_b888.html" title="Represents a 24 bit RGB color. " alt="" coords="19,5,127,32"/>
+<area shape="rect" id="node3" href="$structfabgl_1_1_bitmap.html" title="Represents an image. " alt="" coords="253,118,352,145"/>
 </map>

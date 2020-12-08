@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['info',['Info',['../group___enumerations.html#ggaf2f79b5a07ca9d7f44f264b12d986c65a4059b0251f66a18cb56f544728796875',1,'fabgl']]],
-  ['intellimouse',['Intellimouse',['../group___enumerations.html#ggaa42dc1b02d34a4a2a3a831fcf3b5ba2ca580452974fa07908dcb4568ba5202aca',1,'fabgl']]],
-  ['inverse',['Inverse',['../group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba1248f28478ee2a50e1ff4e37e107f0e6',1,'fabgl']]],
-  ['italic',['Italic',['../group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba4dfb7bb6cfd7b2eff2773230ebe1f448',1,'fabgl']]]
+  ['info',['Info',['../group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#ggaae85628862e3db5a13e7c21a90589c1da4059b0251f66a18cb56f544728796875',1,'fabgl']]],
+  ['intellimouse',['Intellimouse',['../group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#gga1a15f1712ba14a6877038ffe9c6f7708a2e71c963cb7659a2783aa306391051ec',1,'fabgl']]],
+  ['inverse',['Inverse',['../group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa17e68c01437379e2ee2ae4ad92a918ac',1,'fabgl']]],
+  ['italic',['Italic',['../group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fac2a214096085052039c5b35d6aae7bd0',1,'fabgl']]]
 ];

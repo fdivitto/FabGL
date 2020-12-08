@@ -1,0 +1,4 @@
+<map id="fabgl::Terminal::send" name="fabgl::Terminal::send">
+<area shape="rect" id="node2" href="$classfabgl_1_1_terminal.html#a05f3b9a39bbf93bbf4b9dccb5928a7c9" title="Connects a remote host using the specified serial port. " alt="" coords="211,5,373,47"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_terminal.html#a3fa34ccc4d268265ad7688850209245e" title="Pools the serial port for incoming data. " alt="" coords="196,71,388,98"/>
+</map>

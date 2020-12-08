@@ -1,5 +1,5 @@
 var structfabgl_1_1_size =
 [
-    [ "height", "structfabgl_1_1_size.html#afcbf56970b3a670d7337e3e19260c412", null ],
-    [ "width", "structfabgl_1_1_size.html#a225b9125956d1283ba37ca9feeb4cc0e", null ]
+    [ "height", "structfabgl_1_1_size_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662", null ],
+    [ "width", "structfabgl_1_1_size_ae0ffb42440f0305b6d22a1c6106b6e6f.html#ae0ffb42440f0305b6d22a1c6106b6e6f", null ]
 ];

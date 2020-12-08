@@ -1,0 +1,5 @@
+<map id="fabgl::Terminal::localWrite" name="fabgl::Terminal::localWrite">
+<area shape="rect" id="node2" href="$classfabgl_1_1_terminal.html#a026895321171522dcb429e9114dc0db1" title="Like localWrite() but sends also to serial port if connected. " alt="" coords="225,42,368,69"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_terminal.html#a05f3b9a39bbf93bbf4b9dccb5928a7c9" title="Connects a remote host using the specified serial port. " alt="" coords="431,5,593,47"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_terminal.html#a3fa34ccc4d268265ad7688850209245e" title="Pools the serial port for incoming data. " alt="" coords="416,71,608,98"/>
+</map>

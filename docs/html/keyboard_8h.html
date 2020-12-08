@@ -95,62 +95,35 @@ $(document).ready(function(){initNavTree('keyboard_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="ps2device_8h_source.html">comdrivers/ps2device.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabui_8h_source.html">fabui.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for keyboard.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="keyboard_8h__incl.png" border="0" usemap="#keyboard_8h" alt=""/></div>
-<map name="keyboard_8h" id="keyboard_8h">
-<area shape="rect" id="node3" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5371,305,5458,331"/>
-<area shape="rect" id="node5" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4975,152,5137,177"/>
-<area shape="rect" id="node11" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="5389,79,5451,104"/>
-<area shape="rect" id="node7" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="5179,225,5287,251"/>
-<area shape="rect" id="node9" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="5143,305,5217,331"/>
-<area shape="rect" id="node16" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="5413,225,5541,251"/>
-<area shape="rect" id="node17" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="5649,152,5724,177"/>
-<area shape="rect" id="node18" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2697,225,2777,251"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="keyboard_8h__dep__incl.png" border="0" usemap="#keyboard_8hdep" alt=""/></div>
-<map name="keyboard_8hdep" id="keyboard_8hdep">
-<area shape="rect" id="node2" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="20,152,100,177"/>
-<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="68,225,129,251"/>
-<area shape="rect" id="node4" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="20,79,100,104"/>
-</map>
-</div>
-</div>
+
 <p><a href="keyboard_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_alt_virtual_key_def.html">fabgl::AltVirtualKeyDef</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_alt_virtual_key_def.html">AltVirtualKeyDef</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associates a virtualkey and various shift states (ctrl, alt, etc..) to another virtualkey.  <a href="structfabgl_1_1_alt_virtual_key_def.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard.html">fabgl::Keyboard</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PS2 <a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">Keyboard</a> controller class.  <a href="classfabgl_1_1_keyboard.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_keyboard_layout.html">fabgl::KeyboardLayout</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_keyboard_layout.html">KeyboardLayout</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All in one structure to fully represent a keyboard layout.  <a href="structfabgl_1_1_keyboard_layout.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_virtual_key_def.html">fabgl::VirtualKeyDef</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_virtual_key_def.html">VirtualKeyDef</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Associates scancode to virtualkey.  <a href="structfabgl_1_1_virtual_key_def.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="keyboard_8h_source.html">keyboard.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_82e8a5453e51b0b6168db3257bd0eaab.html">devdrivers</a></li><li class="navelem"><a class="el" href="keyboard_8h.html">keyboard.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

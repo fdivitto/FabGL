@@ -1,11 +1,11 @@
 var classfabgl_1_1_collision_detector =
 [
-    [ "CollisionDetector", "classfabgl_1_1_collision_detector.html#ae0597f14ef70f19dd8630c650a56e29e", null ],
-    [ "addSprite", "classfabgl_1_1_collision_detector.html#a90308afcec5448c888d4117842f0757a", null ],
-    [ "detectCollision", "classfabgl_1_1_collision_detector.html#a1bcc28c81c5d430974391395caa7f321", null ],
-    [ "detectCollision", "classfabgl_1_1_collision_detector.html#a7716dbe8f5e5829523a44a0705f7ea0e", null ],
-    [ "removeSprite", "classfabgl_1_1_collision_detector.html#a4eb7cf8e9b5b3c9bede09bfc450bb53a", null ],
-    [ "update", "classfabgl_1_1_collision_detector.html#a55d2fe2c8857aeb4f3c8cf86be6d409e", null ],
-    [ "updateAndDetectCollision", "classfabgl_1_1_collision_detector.html#a8f554a3e2f5d003ef6f47c8aa7415403", null ],
-    [ "updateAndDetectCollision", "classfabgl_1_1_collision_detector.html#accd92470e9aefba528dd72213475b995", null ]
+    [ "CollisionDetector", "classfabgl_1_1_collision_detector_aadae4076ddcd85581efac286bb8d799c.html#aadae4076ddcd85581efac286bb8d799c", null ],
+    [ "addSprite", "classfabgl_1_1_collision_detector_a48b03f63e22824a043e5df322ecebd3c.html#a48b03f63e22824a043e5df322ecebd3c", null ],
+    [ "detectCollision", "classfabgl_1_1_collision_detector_af49934327173c9c132ad03a49cbe88dd.html#af49934327173c9c132ad03a49cbe88dd", null ],
+    [ "detectCollision", "classfabgl_1_1_collision_detector_a9a5ba3dccacba4da74daf832bca16dbc.html#a9a5ba3dccacba4da74daf832bca16dbc", null ],
+    [ "removeSprite", "classfabgl_1_1_collision_detector_aefc081299e5e20cd9b6d900de8559248.html#aefc081299e5e20cd9b6d900de8559248", null ],
+    [ "update", "classfabgl_1_1_collision_detector_ad5da37881b02299b991afee3cd96bf57.html#ad5da37881b02299b991afee3cd96bf57", null ],
+    [ "updateAndDetectCollision", "classfabgl_1_1_collision_detector_ae98903a2c36b115ac076b56fa3a64416.html#ae98903a2c36b115ac076b56fa3a64416", null ],
+    [ "updateAndDetectCollision", "classfabgl_1_1_collision_detector_af7b33b616a340e85f56563d6bf38b895.html#af7b33b616a340e85f56563d6bf38b895", null ]
 ];

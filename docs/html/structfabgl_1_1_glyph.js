@@ -1,8 +1,8 @@
 var structfabgl_1_1_glyph =
 [
-    [ "data", "structfabgl_1_1_glyph.html#aaf87f9924c508aea88fe90afbae753c0", null ],
-    [ "height", "structfabgl_1_1_glyph.html#a9ad42c2b82617e2092822010d5dee55e", null ],
-    [ "width", "structfabgl_1_1_glyph.html#ab2183ae78c87a19f5fafae939c766ddc", null ],
-    [ "X", "structfabgl_1_1_glyph.html#a308a7abab39d158169005530159b50de", null ],
-    [ "Y", "structfabgl_1_1_glyph.html#a6519cffa60083bab2b022967a34f8431", null ]
+    [ "data", "structfabgl_1_1_glyph_a96db82e580e46e24e2b39dd6c5bf7c21.html#a96db82e580e46e24e2b39dd6c5bf7c21", null ],
+    [ "height", "structfabgl_1_1_glyph_adcf201a8aabf55cb352ec05331242594.html#adcf201a8aabf55cb352ec05331242594", null ],
+    [ "width", "structfabgl_1_1_glyph_a09a2a45f731b02946ff6d3cd15c1a476.html#a09a2a45f731b02946ff6d3cd15c1a476", null ],
+    [ "X", "structfabgl_1_1_glyph_aa6aba27bc1a89db9e350b50bbf881f57.html#aa6aba27bc1a89db9e350b50bbf881f57", null ],
+    [ "Y", "structfabgl_1_1_glyph_abe4637362df8e341470401813999dd17.html#abe4637362df8e341470401813999dd17", null ]
 ];

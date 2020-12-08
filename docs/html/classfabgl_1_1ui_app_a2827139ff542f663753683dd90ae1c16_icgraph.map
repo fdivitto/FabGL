@@ -1,0 +1,5 @@
+<map id="fabgl::uiApp::reshapeWindow" name="fabgl::uiApp::reshapeWindow">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#a8bda82c9f53c538ab1fb3edb7d6f25d0" title="Moves a window. " alt="" coords="247,5,425,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a3dd886b08dc0cd588edff12ca093ed73" title="Resizes a window. " alt="" coords="245,56,427,83"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_label.html#a31786a83fe2d4d4936f30c29e20c3915" title="Updates the label content. " alt="" coords="475,56,621,83"/>
+</map>

@@ -96,98 +96,63 @@ $(document).ready(function(){initNavTree('terminal_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;ctype.h&gt;</code><br />
-<code>#include &lt;string.h&gt;</code><br />
-<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;freertos/task.h&quot;</code><br />
-<code>#include &quot;freertos/timers.h&quot;</code><br />
-<code>#include &quot;freertos/semphr.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="canvas_8h_source.html">canvas.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="keyboard_8h_source.html">devdrivers/keyboard.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="terminfo_8h_source.html">terminfo.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="soundgen_8h_source.html">devdrivers/soundgen.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for terminal.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="terminal_8h__incl.png" border="0" usemap="#terminal_8h" alt=""/></div>
-<map name="terminal_8h" id="terminal_8h">
-<area shape="rect" id="node8" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5081,452,5167,477"/>
-<area shape="rect" id="node10" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="4392,299,4467,324"/>
-<area shape="rect" id="node17" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4939,152,5091,177"/>
-<area shape="rect" id="node49" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="4901,79,4982,104"/>
-<area shape="rect" id="node50" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="4259,372,4416,397"/>
-<area shape="rect" id="node13" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="4592,372,4720,397"/>
-<area shape="rect" id="node15" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="4508,452,4583,477"/>
-<area shape="rect" id="node18" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="5077,299,5238,324"/>
-<area shape="rect" id="node20" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="4575,225,4636,251"/>
-<area shape="rect" id="node19" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4978,372,5086,397"/>
-<area shape="rect" id="node21" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2354,372,2433,397"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="terminal_8h__dep__incl.png" border="0" usemap="#terminal_8hdep" alt=""/></div>
-<map name="terminal_8hdep" id="terminal_8hdep">
-<area shape="rect" id="node2" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="15,79,76,104"/>
-</map>
-</div>
-</div>
+
 <p><a href="terminal_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_line_editor.html">fabgl::LineEditor</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_line_editor.html">LineEditor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classfabgl_1_1_line_editor.html" title="LineEditor is a single-line / multiple-rows editor which uses the Terminal object as input and output...">LineEditor</a> is a single-line / multiple-rows editor which uses the <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">Terminal</a> object as input and output.  <a href="classfabgl_1_1_line_editor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal.html">Terminal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An ANSI-VT100 compatible display terminal.  <a href="classfabgl_1_1_terminal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_controller.html">fabgl::TerminalController</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_terminal_controller.html">TerminalController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classfabgl_1_1_terminal_controller.html" title="TerminalController allows direct controlling of the Terminal object without using escape sequences...">TerminalController</a> allows direct controlling of the <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">Terminal</a> object without using escape sequences.  <a href="classfabgl_1_1_terminal_controller.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:gabfedaa59d48f756f7fe2cbc756771a7b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gabfedaa59d48f756f7fe2cbc756771a7b">fabgl::CharStyle</a> { <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba5089484c34f7bcfedf45b0e659a628fc">fabgl::Bold</a>, 
-<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7bac2e340f0155b15c426d731179ae6cee8">fabgl::ReducedLuminosity</a>, 
-<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba4dfb7bb6cfd7b2eff2773230ebe1f448">fabgl::Italic</a>, 
-<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba96c99f278ca6d44795a83a485e327738">fabgl::Underline</a>, 
+<tr class="memitem:ga58734f6595a1eefb555afc0f1897fc3f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#ga58734f6595a1eefb555afc0f1897fc3f">CharStyle</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3faa529a7a50505042b4f78439ecc3fb0d6">Bold</a>, 
+<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa01a8eb7c512c56e42383b0564f4e1514">ReducedLuminosity</a>, 
+<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fac2a214096085052039c5b35d6aae7bd0">Italic</a>, 
+<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3faa909c5f2b588ba35fcc40b3b504ad2ed">Underline</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7bac801bcb1900c6e0a30c4e66448ff8480">fabgl::Blink</a>, 
-<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7baa999cbaf1818a72edcfe20beec0034c2">fabgl::Blank</a>, 
-<a class="el" href="group___enumerations.html#ggabfedaa59d48f756f7fe2cbc756771a7ba1248f28478ee2a50e1ff4e37e107f0e6">fabgl::Inverse</a>
+&#160;&#160;<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa1608aa89b3f44882080cfaa7536c1cde">Blink</a>, 
+<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fae885c31e41fc9fcb8ac14496dc4346df">Blank</a>, 
+<a class="el" href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa17e68c01437379e2ee2ae4ad92a918ac">Inverse</a>
 <br />
  }</td></tr>
-<tr class="memdesc:gabfedaa59d48f756f7fe2cbc756771a7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a character style.  <a href="group___enumerations.html#gabfedaa59d48f756f7fe2cbc756771a7b">More...</a><br /></td></tr>
-<tr class="separator:gabfedaa59d48f756f7fe2cbc756771a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1786b5a5a82ac748a1bde3fb8451e7cb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga1786b5a5a82ac748a1bde3fb8451e7cb">fabgl::FlowControl</a> { <a class="el" href="group___enumerations.html#gga1786b5a5a82ac748a1bde3fb8451e7cba6adf97f83acf6453d4a6a4b1070f3754">fabgl::FlowControl::None</a>, 
-<a class="el" href="group___enumerations.html#gga1786b5a5a82ac748a1bde3fb8451e7cba719d067b229178f03bcfa1da4ac4dede">fabgl::FlowControl::Software</a>
+<tr class="memdesc:ga58734f6595a1eefb555afc0f1897fc3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a character style.  <a href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#ga58734f6595a1eefb555afc0f1897fc3f">More...</a><br /></td></tr>
+<tr class="separator:ga58734f6595a1eefb555afc0f1897fc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae88006c219f95bae663fe0f2a2561dd7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#gae88006c219f95bae663fe0f2a2561dd7">FlowControl</a> { <a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a6adf97f83acf6453d4a6a4b1070f3754">None</a>, 
+<a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a719d067b229178f03bcfa1da4ac4dede">Software</a>
  }</td></tr>
-<tr class="memdesc:ga1786b5a5a82ac748a1bde3fb8451e7cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines various serial port flow control methods.  <a href="group___enumerations.html#ga1786b5a5a82ac748a1bde3fb8451e7cb">More...</a><br /></td></tr>
-<tr class="separator:ga1786b5a5a82ac748a1bde3fb8451e7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad6fccf8ca9dcb5449240cd02a91137b6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gad6fccf8ca9dcb5449240cd02a91137b6">fabgl::LineEditorSpecialChar</a> { <a class="el" href="group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a49176da75a1269d7cda14dd52331c7da">fabgl::LineEditorSpecialChar::CursorUp</a>, 
-<a class="el" href="group___enumerations.html#ggad6fccf8ca9dcb5449240cd02a91137b6a3f96d33d45dfd7be341bf60569f3e623">fabgl::LineEditorSpecialChar::CursorDown</a>
+<tr class="memdesc:gae88006c219f95bae663fe0f2a2561dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines various serial port flow control methods.  <a href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#gae88006c219f95bae663fe0f2a2561dd7">More...</a><br /></td></tr>
+<tr class="separator:gae88006c219f95bae663fe0f2a2561dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab18ae5ee717bbc4b0722f7c3f5cffbf6"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#gab18ae5ee717bbc4b0722f7c3f5cffbf6">LineEditorSpecialChar</a> { <a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#ggab18ae5ee717bbc4b0722f7c3f5cffbf6a49176da75a1269d7cda14dd52331c7da">CursorUp</a>, 
+<a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#ggab18ae5ee717bbc4b0722f7c3f5cffbf6a3f96d33d45dfd7be341bf60569f3e623">CursorDown</a>
  }</td></tr>
-<tr class="memdesc:gad6fccf8ca9dcb5449240cd02a91137b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special character specified in on values from LineEditor::onSpecialChar delegate.  <a href="group___enumerations.html#gad6fccf8ca9dcb5449240cd02a91137b6">More...</a><br /></td></tr>
-<tr class="separator:gad6fccf8ca9dcb5449240cd02a91137b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa05e86d2759d0ed2edd159ad66efee78"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gaa05e86d2759d0ed2edd159ad66efee78">fabgl::TerminalTransition</a> { , <a class="el" href="group___enumerations.html#ggaa05e86d2759d0ed2edd159ad66efee78ad1e80c506f4c89e3c4fb1c1b4867a03c">fabgl::TerminalTransition::LeftToRight</a>, 
-<a class="el" href="group___enumerations.html#ggaa05e86d2759d0ed2edd159ad66efee78ab7b0ea3028791689ea070674776855e2">fabgl::TerminalTransition::RightToLeft</a>
+<tr class="memdesc:gab18ae5ee717bbc4b0722f7c3f5cffbf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special character specified in on values from LineEditor::onSpecialChar delegate.  <a href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#gab18ae5ee717bbc4b0722f7c3f5cffbf6">More...</a><br /></td></tr>
+<tr class="separator:gab18ae5ee717bbc4b0722f7c3f5cffbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1743e3458e6f97a06488133ec83ba679"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga1743e3458e6f97a06488133ec83ba679.html#ga1743e3458e6f97a06488133ec83ba679">TerminalTransition</a> { , <a class="el" href="group___enumerations_ga1743e3458e6f97a06488133ec83ba679.html#gga1743e3458e6f97a06488133ec83ba679ad1e80c506f4c89e3c4fb1c1b4867a03c">LeftToRight</a>, 
+<a class="el" href="group___enumerations_ga1743e3458e6f97a06488133ec83ba679.html#gga1743e3458e6f97a06488133ec83ba679ab7b0ea3028791689ea070674776855e2">RightToLeft</a>
  }</td></tr>
-<tr class="memdesc:gaa05e86d2759d0ed2edd159ad66efee78"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines terminal transition effect.  <a href="group___enumerations.html#gaa05e86d2759d0ed2edd159ad66efee78">More...</a><br /></td></tr>
-<tr class="separator:gaa05e86d2759d0ed2edd159ad66efee78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:ga1743e3458e6f97a06488133ec83ba679"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines terminal transition effect.  <a href="group___enumerations_ga1743e3458e6f97a06488133ec83ba679.html#ga1743e3458e6f97a06488133ec83ba679">More...</a><br /></td></tr>
+<tr class="separator:ga1743e3458e6f97a06488133ec83ba679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="terminal_8h_source.html">terminal.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="terminal_8h.html">terminal.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

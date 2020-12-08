@@ -1,16 +1,17 @@
 var searchData=
 [
-  ['hascaret',['hasCaret',['../structfabgl_1_1ui_text_edit_props.html#a9b75b1dc47e0ba679f571a23575ef8f3',1,'fabgl::uiTextEditProps']]],
-  ['hasclosebutton',['hasCloseButton',['../structfabgl_1_1ui_frame_props.html#a4ac0f820686bd3e3672b02f24bc37e00',1,'fabgl::uiFrameProps']]],
-  ['hasmaximizebutton',['hasMaximizeButton',['../structfabgl_1_1ui_frame_props.html#ad4288398695af48bc286228ce3ee4f41',1,'fabgl::uiFrameProps']]],
-  ['hasminimizebutton',['hasMinimizeButton',['../structfabgl_1_1ui_frame_props.html#a8c807b7a49be228194a9339448ec8120',1,'fabgl::uiFrameProps']]],
-  ['hbackporch',['HBackPorch',['../structfabgl_1_1_v_g_a_timings.html#a9336fdd43d196ec17dd7e54c2ac79c18',1,'fabgl::VGATimings']]],
-  ['height',['height',['../structfabgl_1_1_glyph.html#a9ad42c2b82617e2092822010d5dee55e',1,'fabgl::Glyph::height()'],['../structfabgl_1_1_bitmap.html#a836fbdf0e47b513858c9f369aedaa076',1,'fabgl::Bitmap::height()'],['../structfabgl_1_1_size.html#afcbf56970b3a670d7337e3e19260c412',1,'fabgl::Size::height()'],['../displaycontroller_8h.html#adcf201a8aabf55cb352ec05331242594',1,'height():&#160;displaycontroller.h'],['../fabutils_8h.html#a777dd66f9609a587ee98ad50de301662',1,'height():&#160;fabutils.h']]],
-  ['hfrontporch',['HFrontPorch',['../structfabgl_1_1_v_g_a_timings.html#ac4b72d4c1284294edf055fc5b640b31f',1,'fabgl::VGATimings']]],
-  ['hotspotx',['hotspotX',['../structfabgl_1_1_cursor.html#ae40bc3f57be9b5147851a542364f02a9',1,'fabgl::Cursor']]],
-  ['hotspoty',['hotspotY',['../structfabgl_1_1_cursor.html#a5152c6cf0f0af8aa8f01944ab28af54b',1,'fabgl::Cursor']]],
-  ['hstartingblock',['HStartingBlock',['../structfabgl_1_1_v_g_a_timings.html#ae7df8e162527fe62ffdb434a4eff5e2e',1,'fabgl::VGATimings']]],
-  ['hsynclogic',['HSyncLogic',['../structfabgl_1_1_v_g_a_timings.html#a0518f31373be9ce02fd4ec5a839b4749',1,'fabgl::VGATimings']]],
-  ['hsyncpulse',['HSyncPulse',['../structfabgl_1_1_v_g_a_timings.html#a72e6dfddc01c96ccfbcb73517ca1883f',1,'fabgl::VGATimings']]],
-  ['hvisiblearea',['HVisibleArea',['../structfabgl_1_1_v_g_a_timings.html#acaa3e2e22d4158e2c2628de35c540500',1,'fabgl::VGATimings']]]
+  ['hascaret',['hasCaret',['../structfabgl_1_1ui_text_edit_props_a84898156730ce3318a26a7cf6c97fbb1.html#a84898156730ce3318a26a7cf6c97fbb1',1,'fabgl::uiTextEditProps']]],
+  ['hasclosebutton',['hasCloseButton',['../structfabgl_1_1ui_frame_props_abd46fbb6409e64da394e03d52ebef0b6.html#abd46fbb6409e64da394e03d52ebef0b6',1,'fabgl::uiFrameProps']]],
+  ['hasmaximizebutton',['hasMaximizeButton',['../structfabgl_1_1ui_frame_props_a99fe0e56f4de6c8c6d09c4ac4312eb66.html#a99fe0e56f4de6c8c6d09c4ac4312eb66',1,'fabgl::uiFrameProps']]],
+  ['hasminimizebutton',['hasMinimizeButton',['../structfabgl_1_1ui_frame_props_adde989e2c2f93896ca9946840770f6fb.html#adde989e2c2f93896ca9946840770f6fb',1,'fabgl::uiFrameProps']]],
+  ['hbackporch',['HBackPorch',['../structfabgl_1_1_v_g_a_timings_a0ac86456ab40fda78e3e2e91adb2dbd5.html#a0ac86456ab40fda78e3e2e91adb2dbd5',1,'fabgl::VGATimings']]],
+  ['height',['height',['../structfabgl_1_1_glyph_adcf201a8aabf55cb352ec05331242594.html#adcf201a8aabf55cb352ec05331242594',1,'fabgl::Glyph::height()'],['../structfabgl_1_1_bitmap_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662',1,'fabgl::Bitmap::height()'],['../structfabgl_1_1_size_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662',1,'fabgl::Size::height()'],['../displaycontroller_8h_adcf201a8aabf55cb352ec05331242594.html#adcf201a8aabf55cb352ec05331242594',1,'height():&#160;displaycontroller.h'],['../fabutils_8h_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662',1,'height():&#160;fabutils.h']]],
+  ['hfrontporch',['HFrontPorch',['../structfabgl_1_1_v_g_a_timings_af8fb8516e4ac5969dfcfd550fcbfe466.html#af8fb8516e4ac5969dfcfd550fcbfe466',1,'fabgl::VGATimings']]],
+  ['hotspotx',['hotspotX',['../structfabgl_1_1_cursor_a0e4f59780867e7453248d317439cc16e.html#a0e4f59780867e7453248d317439cc16e',1,'fabgl::Cursor']]],
+  ['hotspoty',['hotspotY',['../structfabgl_1_1_cursor_a068b9d6ed14249ac8d20123435be5356.html#a068b9d6ed14249ac8d20123435be5356',1,'fabgl::Cursor']]],
+  ['hours',['hours',['../structfabgl_1_1_date_time_abeadeae0e85f4d556e96cd8548a93c51.html#abeadeae0e85f4d556e96cd8548a93c51',1,'fabgl::DateTime']]],
+  ['hstartingblock',['HStartingBlock',['../structfabgl_1_1_v_g_a_timings_a6ad7c58abc56e7d3c9966d2c0080f286.html#a6ad7c58abc56e7d3c9966d2c0080f286',1,'fabgl::VGATimings']]],
+  ['hsynclogic',['HSyncLogic',['../structfabgl_1_1_v_g_a_timings_abca7a90832dc18df785ce1324507d70b.html#abca7a90832dc18df785ce1324507d70b',1,'fabgl::VGATimings']]],
+  ['hsyncpulse',['HSyncPulse',['../structfabgl_1_1_v_g_a_timings_aeb917c791b595499480dd3ffa9d08aa6.html#aeb917c791b595499480dd3ffa9d08aa6',1,'fabgl::VGATimings']]],
+  ['hvisiblearea',['HVisibleArea',['../structfabgl_1_1_v_g_a_timings_aa1b01b3236b56bcedb92a2aab7fa0191.html#aa1b01b3236b56bcedb92a2aab7fa0191',1,'fabgl::VGATimings']]]
 ];

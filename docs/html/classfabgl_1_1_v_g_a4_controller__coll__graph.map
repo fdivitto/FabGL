@@ -1,4 +1,4 @@
 <map id="fabgl::VGA4Controller" name="fabgl::VGA4Controller">
-<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller, VGA8Controller, etc.. " alt="" coords="5,92,198,117"/>
-<area shape="rect" id="node3" href="$structfabgl_1_1_r_g_b222.html" title="Represents a 6 bit RGB color. " alt="" coords="47,5,156,31"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller, VGA8Controller, etc.. " alt="" coords="5,95,196,121"/>
+<area shape="rect" id="node3" href="$structfabgl_1_1_r_g_b222.html" title="Represents a 6 bit RGB color. " alt="" coords="47,5,155,32"/>
 </map>

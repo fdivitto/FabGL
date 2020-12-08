@@ -1,8 +1,11 @@
 var structfabgl_1_1_keyboard_layout =
 [
-    [ "alternateVK", "structfabgl_1_1_keyboard_layout.html#a91f9cb1460c319c123195376232afe17", null ],
-    [ "exScancodeToVK", "structfabgl_1_1_keyboard_layout.html#acbf4e05c1ffcf727da2d5b044cd60390", null ],
-    [ "inherited", "structfabgl_1_1_keyboard_layout.html#a721287b2c6c33a9e15679ff244245499", null ],
-    [ "name", "structfabgl_1_1_keyboard_layout.html#ab4056289e6b9726900042349a455c41b", null ],
-    [ "scancodeToVK", "structfabgl_1_1_keyboard_layout.html#a4c902487371c94882394ac39a8bcb549", null ]
+    [ "alternateVK", "structfabgl_1_1_keyboard_layout_a7b4eb75aeddcbe8f35931c2e7a558e94.html#a7b4eb75aeddcbe8f35931c2e7a558e94", null ],
+    [ "deadkeysToVK", "structfabgl_1_1_keyboard_layout_a0ede61cf5f83095ea3ec5acacc39e183.html#a0ede61cf5f83095ea3ec5acacc39e183", null ],
+    [ "deadKeysVK", "structfabgl_1_1_keyboard_layout_ad0d829bcf251d4905509f2bd5001c770.html#ad0d829bcf251d4905509f2bd5001c770", null ],
+    [ "desc", "structfabgl_1_1_keyboard_layout_a710bce51374aba96ab04912897666c35.html#a710bce51374aba96ab04912897666c35", null ],
+    [ "exScancodeToVK", "structfabgl_1_1_keyboard_layout_a8d11284e5ee0af6381085b85121d8235.html#a8d11284e5ee0af6381085b85121d8235", null ],
+    [ "inherited", "structfabgl_1_1_keyboard_layout_afdd0381a636e103e33501ce7d38181e2.html#afdd0381a636e103e33501ce7d38181e2", null ],
+    [ "name", "structfabgl_1_1_keyboard_layout_a8f8f80d37794cde9472343e4487ba3eb.html#a8f8f80d37794cde9472343e4487ba3eb", null ],
+    [ "scancodeToVK", "structfabgl_1_1_keyboard_layout_aa8473d36fb783abeab5c0ba240804ff8.html#aa8473d36fb783abeab5c0ba240804ff8", null ]
 ];

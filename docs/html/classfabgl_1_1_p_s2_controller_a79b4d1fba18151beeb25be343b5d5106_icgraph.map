@@ -1,0 +1,4 @@
+<map id="fabgl::PS2Controller::mouse" name="fabgl::PS2Controller::mouse">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#ad2c90364f95b06bccc5ac585da94b1c3" title="Initializes application and executes the main event loop. " alt="" coords="203,5,320,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_p_s2_controller.html#afdf49e36312eb8ad33e427bf4391e9a5" title="Initializes PS2 device controller using default GPIOs. " alt="" coords="192,57,331,98"/>
+</map>

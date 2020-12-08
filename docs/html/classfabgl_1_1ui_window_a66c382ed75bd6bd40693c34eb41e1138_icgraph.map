@@ -1,0 +1,5 @@
+<map id="fabgl::uiWindow::lastChild" name="fabgl::uiWindow::lastChild">
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_app.html#aadc98d9de237a32bcff2f63a9b3129f2" title="Terminates application and free resources. " alt="" coords="475,25,595,51"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_app.html#a55fabea8349dd5282b80ace47dd5fda1" title="Determines which window a point belongs to. " alt="" coords="228,25,427,51"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_app.html#a05a6271de5e4925cff22073bf48f7952" title="Destroys a window. " alt="" coords="233,75,422,102"/>
+</map>

@@ -95,61 +95,37 @@ $(document).ready(function(){initNavTree('terminfo_8h.html','');});
 
 <p>This file contains terminal emulation definitions.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="keyboard_8h_source.html">devdrivers/keyboard.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for terminfo.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="terminfo_8h__incl.png" border="0" usemap="#terminfo_8h" alt=""/></div>
-<map name="terminfo_8h" id="terminfo_8h">
-<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4971,79,5123,104"/>
-<area shape="rect" id="node4" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5060,379,5146,404"/>
-<area shape="rect" id="node6" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4532,225,4693,251"/>
-<area shape="rect" id="node12" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="5162,152,5223,177"/>
-<area shape="rect" id="node8" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4820,299,4928,324"/>
-<area shape="rect" id="node10" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="4780,379,4855,404"/>
-<area shape="rect" id="node17" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="5003,299,5131,324"/>
-<area shape="rect" id="node18" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="5155,225,5230,251"/>
-<area shape="rect" id="node19" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2510,299,2590,324"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="terminfo_8h__dep__incl.png" border="0" usemap="#terminfo_8hdep" alt=""/></div>
-<map name="terminfo_8hdep" id="terminfo_8hdep">
-<area shape="rect" id="node2" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="6,79,86,104"/>
-<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="15,152,76,177"/>
-</map>
-</div>
-</div>
+
 <p><a href="terminfo_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ga2d726f689f0c7c127a9327262181bbbd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd">fabgl::TermType</a> { <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda4a2e8311f3f780894b5c37112b908ca2">fabgl::ANSI_VT</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda7494ccbc11c82259ca58c13925d218be">fabgl::ADM3A</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda8ac06e0429ea3a6cd71f46c7d4525b95">fabgl::ADM31</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf2db09bec0ffa1ed3836fa85a0d82a05">fabgl::Hazeltine1500</a>, 
+<tr class="memitem:ga67edd9a04814c247a553dfde047e6f62"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#ga67edd9a04814c247a553dfde047e6f62">TermType</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62ae932beee86a50089d63ac0bb1c480cae">ANSI_VT</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a14ceba0d771609decce2a2bca361ec20">ADM3A</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62af2a4ec17a361c2143dff0ad78e9a3c57">ADM31</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a40e0f1b332fd17171a30aa39461877b2">Hazeltine1500</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda73e8beb31d6b2ea5697866df7dd578e2">fabgl::Osborne</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbda90856a5022c37a3cbd6f9c5c04bc660b">fabgl::Kaypro</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaef7d46a160a81667dadfcb3b40b49e80">fabgl::VT52</a>, 
-<a class="el" href="group___enumerations.html#gga2d726f689f0c7c127a9327262181bbbdaf7bc7bfefc009fcde2d822215b8ae1bc">fabgl::ANSILegacy</a>
+&#160;&#160;<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a108a576e87babb484f7af94772834609">Osborne</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62aa8b8337fb3761c8a2e4793dd591b91d6">Kaypro</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a1b7a113f22fdb18c0f32345e711b81d6">VT52</a>, 
+<a class="el" href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62aae8007304090df4db995e4bbea0704af">ANSILegacy</a>
 <br />
  }</td></tr>
-<tr class="memdesc:ga2d726f689f0c7c127a9327262181bbbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines supported terminals.  <a href="group___enumerations.html#ga2d726f689f0c7c127a9327262181bbbd">More...</a><br /></td></tr>
-<tr class="separator:ga2d726f689f0c7c127a9327262181bbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:ga67edd9a04814c247a553dfde047e6f62"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines supported terminals.  <a href="group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#ga67edd9a04814c247a553dfde047e6f62">More...</a><br /></td></tr>
+<tr class="separator:ga67edd9a04814c247a553dfde047e6f62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains terminal emulation definitions. </p>
+
+<p class="definition">Definition in file <a class="el" href="terminfo_8h_source.html">terminfo.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="terminfo_8h.html">terminfo.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

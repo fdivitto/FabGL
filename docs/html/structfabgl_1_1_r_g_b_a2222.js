@@ -1,7 +1,7 @@
 var structfabgl_1_1_r_g_b_a2222 =
 [
-    [ "A", "structfabgl_1_1_r_g_b_a2222.html#a1791712b60e2a1ca212e70cf74a04c65", null ],
-    [ "B", "structfabgl_1_1_r_g_b_a2222.html#a685c01e21b79b8077cfcae57467bb7e4", null ],
-    [ "G", "structfabgl_1_1_r_g_b_a2222.html#ae7995a23d6db2ef162ae46c479181a8f", null ],
-    [ "R", "structfabgl_1_1_r_g_b_a2222.html#aa331d47ac869b021d3351aee4b01de36", null ]
+    [ "A", "structfabgl_1_1_r_g_b_a2222_aa99de428bd3e7715b73b335a5af9e900.html#aa99de428bd3e7715b73b335a5af9e900", null ],
+    [ "B", "structfabgl_1_1_r_g_b_a2222_a7c7fb36d372d349a62c14f1e6c7337ea.html#a7c7fb36d372d349a62c14f1e6c7337ea", null ],
+    [ "G", "structfabgl_1_1_r_g_b_a2222_aae2a690e4df0bce516938666009b5ea6.html#aae2a690e4df0bce516938666009b5ea6", null ],
+    [ "R", "structfabgl_1_1_r_g_b_a2222_ad6dca68b61d96e60ca0062e00390ba9f.html#ad6dca68b61d96e60ca0062e00390ba9f", null ]
 ];

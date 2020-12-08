@@ -96,66 +96,42 @@ $(document).ready(function(){initNavTree('ps2device_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_p_s2_device.html" title="Base class for PS2 devices (like mouse or keyboard). ">fabgl::PS2Device</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
-<code>#include &quot;freertos/semphr.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="ps2controller_8h_source.html">ps2controller.h</a>&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for ps2device.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="ps2device_8h__incl.png" border="0" usemap="#ps2device_8h" alt=""/></div>
-<map name="ps2device_8h" id="ps2device_8h">
-<area shape="rect" id="node4" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="443,152,529,177"/>
-<area shape="rect" id="node6" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="260,79,368,104"/>
-<area shape="rect" id="node8" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="163,152,238,177"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="ps2device_8h__dep__incl.png" border="0" usemap="#ps2device_8hdep" alt=""/></div>
-<map name="ps2device_8hdep" id="ps2device_8hdep">
-<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="53,79,140,104"/>
-<area shape="rect" id="node6" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="176,152,249,177"/>
-<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="22,225,102,251"/>
-<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="108,299,170,324"/>
-<area shape="rect" id="node5" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="21,152,102,177"/>
-</map>
-</div>
-</div>
+
 <p><a href="ps2device_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device.html">fabgl::PS2Device</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device.html">PS2Device</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for PS2 devices (like mouse or keyboard).  <a href="classfabgl_1_1_p_s2_device.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:gace9317dbf2d52e8ca5436590be2b97ed"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed">fabgl::PS2DeviceType</a> { <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda896a8d33d48700b0acaeb7d8fd0f58a0">fabgl::PS2DeviceType::UnknownPS2Device</a>, 
-<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda45e3ba6c41a9110f3478fff0794acde1">fabgl::PS2DeviceType::OldATKeyboard</a>, 
-<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda587da6d8dc703c1519c5f5878034d791">fabgl::PS2DeviceType::MouseStandard</a>, 
-<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97eda7b1bf224080b249a7253c8c26f56b13f">fabgl::PS2DeviceType::MouseWithScrollWheel</a>, 
+<tr class="memitem:gab1e29a3412c837d0e4e7599473e8948f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#gab1e29a3412c837d0e4e7599473e8948f">PS2DeviceType</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa896a8d33d48700b0acaeb7d8fd0f58a0">UnknownPS2Device</a>, 
+<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa45e3ba6c41a9110f3478fff0794acde1">OldATKeyboard</a>, 
+<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa587da6d8dc703c1519c5f5878034d791">MouseStandard</a>, 
+<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa7b1bf224080b249a7253c8c26f56b13f">MouseWithScrollWheel</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf1d7e419c78438778a0aff8adab862b5">fabgl::PS2DeviceType::Mouse5Buttons</a>, 
-<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edaf538f76f49a8e36da8fc9c30ded61260">fabgl::PS2DeviceType::MF2KeyboardWithTranslation</a>, 
-<a class="el" href="group___enumerations.html#ggace9317dbf2d52e8ca5436590be2b97edacd84073eb44e25384b4dfab30e81d441">fabgl::PS2DeviceType::M2Keyboard</a>
+&#160;&#160;<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948faf1d7e419c78438778a0aff8adab862b5">Mouse5Buttons</a>, 
+<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948faf538f76f49a8e36da8fc9c30ded61260">MF2KeyboardWithTranslation</a>, 
+<a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948facd84073eb44e25384b4dfab30e81d441">M2Keyboard</a>
 <br />
  }</td></tr>
-<tr class="memdesc:gace9317dbf2d52e8ca5436590be2b97ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the type of device attached to PS/2 port.  <a href="group___enumerations.html#gace9317dbf2d52e8ca5436590be2b97ed">More...</a><br /></td></tr>
-<tr class="separator:gace9317dbf2d52e8ca5436590be2b97ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:gab1e29a3412c837d0e4e7599473e8948f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the type of device attached to PS/2 port.  <a href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#gab1e29a3412c837d0e4e7599473e8948f">More...</a><br /></td></tr>
+<tr class="separator:gab1e29a3412c837d0e4e7599473e8948f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains <a class="el" href="classfabgl_1_1_p_s2_device.html" title="Base class for PS2 devices (like mouse or keyboard). ">fabgl::PS2Device</a> definition. </p>
+
+<p class="definition">Definition in file <a class="el" href="ps2device_8h_source.html">ps2device.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b741fed86bf5fa30eab98075f2fe4281.html">comdrivers</a></li><li class="navelem"><a class="el" href="ps2device_8h.html">ps2device.h</a></li>
-    <li class="footer">Generated by
+    <li class="footer">Generated on Tue Dec 8 2020 17:46:10 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

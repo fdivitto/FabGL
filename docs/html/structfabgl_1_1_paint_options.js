@@ -1,5 +1,5 @@
 var structfabgl_1_1_paint_options =
 [
-    [ "NOT", "structfabgl_1_1_paint_options.html#afcec82d9cae77adfe9208a072d58d529", null ],
-    [ "swapFGBG", "structfabgl_1_1_paint_options.html#af85f53f3ae322adfa8ac33bad02e2cb8", null ]
+    [ "NOT", "structfabgl_1_1_paint_options_a5802f48a4a51260d01324a9a46c4d840.html#a5802f48a4a51260d01324a9a46c4d840", null ],
+    [ "swapFGBG", "structfabgl_1_1_paint_options_ab4ebc0c75fafd0babcc5095e6b3765ee.html#ab4ebc0c75fafd0babcc5095e6b3765ee", null ]
 ];
