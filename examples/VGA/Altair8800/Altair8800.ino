@@ -54,25 +54,26 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 // 8'' disk images (338K)
+// To use these disks you have to enable Disk_338K and disable MiniDisk_76K
 
 // CP/M 2.2
-#include "disks/CPM22/cpm22_dsk.h"
-#include "disks/CPM22/games_dsk.h"
-#include "disks/CPM22/turbopascal3_dsk.h"
-#include "disks/CPM22/wordstar3_dsk.h"
-#include "disks/CPM22/wordstar4_dsk.h"
-#include "disks/CPM22/multiplan_dsk.h"
-#include "disks/CPM22/dbaseii_dsk.h"
-#include "disks/CPM22/BDSC_dsk.h"
-#include "disks/CPM22/langs_dsk.h"
+#include "disks/CPM22/cpm22_dsk.h"          // usage: "#define DRIVE_A cpm22_dsk"
+#include "disks/CPM22/games_dsk.h"          // usage: "#define DRIVE_B games_dsk"
+#include "disks/CPM22/turbopascal3_dsk.h"   // usage: "#define DRIVE_B turbopascal3_dsk"
+#include "disks/CPM22/wordstar3_dsk.h"      // usage: "#define DRIVE_B wordstar3_dsk"
+#include "disks/CPM22/wordstar4_dsk.h"      // usage: "#define DRIVE_B wordstar4_dsk"
+#include "disks/CPM22/multiplan_dsk.h"      // usage: "#define DRIVE_B multiplan_dsk"
+#include "disks/CPM22/dbaseii_dsk.h"        // usage: "#define DRIVE_B dbaseii_dsk"
+#include "disks/CPM22/BDSC_dsk.h"           // usage: "#define DRIVE_B BDSC_dsk"
+#include "disks/CPM22/langs_dsk.h"          // usage: "#define DRIVE_B langs_dsk"
 
 // CP/M 1.4
-#include "disks/CPM14/cpm141_dsk.h"
+#include "disks/CPM14/cpm141_dsk.h"         // usage: "#define DRIVE_A cpm141_dsk"
 
 // CP/M 3
-#include "disks/CPM3/cpm3_disk1_dsk.h"
-#include "disks/CPM3/cpm3_disk2_dsk.h"
-#include "disks/CPM3/cpm3_build_dsk.h"
+#include "disks/CPM3/cpm3_disk1_dsk.h"      // usage: "#define DRIVE_A cpm3_disk1_dsk"
+#include "disks/CPM3/cpm3_disk2_dsk.h"      // usage: "#define DRIVE_B cpm3_disk2_dsk"
+#include "disks/CPM3/cpm3_build_dsk.h"      // usage: "#define DRIVE_B cpm3_build_dsk"
 
 // Altair DOS
 //   MEMORY SIZE? [insert "64"]
@@ -80,8 +81,8 @@
 //   HIGHEST DISK NUMBER? [insert "1"]
 //   HOW MANY DISK FILES? [insert "4"]
 //   HOW MANY RANDOM FILES? [insert "4"]
-#include "disks/AltairDOS/DOS_1_dsk.h"
-#include "disks/AltairDOS/DOS_2_dsk.h"
+#include "disks/AltairDOS/DOS_1_dsk.h"      // usage: "#define DRIVE_A DOS_1_dsk"
+#include "disks/AltairDOS/DOS_2_dsk.h"      // usage: "#define DRIVE_A DOS_2_dsk"
 
 // Basic
 //    MEMORY SIZE? [press ENTER]
@@ -89,7 +90,7 @@
 //    HIGHEST DISK NUMBER? [press ENTER]
 //    HOW MANY FILES? [press ENTER]
 //    HOW MANY RANDOM FILES? [press ENTER]
-#include "disks/basic/basic5_dsk.h"
+#include "disks/basic/basic5_dsk.h"         // usage: "#define DRIVE_A basic5_dsk"
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -97,10 +98,11 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 // Mini disk images (76K)
+// To use these disks you have to enable MiniDisk_76K and disable Disk_338K
 
 // CP/M 2.2
-#include "minidisks/CPM22/cpm22_disk1_minidsk.h"
-#include "minidisks/CPM22/cpm22_disk2_minidsk.h"
+#include "minidisks/CPM22/cpm22_disk1_minidsk.h"  // usage: "#define DRIVE_A cpm22_disk1_minidsk"
+#include "minidisks/CPM22/cpm22_disk2_minidsk.h"  // usage: "#define DRIVE_B cpm22_disk2_minidsk"
 
 // Basic (need i8080 CPU)
 //   MEMORY SIZE? [press ENTER]
@@ -108,7 +110,7 @@
 //   HIGHEST DISK NUMBER? [insert "0"]
 //   HOW MANY FILES? [insert "3"]
 //   HOW MANY RANDOM FILES? [insert "2"]
-#include "minidisks/basic/basic300_5F_minidisk.h"
+#include "minidisks/basic/basic300_5F_minidisk.h" // usage: "#define DRIVE_A basic300_5F_minidisk"
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +119,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Disks configuration
 
-
 // Enable this when using 8'' disk images ("disks" folder)
 #define DISKFORMAT Disk_338K
 
@@ -125,8 +126,8 @@
 //#define DISKFORMAT MiniDisk_76K
 
 // Specify which disk image or file name assign to drives
-#define DRIVE_A cpm22_dsk     // A: read only
-#define DRIVE_B games_dsk     // B: read only
+#define DRIVE_A cpm22_dsk     // A: read only (or read/write using SD Card)
+#define DRIVE_B games_dsk     // B: read only (or read/write using SD Card)
 #define DRIVE_C "diskC.dsk"   // C: read/write
 #define DRIVE_D "diskD.dsk"   // D: read/write
 
@@ -353,11 +354,35 @@ void setup()
 }
 
 
+void attachDisk(int drive, void const * data)
+{
+  auto filename = (char const *)data;
+  auto dskimage = (uint8_t const *) data;
+
+  if (dskimage[0] >= 0x80) {
+    // "data" is a disk image
+    if (FileBrowser::getDriveType(basepath) == fabgl::DriveType::SDCard) {
+      // when storage is SD Card, copy read only disk image into a file, if doesn't already exist
+      auto newfilename = String(basepath) + String("/disk") + String('A' + drive) + String(".dsk");
+      Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, newfilename.c_str());
+      diskDrive.attachFileFromImage(drive, newfilename.c_str(), dskimage);
+    } else {
+      // when storage is SPIFFS just mount image as Read Only image
+      diskDrive.attachReadOnlyBuffer(drive, dskimage);
+    }
+  } else {
+    if (filename[0] < 0x80) {
+      // "data" is a filename
+      Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, filename);
+      Terminal.flush();
+      diskDrive.attachFile(drive, (String(basepath) + String("/") + String(filename)).c_str());
+    }
+  }
+}
+
+
 void loop()
 {
-  Terminal.write("Initializing filesystem...\r");
-  Terminal.flush();
-
   if (FileBrowser::mountSDCard(FORMAT_ON_FAIL, SDCARD_MOUNT_PATH))
     basepath = SDCARD_MOUNT_PATH;
   else if (FileBrowser::mountSPIFFS(FORMAT_ON_FAIL, SPIFFS_MOUNT_PATH))
@@ -365,16 +390,10 @@ void loop()
 
   // setup disk drives
 
-  diskDrive.attachReadOnlyBuffer(0, DRIVE_A);
-  diskDrive.attachReadOnlyBuffer(1, DRIVE_B);
-
-  Terminal.write("Creating Disk C...        \r");
-  Terminal.flush();
-  diskDrive.attachFile(2, (String(basepath) + String("/") + String(DRIVE_C)).c_str());
-
-  Terminal.write("Creating Disk D...        \r");
-  Terminal.flush();
-  diskDrive.attachFile(3, (String(basepath) + String("/") + String(DRIVE_D)).c_str());
+  attachDisk(0, DRIVE_A);
+  attachDisk(1, DRIVE_B);
+  attachDisk(2, DRIVE_C);
+  attachDisk(3, DRIVE_D);
 
   // setup SIOs (Serial I/O)
 
@@ -417,7 +436,7 @@ void loop()
   Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
   Terminal.printf("\e[33mCPU         : \e[32m%s\e[92m\e[K\r\n\e[K\n", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
 
-  Terminal.printf("Press \e[93mPAUSE\e[92m to display emulator menu\e[K\r\n");
+  Terminal.printf("Press \e[93m[F12]\e[92m or \e[93m[PAUSE]\e[92m to display emulator menu\e[K\r\n");
 
   setTerminalColors();
 

@@ -204,16 +204,13 @@ void Machine::attachRAM(int RAMSize)
 }
 
 
-IRAM_ATTR int Machine::nextStep(CPU cpu)
+int Machine::nextStep(CPU cpu)
 {
-  auto keyboard = fabgl::PS2Controller::instance()->keyboard();
-  if (m_menuCallback && keyboard->isVKDown(VirtualKey::VK_PAUSE))
-    m_menuCallback();
   return (cpu == CPU::i8080 ? i8080_instruction() : m_Z80.emulate(0));
 }
 
 
-IRAM_ATTR void Machine::run(CPU cpu, int address)
+void Machine::run(CPU cpu, int address)
 {
   if (cpu == CPU::i8080) {
     i8080_init(this);
@@ -223,13 +220,16 @@ IRAM_ATTR void Machine::run(CPU cpu, int address)
     m_Z80.setPC(address);
   }
 
+  constexpr int timeToCheckKeyboardReset = 200000;
+  int timeToCheckKeyboard = timeToCheckKeyboardReset;
+
   while (true) {
     int cycles = 0;
     if (m_realSpeed) {
       int64_t t = esp_timer_get_time();  // time in microseconds
       cycles = nextStep(cpu);
       if (m_realSpeed) {
-        t += cycles / 2;    // at 2MHz each cycle last 0.5us, so instruction time is cycles*0.5, that is cycles/2
+        t += cycles / 2;                 // at 2MHz each cycle last 0.5us, so instruction time is cycles*0.5, that is cycles/2
         while (esp_timer_get_time() < t)
           ;
       }
@@ -238,6 +238,15 @@ IRAM_ATTR void Machine::run(CPU cpu, int address)
     }
     for (Device * d = m_devices; d; d = d->next)
       d->tick(cycles);
+
+    // time to check keyboard for menu key (F12 or PAUSE)?
+    timeToCheckKeyboard -= cycles;
+    if (timeToCheckKeyboard < 0) {
+      timeToCheckKeyboard = timeToCheckKeyboardReset;
+      auto keyboard = fabgl::PS2Controller::instance()->keyboard();
+      if (m_menuCallback && (keyboard->isVKDown(VirtualKey::VK_PAUSE) || keyboard->isVKDown(VirtualKey::VK_F12)))
+        m_menuCallback();
+    }
   }
 
 }
@@ -363,14 +372,14 @@ Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
   switch (diskFormat) {
     // 88-Disk 8'' inches has 77 tracks and 32 sectors
     case Disk_338K:
-      m_trackSize   = 32;
-      m_tracksCount = 77;
+      m_trackSize   = diskSectorsPerTrack;
+      m_tracksCount = diskTracksCount;
       m_sectorChangeDuration = sectorChangeDurationDisk;  // us
       break;
     // minidisk has 35 tracks and 16 sectors
     case MiniDisk_76K:
-      m_trackSize   = 16;
-      m_tracksCount = 35;
+      m_trackSize   = minidiskSectorsPerTrack;
+      m_tracksCount = minidiskTracksCount;
       m_sectorChangeDuration = sectorChangeDurationMiniDisk;  // us
       break;
   };
@@ -380,15 +389,15 @@ Mits88Disk::Mits88Disk(Machine * machine, DiskFormat diskFormat)
   for (int i = 0; i < DISKCOUNT; ++i) {
     m_readOnlyBuffer[i]   = nullptr;
     m_fileSectorBuffer[i] = nullptr;
-    m_file[i]  = nullptr;
-    m_track[i] = 0;
-    m_sector[i] = 0;
-    m_pos[i] = 0;
-    m_readByteTime[i] = 0;
-    m_readByteReady[i] = 1;
+    m_file[i]             = nullptr;
+    m_track[i]            = 0;
+    m_sector[i]           = 0;
+    m_pos[i]              = 0;
+    m_readByteTime[i]     = 0;
+    m_readByteReady[i]    = 1;
     m_sectorChangeTime[i] = 0;
-    m_sectorTrue[i] = 1;
-    m_headLoaded[i] = 1;
+    m_sectorTrue[i]       = 1;
+    m_headLoaded[i]       = 1;
   }
 }
 
@@ -447,6 +456,30 @@ void Mits88Disk::attachFile(int drive, char const * filename)
   }
 
   flush();
+}
+
+
+// create a file (filename) from specified image (data), and mount it as RW
+// file is not created if already exists
+void Mits88Disk::attachFileFromImage(int drive, char const * filename, uint8_t const * data)
+{
+  // file exists?
+  struct stat st;
+  if (stat(filename, &st) != 0) {
+    // file doesn't exist, create and fill with "data" content
+    auto imageSize = diskSize();
+    auto bufferSize = SECTOR_SIZE * sectorsPerTrack();
+    auto buffer = (uint8_t *)malloc(bufferSize);
+    auto fw = fopen(filename, "wb");
+    while (imageSize > 0) {
+      fwrite(data, bufferSize, 1, fw);
+      imageSize -= bufferSize;
+      data += bufferSize;
+    }
+    fclose(fw);
+    free(buffer);
+  }
+  attachFile(drive, filename);
 }
 
 

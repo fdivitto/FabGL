@@ -89,6 +89,9 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Mits88Disk (88-disk)
+//
+// 88-Disk 8'' inches has 77 tracks and 32 sectors (named here as Disk_338K)
+// minidisk has 35 tracks and 16 sectors (naed here as MiniDisk_76K)
 
 
 enum DiskFormat {
@@ -99,21 +102,38 @@ enum DiskFormat {
 
 class Mits88Disk : public Device {
 
-public:
+private:
+
+  static const int DISKCOUNT                    = 4;
 
   static const int sectorChangeDurationDisk     = 9500;  // us
   static const int sectorChangeDurationMiniDisk = 11000; // us
-  static const int sectorChangeShortDuration    = 200;    // us
-  static const int readByteDuration      = 32;    // us
-  static const int sectorTrueDuration    = 90;    // us
-  static const int DISKCOUNT             = 4;
-  static const int SECTOR_SIZE           = 137;   // number of bytes per sector
+  static const int sectorChangeShortDuration    = 200;   // us
+  static const int readByteDuration             = 32;    // us
+  static const int sectorTrueDuration           = 90;    // us
+
+  static const int SECTOR_SIZE                  = 137;   // number of bytes per sector
+
+  static const int diskTracksCount              = 77;    // number of tracks (Disk_338K)
+  static const int diskSectorsPerTrack          = 32;    // number of sectors per track (Disk_338K)
+
+  static const int minidiskTracksCount          = 35;    // number of tracks (MiniDisk_76K)
+  static const int minidiskSectorsPerTrack      = 16;    // number of sectors per track (MiniDisk_76K)
+
+
+public:
 
   Mits88Disk(Machine * machine, DiskFormat diskFormat);
   ~Mits88Disk();
 
+  DiskFormat diskFormat()    { return m_diskFormat; }
+  size_t diskSize()          { return tracksCount() * sectorsPerTrack() * SECTOR_SIZE; }
+  int sectorsPerTrack()      { return m_trackSize; }
+  int tracksCount()          { return m_tracksCount; }
+
   void attachReadOnlyBuffer(int drive, uint8_t const * data);
   void attachFile(int drive, char const * filename);
+  void attachFileFromImage(int drive, char const * filename, uint8_t const * data);
 
   void detach(int drive);
 
