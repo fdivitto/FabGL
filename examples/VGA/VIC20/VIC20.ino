@@ -72,7 +72,7 @@
 
 // non-free list
 char const *  LIST_URL    = "http://cloud.cbm8bit.com/adamcost/vic20list.txt";
-constexpr int MAXLISTSIZE = 16384;
+constexpr int MAXLISTSIZE = 8192;
 
 
 // Flash and SDCard configuration
@@ -497,6 +497,7 @@ class Menu : public uiApp {
         fileBrowser->update();
         updateFreeSpaceLabel();
       }
+      WiFi.disconnect();
     };
 
     // Download from URL
@@ -522,6 +523,7 @@ class Menu : public uiApp {
         }
         delete [] filename;
         delete [] URL;
+        WiFi.disconnect();
       }
     };
 

@@ -33,7 +33,7 @@
 
 
 #if DEBUGMACHINE || DEBUG6522 || DEBUG6561
-#define DEBUG
+#define DEBUG 1
 #endif
 
 
