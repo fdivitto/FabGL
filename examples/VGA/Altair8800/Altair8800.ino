@@ -144,6 +144,8 @@ constexpr int MaxTermIndex       = 7;   // Max: "Legacy ANSI"
 
 constexpr int DefaultKbdLayIndex = 2;   // Default: "UK"
 
+constexpr int DefaultRowsCount   = 0;   // 0 = no limit (34 on the text terminal)
+
 const char * ColorsStr[] = { "Green/Black", "Yellow/Black", "White/Black", "Black/White", "Yellow/Blue", "Black/Yellow" };
 const Color TextColors[] = { Color::BrightGreen, Color::BrightYellow, Color::BrightWhite, Color::Black,       Color::BrightYellow, Color::Black };
 const Color BackColors[] = { Color::Black,       Color::Black,        Color::Black,       Color::BrightWhite, Color::Blue,         Color::BrightYellow };
@@ -175,7 +177,7 @@ char const * basepath = nullptr;
 
 
 
-void setTerminalColors()
+void setupTerminalColors()
 {
   int colorsIndex = preferences.getInt("colors", DefaultColorsIndex);
   Terminal.setForegroundColor(TextColors[colorsIndex]);
@@ -183,13 +185,46 @@ void setTerminalColors()
 }
 
 
+TermType getTerminalEmu()
+{
+  return (TermType) preferences.getInt("termEmu", DefaultTermIndex);
+}
+
+
+void setupTerminalEmu()
+{
+  Terminal.setTerminalType(getTerminalEmu());
+}
+
+
+// 0 = max
+int getRowsCount()
+{
+  return preferences.getInt("rowsCount", DefaultRowsCount);
+}
+
+
+void setupRowsCount()
+{
+  int rows = getRowsCount();
+  if (rows <= 0)
+    Terminal.write("\e[r");             // disable scrolling region
+  else
+    Terminal.printf("\e[1;%dr", rows);  // enable scrolling region (1..rows)
+}
+
+
 // shown pressing PAUSE
 void emulator_menu()
 {
   bool resetRequired = false;
+  bool changedRowsCount = false;
+
   for (bool loop = true; loop; ) {
 
     diskDrive.flush();
+
+    Terminal.setTerminalType(TermType::ANSILegacy);
 
     Terminal.write("\r\n\n\e[97m\e[40m                            ** Emulator Menu **\e[K\r\n\e[K\n");
     Terminal.write( "\e[93m Z \e[37m Reset\e[K\n\r");
@@ -199,12 +234,13 @@ void emulator_menu()
     Terminal.printf("\e[93m U \e[37m CPU: \e[33m%s\e[K\n\r", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
     Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", preferences.getBool("realSpeed", false) ? "YES" : "NO");
     Terminal.write("\e[6A");  // cursor UP
-    Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", SupportedTerminals::names()[preferences.getInt("termEmu", DefaultTermIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", SupportedTerminals::names()[(int)getTerminalEmu()] );
     Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
     #ifndef USE_TEXTUAL_DISPLAYCONTROLLER
     Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", preferences.getBool("emuCRT", false) ? "YES" : "NO");
     #endif
     Terminal.printf("\t\t\t\t\t\e[93m C \e[37m Colors: \e[33m%s\e[K\n\r", ColorsStr[preferences.getInt("colors", DefaultColorsIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m L \e[37m Rows: \e[33m%d\e[K\n\r",  getRowsCount() <= 0 ? Terminal.getRows() : getRowsCount());
     Terminal.write( "\t\t\t\t\t\e[93m O \e[37m Reset Configuration\e[K\n\r");
 
     Terminal.write("\n\n\e[97mPlease select an option (ENTER to exit): \e[K\e[92m");
@@ -269,11 +305,10 @@ void emulator_menu()
       // Terminal emulation
       case 'T':
       {
-        int termIndex = preferences.getInt("termEmu", DefaultTermIndex) + 1;
+        int termIndex = (int)getTerminalEmu() + 1;
         if (termIndex > MaxTermIndex)
           termIndex = 0;
         preferences.putInt("termEmu", termIndex);
-        Terminal.setTerminalType((TermType)termIndex);
         break;
       }
 
@@ -298,6 +333,19 @@ void emulator_menu()
         break;
       }
 
+      // Rows
+      case 'L':
+      {
+        int rows = getRowsCount() + 1;
+        if (rows < 24)
+          rows = 24;  // min
+        if (rows > 25)
+          rows = 0;   // max
+        preferences.putInt("rowsCount", rows);
+        changedRowsCount = true;
+        break;
+      }
+
       // Reset configuration
       case 'O':
         preferences.clear();
@@ -310,6 +358,7 @@ void emulator_menu()
 
     }
   }
+
   if (resetRequired) {
     Terminal.write("Reset required. Reset now? (Y/N)");
     if (toupper(Terminal.read()) == 'Y') {
@@ -317,8 +366,17 @@ void emulator_menu()
       ESP.restart();
     }
   }
+
   Terminal.localWrite("\n");
-  setTerminalColors();
+
+  if (changedRowsCount) {
+    setupRowsCount();
+    Terminal.clear();
+    Terminal.write("Clear screen required. Settings applied.\r\n\e\n");
+  }
+
+  setupTerminalEmu();
+  setupTerminalColors();
 }
 
 
@@ -415,11 +473,10 @@ void loop()
   // menu callback (pressing PAUSE)
   altair.setMenuCallback(emulator_menu);
 
-  setTerminalColors();
+  setupTerminalColors();
   Terminal.clear();
 
-  // scrolling region (24 rows)
-  Terminal.write("\e[1;24r");
+  setupRowsCount();
 
   Terminal.write("\e[97m\e[44m");
   Terminal.write("                    /* * * * * * * * * * * * * * * * * * * *\e[K\r\n");
@@ -438,15 +495,14 @@ void loop()
 
   Terminal.printf("Press \e[93m[F12]\e[92m or \e[93m[PAUSE]\e[92m to display emulator menu\e[K\r\n");
 
-  setTerminalColors();
+  setupTerminalColors();
 
   // setup keyboard layout
   int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex);
   PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[kbdLayIndex]);
 
   // setup terminal emulation
-  int termIndex = preferences.getInt("termEmu", DefaultTermIndex);
-  Terminal.setTerminalType((TermType)termIndex);
+  setupTerminalEmu();
 
   // CPU speed
   altair.setRealSpeed(preferences.getBool("realSpeed", false));
