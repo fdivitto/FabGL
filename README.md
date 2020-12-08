@@ -3,6 +3,8 @@
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
+**[See also my youtube channel where you can find demos and tutorials](https://www.youtube.com/user/fdivitto/videos)**
+
 
 You can support development by purchasing my own [development board](https://www.tindie.com/products/18910/) and [Serial Terminal](https://www.tindie.com/products/21107/).
 
