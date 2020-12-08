@@ -128,8 +128,8 @@
 // Specify which disk image or file name assign to drives
 #define DRIVE_A cpm22_dsk     // A: read only (or read/write using SD Card)
 #define DRIVE_B games_dsk     // B: read only (or read/write using SD Card)
-#define DRIVE_C "diskC.dsk"   // C: read/write
-#define DRIVE_D "diskD.dsk"   // D: read/write
+#define DRIVE_C "diskC.dsk"   // C: read/write (remember to FORMAT!!)
+#define DRIVE_D "diskD.dsk"   // D: read/write (remember to FORMAT!!)
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -146,9 +146,9 @@ constexpr int DefaultKbdLayIndex = 2;   // Default: "UK"
 
 constexpr int DefaultRowsCount   = 0;   // 0 = no limit (34 on the text terminal)
 
-const char * ColorsStr[] = { "Green/Black", "Yellow/Black", "White/Black", "Black/White", "Yellow/Blue", "Black/Yellow" };
-const Color TextColors[] = { Color::BrightGreen, Color::BrightYellow, Color::BrightWhite, Color::Black,       Color::BrightYellow, Color::Black };
-const Color BackColors[] = { Color::Black,       Color::Black,        Color::Black,       Color::BrightWhite, Color::Blue,         Color::BrightYellow };
+const char * ColorsStr[]         = { "Green/Black",      "Yellow/Black",      "White/Black",      "Black/White",      "Yellow/Blue",       "Black/Yellow" };
+const Color TextColors[]         = { Color::BrightGreen, Color::BrightYellow, Color::BrightWhite, Color::Black,       Color::BrightYellow, Color::Black };
+const Color BackColors[]         = { Color::Black,       Color::Black,        Color::Black,       Color::BrightWhite, Color::Blue,         Color::BrightYellow };
 constexpr int DefaultColorsIndex = 0;   // Default: Green/Black
 constexpr int MaxColorsIndex     = 5;
 
@@ -174,15 +174,6 @@ Preferences          preferences;
 // base path (can be SPIFFS_MOUNT_PATH or SDCARD_MOUNT_PATH depending from what was successfully mounted first)
 char const * basepath = nullptr;
 
-
-
-
-void setupTerminalColors()
-{
-  int colorsIndex = preferences.getInt("colors", DefaultColorsIndex);
-  Terminal.setForegroundColor(TextColors[colorsIndex]);
-  Terminal.setBackgroundColor(BackColors[colorsIndex]);
-}
 
 
 TermType getTerminalEmu()
@@ -214,6 +205,57 @@ void setupRowsCount()
 }
 
 
+int getKbdLayoutIndex()
+{
+  return preferences.getInt("kbdLay", DefaultKbdLayIndex);
+}
+
+
+void setupKbdLayout()
+{
+  PS2Controller.keyboard()->setLayout( SupportedLayouts::layouts()[getKbdLayoutIndex()] );
+}
+
+
+bool getRealCPUSpeed()
+{
+  return preferences.getBool("realSpeed", false);
+}
+
+
+void setupRealCPUSpeed()
+{
+  altair.setRealSpeed(getRealCPUSpeed());
+}
+
+
+// 0 = 8080, 1 = Z80
+int getCPU()
+{
+  return preferences.getInt("CPU", DefaultCPU);
+}
+
+
+bool getEmuCRT()
+{
+  return preferences.getBool("emuCRT", false);
+}
+
+
+int getColorsIndex()
+{
+  return preferences.getInt("colors", DefaultColorsIndex);
+}
+
+
+void setupTerminalColors()
+{
+  int colorsIndex = getColorsIndex();
+  Terminal.setForegroundColor(TextColors[colorsIndex]);
+  Terminal.setBackgroundColor(BackColors[colorsIndex]);
+}
+
+
 // shown pressing PAUSE
 void emulator_menu()
 {
@@ -231,15 +273,15 @@ void emulator_menu()
     Terminal.write( "\e[93m S \e[37m Send Disk to Serial\e[K\n\r");
     Terminal.write( "\e[93m R \e[37m Get Disk from Serial\e[K\n\r");
     Terminal.write( "\e[93m F \e[37m Format FileSystem\e[K\n\r");
-    Terminal.printf("\e[93m U \e[37m CPU: \e[33m%s\e[K\n\r", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
-    Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", preferences.getBool("realSpeed", false) ? "YES" : "NO");
+    Terminal.printf("\e[93m U \e[37m CPU: \e[33m%s\e[K\n\r", getCPU() == 1 ? "Z80" : "i8080");
+    Terminal.printf("\e[93m P \e[37m Real CPU Speed: \e[33m%s\e[K\n\r", getRealCPUSpeed() ? "YES" : "NO");
     Terminal.write("\e[6A");  // cursor UP
     Terminal.printf("\t\t\t\t\t\e[93m T \e[37m Terminal: \e[33m%s\e[K\n\r", SupportedTerminals::names()[(int)getTerminalEmu()] );
-    Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m K \e[37m Keyboard Layout: \e[33m%s\e[K\n\r", SupportedLayouts::names()[getKbdLayoutIndex()] );
     #ifndef USE_TEXTUAL_DISPLAYCONTROLLER
-    Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", preferences.getBool("emuCRT", false) ? "YES" : "NO");
+    Terminal.printf("\t\t\t\t\t\e[93m G \e[37m CRT Mode: \e[33m%s\e[K\n\r", getEmuCRT() ? "YES" : "NO");
     #endif
-    Terminal.printf("\t\t\t\t\t\e[93m C \e[37m Colors: \e[33m%s\e[K\n\r", ColorsStr[preferences.getInt("colors", DefaultColorsIndex)] );
+    Terminal.printf("\t\t\t\t\t\e[93m C \e[37m Colors: \e[33m%s\e[K\n\r", ColorsStr[getColorsIndex()] );
     Terminal.printf("\t\t\t\t\t\e[93m L \e[37m Rows: \e[33m%d\e[K\n\r",  getRowsCount() <= 0 ? Terminal.getRows() : getRowsCount());
     Terminal.write( "\t\t\t\t\t\e[93m O \e[37m Reset Configuration\e[K\n\r");
 
@@ -268,7 +310,7 @@ void emulator_menu()
 
       // Format FileSystem
       case 'F':
-        Terminal.write("Formatting filesystem removes RW disks and resets the Altair. Are you sure? (Y/N)");
+        Terminal.write("\e[91mFormat deletes all disks and files in your SD or SPIFFS!\e[92m\r\nAre you sure? (Y/N)");
         if (toupper(Terminal.read()) == 'Y') {
           Terminal.write("\n\rFormatting...");
           Terminal.flush();
@@ -286,19 +328,19 @@ void emulator_menu()
 
       // Real CPU speed
       case 'P':
-        preferences.putBool("realSpeed", !preferences.getBool("realSpeed", false));
-        altair.setRealSpeed(preferences.getBool("realSpeed", false));
+        preferences.putBool("realSpeed", !getRealCPUSpeed());
+        setupRealCPUSpeed();
         break;
 
       // Emulate CRT
       case 'G':
-        preferences.putBool("emuCRT", !preferences.getBool("emuCRT", false));
+        preferences.putBool("emuCRT", !getEmuCRT());
         resetRequired = true;
         break;
 
       // CPU
       case 'U':
-        preferences.putInt("CPU", preferences.getInt("CPU", DefaultCPU) ^ 1);
+        preferences.putInt("CPU", getCPU() ^ 1);
         resetRequired = true;
         break;
 
@@ -315,18 +357,18 @@ void emulator_menu()
       // Keyboard layout
       case 'K':
       {
-        int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex) + 1;
+        int kbdLayIndex = getKbdLayoutIndex() + 1;
         if (kbdLayIndex >= SupportedLayouts::count())
           kbdLayIndex = 0;
         preferences.putInt("kbdLay", kbdLayIndex);
-        PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[kbdLayIndex]);
+        setupKbdLayout();
         break;
       }
 
       // Colors
       case 'C':
       {
-        int colorsIndex = preferences.getInt("colors", DefaultColorsIndex) + 1;
+        int colorsIndex = getColorsIndex() + 1;
         if (colorsIndex > MaxColorsIndex)
           colorsIndex = 0;
         preferences.putInt("colors", colorsIndex);
@@ -375,8 +417,8 @@ void emulator_menu()
     Terminal.write("Clear screen required. Settings applied.\r\n\e\n");
   }
 
-  setupTerminalEmu();
   setupTerminalColors();
+  setupTerminalEmu();
 }
 
 
@@ -392,14 +434,10 @@ void setup()
   // setup VGA (default configuration with 64 colors)
   DisplayController.begin();
 
-  if (preferences.getBool("emuCRT", false))
+  if (getEmuCRT())
     DisplayController.setResolution(VGA_640x200_70HzRetro);
   else
     DisplayController.setResolution(VGA_640x200_70Hz);
-
-  // uncomment to adjust screen alignment and size
-  //DisplayController.shrinkScreen(5, 0);
-  //DisplayController.moveScreen(-1, 0);
 
   Terminal.begin(&DisplayController);
   Terminal.connectLocally();      // to use Terminal.read(), available(), etc..
@@ -421,7 +459,7 @@ void attachDisk(int drive, void const * data)
     // "data" is a disk image
     if (FileBrowser::getDriveType(basepath) == fabgl::DriveType::SDCard) {
       // when storage is SD Card, copy read only disk image into a file, if doesn't already exist
-      auto newfilename = String(basepath) + String("/disk") + String('A' + drive) + String(".dsk");
+      auto newfilename = String(basepath) + String("/disk") + String((char)('A' + drive)) + String(".dsk");
       Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, newfilename.c_str());
       diskDrive.attachFileFromImage(drive, newfilename.c_str(), dskimage);
     } else {
@@ -470,7 +508,7 @@ void loop()
   // boot ROM
   altair.load(Altair88DiskBootROMAddr, Altair88DiskBootROM, sizeof(Altair88DiskBootROM));
 
-  // menu callback (pressing PAUSE)
+  // menu callback (pressing PAUSE or F12)
   altair.setMenuCallback(emulator_menu);
 
   setupTerminalColors();
@@ -490,24 +528,23 @@ void loop()
   FileBrowser::getFSInfo(FileBrowser::getDriveType(basepath), 0, &total, &used);
   Terminal.printf("\e[33mFile System :\e[32m %lld KiB used, %lld KiB free\e[K\r\n", used / 1024, (total - used) / 1024);
 
-  Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", SupportedLayouts::names()[preferences.getInt("kbdLay", DefaultKbdLayIndex)] );
-  Terminal.printf("\e[33mCPU         : \e[32m%s\e[92m\e[K\r\n\e[K\n", preferences.getInt("CPU", DefaultCPU) == 1 ? "Z80" : "i8080");
+  Terminal.printf("\e[33mKbd Layout  : \e[32m%s\e[K\r\n", SupportedLayouts::names()[getKbdLayoutIndex()] );
+  Terminal.printf("\e[33mCPU         : \e[32m%s\e[92m\e[K\r\n\e[K\n", getCPU() == 1 ? "Z80" : "i8080");
 
   Terminal.printf("Press \e[93m[F12]\e[92m or \e[93m[PAUSE]\e[92m to display emulator menu\e[K\r\n");
 
   setupTerminalColors();
 
   // setup keyboard layout
-  int kbdLayIndex = preferences.getInt("kbdLay", DefaultKbdLayIndex);
-  PS2Controller.keyboard()->setLayout(SupportedLayouts::layouts()[kbdLayIndex]);
+  setupKbdLayout();
 
   // setup terminal emulation
   setupTerminalEmu();
 
   // CPU speed
-  altair.setRealSpeed(preferences.getBool("realSpeed", false));
+  setupRealCPUSpeed();
 
-  CPU cpu = (preferences.getInt("CPU", DefaultCPU) == 1 ? CPU::Z80 : CPU::i8080);
+  CPU cpu = (getCPU() == 1 ? CPU::Z80 : CPU::i8080);
   altair.run(cpu, Altair88DiskBootROMRun);
 }
 
