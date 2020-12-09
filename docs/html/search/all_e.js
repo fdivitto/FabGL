@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['ps_2f2_20ports_20schema',['PS/2 ports schema',['../conf_p_s2.html',1,'']]],
   ['paintboxstyle',['paintBoxStyle',['../classfabgl_1_1ui_paint_box_a04e5b1c6b9cf99759d272bd1053d65ad.html#a04e5b1c6b9cf99759d272bd1053d65ad',1,'fabgl::uiPaintBox']]],
   ['paintoptions',['PaintOptions',['../structfabgl_1_1_paint_options.html',1,'fabgl']]],
   ['palette16',['PALETTE16',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276a2305a7e1bcc1d10f990698ed574363ac',1,'fabgl']]],

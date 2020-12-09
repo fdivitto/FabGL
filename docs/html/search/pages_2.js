@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['generic_20circuit_20diagram',['Generic Circuit Diagram',['../gen_schema.html',1,'']]]
+  ['ps_2f2_20ports_20schema',['PS/2 ports schema',['../conf_p_s2.html',1,'']]]
 ];

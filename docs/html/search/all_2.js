@@ -26,8 +26,6 @@ var searchData=
   ['comboboxprops',['comboBoxProps',['../classfabgl_1_1ui_custom_combo_box_a5325fd0e3e5131873f5224a4ee14f936.html#a5325fd0e3e5131873f5224a4ee14f936',1,'fabgl::uiCustomComboBox']]],
   ['comboboxstyle',['comboBoxStyle',['../classfabgl_1_1ui_custom_combo_box_a6bc11395e669c44bb118bfe6afef8b55.html#a6bc11395e669c44bb118bfe6afef8b55',1,'fabgl::uiCustomComboBox']]],
   ['configuring_20audio_20port',['Configuring Audio port',['../conf_audio.html',1,'']]],
-  ['configuring_20ps_2f2_20port',['Configuring PS/2 port',['../conf_p_s2.html',1,'']]],
-  ['configuring_20vga_20outputs',['Configuring VGA outputs',['../conf_v_g_a.html',1,'']]],
   ['connectlocally',['connectLocally',['../classfabgl_1_1_terminal_a068123b964647130439aa949370181dc.html#a068123b964647130439aa949370181dc',1,'fabgl::Terminal']]],
   ['connectserialport',['connectSerialPort',['../classfabgl_1_1_terminal_aa1dda18e2c27808389d9e514d185a49e.html#aa1dda18e2c27808389d9e514d185a49e',1,'fabgl::Terminal::connectSerialPort(HardwareSerial &amp;serialPort, bool autoXONXOFF=true)'],['../classfabgl_1_1_terminal_a670917860bfd8e7fbbfa572c16d14ab3.html#a670917860bfd8e7fbbfa572c16d14ab3',1,'fabgl::Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted=false)']]],
   ['content',['content',['../classfabgl_1_1ui_file_browser_a9e12acbcf8eac58ec29e175d32765912.html#a9e12acbcf8eac58ec29e175d32765912',1,'fabgl::uiFileBrowser']]],
