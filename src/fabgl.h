@@ -93,13 +93,12 @@
  *    * fabgl::I2C, thread safe I2C (Wire) class
  *    * fabgl::DS3231, Real Time Clock driver which uses the thread safe fabgl::I2C library
  *
- * See @ref confVGA "Configuring VGA outputs" for VGA connection sample schema.
+ * See @ref confVGA "VGA output" for VGA connection sample schema.
  *
- * See @ref confPS2 "Configuring PS/2 port" for PS/2 connection sample schema.
+ * See @ref confPS2 "PS/2 ports" for PS/2 connections sample schema.
  *
  * See @ref confAudio "Configuring Audio port" for audio connection sample schema.
  *
- * See @ref genSchema "Generic Circuit Diagram" for a generic complete circuit diagram.
  *
  * - - -
  * <CENTER> Installation Tutorial </CENTER>
@@ -165,7 +164,7 @@
 
 
 /**
- * @page confVGA Configuring VGA outputs
+ * @page confVGA VGA output schema
  *
  * VGA output can be configured such as 8 colors or 64 colors are displayed.
  * Eight colors require 5 outputs (R, G, B, H and V), while sixty-four colors require 8 outputs (R0, R1, G0, G1, B0, B1, H and V).
@@ -187,7 +186,7 @@
 
 
 /**
- * @page confPS2 Configuring PS/2 port
+ * @page confPS2 PS/2 ports schema
  *
  * PS2 Keyboard or Mouse connection uses two GPIOs (data and clock) and requires one 120 Ohm series resistor and one 2K Ohm pullup resistor for each signal:
  *
@@ -228,15 +227,6 @@
  *
  */
 
-
-/**
- * @page genSchema Generic Circuit Diagram
- *
- * This is a sample schema using ESP32 Devkit V1, with VGA Output, Audio Output, two PS/2 ports and a UART port
- *
- * \image html schema.png width=800cm
- *
- */
 
 
 
