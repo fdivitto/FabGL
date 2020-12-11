@@ -348,7 +348,7 @@ void sendString(char const * str)
 {
   while (*str) {
     Terminal.send(*str++);
-    delay(1);
+    delay(5);
   }
 }
 
