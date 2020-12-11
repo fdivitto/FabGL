@@ -218,11 +218,20 @@ const TermInfoVideoConv videoConv_ADM31[] = {
   // 'ESC T' => Erase to end of line
   { "\eT", 2, { ConvCtrl::EraseToEndOfLine, ConvCtrl::END} },
 
+  // 'ESC t' => Erase to end of line
+  { "\et", 2, { ConvCtrl::EraseToEndOfLine, ConvCtrl::END} },
+
   // 'ESC Y' => Erase to end of screen
   { "\eY", 2, { ConvCtrl::EraseToEndOfScreen, ConvCtrl::END} },
 
+  // 'ESC y' => Erase to end of screen
+  { "\ey", 2, { ConvCtrl::EraseToEndOfScreen, ConvCtrl::END} },
+
   // 'ESC *' => Cursor home and Clear screen
   { "\e*", 2, { ConvCtrl::CursorHome, ConvCtrl::EraseToEndOfScreen, ConvCtrl::END} },
+
+  // 'ESC :' => Cursor home and Clear screen
+  { "\e:", 2, { ConvCtrl::CursorHome, ConvCtrl::EraseToEndOfScreen, ConvCtrl::END} },
 
   // Last item marker
   { nullptr, 0, { } },
