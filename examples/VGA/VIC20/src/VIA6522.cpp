@@ -71,19 +71,52 @@ void MOS6522::dump()
 #endif
 
 
+// reg must be 0..0x0f (not checked)
 void MOS6522::writeReg(int reg, int value)
 {
   #if DEBUG6522
   printf("VIA %d, writeReg 0x%02x = 0x%02x\n", m_tag, reg, value);
   #endif
+
   m_regs[reg] = value;
+
   switch (reg) {
+
+    // ORB: Output Register B
+    case VIA_REG_ORB_IRB:
+      m_regs[VIA_REG_ORB_IRB] = value | (m_regs[VIA_REG_ORB_IRB] & ~m_regs[VIA_REG_DDRB]);
+      m_portOut(this, Port_PB);
+      // clear CB1 and CB2 interrupt flags
+      m_IFR &= ~VIA_I_CB1;
+      m_IFR &= ~VIA_I_CB2;
+      break;
+
+    // ORA: Output Register A
+    case VIA_REG_ORA_IRA:
+      m_regs[VIA_REG_ORA_IRA] = value | (m_regs[VIA_REG_ORA_IRA] & ~m_regs[VIA_REG_DDRA]);
+      m_portOut(this, Port_PA);
+      // clear CA1 and CA2 interrupt flags
+      m_IFR &= ~VIA_I_CA1;
+      m_IFR &= ~VIA_I_CA2;
+      break;
+
+    // DDRB: Data Direction Register B
+    case VIA_REG_DDRB:
+      m_regs[VIA_REG_DDRB] = value;
+      break;
+
+    // DDRA: Data Direction Register A
+    case VIA_REG_DDRA:
+      m_regs[VIA_REG_DDRA] = value;
+      break;
+
+    // T1C-L: T1 Low-Order Latches
     case VIA_REG_T1_C_LO:
-      // timer1: write into low order latch
       m_timer1Latch = (m_timer1Latch & 0xff00) | value;
       break;
+
+    // T1C-H: T1 High-Order Counter
     case VIA_REG_T1_C_HI:
-      // timer1: write into high order latch
       m_timer1Latch = (m_timer1Latch & 0x00ff) | (value << 8);
       // timer1: write into high order counter
       // timer1: transfer low order latch into low order counter
@@ -92,31 +125,43 @@ void MOS6522::writeReg(int reg, int value)
       m_IFR &= ~VIA_I_T1;
       m_timer1Triggered = false;
       break;
+
+    // T1L-L: T1 Low-Order Latches
     case VIA_REG_T1_L_LO:
-      // timer1: write low order latch
       m_timer1Latch = (m_timer1Latch & 0xff00) | value;
       break;
+
+    // T1L-H: T1 High-Order Latches
     case VIA_REG_T1_L_HI:
-      // timer1: write high order latch
       m_timer1Latch = (m_timer1Latch & 0x00ff) | (value << 8);
       // clear T1 interrupt flag
       m_IFR &= ~VIA_I_T1;
       break;
+
+    // T2C-L: T2 Low-Order Latches
     case VIA_REG_T2_C_LO:
-      // timer2: write low order latch
       m_timer2Latch = value;
       break;
+
+    // T2C-H: T2 High-Order Counter
     case VIA_REG_T2_C_HI:
-      // timer2: write high order counter
       // timer2: copy low order latch into low order counter
       m_timer2Counter = (value << 8) | m_timer2Latch;
       // clear T2 interrupt flag
       m_IFR &= ~VIA_I_T2;
       m_timer2Triggered = false;
       break;
+
+    // SR: Shift Register
+    case VIA_REG_SR:
+      break;
+
+    // ACR: Auxliary Control Register
     case VIA_REG_ACR:
       m_ACR = value;
       break;
+
+    // PCR: Peripheral Control Register
     case VIA_REG_PCR:
     {
       m_regs[VIA_REG_PCR] = value;
@@ -152,12 +197,15 @@ void MOS6522::writeReg(int reg, int value)
       }
       break;
     }
+
+    // IFR: Interrupt Flag Register
     case VIA_REG_IFR:
-      // flag register, reset each bit at 1
+      // reset each bit at 1
       m_IFR &= ~value & 0x7f;
       break;
+
+    // IER: Interrupt Enable Register
     case VIA_REG_IER:
-      // interrupt enable register
       if (value & VIA_I_CTRL) {
         // set 0..6 bits
         m_IER |= value & 0x7f;
@@ -166,104 +214,114 @@ void MOS6522::writeReg(int reg, int value)
         m_IER &= ~value & 0x7f;
       }
       break;
-    case VIA_REG_DDRA:
-      // Direction register Port A
-      m_regs[VIA_REG_DDRA] = value;
-      break;
-    case VIA_REG_DDRB:
-      // Direction register Port B
-      m_regs[VIA_REG_DDRB] = value;
-      break;
-    case VIA_REG_ORA:
-      // Output on Port A
-      m_regs[VIA_REG_ORA] = value | (m_regs[VIA_REG_ORA] & ~m_regs[VIA_REG_DDRA]);
-      m_portOut(this, Port_PA);
-      // clear CA1 and CA2 interrupt flags
-      m_IFR &= ~VIA_I_CA1;
-      m_IFR &= ~VIA_I_CA2;
-      break;
-    case VIA_REG_ORA_NH:
-      // Output on Port A (no handshake)
-      m_regs[VIA_REG_ORA] = value | (m_regs[VIA_REG_ORA] & ~m_regs[VIA_REG_DDRA]);
+
+    // ORA: Output Register A - no Handshake
+    case VIA_REG_ORA_IRA_NH:
+      m_regs[VIA_REG_ORA_IRA] = value | (m_regs[VIA_REG_ORA_IRA] & ~m_regs[VIA_REG_DDRA]);
       m_portOut(this, Port_PA);
       break;
-    case VIA_REG_ORB:
-      // Output on Port B
-      m_regs[VIA_REG_ORB] = value | (m_regs[VIA_REG_ORB] & ~m_regs[VIA_REG_DDRB]);
-      m_portOut(this, Port_PB);
-      // clear CB1 and CB2 interrupt flags
-      m_IFR &= ~VIA_I_CB1;
-      m_IFR &= ~VIA_I_CB2;
-      break;
-    default:
-      break;
+
   };
 }
 
 
+// reg must be 0..0x0f (not checked)
 int MOS6522::readReg(int reg)
 {
   #if DEBUG6522
   printf("VIA %d, readReg 0x%02x\n", m_tag, reg);
   #endif
+
   switch (reg) {
-    case VIA_REG_T1_C_LO:
-      // clear T1 interrupt flag
-      m_IFR &= ~VIA_I_T1;
-      // read T1 low order counter
-      return m_timer1Counter & 0xff;
-    case VIA_REG_T1_C_HI:
-      // read T1 high order counter
-      return m_timer1Counter >> 8;
-    case VIA_REG_T1_L_LO:
-      // read T1 low order latch
-      return m_timer1Latch & 0xff;
-    case VIA_REG_T1_L_HI:
-      // read T1 high order latch
-      return m_timer1Latch >> 8;
-    case VIA_REG_T2_C_LO:
-      // clear T2 interrupt flag
-      m_IFR &= ~VIA_I_T2;
-      // read T2 low order counter
-      return m_timer2Counter & 0xff;
-    case VIA_REG_T2_C_HI:
-      // read T2 high order counter
-      return m_timer2Counter >> 8;
-    case VIA_REG_ACR:
-      return m_ACR;
-    case VIA_REG_PCR:
-      return m_regs[VIA_REG_PCR];
-    case VIA_REG_IFR:
-      return m_IFR | (m_IFR & m_IER ? 0x80 : 0);
-    case VIA_REG_IER:
-      return m_IER | 0x80;
-    case VIA_REG_DDRA:
-      // Direction register Port A
-      return m_regs[VIA_REG_DDRA];
-    case VIA_REG_DDRB:
-      // Direction register Port B
-      return m_regs[VIA_REG_DDRB];
-    case VIA_REG_ORA:
-      // clear CA1 and CA2 interrupt flags
-      m_IFR &= ~VIA_I_CA1;
-      m_IFR &= ~VIA_I_CA2;
-      // Input from Port A
-      m_portIn(this, Port_PA);
-      return m_regs[VIA_REG_ORA];
-    case VIA_REG_ORA_NH:
-      // Input from Port A (no handshake)
-      m_portIn(this, Port_PA);
-      return m_regs[VIA_REG_ORA];
-    case VIA_REG_ORB:
+
+    // IRB: Input Register B
+    case VIA_REG_ORB_IRB:
       // clear CB1 and CB2 interrupt flags
       m_IFR &= ~VIA_I_CB1;
       m_IFR &= ~VIA_I_CB2;
       // Input from Port B
       m_portIn(this, Port_PB);
-      return m_regs[VIA_REG_ORB];
-    default:
+      return m_regs[VIA_REG_ORB_IRB];
+
+    // IRA: Input Register A
+    case VIA_REG_ORA_IRA:
+      // clear CA1 and CA2 interrupt flags
+      m_IFR &= ~VIA_I_CA1;
+      m_IFR &= ~VIA_I_CA2;
+      // Input from Port A
+      m_portIn(this, Port_PA);
+      return m_regs[VIA_REG_ORA_IRA];
+
+    // DDRB: Data Direction Register B
+    case VIA_REG_DDRB:
+      return m_regs[VIA_REG_DDRB];
+
+    // DDRA: Data Direction Register A
+    case VIA_REG_DDRA:
+      return m_regs[VIA_REG_DDRA];
+
+    // T1C-L: T1 Low-Order Counter
+    case VIA_REG_T1_C_LO:
+      // clear T1 interrupt flag
+      m_IFR &= ~VIA_I_T1;
+      // read T1 low order counter
+      return m_timer1Counter & 0xff;
+
+    // T1C-H: T1 High-Order Counter
+    case VIA_REG_T1_C_HI:
+      // read T1 high order counter
+      return m_timer1Counter >> 8;
+
+    // T1L-L: T1 Low-Order Latches
+    case VIA_REG_T1_L_LO:
+      // read T1 low order latch
+      return m_timer1Latch & 0xff;
+
+    // T1L-H: T1 High-Order Latches
+    case VIA_REG_T1_L_HI:
+      // read T1 high order latch
+      return m_timer1Latch >> 8;
+
+    // T2C-L: T2 Low-Order Counter
+    case VIA_REG_T2_C_LO:
+      // clear T2 interrupt flag
+      m_IFR &= ~VIA_I_T2;
+      // read T2 low order counter
+      return m_timer2Counter & 0xff;
+
+    // T2C-H: T2 High-Order Counter
+    case VIA_REG_T2_C_HI:
+      // read T2 high order counter
+      return m_timer2Counter >> 8;
+
+    // SR: Shift Register
+    case VIA_REG_SR:
       return m_regs[reg];
+
+    // ACR: Auxiliary Control Register
+    case VIA_REG_ACR:
+      return m_ACR;
+
+    // PCR: Peripheral Control Register
+    case VIA_REG_PCR:
+      return m_regs[VIA_REG_PCR];
+
+    // IFR: Interrupt Flag Register
+    case VIA_REG_IFR:
+      return m_IFR | (m_IFR & m_IER ? 0x80 : 0);
+
+    // IER: Interrupt Enable Register
+    case VIA_REG_IER:
+      return m_IER | 0x80;
+
+    // IRA: Input Register A - no handshake
+    case VIA_REG_ORA_IRA_NH:
+      // Input from Port A (no handshake)
+      m_portIn(this, Port_PA);
+      return m_regs[VIA_REG_ORA_IRA];
+
   }
+  return 0;
 }
 
 

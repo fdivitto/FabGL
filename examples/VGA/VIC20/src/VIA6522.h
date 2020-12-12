@@ -35,8 +35,8 @@
 
 
 // VIA registers
-#define VIA_REG_ORB             0x0
-#define VIA_REG_ORA             0x1
+#define VIA_REG_ORB_IRB         0x0
+#define VIA_REG_ORA_IRA         0x1
 #define VIA_REG_DDRB            0x2
 #define VIA_REG_DDRA            0x3
 #define VIA_REG_T1_C_LO         0x4
@@ -50,7 +50,7 @@
 #define VIA_REG_PCR             0xc   // Peripherical Control Register
 #define VIA_REG_IFR             0xd   // Interrupt Flag Register
 #define VIA_REG_IER             0xe   // Interrupt Enable Register
-#define VIA_REG_ORA_NH          0xf
+#define VIA_REG_ORA_IRA_NH      0xf
 
 // VIA interrupt flags/control (bit mask)
 #define VIA_I_CA2               0x01
@@ -97,13 +97,13 @@ public:
 
   bool tick(int cycles);
 
-  uint8_t PA()                       { return m_regs[VIA_REG_ORA]; }
-  void setPA(int value)              { m_regs[VIA_REG_ORA] = value; }
-  void setBitPA(int bit, bool value) { m_regs[VIA_REG_ORA] = (m_regs[VIA_REG_ORA] & ~(1 << bit)); if (value) m_regs[VIA_REG_ORA] |= (1 << bit); }
+  uint8_t PA()                       { return m_regs[VIA_REG_ORA_IRA]; }
+  void setPA(int value)              { m_regs[VIA_REG_ORA_IRA] = value; }
+  void setBitPA(int bit, bool value) { m_regs[VIA_REG_ORA_IRA] = (m_regs[VIA_REG_ORA_IRA] & ~(1 << bit)); if (value) m_regs[VIA_REG_ORA_IRA] |= (1 << bit); }
 
-  uint8_t PB()                       { return m_regs[VIA_REG_ORB]; }
-  void setPB(int value)              { m_regs[VIA_REG_ORB] = value; }
-  void setBitPB(int bit, bool value) { m_regs[VIA_REG_ORB] = (m_regs[VIA_REG_ORB] & ~(1 << bit)); if (value) m_regs[VIA_REG_ORB] |= (1 << bit); }
+  uint8_t PB()                       { return m_regs[VIA_REG_ORB_IRB]; }
+  void setPB(int value)              { m_regs[VIA_REG_ORB_IRB] = value; }
+  void setBitPB(int bit, bool value) { m_regs[VIA_REG_ORB_IRB] = (m_regs[VIA_REG_ORB_IRB] & ~(1 << bit)); if (value) m_regs[VIA_REG_ORB_IRB] |= (1 << bit); }
 
   uint8_t CA1()                      { return m_CA1; }
   void setCA1(int value)             { m_CA1_prev = m_CA1; m_CA1 = value; }
