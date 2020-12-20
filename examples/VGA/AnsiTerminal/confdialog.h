@@ -34,7 +34,7 @@ Preferences preferences;
 
 
 #define TERMVERSION_MAJ 1
-#define TERMVERSION_MIN 2
+#define TERMVERSION_MIN 3
 
 
 static const char * BAUDRATES_STR[] = { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "230400", "250000", "256000", "500000", "1000000", "2000000" };
@@ -46,24 +46,26 @@ static const char * PARITY_STR[]    = { "None", "Even", "Odd" };
 static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
 static const char * FLOWCTRL_STR[]  = { "None", "Software" };
 
-constexpr int RESOLUTION_DEFAULT = 4;
+constexpr int RESOLUTION_DEFAULT           = 5;
 static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
-                                               "1024x768, 4 colors",      // 1
-                                               "800x600, 8 colors",       // 2
-                                               "720x576, 16 colors",      // 3
-                                               "640x480, 16 colors",      // 4
-                                               "640x350, 64 colors",      // 5
-                                               "512x384, 64 colors",      // 6
-                                               "400x300, 64 colors",      // 7
+                                               "1024x768, 4 Colors",      // 1
+                                               "800x600, 8 Colors",       // 2
+                                               "720x576, 16 Colors",      // 3
+                                               "640x480 73Hz, 16 C.",     // 4
+                                               "640x480 60Hz, 16 C.",     // 5
+                                               "640x350, 64 Colors",      // 6
+                                               "512x384, 64 Colors",      // 7
+                                               "400x300, 64 Colors",      // 8
                                               };
 static const char * RESOLUTIONS_CMDSTR[]   = { "1280x768x2",              // 0
                                                "1024x768x4",              // 1
                                                "800x600x8",               // 2
                                                "720x576x16",              // 3
-                                               "640x480x16",              // 4
-                                               "640x350x64",              // 5
-                                               "512x384x64",              // 6
-                                               "400x300x64",              // 7
+                                               "640x480@73x16",           // 4
+                                               "640x480@60x16",           // 5
+                                               "640x350x64",              // 6
+                                               "512x384x64",              // 7
+                                               "400x300x64",              // 8
                                             };
 enum class ResolutionController { VGAController, VGA16Controller, VGA8Controller, VGA2Controller, VGA4Controller };
 static const ResolutionController RESOLUTIONS_CONTROLLER[] = { ResolutionController::VGA2Controller,     // 0
@@ -71,22 +73,24 @@ static const ResolutionController RESOLUTIONS_CONTROLLER[] = { ResolutionControl
                                                                ResolutionController::VGA8Controller,     // 2
                                                                ResolutionController::VGA16Controller,    // 3
                                                                ResolutionController::VGA16Controller,    // 4
-                                                               ResolutionController::VGAController,      // 5
+                                                               ResolutionController::VGA16Controller,    // 5
                                                                ResolutionController::VGAController,      // 6
                                                                ResolutionController::VGAController,      // 7
+                                                               ResolutionController::VGAController,      // 8
                                                              };
 static const char * RESOLUTIONS_MODELINE[] = { SVGA_1280x768_50Hz,        // 0
                                                SVGA_1024x768_75Hz,        // 1
                                                SVGA_800x600_56Hz,         // 2
                                                PAL_720x576_50Hz,          // 3
                                                VGA_640x480_73Hz,          // 4
-                                               VGA_640x350_70HzAlt1,      // 5
-                                               VGA_512x384_60Hz,          // 6
-                                               VGA_400x300_60Hz,          // 7
+                                               VGA_640x480_60Hz,          // 5
+                                               VGA_640x350_70HzAlt1,      // 6
+                                               VGA_512x384_60Hz,          // 7
+                                               VGA_400x300_60Hz,          // 8
 };
-constexpr int       RESOLUTIONS_COUNT      = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
+constexpr int RESOLUTIONS_COUNT            = sizeof(RESOLUTIONS_STR) / sizeof(char const *);
 
-static const char *            FONTS_STR[]  = { "Auto", "VGA 4x6", "VGA 5x7", "VGA 5x8", "VGA 6x8", "VGA 6x9", "VGA 6x10", "VGA 6x12", "VGA 6x13",
+static const char * FONTS_STR[]            = { "Auto", "VGA 4x6", "VGA 5x7", "VGA 5x8", "VGA 6x8", "VGA 6x9", "VGA 6x10", "VGA 6x12", "VGA 6x13",
                                                 "VGA 7x13", "VGA 7x14", "VGA 8x8", "VGA 8x9", "VGA 8x13", "VGA 8x14", "VGA 8x16", "VGA 8x19", "VGA 9x15",
                                                 "VGA 9x18", "VGA 10x20", "BigSerif 8x14", "BigSerif 8x16", "Block 8x14", "Broadway 8x14",
                                                 "Computer 8x14", "Courier 8x14", "LCD 8x14", "Old English 8x16", "Sans Serif 8x14", "Sans Serif 8x16",
@@ -98,7 +102,7 @@ static const fabgl::FontInfo * FONTS_INFO[] = { nullptr, &fabgl::FONT_4x6, &fabg
                                                &fabgl::FONT_BROADWAY_8x14, &fabgl::FONT_COMPUTER_8x14, &fabgl::FONT_COURIER_8x14,
                                                &fabgl::FONT_LCD_8x14, &fabgl::FONT_OLDENGL_8x16, &fabgl::FONT_SANSERIF_8x14, &fabgl::FONT_SANSERIF_8x16,
                                                &fabgl::FONT_SLANT_8x14, &fabgl::FONT_WIGGLY_8x16 };
-constexpr int                  FONTS_COUNT  = sizeof(FONTS_STR) / sizeof(char const *);
+constexpr int       FONTS_COUNT             = sizeof(FONTS_STR) / sizeof(char const *);
 
 static const char * COLUMNS_STR[] = { "Max", "80", "132" };
 static const int    COLUMNS_INT[] = { 0, 80, 132 };
