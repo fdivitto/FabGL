@@ -90,7 +90,7 @@ public:
   void setKeyboard(VirtualKey key, bool down);
   void resetKeyboard();
 
-  void setJoy(Joy joy, bool value) { m_JOY[joy] = value; }
+  void setJoy(Joy joy, bool value);
   void resetJoy();
   void setJoyEmu(JoyEmu value) { m_joyEmu = value; }
   JoyEmu joyEmu()              { return m_joyEmu; }
@@ -165,10 +165,32 @@ private:
   //   block 3 : 0xA000 - 0xbfff
   uint8_t *             m_expROM[4];
 
-  // VIA1 -> NMI, Restore key, joystick
+  // ** VIA1 **
+  // IRQ      -> NMI
+  // CA1      -> RESTORE key
+  // CA2      -> CASS MOTOR
+  // CB1      -> USER PORT (CB1)
+  // CB2      -> USER PORT (CB2)
+  // PB0..PB7 -> USER PORT (PB0..PB7)
+  // PA0      -> SERIAL CLK IN
+  // PA1      -> SERIAL DATA IN
+  // PA2      -> JOY0
+  // PA3      -> JOY1
+  // PA4      -> JOY2
+  // PA5      -> LIGHT PEN (FIRE)
+  // PA6      -> CASS SW
+  // PA7      -> /SERIAL ATN OUT
   MOS6522               m_VIA1;
 
-  // VIA2 -> IRQ, keyboard Col (PB0..PB7), Keyboard Row (PA0..PA7), joystick (right)
+  // ** VIA2 **
+  // IRQ      -> CPU IRQ
+  // CA1      -> CASS READ
+  // CA2      -> /SERIAL CLK OUT
+  // CB1      -> SERIAL SRQ IN
+  // CB2      -> /SERIAL DATA OUT
+  // PB0..PB7 -> keyboard Col
+  // PA0..PA7 -> Keyboard Row
+  // PB7      -> JOY3
   MOS6522               m_VIA2;
 
   // Video Interface
@@ -186,6 +208,10 @@ private:
   // joystick states and emulation
   uint8_t               m_JOY[JoyFire + 1];
   JoyEmu                m_joyEmu;
+
+  // keyboard states
+  uint8_t               m_rowStatus;  // connected to VIA2 - PA
+  uint8_t               m_colStatus;  // connected to VIA2 - PB
 
   // triggered by type() method
   char const *          m_typingString;

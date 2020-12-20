@@ -29,13 +29,17 @@
 // VIA (6522 - Versatile Interface Adapter)
 
 
-MOS6522::MOS6522(Machine * machine, int tag, VIAPortIO portOut, VIAPortIO portIn)
+MOS6522::MOS6522(Machine * machine, int tag, VIAPortInput portIn, VIAPortOutput portOut)
   : m_machine(machine),
     m_tag(tag),
-    m_portOut(portOut),
-    m_portIn(portIn)
+    m_portIn(portIn),
+    m_portOut(portOut)
 {
   reset();
+
+  #if DEBUG6522
+  m_tick = 0;
+  #endif
 }
 
 
@@ -58,56 +62,118 @@ void MOS6522::reset()
   m_ACR             = 0;
   m_timer1Triggered = false;
   m_timer2Triggered = false;
-  memset(m_regs, 0, 16);
+  m_DDRA            = 0;
+  m_DDRB            = 0;
+  m_PCR             = 0;
+  m_PA              = 0xff;
+  m_PB              = 0xff;
+  m_SR              = 0;
+  m_IRA             = 0xff;
+  m_IRB             = 0xff;
+  m_ORA             = 0;
+  m_ORB             = 0;
 }
 
 
-#if DEBUG6522
-void MOS6522::dump()
+void MOS6522::setPA(int value)
 {
-  for (int i = 0; i < 16; ++i)
-    printf("%02x ", m_regs[i]);
+  m_PA = value;
+  m_IRA = m_PA; // IRA is exactly what there is on port A
 }
-#endif
+
+
+void MOS6522::setBitPA(int bit, bool value)
+{
+  uint8_t newPA = (m_PA & ~(1 << bit)) | ((int)value << bit);
+  setPA(newPA);
+}
+
+
+void MOS6522::openBitPA(int bit)
+{
+  uint8_t mask = (1 << bit);
+  if (m_DDRA & mask) {
+    // pin configured as output, set value of ORA
+    setBitPA(bit, m_ORA & mask);
+  } else {
+    // pin configured as input, pull it up
+    setBitPA(bit, true);
+  }
+}
+
+
+void MOS6522::setPB(int value)
+{
+  m_PB = value;
+  m_IRB = (m_PB & ~m_DDRB) | (m_ORB & m_DDRB);  // IRB contains PB for inputs, and ORB for outputs
+}
+
+
+void MOS6522::setBitPB(int bit, bool value)
+{
+  uint8_t newPB = (m_PB & ~(1 << bit)) | ((int)value << bit);
+  setPB(newPB);
+}
+
+
+void MOS6522::openBitPB(int bit)
+{
+  uint8_t mask = (1 << bit);
+  if (m_DDRB & mask) {
+    // pin configured as output, set value of ORB
+    setBitPB(bit, m_ORB & mask);
+  } else {
+    // pin configured as input, pull it up
+    setBitPB(bit, true);
+  }
+}
 
 
 // reg must be 0..0x0f (not checked)
 void MOS6522::writeReg(int reg, int value)
 {
   #if DEBUG6522
-  printf("VIA %d, writeReg 0x%02x = 0x%02x\n", m_tag, reg, value);
+  printf("tick %d VIA %d writeReg(%s, 0x%02x)\n", m_tick, m_tag, VIAREG2STR[reg], value);
   #endif
-
-  m_regs[reg] = value;
 
   switch (reg) {
 
     // ORB: Output Register B
     case VIA_REG_ORB_IRB:
-      m_regs[VIA_REG_ORB_IRB] = value | (m_regs[VIA_REG_ORB_IRB] & ~m_regs[VIA_REG_DDRB]);
+      m_ORB = value;
+      m_PB  = (m_ORB & m_DDRB) | (m_PB & ~m_DDRB);
+      m_IRB = (m_PB & ~m_DDRB) | (m_ORB & m_DDRB);  // IRB contains PB for inputs, and ORB for outputs
       m_portOut(this, Port_PB);
       // clear CB1 and CB2 interrupt flags
-      m_IFR &= ~VIA_I_CB1;
-      m_IFR &= ~VIA_I_CB2;
+      m_IFR &= ~VIA_IER_CB1;
+      m_IFR &= ~VIA_IER_CB2;
       break;
 
     // ORA: Output Register A
     case VIA_REG_ORA_IRA:
-      m_regs[VIA_REG_ORA_IRA] = value | (m_regs[VIA_REG_ORA_IRA] & ~m_regs[VIA_REG_DDRA]);
-      m_portOut(this, Port_PA);
       // clear CA1 and CA2 interrupt flags
-      m_IFR &= ~VIA_I_CA1;
-      m_IFR &= ~VIA_I_CA2;
+      m_IFR &= ~VIA_IER_CA1;
+      m_IFR &= ~VIA_IER_CA2;
+    // ORA: Output Register A - no Handshake
+    case VIA_REG_ORA_IRA_NH:
+      m_ORA = value;
+      m_PA  = (m_ORA & m_DDRA) | (m_PA & ~m_DDRA);
+      m_IRA = m_PA;                                   // IRA is exactly what there is on port A
+      m_portOut(this, Port_PA);
       break;
 
     // DDRB: Data Direction Register B
     case VIA_REG_DDRB:
-      m_regs[VIA_REG_DDRB] = value;
+      m_DDRB = value;
+      m_PB   = (m_ORB & m_DDRB) | (m_PB & ~m_DDRB);   // refresh Port B status
+      m_IRB  = (m_PB & ~m_DDRB) | (m_ORB & m_DDRB);   // IRB contains PB for inputs, and ORB for outputs
       break;
 
     // DDRA: Data Direction Register A
     case VIA_REG_DDRA:
-      m_regs[VIA_REG_DDRA] = value;
+      m_DDRA = value;
+      m_PA   = (m_ORA & m_DDRA) | (m_PA & ~m_DDRA);   // refresh Port A status
+      m_IRA  = m_PA;                                  // IRA is exactly what there is on port A
       break;
 
     // T1C-L: T1 Low-Order Latches
@@ -122,7 +188,7 @@ void MOS6522::writeReg(int reg, int value)
       // timer1: transfer low order latch into low order counter
       m_timer1Counter = (m_timer1Latch & 0x00ff) | (value << 8);
       // clear T1 interrupt flag
-      m_IFR &= ~VIA_I_T1;
+      m_IFR &= ~VIA_IER_T1;
       m_timer1Triggered = false;
       break;
 
@@ -135,7 +201,7 @@ void MOS6522::writeReg(int reg, int value)
     case VIA_REG_T1_L_HI:
       m_timer1Latch = (m_timer1Latch & 0x00ff) | (value << 8);
       // clear T1 interrupt flag
-      m_IFR &= ~VIA_I_T1;
+      m_IFR &= ~VIA_IER_T1;
       break;
 
     // T2C-L: T2 Low-Order Latches
@@ -148,12 +214,13 @@ void MOS6522::writeReg(int reg, int value)
       // timer2: copy low order latch into low order counter
       m_timer2Counter = (value << 8) | m_timer2Latch;
       // clear T2 interrupt flag
-      m_IFR &= ~VIA_I_T2;
+      m_IFR &= ~VIA_IER_T2;
       m_timer2Triggered = false;
       break;
 
     // SR: Shift Register
     case VIA_REG_SR:
+      m_SR = value;
       break;
 
     // ACR: Auxliary Control Register
@@ -164,9 +231,9 @@ void MOS6522::writeReg(int reg, int value)
     // PCR: Peripheral Control Register
     case VIA_REG_PCR:
     {
-      m_regs[VIA_REG_PCR] = value;
+      m_PCR = value;
       // CA2 control
-      switch ((m_regs[VIA_REG_PCR] >> 1) & 0b111) {
+      switch ((m_PCR >> 1) & 0b111) {
         case 0b110:
           // manual output - low
           m_CA2 = 0;
@@ -181,7 +248,7 @@ void MOS6522::writeReg(int reg, int value)
           break;
       }
       // CB2 control
-      switch ((m_regs[VIA_REG_PCR] >> 5) & 0b111) {
+      switch ((m_PCR >> 5) & 0b111) {
         case 0b110:
           // manual output - low
           m_CB2 = 0;
@@ -206,19 +273,13 @@ void MOS6522::writeReg(int reg, int value)
 
     // IER: Interrupt Enable Register
     case VIA_REG_IER:
-      if (value & VIA_I_CTRL) {
+      if (value & VIA_IER_CTRL) {
         // set 0..6 bits
         m_IER |= value & 0x7f;
       } else {
         // reset 0..6 bits
         m_IER &= ~value & 0x7f;
       }
-      break;
-
-    // ORA: Output Register A - no Handshake
-    case VIA_REG_ORA_IRA_NH:
-      m_regs[VIA_REG_ORA_IRA] = value | (m_regs[VIA_REG_ORA_IRA] & ~m_regs[VIA_REG_DDRA]);
-      m_portOut(this, Port_PA);
       break;
 
   };
@@ -229,7 +290,7 @@ void MOS6522::writeReg(int reg, int value)
 int MOS6522::readReg(int reg)
 {
   #if DEBUG6522
-  printf("VIA %d, readReg 0x%02x\n", m_tag, reg);
+  printf("tick %d VIA %d readReg(%s)\n", m_tick, m_tag, VIAREG2STR[reg]);
   #endif
 
   switch (reg) {
@@ -237,33 +298,35 @@ int MOS6522::readReg(int reg)
     // IRB: Input Register B
     case VIA_REG_ORB_IRB:
       // clear CB1 and CB2 interrupt flags
-      m_IFR &= ~VIA_I_CB1;
-      m_IFR &= ~VIA_I_CB2;
-      // Input from Port B
+      m_IFR &= ~VIA_IER_CB1;
+      m_IFR &= ~VIA_IER_CB2;
+      // get updated PB status
       m_portIn(this, Port_PB);
-      return m_regs[VIA_REG_ORB_IRB];
+      return m_IRB;
 
     // IRA: Input Register A
     case VIA_REG_ORA_IRA:
       // clear CA1 and CA2 interrupt flags
-      m_IFR &= ~VIA_I_CA1;
-      m_IFR &= ~VIA_I_CA2;
-      // Input from Port A
+      m_IFR &= ~VIA_IER_CA1;
+      m_IFR &= ~VIA_IER_CA2;
+    // IRA: Input Register A - no handshake
+    case VIA_REG_ORA_IRA_NH:
+      // get updated PA status
       m_portIn(this, Port_PA);
-      return m_regs[VIA_REG_ORA_IRA];
+      return m_IRA;
 
     // DDRB: Data Direction Register B
     case VIA_REG_DDRB:
-      return m_regs[VIA_REG_DDRB];
+      return m_DDRB;
 
     // DDRA: Data Direction Register A
     case VIA_REG_DDRA:
-      return m_regs[VIA_REG_DDRA];
+      return m_DDRA;
 
     // T1C-L: T1 Low-Order Counter
     case VIA_REG_T1_C_LO:
       // clear T1 interrupt flag
-      m_IFR &= ~VIA_I_T1;
+      m_IFR &= ~VIA_IER_T1;
       // read T1 low order counter
       return m_timer1Counter & 0xff;
 
@@ -285,7 +348,7 @@ int MOS6522::readReg(int reg)
     // T2C-L: T2 Low-Order Counter
     case VIA_REG_T2_C_LO:
       // clear T2 interrupt flag
-      m_IFR &= ~VIA_I_T2;
+      m_IFR &= ~VIA_IER_T2;
       // read T2 low order counter
       return m_timer2Counter & 0xff;
 
@@ -296,7 +359,7 @@ int MOS6522::readReg(int reg)
 
     // SR: Shift Register
     case VIA_REG_SR:
-      return m_regs[reg];
+      return m_SR;
 
     // ACR: Auxiliary Control Register
     case VIA_REG_ACR:
@@ -304,7 +367,7 @@ int MOS6522::readReg(int reg)
 
     // PCR: Peripheral Control Register
     case VIA_REG_PCR:
-      return m_regs[VIA_REG_PCR];
+      return m_PCR;
 
     // IFR: Interrupt Flag Register
     case VIA_REG_IFR:
@@ -314,12 +377,6 @@ int MOS6522::readReg(int reg)
     case VIA_REG_IER:
       return m_IER | 0x80;
 
-    // IRA: Input Register A - no handshake
-    case VIA_REG_ORA_IRA_NH:
-      // Input from Port A (no handshake)
-      m_portIn(this, Port_PA);
-      return m_regs[VIA_REG_ORA_IRA];
-
   }
   return 0;
 }
@@ -328,18 +385,22 @@ int MOS6522::readReg(int reg)
 // ret. true on interrupt
 bool MOS6522::tick(int cycles)
 {
+  #if DEBUG6522
+  m_tick += cycles;
+  #endif
+
   // handle Timer 1
   m_timer1Counter -= cycles;
   if (m_timer1Counter <= 0) {
     if (m_ACR & VIA_ACR_T1_FREERUN) {
       // free run, reload from latch
       m_timer1Counter += (m_timer1Latch - 1) + 3;  // +2 delay before next start
-      m_IFR |= VIA_I_T1;  // set interrupt flag
+      m_IFR |= VIA_IER_T1;  // set interrupt flag
     } else if (!m_timer1Triggered) {
       // one shot
       m_timer1Counter += 0xFFFF;
       m_timer1Triggered = true;
-      m_IFR |= VIA_I_T1;  // set interrupt flag
+      m_IFR |= VIA_IER_T1;  // set interrupt flag
     } else
       m_timer1Counter = (uint16_t)m_timer1Counter;  // restart from <0xffff
   }
@@ -350,29 +411,29 @@ bool MOS6522::tick(int cycles)
     if (m_timer2Counter <= 0 && !m_timer2Triggered) {
       m_timer2Counter += 0xFFFF;
       m_timer2Triggered = true;
-      m_IFR |= VIA_I_T2;  // set interrupt flag
+      m_IFR |= VIA_IER_T2;  // set interrupt flag
     }
   }
 
   // handle CA1 (RESTORE key)
   if (m_CA1 != m_CA1_prev) {
     // (interrupt on low->high transition) OR (interrupt on high->low transition)
-    if (((m_regs[VIA_REG_PCR] & 1) && m_CA1) || (!(m_regs[VIA_REG_PCR] & 1) && !m_CA1)) {
-      m_IFR |= VIA_I_CA1;
+    if (((m_PCR & 1) && m_CA1) || (!(m_PCR & 1) && !m_CA1)) {
+      m_IFR |= VIA_IER_CA1;
     }
     m_CA1_prev = m_CA1;  // set interrupt flag
   }
 
-/*
+///*
   // handle CB1
   if (m_CB1 != m_CB1_prev) {
     // (interrupt on low->high transition) OR (interrupt on high->low transition)
-    if (((m_regs[VIA_REG_PCR] & 0x10) && m_CB1) || (!(m_regs[VIA_REG_PCR] & 0x10) && !m_CB1)) {
-      m_IFR |= VIA_I_CB1;  // set interrupt flag
+    if (((m_PCR & 0x10) && m_CB1) || (!(m_PCR & 0x10) && !m_CB1)) {
+      m_IFR |= VIA_IER_CB1;  // set interrupt flag
     }
     m_CB1_prev = m_CB1;
   }
-*/
+//*/
 
   return m_IER & m_IFR & 0x7f;
 

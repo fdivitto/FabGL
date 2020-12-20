@@ -29,10 +29,16 @@
 #include "../ROM/char_rom.h"
 
 
+
+#if DEBUGIEC
+int testTiming = 0;
+#endif
+
+
 Machine::Machine(fabgl::VGAController * displayController)
   : m_CPU(this),
-    m_VIA1(this, 1, &Machine::VIA1PortOut, &Machine::VIA1PortIn),
-    m_VIA2(this, 2, &Machine::VIA2PortOut, &Machine::VIA2PortIn),
+    m_VIA1(this, 1, &Machine::VIA1PortIn, &Machine::VIA1PortOut),
+    m_VIA2(this, 2, &Machine::VIA2PortIn, &Machine::VIA2PortOut),
     m_VIC(this, displayController),
     m_joyEmu(JE_CursorKeys)
 {
@@ -75,11 +81,6 @@ void Machine::reset()
   VIA2().reset();
 
   VIC().reset();
-
-  // TODO: check these!
-  VIA1().setCA1(1);   // restore high (pulled up)
-  VIA1().setPA(0x7E);
-  VIA1().setPB(0xFF);
 
   resetJoy();
   resetKeyboard();
@@ -137,7 +138,6 @@ int Machine::run()
 
     int cycles = m_CPU.step();
 
-  ///*
     // VIA1
     if (m_VIA1.tick(cycles) != m_NMI) {  // true = NMI request
       // NMI happens only on transition high->low (that is when was m_NMI=false)
@@ -148,9 +148,7 @@ int Machine::run()
         m_VIA1.tick(addCycles);
       }
     }
-  //*/
 
-  ///*
     // VIA2
     if (m_VIA2.tick(cycles)) { // true = IRQ request
       int addCycles = m_CPU.callIRQ();
@@ -158,12 +156,9 @@ int Machine::run()
       m_VIA1.tick(addCycles); // TODO: may this to miss an MMI?
       m_VIA2.tick(addCycles);
     }
-  //*/
 
-  ///*
     // VIC
     m_VIC.tick(cycles);
-  //*/
 
     runCycles += cycles;
   }
@@ -1025,6 +1020,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
     // ,
     case VirtualKey::VK_COMMA:
       m_KBD[5][3] = down;
+      m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
 
     // _
@@ -1037,6 +1033,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
     // -
     case VirtualKey::VK_MINUS:
       m_KBD[5][7] = down;
+      m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
 
     // [
@@ -1096,6 +1093,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
     // .
     case VirtualKey::VK_PERIOD:
       m_KBD[5][4] = down;
+      m_KBD[1][3] = m_KBD[6][4] = false; // release LSHIFT, RSHIFT
       break;
 
     // LEFT
@@ -1154,26 +1152,13 @@ void Machine::setKeyboard(VirtualKey key, bool down)
   }
 
   #if DEBUGMACHINE
-  if (down) {
-    for (int y = 7; y >= 0; --y) {
-      for (int x = 7; x >= 0; --x) {
-        Serial.printf("%02X ", m_KBD[y][x]);
-      }
-      Serial.printf("\n");
-    }
+  for (int y = 0; y < 8; ++y)
+    for (int x = 0; x < 8; ++x)
+      Serial.printf("%02X ", m_KBD[y][x]);
+    Serial.printf("\n");
   }
   #endif
 
-}
-
-
-void Machine::VIA1PortOut(MOS6522 * via, VIAPort port)
-{
-}
-
-
-void Machine::VIA2PortOut(MOS6522 * via, VIAPort port)
-{
 }
 
 
@@ -1182,13 +1167,41 @@ void Machine::VIA1PortIn(MOS6522 * via, VIAPort port)
   Machine * m = via->machine();
 
   switch (port) {
-
-    // joystick (up, down, left, fire). Right on VIA2:PB
     case Port_PA:
-      via->setBitPA(2, !m->m_JOY[JoyUp]);
-      via->setBitPA(3, !m->m_JOY[JoyDown]);
-      via->setBitPA(4, !m->m_JOY[JoyLeft]);
-      via->setBitPA(5, !m->m_JOY[JoyFire]);
+      if (m->m_JOY[JoyUp])
+        via->setBitPA(2, 0);
+      else
+        via->openBitPA(2);
+      if (m->m_JOY[JoyDown])
+        via->setBitPA(3, 0);
+      else
+        via->openBitPA(3);
+      if (m->m_JOY[JoyLeft])
+        via->setBitPA(4, 0);
+      else
+        via->openBitPA(4);
+      if (m->m_JOY[JoyFire])
+        via->setBitPA(5, 0);
+      else
+        via->openBitPA(5);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void Machine::VIA1PortOut(MOS6522 * via, VIAPort port)
+{
+  Machine * m = via->machine();
+
+  switch (port) {
+    case Port_PA:
+      #if DEBUGIEC
+      testTiming = 0;
+      printf("%d: ATN => %s\n", testTiming, ((via->PA() & 0x80) >> 7) ? "true" : "false");
+      #endif
       break;
 
     default:
@@ -1203,45 +1216,76 @@ void Machine::VIA2PortIn(MOS6522 * via, VIAPort port)
 
   switch (port) {
 
-    // Keyboard Row on PA (input)
+    case Port_PB:
+      via->setPB(m->m_colStatus);
+      if (m->m_JOY[JoyRight])
+        via->setBitPB(7, 0);
+      break;
+
+    case Port_PA:
+      via->setPA(m->m_rowStatus);
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void Machine::VIA2PortOut(MOS6522 * via, VIAPort port)
+{
+  Machine * m = via->machine();
+
+  switch (port) {
+
+    // output on PA, select keyboard Row (store Column in PB)
     case Port_PA:
     {
-      // Keyboard column on PB (output)
+      // keyboard can also be queried using PA as output and PB as input
+      int PB = 0;
+      int row = ~(via->PA());
+      if (row) {
+        for (int r = 0; r < 8; ++r)
+          if (row & (1 << r))
+            for (int c = 0; c < 8; ++c)
+              PB |= (m->m_KBD[r][c] & 1) << c;
+      }
+      m->m_colStatus = ~PB;
+      break;
+    }
+
+    // output on PB, select keyboard Column (store Row in PA)
+    case Port_PB:
+    {
       int PA = 0;
-      int col = ~(via->PB()) & via->DDRB();
+      int col = ~(via->PB());
       if (col) {
         for (int c = 0; c < 8; ++c)
           if (col & (1 << c))
             for (int r = 0; r < 8; ++r)
               PA |= (m->m_KBD[r][c] & 1) << r;
       }
-      via->setPA(~PA);
+      m->m_rowStatus = ~PA;
       break;
     }
 
-    // PB:7 -> joystick right (this is also used as output for column selection)
-    case Port_PB:
-    {
-      // keyboard can also be queried using PA as output and PB as input
-      int row = ~(via->PA()) & via->DDRA();
-      if (row) {
-        int PB = 0;
-        for (int r = 0; r < 8; ++r)
-          if (row & (1 << r))
-            for (int c = 0; c < 8; ++c)
-              PB |= (m->m_KBD[r][c] & 1) << c;
-        via->setPB(~PB);
-      }
-      // joystick
-      if ((via->DDRB() & 0x80) == 0)
-        via->setBitPB(7, !m->m_JOY[JoyRight]);
+    case Port_CA2:
+      #if DEBUGIEC
+      printf("%d: CLK => %s\n", testTiming, via->CA2() ? "true" : "false");
+      #endif
       break;
-    }
+
+    case Port_CB2:
+      #if DEBUGIEC
+      printf("%d: DATA => %s\n", testTiming, via->CB2() ? "true" : "false");
+      #endif
+      break;
 
     default:
       break;
 
   }
+
 }
 
 
@@ -1362,9 +1406,14 @@ void Machine::removeCRT()
 void Machine::resetJoy()
 {
   for (int i = JoyUp; i <= JoyFire; ++i)
-    m_JOY[i] = false;
+    setJoy((Joy)i, false);
 }
 
+
+void Machine::setJoy(Joy joy, bool value)
+{
+  m_JOY[joy] = value;
+}
 
 
 
