@@ -1162,7 +1162,7 @@ void Machine::setKeyboard(VirtualKey key, bool down)
   }
 
   #if DEBUGMACHINE
-  for (int y = 0; y < 8; ++y)
+  for (int y = 0; y < 8; ++y) {
     for (int x = 0; x < 8; ++x)
       Serial.printf("%02X ", m_KBD[y][x]);
     Serial.printf("\n");
