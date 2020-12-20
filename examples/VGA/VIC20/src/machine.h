@@ -27,6 +27,7 @@
 #include "MOS6502.h"
 #include "VIA6522.h"
 #include "MOS6561.h"
+#include "IECDrive.h"
 
 
 #define DEBUGMACHINE 0
@@ -119,6 +120,8 @@ public:
 
   void setRAMExpansion(RAMExpansionOption value);
   RAMExpansionOption RAMExpansion() { return m_RAMExpansion; }
+
+  FileBrowser * fileBrowser()       { return &m_fileBrowser; }
 
 private:
 
@@ -219,7 +222,36 @@ private:
   uint32_t              m_lastSyncCycle;
   uint64_t              m_lastSyncTime;   // uS
 
+  IECDrive              m_IECDrive;
+  FileBrowser           m_fileBrowser;
+
 };
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+// PRGCreator
+// Creates a PRG in memory
+
+class PRGCreator {
+
+public:
+
+  PRGCreator(int startingAddress);
+  ~PRGCreator();
+
+  // line must end with "0"
+  void addline(int linenumber, char const * data);
+
+  void addline(int linenumber, void const * data, size_t datalen);
+
+  uint8_t const * get() { return m_prg; }
+  int len()             { return m_prglen; }
+
+private:
+
+  int       m_startingAddress;
+  uint8_t * m_prg;
+  int       m_prglen;
+
+};

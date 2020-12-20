@@ -40,7 +40,8 @@ Machine::Machine(fabgl::VGAController * displayController)
     m_VIA1(this, 1, &Machine::VIA1PortIn, &Machine::VIA1PortOut),
     m_VIA2(this, 2, &Machine::VIA2PortIn, &Machine::VIA2PortOut),
     m_VIC(this, displayController),
-    m_joyEmu(JE_CursorKeys)
+    m_joyEmu(JE_CursorKeys),
+    m_IECDrive(this, 8)
 {
   m_RAM1K    = new uint8_t[0x0400];
   m_RAM4K    = new uint8_t[0x1000];
@@ -84,6 +85,8 @@ void Machine::reset()
 
   resetJoy();
   resetKeyboard();
+
+  m_IECDrive.reset();
 
   m_cycle = m_CPU.callReset();
 }
@@ -138,6 +141,10 @@ int Machine::run()
 
     int cycles = m_CPU.step();
 
+    #if DEBUGIEC
+    testTiming += cycles;
+    #endif
+
     // VIA1
     if (m_VIA1.tick(cycles) != m_NMI) {  // true = NMI request
       // NMI happens only on transition high->low (that is when was m_NMI=false)
@@ -159,6 +166,9 @@ int Machine::run()
 
     // VIC
     m_VIC.tick(cycles);
+
+    // IECDrive
+    m_IECDrive.tick(cycles);
 
     runCycles += cycles;
   }
@@ -1296,7 +1306,7 @@ void Machine::loadPRG(char const * filename, bool resetRequired, bool execRun)
 
     // get file size
     fseek(f, 0, SEEK_END);
-    int size = ftell(f);
+    auto size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
     if (size > 2) {
@@ -1370,7 +1380,7 @@ int Machine::loadCRT(char const * filename, bool reset, int address)
 
     // get file size
     fseek(f, 0, SEEK_END);
-    int size = ftell(f);
+    auto size = ftell(f);
     fseek(f, 0, SEEK_SET);
 
     // get from data or default to 0xa000
@@ -1417,6 +1427,54 @@ void Machine::setJoy(Joy joy, bool value)
 
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// PRGCreator
+
+
+PRGCreator::PRGCreator(int startingAddress)
+  : m_startingAddress(startingAddress)
+{
+  m_prglen = 4; // 2 for starting address, 2 for next line address
+  m_prg    = (uint8_t*) malloc(m_prglen);
+
+  m_prg[0] = m_startingAddress & 0xff;
+  m_prg[1] = m_startingAddress >> 8;
+  m_prg[2] = 0;
+  m_prg[3] = 0;
+}
+
+
+PRGCreator::~PRGCreator()
+{
+  free(m_prg);
+}
+
+
+// line must end with "0"
+void PRGCreator::addline(int linenumber, char const * data)
+{
+  auto len = strlen((char const*)data);
+  addline(linenumber, data, len);
+}
+
+
+// datalen must NOT include ending zero
+void PRGCreator::addline(int linenumber, void const * data, size_t datalen)
+{
+  auto addlen = 2 + datalen + 1 + 2;  // linenumber (2) + datalen + endingzero (1) + nextlineaddr (2)
+  m_prg = (uint8_t*) realloc(m_prg, m_prglen + addlen);
+  auto nextLineAddr = m_startingAddress + m_prglen + addlen - 2;
+  m_prg[m_prglen - 2] = nextLineAddr & 0xff;
+  m_prg[m_prglen - 1] = nextLineAddr >> 8;
+  m_prg[m_prglen + 0] = linenumber & 0xff;
+  m_prg[m_prglen + 1] = linenumber >> 8;
+  memcpy(m_prg + m_prglen + 2, data, datalen);
+  m_prg[m_prglen + 2 + datalen] = 0;
+  m_prg[m_prglen + 2 + datalen + 1] = 0;
+  m_prg[m_prglen + 2 + datalen + 2] = 0;
+  m_prglen += addlen;
+}
 
 
 

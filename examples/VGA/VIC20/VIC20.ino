@@ -91,6 +91,9 @@ char const * EMBDIR  = "Free";
 // name of downloaded programs directory
 char const * DOWNDIR = "List";
 
+// name of user directory (where LOAD and SAVE works)
+char const * USERDIR = "Free";    // same of EMBDIR
+
 
 struct EmbeddedProgDef {
   char const *    filename;
@@ -539,6 +542,12 @@ class Menu : public uiApp {
     enableKeyboardAndMouseEvents(false);
     keyboard->emptyVirtualKeyQueue();
     machine->VIC().enableAudio(true);
+
+    // setup user directory
+    machine->fileBrowser()->setDirectory(basepath);
+    if (!machine->fileBrowser()->exists(USERDIR))
+      machine->fileBrowser()->makeDirectory(USERDIR);
+    machine->fileBrowser()->changeDirectory(USERDIR);
 
     auto cv = canvas();
     cv->setBrushColor(0, 0, 0);
