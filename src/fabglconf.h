@@ -152,7 +152,7 @@
 
 /************ Preset Resolution Modelines ************/
 
-/** Modeline for 256x192@50Hz resolution - requires an upscaler */
+// Modeline for 256x192@50Hz resolution - requires upscaler
 #define VGA_256x192_50Hz "\"256x192@50\" 8.13 256 288 296 328 192 196 198 202 -HSync -VSync DoubleScan"
 
 /** Modeline for 256x384@60Hz resolution */
@@ -194,7 +194,7 @@
 /** Modeline for 640x240@60Hz (DoubleScan) resolution */
 #define VGA_640x240_60Hz "\"640x240@60Hz\" 25.175 640 656 752 800 240 245 247 262 -HSync -VSync DoubleScan"
 
-// Thanks to Paul Rickards (http://biosrhythm.com)
+// Thanks to Paul Rickards (http://biosrhythm.com) - requires upscaler
 #define NTSC_640x240_60hz "\"NTSC 640x240 (60Hz)\" 12.312 640 662 719 784 240 244 247 262 -hsync -vsync"
 
 /** Modeline for 640x350@70Hz resolution */
@@ -233,11 +233,11 @@
 /** Modeline for 640x480@75Hz resolution */
 #define VESA_640x480_75Hz "\"640x480@75Hz\" 31.5 640 656 720 840 480 481 484 500 -HSync -VSync"
 
-// Thanks to Paul Rickards (http://biosrhythm.com)
+// Thanks to Paul Rickards (http://biosrhythm.com) - requires upscaler
 #define NTSC_720x240_60hz "\"NTSC 720x240 (60Hz)\" 13.820 720 744 809 880 240 244 247 262 -hsync -vsync"
 
-// Thanks to Paul Rickards (http://biosrhythm.com)
-#define PAL_720x288_50hz "\"PAL  720x288 (50Hz)\" 13.853 720 741 806 888 288 290 293 312 -hsync -vsync"
+// Thanks to Paul Rickards (http://biosrhythm.com) - requires upscaler
+#define PAL_720x288_50hz "\"PAL 720x288 (50Hz)\" 13.853 720 741 806 888 288 290 293 312 -hsync -vsync"
 
 /** Modeline for 720x400@85Hz resolution */
 #define VESA_720x400_85Hz "\"720x400@85Hz\" 35.5 720 756 828 936 400 401 404 446 -HSync -VSync"
@@ -245,8 +245,8 @@
 /** Modeline for 720x576@50Hz resolution */
 #define PAL_720x576_50Hz "\"720x576@50Hz\" 27 720 732 795 864 576 581 586 625 -HSync -VSync"
 
-// Thanks to Paul Rickards (http://biosrhythm.com)
-#define PAL_768x288_50hz "\"PAL  768x288 (50Hz)\" 14.726 768 790 859 944 288 290 293 312 -hsync -vsync"
+// Thanks to Paul Rickards (http://biosrhythm.com) - requires upscaler
+#define PAL_768x288_50hz "\"PAL 768x288 (50Hz)\" 14.726 768 790 859 944 288 290 293 312 -hsync -vsync"
 
 /** Modeline for 768x576@60Hz resolution */
 #define VESA_768x576_60Hz "\"768x576@60Hz\" 34.96 768 792 872 976 576 577 580 597 -HSync -VSync"
