@@ -1068,25 +1068,46 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
 }
 
 
-VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const * layout)
+VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout const * layout)
 {
   VirtualKey vk = VK_NONE;
 
   if (layout == nullptr)
     layout = m_layout;
 
-  for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
-    if (def->reqVirtualKey == in_vk && def->ctrl == m_CTRL &&
-                                       def->alt == m_ALT &&
-                                       (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK)) &&
-                                       def->numlock == m_NUMLOCK) {
-      vk = def->virtualKey;
-      break;
+  // this avoids releasing a required key when SHIFT has been pressed after the key but before releasing
+  if (!down && isVKDown(in_vk))
+    vk = in_vk;
+
+  if (vk == VK_NONE) {
+    // handle this case:
+    //   - derived KEY up without any SHIFT (because released before the KEY, ie SHIFT+"1" => "!", but you release the SHIFT before "1")
+    // this avoid to maintain a KEY DOWN when you release the SHIFT key before the KEY ()
+    for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
+      if (def->reqVirtualKey == in_vk && isVKDown(def->virtualKey)) {
+        vk = def->virtualKey;
+        break;
+      }
+    }
+  }
+
+  if (vk == VK_NONE) {
+    // handle these cases:
+    //   - KEY down with SHIFTs already down
+    //   - KEY up with SHIFTs still down
+    for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
+      if (def->reqVirtualKey == in_vk && def->ctrl == m_CTRL &&
+                                         def->alt == m_ALT &&
+                                         (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK)) &&
+                                         def->numlock == m_NUMLOCK) {
+        vk = def->virtualKey;
+        break;
+      }
     }
   }
 
   if (vk == VK_NONE && layout->inherited)
-    vk = VKtoAlternateVK(in_vk, layout->inherited);
+    vk = VKtoAlternateVK(in_vk, down, layout->inherited);
 
   return vk == VK_NONE ? in_vk : vk;
 }
@@ -1135,7 +1156,7 @@ VirtualKey Keyboard::blockingGetVirtualKey(bool * keyDown)
   if (vk != VK_NONE) {
 
     // alternate VK (virtualkeys modified by shift, alt, ...)
-    vk = VKtoAlternateVK(vk);
+    vk = VKtoAlternateVK(vk, kdown);
 
     // update shift, alt, ctrl, capslock, numlock and scrollock states and LEDs
     switch (vk) {

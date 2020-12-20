@@ -430,7 +430,7 @@ public:
 private:
 
   VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = nullptr);
-  VirtualKey VKtoAlternateVK(VirtualKey in_vk, KeyboardLayout const * layout = nullptr);
+  VirtualKey VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout const * layout = nullptr);
   void updateLEDs();
   VirtualKey blockingGetVirtualKey(bool * keyDown);
   static void SCodeToVKConverterTask(void * pvParameters);
