@@ -34,7 +34,7 @@
 #include "fabgl.h"
 #include "fabutils.h"
 
-#include "i8080/i8080.h"
+
 
 
 
@@ -172,9 +172,10 @@ void diskFlush(FILE * file = nullptr)
 Machine::Machine()
   : m_devices(nullptr),
     m_realSpeed(false),
-    m_menuCallback(nullptr),
-    m_Z80(this)
+    m_menuCallback(nullptr)
 {
+  m_Z80.setCallbacks(this, readByte, writeByte, readWord, writeWord, readIO, writeIO);
+  m_i8080.setCallbacks(this, readByte, writeByte, readWord, writeWord, readIO, writeIO);
 }
 
 
@@ -206,15 +207,15 @@ void Machine::attachRAM(int RAMSize)
 
 int Machine::nextStep(CPU cpu)
 {
-  return (cpu == CPU::i8080 ? i8080_instruction() : m_Z80.emulate(0));
+  return (cpu == CPU::i8080 ? m_i8080.emulate() : m_Z80.emulate(0));
 }
 
 
 void Machine::run(CPU cpu, int address)
 {
   if (cpu == CPU::i8080) {
-    i8080_init(this);
-    i8080_jump(address);
+    m_i8080.reset();
+    m_i8080.setPC(address);
   } else {
     m_Z80.reset();
     m_Z80.setPC(address);
@@ -252,21 +253,22 @@ void Machine::run(CPU cpu, int address)
 }
 
 
-uint8_t Machine::readByte(uint16_t address)
+int Machine::readByte(void * context, int address)
 {
-  return m_RAM[address];
+  return ((Machine*)context)->m_RAM[address];
 }
 
 
-void Machine::writeByte(uint16_t address, uint8_t value)
+void Machine::writeByte(void * context, int address, int value)
 {
-  m_RAM[address] = value;
+  ((Machine*)context)->m_RAM[address] = value;
 }
 
 
-uint8_t Machine::readIO(uint16_t address)
+int Machine::readIO(void * context, int address)
 {
-  for (Device * d = m_devices; d; d = d->next) {
+  auto m = (Machine*)context;
+  for (Device * d = m->m_devices; d; d = d->next) {
     int value;
     if (d->read(address, &value))
       return value;
@@ -280,9 +282,10 @@ uint8_t Machine::readIO(uint16_t address)
 }
 
 
-void Machine::writeIO(uint16_t address, uint8_t value)
+void Machine::writeIO(void * context, int address, int value)
 {
-  for (Device * d = m_devices; d; d = d->next)
+  auto m = (Machine*)context;
+  for (Device * d = m->m_devices; d; d = d->next)
     if (d->write(address, value))
       return;
 
@@ -763,58 +766,3 @@ void Mits88Disk::receiveDiskImageFromStream(int drive, Stream * stream)
 // Mits88Disk disk drive controller
 ////////////////////////////////////////////////////////////////////////////////////
 
-
-
-////////////////////////////////////////////////////////////////////////////////////
-// required by i8080.cpp
-
-int i8080_hal_memory_read_word(void * context, int addr)
-{
-  Machine * m = (Machine*)context;
-  return m->readByte(addr) | (m->readByte(addr + 1) << 8);
-}
-
-
-void i8080_hal_memory_write_word(void * context, int addr, int word)
-{
-  Machine * m = (Machine*)context;
-  m->writeByte(addr, word & 0xff);
-  m->writeByte(addr + 1, (word >> 8) & 0xff);
-}
-
-
-int i8080_hal_memory_read_byte(void * context, int addr)
-{
-  Machine * m = (Machine*)context;
-  return m->readByte(addr);
-}
-
-
-void i8080_hal_memory_write_byte(void * context, int addr, int byte)
-{
-  Machine * m = (Machine*)context;
-  m->writeByte(addr, byte);
-}
-
-
-int i8080_hal_io_input(void * context, int port)
-{
-  Machine * m = (Machine*)context;
-  return m->readIO(port);
-}
-
-
-void i8080_hal_io_output(void * context, int port, int value)
-{
-  Machine * m = (Machine*)context;
-  m->writeIO(port, value);
-}
-
-
-void i8080_hal_iff(void * context, int on)
-{
-  //printf("i8080_hal_iff %d\n", on);
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////

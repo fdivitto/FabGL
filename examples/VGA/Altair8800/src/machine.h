@@ -26,7 +26,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "Z80/Z80.h"
+#include "emudevs/Z80.h"
+#include "emudevs/i8080.h"
 
 
 // Altair 88-DSK Boot ROM (starts at 0xFF00)
@@ -193,7 +194,7 @@ enum class CPU {
 typedef void (*MenuCallback)();
 
 
-class Machine : public Z80Interface {
+class Machine {
 
 public:
 
@@ -211,15 +212,14 @@ public:
 
   void run(CPU cpu, int address);
 
-  uint8_t readByte(uint16_t address);
-  void writeByte(uint16_t address, uint8_t value);
+  static int readByte(void * context, int address);
+  static void writeByte(void * context, int address, int value);
 
-  uint16_t readWord(uint16_t addr)              { return readByte(addr) | (readByte(addr + 1) << 8); }
-  void writeWord(uint16_t addr, uint16_t value) { writeByte(addr, value & 0xFF); writeByte(addr + 1, value >> 8); }
+  static int readWord(void * context, int addr)              { return readByte(context, addr) | (readByte(context, addr + 1) << 8); }
+  static void writeWord(void * context, int addr, int value) { writeByte(context, addr, value & 0xFF); writeByte(context, addr + 1, value >> 8); }
 
-
-  uint8_t readIO(uint16_t address);
-  void writeIO(uint16_t address, uint8_t value);
+  static int readIO(void * context, int address);
+  static void writeIO(void * context, int address, int value);
 
   void setRealSpeed(bool value) { m_realSpeed = value; }
   bool realSpeed() { return m_realSpeed; }
@@ -232,6 +232,7 @@ private:
   bool         m_realSpeed;
   uint8_t *    m_RAM;
   MenuCallback m_menuCallback;
-  Z80          m_Z80;
+  fabgl::Z80   m_Z80;
+  fabgl::i8080 m_i8080;
 };
 
