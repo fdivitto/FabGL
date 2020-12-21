@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-#include "Z80.h"
+#include "emudevs/Z80.h"
 
 #include "defs.h"
 #include "fabgl.h"
@@ -81,7 +81,7 @@ enum class AbortReason {
 
 
 // implements BDOS and BIOS
-class HAL : public Z80Interface {
+class HAL {
 
 public:
 
@@ -210,9 +210,18 @@ private:
 
   bool checkMem(uint16_t addr);
 
+  static int readByte(void * context, int address)                { return ((HAL*)context)->readByte(address); }
+  static void writeByte(void * context, int address, int value)   { ((HAL*)context)->writeByte(address, value); }
+
+  static int readWord(void * context, int addr)                   { return ((HAL*)context)->readWord(addr); }
+  static void writeWord(void * context, int addr, int value)      { ((HAL*)context)->writeWord(addr, value); }
+
+  static int readIO(void * context, int address)                  { return ((HAL*)context)->readIO(address); }
+  static void writeIO(void * context, int address, int value)     { ((HAL*)context)->writeIO(address, value); }
 
 
-  Z80                m_Z80;
+
+  fabgl::Z80         m_Z80;
 
   uint32_t           m_CPUSpeed;  // 0 = max
 

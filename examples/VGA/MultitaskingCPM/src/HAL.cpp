@@ -33,8 +33,7 @@
 
 
 HAL::HAL()
-  : m_Z80(this),
-    m_CPUSpeed(DEFAULTCPUSPEEDHZ),
+  : m_CPUSpeed(DEFAULTCPUSPEEDHZ),
     m_terminal(nullptr),
     m_LPTStream(nullptr),
     m_abortReason(AbortReason::NoAbort)
@@ -50,6 +49,7 @@ HAL::HAL()
 
   dac_output_enable(DAC_CHANNEL_1);
 
+  m_Z80.setCallbacks(this, readByte, writeByte, readWord, writeWord, readIO, writeIO);
   CPU_reset();
 }
 
