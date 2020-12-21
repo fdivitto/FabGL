@@ -71,7 +71,7 @@
  *
  * - - -
  *
- * The main classes of FabGL library are:
+ * Main classes of FabGL library:
  *    * fabgl::VGAController, device driver for VGA bitmapped output.
  *    * fabgl::VGA2Controller, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).
  *    * fabgl::VGA4Controller, device driver for VGA 4 colors bitmapped output (low RAM requirements, CPU intensive).
@@ -89,7 +89,11 @@
  *    * fabgl::uiApp base class to build Graphical User Interface applications
  *    * fabgl::SoundGenerator to generate sound and music.
  *
- * Other classes are:
+ * Devices emulation classes:
+ *    * fabgl::Z80, Zilog Z80 CPU emulator
+ *    * fabgl::i8080, Intel 8080 CPU emulator
+ *
+ * Other classes:
  *    * fabgl::I2C, thread safe I2C (Wire) class
  *    * fabgl::DS3231, Real Time Clock driver which uses the thread safe fabgl::I2C library
  *
