@@ -291,7 +291,7 @@ void i8080::retrieve_flags()
 }
 
 
-int i8080::emulate()
+int i8080::step()
 {
   int opcode = RD_BYTE(PC++);
 

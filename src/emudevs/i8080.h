@@ -110,7 +110,7 @@ public:
   }
 
   void reset();
-  int emulate();
+  int step();
 
   void setPC(int addr)  { cpu.pc.w = addr & 0xffff; }
   int getPC()           { return cpu.pc.w; }
