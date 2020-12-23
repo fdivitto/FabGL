@@ -207,7 +207,7 @@ void Machine::attachRAM(int RAMSize)
 
 int Machine::nextStep(CPU cpu)
 {
-  return (cpu == CPU::i8080 ? m_i8080.emulate() : m_Z80.emulate(0));
+  return (cpu == CPU::i8080 ? m_i8080.emulate() : m_Z80.step());
 }
 
 

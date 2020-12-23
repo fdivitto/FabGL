@@ -54,13 +54,6 @@ namespace fabgl {
  * Except for Z80_READ_WORD_INTERRUPT and Z80_WRITE_WORD_INTERRUPT, all macros
  * also have access to:
  *
- *      number_cycles   Number of cycles to emulate. After executing each
- *			instruction, the emulator checks if elapsed_cycles is
- *			greater or equal to number_cycles, and will stops if
- *			so. Hence you may decrease or increase the value of
- *			number_cycles to stop the emulation earlier or later.
- * 			In particular, if you set it to zero, the emulator will
- * 			stop after completion of the current instruction.
  *
  *      registers       Current register decoding table, use it to determine if
  * 			the current instruction is prefixed. It points on:
@@ -127,7 +120,6 @@ namespace fabgl {
 #define Z80_OUTPUT_BYTE(port, x)                                        \
 {                                                                       \
   m_writeIO(m_context, (port), (x));                                    \
-  number_cycles = 0;                                                    \
 }
 
 
@@ -1831,7 +1823,7 @@ void Z80::reset()
 
 
 
-int Z80::interrupt(int data_on_bus)
+int Z80::IRQ(int data_on_bus)
 {
   state.status = 0;
   if (state.iff1) {
@@ -1847,7 +1839,7 @@ int Z80::interrupt(int data_on_bus)
          * should take 2 + 11 = 13 cycles.
          */
 
-        return intemulate(data_on_bus, 2, 4);
+        return intemulate(data_on_bus, 2);
 
       }
 
@@ -1892,7 +1884,7 @@ int Z80::interrupt(int data_on_bus)
 }
 
 
-int Z80::nonMaskableInterrupt()
+int Z80::NMI()
 {
   int	elapsed_cycles;
 
@@ -1911,17 +1903,16 @@ int Z80::nonMaskableInterrupt()
 }
 
 
-int Z80::emulate(int number_cycles)
+int Z80::step()
 {
-  int elapsed_cycles, pc, opcode;
-
   state.status = 0;
-  elapsed_cycles = 0;
-  pc = state.pc;
+  int elapsed_cycles = 0;
+  int pc = state.pc;
+  int opcode;
   Z80_FETCH_BYTE(pc, opcode);
   state.pc = pc + 1;
 
-  return intemulate(opcode, elapsed_cycles, number_cycles);
+  return intemulate(opcode, elapsed_cycles);
 }
 
 
@@ -1929,31 +1920,20 @@ int Z80::emulate(int number_cycles)
  * needed by Z80Interrupt() for interrupt mode 0.
  */
 
-int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
+int Z80::intemulate(int opcode, int elapsed_cycles)
 {
-  int	pc, r;
+  int pc = state.pc;
+  int r = state.r & 0x7f;
 
-  pc = state.pc;
-  r = state.r & 0x7f;
-  goto start_emulation;
+  void * * registers = state.register_table;
 
-  for ( ; ; ) {
+  int instruction = INSTRUCTION_TABLE[opcode];
 
-    void    **registers;
-    int     instruction;
+  bool repeatLoop;
 
-    Z80_FETCH_BYTE(pc, opcode);
-    pc++;
+  do {
 
-  start_emulation:
-
-    registers = state.register_table;
-
-  emulate_next_opcode:
-
-    instruction = INSTRUCTION_TABLE[opcode];
-
-  emulate_next_instruction:
+    repeatLoop = false;
 
     elapsed_cycles += 4;
     r++;
@@ -2256,14 +2236,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         f = F & SZC_FLAGS;
         f |= --BC ? Z80_P_FLAG : 0;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         n += A;
         f |= n & Z80_X_FLAG;
         f |= (n << (Z80_Y_FLAG_SHIFT - 1))
         & Z80_Y_FLAG;
 
-#endif
+  #endif
 
         F = f;
 
@@ -2281,14 +2261,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         int     d, f, bc, de, hl, n;
 
-#ifdef Z80_HANDLE_SELF_MODIFYING_CODE
+  #ifdef Z80_HANDLE_SELF_MODIFYING_CODE
 
         int     p, q;
 
         p = (pc - 2) & 0xffff;
         q = (pc - 1) & 0xffff;
 
-#endif
+  #endif
 
         d = opcode == OPCODE_LDIR ? +1 : -1;
 
@@ -2320,7 +2300,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-#ifdef Z80_HANDLE_SELF_MODIFYING_CODE
+  #ifdef Z80_HANDLE_SELF_MODIFYING_CODE
 
           if (((de - d) & 0xffff) == p
               || ((de - d) & 0xffff) == q) {
@@ -2331,19 +2311,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-#endif
+  #endif
 
-          if (elapsed_cycles < number_cycles)
-
-            continue;
-
-          else {
-
-            f |= Z80_P_FLAG;
-            pc -= 2;
-            break;
-
-          }
+          f |= Z80_P_FLAG;
+          pc -= 2;
+          break;
 
         }
 
@@ -2351,14 +2323,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         DE = de;
         BC = bc;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         n += A;
         f |= n & Z80_X_FLAG;
         f |= (n << (Z80_Y_FLAG_SHIFT - 1))
         & Z80_Y_FLAG;
 
-#endif
+  #endif
 
         F = f;
 
@@ -2378,14 +2350,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         f = (a ^ n ^ z) & Z80_H_FLAG;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         n = z - (f >> Z80_H_FLAG_SHIFT);
         f |= (n << (Z80_Y_FLAG_SHIFT - 1))
         & Z80_Y_FLAG;
         f |= n & Z80_X_FLAG;
 
-#endif
+  #endif
 
         f |= SZYX_FLAGS_TABLE[z & 0xff] & SZ_FLAGS;
         f |= --BC ? Z80_P_FLAG : 0;
@@ -2428,16 +2400,8 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-          if (elapsed_cycles < number_cycles)
-
-            continue;
-
-          else {
-
-            pc -= 2;
-            break;
-
-          }
+          pc -= 2;
+          break;
 
         }
 
@@ -2446,14 +2410,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         f = (a ^ n ^ z) & Z80_H_FLAG;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         n = z - (f >> Z80_H_FLAG_SHIFT);
         f |= (n << (Z80_Y_FLAG_SHIFT - 1))
         & Z80_Y_FLAG;
         f |= n & Z80_X_FLAG;
 
-#endif
+  #endif
 
         f |= SZYX_FLAGS_TABLE[z & 0xff] & SZ_FLAGS;
         f |= bc ? Z80_P_FLAG : 0;
@@ -2792,11 +2756,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         A = ~A;
         F = (F & (SZPV_FLAGS | Z80_C_FLAG))
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (A & YX_FLAGS)
 
-#endif
+  #endif
 
         | Z80_H_FLAG | Z80_N_FLAG;
 
@@ -2833,11 +2797,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         F = (F & SZPV_FLAGS)
         | (c << Z80_H_FLAG_SHIFT)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (A & YX_FLAGS)
 
-#endif
+  #endif
 
         | (c ^ Z80_C_FLAG);
 
@@ -2849,11 +2813,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         F = (F & SZPV_FLAGS)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (A & YX_FLAGS)
 
-#endif
+  #endif
 
         | Z80_C_FLAG;
 
@@ -2869,25 +2833,13 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
       case HALT: {
 
-#ifdef Z80_CATCH_HALT
+  #ifdef Z80_CATCH_HALT
 
         state.status = Z80_STATUS_FLAG_HALT;
 
-#else
+  #endif
 
-        /* If an HALT instruction is executed, the Z80
-         * keeps executing NOPs until an interrupt is
-         * generated. Basically nothing happens for the
-         * remaining number of cycles.
-         */
-
-        if (elapsed_cycles < number_cycles)
-
-          elapsed_cycles = number_cycles;
-
-#endif
-
-        goto stop_emulation;
+        break;
 
       }
 
@@ -2895,28 +2847,13 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         state.iff1 = state.iff2 = 0;
 
-#ifdef Z80_CATCH_DI
+  #ifdef Z80_CATCH_DI
 
         state.status = Z80_STATUS_FLAG_DI;
-        goto stop_emulation;
 
-#else
+  #endif
 
-        /* No interrupt can be accepted right after
-         * a DI or EI instruction on an actual Z80
-         * processor. By adding 4 cycles to
-         * number_cycles, at least one more
-         * instruction will be executed. However, this
-         * will fail if the next instruction has
-         * multiple 0xdd or 0xfd prefixes and
-         * Z80_PREFIX_FAILSAFE is defined, but that
-         * is an unlikely pathological case.
-         */
-
-        number_cycles += 4;
         break;
-
-#endif
 
       }
 
@@ -2924,19 +2861,13 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         state.iff1 = state.iff2 = 1;
 
-#ifdef Z80_CATCH_EI
+  #ifdef Z80_CATCH_EI
 
         state.status = Z80_STATUS_FLAG_EI;
-        goto stop_emulation;
 
-#else
+  #endif
 
-        /* See comment for DI. */
-
-        number_cycles += 4;
         break;
-
-#endif
 
       }
 
@@ -2975,12 +2906,12 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         c = x ^ y ^ z;
         f = F & SZPV_FLAGS;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         f |= (z >> 8) & YX_FLAGS;
         f |= (c >> 8) & Z80_H_FLAG;
 
-#endif
+  #endif
 
         f |= c >> (16 - Z80_C_FLAG_SHIFT);
 
@@ -3006,11 +2937,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         ? (z >> 8) & SYX_FLAGS
         : Z80_Z_FLAG;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         f |= (c >> 8) & Z80_H_FLAG;
 
-#endif
+  #endif
 
         f |= OVERFLOW_TABLE[c >> 15];
         f |= z >> (16 - Z80_C_FLAG_SHIFT);
@@ -3038,11 +2969,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         ? (z >> 8) & SYX_FLAGS
         : Z80_Z_FLAG;
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         f |= (c >> 8) & Z80_H_FLAG;
 
-#endif
+  #endif
 
         c &= 0x018000;
         f |= OVERFLOW_TABLE[c >> 15];
@@ -3103,11 +3034,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         a = A << 1;
         f = (F & SZPV_FLAGS)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (a & YX_FLAGS)
 
-#endif
+  #endif
 
         | (A >> 7);
         A = a | (F & Z80_C_FLAG);
@@ -3125,11 +3056,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         A = (A >> 1) | (A << 7);
         F = (F & SZPV_FLAGS)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (A & YX_FLAGS)
 
-#endif
+  #endif
 
         | c;
 
@@ -3145,11 +3076,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         A = (A >> 1) | ((F & Z80_C_FLAG) << 7);
         F = (F & SZPV_FLAGS)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (A & YX_FLAGS)
 
-#endif
+  #endif
 
         | c;
 
@@ -3534,12 +3465,12 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         x = R(Z(opcode)) & (1 << Y(opcode));
         F = (x ? 0 : Z80_Z_FLAG | Z80_P_FLAG)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (x & Z80_S_FLAG)
         | (R(Z(opcode)) & YX_FLAGS)
 
-#endif
+  #endif
 
         | Z80_H_FLAG
         | (F & Z80_C_FLAG);
@@ -3573,12 +3504,12 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         x &= 1 << Y(opcode);
         F = (x ? 0 : Z80_Z_FLAG | Z80_P_FLAG)
 
-#ifndef Z80_DOCUMENTED_FLAGS_ONLY
+  #ifndef Z80_DOCUMENTED_FLAGS_ONLY
 
         | (x & Z80_S_FLAG)
         | (d & YX_FLAGS)
 
-#endif
+  #endif
 
         | Z80_H_FLAG
         | (F & Z80_C_FLAG);
@@ -3699,11 +3630,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         } else {
 
-#ifdef Z80_FALSE_CONDITION_FETCH
+  #ifdef Z80_FALSE_CONDITION_FETCH
 
           Z80_FETCH_WORD(pc, nn);
 
-#endif
+  #endif
 
           pc += 2;
 
@@ -3741,11 +3672,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         } else {
 
-#ifdef Z80_FALSE_CONDITION_FETCH
+  #ifdef Z80_FALSE_CONDITION_FETCH
 
           Z80_FETCH_BYTE(pc, e);
 
-#endif
+  #endif
 
           pc++;
 
@@ -3776,11 +3707,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         } else {
 
-#ifdef Z80_FALSE_CONDITION_FETCH
+  #ifdef Z80_FALSE_CONDITION_FETCH
 
           Z80_FETCH_BYTE(pc, e);
 
-#endif
+  #endif
 
           pc++;
 
@@ -3821,11 +3752,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         } else {
 
-#ifdef Z80_FALSE_CONDITION_FETCH
+  #ifdef Z80_FALSE_CONDITION_FETCH
 
           Z80_FETCH_WORD(pc, nn);
 
-#endif
+  #endif
 
           pc += 2;
 
@@ -3860,28 +3791,23 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         state.iff1 = state.iff2;
         POP(pc);
 
-#if defined(Z80_CATCH_RETI) && defined(Z80_CATCH_RETN)
+  #if defined(Z80_CATCH_RETI) && defined(Z80_CATCH_RETN)
 
         state.status = opcode == OPCODE_RETI
         ? Z80_STATUS_FLAG_RETI
         : Z80_STATUS_FLAG_RETN;
-        goto stop_emulation;
 
-#elif defined(Z80_CATCH_RETI)
+  #elif defined(Z80_CATCH_RETI)
 
         state.status = Z80_STATUS_FLAG_RETI;
-        goto stop_emulation;
 
-#elif defined(Z80_CATCH_RETN)
+  #elif defined(Z80_CATCH_RETN)
 
         state.status = Z80_STATUS_FLAG_RETN;
-        goto stop_emulation;
 
-#else
+  #endif
 
         break;
-
-#endif
 
       }
 
@@ -3967,14 +3893,14 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         int     d, b, hl, x, f;
 
-#ifdef Z80_HANDLE_SELF_MODIFYING_CODE
+  #ifdef Z80_HANDLE_SELF_MODIFYING_CODE
 
         int     p, q;
 
         p = (pc - 2) & 0xffff;
         q = (pc - 1) & 0xffff;
 
-#endif
+  #endif
 
         d = opcode == OPCODE_INIR ? +1 : -1;
 
@@ -4004,7 +3930,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-#ifdef Z80_HANDLE_SELF_MODIFYING_CODE
+  #ifdef Z80_HANDLE_SELF_MODIFYING_CODE
 
           if (((hl - d) & 0xffff) == p
               || ((hl - d) & 0xffff) == q) {
@@ -4015,19 +3941,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-#endif
+  #endif
 
-          if (elapsed_cycles < number_cycles)
-
-            continue;
-
-          else {
-
-            f = SZYX_FLAGS_TABLE[b];
-            pc -= 2;
-            break;
-
-          }
+          f = SZYX_FLAGS_TABLE[b];
+          pc -= 2;
+          break;
 
         }
 
@@ -4125,17 +4043,9 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
           }
 
-          if (elapsed_cycles < number_cycles)
-
-            continue;
-
-          else {
-
-            f = SZYX_FLAGS_TABLE[b];
-            pc -= 2;
-            break;
-
-          }
+          f = SZYX_FLAGS_TABLE[b];
+          pc -= 2;
+          break;
 
         }
 
@@ -4179,7 +4089,8 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         }
         instruction = CB_INSTRUCTION_TABLE[opcode];
 
-        goto emulate_next_instruction;
+        repeatLoop = true;
+        break;
 
       }
 
@@ -4187,34 +4098,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         registers = state.dd_register_table;
 
-#ifdef Z80_PREFIX_FAILSAFE
-
-        /* Ensure that at least number_cycles cycles
-         * are executed.
-         */
-
-        if (elapsed_cycles < number_cycles) {
-
-          Z80_FETCH_BYTE(pc, opcode);
-          pc++;
-          goto emulate_next_opcode;
-
-        } else {
-
-          state.status = Z80_STATUS_PREFIX;
-          pc--;
-          elapsed_cycles -= 4;
-          goto stop_emulation;
-
-        }
-
-#else
-
         Z80_FETCH_BYTE(pc, opcode);
         pc++;
-        goto emulate_next_opcode;
-
-#endif
+        instruction = INSTRUCTION_TABLE[opcode];
+        repeatLoop = true;
+        break;
 
       }
 
@@ -4222,30 +4110,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
         registers = state.fd_register_table;
 
-#ifdef Z80_PREFIX_FAILSAFE
-
-        if (elapsed_cycles < number_cycles) {
-
-          Z80_FETCH_BYTE(pc, opcode);
-          pc++;
-          goto emulate_next_opcode;
-
-        } else {
-
-          state.status = Z80_STATUS_PREFIX;
-          pc--;
-          elapsed_cycles -= 4;
-          goto stop_emulation;
-
-        }
-
-#else
-
         Z80_FETCH_BYTE(pc, opcode);
         pc++;
-        goto emulate_next_opcode;
-
-#endif
+        instruction = INSTRUCTION_TABLE[opcode];
+        repeatLoop = true;
+        break;
 
       }
 
@@ -4255,8 +4124,8 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
         Z80_FETCH_BYTE(pc, opcode);
         pc++;
         instruction = ED_INSTRUCTION_TABLE[opcode];
-
-        goto emulate_next_instruction;
+        repeatLoop = true;
+        break;
 
       }
 
@@ -4264,29 +4133,20 @@ int Z80::intemulate(int opcode, int elapsed_cycles, int number_cycles)
 
       case ED_UNDEFINED: {
 
-#ifdef Z80_CATCH_ED_UNDEFINED
+  #ifdef Z80_CATCH_ED_UNDEFINED
 
         state.status = Z80_STATUS_FLAG_ED_UNDEFINED;
         pc -= 2;
-        goto stop_emulation;
 
-#else
+  #endif
 
         break;
-
-#endif
 
       }
 
     }
 
-    if (elapsed_cycles >= number_cycles)
-
-      goto stop_emulation;
-
-  }
-
-stop_emulation:
+  } while (repeatLoop);
 
   state.r = (state.r & 0x80) | (r & 0x7f);
   state.pc = pc & 0xffff;

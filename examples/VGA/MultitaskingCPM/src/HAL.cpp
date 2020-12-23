@@ -24,7 +24,7 @@
 #include <sys/time.h>
 
 #include "driver/gpio.h"
-#include <driver/dac.h>
+#include "driver/dac.h"
 
 
 #include "HAL.h"
@@ -290,7 +290,7 @@ void HAL::CPU_exec(uint16_t addr, uint16_t exitAddr)
     if (!m_execMainLoop)
       break;
 
-    /*int cycles = */m_Z80.emulate(0);
+    /*int cycles = */m_Z80.step();
 
     /*
     if (m_CPUSpeed != 0) {

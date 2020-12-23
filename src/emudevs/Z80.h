@@ -60,18 +60,6 @@ namespace fabgl {
 
 /* #define Z80_CATCH_ED_UNDEFINED */
 
-/* The emulator cannot be stopped between prefixed opcodes. This can be a
- * problem if there is a long sequence of 0xdd and/or 0xfd prefixes. But if
- * Z80_PREFIX_FAILSAFE is defined, it will always be able to stop after at
- * least numbers_cycles are executed, in which case Z80_STATE's status is set
- * to Z80_STATUS_PREFIX. Note that if the memory where the opcodes are read,
- * has wait states (slow memory), then the additional cycles for a one byte
- * fetch (the non executed prefix) must be substracted. Even if it is safer,
- * most program won't need this feature.
- */
-
-/* #define Z80_PREFIX_FAILSAFE */
-
 /* By defining this macro, the emulator will always fetch the displacement or
  * address of a conditionnal jump or call instruction, even if the condition
  * is false and the fetch can be avoided. Define this macro if you need to
@@ -267,18 +255,14 @@ public:
   * this will return zero. In interrupt mode 0, data_on_bus must be a single
   * byte opcode.
   */
-  int interrupt(int data_on_bus);
+  int IRQ(int data_on_bus);
 
   /* Trigger a non maskable interrupt, then return the number of cycles elapsed
    * to accept it.
    */
-  int nonMaskableInterrupt();
+  int NMI();
 
-  /* Execute instructions as long as the number of elapsed cycles is smaller than
-   * number_cycles, and return the number of cycles emulated. The emulator can be
-   * set to stop early on some conditions. The user macros also control the emulation.
-   */
-  int emulate(int number_cycles);
+  int step();
 
 
   // CPU registers access
@@ -295,7 +279,7 @@ public:
 
 private:
 
-  int intemulate(int opcode, int elapsed_cycles, int number_cycles);
+  int intemulate(int opcode, int elapsed_cycles);
 
 
   Z80_STATE        state;
