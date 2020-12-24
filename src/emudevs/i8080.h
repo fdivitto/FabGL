@@ -53,16 +53,6 @@ namespace fabgl {
 
 
 
-// callbacks
-
-typedef int  (*i8080ReadByte_t)(void * context, int addr);
-typedef void (*i8080WriteByte_t)(void * context, int addr, int value);
-typedef int  (*i8080ReadWord_t)(void * context, int addr);
-typedef void (*i8080WriteWord_t)(void * context, int addr, int value);
-typedef int  (*i8080ReadIO_t)(void * context, int addr);
-typedef void (*i8080WriteIO_t)(void * context, int addr, int value);
-
-
 
 /**
  * @brief Intel 8080 CPU emulator
@@ -99,7 +89,17 @@ class i8080 {
 
 public:
 
-  void setCallbacks(void * context, i8080ReadByte_t readByte, i8080WriteByte_t writeByte, i8080ReadWord_t readWord, i8080WriteWord_t writeWord, i8080ReadIO_t readIO, i8080WriteIO_t writeIO) {
+
+  // callbacks
+  typedef int  (*ReadByteCallback)(void * context, int addr);
+  typedef void (*WriteByteCallback)(void * context, int addr, int value);
+  typedef int  (*ReadWordCallback)(void * context, int addr);
+  typedef void (*WriteWordCallback)(void * context, int addr, int value);
+  typedef int  (*ReadIOCallback)(void * context, int addr);
+  typedef void (*WriteIOCallback)(void * context, int addr, int value);
+
+
+  void setCallbacks(void * context, ReadByteCallback readByte, WriteByteCallback writeByte, ReadWordCallback readWord, WriteWordCallback writeWord, ReadIOCallback readIO, WriteIOCallback writeIO) {
     m_context   = context;
     m_readByte  = readByte;
     m_writeByte = writeByte;
@@ -149,12 +149,12 @@ private:
 
   void *             m_context;
 
-  i8080ReadByte_t    m_readByte;
-  i8080WriteByte_t   m_writeByte;
-  i8080ReadWord_t    m_readWord;
-  i8080WriteWord_t   m_writeWord;
-  i8080ReadIO_t      m_readIO;
-  i8080WriteIO_t     m_writeIO;
+  ReadByteCallback   m_readByte;
+  WriteByteCallback  m_writeByte;
+  ReadWordCallback   m_readWord;
+  WriteWordCallback  m_writeWord;
+  ReadIOCallback     m_readIO;
+  WriteIOCallback    m_writeIO;
 
 };
 

@@ -217,19 +217,6 @@ struct Z80_STATE {
 };
 
 
-
-// callbacks
-
-typedef int  (*Z80ReadByte_t)(void * context, int addr);
-typedef void (*Z80WriteByte_t)(void * context, int addr, int value);
-typedef int  (*Z80ReadWord_t)(void * context, int addr);
-typedef void (*Z80WriteWord_t)(void * context, int addr, int value);
-typedef int  (*Z80ReadIO_t)(void * context, int addr);
-typedef void (*Z80WriteIO_t)(void * context, int addr, int value);
-
-
-
-
 /**
  * @brief Zilog Z80 CPU emulator
  */
@@ -237,7 +224,15 @@ class Z80 {
 
 public:
 
-  void setCallbacks(void * context, Z80ReadByte_t readByte, Z80WriteByte_t writeByte, Z80ReadWord_t readWord, Z80WriteWord_t writeWord, Z80ReadIO_t readIO, Z80WriteIO_t writeIO) {
+  // callbacks
+  typedef int  (*ReadByteCallback)(void * context, int addr);
+  typedef void (*WriteByteCallback)(void * context, int addr, int value);
+  typedef int  (*ReadWordCallback)(void * context, int addr);
+  typedef void (*WriteWordCallback)(void * context, int addr, int value);
+  typedef int  (*ReadIOCallback)(void * context, int addr);
+  typedef void (*WriteIOCallback)(void * context, int addr, int value);
+
+  void setCallbacks(void * context, ReadByteCallback readByte, WriteByteCallback writeByte, ReadWordCallback readWord, WriteWordCallback writeWord, ReadIOCallback readIO, WriteIOCallback writeIO) {
     m_context   = context;
     m_readByte  = readByte;
     m_writeByte = writeByte;
@@ -282,18 +277,18 @@ private:
   int intemulate(int opcode, int elapsed_cycles);
 
 
-  Z80_STATE        state;
+  Z80_STATE         state;
 
   // callbacks
 
-  void *           m_context;
+  void *            m_context;
 
-  Z80ReadByte_t    m_readByte;
-  Z80WriteByte_t   m_writeByte;
-  Z80ReadWord_t    m_readWord;
-  Z80WriteWord_t   m_writeWord;
-  Z80ReadIO_t      m_readIO;
-  Z80WriteIO_t     m_writeIO;
+  ReadByteCallback  m_readByte;
+  WriteByteCallback m_writeByte;
+  ReadWordCallback  m_readWord;
+  WriteWordCallback m_writeWord;
+  ReadIOCallback    m_readIO;
+  WriteIOCallback   m_writeIO;
 
 };
 
