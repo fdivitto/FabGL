@@ -30,7 +30,7 @@
 #include "IECDrive.h"
 
 
-#define DEBUGMACHINE 1
+#define DEBUGMACHINE 0
 
 
 #if DEBUGMACHINE || DEBUG6522 || DEBUG6561

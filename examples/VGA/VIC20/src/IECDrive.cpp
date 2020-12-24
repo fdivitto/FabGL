@@ -59,7 +59,11 @@ void IECDrive::reset()
   setDATA(false);
   setCLK(false);
 
-  m_ATN = false;
+  m_inputATN  = false;
+  m_inputDATA = false;
+  m_inputCLK  = false;
+
+  m_prevATN   = false;
 
   changeLinkState(LinkState::Idle);
   changeArbState(ArbState::Idle);
@@ -80,31 +84,10 @@ void IECDrive::setDATA(bool value)
 }
 
 
-// ret: true = pulled-down, false = released (pulled-up)
-bool IECDrive::getDATA()
-{
-  return m_machine->VIA2().CB2();                // don't need to negate because VIC20 has inverters out of DATA
-}
-
-
 // value: true = pull-down,  false = release (pull-up)
 void IECDrive::setCLK(bool value)
 {
   m_machine->VIA1().setBitPA(0, !value);
-}
-
-
-// ret: true = pulled-down, false = released (pulled-up)
-bool IECDrive::getCLK()
-{
-  return m_machine->VIA2().CA2();                // don't need to negate because VIC20 has inverters out of DATA
-}
-
-
-// ret: true = pulled-down, false = released (pulled-up)
-bool IECDrive::getATN()
-{
-  return (m_machine->VIA1().PA() & 0x80) != 0;   // don't need to negate because VIC20 has inverters out of DATA
 }
 
 
@@ -117,26 +100,27 @@ void IECDrive::changeLinkState(LinkState newState)
 
 void IECDrive::tick(int cycles)
 {
-  m_linkStateCycles += cycles;
 
-  if (!m_ATN && getATN() == true) {
-    m_ATN = true;
+  if (!m_prevATN && m_inputATN == true) {
+    m_prevATN = true;
     setDATA(true);
     setCLK(false);
     changeLinkState(LinkState::SenderLookingForDevices);
     //printf("ATN true\n");
-  } else if (m_ATN && getATN() == false) {
-    m_ATN = false;
+  } else if (m_prevATN && m_inputATN == false) {
+    m_prevATN = false;
     //printf("ATN false\n");
   }
 
-  if (!m_ATN && m_arbState == ArbState::Idle)
+  if (!m_inputATN && m_arbState == ArbState::Idle)
     return;
+
+  m_linkStateCycles += cycles;
 
   switch (m_linkState) {
 
     case LinkState::Idle:
-      if (getCLK() == true) {
+      if (m_inputCLK == true) {
         // sender is checking devices presence
         setDATA(true);    // signal I'm here!
         changeLinkState(LinkState::SenderLookingForDevices);
@@ -144,7 +128,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::SenderLookingForDevices:
-      if (getCLK() == false) {
+      if (m_inputCLK == false) {
         // sender is ready to send, signal we are ready to receive
         setDATA(false);
         m_isLastByte = false;
@@ -162,7 +146,7 @@ void IECDrive::tick(int cycles)
         setDATA(true);
         m_isLastByte = true;
         changeLinkState(LinkState::ReadyToReceive); // just to reset cycles counter
-      } else if (getCLK() == true) {
+      } else if (m_inputCLK == true) {
         // sender holds CLK
         changeLinkState(LinkState::WaitRecvDataValid);
         m_dataBit = 0;
@@ -174,9 +158,9 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::WaitRecvDataValid:
-      if (getCLK() == false) {
+      if (m_inputCLK == false) {
         // CLK release, data valid
-        m_curByte |= (int)!getDATA() << m_dataBit;
+        m_curByte |= (int)!m_inputDATA << m_dataBit;
         ++m_dataBit;
         changeLinkState(LinkState::WaitRecvDataInvalid);
       } else if (m_linkStateCycles > 1024) {
@@ -186,7 +170,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::WaitRecvDataInvalid:
-      if (getCLK() == true) {
+      if (m_inputCLK == true) {
         // CLK hold, data invalid
         changeLinkState(m_dataBit == 8 ? LinkState::DataAccepted : LinkState::WaitRecvDataValid);
       } else if (m_linkStateCycles > 1024) {
@@ -196,7 +180,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::DataAccepted:
-      if (getDATA() == false) {
+      if (m_inputDATA == false) {
         setDATA(true);                  // frame handshake
         changeLinkState(m_isLastByte ? LinkState::GoToIdle : LinkState::SenderLookingForDevices);
         processByte(m_curByte);
@@ -212,7 +196,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::TurnAround:
-      if (getCLK() == false) {
+      if (m_inputCLK == false) {
         setDATA(false);
         setCLK(true);
         changeLinkState(LinkState::TurnAroundReady);
@@ -227,7 +211,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::WaitReceiverReady:
-      if (getDATA() == false) {
+      if (m_inputDATA == false) {
         // receiver is ready to receive
         changeLinkState(LinkState::ReadyToSend);
         fetchNextByteToSend();
@@ -241,7 +225,7 @@ void IECDrive::tick(int cycles)
           changeLinkState(LinkState::GoToIdle);
         }
       } else if (m_isLastByte) {
-        if (m_linkStateCycles > 200 && getDATA() == true) {
+        if (m_linkStateCycles > 200 && m_inputDATA == true) {
           // wait EOI ack release
           changeLinkState(LinkState::WaitEndOfEOIAck);
         }
@@ -254,7 +238,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::WaitEndOfEOIAck:
-      if (getDATA() == false) {
+      if (m_inputDATA == false) {
         setCLK(true);
         changeLinkState(LinkState::SendDataInvalid);
       }
@@ -282,7 +266,7 @@ void IECDrive::tick(int cycles)
       break;
 
     case LinkState::WaitDataAccepted:
-      if (getDATA() == true) {
+      if (m_inputDATA == true) {
         if (m_isLastByte)
           changeLinkState(LinkState::GoToIdle);
         else
@@ -332,7 +316,7 @@ void IECDrive::processByte(uint8_t value)
 {
   //printf("%02X %s\n", m_curByte, m_isLastByte ? "(last byte)" : "");
 
-  if (m_ATN) {
+  if (m_inputATN) {
 
     // Attention mode
     int cmd  = value & 0xe0;  // higher 3 bits

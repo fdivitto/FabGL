@@ -172,7 +172,8 @@ int Machine::run()
     m_VIC.tick(cycles);
 
     // IECDrive
-    m_IECDrive.tick(cycles);
+    if (m_IECDrive.isActive())
+      m_IECDrive.tick(cycles);
 
     runCycles += cycles;
   }
@@ -1216,6 +1217,8 @@ void Machine::VIA1PortOut(void * context, VIA6522 * via, VIA6522Port port)
       testTiming = 0;
       printf("%d: ATN => %s\n", testTiming, ((via->PA() & 0x80) >> 7) ? "true" : "false");
       #endif
+      // don't need to negate because VIC20 has inverters out of DATA
+      m->m_IECDrive.setInputATN((via->PA() & 0x80) != 0);
       break;
 
     default:
@@ -1287,12 +1290,15 @@ void Machine::VIA2PortOut(void * context, VIA6522 * via, VIA6522Port port)
       #if DEBUGIEC
       printf("%d: CLK => %s\n", testTiming, via->CA2() ? "true" : "false");
       #endif
+      m->m_IECDrive.setInputCLK(via->CA2());
       break;
 
     case VIA6522Port::CB2:
       #if DEBUGIEC
       printf("%d: DATA => %s\n", testTiming, via->CB2() ? "true" : "false");
       #endif
+      // don't need to negate because VIC20 has inverters out of DATA
+      m->m_IECDrive.setInputDATA(via->CB2());
       break;
 
     default:

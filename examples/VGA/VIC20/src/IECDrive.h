@@ -91,16 +91,17 @@ public:
 
   void tick(int cycles);
 
+  bool isActive()               { return m_inputATN || m_arbState != ArbState::Idle; }
+
+  void setInputDATA(bool value) { m_inputDATA = value; }
+  void setInputCLK(bool value)  { m_inputCLK  = value; }
+  void setInputATN(bool value)  { m_inputATN  = value; }
+
 
 private:
 
   void setDATA(bool value);
-  bool getDATA();
-
   void setCLK(bool value);
-  bool getCLK();
-
-  bool getATN();
 
   void changeLinkState(LinkState newState);
 
@@ -122,6 +123,14 @@ private:
 
   uint8_t      m_deviceNum;     // this device number (8, 9...)
 
+  // input signals - true = pulled-down, false = released (pulled-up)
+  bool         m_inputATN;
+  bool         m_inputDATA;
+  bool         m_inputCLK;
+
+  // previous state of ATN
+  bool         m_prevATN;
+
   // link layer state
   LinkState    m_linkState;
   bool         m_isLastByte;
@@ -129,7 +138,6 @@ private:
   int          m_linkStateCycles;
   int          m_dataBit;
   uint8_t      m_curByte;
-  bool         m_ATN;
 
   // arbitration layer state
   ArbState     m_arbState;
