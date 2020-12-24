@@ -21,29 +21,26 @@
 
 
 #include "VIA6522.h"
-#include "machine.h"
 
+
+
+namespace fabgl {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // VIA (6522 - Versatile Interface Adapter)
 
 
-MOS6522::MOS6522(Machine * machine, int tag, VIAPortInput portIn, VIAPortOutput portOut)
-  : m_machine(machine),
-    m_tag(tag),
-    m_portIn(portIn),
-    m_portOut(portOut)
+VIA6522::VIA6522(int tag)
+  : m_tag(tag)
 {
-  reset();
-
   #if DEBUG6522
   m_tick = 0;
   #endif
 }
 
 
-void MOS6522::reset()
+void VIA6522::reset()
 {
   m_timer1Counter   = 0x0000;
   m_timer1Latch     = 0x0000;
@@ -75,21 +72,21 @@ void MOS6522::reset()
 }
 
 
-void MOS6522::setPA(int value)
+void VIA6522::setPA(int value)
 {
   m_PA = value;
   m_IRA = m_PA; // IRA is exactly what there is on port A
 }
 
 
-void MOS6522::setBitPA(int bit, bool value)
+void VIA6522::setBitPA(int bit, bool value)
 {
   uint8_t newPA = (m_PA & ~(1 << bit)) | ((int)value << bit);
   setPA(newPA);
 }
 
 
-void MOS6522::openBitPA(int bit)
+void VIA6522::openBitPA(int bit)
 {
   uint8_t mask = (1 << bit);
   if (m_DDRA & mask) {
@@ -102,21 +99,21 @@ void MOS6522::openBitPA(int bit)
 }
 
 
-void MOS6522::setPB(int value)
+void VIA6522::setPB(int value)
 {
   m_PB = value;
   m_IRB = (m_PB & ~m_DDRB) | (m_ORB & m_DDRB);  // IRB contains PB for inputs, and ORB for outputs
 }
 
 
-void MOS6522::setBitPB(int bit, bool value)
+void VIA6522::setBitPB(int bit, bool value)
 {
   uint8_t newPB = (m_PB & ~(1 << bit)) | ((int)value << bit);
   setPB(newPB);
 }
 
 
-void MOS6522::openBitPB(int bit)
+void VIA6522::openBitPB(int bit)
 {
   uint8_t mask = (1 << bit);
   if (m_DDRB & mask) {
@@ -130,7 +127,7 @@ void MOS6522::openBitPB(int bit)
 
 
 // reg must be 0..0x0f (not checked)
-void MOS6522::writeReg(int reg, int value)
+void VIA6522::writeReg(int reg, int value)
 {
   #if DEBUG6522
   printf("tick %d VIA %d writeReg(%s, 0x%02x)\n", m_tick, m_tag, VIAREG2STR[reg], value);
@@ -143,7 +140,7 @@ void MOS6522::writeReg(int reg, int value)
       m_ORB = value;
       m_PB  = (m_ORB & m_DDRB) | (m_PB & ~m_DDRB);
       m_IRB = (m_PB & ~m_DDRB) | (m_ORB & m_DDRB);  // IRB contains PB for inputs, and ORB for outputs
-      m_portOut(this, Port_PB);
+      m_portOut(m_context, this, VIA6522Port::PB);
       // clear CB1 and CB2 interrupt flags
       m_IFR &= ~VIA_IER_CB1;
       m_IFR &= ~VIA_IER_CB2;
@@ -159,7 +156,7 @@ void MOS6522::writeReg(int reg, int value)
       m_ORA = value;
       m_PA  = (m_ORA & m_DDRA) | (m_PA & ~m_DDRA);
       m_IRA = m_PA;                                   // IRA is exactly what there is on port A
-      m_portOut(this, Port_PA);
+      m_portOut(m_context, this, VIA6522Port::PA);
       break;
 
     // DDRB: Data Direction Register B
@@ -237,12 +234,12 @@ void MOS6522::writeReg(int reg, int value)
         case 0b110:
           // manual output - low
           m_CA2 = 0;
-          m_portOut(this, Port_CA2);
+          m_portOut(m_context, this, VIA6522Port::CA2);
           break;
         case 0b111:
           // manual output - high
           m_CA2 = 1;
-          m_portOut(this, Port_CA2);
+          m_portOut(m_context, this, VIA6522Port::CA2);
           break;
         default:
           break;
@@ -252,12 +249,12 @@ void MOS6522::writeReg(int reg, int value)
         case 0b110:
           // manual output - low
           m_CB2 = 0;
-          m_portOut(this, Port_CB2);
+          m_portOut(m_context, this, VIA6522Port::CB2);
           break;
         case 0b111:
           // manual output - high
           m_CB2 = 1;
-          m_portOut(this, Port_CB2);
+          m_portOut(m_context, this, VIA6522Port::CB2);
           break;
         default:
           break;
@@ -287,7 +284,7 @@ void MOS6522::writeReg(int reg, int value)
 
 
 // reg must be 0..0x0f (not checked)
-int MOS6522::readReg(int reg)
+int VIA6522::readReg(int reg)
 {
   #if DEBUG6522
   printf("tick %d VIA %d readReg(%s)\n", m_tick, m_tag, VIAREG2STR[reg]);
@@ -301,7 +298,7 @@ int MOS6522::readReg(int reg)
       m_IFR &= ~VIA_IER_CB1;
       m_IFR &= ~VIA_IER_CB2;
       // get updated PB status
-      m_portIn(this, Port_PB);
+      m_portIn(m_context, this, VIA6522Port::PB);
       return m_IRB;
 
     // IRA: Input Register A
@@ -312,7 +309,7 @@ int MOS6522::readReg(int reg)
     // IRA: Input Register A - no handshake
     case VIA_REG_ORA_IRA_NH:
       // get updated PA status
-      m_portIn(this, Port_PA);
+      m_portIn(m_context, this, VIA6522Port::PA);
       return m_IRA;
 
     // DDRB: Data Direction Register B
@@ -383,7 +380,7 @@ int MOS6522::readReg(int reg)
 
 
 // ret. true on interrupt
-bool MOS6522::tick(int cycles)
+bool VIA6522::tick(int cycles)
 {
   #if DEBUG6522
   m_tick += cycles;
@@ -424,7 +421,6 @@ bool MOS6522::tick(int cycles)
     m_CA1_prev = m_CA1;  // set interrupt flag
   }
 
-///*
   // handle CB1
   if (m_CB1 != m_CB1_prev) {
     // (interrupt on low->high transition) OR (interrupt on high->low transition)
@@ -433,9 +429,11 @@ bool MOS6522::tick(int cycles)
     }
     m_CB1_prev = m_CB1;
   }
-//*/
 
   return m_IER & m_IFR & 0x7f;
 
 }
 
+
+
+};  // namespace fabgl

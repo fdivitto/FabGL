@@ -92,6 +92,8 @@
  * Devices emulation classes:
  *    * fabgl::Z80, Zilog Z80 CPU emulator
  *    * fabgl::i8080, Intel 8080 CPU emulator
+ *    * fabgl::MOS6502, MOS 6502 CPU emulator
+ *    * fabgl::VIA6522, VIA 6522 emulator
  *
  * Other classes:
  *    * fabgl::I2C, thread safe I2C (Wire) class

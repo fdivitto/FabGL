@@ -36,9 +36,8 @@ int testTiming = 0;
 
 
 Machine::Machine(fabgl::VGAController * displayController)
-  : m_CPU(this),
-    m_VIA1(this, 1, &Machine::VIA1PortIn, &Machine::VIA1PortOut),
-    m_VIA2(this, 2, &Machine::VIA2PortIn, &Machine::VIA2PortOut),
+  : m_VIA1(1),
+    m_VIA2(2),
     m_VIC(this, displayController),
     m_joyEmu(JE_CursorKeys),
     m_IECDrive(this, 8)
@@ -49,6 +48,11 @@ Machine::Machine(fabgl::VGAController * displayController)
 
   m_expRAM[0] = m_expRAM[1] = m_expRAM[2] = m_expRAM[3] = m_expRAM[4] = nullptr;
   m_expROM[0] = m_expROM[1] = m_expROM[2] = m_expROM[3] = nullptr;
+
+  m_CPU.setCallbacks(this, busRead, busWrite, page0Read, page0Write, page1Read, page1Write);
+
+  m_VIA1.setCallbacks(this, VIA1PortIn, VIA1PortOut);
+  m_VIA2.setCallbacks(this, VIA2PortIn, VIA2PortOut);
 
   reset();
 }
@@ -88,7 +92,7 @@ void Machine::reset()
 
   m_IECDrive.reset();
 
-  m_cycle = m_CPU.callReset();
+  m_cycle = m_CPU.reset();
 }
 
 
@@ -150,7 +154,7 @@ int Machine::run()
       // NMI happens only on transition high->low (that is when was m_NMI=false)
       m_NMI = !m_NMI;
       if (m_NMI) {
-        int addCycles = m_CPU.callNMI();
+        int addCycles = m_CPU.NMI();
         cycles += addCycles;
         m_VIA1.tick(addCycles);
       }
@@ -158,7 +162,7 @@ int Machine::run()
 
     // VIA2
     if (m_VIA2.tick(cycles)) { // true = IRQ request
-      int addCycles = m_CPU.callIRQ();
+      int addCycles = m_CPU.IRQ();
       cycles += addCycles;
       m_VIA1.tick(addCycles); // TODO: may this to miss an MMI?
       m_VIA2.tick(addCycles);
@@ -1172,12 +1176,12 @@ void Machine::setKeyboard(VirtualKey key, bool down)
 }
 
 
-void Machine::VIA1PortIn(MOS6522 * via, VIAPort port)
+void Machine::VIA1PortIn(void * context, VIA6522 * via, VIA6522Port port)
 {
-  Machine * m = via->machine();
+  auto m = (Machine*)context;
 
   switch (port) {
-    case Port_PA:
+    case VIA6522Port::PA:
       if (m->m_JOY[JoyUp])
         via->setBitPA(2, 0);
       else
@@ -1202,12 +1206,12 @@ void Machine::VIA1PortIn(MOS6522 * via, VIAPort port)
 }
 
 
-void Machine::VIA1PortOut(MOS6522 * via, VIAPort port)
+void Machine::VIA1PortOut(void * context, VIA6522 * via, VIA6522Port port)
 {
-  Machine * m = via->machine();
+  auto m = (Machine*)context;
 
   switch (port) {
-    case Port_PA:
+    case VIA6522Port::PA:
       #if DEBUGIEC
       testTiming = 0;
       printf("%d: ATN => %s\n", testTiming, ((via->PA() & 0x80) >> 7) ? "true" : "false");
@@ -1220,19 +1224,19 @@ void Machine::VIA1PortOut(MOS6522 * via, VIAPort port)
 }
 
 
-void Machine::VIA2PortIn(MOS6522 * via, VIAPort port)
+void Machine::VIA2PortIn(void * context, VIA6522 * via, VIA6522Port port)
 {
-  Machine * m = via->machine();
+  auto m = (Machine*)context;
 
   switch (port) {
 
-    case Port_PB:
+    case VIA6522Port::PB:
       via->setPB(m->m_colStatus);
       if (m->m_JOY[JoyRight])
         via->setBitPB(7, 0);
       break;
 
-    case Port_PA:
+    case VIA6522Port::PA:
       via->setPA(m->m_rowStatus);
       break;
 
@@ -1242,14 +1246,14 @@ void Machine::VIA2PortIn(MOS6522 * via, VIAPort port)
 }
 
 
-void Machine::VIA2PortOut(MOS6522 * via, VIAPort port)
+void Machine::VIA2PortOut(void * context, VIA6522 * via, VIA6522Port port)
 {
-  Machine * m = via->machine();
+  auto m = (Machine*)context;
 
   switch (port) {
 
     // output on PA, select keyboard Row (store Column in PB)
-    case Port_PA:
+    case VIA6522Port::PA:
     {
       // keyboard can also be queried using PA as output and PB as input
       int PB = 0;
@@ -1265,7 +1269,7 @@ void Machine::VIA2PortOut(MOS6522 * via, VIAPort port)
     }
 
     // output on PB, select keyboard Column (store Row in PA)
-    case Port_PB:
+    case VIA6522Port::PB:
     {
       int PA = 0;
       int col = ~(via->PB());
@@ -1279,13 +1283,13 @@ void Machine::VIA2PortOut(MOS6522 * via, VIAPort port)
       break;
     }
 
-    case Port_CA2:
+    case VIA6522Port::CA2:
       #if DEBUGIEC
       printf("%d: CLK => %s\n", testTiming, via->CA2() ? "true" : "false");
       #endif
       break;
 
-    case Port_CB2:
+    case VIA6522Port::CB2:
       #if DEBUGIEC
       printf("%d: DATA => %s\n", testTiming, via->CB2() ? "true" : "false");
       #endif

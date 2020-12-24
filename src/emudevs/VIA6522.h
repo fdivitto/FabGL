@@ -23,11 +23,22 @@
 #pragma once
 
 
+/**
+ * @file
+ *
+ * @brief This file contains fabgl::VIA6522 definition.
+ */
+
+
+
 #include <stdlib.h>
 #include <stdint.h>
 
 
 #define DEBUG6522 0
+
+
+namespace fabgl {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,13 +79,13 @@
 #define VIA_ACR_T1_OUTENABLE    0x80
 
 
-enum VIAPort {
-  Port_PA,  // (8 bit)
-  Port_PB,  // (8 bit)
-  Port_CA1, // (1 bit)
-  Port_CA2, // (1 bit)
-  Port_CB1, // (1 bit)
-  Port_CB2, // (1 bit)
+enum class VIA6522Port {
+  PA,  // (8 bit)
+  PB,  // (8 bit)
+  CA1, // (1 bit)
+  CA2, // (1 bit)
+  CB1, // (1 bit)
+  CB2, // (1 bit)
 };
 
 
@@ -83,20 +94,25 @@ static const char * VIAREG2STR[] = { "ORB_IRB", "ORA_IRA", "DDRB", "DDRA", "T1_C
 #endif
 
 
-class Machine;
-
-
-class MOS6522 {
+/**
+ * @brief VIA 6522 emulator
+ */
+class VIA6522 {
 public:
 
-  typedef void (*VIAPortOutput)(MOS6522 * via, VIAPort port);
-  typedef void (*VIAPortInput)(MOS6522 * via, VIAPort port);
+  // callbacks
+  typedef void (*PortOutputCallback)(void * context, VIA6522 * via, VIA6522Port port);
+  typedef void (*PortInputCallback)(void * context, VIA6522 * via, VIA6522Port port);
 
-  MOS6522(Machine * machine, int tag, VIAPortInput portIn, VIAPortOutput portOut);
+  VIA6522(int tag);
+
+  void setCallbacks(void * context, PortInputCallback portIn, PortOutputCallback portOut) {
+    m_context = context;
+    m_portIn  = portIn;
+    m_portOut = portOut;
+  }
 
   void reset();
-
-  Machine * machine() { return m_machine; }
 
   void writeReg(int reg, int value);
   int readReg(int reg);
@@ -136,15 +152,13 @@ public:
 
 private:
 
-  Machine *     m_machine;
-
   uint8_t       m_tag;
 
   // timers
   int           m_timer1Counter;
   uint16_t      m_timer1Latch;
   int           m_timer2Counter;
-  uint8_t       m_timer2Latch; // timer 2 latch is 8 bits
+  uint8_t       m_timer2Latch;     // timer 2 latch is 8 bits
   bool          m_timer1Triggered;
   bool          m_timer2Triggered;
 
@@ -161,8 +175,6 @@ private:
   uint8_t       m_CB2_prev;
 
   // PA, PB
-  VIAPortInput  m_portIn;       // input callback
-  VIAPortOutput m_portOut;      // output callback
   uint8_t       m_DDRA;
   uint8_t       m_DDRB;
   uint8_t       m_PA;     // what actually there is out of 6522 port A
@@ -178,7 +190,15 @@ private:
   uint8_t       m_PCR;
   uint8_t       m_SR;
 
+  // callbacks
+  void *             m_context;
+  PortInputCallback  m_portIn;       // input callback
+  PortOutputCallback m_portOut;      // output callback
+
   #if DEBUG6522
-  int        m_tick;
+  int           m_tick;
   #endif
 };
+
+
+};  // namespace fabgl

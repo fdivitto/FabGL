@@ -24,19 +24,24 @@
 
 #include "fabgl.h"
 
-#include "MOS6502.h"
-#include "VIA6522.h"
+#include "emudevs/MOS6502.h"
+#include "emudevs/VIA6522.h"
 #include "MOS6561.h"
 #include "IECDrive.h"
 
 
-#define DEBUGMACHINE 0
+#define DEBUGMACHINE 1
 
 
 #if DEBUGMACHINE || DEBUG6522 || DEBUG6561
 #define DEBUG 1
 #endif
 
+
+
+using fabgl::MOS6502;
+using fabgl::VIA6522;
+using fabgl::VIA6522Port;
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,8 +88,8 @@ public:
 
   int run();
 
-  MOS6522 & VIA1() { return m_VIA1; }
-  MOS6522 & VIA2() { return m_VIA2; }
+  VIA6522 & VIA1() { return m_VIA1; }
+  VIA6522 & VIA2() { return m_VIA2; }
   MOS6561 & VIC()  { return m_VIC; }
   MOS6502 & CPU()  { return m_CPU; }
 
@@ -102,19 +107,12 @@ public:
 
   void removeCRT();
 
-  uint8_t busRead(int addr);
-
   uint8_t busReadCharDefs(int addr);
   uint8_t const * busReadVideoP(int addr);
   uint8_t const * busReadColorP(int addr);
 
+  uint8_t busRead(int addr);
   void busWrite(int addr, uint8_t value);
-
-  uint8_t page0Read(int addr)               { return m_RAM1K[addr]; }
-  void page0Write(int addr, uint8_t value)  { m_RAM1K[addr] = value; }
-
-  uint8_t page1Read(int addr)               { return m_RAM1K[0x100 + addr]; }
-  void page1Write(int addr, uint8_t value)  { m_RAM1K[0x100 + addr] = value; }
 
   void type(char const * str) { m_typingString = str; }   // TODO: multiple type() calls not possible!!
 
@@ -125,13 +123,23 @@ public:
 
 private:
 
+  static int busRead(void * context, int addr)                 { return ((Machine*)context)->busRead(addr); }
+  static void busWrite(void * context, int addr, int value)    { ((Machine*)context)->busWrite(addr, value); }
+
+  static int page0Read(void * context, int addr)               { return ((Machine*)context)->m_RAM1K[addr]; }
+  static void page0Write(void * context, int addr, int value)  { ((Machine*)context)->m_RAM1K[addr] = value; }
+
+  static int page1Read(void * context, int addr)               { return ((Machine*)context)->m_RAM1K[0x100 + addr]; }
+  static void page1Write(void * context, int addr, int value)  { ((Machine*)context)->m_RAM1K[0x100 + addr] = value; }
+
+
   int VICRead(int reg);
   void VICWrite(int reg, int value);
 
-  static void VIA1PortOut(MOS6522 * via, VIAPort port);
-  static void VIA1PortIn(MOS6522 * via, VIAPort port);
-  static void VIA2PortOut(MOS6522 * via, VIAPort port);
-  static void VIA2PortIn(MOS6522 * via, VIAPort port);
+  static void VIA1PortOut(void * context, VIA6522 * via, VIA6522Port port);
+  static void VIA1PortIn(void * context, VIA6522 * via, VIA6522Port port);
+  static void VIA2PortOut(void * context, VIA6522 * via, VIA6522Port port);
+  static void VIA2PortIn(void * context, VIA6522 * via, VIA6522Port port);
 
   void syncTime();
   void handleCharInjecting();
@@ -183,7 +191,7 @@ private:
   // PA5      -> LIGHT PEN (FIRE)
   // PA6      -> CASS SW
   // PA7      -> /SERIAL ATN OUT
-  MOS6522               m_VIA1;
+  VIA6522               m_VIA1;
 
   // ** VIA2 **
   // IRQ      -> CPU IRQ
@@ -194,7 +202,7 @@ private:
   // PB0..PB7 -> keyboard Col
   // PA0..PA7 -> Keyboard Row
   // PB7      -> JOY3
-  MOS6522               m_VIA2;
+  VIA6522               m_VIA2;
 
   // Video Interface
   MOS6561               m_VIC;

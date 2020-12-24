@@ -21,8 +21,9 @@
 
 
 #include "MOS6502.h"
-#include "MOS6502conf.h"
 
+
+namespace fabgl {
 
 
 // compose status word
@@ -42,6 +43,14 @@
 }
 
 
+#define BUSREAD(addr)           (m_readByte(m_context, (addr)))
+#define BUSWRITE(addr, value)   (m_writeByte(m_context, (addr), (value)))
+#define PAGE0READ(addr)         (m_page0ReadByte(m_context, (addr)))
+#define PAGE0WRITE(addr, value) (m_page0WriteByte(m_context, (addr), (value)))
+#define PAGE1READ(addr)         (m_page1ReadByte(m_context, (addr)))
+#define PAGE1WRITE(addr, value) (m_page1WriteByte(m_context, (addr), (value)))
+
+
 #define STACKPUSHBYTE(v) PAGE1WRITE(m_SP--, (v))
 
 #define STACKPUSHWORD(v) { PAGE1WRITE(m_SP--, (v) >> 8); PAGE1WRITE(m_SP--, (v) & 0xff); }
@@ -51,14 +60,7 @@
 #define STACKPOPWORD()   (m_SP += 2, (PAGE1READ(m_SP - 1) | (PAGE1READ(m_SP) << 8)))
 
 
-MOS6502::MOS6502(void * context)
-  : m_context(context)
-{
-	callReset();
-}
-
-
-int MOS6502::callReset()
+int MOS6502::reset()
 {
 	m_A  = m_X = m_Y = 0;
   m_SP = 0xfd;  // transistor level simulators reset SP to 0xfd
@@ -69,7 +71,7 @@ int MOS6502::callReset()
 }
 
 
-int MOS6502::callIRQ()
+int MOS6502::IRQ()
 {
 	if (!m_intDisable) {
     STACKPUSHWORD(m_PC);
@@ -82,7 +84,7 @@ int MOS6502::callIRQ()
 }
 
 
-int MOS6502::callNMI()
+int MOS6502::NMI()
 {
   STACKPUSHWORD(m_PC);
 	STACKPUSHBYTE(COMPOSE_STATUS);
@@ -1561,8 +1563,11 @@ int MOS6502::step()
 
     default:
       // unsupported opcode
-      Serial.printf("6502 illegal 0x%02x\n", BUSREAD(m_PC - 1));
+      //Serial.printf("6502 illegal 0x%02x\n", BUSREAD(m_PC - 1));
       return 0;
 
   }
 }
+
+
+}; // namespace fabgl
