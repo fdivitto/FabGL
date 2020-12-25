@@ -32,6 +32,7 @@
 #include "SSD1306Controller.h"
 
 
+#pragma GCC optimize ("O2")
 
 
 #define SSD1306_I2C_TIMEOUT         100  // ms

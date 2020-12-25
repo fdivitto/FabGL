@@ -29,6 +29,8 @@
 #include "tsi2c.h"
 
 
+#pragma GCC optimize ("O2")
+
 
 namespace fabgl {
 

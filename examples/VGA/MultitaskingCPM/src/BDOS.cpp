@@ -26,6 +26,9 @@
 
 
 
+#pragma GCC optimize ("O2")
+
+
 
 // Disc Parameter Block (DPB) - common to all disks
 // configuration;

@@ -35,6 +35,9 @@ int testTiming = 0;
 #endif
 
 
+#pragma GCC optimize ("O2")
+
+
 Machine::Machine(fabgl::VGAController * displayController)
   : m_VIA1(1),
     m_VIA2(2),

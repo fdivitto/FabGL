@@ -30,6 +30,9 @@
 #endif
 
 
+#pragma GCC optimize ("O2")
+
+
 // statically allocated variables
 
 #define CCP_STATIC_VARS_ADDR   TPA_ADDR

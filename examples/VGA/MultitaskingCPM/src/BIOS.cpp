@@ -25,6 +25,9 @@
 #include "BDOS.h"
 
 
+#pragma GCC optimize ("O2")
+
+
 const PhysicalDevice chrtbl[CHRTBL_DEVICES + 1] = {
   // PHYSICALDEV_CRT: terminal out (display)
   { { 'C', 'R', 'T', ' ', ' ', ' ' }, PHYSICALDEVICE_FLAG_OUTPUT | PHYSICALDEVICE_FLAG_SERIAL, 0 },

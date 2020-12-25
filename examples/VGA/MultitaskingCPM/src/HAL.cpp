@@ -30,6 +30,7 @@
 #include "HAL.h"
 
 
+#pragma GCC optimize ("O2")
 
 
 HAL::HAL()

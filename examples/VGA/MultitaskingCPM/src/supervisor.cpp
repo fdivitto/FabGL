@@ -24,6 +24,7 @@
 #include "supervisor.h"
 
 
+#pragma GCC optimize ("O2")
 
 
 #define SESSIONTHREAD_STACK_SIZE    4500

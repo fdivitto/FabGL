@@ -43,7 +43,7 @@
 
 
 
-
+#pragma GCC optimize ("O2")
 
 
 
@@ -443,9 +443,6 @@ void VGA16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const 
                                  [&] (uint8_t * row, int x, RGBA8888 const & src) { VGA16_SETPIXELINROW(row, x, RGB8888toPaletteIndex(src)); }   // rawSetPixelInRow
                                 );
 }
-
-
-#pragma GCC optimize ("O2")
 
 
 void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)

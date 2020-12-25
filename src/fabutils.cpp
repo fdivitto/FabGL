@@ -44,6 +44,9 @@
 #include "comdrivers/ps2controller.h"
 
 
+#pragma GCC optimize ("O2")
+
+
 
 namespace fabgl {
 

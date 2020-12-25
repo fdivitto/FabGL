@@ -23,6 +23,9 @@
 #include "MOS6502.h"
 
 
+#pragma GCC optimize ("O2")
+
+
 namespace fabgl {
 
 

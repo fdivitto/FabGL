@@ -15,8 +15,10 @@
 
 
 
-namespace fabgl {
+#pragma GCC optimize ("O2")
 
+
+namespace fabgl {
 
 
 // statics

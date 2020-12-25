@@ -27,6 +27,9 @@
 #include <stdio.h>
 
 
+#pragma GCC optimize ("O2")
+
+
 using fabgl::imin;
 using fabgl::imax;
 

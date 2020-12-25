@@ -30,6 +30,7 @@
 #include "TFTControllerGeneric.h"
 
 
+#pragma GCC optimize ("O2")
 
 
 #define TFT_UPDATETASK_STACK             1024

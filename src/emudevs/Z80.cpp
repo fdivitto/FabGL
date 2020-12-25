@@ -13,6 +13,9 @@
 #include "Z80.h"
 
 
+#pragma GCC optimize ("O2")
+
+
 namespace fabgl {
 
 

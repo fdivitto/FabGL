@@ -40,6 +40,8 @@
 #include "dispdrivers/vgabasecontroller.h"
 
 
+#pragma GCC optimize ("O2")
+
 
 namespace fabgl {
 

@@ -27,7 +27,7 @@
 #include "displaycontroller.h"
 
 
-
+#pragma GCC optimize ("O2")
 
 
 

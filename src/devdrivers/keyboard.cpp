@@ -31,6 +31,7 @@
 #include "keyboard.h"
 
 
+#pragma GCC optimize ("O2")
 
 
 namespace fabgl {
