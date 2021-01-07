@@ -668,6 +668,12 @@ bool Keyboard::reset()
 }
 
 
+bool Keyboard::setScancodeSet(int value)
+{
+  return send_cmdSetScancodeSet(value);
+}
+
+
 void Keyboard::getLEDs(bool * numLock, bool * capsLock, bool * scrollLock)
 {
   *numLock    = m_numLockLED;

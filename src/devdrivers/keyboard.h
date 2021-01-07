@@ -397,6 +397,20 @@ public:
    */
   bool setTypematicRateAndDelay(int repeatRateMS, int repeatDelayMS) { return send_cmdTypematicRateAndDelay(repeatRateMS, repeatDelayMS); }
 
+  /**
+   * @brief Sets the scancode set
+   *
+   * In order to correctly generate virtual keys Keyboard class needs scancode set 2 (it is the default on reset).
+   * Scancode set 1 is used on original IBM PC XT (https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_1)
+   * Scancode set 2 is used on IBM PC AT (https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_2)
+   * Scancode set 3 is used on IBM 3270 (https://web.archive.org/web/20170108131104/http://www.computer-engineering.org/ps2keyboard/scancodes3.html)
+   *
+   * @param value Scancode set (1, 2 or 3).
+   *
+   * @return True if scancode has been set.
+   */
+  bool setScancodeSet(int value);
+
 #if FABGLIB_HAS_VirtualKeyO_STRING
   static char const * virtualKeyToString(VirtualKey virtualKey);
 #endif
