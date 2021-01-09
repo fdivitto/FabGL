@@ -78,8 +78,9 @@ void VGADirectController::init()
 
 void VGADirectController::allocateViewPort()
 {
-  for (int i = 0; i < VGAD_LinesCount; ++i)
-    m_lines[i] = (uint8_t*) heap_caps_malloc(m_viewPortWidth, MALLOC_CAP_DMA);
+  m_lines[0] = (uint8_t*) heap_caps_malloc(m_viewPortWidth * VGAD_LinesCount, MALLOC_CAP_DMA);
+  for (int i = 1; i < VGAD_LinesCount; ++i)
+    m_lines[i] = m_lines[0] + i * m_viewPortWidth;
 }
 
 
@@ -87,10 +88,9 @@ void VGADirectController::freeViewPort()
 {
   VGABaseController::freeViewPort();
 
-  for (int i = 0; i < VGAD_LinesCount; ++i) {
-    heap_caps_free((void*)m_lines[i]);
+  heap_caps_free((void*)m_lines[0]);
+  for (int i = 0; i < VGAD_LinesCount; ++i)
     m_lines[i] = nullptr;
-  }
 }
 
 
