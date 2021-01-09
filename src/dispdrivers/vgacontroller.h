@@ -110,7 +110,7 @@ public:
   // abstract method of BitmappedDisplayController
   NativePixelFormat nativePixelFormat() { return NativePixelFormat::SBGR2222; }
 
-  // import "modeline" v3rsion of setResolution
+  // import "modeline" version of setResolution
   using VGABaseController::setResolution;
 
   void setResolution(VGATimings const& timings, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
