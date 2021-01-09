@@ -54,9 +54,6 @@ namespace fabgl {
 
 
 
-#if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
-  extern volatile uint64_t s_vgapalctrlcycles;
-#endif
 
 
 

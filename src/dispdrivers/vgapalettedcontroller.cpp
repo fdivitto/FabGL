@@ -62,9 +62,6 @@ volatile uint8_t * * VGAPalettedController::s_viewPortVisible;
 lldesc_t volatile *  VGAPalettedController::s_frameResetDesc;
 volatile int         VGAPalettedController::s_scanLine;
 
-#if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
-  volatile uint64_t s_vgapalctrlcycles = 0;
-#endif
 
 
 

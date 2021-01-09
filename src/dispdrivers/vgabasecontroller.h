@@ -75,6 +75,12 @@ namespace fabgl {
 
 
 
+#if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
+  extern volatile uint64_t s_vgapalctrlcycles;
+#endif
+
+
+
 /** \ingroup Enumerations
  * @brief Represents one of the four blocks of horizontal or vertical line
  */
