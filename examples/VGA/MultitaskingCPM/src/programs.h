@@ -2923,7 +2923,6 @@ static const Program programs[] = {
   { "", "PROFILE.SUB", (uint8_t const*) PROFILE_SUB, sizeof(PROFILE_SUB) },
 
   { "BIN", "DATE.COM", DATE_COM, sizeof(DATE_COM) },        // from 2k fixed CP/M 3
-  { "BIN", "HELP.COM", HELP_COM, sizeof(HELP_COM) },        // from 2k fixed CP/M 3
   { "BIN", "GET.COM", GET_COM, sizeof(GET_COM) },           // from 2k fixed CP/M 3
   { "BIN", "PUT.COM", PUT_COM, sizeof(PUT_COM) },           // from 2k fixed CP/M 3
   { "BIN", "SETDEF.COM", SETDEF_COM, sizeof(SETDEF_COM) },  // from 2k fixed CP/M 3
@@ -2945,6 +2944,7 @@ static const Program programs[] = {
   { "BIN", "ECHO.COM", ECHO_COM, sizeof(ECHO_COM) },        // from SIMTEL
   { "BIN", "ZEXDOC.COM", ZEXDOC_COM, sizeof(ZEXDOC_COM) },  // Z80 CPU test, Copyright (C) 1994  Frank D. Cringle, 2002 J.G.Harston
   { "BIN", "ZEXALL.COM", ZEXALL_COM, sizeof(ZEXALL_COM) },  // Z80 CPU test, Copyright (C) 1994  Frank D. Cringle, 2002 J.G.Harston
+  { "BIN", "HELP.COM", HELP_COM, sizeof(HELP_COM) },        // from 2k fixed CP/M 3
   #endif
 
   { "SDK", "HEXCOM.COM", HEXCOM_COM, sizeof(HEXCOM_COM) },
