@@ -121,6 +121,10 @@ void VGABaseController::end()
     }
     suspendBackgroundPrimitiveExecution();
     m_GPIOStream.stop();
+
+    // just in case interrupt is still runing
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+
     freeBuffers();
   }
 }
