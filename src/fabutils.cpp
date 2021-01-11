@@ -36,6 +36,7 @@
 #include "esp_spiffs.h"
 #include "soc/efuse_reg.h"
 #include "soc/rtc.h"
+#include "esp_ipc.h"
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"
@@ -226,19 +227,18 @@ struct esp_intr_alloc_args {
   TaskHandle_t    waitingTask;
 };
 
-void esp_intr_alloc_pinnedToCore_task(void * arg)
+
+void esp_intr_alloc_pinnedToCore_call(void * arg)
 {
   auto args = (esp_intr_alloc_args*) arg;
   esp_intr_alloc(args->source, args->flags, args->handler, args->arg, args->ret_handle);
-  xTaskNotifyGive(args->waitingTask);
-  vTaskDelete(NULL);
 }
+
 
 void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, void * arg, intr_handle_t * ret_handle, int core)
 {
   esp_intr_alloc_args args = { source, flags, handler, arg, ret_handle, xTaskGetCurrentTaskHandle() };
-  xTaskCreatePinnedToCore(esp_intr_alloc_pinnedToCore_task, "" , 1024, &args, 3, NULL, core);
-  ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+  esp_ipc_call_blocking(core, esp_intr_alloc_pinnedToCore_call, &args);
 }
 
 
