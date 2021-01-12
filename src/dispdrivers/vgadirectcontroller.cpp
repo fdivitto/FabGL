@@ -113,6 +113,8 @@ void VGADirectController::run()
   // must be started before interrupt alloc
   startGPIOStream();
 
+  s_scanLine = 0;
+
   // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
   if (m_isr_handle == nullptr) {
     CoreUsage::setBusiestCore(FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
