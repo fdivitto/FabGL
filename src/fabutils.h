@@ -938,7 +938,7 @@ struct CoreUsage {
   static void setBusiestCore(int core)     { s_busiestCore = core; }
 
   private:
-    static int s_busiestCore;  // -1 = none, 0 = core 0, 1 = core 1
+    static int s_busiestCore;  // 0 = core 0, 1 = core 1 (default is FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE)
 };
 
 

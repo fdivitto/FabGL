@@ -1366,7 +1366,7 @@ int LightMemoryPool::largestFree()
 // CoreUsage
 
 
-int CoreUsage::s_busiestCore = -1;
+int CoreUsage::s_busiestCore = FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE;
 
 
 // CoreUsage
