@@ -185,8 +185,8 @@
 /** Modeline for 512x512@58Hz resolution */
 #define VGA_512x512_58Hz "\"512x512@58Hz\" 21.21 512 538 594 668 512 513 516 545 -HSync -VSync"
 
-/** Modeline for 640x200@70Hz resolution */
-#define VGA_640x200_70Hz "\"640x200@70Hz\" 25.175 640 663 759 808 200 208 211 226 -HSync -VSync DoubleScan"
+/** Modeline for 640x200@70Hz resolution - the same of VGA_640x400_70Hz with vertical halved */
+#define VGA_640x200_70Hz "\"640x200@70Hz\" 25.175 640 656 752 800 200 206 207 224 -HSync -VSync DoubleScan"
 
 /** Modeline for 640x200@70Hz retro resolution */
 #define VGA_640x200_70HzRetro "\"640x200@70Hz\" 25.175 640 663 759 808 200 208 211 226 -HSync -VSync DoubleScan MultiScanBlank"
