@@ -158,6 +158,9 @@
 /** Modeline for 256x384@60Hz resolution */
 #define VGA_256x384_60Hz "\"256x384@60\" 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan FrontPorchBegins"
 
+/** Modeline for 320x200@70Hz resolution - the same of VGA_640x200_70Hz with horizontal halved */
+#define VGA_320x200_70Hz "\"320x200@70Hz\" 12.5875 320 328 376 400 200 206 207 224 -HSync -VSync DoubleScan"
+
 /** Modeline for 320x200@75Hz resolution */
 #define VGA_320x200_75Hz "\"320x200@75Hz\" 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan"
 
@@ -238,6 +241,9 @@
 
 // Thanks to Paul Rickards (http://biosrhythm.com) - requires upscaler
 #define PAL_720x288_50hz "\"PAL 720x288 (50Hz)\" 13.853 720 741 806 888 288 290 293 312 -hsync -vsync"
+
+/** Modeline for 720x348@73Hz resolution */
+#define VGA_720x348_73Hz "\"720x348@73Hz\" 27 720 736 799 872 348 379 381 433 -HSync -VSync"
 
 /** Modeline for 720x400@70Hz resolution */
 #define VGA_720x400_70Hz "\"720x400@70Hz\" 28.32  720 738 846 900  400 412 414 449 -hsync +vsync"
