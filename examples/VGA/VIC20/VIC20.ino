@@ -108,7 +108,6 @@ struct EmbeddedProgDef {
 //   ...modify like files in progs/embedded, and put filename and binary data in following list.
 const EmbeddedProgDef embeddedProgs[] = {
   { arukanoido_filename, arukanoido_prg, sizeof(arukanoido_prg) },
-  { kweepoutmc_filename, kweepoutmc_prg, sizeof(kweepoutmc_prg) },
   { nibbler_filename, nibbler_prg, sizeof(nibbler_prg) },
   { pooyan_filename, pooyan_prg, sizeof(pooyan_prg) },
   { popeye_filename, popeye_prg, sizeof(popeye_prg) },
@@ -120,6 +119,7 @@ const EmbeddedProgDef embeddedProgs[] = {
   // you need more program flash in order to use remaining games. To do this select
   // the board name "ESP32 Dev Module" and in menu "Tools->Partition Scheme", select "No OTA 2MB/2MB" or "Huge App".
   /*
+  { kweepoutmc_filename, kweepoutmc_prg, sizeof(kweepoutmc_prg) },
   { dragonwing_filename, dragonwing_prg, sizeof(dragonwing_prg) },
   { tank_battalion_filename, tank_battalion_prg, sizeof(tank_battalion_prg) },
   { blue_star_filename, blue_star_prg, sizeof(blue_star_prg) },
