@@ -49,8 +49,6 @@
 
 
 
-#define VGAD_LinesCount 2
-
 
 
 namespace fabgl {
@@ -120,6 +118,22 @@ public:
    * You need to call this only when VGADirectController constructor has been called with autoRun = false.
    */
   void run();
+
+  /**
+   * @brief Sets number of scanlines to draw in a single callback
+   *
+   * Default scanlines per callback is 1.
+   *
+   * @param value Number of scanlines to fill in DrawScanlineCallback callback
+   */
+  void setScanlinesPerCallBack(int value)    { m_linesCount = value * 2; }
+
+  /**
+   * @brief Determines if retracing is in progress
+   *
+   * @return True when retracing (vertical sync) is active
+   */
+  static bool VSync()                        { return s_VSync; }
 
 private:
 
@@ -192,9 +206,10 @@ private:
   static VGADirectController * s_instance;
   static volatile int          s_scanLine;
   static lldesc_t volatile *   s_frameResetDesc;
+  static bool                  s_VSync;
 
-
-  volatile uint8_t *           m_lines[VGAD_LinesCount];
+  int32_t                      m_linesCount;
+  uint8_t *  *                 m_lines;
 
   // here we use callbacks in place of virtual methods because vtables are stored in Flash and
   // so it would not have been possible to put ISR into IRAM.

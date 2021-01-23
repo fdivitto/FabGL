@@ -59,12 +59,15 @@ namespace fabgl {
 VGADirectController *    VGADirectController::s_instance = nullptr;
 volatile int             VGADirectController::s_scanLine;
 lldesc_t volatile *      VGADirectController::s_frameResetDesc;
+bool                     VGADirectController::s_VSync;
 
 
 
 VGADirectController::VGADirectController(bool autoRun)
   : m_drawScanlineCallback(nullptr),
-    m_autoRun(autoRun)
+    m_autoRun(autoRun),
+    m_linesCount(2),
+    m_lines(nullptr)
 {
   s_instance = this;
 }
@@ -79,8 +82,9 @@ void VGADirectController::init()
 
 void VGADirectController::allocateViewPort()
 {
-  m_lines[0] = (uint8_t*) heap_caps_malloc(m_viewPortWidth * VGAD_LinesCount, MALLOC_CAP_DMA);
-  for (int i = 1; i < VGAD_LinesCount; ++i)
+  m_lines = (uint8_t**) heap_caps_malloc(sizeof(uint8_t*) * m_linesCount, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+  m_lines[0] = (uint8_t*) heap_caps_malloc(m_viewPortWidth * m_linesCount, MALLOC_CAP_DMA);
+  for (int i = 1; i < m_linesCount; ++i)
     m_lines[i] = m_lines[0] + i * m_viewPortWidth;
 }
 
@@ -90,8 +94,8 @@ void VGADirectController::freeViewPort()
   VGABaseController::freeViewPort();
 
   heap_caps_free((void*)m_lines[0]);
-  for (int i = 0; i < VGAD_LinesCount; ++i)
-    m_lines[i] = nullptr;
+  heap_caps_free((void*)m_lines);
+  m_lines = nullptr;
 }
 
 
@@ -128,10 +132,10 @@ void VGADirectController::run()
 void VGADirectController::onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow)
 {
   if (isVisible) {
-    buffer->buf = (uint8_t *) m_lines[visibleRow % VGAD_LinesCount];
+    buffer->buf = (uint8_t *) m_lines[visibleRow % m_linesCount];
 
-    // generate interrupt every half VGAD_LinesCount
-    if ((scan == 0 && (visibleRow % (VGAD_LinesCount / 2)) == 0)) {
+    // generate interrupt every half m_linesCount
+    if ((scan == 0 && (visibleRow % (m_linesCount / 2)) == 0)) {
       if (visibleRow == 0)
         s_frameResetDesc = buffer;
       buffer->eof = 1;
@@ -246,28 +250,30 @@ void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
   auto s1 = getCycleCount();
   #endif
 
-  auto ctrl = (VGADirectController *) arg;
-
   if (I2S1.int_st.out_eof) {
+
+    auto ctrl = (VGADirectController *) arg;
+
+    auto viewPortHeight = ctrl->m_viewPortHeight;
 
     auto desc = (volatile lldesc_t*) I2S1.out_eof_des_addr;
 
-    if (desc == s_frameResetDesc)
+    if (desc == s_frameResetDesc) {
       s_scanLine = 0;
-
-    int scanLine = (s_scanLine + VGAD_LinesCount / 2) % ctrl->m_viewPortHeight;
-
-    auto lineIndex = scanLine & (VGAD_LinesCount - 1);
-
-    for (int i = 0; i < VGAD_LinesCount / 2; ++i) {
-
-      ctrl->m_drawScanlineCallback(ctrl->m_drawScanlineArg, (uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
-
-      ++lineIndex;
-      ++scanLine;
+      s_VSync = false;
     }
 
-    s_scanLine += VGAD_LinesCount / 2;
+    int linesCount = ctrl->m_linesCount;
+    int scanLine = (s_scanLine + linesCount / 2) % viewPortHeight;
+
+    const auto lineIndex = scanLine & (linesCount - 1);
+
+    ctrl->m_drawScanlineCallback(ctrl->m_drawScanlineArg, (uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
+
+    s_scanLine += linesCount / 2;
+
+    if (s_scanLine >= viewPortHeight)
+      s_VSync = true;
 
   }
 
