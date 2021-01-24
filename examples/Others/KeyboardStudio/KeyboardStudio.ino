@@ -53,9 +53,10 @@ void printHelp()
   printInfo();
 
   xprintf("Commands:\r\n");
-  xprintf("  1 = US Layout  2 = UK Layout      3 = DE Layout\r\n");
-  xprintf("  4 = IT Layout  5 = ES Layout\r\n");
-  xprintf("  r = Reset      s = Scancode Mode  a = VirtualKey/ASCII Mode\r\n");
+  xprintf("  1 = US Layout       2 = UK Layout       3 = DE Layout\r\n");
+  xprintf("  4 = IT Layout       5 = ES Layout\r\n");
+  xprintf("  r = Reset           s = Scancode Mode   a = VirtualKey/ASCII Mode\r\n");
+  xprintf("  q = Scancode set 1  w = Scancode set 2\r\n");
   xprintf("  l = Test LEDs\r\n");
   xprintf("Various:\r\n");
   xprintf("  h = Print This help\r\n\n");
@@ -167,7 +168,6 @@ void loop()
         xprintf("VirtualKey/ASCII mode\r\n");
         break;
       case 'l':
-      {
         for (int i = 0; i < 8; ++i) {
           keyboard->setLEDs(i & 1, i & 2, i & 4);
           delay(1000);
@@ -176,12 +176,19 @@ void loop()
         if (keyboard->setLEDs(0, 0, 0))
           xprintf("OK\r\n");
         break;
-      }
+      case 'q':
+        keyboard->setScancodeSet(1);
+        xprintf("Scancode Set = %d\r\n", keyboard->scancodeSet());
+        break;
+      case 'w':
+        keyboard->setScancodeSet(2);
+        xprintf("Scancode Set = %d\r\n", keyboard->scancodeSet());
+        break;
     }
   }
 
   if (mode == 's' && keyboard->scancodeAvailable()) {
-    // scancode mode (show scancodes)
+    // scancode mode (show scancodes). Because we are using virtual keys, the scancode set here is always 2.
     xprintf("Scancode = 0x%02X\r\n", keyboard->getNextScancode());
   } else if (keyboard->virtualKeyAvailable()) {
     // ascii mode (show ASCIIl, VirtualKeys and scancodes)
