@@ -74,7 +74,7 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
 
   if (generateVirtualKeys || createVKQueue) {
     if (createVKQueue)
-      m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(uint16_t));
+      m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(VirtualKeyItem));
     xTaskCreate(&SCodeToVKConverterTask, "", Keyboard::scancodeToVirtualKeyTaskStackSize, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
   }
 }
@@ -561,79 +561,79 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
 }
 
 
-VirtualKey Keyboard::blockingGetVirtualKey(bool * keyDown)
+bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
 {
-  VirtualKey vk = VK_NONE;
-  bool kdown = true;
-  do {
-    int scode = getNextScancode();
-    if (scode == 0xE0) {
-      // two bytes scancode
-      scode = getNextScancode(100, true);
-      if (scode == 0xF0) {
-        // two bytes scancode key up
-        scode = getNextScancode(100, true);
-        vk = scancodeToVK(scode, true);
-        kdown = false;
-      } else {
-        // two bytes scancode key down
-        vk = scancodeToVK(scode, true);
-      }
-    } else if (scode == 0xE1) {
-      // special case: "PAUSE" : 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77
-      const uint8_t PAUSECODES[] = {0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77};
-      int i;
-      for (i = 0; i < 7; ++i) {
-        scode = getNextScancode(100, true);
-        if (scode != PAUSECODES[i])
-          break;
-      }
-      if (i == 7)
-        vk = VK_PAUSE;
-    } else if (scode == 0xF0) {
-      // key up
-      scode = getNextScancode(100, true);
-      vk = scancodeToVK(scode, false);
-      kdown = false;
-    } else {
-      // one byte scancode key down
-      vk = scancodeToVK(scode, false);
-    }
-  } while (false);
+  item->vk   = VK_NONE;
+  item->down = true;
 
-  if (vk != VK_NONE) {
+  uint8_t * scode = item->scancode;
+
+  *scode = getNextScancode();
+  if (*scode == 0xE0) {
+    // two bytes scancode
+    *(++scode) = getNextScancode(100, true);
+    if (*scode == 0xF0) {
+      // two bytes scancode key up
+      *(++scode) = getNextScancode(100, true);
+      item->vk = scancodeToVK(*scode, true);
+      item->down = false;
+    } else {
+      // two bytes scancode key down
+      item->vk = scancodeToVK(*scode, true);
+    }
+  } else if (*scode == 0xE1) {
+    // special case: "PAUSE" : 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77
+    static const uint8_t PAUSECODES[] = {0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77};
+    for (int i = 0; i < sizeof(PAUSECODES); ++i) {
+      *(++scode) = getNextScancode(100, true);
+      if (*scode != PAUSECODES[i])
+        break;
+      else if (i == sizeof(PAUSECODES) - 1)
+        item->vk = VK_PAUSE;
+    }
+  } else if (*scode == 0xF0) {
+    // one byte scancode, key up
+    *(++scode) = getNextScancode(100, true);
+    item->vk = scancodeToVK(*scode, false);
+    item->down = false;
+  } else {
+    // one byte scancode, key down
+    item->vk = scancodeToVK(*scode, false);
+  }
+
+  if (item->vk != VK_NONE) {
 
     // alternate VK (virtualkeys modified by shift, alt, ...)
-    vk = VKtoAlternateVK(vk, kdown);
+    item->vk = VKtoAlternateVK(item->vk, item->down);
 
     // update shift, alt, ctrl, capslock, numlock and scrollock states and LEDs
-    switch (vk) {
+    switch (item->vk) {
       case VK_LCTRL:
       case VK_RCTRL:
-        m_CTRL = kdown;
+        m_CTRL = item->down;
         break;
       case VK_LALT:
       case VK_RALT:
-        m_ALT = kdown;
+        m_ALT = item->down;
         break;
       case VK_LSHIFT:
       case VK_RSHIFT:
-        m_SHIFT = kdown;
+        m_SHIFT = item->down;
         break;
       case VK_CAPSLOCK:
-        if (!kdown) {
+        if (!item->down) {
           m_CAPSLOCK = !m_CAPSLOCK;
           updateLEDs();
         }
         break;
       case VK_NUMLOCK:
-        if (!kdown) {
+        if (!item->down) {
           m_NUMLOCK = !m_NUMLOCK;
           updateLEDs();
         }
         break;
       case VK_SCROLLLOCK:
-        if (!kdown) {
+        if (!item->down) {
           m_SCROLLLOCK = !m_SCROLLLOCK;
           updateLEDs();
         }
@@ -644,79 +644,97 @@ VirtualKey Keyboard::blockingGetVirtualKey(bool * keyDown)
 
   }
 
-  if (keyDown)
-    *keyDown = kdown;
-    
   // manage dead keys - Implemented by Carles Oriol (https://github.com/carlesoriol)
   for (VirtualKey const * dk = m_layout->deadKeysVK; *dk != VK_NONE; ++dk) {
-    if (vk == *dk) {
-      m_lastDeadKey = vk;
-      vk = VK_NONE;
+    if (item->vk == *dk) {
+      m_lastDeadKey = item->vk;
+      item->vk = VK_NONE;
     }
   }
-  if (vk != m_lastDeadKey && vk != VK_NONE) {
+  if (item->vk != m_lastDeadKey && item->vk != VK_NONE) {
     for (DeadKeyVirtualKeyDef const * dk = m_layout->deadkeysToVK; dk->deadKey != VK_NONE; ++dk) {
-      if (vk == dk->reqVirtualKey && m_lastDeadKey == dk->deadKey) {
-        vk = dk->virtualKey;
+      if (item->vk == dk->reqVirtualKey && m_lastDeadKey == dk->deadKey) {
+        item->vk = dk->virtualKey;
         break;
       }
     }
-    if (!kdown && (vk != m_lastDeadKey) && (vk != VK_RSHIFT) && (vk != VK_LSHIFT))
+    if (!item->down && (item->vk != m_lastDeadKey) && (item->vk != VK_RSHIFT) && (item->vk != VK_LSHIFT))
       m_lastDeadKey = VK_NONE;
   }
 
-  return vk;
+  // ending zero to item->scancode
+  if (scode < item->scancode + sizeof(VirtualKeyItem::scancode) - 1)
+    *(++scode) = 0;
+
+  return item->vk != VK_NONE;
+}
+
+
+void Keyboard::injectVirtualKey(VirtualKeyItem const & item, bool insert)
+{
+  // update m_VKMap
+  if (item.down)
+    m_VKMap[(int)item.vk >> 3] |= 1 << ((int)item.vk & 7);
+  else
+    m_VKMap[(int)item.vk >> 3] &= ~(1 << ((int)item.vk & 7));
+
+  // has VK queue? Insert VK into it.
+  if (m_virtualKeyQueue) {
+    auto ticksToWait = (m_uiApp ? 0 : portMAX_DELAY);  // 0, and not portMAX_DELAY to avoid uiApp locks
+    if (insert)
+      xQueueSendToFront(m_virtualKeyQueue, &item, ticksToWait);
+    else
+      xQueueSendToBack(m_virtualKeyQueue, &item, ticksToWait);
+  }
 }
 
 
 void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert)
 {
-  // update m_VKMap
-  if (keyDown)
-    m_VKMap[(int)virtualKey >> 3] |= 1 << ((int)virtualKey & 7);
-  else
-    m_VKMap[(int)virtualKey >> 3] &= ~(1 << ((int)virtualKey & 7));
-
-  // has VK queue? Insert VK into it.
-  if (m_virtualKeyQueue) {
-    uint16_t code = (uint16_t)virtualKey | (keyDown ? 0x8000 : 0);
-    auto ticksToWait = (m_uiApp ? 0 : portMAX_DELAY);  // 0, and not portMAX_DELAY to avoid uiApp locks
-    if (insert)
-      xQueueSendToFront(m_virtualKeyQueue, &code, ticksToWait);
-    else
-      xQueueSendToBack(m_virtualKeyQueue, &code, ticksToWait);
-  }
+  VirtualKeyItem item;
+  item.vk          = virtualKey;
+  item.down        = keyDown;
+  item.scancode[0] = 0;  // this is a manual insert, not scancode associated
+  injectVirtualKey(item, insert);
 }
 
 
 void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 {
   Keyboard * keyboard = (Keyboard*) pvParameters;
+
   while (true) {
-    bool keyDown;
-    VirtualKey vk = keyboard->blockingGetVirtualKey(&keyDown);
 
-    keyboard->onVirtualKey(&vk, keyDown);
+    VirtualKeyItem item;
 
-    if (vk != VK_NONE) {
+    if (keyboard->blockingGetVirtualKey(&item)) {
 
-      // add into m_virtualKeyQueue and update m_VKMap
-      keyboard->injectVirtualKey(vk, keyDown);
+      // onVirtualKey may set item.vk = VK_NONE!
+      keyboard->onVirtualKey(&item.vk, item.down);
 
-      // need to send events to uiApp?
-      if (keyboard->m_uiApp) {
-        uiEvent evt = uiEvent(nullptr, keyDown ? UIEVT_KEYDOWN : UIEVT_KEYUP);
-        evt.params.key.VK    = vk;
-        evt.params.key.LALT  = keyboard->isVKDown(VK_LALT);
-        evt.params.key.RALT  = keyboard->isVKDown(VK_RALT);
-        evt.params.key.CTRL  = keyboard->isVKDown(VK_LCTRL)  || keyboard->isVKDown(VK_RCTRL);
-        evt.params.key.SHIFT = keyboard->isVKDown(VK_LSHIFT) || keyboard->isVKDown(VK_RSHIFT);
-        evt.params.key.GUI   = keyboard->isVKDown(VK_LGUI)   || keyboard->isVKDown(VK_RGUI);
-        keyboard->m_uiApp->postEvent(&evt);
+      if (item.vk != VK_NONE) {
+
+        // add into m_virtualKeyQueue and update m_VKMap
+        keyboard->injectVirtualKey(item, false);
+
+        // need to send events to uiApp?
+        if (keyboard->m_uiApp) {
+          uiEvent evt = uiEvent(nullptr, item.down ? UIEVT_KEYDOWN : UIEVT_KEYUP);
+          evt.params.key.VK    = item.vk;
+          evt.params.key.LALT  = keyboard->isVKDown(VK_LALT);
+          evt.params.key.RALT  = keyboard->isVKDown(VK_RALT);
+          evt.params.key.CTRL  = keyboard->isVKDown(VK_LCTRL)  || keyboard->isVKDown(VK_RCTRL);
+          evt.params.key.SHIFT = keyboard->isVKDown(VK_LSHIFT) || keyboard->isVKDown(VK_RSHIFT);
+          evt.params.key.GUI   = keyboard->isVKDown(VK_LGUI)   || keyboard->isVKDown(VK_RGUI);
+          keyboard->m_uiApp->postEvent(&evt);
+        }
+
       }
 
     }
+
   }
+
 }
 
 
@@ -741,18 +759,21 @@ bool Keyboard::isVKDown(VirtualKey virtualKey)
 }
 
 
+bool Keyboard::getNextVirtualKey(VirtualKeyItem * item, int timeOutMS)
+{
+  return (m_SCodeToVKConverterTask && item && xQueueReceive(m_virtualKeyQueue, item, msToTicks(timeOutMS)) == pdTRUE);
+}
+
+
 VirtualKey Keyboard::getNextVirtualKey(bool * keyDown, int timeOutMS)
 {
-  VirtualKey vk = VK_NONE;
-  if (m_SCodeToVKConverterTask) {
-    uint16_t code;
-    if (xQueueReceive(m_virtualKeyQueue, &code, msToTicks(timeOutMS)) == pdTRUE) {
-      vk = (VirtualKey) (code & 0x7FFF);
-      if (keyDown)
-        *keyDown = code & 0x8000;
-    }
+  VirtualKeyItem item;
+  if (getNextVirtualKey(&item, timeOutMS)) {
+    if (keyDown)
+      *keyDown = item.down;
+    return item.vk;
   }
-  return vk;
+  return VK_NONE;
 }
 
 

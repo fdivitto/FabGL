@@ -184,22 +184,23 @@ void loop()
     // scancode mode (show scancodes)
     xprintf("Scancode = 0x%02X\r\n", keyboard->getNextScancode());
   } else if (keyboard->virtualKeyAvailable()) {
-    // ascii mode (show ASCII and VirtualKeys)
-    bool down;
-    auto vk = keyboard->getNextVirtualKey(&down);
-    //if (vk != lastvk) {
-      xprintf("VirtualKey = %s", keyboard->virtualKeyToString(vk));
-      int c = keyboard->virtualKeyToASCII(vk);
+    // ascii mode (show ASCIIl, VirtualKeys and scancodes)
+    fabgl::VirtualKeyItem item;
+    if (keyboard->getNextVirtualKey(&item)) {
+      xprintf("%s: ", keyboard->virtualKeyToString(item.vk));
+      int c = keyboard->virtualKeyToASCII(item.vk);
       if (c > -1) {
         xprintf("\tASCII = 0x%02X\t", c);
         if (c >= ' ')
           xprintf("%c", c);
       }
-      if (!down)
-        xprintf("\tUP");
+      xprintf("\t%s", item.down ? "DN" : "UP");
+      xprintf("\t[");
+      for (int i = 0; i < 8 && item.scancode[i] != 0; ++i)
+        xprintf("%02X ", item.scancode[i]);
+      xprintf("]");
       xprintf("\r\n");
-      //lastvk = down ? vk : fabgl::VK_NONE;
-    //}
+    }
   }
 
 }

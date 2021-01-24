@@ -43,6 +43,16 @@ namespace fabgl {
 
 
 
+/**
+ * @brief A struct which contains a virtual key, key state and associated scan code
+ */
+struct VirtualKeyItem {
+  VirtualKey vk;          /**< Virtual key */
+  uint8_t    down;        /**< 0 = up, 1 = down */
+  uint8_t    scancode[8]; /**< Keyboard scancode. Ends with zero if length is <8, otherwise gets the entire length (like PAUSE, which is 8 bytes) */
+};
+
+
 
 
 /**
@@ -206,6 +216,19 @@ public:
   VirtualKey getNextVirtualKey(bool * keyDown = nullptr, int timeOutMS = -1);
 
   /**
+   * @brief Gets a virtual key from the queue, including associated scan code.
+   *
+   * Virtual keys are generated from scancodes only if generateVirtualKeys parameter is true (default)
+   * and createVKQueue parameter is true (default) of Keyboard.begin() method.
+   *
+   * @param item Pointer to VirtualKeyItem structure which receive virtual key info.
+   * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
+   *
+   * @return True if item has been received. False if no data is available in the timeout period.
+   */
+  bool getNextVirtualKey(VirtualKeyItem * item, int timeOutMS = -1);
+
+  /**
    * @brief Adds or inserts a virtual key into the virtual keys queue
    *
    * @param virtualKey Virtual key to add or insert
@@ -213,6 +236,14 @@ public:
    * @param insert If true virtual key is inserted as first item
    */
   void injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert = false);
+
+  /**
+   * @brief Adds or inserts a virtual key info into the virtual keys queue
+   *
+   * @param item Virtual key info add or insert
+   * @param insert If true virtual key is inserted as first item
+   */
+  void injectVirtualKey(VirtualKeyItem const & item, bool insert = false);
 
   /**
    * @brief Empties the virtual keys queue
@@ -354,7 +385,7 @@ private:
   VirtualKey scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLayout const * layout = nullptr);
   VirtualKey VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout const * layout = nullptr);
   void updateLEDs();
-  VirtualKey blockingGetVirtualKey(bool * keyDown);
+  bool blockingGetVirtualKey(VirtualKeyItem * item);
   static void SCodeToVKConverterTask(void * pvParameters);
 
 
