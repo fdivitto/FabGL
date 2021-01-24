@@ -339,16 +339,24 @@ public:
   /**
    * @brief Sets the scancode set
    *
-   * In order to correctly generate virtual keys Keyboard class needs scancode set 2 (it is the default on reset).
    * Scancode set 1 is used on original IBM PC XT (https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_1)
    * Scancode set 2 is used on IBM PC AT (https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_2)
    * Scancode set 3 is used on IBM 3270 (https://web.archive.org/web/20170108131104/http://www.computer-engineering.org/ps2keyboard/scancodes3.html)
+   *
+   * When virtual keys are enabled only set 1 and set 2 are available.
    *
    * @param value Scancode set (1, 2 or 3).
    *
    * @return True if scancode has been set.
    */
   bool setScancodeSet(int value);
+
+  /**
+   * @brief Gets current scancode set
+   *
+   * @return Current scan code set (1, 2 or 3)
+   */
+  int scancodeSet()                { return m_scancodeSet; }
 
 #if FABGLIB_HAS_VirtualKeyO_STRING
   static char const * virtualKeyToString(VirtualKey virtualKey);
@@ -386,6 +394,8 @@ private:
   VirtualKey VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout const * layout = nullptr);
   void updateLEDs();
   bool blockingGetVirtualKey(VirtualKeyItem * item);
+  void convertScancode2to1(VirtualKeyItem * item);
+
   static void SCodeToVKConverterTask(void * pvParameters);
 
 
@@ -396,6 +406,11 @@ private:
   QueueHandle_t             m_virtualKeyQueue;
 
   uint8_t                   m_VKMap[(int)(VK_LAST + 7) / 8];
+
+  // allowed values: 1, 2 or 3
+  // If virtual keys are enabled only 1 and 2 are possible. In case of scancode set 1 it is converted from scan code set 2, which is necessary
+  // in order to decode virtual keys.
+  uint8_t                   m_scancodeSet;
 
   KeyboardLayout const *    m_layout;
 
@@ -414,6 +429,7 @@ private:
   bool                      m_numLockLED;
   bool                      m_capsLockLED;
   bool                      m_scrollLockLED;
+
 };
 
 
