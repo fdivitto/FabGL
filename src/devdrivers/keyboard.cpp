@@ -713,6 +713,47 @@ void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert
 }
 
 
+// converts keypad virtual key to number (VK_KP_1 = 1, VK_KP_DOWN = 2, etc...)
+// -1 = no convertible
+int Keyboard::convKeypadVKToNum(VirtualKey vk)
+{
+  switch (vk) {
+    case VK_KP_0:
+    case VK_KP_INSERT:
+      return 0;
+    case VK_KP_1:
+    case VK_KP_END:
+      return 1;
+    case VK_KP_2:
+    case VK_KP_DOWN:
+      return 2;
+    case VK_KP_3:
+    case VK_KP_PAGEDOWN:
+      return 3;
+    case VK_KP_4:
+    case VK_KP_LEFT:
+      return 4;
+    case VK_KP_5:
+    case VK_KP_CENTER:
+      return 5;
+    case VK_KP_6:
+    case VK_KP_RIGHT:
+      return 6;
+    case VK_KP_7:
+    case VK_KP_HOME:
+      return 7;
+    case VK_KP_8:
+    case VK_KP_UP:
+      return 8;
+    case VK_KP_9:
+    case VK_KP_PAGEUP:
+      return 9;
+    default:
+      return -1;
+  };
+}
+
+
 void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 {
   Keyboard * keyboard = (Keyboard*) pvParameters;
