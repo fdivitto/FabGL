@@ -455,20 +455,20 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
     case VK_DIAERESIS: // '¨'
       return '"';
 
-    case VK_UMLAUT_e: // 'ë'
+    case VK_UMLAUT_e:  // 'ë'
       return 0xEB;
 
-    case VK_UMLAUT_A: // 'Ä'
+    case VK_UMLAUT_A:  // 'Ä'
       return 0XC4;
 
     case VK_UMLAUT_E:  // 'Ë'
       return 0XCB;
 
     case VK_UMLAUT_I:  // 'Ï'
-      return  0XCF;
+      return 0XCF;
 
     case VK_UMLAUT_O:  // 'Ö'
-      return  0XD6;
+      return 0XD6;
 
     case VK_UMLAUT_U:  // 'Ü'
       return 0XDC;
@@ -491,7 +491,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
     case VK_CARET_A:   // 'Â'
       return 0XC2;
 
-    case VK_CARET_E:  // 'Ê'
+    case VK_CARET_E:   // 'Ê'
       return 0XCA;
 
     case VK_CARET_I:   // 'Î'
@@ -500,7 +500,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
     case VK_CARET_O:   // 'Ô'
       return 0XD4;
 
-    case VK_CARET_U:  // 'Û'
+    case VK_CARET_U:   // 'Û'
       return 0XDB;
 		
     default:
