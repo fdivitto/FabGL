@@ -527,6 +527,42 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
   if (vk == VK_NONE && layout->inherited)
     vk = scancodeToVK(scancode, isExtended, layout->inherited);
 
+  // manage keypad
+  if (m_NUMLOCK) {
+    switch (vk) {
+      case VK_KP_INSERT:
+        vk = VK_KP_0;
+        break;
+      case VK_KP_END:
+        vk = VK_KP_1;
+        break;
+      case VK_KP_DOWN:
+        vk = VK_KP_2;
+        break;
+      case VK_KP_PAGEDOWN:
+        vk = VK_KP_3;
+        break;
+      case VK_KP_LEFT:
+        vk = VK_KP_4;
+        break;
+      case VK_KP_CENTER:
+        vk = VK_KP_5;
+        break;
+      case VK_KP_RIGHT:
+        vk = VK_KP_6;
+        break;
+      case VK_KP_HOME:
+        vk = VK_KP_7;
+        break;
+      case VK_KP_UP:
+        vk = VK_KP_8;
+        break;
+      case VK_KP_PAGEUP:
+        vk = VK_KP_9;
+        break;
+    }
+  }
+
   return vk;
 }
 
@@ -561,8 +597,7 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
     for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
       if (def->reqVirtualKey == in_vk && def->ctrl == m_CTRL &&
                                          def->alt == m_ALT &&
-                                         (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK)) &&
-                                         def->numlock == m_NUMLOCK) {
+                                         (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK))) {
         vk = def->virtualKey;
         break;
       }

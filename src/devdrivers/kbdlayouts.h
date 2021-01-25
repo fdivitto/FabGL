@@ -62,7 +62,6 @@ struct AltVirtualKeyDef {
     uint8_t alt      : 1;   /**< ALT needs to be down. */
     uint8_t shift    : 1;   /**< SHIFT needs to be down (OR-ed with capslock). */
     uint8_t capslock : 1;   /**< CAPSLOCK needs to be down (OR-ed with shift). */
-    uint8_t numlock  : 1;   /**< NUMLOCK needs to be down. */
   };
   VirtualKey virtualKey;    /**< Generated virtualkey. */
 };
