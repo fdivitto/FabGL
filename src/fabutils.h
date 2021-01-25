@@ -1201,6 +1201,34 @@ enum VirtualKey {
 
 
 ///////////////////////////////////////////////////////////////////////////////////
+// Virtual keys helpers
+
+inline bool isSHIFT(VirtualKey value)
+{
+  return value == VK_LSHIFT || value == VK_RSHIFT;
+}
+
+
+inline bool isALT(VirtualKey value)
+{
+  return value == VK_LALT || value == VK_RALT;
+}
+
+
+inline bool isCTRL(VirtualKey value)
+{
+  return value == VK_LCTRL || value == VK_RCTRL;
+}
+
+
+inline bool isGUI(VirtualKey value)
+{
+  return value == VK_LGUI || value == VK_RGUI;  
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
 // ASCII control characters
 
 #define ASCII_NUL   0x00   // Null
