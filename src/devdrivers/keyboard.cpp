@@ -764,6 +764,7 @@ void Keyboard::postVirtualKeyItem(VirtualKeyItem const & item)
   if (m_uiApp) {
     uiEvent evt = uiEvent(nullptr, item.down ? UIEVT_KEYDOWN : UIEVT_KEYUP);
     evt.params.key.VK    = item.vk;
+    evt.params.key.ASCII = item.ASCII;
     evt.params.key.LALT  = isVKDown(VK_LALT);
     evt.params.key.RALT  = isVKDown(VK_RALT);
     evt.params.key.CTRL  = isVKDown(VK_LCTRL)  || isVKDown(VK_RCTRL);
