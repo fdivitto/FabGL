@@ -50,6 +50,7 @@ struct VirtualKeyItem {
   VirtualKey vk;          /**< Virtual key */
   uint8_t    down;        /**< 0 = up, 1 = down */
   uint8_t    scancode[8]; /**< Keyboard scancode. Ends with zero if length is <8, otherwise gets the entire length (like PAUSE, which is 8 bytes) */
+  uint8_t    ASCII;       /**< ASCII value (0 = if it isn't possible to translate from virtual key) */
 };
 
 

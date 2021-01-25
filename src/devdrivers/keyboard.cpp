@@ -189,7 +189,8 @@ char const * Keyboard::virtualKeyToString(VirtualKey virtualKey)
                              "VK_GRAVE_a", "VK_GRAVE_e", "VK_ACUTE_e", "VK_GRAVE_i", "VK_GRAVE_o", "VK_GRAVE_u", "VK_CEDILLA_c", "VK_ESZETT", "VK_UMLAUT_u",
                              "VK_UMLAUT_o", "VK_UMLAUT_a", "VK_CEDILLA_C", "VK_TILDE_n", "VK_TILDE_N", "VK_UPPER_a", "VK_ACUTE_a", "VK_ACUTE_i", "VK_ACUTE_o", "VK_ACUTE_u", "VK_UMLAUT_i", "VK_EXCLAIM_INV", "VK_QUESTION_INV",
                              "VK_ACUTE_A","VK_ACUTE_E","VK_ACUTE_I","VK_ACUTE_O","VK_ACUTE_U", "VK_GRAVE_A","VK_GRAVE_E","VK_GRAVE_I","VK_GRAVE_O","VK_GRAVE_U", "VK_INTERPUNCT", "VK_DIAERESIS",
-                             "VK_UMLAUT_e", "VK_UMLAUT_A", "VK_UMLAUT_E", "VK_UMLAUT_I", "VK_UMLAUT_O", "VK_UMLAUT_U", "VK_CARET_a", "VK_CARET_e", "VK_CARET_i", "VK_CARET_o", "VK_CARET_u", "VK_CARET_A", "VK_CARET_E","VK_CARET_I","VK_CARET_O","VK_CARET_U",
+                             "VK_UMLAUT_e", "VK_UMLAUT_A", "VK_UMLAUT_E", "VK_UMLAUT_I", "VK_UMLAUT_O", "VK_UMLAUT_U", "VK_CARET_a", "VK_CARET_e", "VK_CARET_i", "VK_CARET_o", "VK_CARET_u", "VK_CARET_A", "VK_CARET_E",
+                             "VK_CARET_I", "VK_CARET_O", "VK_CARET_U", "VK_ASCII",
                           };
   return VKTOSTR[virtualKey];
 }
@@ -680,6 +681,10 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
   if (scode < item->scancode + sizeof(VirtualKeyItem::scancode) - 1)
     *(++scode) = 0;
 
+  // fill ASCII field
+  int ascii = virtualKeyToASCII(item->vk);
+  item->ASCII = ascii > -1 ? ascii : 0;
+
   return item->vk != VK_NONE;
 }
 
@@ -709,6 +714,7 @@ void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert
   item.vk          = virtualKey;
   item.down        = keyDown;
   item.scancode[0] = 0;  // this is a manual insert, not scancode associated
+  item.ASCII       = virtualKeyToASCII(virtualKey);
   injectVirtualKey(item, insert);
 }
 

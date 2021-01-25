@@ -1194,9 +1194,11 @@ enum VirtualKey {
   VK_CARET_I,		      /**< Caret 'I': Î */
   VK_CARET_O,		      /**< Caret 'O': Ô */
   VK_CARET_U,		      /**< Caret 'U': Û */
-  
+
+  VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
   
   VK_LAST,            // marks the last virtual key
+
 };
 
 
