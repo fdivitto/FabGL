@@ -719,6 +719,26 @@ void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert
 }
 
 
+// inject a virtual key item into virtual key queue calling injectVirtualKey() and into m_uiApp
+void Keyboard::postVirtualKeyItem(VirtualKeyItem const & item)
+{
+  // add into m_virtualKeyQueue and update m_VKMap
+  injectVirtualKey(item, false);
+
+  // need to send events to uiApp?
+  if (m_uiApp) {
+    uiEvent evt = uiEvent(nullptr, item.down ? UIEVT_KEYDOWN : UIEVT_KEYUP);
+    evt.params.key.VK    = item.vk;
+    evt.params.key.LALT  = isVKDown(VK_LALT);
+    evt.params.key.RALT  = isVKDown(VK_RALT);
+    evt.params.key.CTRL  = isVKDown(VK_LCTRL)  || isVKDown(VK_RCTRL);
+    evt.params.key.SHIFT = isVKDown(VK_LSHIFT) || isVKDown(VK_RSHIFT);
+    evt.params.key.GUI   = isVKDown(VK_LGUI)   || isVKDown(VK_RGUI);
+    m_uiApp->postEvent(&evt);
+  }
+}
+
+
 // converts keypad virtual key to number (VK_KP_1 = 1, VK_KP_DOWN = 2, etc...)
 // -1 = no convertible
 int Keyboard::convKeypadVKToNum(VirtualKey vk)
@@ -764,6 +784,9 @@ void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 {
   Keyboard * keyboard = (Keyboard*) pvParameters;
 
+  // manage ALT + Keypad num
+  uint8_t ALTNUMValue = 0;  // current value (0 = no value, 0 is not allowed)
+
   while (true) {
 
     VirtualKeyItem item;
@@ -775,19 +798,33 @@ void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 
       if (item.vk != VK_NONE) {
 
-        // add into m_virtualKeyQueue and update m_VKMap
-        keyboard->injectVirtualKey(item, false);
-
-        // need to send events to uiApp?
-        if (keyboard->m_uiApp) {
-          uiEvent evt = uiEvent(nullptr, item.down ? UIEVT_KEYDOWN : UIEVT_KEYUP);
-          evt.params.key.VK    = item.vk;
-          evt.params.key.LALT  = keyboard->isVKDown(VK_LALT);
-          evt.params.key.RALT  = keyboard->isVKDown(VK_RALT);
-          evt.params.key.CTRL  = keyboard->isVKDown(VK_LCTRL)  || keyboard->isVKDown(VK_RCTRL);
-          evt.params.key.SHIFT = keyboard->isVKDown(VK_LSHIFT) || keyboard->isVKDown(VK_RSHIFT);
-          evt.params.key.GUI   = keyboard->isVKDown(VK_LGUI)   || keyboard->isVKDown(VK_RGUI);
-          keyboard->m_uiApp->postEvent(&evt);
+        // manage ALT + NUM
+        if (!isALT(item.vk) && keyboard->m_ALT && keyboard->m_NUMLOCK) {
+          // ALT was down, is this a keypad number?
+          int num = convKeypadVKToNum(item.vk);
+          if (num >= 0) {
+            // yes this is a keypad num, if down update ALTNUMValue
+            if (item.down)
+              ALTNUMValue = (ALTNUMValue * 10 + num) & 0xff;
+          } else {
+            // no, back to normal case
+            ALTNUMValue = 0;
+            keyboard->postVirtualKeyItem(item);
+          }
+        } else if (ALTNUMValue > 0 && isALT(item.vk) && !item.down) {
+          // ALT is up and ALTNUMValue contains a valid value, add it
+          keyboard->postVirtualKeyItem(item); // post ALT up
+          item.vk          = VK_ASCII;
+          item.down        = true;
+          item.scancode[0] = 0;
+          item.ASCII       = ALTNUMValue;
+          keyboard->postVirtualKeyItem(item); // ascii key down
+          item.down        = false;
+          keyboard->postVirtualKeyItem(item); // ascii key up
+          ALTNUMValue = 0;
+        } else {
+          // normal case
+          keyboard->postVirtualKeyItem(item);
         }
 
       }

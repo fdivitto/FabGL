@@ -2609,16 +2609,13 @@ void uiTextEdit::handleKeyDown(uiKeyEventInfo key)
         break;
 
       default:
-      {
         // normal keys
-        int c = app()->keyboard()->virtualKeyToASCII(key.VK);
-        if (c >= 0x20 && c != 0x7F) {
+        if (key.ASCII >= 0x20 && key.ASCII != 0x7F) {
           if (m_cursorCol != m_selCursorCol)
             removeSel();  // there is a selection, same behavior of VK_DELETE
-          insert(c);
+          insert(key.ASCII);
         }
         break;
-      }
     }
   }
 

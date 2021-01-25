@@ -396,6 +396,7 @@ private:
   void updateLEDs();
   bool blockingGetVirtualKey(VirtualKeyItem * item);
   void convertScancode2to1(VirtualKeyItem * item);
+  void postVirtualKeyItem(VirtualKeyItem const & item);
   static int convKeypadVKToNum(VirtualKey vk);
 
   static void SCodeToVKConverterTask(void * pvParameters);

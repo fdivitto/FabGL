@@ -141,6 +141,7 @@ typedef void * uiTimerHandle;
 /** @brief Contains details about the key event */
 struct uiKeyEventInfo {
   VirtualKey VK;         /**< Virtual key */
+  uint8_t    ASCII;      /**< ASCII value (when applicable) */
   uint8_t    LALT  : 1;  /**< Status of left-ALT key */
   uint8_t    RALT  : 1;  /**< Status of right-ALT key */
   uint8_t    CTRL  : 1;  /**< Status of CTRL (left or right) key */
