@@ -4394,39 +4394,41 @@ void Terminal::keyboardReaderTask(void * pvParameters)
     if (!term->isActive())
       vTaskSuspend(NULL);
 
-    bool keyDown;
-    VirtualKey vk = term->m_keyboard->getNextVirtualKey(&keyDown);
+    VirtualKeyItem item;
+    if (term->m_keyboard->getNextVirtualKey(&item)) {
 
-    if (term->isActive()) {
+      if (term->isActive()) {
 
-      term->onVirtualKey(&vk, keyDown);
+        term->onVirtualKey(&item.vk, item.down);
 
-      if (keyDown) {
+        if (item.down) {
 
-        if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == vk)
-          continue; // don't repeat
-        term->m_lastPressedKey = vk;
+          if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == item.vk)
+            continue; // don't repeat
+          term->m_lastPressedKey = item.vk;
 
-        xSemaphoreTake(term->m_mutex, portMAX_DELAY);
+          xSemaphoreTake(term->m_mutex, portMAX_DELAY);
 
-        if (term->m_termInfo == nullptr) {
-          if (term->m_emuState.ANSIMode)
-            term->ANSIDecodeVirtualKey(vk);
-          else
-            term->VT52DecodeVirtualKey(vk);
-        } else
-          term->TermDecodeVirtualKey(vk);
+          if (term->m_termInfo == nullptr) {
+            if (term->m_emuState.ANSIMode)
+              term->ANSIDecodeVirtualKey(item);
+            else
+              term->VT52DecodeVirtualKey(item);
+          } else
+            term->TermDecodeVirtualKey(item);
 
-        xSemaphoreGive(term->m_mutex);
+          xSemaphoreGive(term->m_mutex);
+
+        } else {
+          // !keyDown
+          term->m_lastPressedKey = VK_NONE;
+        }
 
       } else {
-        // !keyDown
-        term->m_lastPressedKey = VK_NONE;
+        // not active, reinject back
+        term->m_keyboard->injectVirtualKey(item, true);
       }
 
-    } else {
-      // not active, reinject back
-      term->m_keyboard->injectVirtualKey(vk, keyDown, true);
     }
 
   }
@@ -4455,9 +4457,9 @@ void Terminal::sendKeypadCursorKeyCode(uint8_t applicationCode, const char * num
 }
 
 
-void Terminal::ANSIDecodeVirtualKey(VirtualKey vk)
+void Terminal::ANSIDecodeVirtualKey(VirtualKeyItem const & item)
 {
-  switch (vk) {
+  switch (item.vk) {
 
     // cursor keys
 
@@ -4625,8 +4627,7 @@ void Terminal::ANSIDecodeVirtualKey(VirtualKey vk)
 
     default:
     {
-      int ascii = m_keyboard->virtualKeyToASCII(vk);
-      switch (ascii) {
+      switch (item.ASCII) {
 
         // RETURN (CR)?
         case ASCII_CR:
@@ -4637,8 +4638,8 @@ void Terminal::ANSIDecodeVirtualKey(VirtualKey vk)
           break;
 
         default:
-          if (ascii > -1)
-            send(ascii);
+          if (item.ASCII > 0)
+            send(item.ASCII);
           break;
       }
       break;
@@ -4648,9 +4649,9 @@ void Terminal::ANSIDecodeVirtualKey(VirtualKey vk)
 }
 
 
-void Terminal::VT52DecodeVirtualKey(VirtualKey vk)
+void Terminal::VT52DecodeVirtualKey(VirtualKeyItem const & item)
 {
-  switch (vk) {
+  switch (item.vk) {
 
     // cursor keys
 
@@ -4736,9 +4737,8 @@ void Terminal::VT52DecodeVirtualKey(VirtualKey vk)
 
     default:
     {
-      int ascii = m_keyboard->virtualKeyToASCII(vk);
-      if (ascii > -1)
-        send(ascii);
+      if (item.ASCII > 0)
+        send(item.ASCII);
       break;
     }
 
@@ -4746,19 +4746,18 @@ void Terminal::VT52DecodeVirtualKey(VirtualKey vk)
 }
 
 
-void Terminal::TermDecodeVirtualKey(VirtualKey vk)
+void Terminal::TermDecodeVirtualKey(VirtualKeyItem const & item)
 {
-  for (auto item = m_termInfo->kbdCtrlSet; item->vk != VK_NONE; ++item) {
-    if (item->vk == vk) {
-      send(item->ANSICtrlCode);
+  for (auto i = m_termInfo->kbdCtrlSet; i->vk != VK_NONE; ++i) {
+    if (i->vk == item.vk) {
+      send(i->ANSICtrlCode);
       return;
     }
   }
 
   // default behavior
-  int ascii = m_keyboard->virtualKeyToASCII(vk);
-  if (ascii > -1)
-    send(ascii);
+  if (item.ASCII > 0)
+    send(item.ASCII);
 }
 
 

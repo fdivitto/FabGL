@@ -1536,13 +1536,13 @@ private:
   void sendCursorKeyCode(uint8_t c);
   void sendKeypadCursorKeyCode(uint8_t applicationCode, const char * numericCode);
 
-  void ANSIDecodeVirtualKey(VirtualKey vk);
-  void VT52DecodeVirtualKey(VirtualKey vk);
+  void ANSIDecodeVirtualKey(VirtualKeyItem const & item);
+  void VT52DecodeVirtualKey(VirtualKeyItem const & item);
 
   void convHandleTranslation(uint8_t c, bool fromISR);
   void convSendCtrl(ConvCtrl ctrl, bool fromISR);
   void convQueue(const char * str, bool fromISR);
-  void TermDecodeVirtualKey(VirtualKey vk);
+  void TermDecodeVirtualKey(VirtualKeyItem const & item);
 
   bool addToInputQueue(uint8_t c, bool fromISR);
   bool insertToInputQueue(uint8_t c, bool fromISR);
