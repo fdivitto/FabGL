@@ -195,12 +195,9 @@ void loop()
     fabgl::VirtualKeyItem item;
     if (keyboard->getNextVirtualKey(&item)) {
       xprintf("%s: ", keyboard->virtualKeyToString(item.vk));
-      int c = keyboard->virtualKeyToASCII(item.vk);
-      if (c > -1) {
-        xprintf("\tASCII = 0x%02X\t", c);
-        if (c >= ' ')
-          xprintf("%c", c);
-      }
+      xprintf("\tASCII = 0x%02X\t", item.ASCII);
+      if (item.ASCII >= ' ')
+        xprintf("'%c'", item.ASCII);
       xprintf("\t%s", item.down ? "DN" : "UP");
       xprintf("\t[");
       for (int i = 0; i < 8 && item.scancode[i] != 0; ++i)
