@@ -2305,6 +2305,11 @@ void Terminal::execCtrlCode(uint8_t c)
       // nothing to do
       break;
 
+    // BELL
+    case ASCII_BEL:
+      sound('1', 800, 250, 100);  // square wave, 800 Hz, 250ms, volume 100
+      break;
+
     default:
       break;
   }
