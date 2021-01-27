@@ -534,7 +534,7 @@ struct Race : public Scene
     sprintf( buffer, "SCORE:  %4d",      players[player].points );
     slowDrawText( players[player].minx + 2 * 8 + 1, 11 * 8, buffer );
 
-    sprintf( buffer, "TIME : %02d:%02d", (currentTime / 1000) / 60,  (currentTime / 1000) % 60 );
+    sprintf( buffer, "TIME : %02ld:%02ld", (currentTime / 1000) / 60,  (currentTime / 1000) % 60 );
     slowDrawText( players[player].minx + 2 * 8 + 1, 12 * 8, buffer );
 
     sprintf( buffer, "CARS :  %4d", players[player].cars  );

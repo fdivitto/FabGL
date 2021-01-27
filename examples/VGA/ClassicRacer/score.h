@@ -173,7 +173,7 @@ struct Score : public Scene
                                               bitmap_mouse_data, bitmap_joystick_data,
                                               bitmap_keybb_data, bitmap_keyba_data,  bitmap_keybo_data  };
       
-    int nselected = 1;
+    //int nselected = 1;
     
     canvas.setBrushColor(RGB888(0, 0xff, 0));
     canvas.clear();
@@ -310,7 +310,7 @@ struct Score : public Scene
         }
       }
 
-        canvas.setPenColor(millis()%250 > 125 == 0 ? RGB888(0,255,0):scorecolors[editItem] );  
+        canvas.setPenColor( millis() % 250 == 0 ? RGB888(0,255,0) : scorecolors[editItem] );  
         canvas.setBrushColor(RGB888(0,255,0) );             
         canvas.drawChar((9+editInitial)*8, 12*8, top[editItem].initials[editInitial]);      
         canvas.waitCompletion(); 

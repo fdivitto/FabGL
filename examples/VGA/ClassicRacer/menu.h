@@ -20,7 +20,7 @@ struct Menu : public Scene
   
   long menulastactivity = 0;     
   int exitValue = -1;
-  char *textControls[6] = { ".......", " MOUSE ", "JOYSTICK", " ARROWS ", "A S T F ", "Q A O P" };
+  char const *textControls[6] = { ".......", " MOUSE ", "JOYSTICK", " ARROWS ", "A S T F ", "Q A O P" };
   bool lockedControls[6] = { false, false, false, false,false,false };  
     
   void init()  

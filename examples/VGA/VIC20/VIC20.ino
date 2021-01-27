@@ -351,6 +351,9 @@ class Menu : public uiApp {
         case VirtualKey::VK_F12:
           runVIC20();
           break;
+        // just to avoid compiler warning
+        default:
+          break;
       }
     };
 
@@ -371,6 +374,9 @@ class Menu : public uiApp {
             fileBrowser->update();
             updateFreeSpaceLabel();
           }
+          break;
+        // just to avoid compiler warning
+        default:
           break;
       }
     };
@@ -430,7 +436,7 @@ class Menu : public uiApp {
 
     // RAM expansion options
     y += 50;
-    auto lbl = new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
     RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 19), 130, true, STYLE_COMBOBOX);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
@@ -442,7 +448,7 @@ class Menu : public uiApp {
 
     // joystick emulation options
     y += 50;
-    lbl = new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
     new uiLabel(rootWindow(), "None", Point(180, y + 21), Size(0, 0), true, STYLE_LABEL);
     auto radioJNone = new uiCheckBox(rootWindow(), Point(158, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 41), Size(0, 0), true, STYLE_LABEL);
@@ -464,7 +470,7 @@ class Menu : public uiApp {
     updateFreeSpaceLabel();
 
     // "Download From" label
-    auto downloadFromLbl = new uiLabel(rootWindow(), "Download From:", Point(5, 326), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiLabel(rootWindow(), "Download From:", Point(5, 326), Size(0, 0), true, STYLE_LABELGROUP);
 
     // Download List button (download programs listed and linked in LIST_URL)
     auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(13, 345), Size(27, 20), uiButtonKind::Button, true, STYLE_BUTTON);
@@ -893,4 +899,3 @@ void loop()
   auto menu = new Menu;
   menu->run(&DisplayController);
 }
-

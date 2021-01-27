@@ -11,7 +11,7 @@ struct GameController
   int id = 0;     // device number assigned by client
   bool active = false;
 
-  GameController( int id_, gcmode mode_) : id( id_ ), mode(mode_) { }
+  GameController( int id_, gcmode mode_) : mode(mode_), id( id_ ) { }
 
   virtual bool isLeft()     { return false;  };
   virtual bool isRight()    { return false;  };

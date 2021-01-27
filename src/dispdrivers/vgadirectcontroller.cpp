@@ -64,10 +64,10 @@ bool                     VGADirectController::s_VSync;
 
 
 VGADirectController::VGADirectController(bool autoRun)
-  : m_drawScanlineCallback(nullptr),
-    m_autoRun(autoRun),
-    m_linesCount(2),
-    m_lines(nullptr)
+  : m_linesCount(2),
+    m_lines(nullptr),
+    m_drawScanlineCallback(nullptr),
+    m_autoRun(autoRun)
 {
   s_instance = this;
 }

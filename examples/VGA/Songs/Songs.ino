@@ -63,7 +63,7 @@ void iPlaySound( void *pvParameters )
 {
   playsounddata psd = *(playsounddata *)pvParameters;
 
-  WaveformGenerator *pwave;
+  WaveformGenerator *pwave = nullptr;
   if ( psd.wave == WAVE_SQUARE)   pwave = new SquareWaveformGenerator();
   if ( psd.wave == WAVE_SINE)     pwave = new SineWaveformGenerator();
   if ( psd.wave == WAVE_TRIANGLE) pwave = new TriangleWaveformGenerator();
@@ -200,7 +200,7 @@ char const * noteToDelayEx(char const * note, int * delayMS)
   if (val > 0)
     *delayMS = 250 * val;
 
-  while (*note && isdigit(*note) || *note == '.')
+  while ((*note && isdigit(*note)) || *note == '.')
     ++note;
     
   return note;

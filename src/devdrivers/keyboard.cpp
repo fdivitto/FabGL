@@ -45,8 +45,8 @@ int Keyboard::scancodeToVirtualKeyTaskStackSize = FABGLIB_DEFAULT_SCODETOVK_TASK
 
 Keyboard::Keyboard()
   : m_keyboardAvailable(false),
-    m_lastDeadKey(VK_NONE),
-    m_scancodeSet(2)
+    m_scancodeSet(2),
+    m_lastDeadKey(VK_NONE)
 {
 }
 
@@ -559,6 +559,8 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
         break;
       case VK_KP_PAGEUP:
         vk = VK_KP_9;
+        break;
+      default:
         break;
     }
   }
