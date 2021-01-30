@@ -1,4 +1,4 @@
-** FabGL GPIOs assignment summary - fabgl dev board rev2 **
+** FabGL GPIOs assignment summary **
 
 VGA
   HSync => 23
@@ -22,14 +22,18 @@ Audio
   AUD   => 25
 
 SDCard - HSPI
-  MOSI  => 17
-  MISO  => 16
+  MOSI  => 17 (12 on TTGO/WROVER)
+  MISO  => 16 (2 on TTGO/WROVER)
   CLK   => 14
   CS    => 13
 
+UART - UART1 (USB)
+  RX    => 3
+  TX    => 1
+
 UART - UART2
   RX    => 34
-  TX    => 2
+  TX    => 2  (not usable on TTGO/WROVER with SDCard active)
 
 I2C (not usable with VGA)
   SDA   => 4  (conflicts with VGA B1)
