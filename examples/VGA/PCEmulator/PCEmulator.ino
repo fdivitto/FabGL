@@ -24,7 +24,7 @@
 
     - to run this application you need an ESP32 with PSRAM installed and an SD-CARD slot (ie TTGO ESP32 v1.4)
     - open this with Arduino and make sure PSRAM is DISABLED
-    - copy the boot floppy disk image (fd.img) into the SD-CARD ()
+    - copy the boot floppy disk image (fd.img) into the SD-CARD (https://github.com/fdivitto/FabGL/blob/master/examples/VGA/PCEmulator/fd.img)
     - compile and upload the sketch
 
  */
