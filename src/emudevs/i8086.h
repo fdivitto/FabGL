@@ -1,0 +1,114 @@
+ 
+
+#pragma once
+
+#include "fabgl.h"
+
+#include <stdint.h>
+
+
+#define I8086_SHOW_OPCODE_STATS 0
+
+#define I80186MODE 0
+
+
+namespace fabgl {
+
+
+class i8086 {
+
+public:
+
+  // callbacks
+
+  typedef void (*WritePort)(void * context, int address, uint8_t value);
+  typedef uint8_t (*ReadPort)(void * context, int address);
+  typedef void (*WriteVideoMemory8)(void * context, int address, uint8_t value);
+  typedef void (*WriteVideoMemory16)(void * context, int address, uint16_t value);
+  typedef bool (*Interrupt)(void * context, int num);
+
+
+  static void setCallbacks(void * context, ReadPort readPort, WritePort writePort, WriteVideoMemory8 writeVideoMemory8, WriteVideoMemory16 writeVideoMemory16, Interrupt interrupt) {
+    s_context            = context;
+    s_readPort           = readPort;
+    s_writePort          = writePort;
+    s_writeVideoMemory8  = writeVideoMemory8;
+    s_writeVideoMemory16 = writeVideoMemory16;
+    s_interrupt          = interrupt;
+  }
+
+  static void setMemory(uint8_t * memory) { s_memory = memory; }
+
+  static void reset();
+
+  static void setAX(uint16_t value);
+  static void setAL(uint8_t value);
+  static void setBX(uint16_t value);
+  static void setCX(uint16_t value);
+  static void setDX(uint16_t value);
+  static void setCS(uint16_t value);
+  static void setDS(uint16_t value);
+  static void setSS(uint16_t value);
+  static void setIP(uint16_t value);
+  static void setSP(uint16_t value);
+
+  static uint16_t AX();
+  static uint16_t BX();
+  static uint16_t CX();
+  static uint16_t DX();
+  static uint16_t BP();
+  static uint16_t SI();
+  static uint16_t DI();
+
+  static uint16_t ES();
+  static uint16_t DS();
+
+  static bool flagIF();
+  static bool flagTF();
+
+  static bool halted()                                    { return s_halted; }
+
+  static bool IRQ(uint8_t interrupt_num);
+
+  static void step();
+
+
+private:
+
+  static void WMEM8(int addr, uint8_t value);
+  static void WMEM16(int addr, uint16_t value);
+
+  // debug only
+  static uint8_t & MEM8(int addr);
+  static uint16_t & MEM16(int addr);
+
+  static uint16_t make_flags();
+  static void set_flags(int new_flags);
+
+  static void set_opcode(uint8_t opcode);
+
+  static uint8_t pc_interrupt(uint8_t interrupt_num);
+
+  static int AAA_AAS(int8_t which_operation);
+
+  static uint8_t raiseDivideByZeroInterrupt();
+
+  static void stepEx(uint8_t const * opcode_stream);
+
+
+  static void *             s_context;
+  static ReadPort           s_readPort;
+  static WritePort          s_writePort;
+  static WriteVideoMemory8  s_writeVideoMemory8;
+  static WriteVideoMemory16 s_writeVideoMemory16;
+  static Interrupt          s_interrupt;
+
+  static bool               s_pendingIRQ;
+  static uint8_t            s_pendingIRQIndex;
+  static uint8_t *          s_memory;
+  static bool               s_halted;
+
+};
+
+
+} // namespace fabgl
