@@ -1053,7 +1053,7 @@ void PS2Controller::sendData(uint8_t data, int PS2Port)
   uint32_t RTCMEM_PORTX_SEND_WORD = (PS2Port == 0 ? RTCMEM_PORT0_SEND_WORD : RTCMEM_PORT1_SEND_WORD);
   uint32_t RTCMEM_PORTX_MODE      = (PS2Port == 0 ? RTCMEM_PORT0_MODE      : RTCMEM_PORT1_MODE);
 
-  RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((~calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
+  RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((!calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
   RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_SEND;
   m_TXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
   if (ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10)) == pdFALSE) {
