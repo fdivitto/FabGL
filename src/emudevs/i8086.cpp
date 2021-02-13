@@ -315,16 +315,57 @@ static uint8_t * instr_table_lookup[] = {    rm_mode12_reg1,    // 0
 
 
 
+void i8086::setAL(uint8_t value)
+{
+  regs8[REG_AL] = value;
+}
+
+
+void i8086::setAH(uint8_t value)
+{
+  regs8[REG_AH] = value;
+}
+
+
+uint8_t i8086::AL()
+{
+  return regs8[REG_AL];
+}
+
+
+uint8_t i8086::AH()
+{
+  return regs8[REG_AH];
+}
+
+
+uint8_t i8086::BL()
+{
+  return regs8[REG_BL];
+}
+
+
+uint8_t i8086::BH()
+{
+  return regs8[REG_BH];
+}
+
+
+uint8_t i8086::CL()
+{
+  return regs8[REG_CL];
+}
+
+
+uint8_t i8086::CH()
+{
+  return regs8[REG_CH];
+}
+
 
 void i8086::setAX(uint16_t value)
 {
   regs16[REG_AX] = value;
-}
-
-
-void i8086::setAL(uint8_t value)
-{
-  regs8[REG_AL] = value;
 }
 
 
@@ -346,21 +387,9 @@ void i8086::setDX(uint16_t value)
 }
 
 
-void i8086::setSP(uint16_t value)
-{
-  regs16[REG_SP] = value;
-}
-
-
 void i8086::setCS(uint16_t value)
 {
   regs16[REG_CS] = value;
-}
-
-
-void i8086::setSS(uint16_t value)
-{
-  regs16[REG_SS] = value;
 }
 
 
@@ -370,9 +399,21 @@ void i8086::setDS(uint16_t value)
 }
 
 
+void i8086::setSS(uint16_t value)
+{
+  regs16[REG_SS] = value;
+}
+
+
 void i8086::setIP(uint16_t value)
 {
   reg_ip = value;
+}
+
+
+void i8086::setSP(uint16_t value)
+{
+  regs16[REG_SP] = value;
 }
 
 
@@ -418,6 +459,12 @@ uint16_t i8086::DI()
 }
 
 
+uint16_t i8086::SP()
+{
+  return regs16[REG_SP];
+}
+
+
 uint16_t i8086::ES()
 {
   return regs16[REG_ES];
@@ -427,6 +474,12 @@ uint16_t i8086::ES()
 uint16_t i8086::DS()
 {
   return regs16[REG_DS];
+}
+
+
+uint16_t i8086::SS()
+{
+  return regs16[REG_SS];
 }
 
 
@@ -440,6 +493,31 @@ bool i8086::flagTF()
 {
   return FLAG_TF;
 }
+
+
+bool i8086::flagCF()
+{
+  return FLAG_CF;
+}
+
+
+bool i8086::flagZF()
+{
+  return FLAG_ZF;
+}
+
+void i8086::setFlagZF(bool value)
+{
+  FLAG_ZF = value;
+}
+
+
+void i8086::setFlagCF(bool value)
+{
+  FLAG_CF = value;
+}
+
+
 
 
 // ret false if not acked
