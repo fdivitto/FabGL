@@ -373,6 +373,7 @@ using fabgl::PS2Preset;
 using fabgl::PS2DeviceType;
 using fabgl::KbdMode;
 using fabgl::VirtualKey;
+using fabgl::VirtualKeyItem;
 using fabgl::uiKeyEventInfo;
 using fabgl::uiCustomListBox;
 using fabgl::uiFileBrowser;
