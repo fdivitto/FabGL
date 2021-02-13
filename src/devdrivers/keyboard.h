@@ -420,7 +420,8 @@ private:
   uiApp *                   m_uiApp;
 
   bool                      m_CTRL;
-  bool                      m_ALT;
+  bool                      m_LALT;
+  bool                      m_RALT;
   bool                      m_SHIFT;
   bool                      m_CAPSLOCK;
   bool                      m_NUMLOCK;

@@ -56,7 +56,8 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
   PS2Device::begin(PS2Port);
 
   m_CTRL       = false;
-  m_ALT        = false;
+  m_LALT       = false;
+  m_RALT       = false;
   m_SHIFT      = false;
   m_CAPSLOCK   = false;
   m_NUMLOCK    = false;
@@ -598,7 +599,8 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
     //   - KEY up with SHIFTs still down
     for (AltVirtualKeyDef const * def = layout->alternateVK; def->reqVirtualKey != VK_NONE; ++def) {
       if (def->reqVirtualKey == in_vk && def->ctrl == m_CTRL &&
-                                         def->alt == m_ALT &&
+                                         def->lalt == m_LALT &&
+                                         def->ralt == m_RALT &&
                                          (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK))) {
         vk = def->virtualKey;
         break;
@@ -665,8 +667,10 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
         m_CTRL = item->down;
         break;
       case VK_LALT:
+        m_LALT = item->down;
+        break;
       case VK_RALT:
-        m_ALT = item->down;
+        m_RALT = item->down;
         break;
       case VK_LSHIFT:
       case VK_RSHIFT:
@@ -836,8 +840,8 @@ void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 
       if (item.vk != VK_NONE) {
 
-        // manage ALT + NUM
-        if (!isALT(item.vk) && keyboard->m_ALT && keyboard->m_NUMLOCK) {
+        // manage left-ALT + NUM
+        if (!isALT(item.vk) && keyboard->m_LALT && keyboard->m_NUMLOCK) {
           // ALT was down, is this a keypad number?
           int num = convKeypadVKToNum(item.vk);
           if (num >= 0) {
