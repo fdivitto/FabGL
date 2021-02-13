@@ -844,7 +844,7 @@ void Keyboard::SCodeToVKConverterTask(void * pvParameters)
       if (item.vk != VK_NONE) {
 
         // manage left-ALT + NUM
-        if (!isALT(item.vk) && keyboard->m_LALT && keyboard->m_NUMLOCK) {
+        if (!isALT(item.vk) && keyboard->m_LALT) {
           // ALT was down, is this a keypad number?
           int num = convKeypadVKToNum(item.vk);
           if (num >= 0) {
