@@ -90,6 +90,18 @@ public:
 
   bool parityError();
 
+  /**
+   * @brief Sends a raw command to the PS/2 device
+   *
+   * For realiable operations device should be locked using fabgl::PS2DeviceLock.
+   *
+   * @param cmd The command byte
+   * @param expectedReply Expected reply from PS/2 device
+   *
+   * @return True on success
+   */
+  bool sendCommand(uint8_t cmd, uint8_t expectedReply);
+
 protected:
 
   PS2Device();
@@ -103,8 +115,6 @@ protected:
   int getData(int timeOutMS);
 
   void requestToResendLastByte();
-
-  bool sendCommand(uint8_t cmd, uint8_t expectedReply);
 
   bool send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock);
   bool send_cmdEcho();
