@@ -192,7 +192,7 @@ void loop()
     xprintf("Scancode = 0x%02X\r\n", keyboard->getNextScancode());
   } else if (keyboard->virtualKeyAvailable()) {
     // ascii mode (show ASCIIl, VirtualKeys and scancodes)
-    fabgl::VirtualKeyItem item;
+    VirtualKeyItem item;
     if (keyboard->getNextVirtualKey(&item)) {
       xprintf("%s: ", keyboard->virtualKeyToString(item.vk));
       xprintf("\tASCII = 0x%02X\t", item.ASCII);
