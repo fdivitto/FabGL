@@ -529,7 +529,10 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
     vk = scancodeToVK(scancode, isExtended, layout->inherited);
 
   // manage keypad
-  if (m_NUMLOCK) {
+  // NUMLOCK ON, SHIFT OFF => generate VK_KP_number
+  // NUMLOCK ON, SHIFT ON  => generate VK_KP_cursor_control (as when NUMLOCK is OFF)
+  // NUMLOCK OFF           => generate VK_KP_cursor_control
+  if (m_NUMLOCK & !m_SHIFT) {
     switch (vk) {
       case VK_KP_INSERT:
         vk = VK_KP_0;
