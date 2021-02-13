@@ -203,9 +203,20 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
 {
   switch (virtualKey) {
     case VK_SPACE:
-      return m_CTRL ? ASCII_NUL : ASCII_SPC;   // CTRL + SPACE = NUL, otherwise 0x20
+      return m_CTRL ? ASCII_NUL : ASCII_SPC;   // CTRL SPACE = NUL, otherwise 0x20
 
     case VK_0 ... VK_9:
+      if (m_CTRL) {
+        switch (virtualKey) {
+          case VK_2:
+            return ASCII_NUL;  // CTRL + 2 = NUL
+          case VK_6:
+            return ASCII_RS;   // CTRL + 6 = RS
+          default:
+            return -1;
+        }
+      }
+      // otherwise digits
       return virtualKey - VK_0 + '0';
 
     case VK_KP_0 ... VK_KP_9:
@@ -266,6 +277,8 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '=';
 
     case VK_MINUS:
+      return m_CTRL ? ASCII_US : '-'; // CTRL - = US, otherwise '-'
+
     case VK_KP_MINUS:
       return '-';
 
@@ -340,7 +353,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return m_CTRL ? ASCII_ESC : '['; // CTRL [ = ESC, otherwise '['
 
     case VK_RIGHTBRACKET:
-      return m_CTRL ? ASCII_GS : ']'; // CTRL ] = GS, otherwise ']'
+      return m_CTRL ? ASCII_GS : ']';  // CTRL ] = GS, otherwise ']'
 
     case VK_LEFTPAREN:
       return '(';
@@ -370,7 +383,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return 0xAA;  // "¬"
 
     case VK_BACKSPACE:
-      return ASCII_BS;
+      return m_CTRL ? ASCII_DEL : ASCII_BS;  // CTRL BACKSPACE = DEL, otherwise BS
 
     case VK_DELETE:
     case VK_KP_DELETE:
@@ -378,10 +391,10 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
 
     case VK_RETURN:
     case VK_KP_ENTER:
-      return ASCII_CR;
+      return m_CTRL ? ASCII_LF : ASCII_CR;  // CTRL ENTER = LF, otherwise CR
 
     case VK_TAB:
-      return ASCII_HT;
+      return m_CTRL ? -1 : ASCII_HT;
 
     case VK_ESCAPE:
       return ASCII_ESC;
