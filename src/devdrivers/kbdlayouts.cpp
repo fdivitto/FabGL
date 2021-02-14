@@ -188,7 +188,7 @@ const KeyboardLayout USLayout {
     { VK_PERIOD,       { 0, 0, 0, 1, 0 }, VK_GREATER },      // SHIFT "." = ">"
     { VK_SLASH,        { 0, 0, 0, 1, 0 }, VK_QUESTION },     // SHIFT "/" = "?"
 
-    // SHIFT or CAPSLOCK "a".."z" = "A".."Z"
+    // SHIFT "a".."z" = "A".."Z"
     { VK_a,            { 0, 0, 0, 1, 1 }, VK_A },
     { VK_b,            { 0, 0, 0, 1, 1 }, VK_B },
     { VK_c,            { 0, 0, 0, 1, 1 }, VK_C },
@@ -215,6 +215,35 @@ const KeyboardLayout USLayout {
     { VK_x,            { 0, 0, 0, 1, 1 }, VK_X },
     { VK_y,            { 0, 0, 0, 1, 1 }, VK_Y },
     { VK_z,            { 0, 0, 0, 1, 1 }, VK_Z },
+
+    // SHIFT "A".."Z" = "a".."z"
+    { VK_A,            { 0, 0, 0, 1, 1 }, VK_a },
+    { VK_B,            { 0, 0, 0, 1, 1 }, VK_b },
+    { VK_C,            { 0, 0, 0, 1, 1 }, VK_c },
+    { VK_D,            { 0, 0, 0, 1, 1 }, VK_d },
+    { VK_E,            { 0, 0, 0, 1, 1 }, VK_e },
+    { VK_F,            { 0, 0, 0, 1, 1 }, VK_f },
+    { VK_G,            { 0, 0, 0, 1, 1 }, VK_g },
+    { VK_H,            { 0, 0, 0, 1, 1 }, VK_h },
+    { VK_I,            { 0, 0, 0, 1, 1 }, VK_i },
+    { VK_J,            { 0, 0, 0, 1, 1 }, VK_j },
+    { VK_K,            { 0, 0, 0, 1, 1 }, VK_k },
+    { VK_L,            { 0, 0, 0, 1, 1 }, VK_l },
+    { VK_M,            { 0, 0, 0, 1, 1 }, VK_m },
+    { VK_N,            { 0, 0, 0, 1, 1 }, VK_n },
+    { VK_O,            { 0, 0, 0, 1, 1 }, VK_o },
+    { VK_P,            { 0, 0, 0, 1, 1 }, VK_p },
+    { VK_Q,            { 0, 0, 0, 1, 1 }, VK_q },
+    { VK_R,            { 0, 0, 0, 1, 1 }, VK_r },
+    { VK_S,            { 0, 0, 0, 1, 1 }, VK_s },
+    { VK_T,            { 0, 0, 0, 1, 1 }, VK_t },
+    { VK_U,            { 0, 0, 0, 1, 1 }, VK_u },
+    { VK_V,            { 0, 0, 0, 1, 1 }, VK_v },
+    { VK_W,            { 0, 0, 0, 1, 1 }, VK_w },
+    { VK_X,            { 0, 0, 0, 1, 1 }, VK_x },
+    { VK_Y,            { 0, 0, 0, 1, 1 }, VK_y },
+    { VK_Z,            { 0, 0, 0, 1, 1 }, VK_z },
+
   },
 
   // deadkeys

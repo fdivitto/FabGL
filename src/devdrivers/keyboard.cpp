@@ -587,12 +587,27 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
 }
 
 
+VirtualKey Keyboard::manageCAPSLOCK(VirtualKey vk)
+{
+  if (m_CAPSLOCK) {
+    // inverts letters case
+    if (vk >= VK_a && vk <= VK_z)
+      vk = (VirtualKey)(vk - VK_a + VK_A);
+    else if (vk >= VK_A && vk <= VK_Z)
+      vk = (VirtualKey)(vk - VK_A + VK_a);
+  }
+  return vk;
+}
+
+
 VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout const * layout)
 {
   VirtualKey vk = VK_NONE;
 
   if (layout == nullptr)
     layout = m_layout;
+
+  in_vk = manageCAPSLOCK(in_vk);
 
   // this avoids releasing a required key when SHIFT has been pressed after the key but before releasing
   if (!down && isVKDown(in_vk))
@@ -618,7 +633,7 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
       if (def->reqVirtualKey == in_vk && def->ctrl == m_CTRL &&
                                          def->lalt == m_LALT &&
                                          def->ralt == m_RALT &&
-                                         (def->shift == m_SHIFT || (def->capslock && def->capslock == m_CAPSLOCK))) {
+                                         def->shift == m_SHIFT) {
         vk = def->virtualKey;
         break;
       }
