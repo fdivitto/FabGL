@@ -395,7 +395,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return m_CTRL ? ASCII_LF : ASCII_CR;  // CTRL ENTER = LF, otherwise CR
 
     case VK_TAB:
-      return m_CTRL ? -1 : ASCII_HT;
+      return m_CTRL || m_SHIFT ? -1 : ASCII_HT;
 
     case VK_ESCAPE:
       return ASCII_ESC;
