@@ -47,10 +47,17 @@ namespace fabgl {
  * @brief A struct which contains a virtual key, key state and associated scan code
  */
 struct VirtualKeyItem {
-  VirtualKey vk;          /**< Virtual key */
-  uint8_t    down;        /**< 0 = up, 1 = down */
-  uint8_t    scancode[8]; /**< Keyboard scancode. Ends with zero if length is <8, otherwise gets the entire length (like PAUSE, which is 8 bytes) */
-  uint8_t    ASCII;       /**< ASCII value (0 = if it isn't possible to translate from virtual key) */
+  VirtualKey vk;            /**< Virtual key */
+  uint8_t    down;          /**< 0 = up, 1 = down */
+  uint8_t    scancode[8];   /**< Keyboard scancode. Ends with zero if length is <8, otherwise gets the entire length (like PAUSE, which is 8 bytes) */
+  uint8_t    ASCII;         /**< ASCII value (0 = if it isn't possible to translate from virtual key) */
+  uint8_t    CTRL     : 1;  /**< CTRL key state at the time of this virtual key event */
+  uint8_t    LALT     : 1;  /**< LEFT ALT key state at the time of this virtual key event */
+  uint8_t    RALT     : 1;  /**< RIGHT ALT key state at the time of this virtual key event */
+  uint8_t    SHIFT    : 1;  /**< SHIFT key state at the time of this virtual key event */
+  uint8_t    GUI      : 1;  /**< GUI key state at the time of this virtual key event */
+  uint8_t    CAPSLOCK : 1;  /**< CAPSLOCK key state at the time of this virtual key event */
+  uint8_t    NUMLOCK  : 1;  /**< NUMLOCK key state at the time of this virtual key event */
 };
 
 
@@ -424,6 +431,7 @@ private:
   bool                      m_RALT;
   bool                      m_SHIFT;
   bool                      m_CAPSLOCK;
+  bool                      m_GUI;
   bool                      m_NUMLOCK;
   bool                      m_SCROLLLOCK;
 

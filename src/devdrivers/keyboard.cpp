@@ -60,6 +60,7 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
   m_RALT       = false;
   m_SHIFT      = false;
   m_CAPSLOCK   = false;
+  m_GUI        = false;
   m_NUMLOCK    = false;
   m_SCROLLLOCK = false;
 
@@ -633,8 +634,15 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
 
 bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
 {
-  item->vk   = VK_NONE;
-  item->down = true;
+  item->vk       = VK_NONE;
+  item->down     = true;
+  item->CTRL     = m_CTRL;
+  item->LALT     = m_LALT;
+  item->RALT     = m_RALT;
+  item->SHIFT    = m_SHIFT;
+  item->GUI      = m_GUI;
+  item->CAPSLOCK = m_CAPSLOCK;
+  item->NUMLOCK  = m_NUMLOCK;
 
   uint8_t * scode = item->scancode;
 
@@ -691,6 +699,10 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
       case VK_LSHIFT:
       case VK_RSHIFT:
         m_SHIFT = item->down;
+        break;
+      case VK_LGUI:
+      case VK_RGUI:
+        m_GUI = item->down;
         break;
       case VK_CAPSLOCK:
         if (!item->down) {
@@ -772,6 +784,13 @@ void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert
   item.down        = keyDown;
   item.scancode[0] = 0;  // this is a manual insert, not scancode associated
   item.ASCII       = virtualKeyToASCII(virtualKey);
+  item.CTRL        = m_CTRL;
+  item.LALT        = m_LALT;
+  item.RALT        = m_RALT;
+  item.SHIFT       = m_SHIFT;
+  item.GUI         = m_GUI;
+  item.CAPSLOCK    = m_CAPSLOCK;
+  item.NUMLOCK     = m_NUMLOCK;
   injectVirtualKey(item, insert);
 }
 
@@ -787,11 +806,11 @@ void Keyboard::postVirtualKeyItem(VirtualKeyItem const & item)
     uiEvent evt = uiEvent(nullptr, item.down ? UIEVT_KEYDOWN : UIEVT_KEYUP);
     evt.params.key.VK    = item.vk;
     evt.params.key.ASCII = item.ASCII;
-    evt.params.key.LALT  = isVKDown(VK_LALT);
-    evt.params.key.RALT  = isVKDown(VK_RALT);
-    evt.params.key.CTRL  = isVKDown(VK_LCTRL)  || isVKDown(VK_RCTRL);
-    evt.params.key.SHIFT = isVKDown(VK_LSHIFT) || isVKDown(VK_RSHIFT);
-    evt.params.key.GUI   = isVKDown(VK_LGUI)   || isVKDown(VK_RGUI);
+    evt.params.key.LALT  = item.LALT;
+    evt.params.key.RALT  = item.RALT;
+    evt.params.key.CTRL  = item.CTRL;
+    evt.params.key.SHIFT = item.SHIFT;
+    evt.params.key.GUI   = item.GUI;
     m_uiApp->postEvent(&evt);
   }
 }
