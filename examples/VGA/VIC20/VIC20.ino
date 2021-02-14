@@ -111,14 +111,14 @@ const EmbeddedProgDef embeddedProgs[] = {
   { nibbler_filename, nibbler_prg, sizeof(nibbler_prg) },
   { pooyan_filename, pooyan_prg, sizeof(pooyan_prg) },
   { popeye_filename, popeye_prg, sizeof(popeye_prg) },
-  { spikes_filename, spikes_prg, sizeof(spikes_prg) },
   { tetris_plus_filename, tetris_plus_prg, sizeof(tetris_plus_prg) },
-  { splatform_filename, splatform_prg, sizeof(splatform_prg) },
-  { astro_panic_filename, astro_panic_prg, sizeof(astro_panic_prg) },
 
   // you need more program flash in order to use remaining games. To do this select
   // the board name "ESP32 Dev Module" and in menu "Tools->Partition Scheme", select "No OTA 2MB/2MB" or "Huge App".
   /*
+  { spikes_filename, spikes_prg, sizeof(spikes_prg) },
+  { astro_panic_filename, astro_panic_prg, sizeof(astro_panic_prg) },
+  { splatform_filename, splatform_prg, sizeof(splatform_prg) },
   { kweepoutmc_filename, kweepoutmc_prg, sizeof(kweepoutmc_prg) },
   { dragonwing_filename, dragonwing_prg, sizeof(dragonwing_prg) },
   { tank_battalion_filename, tank_battalion_prg, sizeof(tank_battalion_prg) },
