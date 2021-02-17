@@ -366,6 +366,8 @@ public:
    */
   int scancodeSet()                { return m_scancodeSet; }
 
+  static uint8_t convScancodeSet2To1(uint8_t code);
+
 #if FABGLIB_HAS_VirtualKeyO_STRING
   static char const * virtualKeyToString(VirtualKey virtualKey);
 #endif

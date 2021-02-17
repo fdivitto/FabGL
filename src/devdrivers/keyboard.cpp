@@ -984,6 +984,23 @@ void Keyboard::emptyVirtualKeyQueue()
 
 void Keyboard::convertScancode2to1(VirtualKeyItem * item)
 {
+  uint8_t * rpos = item->scancode;
+  uint8_t * wpos = rpos;
+  uint8_t * epos = rpos + sizeof(VirtualKeyItem::scancode);
+  while (*rpos && rpos < epos) {
+    if (*rpos == 0xf0) {
+      ++rpos;
+      *wpos++ = 0x80 | convScancodeSet2To1(*rpos++);
+    } else
+      *wpos++ = convScancodeSet2To1(*rpos++);
+  }
+  if (wpos < epos)
+    *wpos = 0;
+}
+
+
+uint8_t Keyboard::convScancodeSet2To1(uint8_t code)
+{
   // 8042 scancodes set 2 to 1 translation table
   static const uint8_t S2TOS1[256] = {
     0xff, 0x43, 0x41, 0x3f, 0x3d, 0x3b, 0x3c, 0x58, 0x64, 0x44, 0x42, 0x40, 0x3e, 0x0f, 0x29, 0x59,
@@ -1003,18 +1020,7 @@ void Keyboard::convertScancode2to1(VirtualKeyItem * item)
     0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef,
     0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff,
   };
-  uint8_t * rpos = item->scancode;
-  uint8_t * wpos = rpos;
-  uint8_t * epos = rpos + sizeof(VirtualKeyItem::scancode);
-  while (*rpos && rpos < epos) {
-    if (*rpos == 0xf0) {
-      ++rpos;
-      *wpos++ = 0x80 | S2TOS1[*rpos++];
-    } else
-      *wpos++ = S2TOS1[*rpos++];
-  }
-  if (wpos < epos)
-    *wpos = 0;
+  return S2TOS1[code];
 }
 
 
