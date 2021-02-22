@@ -319,7 +319,7 @@ public:
    *
    * @return True if command has been successfully delivered to the keyboard.
    */
-  bool setLEDs(bool numLock, bool capsLock, bool scrollLock) { return send_cmdLEDs(numLock, capsLock, scrollLock); }
+  bool setLEDs(bool numLock, bool capsLock, bool scrollLock);
 
   /**
    * @brief Gets keyboard LEDs status.

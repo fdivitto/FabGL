@@ -131,11 +131,29 @@ bool Keyboard::setScancodeSet(int value)
 }
 
 
+bool Keyboard::setLEDs(bool numLock, bool capsLock, bool scrollLock)
+{
+  m_numLockLED    = numLock;
+  m_capsLockLED   = capsLock;
+  m_scrollLockLED = scrollLock;
+  return send_cmdLEDs(numLock, capsLock, scrollLock);
+}
+
+
 void Keyboard::getLEDs(bool * numLock, bool * capsLock, bool * scrollLock)
 {
   *numLock    = m_numLockLED;
   *capsLock   = m_capsLockLED;
   *scrollLock = m_scrollLockLED;
+}
+
+
+void Keyboard::updateLEDs()
+{
+  send_cmdLEDs(m_NUMLOCK, m_CAPSLOCK, m_SCROLLLOCK);
+  m_numLockLED    = m_NUMLOCK;
+  m_capsLockLED   = m_CAPSLOCK;
+  m_scrollLockLED = m_SCROLLLOCK;
 }
 
 
@@ -155,15 +173,6 @@ int Keyboard::getNextScancode(int timeOutMS, bool requestResendOnTimeOut)
     }
     return r;
   }
-}
-
-
-void Keyboard::updateLEDs()
-{
-  send_cmdLEDs(m_NUMLOCK, m_CAPSLOCK, m_SCROLLLOCK);
-  m_numLockLED    = m_NUMLOCK;
-  m_capsLockLED   = m_CAPSLOCK;
-  m_scrollLockLED = m_SCROLLLOCK;
 }
 
 
