@@ -151,6 +151,12 @@ bool PS2Device::sendCommand(uint8_t cmd, uint8_t expectedReply)
 }
 
 
+void PS2Device::sendCommand(uint8_t cmd)
+{
+  PS2Controller::instance()->sendData(cmd, m_PS2Port);
+}
+
+
 void PS2Device::requestToResendLastByte()
 {
   PS2Controller::instance()->sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);

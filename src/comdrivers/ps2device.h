@@ -91,7 +91,7 @@ public:
   bool parityError();
 
   /**
-   * @brief Sends a raw command to the PS/2 device
+   * @brief Sends a raw command to the PS/2 device and wait for reply
    *
    * For realiable operations device should be locked using fabgl::PS2DeviceLock.
    *
@@ -101,6 +101,15 @@ public:
    * @return True on success
    */
   bool sendCommand(uint8_t cmd, uint8_t expectedReply);
+
+  /**
+   * @brief Sends a raw command to the PS/2 device
+   *
+   * For realiable operations device should be locked using fabgl::PS2DeviceLock.
+   *
+   * @param cmd The command byte
+   */
+  void sendCommand(uint8_t cmd);
 
 protected:
 
