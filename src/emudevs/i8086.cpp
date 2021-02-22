@@ -34,13 +34,10 @@ namespace fabgl {
 #pragma GCC optimize ("O3")
 
 
-///*
-#if TESTING_CPU == 1
-  #define REGS_BASE                                0xE0000  // for test186 tests
-#else
-  #define REGS_BASE                                0xF0000  // normal use
+#ifndef REGS_BASE
+  #define REGS_BASE 0xF0000  // normal use
 #endif
-//*/
+
 
 //static uint8_t rrr[46];
 //static int32_t REGS_BASE;
@@ -465,6 +462,12 @@ uint16_t i8086::SP()
 }
 
 
+uint16_t i8086::CS()
+{
+  return regs16[REG_CS];
+}
+
+
 uint16_t i8086::ES()
 {
   return regs16[REG_ES];
@@ -678,7 +681,6 @@ uint8_t i8086::pc_interrupt(uint8_t interrupt_num)
   }
 
   if (!s_interrupt(s_context, interrupt_num)) {
-
     regs16[REG_SP] -= 2;
     MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = make_flags();
 
@@ -727,9 +729,8 @@ void i8086::reset()
 {
   //REGS_BASE = (int32_t)(rrr - s_memory);
 
-  // regs16 and reg8 point to F000:0, the start of memory-mapped registers
-  regs8  = ( uint8_t  * ) ( s_memory + REGS_BASE ) ; // Base + 000F.0000
-  regs16 = ( uint16_t * ) ( s_memory + REGS_BASE ) ; // Base + 000F.0000
+  regs8  = (uint8_t *)(s_memory + REGS_BASE);
+  regs16 = (uint16_t *)(s_memory + REGS_BASE);
 
   memset(regs8, 0, 48);
   set_flags(0);

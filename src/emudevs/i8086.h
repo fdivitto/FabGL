@@ -9,7 +9,9 @@
 
 #define I8086_SHOW_OPCODE_STATS 0
 
-#define I80186MODE 0
+#ifndef I80186MODE
+  #define I80186MODE 0
+#endif
 
 
 namespace fabgl {
@@ -70,6 +72,7 @@ public:
   static uint16_t DI();
   static uint16_t SP();
 
+  static uint16_t CS();
   static uint16_t ES();
   static uint16_t DS();
   static uint16_t SS();
