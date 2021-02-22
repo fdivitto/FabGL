@@ -1551,19 +1551,17 @@ void i8086::stepEx(uint8_t const * opcode_stream)
     }
     case 19: // RET|RETF|IRET
       i_d = i_w;
+      reg_ip = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
       regs16[REG_SP] += 2;
-      reg_ip = MEM16(16 * regs16[REG_SS] + (uint16_t)(-2 + regs16[REG_SP]));
       if (extra) {
         // IRET|RETF|RETF imm16
+        regs16[REG_CS] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
         regs16[REG_SP] += 2;
-        op_dest = regs16[REG_CS];
-        regs16[REG_CS] = MEM16(16 * regs16[REG_SS] + (uint16_t)(-2 + regs16[REG_SP]));
       }
       if (extra & 2) {
         // IRET
+        set_flags(MEM16(16 * regs16[REG_SS] + regs16[REG_SP]));
         regs16[REG_SP] += 2;
-        op_result = MEM16(16 * regs16[REG_SS] + (uint16_t)(-2 + regs16[REG_SP]));
-        set_flags(op_result);
       } else if (!i_d) // RET|RETF imm16
         regs16[REG_SP] += i_data0;
       calcIP = false;
@@ -1720,8 +1718,52 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       s_halted = true;
       calcIP = false;
       break;
+    /*
+    case 51: // 80186, NEC V20: ENTER
+      printf("80186, NEC V20: ENTER\n");
+      break;
+    case 52: // 80186, NEC V20: LEAVE
+      printf("80186, NEC V20: LEAVE\n");
+      break;
+    case 53: // 80186, NEC V20: PUSHA
+      printf("80186, NEC V20: PUSHA\n");
+      break;
+    case 54: // 80186, NEC V20: POPA
+      printf("80186, NEC V20: POPA\n");
+      break;
+    case 55: // 80186: BOUND
+      printf("80186: BOUND\n");
+      break;
+    case 56: // 80186, NEC V20: PUSH imm16
+      printf("80186, NEC V20: PUSH imm16\n");
+      break;
+    case 57: // 80186, NEC V20: PUSH imm8
+      printf("80186, NEC V20: PUSH imm8\n");
+      break;
+    case 58: // 80186 IMUL
+      printf("80186 IMUL\n");
+      break;
+    case 59: // 80186: INSB INSW
+      printf("80186: INSB INSW\n");
+      break;
+    case 60: // 80186: OUTSB OUTSW
+      printf("80186: OUTSB OUTSW\n");
+      break;
+    case 69: // 8087 MATH Coprocessor
+      printf("8087 MATH Coprocessor %02X %02X %02X %02X\n", opcode_stream[0], opcode_stream[1], opcode_stream[2], opcode_stream[3]);
+      break;
+    case 70: // 80286+
+      printf("80286+\n");
+      break;
+    case 71: // 80386+
+      printf("80386+\n");
+      break;
+    case 72: // BAD OP CODE
+      printf("Bad 8086 opcode %02X %02X\n", opcode_stream[0], opcode_stream[1]);
+      break;
+      */
     default:
-      printf("Unsupported 8086 opcode\n");
+      printf("Unsupported 8086 opcode %02X %02X\n", opcode_stream[0], opcode_stream[1]);
       break;
   }
 
