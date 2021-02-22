@@ -858,7 +858,7 @@ void IRAM_ATTR i8086::step()
     // POP reg
     case 0x58 ... 0x5f:
       regs16[REG_SP] += 2;  // SP may be read from stack, so we have to increment here
-      regs16[*opcode_stream & 7] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP] - 2);
+      regs16[*opcode_stream & 7] = MEM16(16 * regs16[REG_SS] + (uint16_t)(regs16[REG_SP] - 2));
       ++reg_ip;
       break;
 
