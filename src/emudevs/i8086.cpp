@@ -80,20 +80,33 @@ namespace fabgl {
 #define REG_BH                                   7
 
 
-// FLAGS register
+// FLAGS
 
-static uint8_t flags[10];
-
-#define CF_ADDR 0
-#define PF_ADDR 1
-#define AF_ADDR 2
-#define ZF_ADDR 3
-#define SF_ADDR 4
-#define TF_ADDR 5
-#define IF_ADDR 6
-#define DF_ADDR 7
-#define OF_ADDR 8
-#define XX_ADDR 9
+#if I8086_FLAGSINREGS
+  #define flags regs8
+  #define CF_ADDR 40
+  #define PF_ADDR 41
+  #define AF_ADDR 42
+  #define ZF_ADDR 43
+  #define SF_ADDR 44
+  #define TF_ADDR 45
+  #define IF_ADDR 46
+  #define DF_ADDR 47
+  #define OF_ADDR 48
+  #define XX_ADDR 49
+#else
+  static uint8_t flags[10];
+  #define CF_ADDR 0
+  #define PF_ADDR 1
+  #define AF_ADDR 2
+  #define ZF_ADDR 3
+  #define SF_ADDR 4
+  #define TF_ADDR 5
+  #define IF_ADDR 6
+  #define DF_ADDR 7
+  #define OF_ADDR 8
+  #define XX_ADDR 9
+#endif
 
 #define FLAG_CF                                  (flags[CF_ADDR])
 #define FLAG_PF                                  (flags[PF_ADDR])
@@ -104,8 +117,6 @@ static uint8_t flags[10];
 #define FLAG_IF                                  (flags[IF_ADDR])
 #define FLAG_DF                                  (flags[DF_ADDR])
 #define FLAG_OF                                  (flags[OF_ADDR])
-
-
 
 
 
@@ -644,7 +655,6 @@ uint16_t i8086::make_flags()
 }
 
 
-// Set emulated CPU FLAGS register from regs8[FLAG_xx] values
 void i8086::set_flags(int new_flags)
 {
   FLAG_CF = (new_flags >> 0) & 1;
@@ -1709,6 +1719,9 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       //printf("CPU HALT, IP = %04X:%04X, AX = %04X, BX = %04X, CX = %04X, DX = %04X\n", regs16[REG_CS], reg_ip, regs16[REG_AX], regs16[REG_BX], regs16[REG_CX], regs16[REG_DX]);
       s_halted = true;
       calcIP = false;
+      break;
+    default:
+      printf("Unsupported 8086 opcode\n");
       break;
   }
 
