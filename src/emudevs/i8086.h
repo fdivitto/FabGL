@@ -13,6 +13,8 @@
   #define I80186MODE 0
 #endif
 
+#define I8086_FLAGSINREGS 0
+
 
 namespace fabgl {
 
