@@ -562,12 +562,11 @@ uint8_t & IRAM_ATTR i8086::MEM8(int addr)
 {
   uint8_t opcode = s_memory[16 * regs16[REG_CS] + reg_ip];
   uint8_t opcode2 = s_memory[16 * regs16[REG_CS] + reg_ip + 1];
-  if (addr >= 0xA0000 && addr < 0xC0000) {
+  if (addr >= VIDEOMEM_START && addr < VIDEOMEM_END) {
     if (opcode != 0x8b && opcode != 0xa5 && opcode != 0x8a && opcode != 0x30 && opcode != 0x32 && opcode != 0x86 && opcode != 0x20 && opcode != 0x08
         && opcode != 0xa4 && opcode != 0x22 && opcode != 0xac && opcode != 0x31 && opcode != 0xad)
       printf("8 bit video access, addr %05X instr %02X, %02X\n", addr, opcode, opcode2);
   }
-  //printf("MEM8(%05X)[%02X] instr %02X\n", addr, s_memory[addr], opcode);
   return s_memory[addr];
 }
 
@@ -580,10 +579,9 @@ uint16_t & IRAM_ATTR i8086::MEM16(int addr)
         && opcode != 0xa4 && opcode != 0x22 && opcode != 0xac && opcode != 0x31 && opcode != 0xad)
       printf("16 bit video access, addr %05X instr %02X, %02X\n", addr, opcode, opcode2);
   }
-  //printf("MEM16(%05X)[%04X] instr %02X\n", addr, *(uint16_t*)(s_memory + addr), opcode);
   return *(uint16_t*)(s_memory + addr);
 }
-//*/
+*/
 
 
 // monitored (video) write
@@ -592,7 +590,7 @@ void IRAM_ATTR i8086::WMEM8(int addr, uint8_t value)
 {
   if (addr >= VIDEOMEM_START && addr < VIDEOMEM_END)
     s_writeVideoMemory8(s_context, addr, value);
-  s_memory[addr] = value;
+  MEM8(addr) = value;
 }
 
 
@@ -600,7 +598,7 @@ void IRAM_ATTR i8086::WMEM16(int addr, uint16_t value)
 {
   if (addr >= VIDEOMEM_START && addr < VIDEOMEM_END)
     s_writeVideoMemory16(s_context, addr, value);
-  *(uint16_t*)(s_memory + addr) = value;
+  MEM16(addr) = value;
 }
 
 /////////////////////////////////////////////////////////////////////////////
