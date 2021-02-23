@@ -33,10 +33,6 @@
 
 
 
-#define BIOS_SEG             0xF000
-#define BIOS_OFF             0x0100
-#define BIOS_ADDR            (BIOS_SEG * 16 + BIOS_OFF)
-
 #define RAM_SIZE             1048576    // must correspond to bios MEMSIZE
 #define VIDEOMEMSIZE         65536
 
@@ -45,7 +41,6 @@
 
 // number of times PIT is updated every second
 #define PIT_UPDATES_PER_SEC  500
-
 
 
 
@@ -75,6 +70,7 @@
 
 
 
+
 //////////////////////////////////////////////////////////////////////////////////////
 // Machine
 
@@ -99,11 +95,6 @@ Machine::~Machine()
 
 void Machine::init()
 {
-  m_PS2Controller.begin(PS2Preset::KeyboardPort0);
-  m_PS2Controller.keyboard()->setScancodeSet(1);
-  m_vkItem.scancode[0] = 0;
-  m_curScancode = m_vkItem.scancode;
-
   // to avoid PSRAM bug without -mfix-esp32-psram-cache-issue
   // core 0 can only work reliably with the lower 2 MB and core 1 only with the higher 2 MB.
   s_memory = (uint8_t*)(0x3F800000 + (xPortGetCoreID() == 1 ? 2 * 1024 * 1024 : 0));
@@ -112,7 +103,6 @@ void Machine::init()
 
   memset(s_memory, 0, RAM_SIZE);
 
-  m_keyInputFull = false;
   m_ticksCounter = 0;
 
   m_CGAMemoryOffset = 0;
@@ -125,6 +115,8 @@ void Machine::init()
   m_HGCSwitchReg    = 0;
   m_HGCVSyncQuery   = 0;
 
+  m_i8042.init(&m_PIC8259);
+
   m_PIC8259.reset();
 
   m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
@@ -134,16 +126,7 @@ void Machine::init()
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
 
-	// copy bios
-  memcpy(s_memory + BIOS_ADDR, biosrom, sizeof(biosrom));
-
-  // setup bootstrap code (starting from 0xFFFF0)
-  // for example: "JMP FC00:0100"
-  s_memory[0xffff0] = 0xea;
-  s_memory[0xffff1] = BIOS_OFF & 0xff;
-  s_memory[0xffff2] = BIOS_OFF >> 8;
-  s_memory[0xffff3] = BIOS_SEG & 0xff;
-  s_memory[0xffff4] = BIOS_SEG >> 8;
+  m_BIOS.init(s_memory, this, readPort, writePort, m_i8042.keyboard());
 
   i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, interrupt);
   i8086::setMemory(s_memory);
@@ -363,6 +346,16 @@ void Machine::writePort(void * context, int address, uint8_t value)
       m->m_PIT8253.write(address & 3, value);
       break;
 
+    // 8042 keyboard controller input
+    case 0x0060:
+      m->m_i8042.write(0, value);
+      break;
+
+    // 8042 keyboard controller input
+    case 0x0064:
+      m->m_i8042.write(1, value);
+      break;
+
     // CGA - CRT 6845 - register selection register
     case 0x3d4:
       m->m_CGA6845SelectRegister = value;
@@ -434,12 +427,17 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x0043:
       return m->m_PIT8253.read(address & 3);
 
+    // 8042 keyboard controller output
     case 0x0060:
-      m->m_keyInputFull = false;
-      return m->m_keyInputBuffer;
+      return m->m_i8042.read(0);
 
+    // I/O port
+    case 0x0062:
+      return 0x20 * m->m_PIT8253.readOut(2);  // bit 5 = timer 2 output
+
+    // 8042 keyboard controller status register
     case 0x0064:
-      return 0x14 | (m->m_keyInputFull ? 0x01 : 0x00);
+      return m->m_i8042.read(1);
 
     // CGA - CRT 6845 - register selection register
     case 0x3d4:
@@ -493,27 +491,8 @@ void Machine::PITChangeOut(void * context, int timerIndex)
 void Machine::PITTick(void * context, int timerIndex)
 {
   auto m = (Machine*)context;
-  m->queryKeyboard();
-}
-
-
-void Machine::queryKeyboard()
-{
-  if ((*m_curScancode || m_PS2Controller.keyboard()->virtualKeyAvailable()) && !m_keyInputFull) {
-    if (*m_curScancode == 0) {
-      m_PS2Controller.keyboard()->getNextVirtualKey(&m_vkItem);
-      m_curScancode = m_vkItem.scancode;
-    }
-    m_keyInputBuffer = *m_curScancode++;
-    if (m_curScancode - m_vkItem.scancode == 8) {
-      // 8 bytes scancodes check
-      m_vkItem.scancode[0] = 0;
-      m_curScancode = m_vkItem.scancode;
-    }
-    m_keyInputFull = true;
-    m_PIC8259.signalInterrupt(1); // report IR1 (IRQ9)
-    //printf("kbd %02X\n", m_keyInputBuffer);
-  }
+  // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
+  m->m_i8042.tick();
 }
 
 
@@ -535,54 +514,100 @@ bool Machine::interrupt(void * context, int num)
 {
   auto m = (Machine*)context;
 
-  switch (num) {
+  //printf("INT %02X (AH = %02X)\n", num, i8086::AH());
 
-    // Disk read
-    case 0xf1:
-    {
-      int diskIndex  = i8086::DX() & 0xff;
-      uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
-      uint32_t dest  = i8086::ES() * 16 + i8086::BX();
-      uint32_t count = i8086::AX();
-      fseek(m->m_disk[diskIndex], pos, 0);
-      auto r = fread(s_memory + dest, 1, count, m->m_disk[diskIndex]);
-      i8086::setAL(r & 0xff);
-      //printf("read(0x%05X, %d, %d) => %d\n", dest, count, diskIndex, r);
-      return true;
+  // emu interrupts callable only inside the BIOS segment
+  if (i8086::CS() == BIOS_SEG) {
+    switch (num) {
+
+      // Disk read
+      case 0xf1:
+      {
+        int diskIndex  = i8086::DX() & 0xff;
+        uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
+        uint32_t dest  = i8086::ES() * 16 + i8086::BX();
+        uint32_t count = i8086::AX();
+        fseek(m->m_disk[diskIndex], pos, 0);
+        auto r = fread(s_memory + dest, 1, count, m->m_disk[diskIndex]);
+        i8086::setAL(r & 0xff);
+        //printf("read(0x%05X, %d, %d) => %d\n", dest, count, diskIndex, r);
+        return true;
+      }
+
+      // Disk write
+      case 0xf2:
+      {
+        int diskIndex  = i8086::DX() & 0xff;
+        uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
+        uint32_t src   = i8086::ES() * 16 + i8086::BX();
+        uint32_t count = i8086::AX();
+        fseek(m->m_disk[diskIndex], pos, 0);
+        auto r = fwrite(s_memory + src, 1, count, m->m_disk[diskIndex]);
+        i8086::setAL(r & 0xff);
+        //printf("write(0x%05X, %d, %d) => %d\n", src, count, diskIndex, r);
+        return true;
+      }
+
+      // Get RTC
+      case 0xf3:
+      {
+        // @TODO
+        //printf("Get RTC\n");
+        uint32_t dest = i8086::ES() * 16 + i8086::BX();
+        memset(s_memory + dest, 0, 36);
+        *(int16_t*)(s_memory + dest + 36) = xTaskGetTickCount() * portTICK_PERIOD_MS;
+        return true;
+      }
+
+      // Put Char for debug (AL)
+      case 0xf4:
+        printf("debug: %c\n", i8086::AX() & 0xff);
+        return true;
+
+      // BIOS helpers (AH = select helper function)
+      case 0xf5:
+        m->m_BIOS.helpersEntry();
+        return true;
+
+      // set or reset flag CF before IRET, replacing value in stack with current value
+      case 0xf6:
+      {
+        auto savedFlags = (uint16_t*) (s_memory + i8086::SS() * 16 + (uint16_t)(i8086::SP() + 4));
+        *savedFlags = (*savedFlags & 0xfffe) | i8086::flagCF();
+        return true;
+      }
+
+      // set or reset flag ZF before IRET, replacing value in stack with current value
+      case 0xf7:
+      {
+        auto savedFlags = (uint16_t*) (s_memory + i8086::SS() * 16 + (uint16_t)(i8086::SP() + 4));
+        *savedFlags = (*savedFlags & 0xffbf) | (i8086::flagZF() << 6);
+        return true;
+      }
+
+      // set or reset flag IF before IRET, replacing value in stack with current value
+      case 0xf8:
+      {
+        auto savedFlags = (uint16_t*) (s_memory + i8086::SS() * 16 + (uint16_t)(i8086::SP() + 4));
+        *savedFlags = (*savedFlags & 0xfdff) | (i8086::flagIF() << 9);
+        return true;
+      }
+
+      // test point P0
+      case 0xf9:
+        printf("P0\n");
+        return true;
+
+      // test point P1
+      case 0xfa:
+        printf("P1\n");
+        return true;
+
     }
-
-    // Disk write
-    case 0xf2:
-    {
-      int diskIndex  = i8086::DX() & 0xff;
-      uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
-      uint32_t src   = i8086::ES() * 16 + i8086::BX();
-      uint32_t count = i8086::AX();
-      fseek(m->m_disk[diskIndex], pos, 0);
-      auto r = fwrite(s_memory + src, 1, count, m->m_disk[diskIndex]);
-      i8086::setAL(r & 0xff);
-      //printf("write(0x%05X, %d, %d) => %d\n", src, count, diskIndex, r);
-      return true;
-    }
-
-    // Get RTC
-    case 0xf3:
-    {
-      // @TODO
-      //printf("Get RTC\n");
-      uint32_t dest = i8086::ES() * 16 + i8086::BX();
-      memset(s_memory + dest, 0, 36);
-      *(int16_t*)(s_memory + dest + 36) = xTaskGetTickCount() * portTICK_PERIOD_MS;
-      return true;
-    }
-
-    // Put Char for debug (AL)
-    case 0xf4:
-      printf("debug: %c\n", i8086::AX() & 0xff);
-      return true;
-
   }
 
   // not hanlded
   return false;
 }
+
+

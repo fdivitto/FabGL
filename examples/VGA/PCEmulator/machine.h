@@ -28,14 +28,15 @@
 #include "emudevs/i8086.h"
 #include "emudevs/PIC8259.h"
 #include "emudevs/PIT8253.h"
+#include "emudevs/i8042.h"
 
 #include "bios.h"
 
 
 using fabgl::GraphicsAdapter;
-using fabgl::PS2Controller;
 using fabgl::PIC8259;
 using fabgl::PIT8253;
+using fabgl::i8042;
 
 
 class Machine {
@@ -63,8 +64,6 @@ private:
   void setHGCMode();
   void setHGC6845Register(uint8_t value);
 
-  void queryKeyboard();
-
   static void writePort(void * context, int address, uint8_t value);
   static uint8_t readPort(void * context, int address);
 
@@ -77,22 +76,19 @@ private:
   static void PITTick(void * context, int timerIndex);
 
 
-
   GraphicsAdapter          m_graphicsAdapter;
-  PS2Controller            m_PS2Controller;
 
-  uint8_t                  m_keyInputBuffer;
-  bool                     m_keyInputFull;
-  uint8_t *                m_curScancode;
-  fabgl::VirtualKeyItem    m_vkItem;
+  BIOS                     m_BIOS;
 
   FILE *                   m_disk[2];
 
   static uint8_t *         s_memory;
   static uint8_t *         s_videoMemory;
 
+  // 8259 Programmable Interrupt Controller
   PIC8259                  m_PIC8259;
 
+  // 8253 Programmable Interval Timers
   // pin connections of PIT8253 on the IBM XT:
   //    gate-0 = gate-1 = +5V
   //    gate-2 = TIM2GATESPK
@@ -101,6 +97,9 @@ private:
   //    out-1  = RAM refresh
   //    out-2  = speaker
   PIT8253                  m_PIT8253;
+
+  // 8042 PS/2 Keyboard Controller
+  i8042                    m_i8042;
 
   TaskHandle_t             m_taskHandle;
 

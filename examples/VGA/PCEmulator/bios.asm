@@ -20,7 +20,18 @@
 ;   - bugfix: missing CLD in put_cga320_char_vidoffset and put_cga640_char (may draw chars in reverse and wrong pos in graphics mode, try with gwbasic!)
 ;   - bugfix: "int 10, 09" in graphics mode, when bit 7 of BL is set then destination pixels are XORed, not copied
 ;   - communications to the emulator performed with "int 0xf1", "int 0xf2"... instead of custom CPU opcodes
+;   - INT9 managed partially by the emulator
+;   - INT16 managed partially by the emulator
+;   - INT16 implemented missing functions
 ;   - added MEMSIZE equ for memory size
+;   - fixed int12, get mem size from memsize field
+;   - implemeted int15, 0xc0 function
+;   - copy of rom_config into BIOS e6f5, configuration table
+;   - INT16 implemented function 0x92
+;   - INT16 implemented function 0x09
+;   - INT15 implemented function 0xc1
+;   - added Extended BIOS data
+;   - INT9, support for INT15,4F keyboard intercept
 ;
 ;
 ;
@@ -39,18 +50,19 @@ PIC8259_EOI equ 0x20 ; EOI (End Of Interrupt)
 ; memory size in K
 MEMSIZE equ 639
 
-%macro	emu_putchar_al 0
-  int 0xf4
-%endmacro
+; segment of Extended Data area
+EDASEG equ 0x9fc0
 
-%macro	emu_get_rtc 0
-  int 0xf3
-%endmacro
 ; model and submodel
 ; fc/01 = generic AT
 MODEL    equ 0xfc
 SUBMODEL equ 0x01
 BIOSREV  equ 0x00
+
+; emulator macros
+; These macros allows BIOS to call helper functions implemented in the emulator side.
+; The INTs aren't managed as normal INTs in the 8086 emulator. For example
+; The helper code is executed immediately without using stack to preserve flags/CS/IP.
 
 %macro	emu_read_disk 0
   int 0xf1
@@ -59,6 +71,40 @@ BIOSREV  equ 0x00
 %macro	emu_write_disk 0
   int 0xf2
 %endmacro
+
+%macro	emu_get_rtc 0
+  int 0xf3
+%endmacro
+
+%macro	emu_putchar_al 0
+  int 0xf4
+%endmacro
+
+%macro	emu_helper 0
+  int 0xf5
+%endmacro
+
+%macro	emu_iret_replace_CF 0
+  int 0xf6
+%endmacro
+
+%macro	emu_iret_replace_ZF 0
+  int 0xf7
+%endmacro
+
+%macro	emu_iret_replace_IF 0
+  int 0xf8
+%endmacro
+
+%macro	emu_testP0 0
+  int 0xf9
+%endmacro
+
+%macro	emu_testP1 0
+  int 0xfa
+%endmacro
+
+
 
 
 
@@ -276,6 +322,26 @@ boot:	mov	ax, 0
 	mov	cx, 1024
 	rep	movsb
 
+; copy rom_config into BIOS configuration table
+	mov	ax, cs
+	mov	es, ax
+	mov	di, confDataTable
+	mov	ds, ax
+	mov	si, rom_config
+	mov	cx, 16
+	rep	movsb
+
+; copy Extended BIOS data
+  mov ax, EDASEG
+	mov	es, ax
+	mov	di, 0x0000
+  mov	ax, cs
+	mov	ds, ax
+	mov	si, eda
+	mov	cx, 1024
+	rep	movsb
+
+
 ; Add BIOS redirects for 100% compatible vectors
 	mov	ax, cs
 	mov	es, ax
@@ -371,7 +437,6 @@ int7:
 
 int8:	
 	; timer interupt evert 1/18.2 seconds
-
 	push	ax
 	push	bx
 	push	dx
@@ -417,194 +482,27 @@ i8_end:
 int9:
 
 	push	ax
-	push	bx
-	push	cx
-	push	dx
-	push	ds
-	push	es
-	push	bp
 
-	; get cs into ds for xlatb
-	push	cs
-	pop	  ds
+  in al, 0x60
 
-	mov	  bx, 0x40
-	mov	  es, bx
+  ; call INT 15, 4F (keyboard intercept)
+  clc
+  mov ah, 0x4f
+  int 0x15
+  jnc int9_exit  ; keystroke absorbed by INT 15
 
-	; Tail of the BIOS keyboard buffer goes in BP. This is where we add new keystrokes
-	mov	  bp, [es:kbbuf_tail-bios_data]
+  ; emulator does the actual job
+  mov ah, 0x00
+  emu_helper
 
-	; get the next scan code into AL
-	mov	  dx, 0x0060
-	in 	  al, dx
-
-	; if it is a key down code then process the key down
-	test	al, 0x80
-	je	  int09_key_down
-
-	; It is a key up, always use the normal scan to ascii table.
-	mov	  ah, al
-	mov	  bx, scan2a_tbl
-	xlatb
-
-	test	al, 0x80
-	je	  int09_done
-	mov	  ah, al
-	and	  ah, 0xf0
-	and	  al, 0x0f
-
-	cmp	  ah, 0x80
-	je	  int09_shift_up
-
-	jmp	  int09_done
-
-int09_shift_up:
-	mov	  cl, al
-	mov	  bl, 1
-	shl	  bl, cl
-	not 	bl
-	and	  [es:keyflags1-bios_data], bl
-	jmp	  int09_done
-
-
-int09_key_down:
-	mov	  ah, al ; Scan code into ah
-
-	test	byte [es:keyflags1-bios_data], 0x03  ; Shift key : bits 0 | 1
-	jne	  int09_key_down_shift
-	test	byte [es:keyflags1-bios_data], 0x04  ; Ctrl key  : bit 2
-	jne	  int09_key_down_ctrl
-	test	byte [es:keyflags1-bios_data], 0x08  ; Alt key   : bit 3
-	jne	  int09_key_down_alt
-
-	mov	  bx, scan2a_tbl
-	jmp	  int09_key_down_cont
-
-int09_key_down_shift:
-	mov	  bx, sscan2a_tbl
-	jmp	  int09_key_down_cont
-		
-int09_key_down_ctrl:
-	mov	  bx, cscan2a_tbl
-	jmp	  int09_key_down_cont
-
-int09_key_down_alt:
-	mov	  bx, ascan2a_tbl
-
-int09_key_down_cont:
-	xlatb
-	mov	  bx, ax             ; bh = scan code, bl = translated scan code
-	test	al, 0x80
-	je	  int09_use_keydown
-	mov	  ah, al
-	and	  ah, 0xf0           ; ah = special function
-	and	  al, 0x0f           ; al = function data
-
-	cmp	  ah, 0x80
-	je	  int09_shift_down
-
-	cmp	  ah, 0x90
-	je	  int09_shift_toggle
-
-	cmp	  ah, 0xa0
-	je	  int09_scancode_mod
-
-	jmp	  int09_done
-
-int09_shift_down:
-	mov	  cl, al
-	mov	  bl, 1
-	shl	  bl, cl
-	or	  [es:keyflags1-bios_data], bl
-
-	jmp   int09_done
-
-int09_shift_toggle:
-	mov	  cl, al
-	mov	  bl, 1
-	shl	  bl, cl
-	xor	  [es:keyflags1-bios_data], bl
-
-	jmp   int09_done
-
-int09_scancode_mod:
-	cmp   al, 0x00
-	je	  int09_scancode_mod_altnum
-	cmp	  al, 0x01
-	je	  int09_scancode_mod_altfn
-	cmp	  al, 0x02
-	je	  int09_scancode_mod_ctrlfn
-	cmp	  al, 0x03
-	jne	  int09_done
-
-	; Shift0-fn
-	add	  bh, 0x19
-	mov	  bl, 0x00
-	jmp	  int09_store_key
-
-int09_scancode_mod_altnum:
-	add	  bh, 0x76
-	mov	  bl, 0x00
-	jmp	  int09_store_key
-
-int09_scancode_mod_altfn:
-	add	  bh, 0x2d
-	mov	  bl, 0x00
-	jmp	  int09_store_key
-
-int09_scancode_mod_ctrlfn:
-	add	  bh, 0x23
-	mov	  bl, 0x00
-	jmp	  int09_store_key
-
-int09_use_keydown:
-	test	byte [es:keyflags1-bios_data], 0x20
-	jne	  int09_num_lock
-	jmp	  int09_test_capslock
-
-int09_num_lock:
-	cmp	  bh, 0x47
-	jl	  int09_test_capslock
-	cmp	  bh, 0x53
-	jg	  int09_test_capslock
-	mov   ax, bx
-	mov   al, ah
-	mov	  bx, sscan2a_tbl
-	xlatb
-	mov	  bx, ax
-
-int09_test_capslock:
-	test	byte [es:keyflags1-bios_data], 0x40
-	jne	  int09_caps_lock
-
-	jmp	  int09_store_key
-
-int09_caps_lock:
-	cmp	  bl, 0x61
-	jl	  int09_store_key
-	cmp	  bl, 0x7a
-	jg	  int09_store_key
-	sub	  bl, 0x20
-	jmp	  int09_store_key
-
-int09_store_key:
-	mov	  [es:bp], bx
-
-	add	  word [es:kbbuf_tail-bios_data], 2
-	call	kb_adjust_buf ; Wrap the tail around the head if the buffer gets too large
-        
-int09_done:
+  ; now AH contains: 0 : other chars, 1 : CTRL + ALT + DEL, 2 : PAUSE, 3 : PRINTSCREEN, 4 : CTRL-BREAK, 5 : SYSREQ
+  ; @TODO
 
   ; signal EOI (End Of Interrupt) to 8259
 	mov	  al, PIC8259_EOI
 	out	  PIC8259_A00, al
 
-	pop	  bp
-	pop	  es
-	pop	  ds
-	pop	  dx
-	pop	  cx
-	pop	  bx
+int9_exit:
 	pop	  ax
 
 	iret
@@ -3215,13 +3113,16 @@ int14_get_port_status:
 	pop	bx
 	iret
 
+
+
 ; ************************* INT 15h - get system configuration
 
-int15:	; Here we do not support any of the functions, and just return
-	; a function not supported code - like the original IBM PC/XT does.
+int15:
 
-	; cmp	ah, 0xc0
-	; je	int15_sysconfig
+	cmp	ah, 0xc0
+	je	int15_sysconfig
+  cmp ah, 0xc1
+  je  int15_c1
 	; cmp	ah, 0x41
 	; je	int15_waitevent
 	; cmp	ah, 0x4f
@@ -3235,15 +3136,24 @@ int15:	; Here we do not support any of the functions, and just return
 
 	jmp	reach_stack_stc
 
-;  int15_sysconfig: ; Return address of system configuration table in ROM
-;
-;	mov	bx, 0xf000
-;	mov	es, bx
-;	mov	bx, rom_config
-;	mov	ah, 0
-;
-;	jmp	reach_stack_clc
-;
+int15_sysconfig: ; Return address of system configuration table in ROM
+
+ 	mov	bx, cs
+ 	mov	es, bx
+ 	mov	bx, confDataTable
+ 	mov	ah, 0
+
+ 	jmp	reach_stack_clc
+
+; RETURN EXTENDED-BIOS DATA-AREA SEGMENT ADDRESS
+int15_c1:
+  push ax
+  mov ax, EDASEG
+  mov es, ax
+  pop ax
+  jmp	reach_stack_clc
+
+
 ;  int15_waitevent: ; Events not supported
 ;
 ;	mov	ah, 0x86
@@ -3260,114 +3170,184 @@ int15:	; Here we do not support any of the functions, and just return
 ;
 ;	jmp	reach_stack_stc
 
+
+
+; return from INT setting AH and CF for "unsupported BIOS function"
+iret_unsupported_bios_func:
+  mov ah, 0x86
+  stc
+  emu_iret_replace_CF
+	iret
+
+
+
 ; ************************* INT 16h handler - keyboard
 
 int16:
 	cmp	ah, 0x00 ; Get keystroke (remove from buffer)
-	je	kb_getkey
+	je	int16_00
 	cmp	ah, 0x01 ; Check for keystroke (do not remove from buffer)
-	je	kb_checkkey
+	je	int16_01
 	cmp	ah, 0x02 ; Check shift flags
-	je	kb_shiftflags
+	je	int16_02
+  cmp ah, 0x03 ; Set typematic rate and delay
+  je  int16_03
+  cmp ah, 0x05 ; Store Key Data
+  je  int16_05
+  cmp ah, 0x09 ; Get keyboard functionality
+  je  int16_09
+  cmp ah, 0x10 ; Read Extended Keyboard input
+  je  int16_10
+  cmp ah, 0x11 ; Read Extended Keyboard Status
+  je  int16_11
 	cmp	ah, 0x12 ; Check shift flags
-	je	kb_extshiftflags
+	je	int16_12
+  cmp ah, 0x92 ; Check for undocumented cap checks
+  je  int16_92
 
-	iret
+  ; unsupported function
+  jmp iret_unsupported_bios_func
 
-kb_getkey:
 
-	push	es
-	push	bx
-	push	cx
-	push	dx
-
-	sti
-
-	mov	bx, 0x40
-	mov	es, bx
-
-kb_gkblock:
-
-	mov	cx, [es:kbbuf_tail-bios_data]
-	mov	bx, [es:kbbuf_head-bios_data]
-	mov	dx, [es:bx]
-
-	; Wait until there is a key in the buffer
-	cmp	cx, bx
-	je	kb_gkblock
-
-	add	word [es:kbbuf_head-bios_data], 2
-	call	kb_adjust_buf
-
-	mov	ah, dh
-	mov	al, dl
-
-	pop	dx
-	pop	cx
-	pop	bx
-	pop	es	
-
-	iret
-
-kb_checkkey:
-
-	push	es
-	push	bx
-	push	cx
-	push	dx
+; INT 16, function 0x00 - Read Keyboard Input
+; no register is changed other than return values
+int16_00:
 
 	sti
 
-	mov	bx, 0x40
-	mov	es, bx
+int16_00_wait:
 
-	mov	cx, [es:kbbuf_tail-bios_data]
-	mov	bx, [es:kbbuf_head-bios_data]
-	mov	dx, [es:bx]
+  ; ask emulator for non extended key from buffer
+  mov ah, 0x01
+  mov al, 0x03  ; ask to remove from buffer, filter extended keys
+  emu_helper
 
-	; Check if there is a key in the buffer. ZF is set if there is none.
-	cmp	cx, bx
-
-	mov	ah, dh
-	mov	al, dl
-
-	pop	dx
-	pop	cx
-	pop	bx
-	pop	es	
-
-	retf	2	; NEED TO FIX THIS!!
-
-kb_shiftflags:
-
-	push	es
-	push	bx
-
-	mov	bx, 0x40
-	mov	es, bx
-
-	mov	al, [es:keyflags1-bios_data]
-
-	pop	bx
-	pop	es
+  ; ZF = 1 : key not ready
+  jz int16_00_wait
 
 	iret
 
-kb_extshiftflags:
 
-	push	es
-	push	bx
+; INT 16, function 0x01 - Read Keyboard Status
+; no register is changed other than return values
+int16_01:
 
-	mov	bx, 0x40
-	mov	es, bx
+  sti
 
-	mov	al, [es:keyflags1-bios_data]
-	mov	ah, al
+  ; ask emulator for non extended key from buffer
+  mov ah, 0x01
+  mov al, 0x02  ; do not remove from buffer, filter extended keys
+  emu_helper
 
-	pop	bx
-	pop	es
+  ; pass ZF to interrupt caller
+  emu_iret_replace_ZF
+  ; pass IF to interrupt caller (this is done by almost all BIOS I've seen)
+  emu_iret_replace_IF
+
+  iret
+
+
+; INT 16, function 0x02 - Return Shift Flags Status
+; no register is changed other than return values
+int16_02:
+
+  ; ask emulator for keyboard flags
+  mov ah, 0x02
+  mov al, 0x00
+  emu_helper
 
 	iret
+
+
+; INT 16, function 0x03 - Set typematic rate and delay
+; no register is changed
+int16_03:
+
+  ; ask emulator for service
+  mov ah, 0x03
+  emu_helper
+
+  iret
+
+
+; INT 16, function 0x05 - Store Key Data
+; no register is changed other than return values
+int16_05:
+
+  ; ask emulator for service
+  mov ah, 0x05
+  emu_helper
+
+  ; pass CF to interrupt caller
+  emu_iret_replace_CF
+
+  iret
+
+
+; INT 16, function 0x09 - Get Keyboard functionality
+int16_09:
+
+  mov al, 0b00001111
+  iret
+
+
+; INT 16, function 0x10 - Read Extended Keyboard input
+; no register is changed other than return values
+int16_10:
+
+	sti
+
+int16_10_wait:
+
+  ; ask emulator for extended key from buffer
+  mov ah, 0x01
+  mov al, 0x01  ; ask to remove from buffer, do not filter
+  emu_helper
+
+  ; ZF = 1 : key not ready
+  jz int16_10_wait
+
+	iret
+
+
+; INT 16, function 0x11 - Read Keyboard Extended Status
+; no register is changed other than return values
+int16_11:
+
+  ; ask emulator for non extended key from buffer
+  mov ah, 0x01
+  mov al, 0x00  ; do not remove from buffer, do not filter
+  emu_helper
+
+  ; pass ZF to interrupt caller
+  emu_iret_replace_ZF
+
+  iret
+
+
+; INT 16, function 0x12 - Return Extended Shift Flags
+; no register is changed other than return values
+int16_12:
+
+  ; ask emulator for keyboard extended flags
+  mov ah, 0x02
+  mov al, 0x01
+  emu_helper
+
+	iret
+
+
+; INT 16, function 0x92 - Undocumented extended keyboard check
+; see http://www.ctyme.com/intr/rb-1867.htm
+int16_92:
+
+  mov ah, 0x7f
+  stc
+  emu_iret_replace_CF
+	iret
+
+
+
 
 ; ************************* INT 17h handler - printer
 
@@ -3605,6 +3585,14 @@ rom_config	dw 16		; 16 bytes following
 		db 0b00000000   ; Feature 4
 		db 0b00000000   ; Feature 5
 		db 0, 0, 0, 0, 0, 0
+
+
+; ************************* Extended BIOS data
+
+eda              db 1        ; size in K
+eda_drive_offset dw 0000
+eda_drive_seg    dw 0000
+                 db 1019 dup(0)
 
 ; Internal state variables
 
@@ -6238,16 +6226,19 @@ int09_redirect_end:
 
 bios_data:
 
-com1addr	  dw	0x03F8
+com1addr	  dw	0x03F8              ; 40:00h
 com2addr	  dw	0x02F8
-com3addr	  dw	0x03E8
-com4addr	  dw	0x02E8
-lpt1addr	  dw	0
+com3addr	  dw	0x0000
+com4addr	  dw	0x0000
+lpt1addr	  dw	0x0378              ; 40:08h
 lpt2addr	  dw	0
 lpt3addr	  dw	0
-lpt4addr	  dw	0
-equip		    dw	0b0000100000000001 ; serial port at bits 11-9 (000 = none, 001 = 1, 010 = 2, 011  3, 100 = 4)
-;equip		  dw	0b0000000000100001
+lpt4addr	  dw	0                   ; 40:0e
+
+; bit 0 : diskette available for boot
+; bit 2 : PS/2 mouse present
+equip		    dw	0b1101010000100101  ; 40:10h
+
             db	0
 memsize		  dw	MEMSIZE
             db	0
@@ -6318,8 +6309,8 @@ video_card	      db	0x0c ; 0x0c
                   db	0
                   db	0
                   db	0
-kb_mode		        db	0
-kb_led		        db	0
+kb_mode		        db  0x10    ; bit 4 = 1, 101/102 enhanced keyboard
+kb_led		        db	0x10    ; bit 4 = 1, ACK received (always on)
                   db	0
                   db	0
                   db	0
@@ -6339,60 +6330,6 @@ this_keystroke	  db	0
 ending:
 times (0xff-($-com1addr)) db	0
 
-; Keyboard scan code translation tables
-; < 0x80 = normal key
-;   0x8n = keyboard shift flag n set/clear on key down/up
-;                n = 1 : Shift
-;                n = 2 : Control
-;                n = 3 : Alt
-;                n = 4 : Scroll Lock
-;                n = 5 : Num Lock
-;                n = 6 : Caps Lock
-;                n = 7 : Insert 
-;   0x9n = toggle shift flag n on key down
-;   0xAn = ASCII = 0, scan code is modified
-;                n = 0 : add 0x76 (alt number keys)
-;                n = 1 : add 0x2d (alt-Fn)
-;                n = 2 : add 0x23 (ctrl-Fn)
-;                n = 3 ; Add 0x19 (shift-Fn)
-;   0xFF = Do not report a key press
-
-; plain key
-scan2a_tbl	db	0xFF, 0x1b,  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  '0',  '-',  '=', 0x08, 0x09
-            db	 'q',  'w',  'e',  'r',  't',  'y',  'u',  'i',  'o',  'p',  '[',  ']', 0x0d, 0x82,  'a',  's'
-            db	 'd',  'f',  'g',  'h',  'j',  'k',  'l',  ';', 0x27,  '`', 0x81,  '\',  'z',  'x',  'c',  'v'
-            db	 'b',  'n',  'm',  ',',  '.',  '/', 0x80,  '*', 0x83,  ' ', 0x96, 0x00, 0x00, 0x00, 0x00, 0x00
-            db	0x00, 0x00, 0x00, 0x00, 0x00, 0x95, 0x94, 0x00, 0x00, 0x00,  '-', 0x00, 0x00, 0x00,  '+', 0x00
-            db	0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-; shift+key
-sscan2a_tbl	db	0xFF, 0x1b,  '!',  '@',  '#',  '$',  '%',  '^',  '&',  '*',  '(',  ')',  '_',  '+', 0x08, 0x09
-            db	 'Q',  'W',  'E',  'R',  'T',  'Y',  'U',  'I',  'O',  'P',  '{',  '}', 0x0d, 0x82,  'A',  'S'
-            db	 'D',  'F',  'G',  'H',  'J',  'K',  'L',  ':', 0x22,  '~', 0x81,  '|',  'Z',  'X',  'C',  'V'
-            db	 'B',  'N',  'M',  '<',  '>',  '?', 0x80, 0xFF, 0x83,  ' ', 0x96, 0xA3, 0xA3, 0xA3, 0xA3, 0xA3
-            db	0xA3, 0xA3, 0xA3, 0xA3, 0xA3, 0x95, 0x94,  '7',  '8',  '9',  '-',  '4',  '5',  '6',  '+',  '1'
-            db	 '2', '3',   '0',  '.', 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-; control+key
-cscan2a_tbl	db	0xFF, 0x1b, 0xFF, 0x00, 0xFF, 0xFF, 0xFF, 0x1e, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x08, 0x09
-            db	0x11, 0x17, 0x05, 0x12, 0x14, 0x19, 0x15, 0x09, 0x0F, 0x10, 0x1B, 0x1D, 0x0a, 0x82, 0x01, 0x13
-            db	0x04, 0x06, 0x07, 0x08, 0x0A, 0x0B, 0x0C, 0xFF, 0xFF, 0xFF, 0x81, 0x1C, 0x1A, 0x18, 0x03, 0x16
-            db	0x02, 0x0E, 0x0D, 0xFF, 0xFF, 0xFF, 0x80, 0xFF, 0x83,  ' ', 0x96, 0xA2, 0xA2, 0xA2, 0xA2, 0xA2
-            db	0xA2, 0xA2, 0xA2, 0xA2, 0xA2, 0x95, 0x94, 0xFF, 0x00, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0xFF
-            db	0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-; alt+key
-ascan2a_tbl	db	0xFF, 0x1b, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xFF, 0xFF
-            db	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x82, 0x00, 0x00
-            db	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x81, 0xFF, 0x00, 0x00, 0x00, 0x00
-            db	0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x80, 0xFF, 0x83, 0xFF, 0x96, 0xA1, 0xA1, 0xA1, 0xA1, 0xA1
-            db	0xA1, 0xA1, 0xA1, 0xA1, 0xA1, 0x95, 0x94, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-            db	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 	 
 ; Interrupt vector table - to copy to 0:0
 
@@ -7030,6 +6967,7 @@ vga_glyphs:
   db 0x00, 0x00, 0x00, 0x00, 0x7e, 0x7e, 0x7e, 0x7e, 0x7e, 0x7e, 0x7e, 0x00, 0x00, 0x00, 0x00, 0x00,
   db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
+
 ; ROM BIOS compatibility entry points:
 ; ===================================
 ;   $e05b ; POST Entry Point
@@ -7062,6 +7000,10 @@ vga_glyphs:
 ; * $fff5 ; ASCII Date ROM was built - 8 characters in MM/DD/YY
 ; * $fffe ; System Model ID
 
+  absolute 0xe6f5
+confDataTable:
+  resb 0x1b
+
 ; In a 100% compatible BIOS this is where the int09 (keyboard) handler lives.
 	absolute 0xe987
 int09_bios_redirect:
@@ -7072,6 +7014,7 @@ int09_bios_redirect:
 	absolute 0xfa6e
 glyphs8x8:
 	resb 1024
+
 
 
 ; This is the format of the 36-byte tm structure, returned by the emulator's RTC query call
