@@ -20,6 +20,7 @@
 ;   - bugfix: missing CLD in put_cga320_char_vidoffset and put_cga640_char (may draw chars in reverse and wrong pos in graphics mode, try with gwbasic!)
 ;   - bugfix: "int 10, 09" in graphics mode, when bit 7 of BL is set then destination pixels are XORed, not copied
 ;   - communications to the emulator performed with "int 0xf1", "int 0xf2"... instead of custom CPU opcodes
+;   - added MEMSIZE equ for memory size
 ;
 ;
 ;
@@ -35,6 +36,8 @@ PIC8259_A00 equ 0x20 ; 8259 PORT
 PIC8259_A01 equ 0x21 ; 8259 PORT
 PIC8259_EOI equ 0x20 ; EOI (End Of Interrupt)
 
+; memory size in K
+MEMSIZE equ 639
 
 %macro	emu_putchar_al 0
   int 0xf4
@@ -2532,8 +2535,8 @@ int11:
 
 ; ************************* INT 12h - return memory size
 
-int12:	
-	mov	ax, 0x280 ; 640K conventional memory
+int12:
+	mov	 ax, [cs:memsize]
 	iret
 
 ; ************************* INT 13h handler - disk services
@@ -6235,7 +6238,7 @@ lpt4addr	  dw	0
 equip		    dw	0b0000100000000001 ; serial port at bits 11-9 (000 = none, 001 = 1, 010 = 2, 011  3, 100 = 4)
 ;equip		  dw	0b0000000000100001
             db	0
-memsize		  dw	0x280
+memsize		  dw	MEMSIZE
             db	0
             db	0
 keyflags1	  db	0
