@@ -46,6 +46,11 @@ MEMSIZE equ 639
 %macro	emu_get_rtc 0
   int 0xf3
 %endmacro
+; model and submodel
+; fc/01 = generic AT
+MODEL    equ 0xfc
+SUBMODEL equ 0x01
+BIOSREV  equ 0x00
 
 %macro	emu_read_disk 0
   int 0xf1
@@ -68,7 +73,7 @@ main:
 ; These values (BIOS ID string, BIOS date and so forth) go at the very top of memory
 
 biosstr	db	'Based on 8086tiny plus 2.34!', 0, 0
-mem_top	db	0xea, 0, 0x01, 0, 0xf0, '02/08/21', 0, 0xfe, 0
+mem_top	db	0xea, 0, 0x01, 0, 0xf0, '01/01/91', 0, MODEL, SUBMODEL
 
 
 bios_entry:
@@ -3585,11 +3590,17 @@ int41_max_sect	db 0
 ; ************************* ROM configuration table
 
 rom_config	dw 16		; 16 bytes following
-		db 0xfe		; Model
-		db 'A'		; Submodel
-		db 'C'		; BIOS revision
-		db 0b00100000   ; Feature 1
-		db 0b00000000   ; Feature 2
+		db MODEL		; Model         // Generic AT system
+		db SUBMODEL	; Submodel
+		db BIOSREV  ; BIOS revision
+    ; feature 1:
+    ;   bit 2 : extended BIOS area allocated
+    ;   bit 4 : Keyboard intercept sequence (INT 15H) called in keyboard interrupt (INT 09H)
+    ;   bit 5 : real time clock installed
+		db 0b00110100
+    ; feature 2:
+    ;   bit 6 : INT 16/AH=09h (keyboard functionality) supported
+		db 0b01000000
 		db 0b00000000   ; Feature 3
 		db 0b00000000   ; Feature 4
 		db 0b00000000   ; Feature 5
