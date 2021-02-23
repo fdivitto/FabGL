@@ -30,6 +30,10 @@
 
   An hard disk may be added. It must be named "hd.img".
 
+
+  Notes about software compatibility:
+    - Windows 3.0a, set with "Hercules" video adapter, keyboard type must be "Enhanced 101 or 102 key US and Non US"
+
  */
 
 
