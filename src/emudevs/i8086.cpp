@@ -33,6 +33,10 @@ namespace fabgl {
 
 #pragma GCC optimize ("O3")
 
+#ifndef ARDUINO
+  #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 
 #ifndef REGS_BASE
   #define REGS_BASE 0xF0000  // normal use

@@ -27,6 +27,10 @@
 #include "esp32/ulp.h"
 #include "driver/rtc_io.h"
 #include "soc/sens_reg.h"
+#ifndef ARDUINO
+  #include "soc/rtc_io_periph.h"
+#endif
+#include "esp_log.h"
 
 #include "ps2controller.h"
 #include "fabutils.h"
@@ -37,7 +41,7 @@
 
 
 #pragma GCC optimize ("O2")
-
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
 namespace fabgl {
 
@@ -786,21 +790,51 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
   uint32_t DAT_rtc_gpio_num[2], DAT_rtc_gpio_reg[2], DAT_rtc_gpio_ie_s[2];
 
   if (port0Enabled) {
+    if (!rtc_gpio_is_valid_gpio(port0_clkGPIO) || !rtc_gpio_is_valid_gpio(port0_datGPIO)) {
+      ESP_LOGE("FabGL", "Invalid PS/2 Port 0 ports");
+      return;
+    }
+    #ifdef ARDUINO
     CLK_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1;
     DAT_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_datGPIO].rtc_num;
     DAT_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_datGPIO].reg;
     DAT_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_datGPIO].ie) - 1;
+    #else
+    int port0_clkIO = rtc_io_number_get(port0_clkGPIO);
+    CLK_rtc_gpio_num[0]  = port0_clkIO;
+    CLK_rtc_gpio_reg[0]  = rtc_io_desc[port0_clkIO].reg;
+    CLK_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_io_desc[port0_clkIO].ie) - 1;
+    int port0_datIO = rtc_io_number_get(port0_datGPIO);
+    DAT_rtc_gpio_num[0]  = port0_datIO;
+    DAT_rtc_gpio_reg[0]  = rtc_io_desc[port0_datIO].reg;
+    DAT_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_io_desc[port0_datIO].ie) - 1;
+    #endif
   }
 
   if (port1Enabled) {
+    if (!rtc_gpio_is_valid_gpio(port1_clkGPIO) || !rtc_gpio_is_valid_gpio(port1_datGPIO)) {
+      ESP_LOGE("FabGL", "Invalid PS/2 Port 1 ports");
+      return;
+    }
+    #ifdef ARDUINO
     CLK_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1;
     DAT_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_datGPIO].rtc_num;
     DAT_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_datGPIO].reg;
     DAT_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_datGPIO].ie) - 1;
+    #else
+    int port1_clkIO = rtc_io_number_get(port1_clkGPIO);
+    CLK_rtc_gpio_num[1]  = port1_clkIO;
+    CLK_rtc_gpio_reg[1]  = rtc_io_desc[port1_clkIO].reg;
+    CLK_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_io_desc[port1_clkIO].ie) - 1;
+    int port1_datIO = rtc_io_number_get(port1_datGPIO);
+    DAT_rtc_gpio_num[1]  = port1_datIO;
+    DAT_rtc_gpio_reg[1]  = rtc_io_desc[port1_datIO].reg;
+    DAT_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_io_desc[port1_datIO].ie) - 1;
+    #endif
   }
 
   for (uint32_t i = 0; i < size; ++i) {
@@ -1053,7 +1087,7 @@ void PS2Controller::sendData(uint8_t data, int PS2Port)
   uint32_t RTCMEM_PORTX_SEND_WORD = (PS2Port == 0 ? RTCMEM_PORT0_SEND_WORD : RTCMEM_PORT1_SEND_WORD);
   uint32_t RTCMEM_PORTX_MODE      = (PS2Port == 0 ? RTCMEM_PORT0_MODE      : RTCMEM_PORT1_MODE);
 
-  RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((~calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
+  RTC_SLOW_MEM[RTCMEM_PORTX_SEND_WORD]  = 0x200 | ((!calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
   RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_SEND;
   m_TXWaitTask[PS2Port] = xTaskGetCurrentTaskHandle();
   if (ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(10)) == pdFALSE) {

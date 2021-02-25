@@ -33,7 +33,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "rom/lldesc.h"
 #include "driver/gpio.h"
 
 #include "fabglconf.h"

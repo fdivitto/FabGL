@@ -32,6 +32,7 @@
 #include "driver/i2s.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
+#include "esp_log.h"
 
 
 #include "soundgen.h"
@@ -494,6 +495,7 @@ void SoundGenerator::i2s_audio_init()
   i2s_config.dma_buf_len          = FABGL_SAMPLE_BUFFER_SIZE * sizeof(uint16_t);
   i2s_config.use_apll             = 0;
   i2s_config.tx_desc_auto_clear   = 0;
+  i2s_config.fixed_mclk           = 0;
   // install and start i2s driver
   i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
   // init DAC pad
