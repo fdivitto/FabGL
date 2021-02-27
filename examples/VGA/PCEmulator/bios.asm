@@ -32,6 +32,7 @@
 ;   - INT15 implemented function 0xc1
 ;   - added Extended BIOS data
 ;   - INT9, support for INT15,4F keyboard intercept
+;   - removed internal variables from BIOS data area
 ;
 ;
 ;
@@ -1070,7 +1071,6 @@ int10_set_cshape:
 	jne	  cur_visible
 
 cur_not_visible:
-	mov	  byte [cursor_visible-bios_data], 0	; Hide cursor
 	mov	  cx, ax
 	jmp	  cur_vischk_done
 
@@ -1080,8 +1080,7 @@ cur_visible:
 	mov	  [cur_v_end-bios_data], ax
 	or	  ax, 0x6000
 	mov	  cx, ax
-	mov	  byte [cursor_visible-bios_data], 1	; Show cursor
-    
+
 cur_vischk_done:
 	; Set CRTC registers for cursor shape
 	mov	  al, 0x0a
@@ -1136,8 +1135,8 @@ int10_set_cursor:
 	cmp	  bh, [disp_page-bios_data]
 	jne	  int10_set_cursor_done
 
-	mov	  [crt_curpos_y-bios_data], dh
-	mov	  [crt_curpos_x-bios_data], dl
+	mov	  [cs:crt_curpos_y], dh
+	mov	  [cs:crt_curpos_x], dl
 	call	set_crtc_cursor_pos
 
 int10_set_cursor_done:
@@ -1286,9 +1285,9 @@ int10_set_disp_page_upd:
 	
 	; update CRTC cursor pos
 	mov	  dl, [si+curpos_x-bios_data]
-	mov	  [crt_curpos_x-bios_data], dl
+	mov	  [cs:crt_curpos_x], dl
 	mov	  dl, [si+curpos_y-bios_data]
-	mov	  [crt_curpos_y-bios_data], dl
+	mov	  [cs:crt_curpos_y], dl
 	call	set_crtc_cursor_pos
 
 int10_set_disp_page_done:
@@ -1719,7 +1718,7 @@ int10_write_char_tty_set_crtc_cursor:
 	jne	  int10_write_char_tty_done
 
 	mov	  ax, [si+curpos_x-bios_data]
-	mov	  [crt_curpos_x-bios_data], ax
+	mov	  [cs:crt_curpos_x], ax
 	call  set_crtc_cursor_pos
 
 int10_write_char_tty_done:
@@ -3865,8 +3864,8 @@ set_crtc_cursor_pos:
 	mov	ax, 0x40
 	mov	es, ax
 
-	mov	bh, [es:crt_curpos_y-bios_data]
-	mov	bl, [es:crt_curpos_x-bios_data]
+	mov	bh, [cs:crt_curpos_y]
+	mov	bl, [cs:crt_curpos_x]
 
 	; Set CRTC cursor address
 	mov	al, [es:vid_cols-bios_data]
@@ -5486,9 +5485,9 @@ clear_screen:
 	mov	si, ax
 
 	mov	byte [si+curpos_x-bios_data], 0
-	mov	byte [crt_curpos_x-bios_data], 0
+	mov	byte [cs:crt_curpos_x], 0
 	mov	byte [si+curpos_y-bios_data], 0
-	mov	byte [crt_curpos_y-bios_data], 0
+	mov	byte [cs:crt_curpos_y], 0
 
 	cmp	byte [vid_mode-bios_data], 4
 	je	clear_gfx
@@ -6309,26 +6308,21 @@ video_card	      db	0x0c ; 0x0c
                   db	0
                   db	0
                   db	0
-kb_mode		        db  0x10    ; bit 4 = 1, 101/102 enhanced keyboard
-kb_led		        db	0x10    ; bit 4 = 1, ACK received (always on)
-                  db	0
-                  db	0
-                  db	0
-                  db	0
+kb_mode		        db  0x10    ; 40:96, bit 4 = 1, 101/102 enhanced keyboard
+kb_led		        db	0x10    ; 40:97, bit 4 = 1, ACK received (always on)
+                  dw	0       ; 40:98
+                  dw	0       ; 40:9a
+           	      dw	0       ; 40:9c
+                  dw	0       ; 40:9e
+                  db  0       ; 40:a0
+
+ending:
+times (0xff-($-com1addr)) db	0
+
+; additional BIOS variables (non standard)
 boot_device	      db	0
 crt_curpos_x	    db	0
 crt_curpos_y	    db	0
-key_now_down	    db	0
-next_key_fn	      db	0
-cursor_visible	  db	1
-escape_flag_last	db	0
-next_key_alt	    db	0
-escape_flag	      db	0
-notranslate_flg	  db	0
-this_keystroke	  db	0
-                  db	0
-ending:
-times (0xff-($-com1addr)) db	0
 
 	 
 ; Interrupt vector table - to copy to 0:0
