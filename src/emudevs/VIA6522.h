@@ -34,6 +34,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "fabgl.h"
+
 
 #define DEBUG6522 0
 

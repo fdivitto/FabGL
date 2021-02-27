@@ -28,10 +28,10 @@
 #include "freertos/timers.h"
 
 #include "esp_attr.h"
-#ifdef ARDUINO
-  #include "rom/uart.h"
-#else
+#if __has_include("esp32/rom/uart.h")
   #include "esp32/rom/uart.h"
+#else
+  #include "rom/uart.h"
 #endif
 #include "soc/uart_reg.h"
 #include "soc/uart_struct.h"

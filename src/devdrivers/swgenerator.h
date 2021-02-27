@@ -34,10 +34,11 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#ifdef ARDUINO
-  #include "rom/lldesc.h"
-#else
+
+#if __has_include("esp32/rom/lldesc.h")
   #include "esp32/rom/lldesc.h"
+#else
+  #include "rom/lldesc.h"
 #endif
 
 #include "fabglconf.h"

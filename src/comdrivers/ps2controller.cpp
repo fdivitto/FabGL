@@ -27,7 +27,7 @@
 #include "esp32/ulp.h"
 #include "driver/rtc_io.h"
 #include "soc/sens_reg.h"
-#ifndef ARDUINO
+#if __has_include("soc/rtc_io_periph.h")
   #include "soc/rtc_io_periph.h"
 #endif
 #include "esp_log.h"
@@ -42,6 +42,7 @@
 
 #pragma GCC optimize ("O2")
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 
 namespace fabgl {
 
@@ -794,7 +795,7 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
       ESP_LOGE("FabGL", "Invalid PS/2 Port 0 ports");
       return;
     }
-    #ifdef ARDUINO
+    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
     CLK_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1;
@@ -818,7 +819,7 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
       ESP_LOGE("FabGL", "Invalid PS/2 Port 1 ports");
       return;
     }
-    #ifdef ARDUINO
+    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
     CLK_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1;

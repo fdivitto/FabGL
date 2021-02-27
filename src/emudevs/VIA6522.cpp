@@ -25,7 +25,7 @@
 
 #pragma GCC optimize ("O2")
 
-#ifndef ARDUINO
+#if FABGL_ESP_IDF_VERSION > FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
   #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 

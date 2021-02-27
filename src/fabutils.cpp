@@ -37,6 +37,7 @@
 #include "soc/efuse_reg.h"
 #include "soc/rtc.h"
 #include "esp_ipc.h"
+#include "soc/adc_channel.h"
 
 #include "fabutils.h"
 #include "dispdrivers/vgacontroller.h"

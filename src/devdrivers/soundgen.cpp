@@ -32,6 +32,9 @@
 #include "driver/i2s.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
+#if __has_include("hal/i2s_types.h")
+  #include "hal/i2s_types.h"
+#endif
 #include "esp_log.h"
 
 
@@ -488,7 +491,11 @@ void SoundGenerator::i2s_audio_init()
   i2s_config.mode                 = (i2s_mode_t) (I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN);
   i2s_config.sample_rate          = m_sampleRate;
   i2s_config.bits_per_sample      = I2S_BITS_PER_SAMPLE_16BIT;
-  i2s_config.communication_format = (i2s_comm_format_t) I2S_COMM_FORMAT_I2S_MSB;
+  #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(4, 1, 1)
+    i2s_config.communication_format = (i2s_comm_format_t) I2S_COMM_FORMAT_I2S_MSB;
+  #else
+    i2s_config.communication_format = I2S_COMM_FORMAT_STAND_I2S;
+  #endif
   i2s_config.channel_format       = I2S_CHANNEL_FMT_ONLY_RIGHT;
   i2s_config.intr_alloc_flags     = 0;
   i2s_config.dma_buf_count        = 2;

@@ -36,9 +36,20 @@
 #include "freertos/semphr.h"
 
 #include <driver/adc.h>
+#include <esp_system.h>
 
 
 namespace fabgl {
+
+
+// manage IDF versioning
+#ifdef ESP_IDF_VERSION
+  #define FABGL_ESP_IDF_VERSION_VAL                      ESP_IDF_VERSION_VAL
+  #define FABGL_ESP_IDF_VERSION                          ESP_IDF_VERSION
+#else
+  #define FABGL_ESP_IDF_VERSION_VAL(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
+  #define FABGL_ESP_IDF_VERSION                          FABGL_ESP_IDF_VERSION_VAL(0, 0, 0)
+#endif
 
 
 
