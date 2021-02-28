@@ -41,8 +41,10 @@
 #define BIOS_KBDBUFHEAD        0x1a     // pointer to next character in keyboard buffer
 #define BIOS_KBDBUFTAIL        0x1c     // pointer to first available spot in keyboard buffer
 #define BIOS_KBDBUF            0x1e     // keyboard buffer (32 bytes, 16 keys, but actually 15)
+#define BIOS_CTRLBREAKFLAG     0x71     // Ctrl-Break flag
 #define BIOS_KBDMODE           0x96     // keyboard mode and other shift flags
 #define BIOS_KBDLEDS           0x97     // keyboard LEDs
+#define BIOS_PRINTSCREENFLAG   0x100    // PRINTSCREEN flag
 
 
 
@@ -73,6 +75,7 @@ private:
 
   bool storeKeyInKbdBuffer(uint16_t syscode);
   bool processScancode(int scancode, uint16_t * syscode);
+  void emptyKbdBuffer();
 
 
   uint8_t *       m_memory;

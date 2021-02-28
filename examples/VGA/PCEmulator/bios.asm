@@ -33,6 +33,7 @@
 ;   - added Extended BIOS data
 ;   - INT9, support for INT15,4F keyboard intercept
 ;   - removed internal variables from BIOS data area
+;   - INT9, support for CTRL+ALT+DEL, PRINTSCREEN, CTRLBREAK, SYSREQ, PAUSE
 ;
 ;
 ;
@@ -247,7 +248,8 @@ calc_end:
 
 ; Main BIOS entry point. Zero the flags, and set up registers.
 
-boot:  mov  ax, 0
+boot:
+  mov  ax, 0
   push  ax
   popf
 
@@ -429,6 +431,16 @@ init_crtc_loop:
 
   jmp  0:0x7c00
 
+
+
+reportEOI:
+; signal EOI (End Of Interrupt) to 8259
+  mov   al, PIC8259_EOI
+  out   PIC8259_A00, al
+  ret
+
+
+
 ; ************************* INT 7h handler
 
 int7:
@@ -460,9 +472,7 @@ i8_end:
   ; transfer control to user routine
   int   0x1c
 
-  ; signal EOI (End Of Interrupt) to 8259
-  mov   al, PIC8259_EOI
-  out   PIC8259_A00, al
+  call  reportEOI
 
   pop   si
   pop   ds
@@ -482,31 +492,80 @@ i8_end:
 
 int9:
 
-  push ax
+  sti
 
+  push ax
+  push ds
+
+  ; Get the bios data segment into ds
+  mov  ax, 0x40
+  mov  ds, ax
+
+int9_getcode:
+  ; read keyboard output buffer
   in   al, 0x60
 
   ; call INT 15, 4F (keyboard intercept)
-  clc
+  stc
   mov  ah, 0x4f
   int  0x15
   jnc  int9_exit  ; keystroke absorbed by INT 15
 
-  ; emulator does the actual job
+  ; emulator does the actual job (convert to ASCII and insert into the keyboard buffer)
   mov  ah, 0x00
   emu_helper
 
-  ; now AH contains: 0 : other chars, 1 : CTRL + ALT + DEL, 2 : PAUSE, 3 : PRINTSCREEN, 4 : CTRL-BREAK, 5 : SYSREQ
-  ; @TODO
+  ; check result from emu_helper (in AH)
+  cmp  ah, 0x02
+  jz   int9_reboot
+  cmp  ah, 0x03
+  jz   int9_printscreen
+  cmp  ah, 0x04
+  jz   int9_ctrlbreak
+  cmp  ah, 0x05
+  jz   int9_sysreq
 
-  ; signal EOI (End Of Interrupt) to 8259
-  mov  al, PIC8259_EOI
-  out  PIC8259_A00, al
+  ; PAUSE state?
+  test byte [keyflags2 - bios_data], 0x08
+  jnz int9_pause
 
 int9_exit:
+  call reportEOI
+  pop  ds
   pop  ax
-
   iret
+
+; manage CTRL + ALT + DEL
+int9_reboot:
+  call reportEOI
+  mov  word [soft_rst_flg - bios_data], 0x1234
+  jmp  boot
+
+; manage PAUSE state
+int9_pause:
+  ; wait for a code from keyboard
+  in   al, 0x64
+  test al, 0x01
+  jz   int9_pause
+  jmp  int9_getcode
+
+; manage PRINTSCREEN
+int9_printscreen:
+  int 0x05
+  mov byte [0x100], 0   ; reset PRINTSCREEN flag
+  jmp int9_exit
+
+; manage CTRL + BREAK
+int9_ctrlbreak:
+  int 0x1b
+  jmp int9_exit
+
+; manage SYSREQ (ALT + PRINTSCREEN)
+int9_sysreq:
+  mov ah, 0x85  ; AL already assigned by emulator
+  int 0x15
+  jmp int9_exit
+
 
 
 ; ************************* INT 10h handler - video services

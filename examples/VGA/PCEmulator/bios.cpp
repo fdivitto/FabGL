@@ -151,12 +151,15 @@ bool BIOS::processScancode(int scancode, uint16_t * syscode)
     { 0x50, 0x50e0, 0x50e0, 0x91e0, 0xa000 }, { 0x49, 0x49e0, 0x49e0, 0x84e0, 0x9900 }, { 0x51, 0x51e0, 0x51e0, 0x76e0, 0xa100 },
     { 0x4d, 0x4de0, 0x4de0, 0x74e0, 0x9d00 }, { 0x35, 0xe02f, 0xe02f, 0x9500, 0xa400 }, { 0x1c, 0xe00d, 0xe00d, 0xe00a, 0xa600 },
     { 0x37, 0xffff, 0xffff, 0x7200, 0xffff }, // CTRL + PRINTSCREEN
-    { 0x46, 0xffff, 0xffff, 0x0000, 0xffff }, // CTRL + PAUSE
-    { 0x00, 0xffff, 0xffff, 0xffff, 0xffff } // ending code
+    { 0x46, 0xffff, 0xffff, 0x0000, 0xffff }, // CTRL + PAUSE (BREAK)
+    { 0x00, 0xffff, 0xffff, 0xffff, 0xffff }  // ending code
   };
 
   //printf("  %02X\n", scancode);
 
+  *syscode = 0xffff;
+
+  // 3 = RALT, 2 = RCTRL, 1 = E0, 0 = E1
   uint8_t * mode = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDMODE;
 
   // save and reset e0 and e1 flags
@@ -181,9 +184,15 @@ bool BIOS::processScancode(int scancode, uint16_t * syscode)
 
   //printf("  e0 = %d, down = %d\n", e0, down);
 
-  uint8_t * flags1         = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS1;
-  uint8_t * flags2         = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS2;
-  uint8_t * LEDs           = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDLEDS;
+  // 7 = INS ON, 6 = CAPS ON, 5 = NUMLCK ON, 4 = SCRLCK ON, 3 = ALT, 2 = CTRL, 1 = LSHIFT, 0 = RSHIFT
+  uint8_t * flags1 = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS1;
+
+  // 7 = INS, 6 = CAPS, 5 = NUMLCK, 4 = SCRLCK, 3 = CTRL+NUMLCK ON (PAUSE), 2 = SYSREQ, 1 = LALT, 0 = LCTRL
+  uint8_t * flags2 = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS2;
+
+  // 2 = CAPS LED, 1 = NUMLCK LED, 0 = SCRLCK LED
+  uint8_t * LEDs   = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDLEDS;
+
   uint8_t * altKeypadEntry = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDALTKEYPADENTRY;
 
   if (e0) {
@@ -204,21 +213,36 @@ bool BIOS::processScancode(int scancode, uint16_t * syscode)
         *flags1 ^= 0x80 * !down;                       // bit 7 on flags1 (toggle when up)
         *flags2  = (*flags2 & ~0x80) | (0x80 * down);  // bit 7 on flags2 (1 = down)
         break;
+      // PRINTSCREEN or SYSREQ
+      case 0x37:
+        // not shifts, PRINTSCREEN
+        if (down && (*flags1 & 0x0f) == 0)
+          m_memory[BIOS_DATAAREA_ADDR + BIOS_PRINTSCREENFLAG] = 1;
+        // ALT + PRINTSCREEN = SYSREQ
+        else if (*flags1 & 0x08)
+          *flags2 |= 0x04;
+        break;
+      // CTRL + BREAK (CTRL + PAUSE)
+      case 0x46:
+        emptyKbdBuffer();
+        m_memory[BIOS_DATAAREA_ADDR + BIOS_CTRLBREAKFLAG] = 0x80;
+        break;
       // bypass (e0 2a / e0 aa)
       case 0x2a:
         return false;
     }
-  } else if (e1) {
+  } else if (e1 || m_kbdScancodeComp > 0) {
     // extended code (0xe1 ...)
-    if ((m_kbdScancodeComp == 0 && scancode == 0x1d) || (m_kbdScancodeComp == 1 && scancode == 0x45) || (m_kbdScancodeComp == 2 && scancode == 0x9d)) {
+    if ((m_kbdScancodeComp == 0 && scancode == 0x1d) || (m_kbdScancodeComp == 1 && scancode == 0x45) || (m_kbdScancodeComp == 2 && scancode == 0x1d)) {
       ++m_kbdScancodeComp;
       return false;
-    } else if (m_kbdScancodeComp == 3 && scancode == 0xc5) {
+    } else if (m_kbdScancodeComp == 3 && scancode == 0x45) {
       // PAUSE key completed (e1 1d 45 e1 9d c5)
       *flags2 |= 0x08;                                 // bit 3 on flags2 (always set)
       m_kbdScancodeComp = 0;
       return false;
     }
+    m_kbdScancodeComp = 0;
   } else {
     // normal code
     m_kbdScancodeComp = 0;
@@ -338,24 +362,45 @@ bool BIOS::storeKeyInKbdBuffer(uint16_t syscode)
 // intput AL:
 //    scancode as read from port 0x60
 // output AH:
-//    0 : other chars
-//    1 : CTRL + ALT + DEL
-//    2 : PAUSE
+//    0 : normal key
+//    2 : CTRL + ALT + DEL
 //    3 : PRINTSCREEN
-//    4 : CTRL-BREAK
-//    5 : SYSREQ
+//    4 : CTRL-BREAK  (CTRL + PAUSE)
+//    5 : SYSREQ      (ALT + PRINTSCREEN), down (AL = 0), up (AL = 1)
 void BIOS::getKeyFromKeyboard()
 {
+  uint8_t * flags1 = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS1;
+  uint8_t * flags2 = m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDSHIFTFLAGS2;
+  // saves current pause state
+  bool onPause = *flags2 & 0x08;
   // update keyboard decoding state
   uint16_t syscode; // low byte = ASCII value, high byte = scancode
-  if (processScancode(i8086::AL(), &syscode)) {
-    // we need to add this key to the keyboard buffer
-    //printf("kbd store %04X\n", syscode);
-    if (!storeKeyInKbdBuffer(syscode)) {
-      // buffer full
-      //printf("kbd buffer full\n");
+  bool toAdd = processScancode(i8086::AL(), &syscode);
+  if (toAdd) {
+    if (onPause) {
+      // just disable pause state and discard key
+      *flags2 &= ~0x08;
+    } else {
+      // we need to add this key to the keyboard buffer
+      //printf("kbd store %04X\n", syscode);
+      if (!storeKeyInKbdBuffer(syscode)) {
+        // buffer full
+        //printf("kbd buffer full\n");
+      }
     }
   }
+  // check for special syskeys
+  if ((*flags1 & 0x04) && (*flags1 & 0x08) && (syscode == 0x53e0 || syscode == 0x93e0 || syscode == 0xa300)) {
+    i8086::setAH(2);
+  } else if (m_memory[BIOS_DATAAREA_ADDR + BIOS_PRINTSCREENFLAG] == 1) {
+    i8086::setAH(3);
+  } else if (syscode == 0x0000) {
+    i8086::setAH(4);
+  } else if (*flags2 & 0x04) {
+    i8086::setAH(5);
+    i8086::setAL((bool)i8086::AL());
+  } else
+    i8086::setAH(0);
 }
 
 
@@ -431,6 +476,14 @@ void BIOS::getKeyFromBuffer()
   uint8_t LEDs = m_memory[BIOS_DATAAREA_ADDR + BIOS_KBDLEDS];
   if (numLockLED != (bool)(LEDs & 0x02) || capsLockLED != (bool)(LEDs & 0x04) || scrollLockLED != (bool)(LEDs & 0x01))
     m_keyboard->setLEDs((bool)(LEDs & 0x02), (bool)(LEDs & 0x04), (bool)(LEDs & 0x01));
+}
+
+
+void BIOS::emptyKbdBuffer()
+{
+  auto head = (uint16_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDBUFHEAD);
+  auto tail = (uint16_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_KBDBUFTAIL);
+  *tail = *head;
 }
 
 
