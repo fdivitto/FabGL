@@ -179,8 +179,12 @@ void PIC8259::signalInterrupt(int intnum)
 {
   //printf("PIC8259::signalInterrupt(%d)\n", intnum);
   intnum &= 7;
-  m_IRR |= 1 << intnum;
-  setPendingInterrupt();
+  // already servicing?
+  if ((m_ISR & (1 << intnum)) == 0) {
+    // no, request interrupt
+    m_IRR |= 1 << intnum;
+    setPendingInterrupt();
+  }
 }
 
 
