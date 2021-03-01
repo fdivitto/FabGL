@@ -162,6 +162,24 @@ public:
   void resume();
 
   /**
+   * @brief Suspends PS/2 port driving the CLK line Low
+   *
+   * Use resumePort() to release CLK line.
+   *
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   */
+  void suspendPort(int PS2Port);
+
+  /**
+   * @brief Resumes PS/2 port releasing CLK line
+   *
+   * Use suspendPort() to suspend.
+   *
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   */
+  void resumePort(int PSPort);
+
+  /**
    * @brief Returns the instance of Keyboard object automatically created by PS2Controller.
    *
    * @return A pointer to a Keyboard object

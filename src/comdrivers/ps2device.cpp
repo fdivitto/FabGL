@@ -120,6 +120,18 @@ bool PS2Device::parityError()
 }
 
 
+void PS2Device::suspendPort()
+{
+  PS2Controller::instance()->suspendPort(m_PS2Port);
+}
+
+
+void PS2Device::resumePort()
+{
+  PS2Controller::instance()->resumePort(m_PS2Port);
+}
+
+
 int PS2Device::getData(int timeOutMS)
 {
   TimeOut timeout;

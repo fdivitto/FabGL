@@ -309,13 +309,13 @@ namespace fabgl {
 
 
 #define PORT0_RX_BUFFER_SIZE 128
-#define PORT1_RX_BUFFER_SIZE 1644
+#define PORT1_RX_BUFFER_SIZE 1524
 
 
 // Locations inside RTC low speed memory
 
 #define RTCMEM_PROG_START           0x000  // where the program begins
-#define RTCMEM_VARS_START           0x100  // where the variables begin
+#define RTCMEM_VARS_START           0x178  // where the variables begin
 
 #define RTCMEM_PORT0_ENABLED        (RTCMEM_VARS_START +  0)  // if 1 then port 0 is enabled
 #define RTCMEM_PORT0_MODE           (RTCMEM_VARS_START +  1)  // MODE_RECEIVE or MODE_SEND
@@ -351,6 +351,9 @@ namespace fabgl {
 // values for RTCMEM_PORTX_MODE
 #define MODE_RECEIVE                  0
 #define MODE_SEND                     1
+#define MODE_TAKE_CLK                 2   // Force CLK Low (switch to MODE_CLK_TAKEN)
+#define MODE_CLK_TAKEN                3   // CLK is currently force LOW
+#define MODE_RELEASE_CLK              4   // Release CLK (switch to MODE_RECEIVE)
 
 // values for RTCMEM_PORTX_STATE
 #define STATE_WAIT_CLK_HIGH           0
@@ -370,9 +373,14 @@ namespace fabgl {
 #define PORT1_SEND_WAIT_FOR_CLK_HIGH  9
 #define PORT1_RECEIVE                10
 #define PORT1_CLK_IS_HIGH            11
-#define MAIN_LOOP                    12
+#define MAIN_LOOP0                   12
 #define PORT1_INIT                   13
-
+#define PORT0_RELEASE_CLK            14
+#define PORT1_RELEASE_CLK            15
+#define MAIN_LOOP1                   16
+#define PORT0_TAKE_CLK               17
+#define PORT1_TAKE_CLK               18
+#define PORT0_RECEIVE                19
 
 
 
@@ -392,6 +400,10 @@ M_LABEL(READY_TO_RECEIVE),
   // port 0 enabled?
   MEM_READR(R0, RTCMEM_PORT0_ENABLED),                      // R0 = [RTCMEM_PORT0_ENABLED]
   M_BL(PORT1_INIT, 1),                                      // go PORT1_INIT if R0 < 1  (port 0 not enabled)
+
+  // port 0 taken?
+  MEM_READR(R0, RTCMEM_PORT0_MODE),                         // R0 = [RTCMEM_PORT0_MODE]
+  M_BGE(PORT1_INIT, MODE_CLK_TAKEN),                        // jump to PORT1_INIT if R0 >= MODE_CLK_TAKEN
 
   // Configure CLK and DAT as inputs
   CONFIGURE_CLK_INPUT(PS2_PORT0),
@@ -417,7 +429,11 @@ M_LABEL(PORT1_INIT),
 
   // port 1 enabled?
   MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
-  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
+  M_BL(MAIN_LOOP0, 1),                                      // go MAIN_LOOP0 if R0 < 1  (port 1 not enabled)
+
+  // port 1 taken?
+  MEM_READR(R0, RTCMEM_PORT1_MODE),                         // R0 = [RTCMEM_PORT1_MODE]
+  M_BGE(MAIN_LOOP0, MODE_CLK_TAKEN),                        // jump to MAIN_LOOP0 if R0 >= MODE_CLK_TAKEN
 
   // Configure CLK and DAT as inputs
   CONFIGURE_CLK_INPUT(PS2_PORT1),
@@ -436,23 +452,45 @@ M_LABEL(PORT1_INIT),
   /////////////////////////////////////////////////////////////////////////////////////////////
 
 
-M_LABEL(MAIN_LOOP),
+M_LABEL(MAIN_LOOP0),
 
-  // is there something to SEND on port 0?
+  // read port 0 mode
   MEM_READR(R0, RTCMEM_PORT0_MODE),                         // R0 = [RTCMEM_PORT0_MODE]
+  // MODE_RELEASE_CLK?
+  M_LONG_BGE(PORT0_RELEASE_CLK, MODE_RELEASE_CLK),          // jump to PORT0_RELEASE_CLK if R0 >= MODE_RELEASE_CLK
+  // MODE_CLK_TAKEN?
+  M_BGE(MAIN_LOOP1, MODE_CLK_TAKEN),                        // jump to MAIN_LOOP1 if R0 >= MODE_CLK_TAKEN
+  // MODE_TAKE_CLK?
+  M_LONG_BGE(PORT0_TAKE_CLK, MODE_TAKE_CLK),                // jump to PORT0_TAKE_CLK if R0 >= MODE_TAKE_CLK
+  // is there something to SEND on port 0?
   M_LONG_BGE(PORT0_SEND_WORD, MODE_SEND),                   // jump to PORT0_SEND_WORD if R0 >= MODE_SEND
+  // perform PORT0 receive
+  M_BX(PORT0_RECEIVE),
 
-  // is there something to SEND on port 1?
+M_LABEL(MAIN_LOOP1),
+
+  // read port 1 mode
   MEM_READR(R0, RTCMEM_PORT1_MODE),                         // R0 = [RTCMEM_PORT1_MODE]
+  // MODE_RELEASE_CLK?
+  M_LONG_BGE(PORT1_RELEASE_CLK, MODE_RELEASE_CLK),          // jump to PORT1_RELEASE_CLK if R0 >= MODE_RELEASE_CLK
+  // MODE_CLK_TAKEN?
+  M_BGE(MAIN_LOOP0, MODE_CLK_TAKEN),                        // jump to MAIN_LOOP0 if R0 >= MODE_CLK_TAKEN
+  // MODE_TAKE_CLK?
+  M_LONG_BGE(PORT1_TAKE_CLK, MODE_TAKE_CLK),                // jump to PORT1_TAKE_CLK if R0 >= MODE_TAKE_CLK
+  // is there something to SEND on port 1?
   M_LONG_BGE(PORT1_SEND_WORD, MODE_SEND),                   // jump to PORT1_SEND_WORD if R0 >= MODE_SEND
+  // perform PORT1 receive
+  M_BX(PORT1_RECEIVE),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   // PORT0 Receive
 
+M_LABEL(PORT0_RECEIVE),
+
   // port 0 enabled?
   MEM_READR(R0, RTCMEM_PORT0_ENABLED),                      // R0 = [RTCMEM_PORT0_ENABLED]
-  M_BL(PORT1_RECEIVE, 1),                                   // go PORT1_RECEIVE if R0 < 1  (port 0 not enabled)
+  M_BL(MAIN_LOOP1, 1),                                      // go MAIN_LOOP1 if R0 < 1  (port 0 not enabled)
 
   // wait for CLK low or high?
   MEM_READR(R1, RTCMEM_PORT0_STATE),                        // R1 = [RTCMEM_PORT0_STATE]
@@ -462,7 +500,7 @@ M_LABEL(MAIN_LOOP),
 
   // ALU result is Zero when [RTCMEM_PORT0_STATE] = CLK, that means "need to wait"
   I_SUBR(R1, R1, R0),                                       // R1 = R1 - R0
-  M_BXZ(PORT1_RECEIVE),                                     // bypass if ALU is ZERO
+  M_BXZ(MAIN_LOOP1),                                        // bypass if ALU is ZERO
 
   // is CLK high?
   M_BGE(PORT0_CLK_IS_HIGH, 1),
@@ -481,7 +519,7 @@ M_LABEL(MAIN_LOOP),
   MEM_INDWRITER(RTCMEM_PORT0_WRITE_POS, R1),                // [[RTCMEM_PORT0_WRITE_POS]] = R1
 
   // check port 1
-  M_BX(PORT1_RECEIVE),
+  M_BX(MAIN_LOOP1),
 
 M_LABEL(PORT0_CLK_IS_HIGH),
 
@@ -493,7 +531,7 @@ M_LABEL(PORT0_CLK_IS_HIGH),
 
   // end of word? if not get another bit
   I_MOVR(R0, R2),                                           // R0 = R2
-  M_BL(PORT1_RECEIVE, 11),                                  // jump to PORT1_RECEIVE if R0 (=R2) < 11
+  M_BL(MAIN_LOOP1, 11),                                     // jump to MAIN_LOOP1 if R0 (=R2) < 11
 
   // End of word
 
@@ -519,7 +557,7 @@ M_LABEL(PORT0_RECEIVE_WORD_READY),
   I_MOVI(R2, 0),                                            // R2 = 0
 
   // do the next job
-  //M_BX(PORT1_RECEIVE),                                      // jump to PORT1_RECEIVE
+  M_BX(MAIN_LOOP1),                                         // jump to MAIN_LOOP1
 
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -533,7 +571,7 @@ M_LABEL(PORT1_RECEIVE),
 
   // port 1 enabled?
   MEM_READR(R0, RTCMEM_PORT1_ENABLED),                      // R0 = [RTCMEM_PORT1_ENABLED]
-  M_BL(MAIN_LOOP, 1),                                       // go MAIN_LOOP if R0 < 1  (port 1 not enabled)
+  M_BL(MAIN_LOOP0, 1),                                      // go MAIN_LOOP0 if R0 < 1  (port 1 not enabled)
 
   // wait for CLK low or high?
   MEM_READR(R1, RTCMEM_PORT1_STATE),                        // R1 = [RTCMEM_PORT1_STATE]
@@ -543,7 +581,7 @@ M_LABEL(PORT1_RECEIVE),
 
   // ALU result is Zero when [RTCMEM_PORT1_STATE] = CLK, that means "need to wait"
   I_SUBR(R1, R1, R0),                                       // R1 = R1 - R0
-  M_BXZ(MAIN_LOOP),                                         // repeat if ALU is ZERO
+  M_BXZ(MAIN_LOOP0),                                        // repeat if ALU is ZERO
 
   // is CLK high?
   M_BGE(PORT1_CLK_IS_HIGH, 1),
@@ -562,7 +600,7 @@ M_LABEL(PORT1_RECEIVE),
   MEM_INDWRITER(RTCMEM_PORT1_WRITE_POS, R1),                // [[RTCMEM_PORT1_WRITE_POS]] = R1
 
   // go to main loop
-  M_BX(MAIN_LOOP),
+  M_BX(MAIN_LOOP0),
 
 M_LABEL(PORT1_CLK_IS_HIGH),
 
@@ -574,7 +612,7 @@ M_LABEL(PORT1_CLK_IS_HIGH),
 
   // end of word? if not get another bit
   I_MOVR(R0, R3),                                           // R0 = R3
-  M_BL(MAIN_LOOP, 11),                                      // jump to MAIN_LOOP if R0 (=R3) < 11
+  M_BL(MAIN_LOOP0, 11),                                     // jump to MAIN_LOOP0 if R0 (=R3) < 11
 
   // End of word
 
@@ -600,7 +638,7 @@ M_LABEL(PORT1_RECEIVE_WORD_READY),
   I_MOVI(R3, 0),                                            // R3 = 0
 
   // go to the main loop
-  M_BX(MAIN_LOOP),
+  M_BX(MAIN_LOOP0),
 
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -775,6 +813,71 @@ M_LABEL(PORT1_SEND_WAIT_FOR_CLK_HIGH),
 
   //
   /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT0 take CLK (CLK output, CLK = LOW)
+
+M_LABEL(PORT0_TAKE_CLK),
+
+  CONFIGURE_CLK_OUTPUT(PS2_PORT0),
+  WRITE_CLK(PS2_PORT0, 0),
+  MEM_WRITEI(RTCMEM_PORT0_MODE, MODE_CLK_TAKEN),
+
+  // go to the main loop
+  M_BX(MAIN_LOOP1),
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT1 take CLK (CLK output, CLK = LOW)
+
+M_LABEL(PORT1_TAKE_CLK),
+
+  CONFIGURE_CLK_OUTPUT(PS2_PORT1),
+  WRITE_CLK(PS2_PORT1, 0),
+  MEM_WRITEI(RTCMEM_PORT1_MODE, MODE_CLK_TAKEN),
+
+  // go to the main loop
+  M_BX(MAIN_LOOP0),
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT0 release CLK (CLK input)
+
+M_LABEL(PORT0_RELEASE_CLK),
+
+  MEM_WRITEI(RTCMEM_PORT0_MODE, MODE_RECEIVE),
+
+  // go to the main loop
+  M_BX(READY_TO_RECEIVE),
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  // PORT1 release CLK (CLK input)
+
+M_LABEL(PORT1_RELEASE_CLK),
+
+  MEM_WRITEI(RTCMEM_PORT1_MODE, MODE_RECEIVE),
+
+  // go to the main loop
+  M_BX(READY_TO_RECEIVE),
+
+  //
+  /////////////////////////////////////////////////////////////////////////////////////////////
+
 
 };
 
@@ -983,6 +1086,30 @@ void PS2Controller::resume()
   if (m_suspendCount <= 0) {
     m_suspendCount = 0;
     SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
+  }
+}
+
+
+void PS2Controller::suspendPort(int PS2Port)
+{
+  uint32_t RTCMEM_PORTX_MODE = (PS2Port == 0 ? RTCMEM_PORT0_MODE : RTCMEM_PORT1_MODE);
+  RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_TAKE_CLK;
+  while (true) {
+    vTaskDelay(1 / portTICK_PERIOD_MS);
+    if ((RTC_SLOW_MEM[RTCMEM_PORTX_MODE] & 0xffff) == MODE_CLK_TAKEN)
+      break;
+  }
+}
+
+
+void PS2Controller::resumePort(int PS2Port)
+{
+  uint32_t RTCMEM_PORTX_MODE = (PS2Port == 0 ? RTCMEM_PORT0_MODE : RTCMEM_PORT1_MODE);
+  RTC_SLOW_MEM[RTCMEM_PORTX_MODE] = MODE_RELEASE_CLK;
+  while (true) {
+    vTaskDelay(1 / portTICK_PERIOD_MS);
+    if ((RTC_SLOW_MEM[RTCMEM_PORTX_MODE] & 0xffff) == MODE_RECEIVE)
+      break;
   }
 }
 

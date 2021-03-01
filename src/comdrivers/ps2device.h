@@ -111,6 +111,21 @@ public:
    */
   void sendCommand(uint8_t cmd);
 
+  /**
+   * @brief Suspends PS/2 port driving the CLK line Low
+   *
+   * Use resumePort() to release CLK line.
+   */
+  void suspendPort();
+
+  /**
+   * @brief Resumes PS/2 port releasing CLK line
+   *
+   * Use suspendPort() to suspend.
+   */
+  void resumePort();
+
+
 protected:
 
   PS2Device();
