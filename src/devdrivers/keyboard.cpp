@@ -616,8 +616,6 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
   if (layout == nullptr)
     layout = m_layout;
 
-  in_vk = manageCAPSLOCK(in_vk);
-
   // this avoids releasing a required key when SHIFT has been pressed after the key but before releasing
   if (!down && isVKDown(in_vk))
     vk = in_vk;
@@ -704,6 +702,9 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
   }
 
   if (item->vk != VK_NONE) {
+
+    // manage CAPSLOCK
+    item->vk = manageCAPSLOCK(item->vk);
 
     // alternate VK (virtualkeys modified by shift, alt, ...)
     item->vk = VKtoAlternateVK(item->vk, item->down);
