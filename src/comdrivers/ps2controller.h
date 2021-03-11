@@ -33,6 +33,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/timers.h"
 
 #include "fabutils.h"
 #include "fabglconf.h"
@@ -114,15 +115,13 @@ public:
   void begin(PS2Preset preset = PS2Preset::KeyboardPort0_MousePort1, KbdMode keyboardMode = KbdMode::CreateVirtualKeysQueue);
 
   /**
-   * @brief Gets the number of scancodes available in the controller buffer.
+   * @brief Determines if one byte has been received from the specified port
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    *
-   * @return The number of scancodes available to read.
+   * @return True if one byte is available
    */
-  int dataAvailable(int PS2Port);
-
-  bool waitData(int timeOutMS, int PS2Port);
+  bool dataAvailable(int PS2Port);
 
   /**
    * @brief Gets a scancode from the queue.
@@ -131,7 +130,7 @@ public:
    *
    * @return The first scancode of the queue (-1 if no data is available).
    */
-  int getData(int PS2Port);
+  int getData(int PS2Port, int timeOutMS);
 
   /**
    * @brief Sends a command to the device.
@@ -142,42 +141,22 @@ public:
   void sendData(uint8_t data, int PS2Port);
 
   /**
-   * @brief Injects a byte into the RX buffer.
+   * @brief Disables inputs from PS/2 port driving the CLK line Low
    *
-   * Injects a byte as if it were actually sent by the device.
-   *
-   * @param value Byte to inject.
-   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
-   */
-  void injectInRXBuffer(int value, int PS2Port);
-
-  /**
-   * @brief Suspends PS/2 ports operations
-   */
-  void suspend();
-
-  /**
-   * @brief Resumes PS/2 ports operations
-   */
-  void resume();
-
-  /**
-   * @brief Suspends PS/2 port driving the CLK line Low
-   *
-   * Use resumePort() to release CLK line.
+   * Use enableRX() to release CLK line.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void suspendPort(int PS2Port);
+  void disableRX(int PS2Port);
 
   /**
-   * @brief Resumes PS/2 port releasing CLK line
+   * @brief Enables inputs from PS/2 port releasing CLK line
    *
-   * Use suspendPort() to suspend.
+   * Use disableRX() to disable inputs from PS/2 port.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void resumePort(int PSPort);
+  void enableRX(int PSPort);
 
   /**
    * @brief Returns the instance of Keyboard object automatically created by PS2Controller.
@@ -202,15 +181,18 @@ public:
    *
    * @return A pointer to PS2Controller singleton object
    */
-  static PS2Controller * instance() { return s_instance; }
+  static PS2Controller * instance()  { return s_instance; }
 
-  void warmInit();
+  bool parityError(int PS2Port)      { return m_parityError[PS2Port]; }
 
-  bool parityError(int PS2Port) { return m_parityError[PS2Port]; }
+  bool syncError(int PS2Port)        { return m_syncError[PS2Port]; }
+
+  bool CLKTimeOutError(int PS2Port)  { return m_CLKTimeOutError[PS2Port]; }
 
 private:
 
-  static void IRAM_ATTR rtc_isr(void * arg);
+
+  static void IRAM_ATTR ULPWakeISR(void * arg);
 
   static PS2Controller * s_instance;
 
@@ -219,21 +201,18 @@ private:
   Keyboard *            m_keyboard;
   Mouse *               m_mouse;
 
-  // address of next word to read in the circular buffer
-  volatile int          m_readPos[2];
+  bool                  m_portEnabled[2];
 
-  // task that is waiting for TX ends
-  volatile TaskHandle_t m_TXWaitTask[2];
+  intr_handle_t         m_ULPWakeISRHandle;
 
-  // task that is waiting for RX event
-  volatile TaskHandle_t m_RXWaitTask[2];
-
-  intr_handle_t         m_isrHandle;
-
-  int16_t               m_suspendCount;       // 0 = not suspended, >0 suspended
-
-  // true if last call to getData() had a parity error
+  // true if last call to getData() had a parity, sync error (start or stop missing bits) or CLK timeout
   bool                  m_parityError[2];
+  bool                  m_syncError[2];
+  bool                  m_CLKTimeOutError[2];
+
+  // one word queue (contains just the last received word)
+  QueueHandle_t         m_dataIn[2];
+
 };
 
 

@@ -90,6 +90,10 @@ public:
 
   bool parityError();
 
+  bool syncError();
+
+  bool CLKTimeOutError();
+
   /**
    * @brief Sends a raw command to the PS/2 device and wait for reply
    *

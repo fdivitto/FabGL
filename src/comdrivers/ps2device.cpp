@@ -120,32 +120,47 @@ bool PS2Device::parityError()
 }
 
 
+bool PS2Device::syncError()
+{
+  return PS2Controller::instance()->syncError(m_PS2Port);
+}
+
+
+bool PS2Device::CLKTimeOutError()
+{
+  return PS2Controller::instance()->CLKTimeOutError(m_PS2Port);
+}
+
+
 void PS2Device::suspendPort()
 {
-  PS2Controller::instance()->suspendPort(m_PS2Port);
+  PS2Controller::instance()->disableRX(m_PS2Port);
 }
 
 
 void PS2Device::resumePort()
 {
-  PS2Controller::instance()->resumePort(m_PS2Port);
+  PS2Controller::instance()->enableRX(m_PS2Port);
 }
 
 
 int PS2Device::getData(int timeOutMS)
 {
-  TimeOut timeout;
+  constexpr int INTER_GETDATA_TIMEOUT_MS = 100;
+  constexpr int INTER_GETDATA_PAUSE_MS   = 10;
+
+  int interTimeOut = timeOutMS > -1 ? imin(timeOutMS, INTER_GETDATA_TIMEOUT_MS) : INTER_GETDATA_TIMEOUT_MS;
+
   int ret = -1;
-  while (!timeout.expired(timeOutMS)) {
+  TimeOut timeout;
+  while (true) {
     lock(-1);
-    ret = PS2Controller::instance()->getData(m_PS2Port);
+    ret = PS2Controller::instance()->getData(m_PS2Port, interTimeOut);
     unlock();
-    if (ret > -1 || parityError())
+    if (ret > -1 || parityError() || syncError() || CLKTimeOutError() || timeout.expired(timeOutMS))
       break;
-    lock(-1);
-    PS2Controller::instance()->waitData((timeOutMS > -1 ? timeOutMS : m_cmdSubTimeOut), m_PS2Port);
-    unlock();
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+    // give the opportunity for other sends
+    vTaskDelay(INTER_GETDATA_PAUSE_MS / portTICK_PERIOD_MS);
   }
   return ret;
 }
@@ -153,12 +168,14 @@ int PS2Device::getData(int timeOutMS)
 
 bool PS2Device::sendCommand(uint8_t cmd, uint8_t expectedReply)
 {
-  for (int i = 0; i < m_retryCount; ++i) {
-    PS2Controller::instance()->sendData(cmd, m_PS2Port);
-    if (getData(m_cmdTimeOut) != expectedReply)
-      continue;
-    return true;
-  }
+  constexpr int INTER_WAITREPLY_TIMEOUT_MS = 10;
+
+  PS2Controller::instance()->sendData(cmd, m_PS2Port);
+  TimeOut timeout;
+  do {
+    if (getData(INTER_WAITREPLY_TIMEOUT_MS) == expectedReply)
+      return true;
+  } while (!timeout.expired(m_cmdTimeOut));
   return false;
 }
 
@@ -178,10 +195,7 @@ void PS2Device::requestToResendLastByte()
 bool PS2Device::send_cmdLEDs(bool numLock, bool capsLock, bool scrollLock)
 {
   PS2DeviceLock deviceLock(this);
-  if (!sendCommand(PS2_CMD_SETLEDS, PS2_REPLY_ACK))
-    return false;
-  bool ret = sendCommand((scrollLock << 0) | (numLock << 1) | (capsLock << 2), PS2_REPLY_ACK);
-  return ret;
+  return sendCommand(PS2_CMD_SETLEDS, PS2_REPLY_ACK) && sendCommand((scrollLock << 0) | (numLock << 1) | (capsLock << 2), PS2_REPLY_ACK);
 }
 
 

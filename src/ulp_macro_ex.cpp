@@ -30,6 +30,8 @@
 
 #include "sdkconfig.h"
 
+#include "ulp_macro_ex.h"
+
 // fabgl =>
 #undef CONFIG_ULP_COPROC_RESERVE_MEM
 #define CONFIG_ULP_COPROC_RESERVE_MEM 2048
@@ -136,6 +138,7 @@ static esp_err_t do_single_reloc(ulp_insn_t* program, uint32_t load_addr,
     assert(insn->b.opcode == OPCODE_BRANCH
             && "branch macro was applied to a non-branch instruction");
     switch (insn->b.sub_opcode) {
+        case SUB_OPCODE_STAGEB:
         case SUB_OPCODE_B: {
             int32_t offset = ((int32_t) label_info.addr) - ((int32_t) branch_info.addr);
 ESP_LOGW(TAG, "%d\n", offset);

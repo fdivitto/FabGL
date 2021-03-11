@@ -167,6 +167,10 @@ int Keyboard::getNextScancode(int timeOutMS, bool requestResendOnTimeOut)
 {
   while (true) {
     int r = getData(timeOutMS);
+    if (r == -1 && CLKTimeOutError()) {
+      // try to recover a stall sending a re-enable scanning command
+      send_cmdEnableScanning();
+    }
     if (r == -1 && requestResendOnTimeOut) {
       requestToResendLastByte();
       continue;
