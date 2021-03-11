@@ -81,7 +81,7 @@
 
 
 /** Stack size of the task that converts scancodes to Virtual Keys Keyboard */
-#define FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE 1000
+#define FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE 1500
 
 
 /** Priority of the task that converts scancodes to Virtual Keys Keyboard */
