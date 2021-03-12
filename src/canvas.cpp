@@ -116,6 +116,9 @@ void Canvas::reset()
   Primitive p;
   p.cmd = PrimitiveCmd::Reset;
   m_displayController->addPrimitive(p);
+  m_origin = Point(0, 0);
+  m_clippingRect = INVALIDRECT;
+  m_textHorizRate = 1;
 }
 
 
