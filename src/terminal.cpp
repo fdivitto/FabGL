@@ -161,6 +161,12 @@ const char * CTRLCHAR_TO_STR[] = {"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK
 #define FABGLEXT_GSPRITESET     "SPRITESET"
 
 
+// specifies color attribute index for m_coloredAttributesColor[]
+#define COLORED_ATTRIBUTE_BOLD      0
+#define COLORED_ATTRIBUTE_FAINT     1
+#define COLORED_ATTRIBUTE_ITALIC    2
+#define COLORED_ATTRIBUTE_UNDERLINE 3
+#define COLORED_ATTRIBUTE_INVALID   4
 
 
 
@@ -357,6 +363,10 @@ bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, 
   // cursor setup
   m_cursorState = false;
   m_emuState.cursorEnabled = false;
+
+  // colored attributes
+  m_coloredAttributesMaintainStyle = true;
+  m_coloredAttributesMask = 0;
 
   m_mutex = xSemaphoreCreateMutex();
 
@@ -867,6 +877,42 @@ void Terminal::int_setForegroundColor(Color color)
     else
       static_cast<TextualDisplayController*>(m_displayController)->setCursorForeground(color);
   }
+}
+
+
+int CharStyleToColorAttributeIndex(CharStyle attribute)
+{
+  switch (attribute) {
+    case CharStyle::Bold:
+      return COLORED_ATTRIBUTE_BOLD;
+    case CharStyle::ReducedLuminosity:
+      return COLORED_ATTRIBUTE_FAINT;
+    case CharStyle::Italic:
+      return COLORED_ATTRIBUTE_ITALIC;
+    case CharStyle::Underline:
+      return COLORED_ATTRIBUTE_UNDERLINE;
+    default:
+      return COLORED_ATTRIBUTE_INVALID;
+  }
+}
+
+
+void Terminal::setColorForAttribute(CharStyle attribute, Color color, bool maintainStyle)
+{
+  int cindex = CharStyleToColorAttributeIndex(attribute);
+  if (cindex != COLORED_ATTRIBUTE_INVALID) {
+    m_coloredAttributesMask |= 1 << cindex;
+    m_coloredAttributesColor[cindex] = color;
+    m_coloredAttributesMaintainStyle = maintainStyle;
+  }
+}
+
+
+void Terminal::setColorForAttribute(CharStyle attribute)
+{
+  int cindex = CharStyleToColorAttributeIndex(attribute);
+  if (cindex != COLORED_ATTRIBUTE_INVALID)
+    m_coloredAttributesMask &= ~(1 << cindex);
 }
 
 
@@ -2050,6 +2096,38 @@ void Terminal::convQueue(const char * str, bool fromISR)
 }
 
 
+uint32_t Terminal::makeGlyphItem(uint8_t c, GlyphOptions * glyphOptions, Color * newForegroundColor)
+{
+  *newForegroundColor = m_emuState.foregroundColor;
+
+  if (glyphOptions->bold && (m_coloredAttributesMask & (1 << COLORED_ATTRIBUTE_BOLD))) {
+    *newForegroundColor = m_coloredAttributesColor[COLORED_ATTRIBUTE_BOLD];
+    if (!m_coloredAttributesMaintainStyle)
+      glyphOptions->bold = 0;
+  }
+
+  if (glyphOptions->reduceLuminosity && (m_coloredAttributesMask & (1 << COLORED_ATTRIBUTE_FAINT))) {
+    *newForegroundColor = m_coloredAttributesColor[COLORED_ATTRIBUTE_FAINT];
+    if (!m_coloredAttributesMaintainStyle)
+      glyphOptions->reduceLuminosity = 0;
+  }
+
+  if (glyphOptions->italic && (m_coloredAttributesMask & (1 << COLORED_ATTRIBUTE_ITALIC))) {
+    *newForegroundColor = m_coloredAttributesColor[COLORED_ATTRIBUTE_ITALIC];
+    if (!m_coloredAttributesMaintainStyle)
+      glyphOptions->italic = 0;
+  }
+
+  if (glyphOptions->underline && (m_coloredAttributesMask & (1 << COLORED_ATTRIBUTE_UNDERLINE))) {
+    *newForegroundColor = m_coloredAttributesColor[COLORED_ATTRIBUTE_UNDERLINE];
+    if (!m_coloredAttributesMaintainStyle)
+      glyphOptions->underline = 0;
+  }
+
+  return GLYPHMAP_ITEM_MAKE(c, m_emuState.backgroundColor, *newForegroundColor, *glyphOptions);
+}
+
+
 // set specified character at current cursor position
 // return true if vertical scroll happened
 bool Terminal::setChar(uint8_t c)
@@ -2074,16 +2152,26 @@ bool Terminal::setChar(uint8_t c)
   // doubleWidth must be maintained
   uint32_t * mapItemPtr = m_glyphsBuffer.map + (m_emuState.cursorX - 1) + (m_emuState.cursorY - 1) * m_columns;
   glyphOptions.doubleWidth = glyphMapItem_getOptions(mapItemPtr).doubleWidth;
-  *mapItemPtr = GLYPHMAP_ITEM_MAKE(c, m_emuState.backgroundColor, m_emuState.foregroundColor, glyphOptions);
+  Color newForegroundColor;
+  *mapItemPtr = makeGlyphItem(c, &glyphOptions, &newForegroundColor);
 
   if (m_bitmappedDisplayController && isActive()) {
+
+    // Instead of this boring stuff we may also just call:
+    //   m_canvas->renderGlyphsBuffer(m_emuState.cursorX - 1, m_emuState.cursorY - 1, &m_glyphsBuffer);
+    // and then *synch*, but it may be slower. Further tests required.
+
     if (glyphOptions.value != m_glyphOptions.value)
       m_canvas->setGlyphOptions(glyphOptions);
+    if (newForegroundColor != m_emuState.foregroundColor)
+      m_canvas->setPenColor(newForegroundColor);
 
     int x = (m_emuState.cursorX - 1) * m_font.width * (glyphOptions.doubleWidth ? 2 : 1);
     int y = (m_emuState.cursorY - 1) * m_font.height;
     m_canvas->drawGlyph(x, y, m_font.width, m_font.height, m_font.data, c);
 
+    if (newForegroundColor != m_emuState.foregroundColor)
+      m_canvas->setPenColor(m_emuState.foregroundColor);
     if (glyphOptions.value != m_glyphOptions.value)
       m_canvas->setGlyphOptions(m_glyphOptions);
   }

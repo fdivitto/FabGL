@@ -1383,6 +1383,27 @@ public:
    */
   bool isActive() { return s_activeTerminal == this; }
 
+  /**
+   * @brief Selects a color for the specified attribute
+   *
+   * This method allows to indicate a color when the terminal prints a character with a specific attribute.
+   * If a character has multiple attributes then the resulting color is undefined.
+   * To disable attribute color call the other setColorForAttribute() overload.
+   *
+   * @param attribute Style/attribute to set color. Only CharStyle::Bold, CharStyle::ReducedLuminosity, CharStyle::Italic and CharStyle::Underline are supported
+   * @param color Color of the attribute
+   * @param maintainStyle If True style is applied. If False just the specified color is applied.
+   */
+  void setColorForAttribute(CharStyle attribute, Color color, bool maintainStyle);
+
+  /**
+   * @brief Disables color for the specified attribute
+   *
+   * This method disables color specification for the specified attribute.
+   *
+   * @param attribute Style/attribute to disable color. Only CharStyle::Bold, CharStyle::ReducedLuminosity, CharStyle::Italic and CharStyle::Underline are supported
+   */
+  void setColorForAttribute(CharStyle attribute);
 
   //// Delegates ////
 
@@ -1566,6 +1587,8 @@ private:
 
   void freeSprites();
 
+  uint32_t makeGlyphItem(uint8_t c, GlyphOptions * glyphOptions, Color * newForegroundColor);
+
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
 
@@ -1685,6 +1708,10 @@ private:
 
   Sprite *                  m_sprites;
   int                       m_spritesCount;
+
+  bool                      m_coloredAttributesMaintainStyle;
+  int                       m_coloredAttributesMask;    // related bit 1 if enabled
+  Color                     m_coloredAttributesColor[4];
 
 };
 
