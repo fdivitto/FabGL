@@ -47,8 +47,11 @@ namespace fabgl {
  */
 enum class PS2Preset {
   KeyboardPort0_MousePort1,   /**< Keyboard on Port 0 and Mouse on Port 1 */
+  KeyboardPort1_MousePort0,   /**< Keyboard on Port 1 and Mouse on Port 0 */
   KeyboardPort0,              /**< Keyboard on Port 0 (no mouse) */
+  KeyboardPort1,              /**< Keyboard on Port 1 (no mouse) */
   MousePort0,                 /**< Mouse on port 0 (no keyboard) */
+  MousePort1,                 /**< Mouse on port 1 (no keyboard) */
 };
 
 
