@@ -196,6 +196,31 @@ void demo5()
   Terminal.write("\e[20l"); // automatic new line off
 }
 
+void demo6()
+{
+  Terminal.write("\e[40;32m"); // background: black, foreground: green
+  Terminal.setColorForAttribute(CharStyle::Bold, Color::BrightYellow, true);
+  Terminal.setColorForAttribute(CharStyle::Italic, Color::BrightRed, true);
+  Terminal.setColorForAttribute(CharStyle::Underline, Color::BrightWhite, true);
+  slowPrintf("\nColored Attributes with styles:\r\n");
+  slowPrintf("\e[0mNormal\r\n");
+  slowPrintf("\e[1mBold\e[0m\r\n");
+  slowPrintf("\e[3mItalic\e[0m\r\n");
+  slowPrintf("\e[4mUnderlined\e[0m\r\n");
+
+  delay(1000);
+
+  Terminal.setColorForAttribute(CharStyle::Bold, Color::BrightYellow, false);
+  Terminal.setColorForAttribute(CharStyle::Italic, Color::BrightRed, false);
+  Terminal.setColorForAttribute(CharStyle::Underline, Color::BrightWhite, false);
+  slowPrintf("\nColored Attributes without styles:\r\n");
+  slowPrintf("\e[0mNormal\r\n");
+  slowPrintf("\e[1mBold\e[0m\r\n");
+  slowPrintf("\e[3mItalic\e[0m\r\n");
+  slowPrintf("\e[4mUnderlined\e[0m\r\n");
+}
+
+
 void loop()
 {
   delay(1000);
@@ -208,4 +233,7 @@ void loop()
   demo4();
   delay(4000);
   demo5();
+  delay(4000);
+  demo6();
+  delay(4000);
 }
