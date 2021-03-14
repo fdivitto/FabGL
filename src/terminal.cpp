@@ -3459,28 +3459,35 @@ void Terminal::consumeOSC()
 }
 
 
-void Terminal::sound(int waveform, int frequency, int duration, int volume)
+SoundGenerator * Terminal::soundGenerator()
 {
   if (!m_soundGenerator)
     m_soundGenerator = new SoundGenerator;
+  return m_soundGenerator;
+}
+
+
+void Terminal::sound(int waveform, int frequency, int duration, int volume)
+{
+  auto sg = soundGenerator();  // make sure m_soundGenerator is valid
   switch (waveform) {
     case '0':
-      m_soundGenerator->playSound(SineWaveformGenerator(), frequency, duration, volume);
+      sg->playSound(SineWaveformGenerator(), frequency, duration, volume);
       break;
     case '1':
-      m_soundGenerator->playSound(SquareWaveformGenerator(), frequency, duration, volume);
+      sg->playSound(SquareWaveformGenerator(), frequency, duration, volume);
       break;
     case '2':
-      m_soundGenerator->playSound(TriangleWaveformGenerator(), frequency, duration, volume);
+      sg->playSound(TriangleWaveformGenerator(), frequency, duration, volume);
       break;
     case '3':
-      m_soundGenerator->playSound(SawtoothWaveformGenerator(), frequency, duration, volume);
+      sg->playSound(SawtoothWaveformGenerator(), frequency, duration, volume);
       break;
     case '4':
-      m_soundGenerator->playSound(NoiseWaveformGenerator(), frequency, duration, volume);
+      sg->playSound(NoiseWaveformGenerator(), frequency, duration, volume);
       break;
     case '5':
-      m_soundGenerator->playSound(VICNoiseGenerator(), frequency, duration, volume);
+      sg->playSound(VICNoiseGenerator(), frequency, duration, volume);
       break;
   }
 }

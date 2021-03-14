@@ -1405,6 +1405,14 @@ public:
    */
   void setColorForAttribute(CharStyle attribute);
 
+  /**
+   * @brief Gets embedded sound generator
+   *
+   * @return SoundGenerator object
+   */
+  SoundGenerator * soundGenerator();
+
+
   //// Delegates ////
 
   /**
