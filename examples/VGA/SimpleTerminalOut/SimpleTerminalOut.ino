@@ -218,6 +218,10 @@ void demo6()
   slowPrintf("\e[1mBold\e[0m\r\n");
   slowPrintf("\e[3mItalic\e[0m\r\n");
   slowPrintf("\e[4mUnderlined\e[0m\r\n");
+
+  Terminal.setColorForAttribute(CharStyle::Bold);
+  Terminal.setColorForAttribute(CharStyle::Italic);
+  Terminal.setColorForAttribute(CharStyle::Underline);
 }
 
 
