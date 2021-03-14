@@ -561,6 +561,9 @@ VirtualKey Keyboard::scancodeToVK(uint8_t scancode, bool isExtended, KeyboardLay
   // NUMLOCK OFF           => generate VK_KP_cursor_control
   if (m_NUMLOCK & !m_SHIFT) {
     switch (vk) {
+      case VK_KP_DELETE:
+        vk = VK_KP_PERIOD;
+        break;
       case VK_KP_INSERT:
         vk = VK_KP_0;
         break;
