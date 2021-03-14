@@ -67,6 +67,15 @@ void setup()
   print_info();
 
   Terminal.enableCursor(true);
+
+  /*
+  // do you want sound on key press? ;-)
+  Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
+    if (keyDown)
+      Terminal.soundGenerator()->playSound(VICNoiseGenerator(), (*vk == VirtualKey::VK_RETURN ? 90 : 120), 10);;
+      Terminal.soundGenerator()->playSound(SquareWaveformGenerator(), (*vk == VirtualKey::VK_RETURN ? 1000 : 2000), 4);;
+  };
+  */
 }
 
 
