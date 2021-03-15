@@ -55,7 +55,7 @@ void printHelp()
   xprintf("Commands:\r\n");
   xprintf("  1 = US Layout       2 = UK Layout       3 = DE Layout\r\n");
   xprintf("  4 = IT Layout       5 = ES Layout\r\n");
-  xprintf("  r = Reset           s = Scancode Mode   a = VirtualKey/ASCII Mode\r\n");
+  xprintf("  r = Reset\r\n");
   xprintf("  q = Scancode set 1  w = Scancode set 2\r\n");
   xprintf("  l = Test LEDs\r\n");
   xprintf("Various:\r\n");
@@ -124,7 +124,6 @@ void loop()
 {
   auto keyboard = PS2Controller.keyboard();
 
-  static char mode = 'a';
   //static fabgl::VirtualKey lastvk = fabgl::VK_NONE; // avoid to repeat last vk
 
   if (Serial.available() > 0) {
@@ -157,16 +156,6 @@ void loop()
         keyboard->reset();
         printInfo();
         break;
-      case 's':
-        mode = 's';
-        keyboard->suspendVirtualKeyGeneration(true);
-        xprintf("Scancode mode\r\n");
-        break;
-      case 'a':
-        mode = 'a';
-        keyboard->suspendVirtualKeyGeneration(false);
-        xprintf("VirtualKey/ASCII mode\r\n");
-        break;
       case 'l':
         for (int i = 0; i < 8; ++i) {
           keyboard->setLEDs(i & 1, i & 2, i & 4);
@@ -187,10 +176,7 @@ void loop()
     }
   }
 
-  if (mode == 's' && keyboard->scancodeAvailable()) {
-    // scancode mode (show scancodes). Because we are using virtual keys, the scancode set here is always 2.
-    xprintf("Scancode = 0x%02X\r\n", keyboard->getNextScancode());
-  } else if (keyboard->virtualKeyAvailable()) {
+  if (keyboard->virtualKeyAvailable()) {
     // ascii mode (show ASCIIl, VirtualKeys and scancodes)
     VirtualKeyItem item;
     if (keyboard->getNextVirtualKey(&item)) {

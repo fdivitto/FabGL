@@ -278,7 +278,6 @@ public:
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
    * method Keyboard.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
-   * Alternatively it is also possible to suspend the conversion task calling Keyboard.suspendVirtualKeyGeneration() method.
    *
    * @return The number of scancodes available to read.
    */
@@ -289,7 +288,6 @@ public:
    *
    * Scancodes are always generated but they can be consumed by the scancode-to-virtualkeys task. So, in order to use this
    * method Keyboard.begin() method should be called with generateVirtualKeys = false and createVKQueue = false.<br>
-   * Alternatively it is also possible to suspend the conversion task calling Keyboard.suspendVirtualKeyGeneration() method.
    *
    * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
    * @param requestResendOnTimeOut If true and timeout has expired then asks the keyboard to resend the scancode.
@@ -297,16 +295,6 @@ public:
    * @return The first scancode of the queue (-1 if no data is available in the timeout period).
    */
   int getNextScancode(int timeOutMS = -1, bool requestResendOnTimeOut = false);
-
-  /**
-   * @brief Suspends or resume the virtual key generation task.
-   *
-   * Use this method to temporarily suspend the scancode to virtual key conversion task. This is useful when
-   * scancode are necessary for a limited time.
-   *
-   * @param value If true conversion task is suspended. If false conversion task is resumed.
-   */
-  void suspendVirtualKeyGeneration(bool value);
 
   /**
    * @brief Sets keyboard LEDs status.

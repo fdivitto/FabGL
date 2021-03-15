@@ -945,15 +945,6 @@ void Keyboard::SCodeToVKConverterTask(void * pvParameters)
 }
 
 
-void Keyboard::suspendVirtualKeyGeneration(bool value)
-{
-  if (value)
-    vTaskSuspend(m_SCodeToVKConverterTask);
-  else
-    vTaskResume(m_SCodeToVKConverterTask);
-}
-
-
 bool Keyboard::isVKDown(VirtualKey virtualKey)
 {
   bool r = m_VKMap[(int)virtualKey >> 3] & (1 << ((int)virtualKey & 7));

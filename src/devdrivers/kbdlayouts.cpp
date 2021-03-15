@@ -154,7 +154,8 @@ const KeyboardLayout USLayout {
     { 0x6B, VK_LEFT },
     { 0x74, VK_RIGHT },
     { 0x7C, VK_PRINTSCREEN },
-    // pressing CTRL + PAUSE will generate "E0 7E" instead of normal Pause sequence. Here is translated to VK_BREAK.
+    // note1: pressing CTRL + PAUSE will generate "E0 7E" instead of normal Pause sequence. Here is translated to VK_BREAK.
+    // note2: pressing CTRL + PAUSE generates both keydown and keyup at the same time (hence the sequence E0 7E E0 F0 7E)
     { 0x7E, VK_BREAK },
     // these codes are discarded. They are a sort of extended left and right shifts.
     // They are prefixed/postfixed on some special keys (insert, cursor,...) in combination with SHIFT or NUM LOCK, and even in unshifted PRINTSCREEN
