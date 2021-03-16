@@ -293,6 +293,9 @@ namespace fabgl {
 // TX maximum time between CLK cycles
 #define CLK_TX_TIMEOUT_VAL 500
 
+// counter (RTCMEM_COUNTER) wake value
+#define WAKE_THRESHOLD     10000
+
 
 // check RTC memory occupation
 #if RTCMEM_LASTVAR >= 0x800
@@ -328,6 +331,8 @@ namespace fabgl {
 #define LABEL_PORT1_RX_CLK_IS_HIGH    20
 #define LABEL_PORT1_RX_CLK_IS_LOW     21
 #define LABEL_PORT1_RX_CLK_TIMEOUT    22
+
+#define LABEL_COUNTER_WAKE            23
 
 
 // Helpers
@@ -402,6 +407,7 @@ M_LABEL(LABEL_WAIT_COMMAND),
   I_LD(R0, R3, RTCMEM_COUNTER),
   I_ADDI(R0, R0, 1),
   I_ST(R0, R3, RTCMEM_COUNTER),
+  M_BGE(LABEL_COUNTER_WAKE, WAKE_THRESHOLD),
 
   // port 0 TX?
   I_LD(R0, R3, RTCMEM_PORT0_TX),
@@ -432,6 +438,16 @@ M_LABEL(LABEL_WAIT_COMMAND),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
+  // LABEL_COUNTER_WAKE
+
+M_LABEL(LABEL_COUNTER_WAKE),
+  I_WAKE(),
+  I_MOVI(R0, 0),
+  I_ST(R0, R3, RTCMEM_COUNTER),
+  M_BX(LABEL_RX),
+
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
   // LABEL_PORT0_ENABLE_RX - Configure port 0 as RX
 
 M_LABEL(LABEL_PORT0_ENABLE_RX),
@@ -448,7 +464,7 @@ M_LABEL(LABEL_PORT0_ENABLE_RX),
   I_MOVI(R0, 0),
   I_ST(R0, R3, RTCMEM_PORT0_RX_ENABLE),                   // [RTCMEM_PORT0_RX_ENABLE] = 0
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -468,7 +484,7 @@ M_LABEL(LABEL_PORT1_ENABLE_RX),
   I_MOVI(R0, 0),
   I_ST(R0, R3, RTCMEM_PORT1_RX_ENABLE),                   // [RTCMEM_PORT1_RX_ENABLE] = 0
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -482,7 +498,7 @@ M_LABEL(LABEL_PORT0_STOP_RX),
   I_MOVI(R0, 0),
   I_ST(R0, R3, RTCMEM_PORT0_RX_DISABLE),                 // [RTCMEM_PORT0_RX_DISABLE] = 0
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,7 +512,7 @@ M_LABEL(LABEL_PORT1_STOP_RX),
   I_MOVI(R0, 0),
   I_ST(R0, R3, RTCMEM_PORT1_RX_DISABLE),                 // [RTCMEM_PORT1_RX_DISABLE] = 0
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -588,7 +604,7 @@ M_LABEL(LABEL_PORT0_TX_EXIT),
   TEMP_PORT1_ENABLE(),
 
   // go to command loop
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -680,7 +696,7 @@ M_LABEL(LABEL_PORT1_TX_EXIT),
   TEMP_PORT0_ENABLE(),
 
   // go to command loop
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -703,7 +719,7 @@ M_LABEL(LABEL_PORT0_RX_CLK_TIMEOUT),
 
   I_WAKE(),
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -726,7 +742,7 @@ M_LABEL(LABEL_PORT1_RX_CLK_TIMEOUT),
 
   I_WAKE(),
 
-  M_BX(LABEL_WAIT_COMMAND),
+  M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
