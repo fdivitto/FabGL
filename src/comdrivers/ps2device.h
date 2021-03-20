@@ -160,7 +160,6 @@ protected:
 
 private:
 
-  SemaphoreHandle_t m_deviceLock;
   int16_t           m_PS2Port;
   int16_t           m_retryCount;
   int16_t           m_cmdTimeOut;

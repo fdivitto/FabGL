@@ -1137,6 +1137,7 @@ void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gp
     enableRX(p);
     m_parityError[p] = m_syncError[p] = false;
     m_dataIn[p] = (m_portEnabled[p] ? xQueueCreate(1, sizeof(uint16_t)) : nullptr);
+    m_portLock[p] = (m_portEnabled[p] ? xSemaphoreCreateRecursiveMutex() : nullptr);
   }
 
   // ULP start
@@ -1250,6 +1251,20 @@ void PS2Controller::sendData(uint8_t data, int PS2Port)
     RTC_SLOW_MEM[RTCMEM_PORT0_TX + PS2Port]      = 1;
   }
 }
+
+
+bool PS2Controller::lock(int PS2Port, int timeOutMS)
+{
+  return m_portEnabled[PS2Port] ? xSemaphoreTakeRecursive(m_portLock[PS2Port], msToTicks(timeOutMS)) : true;
+}
+
+
+void PS2Controller::unlock(int PS2Port)
+{
+  if (m_portEnabled[PS2Port])
+    xSemaphoreGiveRecursive(m_portLock[PS2Port]);
+}
+
 
 
 void IRAM_ATTR PS2Controller::ULPWakeISR(void * arg)

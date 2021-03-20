@@ -72,13 +72,11 @@ PS2Device::PS2Device()
   m_retryCount    = PS2_DEFAULT_CMD_RETRY_COUNT;
   m_cmdTimeOut    = PS2_DEFAULT_CMD_TIMEOUT;
   m_cmdSubTimeOut = PS2_DEFAULT_CMD_SUBTIMEOUT;
-  m_deviceLock    = xSemaphoreCreateRecursiveMutex();
 }
 
 
 PS2Device::~PS2Device()
 {
-  vSemaphoreDelete(m_deviceLock);
 }
 
 
@@ -92,13 +90,13 @@ void PS2Device::quickCheckHardware()
 
 bool PS2Device::lock(int timeOutMS)
 {
-  return xSemaphoreTakeRecursive(m_deviceLock, msToTicks(timeOutMS));
+  return PS2Controller::instance()->lock(m_PS2Port, timeOutMS);
 }
 
 
 void PS2Device::unlock()
 {
-  xSemaphoreGiveRecursive(m_deviceLock);
+  PS2Controller::instance()->unlock(m_PS2Port);
 }
 
 

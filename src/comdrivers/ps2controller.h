@@ -192,6 +192,24 @@ public:
 
   bool CLKTimeOutError(int PS2Port)  { return m_CLKTimeOutError[PS2Port]; }
 
+  /**
+   * @brief Gets exclusive access to the specified PS/2 port
+   *
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   * @param timeOutMS Timeout in milliseconds to wait before fail.
+   *
+   * @return True if the device has been locked.
+   */
+  bool lock(int PS2Port, int timeOutMS);
+
+  /**
+   * @brief Releases port from exclusive access.
+   *
+   * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   */
+  void unlock(int PS2Port);
+
+
 private:
 
 
@@ -215,6 +233,8 @@ private:
 
   // one word queue (contains just the last received word)
   QueueHandle_t         m_dataIn[2];
+
+  SemaphoreHandle_t     m_portLock[2];
 
 };
 
