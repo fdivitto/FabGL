@@ -248,6 +248,9 @@ namespace fabgl {
     I_STAGEBL(2, imm_value), \
     M_BX(label_num)
 
+// ULP clock is 8MHz, so every cycle takes 0.125us and 1us = 8 cycles
+#define M_DELAY_US(us) I_DELAY(us * 8)
+
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -282,9 +285,7 @@ namespace fabgl {
 #define RTCMEM_PORT0_RX_ENABLED     (RTCMEM_VARS_START + 14)  // 0 = port 0 not configured for RX, 1 = port 0 configured for RX
 #define RTCMEM_PORT1_RX_ENABLED     (RTCMEM_VARS_START + 15)  // 0 = port 1 not configured for RX, 1 = port 1 configured for RX
 
-#define RTCMEM_COUNTER              (RTCMEM_VARS_START + 16)
-
-#define RTCMEM_LASTVAR              (RTCMEM_VARS_START + 16)
+#define RTCMEM_LASTVAR              (RTCMEM_VARS_START + 15)
 
 
 // RX maximum time between CLK cycles (reliable minimum is about 15)
@@ -293,8 +294,8 @@ namespace fabgl {
 // TX maximum time between CLK cycles
 #define CLK_TX_TIMEOUT_VAL 500
 
-// counter (RTCMEM_COUNTER) wake value
-#define WAKE_THRESHOLD     10000
+// counter (R2) re-wake value
+#define WAKE_THRESHOLD     3000
 
 
 // check RTC memory occupation
@@ -320,19 +321,19 @@ namespace fabgl {
 #define LABEL_PORT0_RX_CLK_IS_HIGH    10
 #define LABEL_PORT0_RX_CLK_IS_LOW     11
 #define LABEL_PORT0_RX_CLK_TIMEOUT    12
+#define LABEL_PORT0_RX_CHECK_CLK      13
 
-#define LABEL_PORT1_ENABLE_RX         13
-#define LABEL_PORT1_STOP_RX           14
-#define LABEL_PORT1_TX                15
-#define LABEL_PORT1_TX_NEXT_BIT       16
-#define LABEL_PORT1_TX_WAIT_CLK_HIGH  17
-#define LABEL_PORT1_TX_EXIT           18
-#define LABEL_PORT1_RX_WAIT_LOOP      19
-#define LABEL_PORT1_RX_CLK_IS_HIGH    20
-#define LABEL_PORT1_RX_CLK_IS_LOW     21
-#define LABEL_PORT1_RX_CLK_TIMEOUT    22
-
-#define LABEL_COUNTER_WAKE            23
+#define LABEL_PORT1_ENABLE_RX         14
+#define LABEL_PORT1_STOP_RX           15
+#define LABEL_PORT1_TX                16
+#define LABEL_PORT1_TX_NEXT_BIT       17
+#define LABEL_PORT1_TX_WAIT_CLK_HIGH  18
+#define LABEL_PORT1_TX_EXIT           19
+#define LABEL_PORT1_RX_WAIT_LOOP      20
+#define LABEL_PORT1_RX_CLK_IS_HIGH    21
+#define LABEL_PORT1_RX_CLK_IS_LOW     22
+#define LABEL_PORT1_RX_CLK_TIMEOUT    23
+#define LABEL_PORT1_RX_CHECK_CLK      24
 
 
 // Helpers
@@ -388,6 +389,30 @@ namespace fabgl {
   WRITE_CLK(PS2_PORT1, 0)
 
 
+/*
+  Notes about ULP registers usage
+
+    R0:
+      General purpose temporary accumulator
+
+    R1:
+      General purpose temporary register
+
+    R2:
+      LABEL_PORT0_TX / LABEL_PORT1_TX: Word to send. Reset to 0 on exit.
+      LABEL_RX: Re-wake counter register, when port 0 or port 1 is disabled.
+                General purpose temporary register on receiving data (reset at the end or timeout).
+
+    R3:
+      Base address for variables (0x0000)
+      LABEL_PORT0_TX / LABEL_PORT1_TX: timeout counter waiting for CLK to be Low
+      LABEL_RX: timeout counter waiting for CLK changes
+
+    STAGE:
+      RX, TX bit counter
+
+*/
+
 
 const ulp_insn_t ULP_code[] = {
 
@@ -403,11 +428,6 @@ const ulp_insn_t ULP_code[] = {
   // Command wait main loop
 
 M_LABEL(LABEL_WAIT_COMMAND),
-
-  I_LD(R0, R3, RTCMEM_COUNTER),
-  I_ADDI(R0, R0, 1),
-  I_ST(R0, R3, RTCMEM_COUNTER),
-  M_BGE(LABEL_COUNTER_WAKE, WAKE_THRESHOLD),
 
   // port 0 TX?
   I_LD(R0, R3, RTCMEM_PORT0_TX),
@@ -434,16 +454,6 @@ M_LABEL(LABEL_WAIT_COMMAND),
   M_BGE(LABEL_PORT1_STOP_RX, 1),                          // yes, jump to LABEL_PORT1_STOP_RX
 
   // check RX from port 0 or port 1
-  M_BX(LABEL_RX),
-
-
-  /////////////////////////////////////////////////////////////////////////////////////////////
-  // LABEL_COUNTER_WAKE
-
-M_LABEL(LABEL_COUNTER_WAKE),
-  I_WAKE(),
-  I_MOVI(R0, 0),
-  I_ST(R0, R3, RTCMEM_COUNTER),
   M_BX(LABEL_RX),
 
 
@@ -532,12 +542,12 @@ M_LABEL(LABEL_PORT0_TX),
   // disable port 1?
   TEMP_PORT1_DISABLE(),
 
-  // maintain CLK and DAT low for about 200us
+  // maintain CLK and DAT low for 200us
   CONFIGURE_CLK_OUTPUT(PS2_PORT0),
   WRITE_CLK(PS2_PORT0, 0),
   CONFIGURE_DAT_OUTPUT(PS2_PORT0),
   WRITE_DAT(PS2_PORT0, 0),
-  I_DELAY(1600),
+  M_DELAY_US(200),
 
   // configure CLK as input
   CONFIGURE_CLK_INPUT(PS2_PORT0),
@@ -603,6 +613,9 @@ M_LABEL(LABEL_PORT0_TX_EXIT),
   // re-enable port 1?
   TEMP_PORT1_ENABLE(),
 
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
+
   // go to command loop
   M_BX(LABEL_RX),
 
@@ -624,12 +637,12 @@ M_LABEL(LABEL_PORT1_TX),
   // disable port 0?
   TEMP_PORT0_DISABLE(),
 
-  // maintain CLK and DAT low for about 200us
+  // maintain CLK and DAT low for 200us
   CONFIGURE_CLK_OUTPUT(PS2_PORT1),
   WRITE_CLK(PS2_PORT1, 0),
   CONFIGURE_DAT_OUTPUT(PS2_PORT1),
   WRITE_DAT(PS2_PORT1, 0),
-  I_DELAY(1600),
+  M_DELAY_US(200),
 
   // configure CLK as input
   CONFIGURE_CLK_INPUT(PS2_PORT1),
@@ -695,6 +708,9 @@ M_LABEL(LABEL_PORT1_TX_EXIT),
   // re-enable port 0?
   TEMP_PORT0_ENABLE(),
 
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
+
   // go to command loop
   M_BX(LABEL_RX),
 
@@ -719,6 +735,9 @@ M_LABEL(LABEL_PORT0_RX_CLK_TIMEOUT),
 
   I_WAKE(),
 
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
+
   M_BX(LABEL_RX),
 
 
@@ -742,11 +761,14 @@ M_LABEL(LABEL_PORT1_RX_CLK_TIMEOUT),
 
   I_WAKE(),
 
-  M_BX(LABEL_RX),
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
+
+  //M_BX(LABEL_RX),
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  // LABEL_PORT0_RX - Check for new data from port 0
+  // LABEL_RX - Check for new data from port 0 and port 1
   // During reception port 1 is disabled for RX. It will be enabled at the end.
   // After received data the port 0 remains disabled for RX.
 
@@ -754,7 +776,17 @@ M_LABEL(LABEL_RX),
 
   // Check for RX from port 0?
   I_LD(R0, R3, RTCMEM_PORT0_RX_ENABLED),
-  M_BL(LABEL_RX_NEXT, 1),                                   // no, jump to LABEL_RX_NEXT
+  M_BGE(LABEL_PORT0_RX_CHECK_CLK, 1),                       // yes, jump to LABEL_PORT0_RX_CHECK_CLK
+
+  // no, port 0 is not enabled, maybe we are waiting for an ack from SoC, increment and check the re-wake timeout counter (R2)
+  I_ADDI(R2, R2, 1),                                        // R2 = R2 + 1 (increment counter)
+  I_MOVR(R0, R2),
+  M_BL(LABEL_RX_NEXT, WAKE_THRESHOLD),                      // check the other port if counter is below WAKE_THRESHOLD
+  I_WAKE(),                                                 // need to wake CPU
+  I_MOVI(R2, 0),                                            // reset counter
+  M_BX(LABEL_RX_NEXT),                                      // check the other port
+
+M_LABEL(LABEL_PORT0_RX_CHECK_CLK),
 
   // read CLK
   READ_CLK(PS2_PORT0),                                      // R0 = CLK
@@ -836,6 +868,10 @@ M_LABEL(LABEL_PORT0_RX_CLK_IS_HIGH),
   // the fact ULP never calls HALT or SoC is always active.
   I_WAKE(),
 
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
+
+
   /////////////////////////////////////////////////////////////////////////////////////////////
   // Check for new data from port 1
   // During reception port 0 is disabled for RX. It will be enabled at the end.
@@ -845,7 +881,17 @@ M_LABEL(LABEL_RX_NEXT),
 
   // Check for RX from port 1?
   I_LD(R0, R3, RTCMEM_PORT1_RX_ENABLED),
-  M_LONG_BL(LABEL_WAIT_COMMAND, 1),                         // no, jump to LABEL_WAIT_COMMAND
+  M_BGE(LABEL_PORT1_RX_CHECK_CLK, 1),                       // yes, jump to LABEL_PORT1_RX_CHECK_CLK
+
+  // no, port 1 is not enabled, maybe we are waiting for an ack from SoC, increment and check the re-wake timeout counter (R2)
+  I_ADDI(R2, R2, 1),                                        // R2 = R2 + 1 (increment counter)
+  I_MOVR(R0, R2),
+  M_LONG_BL(LABEL_WAIT_COMMAND, WAKE_THRESHOLD),            // return to main loop if counter is below WAKE_THRESHOLD
+  I_WAKE(),                                                 // need to wake CPU
+  I_MOVI(R2, 0),                                            // reset counter
+  M_BX(LABEL_WAIT_COMMAND),                                 // return to main loop
+
+M_LABEL(LABEL_PORT1_RX_CHECK_CLK),
 
   // read CLK
   READ_CLK(PS2_PORT1),                                      // R0 = CLK
@@ -926,6 +972,9 @@ M_LABEL(LABEL_PORT1_RX_CLK_IS_HIGH),
   // don't check RTC_CNTL_RDY_FOR_WAKEUP_S of RTC_CNTL_LOW_POWER_ST_REG because it never gets active, due
   // the fact ULP never calls HALT or SoC is always active.
   I_WAKE(),
+
+  // from now R2 is used as CPU re-wake timeout
+  I_MOVI(R2, 0),
 
   // return to main loop
   M_BX(LABEL_WAIT_COMMAND),
