@@ -239,6 +239,17 @@ private:
 };
 
 
+struct PS2PortAutoDisableRX {
+  PS2PortAutoDisableRX(int PS2Port) : port(PS2Port) {
+    PS2Controller::instance()->disableRX(port);
+  }
+  ~PS2PortAutoDisableRX() {
+    PS2Controller::instance()->enableRX(port);
+  }
+private:
+  int port;
+};
+
 
 
 

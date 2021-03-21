@@ -97,8 +97,6 @@ public:
   /**
    * @brief Sends a raw command to the PS/2 device and wait for reply
    *
-   * For realiable operations device should be locked using fabgl::PS2DeviceLock.
-   *
    * @param cmd The command byte
    * @param expectedReply Expected reply from PS/2 device
    *
@@ -108,8 +106,6 @@ public:
 
   /**
    * @brief Sends a raw command to the PS/2 device
-   *
-   * For realiable operations device should be locked using fabgl::PS2DeviceLock.
    *
    * @param cmd The command byte
    */

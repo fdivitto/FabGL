@@ -1134,10 +1134,10 @@ void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gp
     RTC_SLOW_MEM[RTCMEM_PORT0_RX_DISABLE + p] = 0;
     RTC_SLOW_MEM[RTCMEM_PORT0_RX + p]         = 0;
     RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLED + p] = 0;
-    enableRX(p);
     m_parityError[p] = m_syncError[p] = false;
-    m_dataIn[p] = (m_portEnabled[p] ? xQueueCreate(1, sizeof(uint16_t)) : nullptr);
+    m_dataIn[p]   = (m_portEnabled[p] ? xQueueCreate(1, sizeof(uint16_t)) : nullptr);
     m_portLock[p] = (m_portEnabled[p] ? xSemaphoreCreateRecursiveMutex() : nullptr);
+    enableRX(p);
   }
 
   // ULP start
@@ -1205,8 +1205,11 @@ void PS2Controller::disableRX(int PS2Port)
 
 void PS2Controller::enableRX(int PS2Port)
 {
-  if (m_portEnabled[PS2Port])
-    RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + PS2Port] = 1;
+  if (m_portEnabled[PS2Port]) {
+    // enable RX only if there is not data waiting
+    if (!dataAvailable(PS2Port))
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + PS2Port] = 1;
+  }
 }
 
 
@@ -1238,8 +1241,10 @@ int PS2Controller::getData(int PS2Port, int timeOutMS)
     }
 
     // ULP leaves RX disables whenever receives data or CLK timeout, so we need to enable it here
-    enableRX(PS2Port);
+    RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + PS2Port] = 1;
+
   }
+
   return r;
 }
 

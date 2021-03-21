@@ -234,7 +234,7 @@ void Mouse::updateAbsolutePosition(MouseDelta * delta)
 
 void Mouse::mouseUpdateTask(void * arg)
 {
-  constexpr int MAX_TIME_BETWEEN_DATA_US = 5000;  // maximum time between data composing a delta frame
+  constexpr int MAX_TIME_BETWEEN_DATA_US = 500000;  // maximum time between data composing a delta frame
 
   Mouse * mouse = (Mouse*) arg;
 
