@@ -115,7 +115,8 @@ void setup()
       } else {
         // pressing CTRL + ALT + F12, reset parameters and reboot
         if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
-            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
+            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT)) &&
+            (Terminal.keyboard()->isVKDown(VirtualKey::VK_F12)))  {
           Terminal.deactivate();
           preferences.clear();
           // show reboot dialog
