@@ -274,7 +274,8 @@
  * @example ST7789_TFT/240x240/Sprites/Sprites.ino Simple sprites animation
  * @example ST7789_TFT/240x240/DoubleBuffer/DoubleBuffer.ino Show double buffering usage
  *
- * @example Others/KeyboardStudio/KeyboardStudio.ino PS/2 keyboard full example (scancodes, virtual keys, LEDs control...)
+ * @example Others/KeyboardScanCodes/KeyboardScanCodes.ino PS/2 keyboard scan codes
+ * @example Others/KeyboardVirtualKeys/KeyboardVirtualKeys.ino PS/2 keyboard virtual keys
  * @example Others/MouseStudio/MouseStudio.ino PS/2 mouse events
  */
 

@@ -47,17 +47,14 @@ void xprintf(const char * format, ...)
 
 void printHelp()
 {
-  xprintf("\e[93m\n\nPS/2 Keyboard Studio\r\n");
+  xprintf("\e[93m\n\nPS/2 Keyboard Scancodes\r\n");
   xprintf("Chip Revision: %d   Chip Frequency: %d MHz\r\n", ESP.getChipRevision(), ESP.getCpuFreqMHz());
 
   printInfo();
 
   xprintf("Commands:\r\n");
-  xprintf("  1 = US Layout       2 = UK Layout       3 = DE Layout\r\n");
-  xprintf("  4 = IT Layout       5 = ES Layout\r\n");
-  xprintf("  r = Reset\r\n");
   xprintf("  q = Scancode set 1  w = Scancode set 2\r\n");
-  xprintf("  l = Test LEDs\r\n");
+  xprintf("  l = Test LEDs       r = Reset keyboard\r\n");
   xprintf("Various:\r\n");
   xprintf("  h = Print This help\r\n\n");
   xprintf("Use Serial Monitor to issue commands\r\n\n");
@@ -93,7 +90,7 @@ void printInfo()
         xprintf("\"Unknown\"");
         break;
     }
-    xprintf("  Keyboard Layout: \"%s\"\r\n", keyboard->getLayout()->name);
+    xprintf("\r\n", keyboard->getLayout()->name);
   } else
     xprintf("Keyboard Error!\r\n");
 }
@@ -112,7 +109,7 @@ void setup()
   Terminal.begin(&DisplayController);
   Terminal.enableCursor(true);
 
-  PS2Controller.begin(PS2Preset::KeyboardPort0);
+  PS2Controller.begin(PS2Preset::KeyboardPort0, KbdMode::NoVirtualKeys);
 
   printHelp();
 }
@@ -122,35 +119,14 @@ void setup()
 
 void loop()
 {
+  static int clen = 1;
   auto keyboard = PS2Controller.keyboard();
-
-  //static fabgl::VirtualKey lastvk = fabgl::VK_NONE; // avoid to repeat last vk
 
   if (Serial.available() > 0) {
     char c = Serial.read();
     switch (c) {
       case 'h':
         printHelp();
-        break;
-      case '1':
-        keyboard->setLayout(&fabgl::USLayout);
-        printInfo();
-        break;
-      case '2':
-        keyboard->setLayout(&fabgl::UKLayout);
-        printInfo();
-        break;
-      case '3':
-        keyboard->setLayout(&fabgl::GermanLayout);
-        printInfo();
-        break;
-      case '4':
-        keyboard->setLayout(&fabgl::ItalianLayout);
-        printInfo();
-        break;
-      case '5':
-        keyboard->setLayout(&fabgl::SpanishLayout);
-        printInfo();
         break;
       case 'r':
         keyboard->reset();
@@ -176,19 +152,13 @@ void loop()
     }
   }
 
-  if (keyboard->virtualKeyAvailable()) {
-    // ascii mode (show ASCIIl, VirtualKeys and scancodes)
-    VirtualKeyItem item;
-    if (keyboard->getNextVirtualKey(&item)) {
-      xprintf("%s: ", keyboard->virtualKeyToString(item.vk));
-      xprintf("\tASCII = 0x%02X\t", item.ASCII);
-      if (item.ASCII >= ' ')
-        xprintf("'%c'", item.ASCII);
-      xprintf("\t%s", item.down ? "DN" : "UP");
-      xprintf("\t[");
-      for (int i = 0; i < 8 && item.scancode[i] != 0; ++i)
-        xprintf("%02X ", item.scancode[i]);
-      xprintf("]");
+  if (keyboard->scancodeAvailable()) {
+    int scode = keyboard->getNextScancode();
+    xprintf("%02X ", scode);
+    if (scode == 0xF0 || scode == 0xE0) ++clen;
+    --clen;
+    if (clen == 0) {
+      clen = 1;
       xprintf("\r\n");
     }
   }
