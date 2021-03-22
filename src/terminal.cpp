@@ -4502,6 +4502,7 @@ void Terminal::keyboardReaderTask(void * pvParameters)
       if (term->isActive()) {
 
         term->onVirtualKey(&item.vk, item.down);
+        term->onVirtualKeyItem(&item);
 
         if (item.down) {
 

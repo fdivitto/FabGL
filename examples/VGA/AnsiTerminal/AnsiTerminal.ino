@@ -94,10 +94,15 @@ void setup()
   }
 
   // onVirtualKey is triggered whenever a key is pressed or released
-  Terminal.onVirtualKey = [&](VirtualKey * vk, bool keyDown) {
-    if (*vk == VirtualKey::VK_F12) {
-      if (!keyDown) {
-
+  Terminal.onVirtualKeyItem = [&](VirtualKeyItem * vkItem) {
+    if (vkItem->vk == VirtualKey::VK_F12) {
+      if (vkItem->CTRL && (vkItem->LALT || vkItem->RALT)) {
+        Terminal.deactivate();
+        preferences.clear();
+        // show reboot dialog
+        auto rebootApp = new RebootDialogApp;
+        rebootApp->run(DisplayController);
+      } else if (!vkItem->CTRL && !vkItem->LALT && !vkItem->RALT && !vkItem->down) {
         // releasing F12 key to open configuration dialog
         Terminal.deactivate();
         PS2Controller.mouse()->emptyQueue();  // avoid previous mouse movements to be showed on UI
@@ -107,23 +112,11 @@ void setup()
         delete dlgApp;
         Terminal.keyboard()->emptyVirtualKeyQueue();
         Terminal.activate();
-
         // it has been requested to install a demo program?
         if (progToInstall > -1)
           installProgram(progToInstall);
-
-      } else {
-        // pressing CTRL + ALT + F12, reset parameters and reboot
-        if ((Terminal.keyboard()->isVKDown(VirtualKey::VK_LCTRL) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RCTRL)) &&
-            (Terminal.keyboard()->isVKDown(VirtualKey::VK_LALT) || Terminal.keyboard()->isVKDown(VirtualKey::VK_RALT))) {
-          Terminal.deactivate();
-          preferences.clear();
-          // show reboot dialog
-          auto rebootApp = new RebootDialogApp;
-          rebootApp->run(DisplayController);
-        }
+        vkItem->vk = VirtualKey::VK_NONE;
       }
-      *vk = VirtualKey::VK_NONE;
     }
   };
 

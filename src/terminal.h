@@ -1425,6 +1425,14 @@ public:
 
 
   /**
+   * @brief Delegate called whenever a new virtual key is received from keyboard, including shift states
+   *
+   * The parameter is a pointer to the decoded virtual key info
+   */
+  Delegate<VirtualKeyItem *> onVirtualKeyItem;
+
+
+  /**
    * @brief Delegate called whenever a new user sequence has been received
    *
    * The parameter contains a zero terminated string containing the user sequence payload.
