@@ -994,7 +994,7 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
   uint32_t DAT_rtc_gpio_num[2], DAT_rtc_gpio_reg[2], DAT_rtc_gpio_ie_s[2];
 
   if (port0Enabled) {
-    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
+    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 4)
     CLK_rtc_gpio_num[0]  = (uint32_t) rtc_gpio_desc[port0_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[0]  = rtc_gpio_desc[port0_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[0] = (uint32_t) ffs(rtc_gpio_desc[port0_clkGPIO].ie) - 1;
@@ -1014,7 +1014,7 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
   }
 
   if (port1Enabled) {
-    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
+    #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 4)
     CLK_rtc_gpio_num[1]  = (uint32_t) rtc_gpio_desc[port1_clkGPIO].rtc_num;
     CLK_rtc_gpio_reg[1]  = rtc_gpio_desc[port1_clkGPIO].reg;
     CLK_rtc_gpio_ie_s[1] = (uint32_t) ffs(rtc_gpio_desc[port1_clkGPIO].ie) - 1;

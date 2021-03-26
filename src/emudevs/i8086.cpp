@@ -33,7 +33,7 @@ namespace fabgl {
 
 #pragma GCC optimize ("O3")
 
-#if FABGL_ESP_IDF_VERSION > FABGL_ESP_IDF_VERSION_VAL(3, 3, 3)
+#if FABGL_ESP_IDF_VERSION > FABGL_ESP_IDF_VERSION_VAL(3, 3, 4)
   #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
