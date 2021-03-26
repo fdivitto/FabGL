@@ -148,13 +148,13 @@ ChipPackage getChipPackage()
   uint32_t ver_pkg = (REG_READ(EFUSE_BLK0_RDATA3_REG) >> 9) & 7;
   switch (ver_pkg) {
     case 0:
-      return ChipPackage::ESP32D0WDQ6;
+      return ChipPackage::ESP32D0WDQ6;  // WROOOM-32
     case 1:
-      return ChipPackage::ESP32D0WDQ5;
+      return ChipPackage::ESP32D0WDQ5;  // WROVER-B
     case 2:
       return ChipPackage::ESP32D2WDQ5;
     case 5:
-      return ChipPackage::ESP32PICOD4;
+      return ChipPackage::ESP32PICOD4;  // TTGO-VGA32
     default:
       return ChipPackage::Unknown;
   }
@@ -1118,9 +1118,13 @@ bool FileBrowser::format(DriveType driveType, int drive)
 
 bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
-  if (getChipPackage() == ChipPackage::ESP32PICOD4) {
-    MISO = 2;
-    MOSI = 12;
+  switch (getChipPackage()) {
+    case ChipPackage::ESP32D0WDQ5:
+    case ChipPackage::ESP32PICOD4:
+      MISO = 2;
+      MOSI = 12;
+    default:
+      break;
   }
 
   s_SDCardMountPath          = mountPath;
