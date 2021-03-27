@@ -131,7 +131,6 @@ void i8042::tick()
   if (m_STATUS & STATUS_IBF) {
     //printf("i8042:tick(), send scode = %02X\n", m_DBBIN);
     m_STATUS &= ~(STATUS_IBF | STATUS_TX_TIMEOUT | STATUS_PARITY_ERR);
-    PS2DeviceLock lock(m_keyboard);
     m_keyboard->sendCommand(m_DBBIN);
     m_STATUS |= STATUS_PARITY_ERR * m_keyboard->parityError();
   }

@@ -511,7 +511,6 @@ void BIOS::getKeyboardFlags()
 void BIOS::setKeyboardTypematicAndDelay()
 {
   if (i8086::AL() == 0x05) {
-    fabgl::PS2DeviceLock lock(m_keyboard);
     // send command "set typematic rate and delay" (0xF3) to the keyboard and wait for ACK (0xFA)
     if (!m_keyboard->sendCommand(0xF3, 0xFA))
       return;
