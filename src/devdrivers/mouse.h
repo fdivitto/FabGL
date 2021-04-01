@@ -340,7 +340,7 @@ private:
 
   int getPacketSize();
   static void mouseUpdateTask(void * arg);
-
+  bool decodeRawDelta(MouseDeltaRaw * rawDelta, MouseDelta * delta);
 
   static bool     s_quickCheckHardware;
 

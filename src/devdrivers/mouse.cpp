@@ -121,33 +121,38 @@ bool Mouse::deltaAvailable()
 }
 
 
-bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOnTimeOut)
+bool Mouse::decodeRawDelta(MouseDeltaRaw * rawDelta, MouseDelta * delta)
 {
-  MouseDeltaRaw draw;
-  if (!xQueueReceive(m_deltaAvail, &draw, msToTicks(timeOutMS)))
-    return false;
-
   // the bit 4 of first byte must be always 1
-  if ((draw.data[0] & 8) == 0) {
+  if ((rawDelta->data[0] & 8) == 0)
     return false;
-  }
 
   m_prevStatus = m_status;
 
   // decode packet
-  m_status.buttons.left   = (draw.data[0] & 0x01 ? 1 : 0);
-  m_status.buttons.middle = (draw.data[0] & 0x04 ? 1 : 0);
-  m_status.buttons.right  = (draw.data[0] & 0x02 ? 1 : 0);
+  m_status.buttons.left   = (rawDelta->data[0] & 0x01 ? 1 : 0);
+  m_status.buttons.middle = (rawDelta->data[0] & 0x04 ? 1 : 0);
+  m_status.buttons.right  = (rawDelta->data[0] & 0x02 ? 1 : 0);
   if (delta) {
-    delta->deltaX    = (int16_t)(draw.data[0] & 0x10 ? 0xFF00 | draw.data[1] : draw.data[1]);
-    delta->deltaY    = (int16_t)(draw.data[0] & 0x20 ? 0xFF00 | draw.data[2] : draw.data[2]);
-    delta->deltaZ    = (int8_t)(getPacketSize() > 3 ? draw.data[3] : 0);
-    delta->overflowX = (draw.data[0] & 0x40 ? 1 : 0);
-    delta->overflowY = (draw.data[0] & 0x80 ? 1 : 0);
+    delta->deltaX    = (int16_t)(rawDelta->data[0] & 0x10 ? 0xFF00 | rawDelta->data[1] : rawDelta->data[1]);
+    delta->deltaY    = (int16_t)(rawDelta->data[0] & 0x20 ? 0xFF00 | rawDelta->data[2] : rawDelta->data[2]);
+    delta->deltaZ    = (int8_t)(getPacketSize() > 3 ? rawDelta->data[3] : 0);
+    delta->overflowX = (rawDelta->data[0] & 0x40 ? 1 : 0);
+    delta->overflowY = (rawDelta->data[0] & 0x80 ? 1 : 0);
     delta->buttons   = m_status.buttons;
   }
-  
+
   return true;
+}
+
+
+bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOnTimeOut)
+{
+  MouseDeltaRaw rawDelta;
+  if (!xQueueReceive(m_deltaAvail, &rawDelta, msToTicks(timeOutMS)))
+    return false;
+
+  return decodeRawDelta(&rawDelta, delta);
 }
 
 
@@ -261,11 +266,9 @@ void Mouse::mouseUpdateTask(void * arg)
       }
     }
 
-    xQueueSendToBack(mouse->m_deltaAvail, &draw, portMAX_DELAY);
-
     if (mouse->m_absoluteUpdate) {
       MouseDelta delta;
-      if (mouse->getNextDelta(&delta)) {
+      if (mouse->decodeRawDelta(&draw, &delta)) {
         mouse->updateAbsolutePosition(&delta);
 
         // VGA Controller
@@ -317,6 +320,10 @@ void Mouse::mouseUpdateTask(void * arg)
         }
 
       }
+
+    } else {
+
+      xQueueOverwrite(mouse->m_deltaAvail, &draw);
 
     }
 
