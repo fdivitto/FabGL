@@ -20,6 +20,13 @@
  */
 
 
+/*
+
+  Credits:
+     - Guido Lehwalder, https://github.com/guidol70 : using USB-serial Port for ANSI-Terminal (https://github.com/fdivitto/FabGL/issues/110)
+
+*/
+
 #include "fabgl.h"
 
 
@@ -37,8 +44,15 @@ fabgl::Terminal                     Terminal;
 //                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
 //                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
 //                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
-#define UART_RX 34
-#define UART_TX 2
+
+// UART Pins for USB serial
+#define UART_URX 3
+#define UART_UTX 1
+
+// UART Pins for normal serial Port
+#define UART_SRX 34
+#define UART_STX 2
+
 
 #define RESET_PIN 12
 

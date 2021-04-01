@@ -116,8 +116,8 @@ constexpr int       BOOTINFO_DISABLED     = 0;
 constexpr int       BOOTINFO_ENABLED      = 1;
 constexpr int       BOOTINFO_TEMPDISABLED = 2;
 
-
-
+constexpr int       SERCTL_DISABLED     = 0;
+constexpr int       SERCTL_ENABLED      = 1;
 
 
 struct ConfDialogApp : public uiApp {
@@ -140,6 +140,7 @@ struct ConfDialogApp : public uiApp {
   uiComboBox *      columnsComboBox;
   uiComboBox *      rowsComboBox;
   uiCheckBox *      infoCheckBox;
+  uiCheckBox *      serctlCheckBox;
 
   void init() {
 
@@ -268,8 +269,14 @@ struct ConfDialogApp : public uiApp {
     infoCheckBox = new uiCheckBox(frame, Point(80, y - 2), Size(16, 16), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
     infoCheckBox->setChecked(getBootInfo() == BOOTINFO_ENABLED);
 
+    y += 24;
 
-    y += 48;
+    // set control to usb-serial
+    new uiLabel(frame, "USBSerial", Point(10, y), Size(0, 0), true, STYLE_LABEL);
+    serctlCheckBox = new uiCheckBox(frame, Point(80, y - 2), Size(16, 16), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
+    serctlCheckBox->setChecked(getSerCtl() == SERCTL_ENABLED);
+
+    y += 24;
 
     // exit without save button
     auto exitNoSaveButton = new uiButton(frame, "Quit [ESC]", Point(10, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
@@ -309,7 +316,8 @@ struct ConfDialogApp : public uiApp {
                   fontComboBox->selectedItem()       != getFontIndex()       ||
                   columnsComboBox->selectedItem()    != getColumnsIndex()    ||
                   rowsComboBox->selectedItem()       != getRowsIndex()       ||
-                  bgColorComboBox->selectedColor()   != getBGColor();
+                  bgColorComboBox->selectedColor()   != getBGColor()         ||
+                  serctlCheckBox->checked()          != getSerCtl();
 
     preferences.putInt("TermType", termComboBox->selectedItem());
     preferences.putInt("KbdLayout", kbdComboBox->selectedItem());
@@ -325,6 +333,7 @@ struct ConfDialogApp : public uiApp {
     preferences.putInt("Columns", columnsComboBox->selectedItem());
     preferences.putInt("Rows", rowsComboBox->selectedItem());
     preferences.putInt("BootInfo", infoCheckBox->checked() ? BOOTINFO_ENABLED : BOOTINFO_DISABLED);
+    preferences.putInt("SerCtl", serctlCheckBox->checked() ? SERCTL_ENABLED : SERCTL_DISABLED);
 
     if (reboot) {
       auto rebootDialog = new RebootDialog(frame);
@@ -403,6 +412,10 @@ struct ConfDialogApp : public uiApp {
     return preferences.getInt("BootInfo", BOOTINFO_ENABLED);
   }
 
+  static int getSerCtl() {
+    return preferences.getInt("SerCtl", SERCTL_DISABLED);
+  }
+  
   // if version in preferences doesn't match, reset preferences
   static void checkVersion() {
     if (preferences.getInt("VerMaj", 0) != TERMVERSION_MAJ || preferences.getInt("VerMin", 0) != TERMVERSION_MIN) {
@@ -458,11 +471,13 @@ struct ConfDialogApp : public uiApp {
   static void loadConfiguration() {
     Terminal.setTerminalType(getTermType());
     Terminal.keyboard()->setLayout(SupportedLayouts::layouts()[getKbdLayoutIndex()]);
-    Terminal.connectSerialPort(BAUDRATES_INT[getBaudRateIndex()], fabgl::UARTConf(getParityIndex(), getDataLenIndex(), getStopBitsIndex()), UART_RX, UART_TX, getFlowCtrl());
     Terminal.setBackgroundColor(getBGColor());
     Terminal.setForegroundColor(getFGColor());
+    // configure serial port
+    bool serctl = (getSerCtl() == SERCTL_ENABLED);
+    auto rxPin = serctl ? UART_URX : UART_SRX;
+    auto txPin = serctl ? UART_UTX : UART_STX;
+    Terminal.connectSerialPort(BAUDRATES_INT[getBaudRateIndex()], fabgl::UARTConf(getParityIndex(), getDataLenIndex(), getStopBitsIndex()), rxPin, txPin, getFlowCtrl());
   }
 
 };
-
-
