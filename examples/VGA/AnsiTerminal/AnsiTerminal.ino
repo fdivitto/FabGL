@@ -94,14 +94,20 @@ void setup()
 
   if (ConfDialogApp::getBootInfo() == BOOTINFO_ENABLED) {
     Terminal.write("* *  FabGL - Serial Terminal                            * *\r\n");
-    Terminal.write("* *  2019-2020 by Fabrizio Di Vittorio - www.fabgl.com  * *\r\n\n");
+    Terminal.write("* *  2019-2021 by Fabrizio Di Vittorio - www.fabgl.com  * *\r\n\n");
+    Terminal.printf("Version            : %d.%d\r\n", TERMVERSION_MAJ, TERMVERSION_MIN);
     Terminal.printf("Screen Size        : %d x %d\r\n", DisplayController->getScreenWidth(), DisplayController->getScreenHeight());
     Terminal.printf("Terminal Size      : %d x %d\r\n", Terminal.getColumns(), Terminal.getRows());
     Terminal.printf("Keyboard Layout    : %s\r\n", PS2Controller.keyboard()->isKeyboardAvailable() ? SupportedLayouts::names()[ConfDialogApp::getKbdLayoutIndex()] : "No Keyboard");
-    Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
+    //Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
     Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
-    Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
-    Terminal.printf("Version            : %d.%d\r\n", TERMVERSION_MAJ, TERMVERSION_MIN);
+    //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+    if (ConfDialogApp::getSerCtl() == SERCTL_ENABLED)
+      Terminal.printf("Serial Port        : USB RX-Pin[%d] TX-Pin[%d]\r\n", UART_URX, UART_UTX);
+    else
+      Terminal.printf("Serial Port        : Serial RX-Pin[%d] TX-Pin[%d]\r\n", UART_SRX, UART_STX);
+    Terminal.printf("Serial Parameters  : %s\r\n", ConfDialogApp::getSerParamStr());
+
     Terminal.write("\r\nPress F12 to change terminal configuration and CTRL-ALT-F12 to reset settings\r\n\n");
   } else if (ConfDialogApp::getBootInfo() == BOOTINFO_TEMPDISABLED) {
     preferences.putInt("BootInfo", BOOTINFO_ENABLED);

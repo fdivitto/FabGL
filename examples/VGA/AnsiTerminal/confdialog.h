@@ -34,7 +34,7 @@ Preferences preferences;
 
 
 #define TERMVERSION_MAJ 1
-#define TERMVERSION_MIN 3
+#define TERMVERSION_MIN 4
 
 
 static const char * BAUDRATES_STR[] = { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "230400", "250000", "256000", "500000", "1000000", "2000000" };
@@ -316,8 +316,7 @@ struct ConfDialogApp : public uiApp {
                   fontComboBox->selectedItem()       != getFontIndex()       ||
                   columnsComboBox->selectedItem()    != getColumnsIndex()    ||
                   rowsComboBox->selectedItem()       != getRowsIndex()       ||
-                  bgColorComboBox->selectedColor()   != getBGColor()         ||
-                  serctlCheckBox->checked()          != getSerCtl();
+                  bgColorComboBox->selectedColor()   != getBGColor();
 
     preferences.putInt("TermType", termComboBox->selectedItem());
     preferences.putInt("KbdLayout", kbdComboBox->selectedItem());
@@ -414,6 +413,15 @@ struct ConfDialogApp : public uiApp {
 
   static int getSerCtl() {
     return preferences.getInt("SerCtl", SERCTL_DISABLED);
+  }
+
+  static char const * getSerParamStr() {
+    static char outstr[13];
+    snprintf(outstr, sizeof(outstr), "%s,%c%c%c", BAUDRATES_STR[getBaudRateIndex()],
+                                                  DATALENS_STR[getDataLenIndex()][0],
+                                                  PARITY_STR[getParityIndex()][0],
+                                                  STOPBITS_STR[getStopBitsIndex() - 1][0]);
+    return outstr;
   }
   
   // if version in preferences doesn't match, reset preferences
