@@ -58,7 +58,10 @@ struct MouseDelta {
 };
 
 
-struct MouseDeltaRaw {
+/**
+ * @brief Contains raw data received from mouse.
+ */
+struct MousePacket {
   uint8_t data[4];
 };
 
@@ -159,6 +162,36 @@ public:
    * @return True if the mouse is correctly initialized.
    */
   bool isMouseAvailable() { return m_mouseAvailable; }
+
+  /**
+   * @brief Gets mouse packet size
+   *
+   * @return Mouse packet size in bytes
+   */
+  int getPacketSize();
+
+  /**
+   * @brief Determines if there is a raw mouse movement available in the queue.
+   *
+   * @return Return true if there is a mouse movement (mouse packet) available to read.
+   */
+  bool packetAvailable();
+
+  /**
+   * @brief Gets a mouse raw movement (packet) from the queue.
+   *
+   * @param packet Pointer to MousePacket structure to be filled with mouse movement.
+   * @param timeOutMS Timeout in milliseconds. -1 means no timeout (infinite time).
+   * @param requestResendOnTimeOut If true and timeout has expired then asks the mouse to resend the mouse movement.
+   *
+   * @return True if the mouse packet structure has been filled. False when there is no data in the queue.
+   *
+   * Example:
+   *
+   *     MousePacket mousePacket;
+   *     Mouse.getNextPacket(&mousePacket);
+   */
+  bool getNextPacket(MousePacket * packet, int timeOutMS = -1, bool requestResendOnTimeOut = false);
 
   /**
    * @brief Determines if there is a mouse movement available in the queue.
@@ -338,9 +371,8 @@ public:
 
 private:
 
-  int getPacketSize();
   static void mouseUpdateTask(void * arg);
-  bool decodeRawDelta(MouseDeltaRaw * rawDelta, MouseDelta * delta);
+  bool decodeMousePacket(MousePacket * mousePacket, MouseDelta * delta);
 
   static bool     s_quickCheckHardware;
 
@@ -349,8 +381,8 @@ private:
 
   TaskHandle_t    m_mouseUpdateTask;
 
-  // queue of one raw delta item
-  QueueHandle_t   m_deltaAvail;
+  // queue of one mouse packet
+  QueueHandle_t   m_receivedPacket;
 
   // absolute position support
   bool            m_absoluteUpdate;
