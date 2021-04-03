@@ -133,6 +133,22 @@ bool Mouse::deltaAvailable()
 }
 
 
+// Mouse packet format:
+//    byte 0:
+//       bit 0 = Left Button
+//       bit 1 = Right Button
+//       bit 2 = Middle Button
+//       bit 3 = Always 1
+//       bit 4 = X sign bit
+//       bit 5 = Y sign bit
+//       bit 6 = X overflow
+//       bit 7 = Y overflow
+//    byte 1:
+//       X movement
+//    byte 2:
+//       Y movement
+//    byte 3:
+//       Z movement
 bool Mouse::decodeMousePacket(MousePacket * mousePacket, MouseDelta * delta)
 {
   // the bit 4 of first byte must be always 1
