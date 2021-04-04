@@ -565,9 +565,10 @@ int9_exit:
 
 ; manage CTRL + ALT + DEL
 int9_reboot:
-  mov  word [soft_rst_flg - bios_data], 0x1234
-  jmp  boot
   call reportEOIA
+  ; reset using 8042 keyboard controller
+  mov al, 0xfe
+  out 0x64, al
 
 ; manage PAUSE state
 int9_pause:
