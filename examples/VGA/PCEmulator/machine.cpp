@@ -115,9 +115,10 @@ void Machine::init()
   m_HGCSwitchReg    = 0;
   m_HGCVSyncQuery   = 0;
 
-  m_i8042.init(&m_PIC8259);
+  m_i8042.init(&m_PIC8259A, &m_PIC8259B);
 
-  m_PIC8259.reset();
+  m_PIC8259A.reset();
+  m_PIC8259B.reset();
 
   m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
   m_PIT8253.reset();
@@ -173,8 +174,10 @@ void Machine::tick()
 {
   ++m_ticksCounter;
 
-  if (m_PIC8259.pendingInterrupt() && i8086::IRQ(m_PIC8259.pendingInterruptNum()))
-    m_PIC8259.ackPendingInterrupt();
+  if (m_PIC8259A.pendingInterrupt() && i8086::IRQ(m_PIC8259A.pendingInterruptNum()))
+    m_PIC8259A.ackPendingInterrupt();
+  if (m_PIC8259B.pendingInterrupt() && i8086::IRQ(m_PIC8259B.pendingInterruptNum()))
+    m_PIC8259B.ackPendingInterrupt();
 }
 
 
@@ -332,10 +335,16 @@ void Machine::writePort(void * context, int address, uint8_t value)
 
   switch (address) {
 
-    // PIC8259
+    // PIC8259A
     case 0x20:
     case 0x21:
-      m->m_PIC8259.write(address & 1, value);
+      m->m_PIC8259A.write(address & 1, value);
+      break;
+
+    // PIC8259B
+    case 0xa0:
+    case 0xa1:
+      m->m_PIC8259B.write(address & 1, value);
       break;
 
     // PIT8253
@@ -415,10 +424,15 @@ uint8_t Machine::readPort(void * context, int address)
 
   switch (address) {
 
-    // PIC8259
+    // PIC8259A
     case 0x0020:
     case 0x0021:
-      return m->m_PIC8259.read(address & 1);
+      return m->m_PIC8259A.read(address & 1);
+
+    // PIC8259B
+    case 0x00a0:
+    case 0x00a1:
+      return m->m_PIC8259B.read(address & 1);
 
     // PIT8253
     case 0x0040:
@@ -483,7 +497,7 @@ void Machine::PITChangeOut(void * context, int timerIndex)
   // timer 0 trigged?
   if (timerIndex == 0 &&  m->m_PIT8253.readOut(0) == true) {
     // yes, report IR0 (IRQ8)
-    m->m_PIC8259.signalInterrupt(0);
+    m->m_PIC8259A.signalInterrupt(0);
   }
 }
 
@@ -514,7 +528,7 @@ bool Machine::interrupt(void * context, int num)
 {
   auto m = (Machine*)context;
 
-  //printf("INT %02X (AH = %02X)\n", num, i8086::AH());
+  //printf("INT %02X (AX = %04X)\n", num, i8086::AX());
 
   // emu interrupts callable only inside the BIOS segment
   if (i8086::CS() == BIOS_SEG) {
@@ -595,12 +609,12 @@ bool Machine::interrupt(void * context, int num)
 
       // test point P0
       case 0xf9:
-        printf("P0\n");
+        printf("P0 AX=%04X BX=%04X CX=%04X DX=%04X DS=%04X\n", i8086::AX(), i8086::BX(), i8086::CX(), i8086::DX(), i8086::DS());
         return true;
 
       // test point P1
       case 0xfa:
-        printf("P1\n");
+        printf("P1 AX=%04X BX=%04X CX=%04X DX=%04X DS=%04X\n", i8086::AX(), i8086::BX(), i8086::CX(), i8086::DX(), i8086::DS());
         return true;
 
     }

@@ -30,7 +30,7 @@
 ;   - INT16 implemented function 0x92
 ;   - INT16 implemented function 0x09
 ;   - INT15 implemented function 0xc1
-;   - added Extended BIOS data
+;   - added Extended BIOS Data Area (EBDA)
 ;   - INT9, support for INT15,4F keyboard intercept
 ;   - removed internal variables from BIOS data area
 ;   - INT9, support for CTRL+ALT+DEL, PRINTSCREEN, CTRLBREAK, SYSREQ, PAUSE
@@ -44,9 +44,11 @@
 cpu  8086
 
 
-; PIC 8259 interrupt controller stuff
-PIC8259_A00 equ 0x20 ; 8259 PORT
-PIC8259_A01 equ 0x21 ; 8259 PORT
+; PIC 8259A/B interrupt controllers stuff
+PIC8259A_A00 equ 0x20 ; 8259A PORT
+PIC8259A_A01 equ 0x21 ; 8259A PORT
+PIC8259B_A00 equ 0xa0 ; 8259B PORT
+PIC8259B_A01 equ 0xa1 ; 8259B PORT
 PIC8259_EOI equ 0x20 ; EOI (End Of Interrupt)
 
 ; memory size in K
@@ -400,16 +402,28 @@ init_crtc_loop:
   out  dx, al
 
 
-;  Initialize the 8259 interrupt controller
+;  Initialize the 8259A interrupt controller
 
   mov  al, 0x13          ; ICW1 - EDGE, SNGL, ICW4
-  out  PIC8259_A00, al
-  mov  al, 8             ; setup ICW2 - INT TYPE 8 (8-F)
-  out  PIC8259_A01, al
+  out  PIC8259A_A00, al
+  mov  al, 8             ; setup ICW2 - (08h-0Fh)
+  out  PIC8259A_A01, al
   mov  al, 9             ; setup ICW4 - BUFFRD, 8086 MODE
-  out  PIC8259_A01, al
+  out  PIC8259A_A01, al
   mov  al, 0x00          ; enable all interrupts
-  out  PIC8259_A01, al    ;
+  out  PIC8259A_A01, al
+
+
+;  Initialize the 8259B interrupt controller
+
+  mov  al, 0x13          ; ICW1 - EDGE, SNGL, ICW4
+  out  PIC8259B_A00, al
+  mov  al, 0x70          ; setup ICW2 - (70h-77h)
+  out  PIC8259B_A01, al
+  mov  al, 9             ; setup ICW4 - BUFFRD, 8086 MODE
+  out  PIC8259B_A01, al
+  mov  al, 0x00          ; enable all interrupts
+  out  PIC8259B_A01, al
 
 
 ; Enable interrupts
@@ -433,10 +447,17 @@ init_crtc_loop:
 
 
 
-reportEOI:
-; signal EOI (End Of Interrupt) to 8259
+reportEOIA:
+; signal EOI (End Of Interrupt) to 8259A
   mov   al, PIC8259_EOI
-  out   PIC8259_A00, al
+  out   PIC8259A_A00, al
+  ret
+
+
+reportEOIB:
+; signal EOI (End Of Interrupt) to 8259B
+  mov   al, PIC8259_EOI
+  out   PIC8259B_A00, al
   ret
 
 
@@ -472,7 +493,7 @@ i8_end:
   ; transfer control to user routine
   int   0x1c
 
-  call  reportEOI
+  call  reportEOIA
 
   pop   si
   pop   ds
@@ -537,9 +558,9 @@ int9_exit:
 
 ; manage CTRL + ALT + DEL
 int9_reboot:
-  call reportEOI
   mov  word [soft_rst_flg - bios_data], 0x1234
   jmp  boot
+  call reportEOIA
 
 ; manage PAUSE state
 int9_pause:
@@ -3173,7 +3194,7 @@ int14_get_port_status:
 
 
 
-; ************************* INT 15h - get system configuration
+; ************************* INT 15h - System Services
 
 int15:
 
@@ -3627,25 +3648,25 @@ int41_max_sect  db 0
 
 ; ************************* ROM configuration table
 
-rom_config  dw 16    ; 16 bytes following
-    db MODEL    ; Model         // Generic AT system
-    db SUBMODEL  ; Submodel
-    db BIOSREV  ; BIOS revision
-    ; feature 1:
-    ;   bit 2 : extended BIOS area allocated
-    ;   bit 4 : Keyboard intercept sequence (INT 15H) called in keyboard interrupt (INT 09H)
-    ;   bit 5 : real time clock installed
-    db 0b00110100
-    ; feature 2:
-    ;   bit 6 : INT 16/AH=09h (keyboard functionality) supported
-    db 0b01000000
-    db 0b00000000   ; Feature 3
-    db 0b00000000   ; Feature 4
-    db 0b00000000   ; Feature 5
-    db 0, 0, 0, 0, 0, 0
+rom_config  dw 16          ; 16 bytes following
+            db MODEL       ; Model - Generic AT system
+            db SUBMODEL    ; Submodel
+            db BIOSREV     ; BIOS revision
+            ; feature 1:
+            ;   bit 2 : extended BIOS area allocated
+            ;   bit 4 : Keyboard intercept sequence (INT 15H) called in keyboard interrupt (INT 09H)
+            ;   bit 5 : real time clock installed
+            db 0b00110100
+            ; feature 2:
+            ;   bit 6 : INT 16/AH=09h (keyboard functionality) supported
+            db 0b01000000
+            db 0b00000000   ; Feature 3
+            db 0b00000000   ; Feature 4
+            db 0b00000000   ; Feature 5
+            db 0, 0, 0, 0, 0, 0, 0
 
 
-; ************************* Extended BIOS data
+; ************************* Extended BIOS Data Area (EBDA)
 
 eda              db 1        ; size in K
 eda_drive_offset dw 0000

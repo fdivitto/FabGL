@@ -85,8 +85,9 @@ private:
   static uint8_t *         s_memory;
   static uint8_t *         s_videoMemory;
 
-  // 8259 Programmable Interrupt Controller
-  PIC8259                  m_PIC8259;
+  // 8259 Programmable Interrupt Controllers
+  PIC8259                  m_PIC8259A;
+  PIC8259                  m_PIC8259B;
 
   // 8253 Programmable Interval Timers
   // pin connections of PIT8253 on the IBM XT:
