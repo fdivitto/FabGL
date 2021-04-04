@@ -54,8 +54,14 @@ PIC8259_EOI equ 0x20 ; EOI (End Of Interrupt)
 ; memory size in K
 MEMSIZE equ 639
 
-; segment of Extended Data area
-EDASEG equ 0x9fc0
+; Extended BIOS Data Area (EBDA) stuff
+EBDA_SEG           equ 0x9fc0   ; segment of Extended BIOS Data Area (EBDA) - must match with same value in bios.h
+EBDA_DRIVER_OFFSET equ 0x22     ; Pointing device device driver far call offset
+EBDA_DRIVER_SEG    equ 0x24     ; Pointing device device driver far call segment
+EBDA_FLAGS1        equ 0x26     ; Flags 1
+EBDA_FLAGS2        equ 0x27     ; Flags 2
+EBDA_PACKET        equ 0x28     ; Start of packet
+
 
 ; model and submodel
 ; fc/01 = generic AT
@@ -336,8 +342,8 @@ boot:
   mov  cx, 16
   rep  movsb
 
-; copy Extended BIOS data
-  mov ax, EDASEG
+; copy Extended BIOS Data Area (EBDA)
+  mov ax, EBDA_SEG
   mov  es, ax
   mov  di, 0x0000
   mov  ax, cs
@@ -551,7 +557,7 @@ int9_getcode:
   jnz int9_pause
 
 int9_exit:
-  call reportEOI
+  call reportEOIA
   pop  ds
   pop  ax
   iret
