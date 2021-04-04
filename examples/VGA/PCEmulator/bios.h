@@ -24,6 +24,7 @@
 
 
 #include "fabgl.h"
+#include "emudevs/i8042.h"
 
 
 #define BIOS_SEG             0xF000
@@ -33,7 +34,8 @@
 
 // BIOS Data Area
 
-#define BIOS_DATAAREA_ADDR   (0x40 * 16)
+#define BIOS_DATAAREA_SEG      0x40
+#define BIOS_DATAAREA_ADDR     (BIOS_DATAAREA_SEG << 4)
 
 #define BIOS_KBDSHIFTFLAGS1    0x17     // keyboard shift flags
 #define BIOS_KBDSHIFTFLAGS2    0x18     // more keyboard shift flags
@@ -47,9 +49,24 @@
 #define BIOS_PRINTSCREENFLAG   0x100    // PRINTSCREEN flag
 
 
+// Extended BIOS Data Area (EBDA)
+
+#define EBDA_SEG               0x9fc0   // EBDA Segment, must match with same value in bios.asm
+#define EBDA_ADDR              (EBDA_SEG << 4)
+
+#define EBDA_DRIVER_OFFSET     0x22     // Pointing device device driver far call offset
+#define EBDA_DRIVER_SEG        0x24     // Pointing device device driver far call segment
+#define EBDA_FLAGS1            0x26     // Flags 1 (bits 0-2: recv data index)
+#define EBDA_FLAGS2            0x27     // Flags 2 (bits 0-2: packet size, bit 7: device handler installed)
+#define EBDA_PACKET            0x28     // Start of packet
+
+
+
 
 using fabgl::PS2Controller;
 using fabgl::Keyboard;
+using fabgl::Mouse;
+using fabgl::i8042;
 
 
 class BIOS {
@@ -61,7 +78,7 @@ public:
   typedef uint8_t (*ReadPort)(void * context, int address);
 
 
-  void init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, Keyboard * keyboard);
+  void init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, i8042 * i8042);
 
   void helpersEntry();
 
@@ -85,7 +102,10 @@ private:
   ReadPort        m_readPort;
   WritePort       m_writePort;
 
-  Keyboard      * m_keyboard;
+  Keyboard *      m_keyboard;
+  Mouse *         m_mouse;
+
+  i8042 *         m_i8042;
 
   // state of multibyte scancode intermediate reception:
   // 0 = none

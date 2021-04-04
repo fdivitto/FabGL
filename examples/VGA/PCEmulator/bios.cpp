@@ -34,7 +34,7 @@ static const uint8_t biosrom[] = {
 };
 
 
-void BIOS::init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, Keyboard * keyboard)
+void BIOS::init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, i8042 * i8042)
 {
   m_memory    = memory;
 
@@ -42,7 +42,9 @@ void BIOS::init(uint8_t * memory, void * context, ReadPort readPort, WritePort w
   m_readPort  = readPort;
   m_writePort = writePort;
 
-  m_keyboard  = keyboard;
+  m_i8042     = i8042;
+  m_keyboard  = m_i8042->keyboard();
+  m_mouse     = m_i8042->mouse();
 
 	// copy bios
   memcpy(m_memory + BIOS_ADDR, biosrom, sizeof(biosrom));
