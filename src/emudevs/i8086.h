@@ -47,6 +47,8 @@ public:
 
   static void setAL(uint8_t value);
   static void setAH(uint8_t value);
+  static void setBL(uint8_t value);
+  static void setBH(uint8_t value);
 
   static uint8_t AL();
   static uint8_t AH();

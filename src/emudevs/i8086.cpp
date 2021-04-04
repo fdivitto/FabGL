@@ -351,6 +351,18 @@ uint8_t i8086::AH()
 }
 
 
+void i8086::setBL(uint8_t value)
+{
+  regs8[REG_BL] = value;
+}
+
+
+void i8086::setBH(uint8_t value)
+{
+  regs8[REG_BH] = value;
+}
+
+
 uint8_t i8086::BL()
 {
   return regs8[REG_BL];
