@@ -125,6 +125,8 @@ public:
    */
   void resumePort();
 
+  uint16_t deviceID()    { return m_deviceID; }
+
 
 protected:
 
@@ -160,6 +162,7 @@ private:
   int16_t           m_retryCount;
   int16_t           m_cmdTimeOut;
   int16_t           m_cmdSubTimeOut;
+  uint16_t          m_deviceID;       // read by send_cmdIdentify()
 };
 
 

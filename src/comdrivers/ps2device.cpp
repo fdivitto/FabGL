@@ -236,6 +236,7 @@ bool PS2Device::send_cmdIdentify(PS2DeviceType * result)
     return false;
   int b1 = getData(m_cmdTimeOut);
   int b2 = getData(m_cmdTimeOut);
+  m_deviceID = (uint8_t)b1 | ((uint8_t)b2 << 8);
   if (b1 == -1 && b2 == -1)
     *result = PS2DeviceType::OldATKeyboard;
   else if (b1 == 0x00 && b2 == -1)
