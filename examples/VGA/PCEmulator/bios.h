@@ -94,6 +94,8 @@ private:
   bool processScancode(int scancode, uint16_t * syscode);
   void emptyKbdBuffer();
 
+  void pointingDeviceInterface();
+
 
   uint8_t *       m_memory;
 

@@ -34,6 +34,7 @@
 ;   - INT9, support for INT15,4F keyboard intercept
 ;   - removed internal variables from BIOS data area
 ;   - INT9, support for CTRL+ALT+DEL, PRINTSCREEN, CTRLBREAK, SYSREQ, PAUSE
+;   - INT15 implemented function 0xC200
 ;
 ;
 ;
@@ -3205,56 +3206,38 @@ int14_get_port_status:
 int15:
 
   cmp  ah, 0xc0
-  je   int15_sysconfig
+  je   int15_c0
   cmp  ah, 0xc1
   je   int15_c1
-  ; cmp  ah, 0x41
-  ; je  int15_waitevent
-  ; cmp  ah, 0x4f
-  ; je  int15_intercept
-  ; cmp  ah, 0x88
-  ; je  int15_getextmem
+  cmp  ah, 0xc2
+  je   int15_c2
 
-; Otherwise, function not supported
-
+; function not supported
   mov  ah, 0x86
-
   jmp  reach_stack_stc
 
-int15_sysconfig: ; Return address of system configuration table in ROM
-
-   mov  bx, cs
-   mov  es, bx
-   mov  bx, confDataTable
-   mov  ah, 0
-
-   jmp  reach_stack_clc
+; Return address of system configuration table in ROM
+int15_c0:
+  mov  bx, cs
+  mov  es, bx
+  mov  bx, confDataTable
+  mov  ah, 0
+  jmp  reach_stack_clc
 
 ; RETURN EXTENDED-BIOS DATA-AREA SEGMENT ADDRESS
 int15_c1:
   push ax
-  mov  ax, EDASEG
+  mov  ax, EBDA_SEG
   mov  es, ax
   pop  ax
   jmp  reach_stack_clc
 
-
-;  int15_waitevent: ; Events not supported
-;
-;  mov  ah, 0x86
-;
-;  jmp  reach_stack_stc
-;
-;  int15_intercept: ; Keyboard intercept
-;
-;  jmp  reach_stack_stc
-;
-;  int15_getextmem: ; Extended memory not supported
-;
-;  mov  ah,0x86
-;
-;  jmp  reach_stack_stc
-
+; Pointing device interface
+int15_c2:
+  mov ah, 0x06  ; helper for Pointing device interface
+  emu_helper
+  emu_iret_replace_CF
+  iret
 
 
 ; return from INT setting AH and CF for "unsupported BIOS function"
@@ -6266,6 +6249,76 @@ put_mode13_char_done:
   ret
 
 
+
+; ************************* INT 74h handler - PS/2 mouse
+int74:
+  push ax
+  push bx
+  push cx
+  push ds
+
+  ; load EBDA segment to DS
+  mov  ax, EBDA_SEG
+  mov  ds, ax
+
+  ; read mouse data from 8042
+  in   al, 0x60
+
+  ; put data index into BX
+  mov  bl, [EBDA_FLAGS1]
+  and  bl, 7
+  xor  bh, bh
+
+  ; save read data
+  mov  [EBDA_PACKET + bx], al
+  inc  bx
+
+  ; save new data index
+  and  byte [EBDA_FLAGS1], 0xf8
+  or   byte [EBDA_FLAGS1], bl
+
+  ; compare with packet size
+  mov  al, [EBDA_FLAGS2]
+  and  al, 7
+  cmp  bl, al
+  jl   int74_exit
+
+  ; packet complete, mouse driver installed?
+  test byte [EBDA_FLAGS2], 0x80
+  jz   int74_reset          ; no, just reset index and exit
+
+  ; packet complete push first 4 datas
+  mov  cx, 4
+  mov  bx, EBDA_PACKET
+  xor  ah, ah
+int74_push:
+  mov  al, [bx]
+  push ax
+  inc  bx
+  loop int74_push
+
+  ; call mouse driver
+  call far [EBDA_DRIVER_OFFSET]
+
+  ; remove parameters
+  mov  cx, 4
+int74_pop:
+  pop  ax
+  loop int74_pop
+
+  ; reset index
+int74_reset:
+  and  byte [EBDA_FLAGS1], 0xf8
+
+int74_exit:
+  call reportEOIB
+  pop  ds
+  pop  cx
+  pop  bx
+  pop  ax
+  iret
+
+
 ; Reaches up into the stack before the end of an interrupt handler, and sets the carry flag
 
 reach_stack_stc:
@@ -6444,6 +6497,7 @@ int_table   dw int0
             dw 0xf000
             dw intf
             dw 0xf000
+
             dw int10
             dw 0xf000
             dw int11
@@ -6470,12 +6524,210 @@ int_table   dw int0
             dw 0xf000
             dw int1c
             dw 0xf000
-            dw video_init_table
+            dw video_init_table   ; int1d
             dw 0xf000
             dw int1e
             dw 0xf000
-            dw cga_glyphs + 1024
+            dw cga_glyphs + 1024  ; int1f
             dw 0xf000
+
+            dw 0x0000   ; int20
+            dw 0x0000
+            dw 0x0000   ; int21
+            dw 0x0000
+            dw 0x0000   ; int22
+            dw 0x0000
+            dw 0x0000   ; int23
+            dw 0x0000
+            dw 0x0000   ; int24
+            dw 0x0000
+            dw 0x0000   ; int25
+            dw 0x0000
+            dw 0x0000   ; int26
+            dw 0x0000
+            dw 0x0000   ; int27
+            dw 0x0000
+            dw 0x0000   ; int28
+            dw 0x0000
+            dw 0x0000   ; int29
+            dw 0x0000
+            dw 0x0000   ; int2a
+            dw 0x0000
+            dw 0x0000   ; int2b
+            dw 0x0000
+            dw 0x0000   ; int2c
+            dw 0x0000
+            dw 0x0000   ; int2d
+            dw 0x0000
+            dw 0x0000   ; int2e
+            dw 0x0000
+            dw 0x0000   ; int2f
+            dw 0x0000
+
+            dw 0x0000   ; int30
+            dw 0x0000
+            dw 0x0000   ; int31
+            dw 0x0000
+            dw 0x0000   ; int32
+            dw 0x0000
+            dw 0x0000   ; int33
+            dw 0x0000
+            dw 0x0000   ; int34
+            dw 0x0000
+            dw 0x0000   ; int35
+            dw 0x0000
+            dw 0x0000   ; int36
+            dw 0x0000
+            dw 0x0000   ; int37
+            dw 0x0000
+            dw 0x0000   ; int38
+            dw 0x0000
+            dw 0x0000   ; int39
+            dw 0x0000
+            dw 0x0000   ; int3a
+            dw 0x0000
+            dw 0x0000   ; int3b
+            dw 0x0000
+            dw 0x0000   ; int3c
+            dw 0x0000
+            dw 0x0000   ; int3d
+            dw 0x0000
+            dw 0x0000   ; int3e
+            dw 0x0000
+            dw 0x0000   ; int3f
+            dw 0x0000
+
+            dw 0x0000   ; int40
+            dw 0x0000
+            dw 0x0000   ; int41
+            dw 0x0000
+            dw 0x0000   ; int42
+            dw 0x0000
+            dw 0x0000   ; int43
+            dw 0x0000
+            dw 0x0000   ; int44
+            dw 0x0000
+            dw 0x0000   ; int45
+            dw 0x0000
+            dw 0x0000   ; int46
+            dw 0x0000
+            dw 0x0000   ; int47
+            dw 0x0000
+            dw 0x0000   ; int48
+            dw 0x0000
+            dw 0x0000   ; int49
+            dw 0x0000
+            dw 0x0000   ; int4a
+            dw 0x0000
+            dw 0x0000   ; int4b
+            dw 0x0000
+            dw 0x0000   ; int4c
+            dw 0x0000
+            dw 0x0000   ; int4d
+            dw 0x0000
+            dw 0x0000   ; int4e
+            dw 0x0000
+            dw 0x0000   ; int4f
+            dw 0x0000
+
+            dw 0x0000   ; int50
+            dw 0x0000
+            dw 0x0000   ; int51
+            dw 0x0000
+            dw 0x0000   ; int52
+            dw 0x0000
+            dw 0x0000   ; int53
+            dw 0x0000
+            dw 0x0000   ; int54
+            dw 0x0000
+            dw 0x0000   ; int55
+            dw 0x0000
+            dw 0x0000   ; int56
+            dw 0x0000
+            dw 0x0000   ; int57
+            dw 0x0000
+            dw 0x0000   ; int58
+            dw 0x0000
+            dw 0x0000   ; int59
+            dw 0x0000
+            dw 0x0000   ; int5a
+            dw 0x0000
+            dw 0x0000   ; int5b
+            dw 0x0000
+            dw 0x0000   ; int5c
+            dw 0x0000
+            dw 0x0000   ; int5d
+            dw 0x0000
+            dw 0x0000   ; int5e
+            dw 0x0000
+            dw 0x0000   ; int5f
+            dw 0x0000
+
+            dw 0x0000   ; int60
+            dw 0x0000
+            dw 0x0000   ; int61
+            dw 0x0000
+            dw 0x0000   ; int62
+            dw 0x0000
+            dw 0x0000   ; int63
+            dw 0x0000
+            dw 0x0000   ; int64
+            dw 0x0000
+            dw 0x0000   ; int65
+            dw 0x0000
+            dw 0x0000   ; int66
+            dw 0x0000
+            dw 0x0000   ; int67
+            dw 0x0000
+            dw 0x0000   ; int68
+            dw 0x0000
+            dw 0x0000   ; int69
+            dw 0x0000
+            dw 0x0000   ; int6a
+            dw 0x0000
+            dw 0x0000   ; int6b
+            dw 0x0000
+            dw 0x0000   ; int6c
+            dw 0x0000
+            dw 0x0000   ; int6d
+            dw 0x0000
+            dw 0x0000   ; int6e
+            dw 0x0000
+            dw 0x0000   ; int6f
+            dw 0x0000
+
+            dw 0x0000   ; int70
+            dw 0x0000
+            dw 0x0000   ; int71
+            dw 0x0000
+            dw 0x0000   ; int72
+            dw 0x0000
+            dw 0x0000   ; int73
+            dw 0x0000
+            dw int74    ; int74
+            dw 0xf000
+            dw 0x0000   ; int75
+            dw 0x0000
+            dw 0x0000   ; int76
+            dw 0x0000
+            dw 0x0000   ; int77
+            dw 0x0000
+            dw 0x0000   ; int78
+            dw 0x0000
+            dw 0x0000   ; int79
+            dw 0x0000
+            dw 0x0000   ; int7a
+            dw 0x0000
+            dw 0x0000   ; int7b
+            dw 0x0000
+            dw 0x0000   ; int7c
+            dw 0x0000
+            dw 0x0000   ; int7d
+            dw 0x0000
+            dw 0x0000   ; int7e
+            dw 0x0000
+            dw 0x0000   ; int7f
+            dw 0x0000
 
 itbl_size   dw $-int_table
 
