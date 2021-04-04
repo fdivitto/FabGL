@@ -39,26 +39,46 @@ public:
   i8042();
   ~i8042();
 
-  void init(PIC8259 * pic8259);
+  void init(PIC8259 * pic8259A, PIC8259 * pic8259B);
 
   void tick();
 
   uint8_t read(int address);
   void write(int address, uint8_t value);
 
-  Keyboard * keyboard() { return m_keyboard; }
+  Keyboard * keyboard()  { return m_keyboard; }
+  Mouse * mouse()        { return m_mouse; }
+
+  void enableMouse(bool value);
 
 private:
 
+  void execCommand();
+  void updateCommandByte(uint8_t newValue);
+  bool trigKeyboardInterrupt();
+  bool trigMouseInterrupt();
+
   PS2Controller     m_PS2Controller;
   Keyboard        * m_keyboard;
-  PIC8259         * m_PIC8259;
+  Mouse           * m_mouse;
+  PIC8259         * m_PIC8259A;
+  PIC8259         * m_PIC8259B;
 
   uint8_t           m_STATUS;
   uint8_t           m_DBBOUT;
   uint8_t           m_DBBIN;
+  uint8_t           m_commandByte;
+  bool              m_writeToMouse; // if True next byte on port 0 (0x60) is transferred to mouse port
+  MousePacket       m_mousePacket;
+  int               m_mousePacketIdx;
+
+  // used when a command requires a parameter
+  uint8_t           m_executingCommand; // 0 = none
 
   SemaphoreHandle_t m_mutex;
+
+  int               m_mouseIntTrigs;
+  int               m_keybIntTrigs;
 
 };
 
