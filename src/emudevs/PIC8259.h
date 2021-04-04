@@ -53,7 +53,7 @@ public:
   uint8_t read(int addr);
 
   // Device->8259: a device reports interrupt to 8259
-  void signalInterrupt(int intnum);
+  bool signalInterrupt(int intnum);
 
   // 8259->CPU: 8259 reports interrupt to CPU
   bool pendingInterrupt()                               { return m_pendingInterrupt; }
