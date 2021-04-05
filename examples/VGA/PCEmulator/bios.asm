@@ -34,7 +34,8 @@
 ;   - INT9, support for INT15,4F keyboard intercept
 ;   - removed internal variables from BIOS data area
 ;   - INT9, support for CTRL+ALT+DEL, PRINTSCREEN, CTRLBREAK, SYSREQ, PAUSE
-;   - INT15 implemented function 0xC200
+;   - INT15 implemented function 0xC2
+;   - implemented INT74 (pointing device)
 ;
 ;
 ;
@@ -42,7 +43,7 @@
 ; This work is licensed under the MIT License. See included LICENSE.TXT.
 
 
-cpu  8086
+cpu 8086
 
 
 ; PIC 8259A/B interrupt controllers stuff
@@ -69,6 +70,7 @@ EBDA_PACKET        equ 0x28     ; Start of packet
 MODEL    equ 0xfc
 SUBMODEL equ 0x01
 BIOSREV  equ 0x00
+
 
 ; emulator macros
 ; These macros allows BIOS to call helper functions implemented in the emulator side.
@@ -3646,7 +3648,8 @@ rom_config  dw 16          ; 16 bytes following
             ;   bit 2 : extended BIOS area allocated
             ;   bit 4 : Keyboard intercept sequence (INT 15H) called in keyboard interrupt (INT 09H)
             ;   bit 5 : real time clock installed
-            db 0b00110100
+            ;   bit 6 : second 8259 installed
+            db 0b01110100
             ; feature 2:
             ;   bit 6 : INT 16/AH=09h (keyboard functionality) supported
             db 0b01000000
@@ -6373,9 +6376,12 @@ lpt2addr         dw  0
 lpt3addr         dw  0
 lpt4addr         dw  0                   ; 40:0e
 
-; bit 0 : diskette available for boot
-; bit 2 : PS/2 mouse present
-equip            dw  0b1101010000100101  ; 40:10h
+; bit 0     : diskette available for boot
+; bit 2     : PS/2 mouse present
+; bit 4-5   : 80x25 color (10)
+; bit 9-11  : number of serial ports (010 = 2)
+; bit 14-15 : number of printer adapters
+equip            dw  0b0001010000100101  ; 40:10h
 
                  db  0
 memsize          dw  MEMSIZE
@@ -6770,15 +6776,6 @@ vid_static_table:
   dw 0x00 ; reserved
   db 0x08 ; save pointer function flags
   db 0x00 ; reserved
-
-
-; Internal variables for VMEM driver
-
-int8_ctr      db  0
-in_update     db  0
-last_attrib   db  0
-int_curpos_x  db  0
-int_curpos_y  db  0
 
 
 ; CGA Character set patterns
