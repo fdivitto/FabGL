@@ -38,6 +38,20 @@ public:
   typedef void (*ChangeOut)(void * context, int timerIndex);
   typedef void (*Tick)(void * context, int ticks);
 
+  struct TimerInfo {
+    bool    BCD;          // BCD mode
+    int32_t mode;         // Timer mode
+    int32_t RLMode;       // Read/Load mode
+    int32_t resetHolding; // Holding area for timer reset count
+    int32_t resetCount;   // Reload value when count is zero
+    int32_t count;        // Current timer counter
+    int32_t latch;        // Latched timer count (-1 = not latched)
+    bool    LSBToggle;    // true: Read load LSB, false: Read load MSB
+    bool    out;          // out state
+    bool    gate;         // date (1 = timer running)
+    bool    running;      // counting down in course
+  };
+
   PIT8253();
   ~PIT8253();
 
@@ -49,7 +63,6 @@ public:
 
   void runAutoTick(int freq, int updatesPerSec);
 
-
   void reset();
 
   void tick(int ticks);
@@ -57,22 +70,15 @@ public:
   void write(int reg, uint8_t value);
   uint8_t read(int reg);
 
-  bool readOut(int index) { return m_timer[index].out; }
+  bool getOut(int timerIndex)  { return m_timer[timerIndex].out; }
+  bool getGate(int timerIndex) { return m_timer[timerIndex].gate; }
+
+  void setGate(int timerIndex, bool value);
+
+  TimerInfo const & timerInfo(int timerIndex) { return m_timer[timerIndex]; }
 
 
 private:
-
-  struct TimerInfo {
-    bool    BCD;          // BCD mode
-    int32_t mode;         // Timer mode
-    int32_t RLMode;       // Read/Load mode
-    int32_t resetHolding; // Holding area for timer reset count
-    int32_t resetCount;   // Reload value when count is zero
-    int32_t count;        // Current timer counter
-    int32_t latch;        // Latched timer count (-1 = not latched)
-    bool    LSBToggle;    // true: Read load LSB, false: Read load MSB
-    bool    out;
-  };
 
 
   static void autoTickTask(void * pvParameters);

@@ -68,9 +68,9 @@ void PIT8253::autoTickTask(void * pvParameters)
 void PIT8253::reset()
 {
   AutoSemaphore autoSemaphore(m_mutex);
-  m_timer[0] = { false, 3, 3, 0, 0, 0, -1, true, false };
-  m_timer[1] = { false, 3, 3, 0, 0, 0, -1, true, false };
-  m_timer[2] = { false, 3, 3, 0, 0, 0, -1, true, false };
+  m_timer[0] = { false, 3, 3, 0, 0, 0, -1, true, false, false, false };
+  m_timer[1] = { false, 3, 3, 0, 0, 0, -1, true, false, false, false };
+  m_timer[2] = { false, 3, 3, 0, 0, 0, -1, true, false, false, false };
 }
 
 
@@ -87,21 +87,21 @@ void PIT8253::write(int reg, uint8_t value)
 
     int RLMode = (value >> 4) & 0x03;
     if (RLMode == 0) {
+      // counter latching operation (doesn't change BCD or mode)
       m_timer[timerIndex].latch = m_timer[timerIndex].count;
       m_timer[timerIndex].LSBToggle = true;
     } else {
+      // read/load
+      m_timer[timerIndex].mode = (value >> 1) & 0x07;
+      m_timer[timerIndex].BCD  = (value & 1) == 1;
       m_timer[timerIndex].RLMode = RLMode;
       if (RLMode == 3)
         m_timer[timerIndex].LSBToggle = true;
     }
 
-    // note: to run correctly Desqview 2.8 disable mode setting (ie setting always .mode=3).
-    // It seems that Desqview set mode 0, which is one time timer, and timer0 never fire other interrupts. To check better!
-    m_timer[timerIndex].mode = 3;//(value >> 1) & 0x07;
-
-    m_timer[timerIndex].BCD  = (value & 1) == 1;
-
     //printf("PIT8253: write ctrl reg, %02X (timer=%d, mode=%d)\n", value, timerIndex, m_timer[timerIndex].mode);
+    if (value >> 6 == 3)
+      printf("8253, read back. Required 8254?\n");
 
   } else {
 
@@ -132,10 +132,10 @@ void PIT8253::write(int reg, uint8_t value)
         m_timer[timerIndex].count = (uint16_t)(m_timer[timerIndex].resetCount - 1);
       }
     }
-  }
 
-  if (m_timer[timerIndex].mode == 0) {
-    changeOut(timerIndex, false);
+    // OUT: with mode 0 it starts low, other modes it starts high
+    changeOut(timerIndex, m_timer[timerIndex].mode != 0);
+
   }
 
 }
@@ -177,6 +177,27 @@ uint8_t PIT8253::read(int reg)
 }
 
 
+void PIT8253::setGate(int timerIndex, bool value)
+{
+  AutoSemaphore autoSemaphore(m_mutex);
+  switch (m_timer[timerIndex].mode) {
+    case 0:
+    case 2:
+    case 3:
+      // running when gate is high
+      m_timer[timerIndex].running = value;
+      break;
+    case 1:
+    case 5:
+      // switch to running when gate changes to high
+      if (m_timer[timerIndex].gate == false && value == true)
+        m_timer[timerIndex].running = true;
+      break;
+  }
+  m_timer[timerIndex].gate = value;
+}
+
+
 void PIT8253::changeOut(int timer, bool value)
 {
   if (value != m_timer[timer].out) {
@@ -199,37 +220,64 @@ void PIT8253::unsafeTick(int ticks)
 {
   for (int timerIndex = 0; timerIndex < 3; ++timerIndex) {
 
-    m_timer[timerIndex].count -= ticks;
+    if (m_timer[timerIndex].running) {
 
-    // in mode 3 each tick subtract 2 instead of 1
-    if (m_timer[timerIndex].mode == 3)
+      // modes 4 or 5, end of ending low pulse?
+      if (m_timer[timerIndex].mode >= 4 && m_timer[timerIndex].out == false) {
+        // mode 4, end of low pulse
+        changeOut(timerIndex, true);
+        m_timer[timerIndex].running = false;
+        m_timer[timerIndex].count = 65535;
+        continue;
+      }
+
       m_timer[timerIndex].count -= ticks;
 
-    if (m_timer[timerIndex].count <= 0) {
-      // count terminated
-      if (m_timer[timerIndex].resetCount == 0) {
-        m_timer[timerIndex].count += 65536;
+      // in mode 3 each tick subtract 2 instead of 1
+      if (m_timer[timerIndex].mode == 3)
+        m_timer[timerIndex].count -= ticks;
+
+      if (m_timer[timerIndex].count <= 0) {
+        // count terminated
+        if (m_timer[timerIndex].resetCount == 0) {
+          m_timer[timerIndex].count += 65536;
+        } else {
+          m_timer[timerIndex].count += m_timer[timerIndex].resetCount;
+        }
+        switch (m_timer[timerIndex].mode) {
+          case 0:
+            // at the end OUT goes high
+            changeOut(timerIndex, true);
+            break;
+          case 1:
+            // at the end OUT goes high
+            changeOut(timerIndex, true);
+            break;
+          case 2:
+            changeOut(timerIndex, false);
+            break;
+          case 3:
+            changeOut(timerIndex, !m_timer[timerIndex].out);
+            break;
+        }
       } else {
-        m_timer[timerIndex].count += m_timer[timerIndex].resetCount;
+        // count running
+        switch (m_timer[timerIndex].mode) {
+          case 1:
+            // OUT is low while running
+            changeOut(timerIndex, false);
+            break;
+          case 2:
+            changeOut(timerIndex, true);
+            break;
+          case 4:
+          case 5:
+            // start low pulse
+            changeOut(timerIndex, false);
+            break;
+        }
       }
-      switch (m_timer[timerIndex].mode) {
-        case 0:
-          changeOut(timerIndex, true);
-          break;
-        case 2:
-          changeOut(timerIndex, false);
-          break;
-        case 3:
-          changeOut(timerIndex, !m_timer[timerIndex].out);
-          break;
-      }
-    } else {
-      // count running
-      switch (m_timer[timerIndex].mode) {
-        case 2:
-          changeOut(timerIndex, true);
-          break;
-      }
+
     }
 
   }
