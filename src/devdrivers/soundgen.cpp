@@ -617,7 +617,7 @@ void SoundGenerator::detachNoSuspend(WaveformGenerator * value)
 }
 
 
-void SoundGenerator::waveGenTask(void * arg)
+void IRAM_ATTR SoundGenerator::waveGenTask(void * arg)
 {
   SoundGenerator * soundGenerator = (SoundGenerator*) arg;
 
