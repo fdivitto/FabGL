@@ -115,6 +115,11 @@ void Machine::init()
   m_HGCSwitchReg    = 0;
   m_HGCVSyncQuery   = 0;
 
+  m_speakerDataEnable = false;
+
+  m_soundGen.play(true);
+  m_soundGen.attach(&m_sinWaveGen);
+
   m_i8042.init(&m_PIC8259A, &m_PIC8259B);
 
   m_PIC8259A.reset();
@@ -123,6 +128,8 @@ void Machine::init()
   m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
   m_PIT8253.reset();
   m_PIT8253.runAutoTick(PIT_TICK_FREQ, PIT_UPDATES_PER_SEC);
+  m_PIT8253.setGate(0, true);
+  m_PIT8253.setGate(1, true);
 
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
@@ -352,12 +359,25 @@ void Machine::writePort(void * context, int address, uint8_t value)
     case 0x0041:
     case 0x0042:
     case 0x0043:
+      //printf("OUT %04x=%02x\n", address, value);
       m->m_PIT8253.write(address & 3, value);
+      if ((address == 0x43 && (value >> 6) == 2) || address == 0x42)
+        m->speakerSetFreq();
       break;
 
     // 8042 keyboard controller input
     case 0x0060:
       m->m_i8042.write(0, value);
+      break;
+
+    // PortB
+    //   bit 1 : speaker data enable
+    //   bit 0 : timer 2 gate
+    case 0x0061:
+      //printf("OUT %04x=%02x\n", address, value);
+      m->m_speakerDataEnable = value & 0x02;
+      m->m_PIT8253.setGate(2, value & 0x01);
+      m->speakerEnableDisable();
       break;
 
     // 8042 keyboard controller input
@@ -445,9 +465,20 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x0060:
       return m->m_i8042.read(0);
 
+    // Port B
+    //   bit 5 : timer 2 out
+    //   bit 4 : toggles every 15.085us (DMA refresh)
+    //   bit 1 : speaker data enable
+    //   bit 0 : timer 2 gate
+    case 0x0061:
+      return ((int)m->m_PIT8253.getOut(2) << 5) |    // bit 5
+             (esp_timer_get_time() & 0x10)       |   // bit 4 (toggles every 16us)
+             ((int)m->m_speakerDataEnable << 1)  |   // bit 1
+             ((int)m->m_PIT8253.getGate(2));         // bit 0
+
     // I/O port
     case 0x0062:
-      return 0x20 * m->m_PIT8253.readOut(2);  // bit 5 = timer 2 output
+      return 0x20 * m->m_PIT8253.getOut(2);  // bit 5 = timer 2 output
 
     // 8042 keyboard controller status register
     case 0x0064:
@@ -495,7 +526,7 @@ void Machine::PITChangeOut(void * context, int timerIndex)
   auto m = (Machine*)context;
 
   // timer 0 trigged?
-  if (timerIndex == 0 &&  m->m_PIT8253.readOut(0) == true) {
+  if (timerIndex == 0 &&  m->m_PIT8253.getOut(0) == true) {
     // yes, report IR0 (IRQ8)
     m->m_PIC8259A.signalInterrupt(0);
   }
@@ -624,4 +655,28 @@ bool Machine::interrupt(void * context, int num)
   return false;
 }
 
+
+void Machine::speakerSetFreq()
+{
+  //printf("speakerSetFreq: count = %d\n", m_PIT8253.timerInfo(2).resetCount);
+  int timerCount = m_PIT8253.timerInfo(2).resetCount;
+  if (timerCount == 0)
+    timerCount = 65536;
+  int freq = PIT_TICK_FREQ / timerCount;
+  //printf("   freq = %dHz\n", freq);
+  m_sinWaveGen.setFrequency(freq);
+}
+
+
+void Machine::speakerEnableDisable()
+{
+  bool genEnabled = m_PIT8253.getGate(2);
+  if (genEnabled && m_speakerDataEnable) {
+    // speaker enabled
+    m_sinWaveGen.enable(true);
+  } else {
+    // speaker disabled
+    m_sinWaveGen.enable(false);
+  }
+}
 

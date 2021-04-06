@@ -75,6 +75,9 @@ private:
   static void PITChangeOut(void * context, int timerIndex);
   static void PITTick(void * context, int timerIndex);
 
+  void speakerSetFreq();
+  void speakerEnableDisable();
+
 
   GraphicsAdapter          m_graphicsAdapter;
 
@@ -121,6 +124,11 @@ private:
   uint8_t                  m_HGCModeReg;
   uint8_t                  m_HGCSwitchReg;
   uint16_t                 m_HGCVSyncQuery;
+
+  // speaker/audio
+  bool                     m_speakerDataEnable;
+  SoundGenerator           m_soundGen;
+  SineWaveformGenerator    m_sinWaveGen;
 
 };
 
