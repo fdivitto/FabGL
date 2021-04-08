@@ -47,7 +47,11 @@ public:
 
   void run();
 
-  uint32_t ticksCounter() { return m_ticksCounter; }
+  uint32_t ticksCounter()    { return m_ticksCounter; }
+
+  i8042 * getI8042()         { return &m_i8042; }
+
+  uint8_t * memory()         { return s_memory; }
 
 private:
 

@@ -135,7 +135,7 @@ void Machine::init()
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
 
-  m_BIOS.init(s_memory, this, readPort, writePort, &m_i8042);
+  m_BIOS.init(this);
 
   i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, interrupt);
   i8086::setMemory(s_memory);

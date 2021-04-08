@@ -22,6 +22,7 @@
 
 
 #include "bios.h"
+#include "machine.h"
 #include "emudevs/i8086.h"
 
 
@@ -34,15 +35,11 @@ static const uint8_t biosrom[] = {
 };
 
 
-void BIOS::init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, i8042 * i8042)
+void BIOS::init(Machine * machine)
 {
-  m_memory    = memory;
-
-  m_context   = context;
-  m_readPort  = readPort;
-  m_writePort = writePort;
-
-  m_i8042     = i8042;
+  m_machine   = m_machine;
+  m_memory    = m_machine->memory();
+  m_i8042     = m_machine->getI8042();
   m_keyboard  = m_i8042->keyboard();
   m_mouse     = m_i8042->mouse();
 
@@ -572,10 +569,10 @@ void BIOS::pointingDeviceInterface()
       // outputs:
       //    BH : Device ID
       case 0x01:
-        m_i8042->enableMouse(false);  // mouse disabled
-        m_mouse->setSampleRate(100);  // 100 reports/second
-        m_mouse->setResolution(2);    // 4 counts/millimeter
-        m_mouse->setScaling(1);       // 1:1 scaling
+        m_i8042->enableMouse(false);             // mouse disabled
+        m_mouse->setSampleRate(100);             // 100 reports/second
+        m_mouse->setResolution(2);               // 4 counts/millimeter
+        m_mouse->setScaling(1);                  // 1:1 scaling
         i8086::setBH(m_mouse->deviceID() & 0xff);
         break;
 
@@ -609,10 +606,10 @@ void BIOS::pointingDeviceInterface()
       //         note: this value is acqually ignored because we get actual packet size from Mouse object
       case 0x05:
       {
-        m_i8042->enableMouse(false);  // mouse disabled
-        m_mouse->setSampleRate(100);  // 100 reports/second
-        m_mouse->setResolution(2);    // 4 counts/millimeter
-        m_mouse->setScaling(1);       // 1:1 scaling
+        m_i8042->enableMouse(false);              // mouse disabled
+        m_mouse->setSampleRate(100);              // 100 reports/second
+        m_mouse->setResolution(2);                // 4 counts/millimeter
+        m_mouse->setScaling(1);                   // 1:1 scaling
         uint8_t * EBDA = m_memory + EBDA_ADDR;
         EBDA[EBDA_DRIVER_OFFSET] = 0x0000;
         EBDA[EBDA_DRIVER_SEG]    = 0x0000;

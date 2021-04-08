@@ -69,16 +69,14 @@ using fabgl::Mouse;
 using fabgl::i8042;
 
 
+class Machine;
+
+
 class BIOS {
 
 public:
 
-  // callbacks
-  typedef void (*WritePort)(void * context, int address, uint8_t value);
-  typedef uint8_t (*ReadPort)(void * context, int address);
-
-
-  void init(uint8_t * memory, void * context, ReadPort readPort, WritePort writePort, i8042 * i8042);
+  void init(Machine * machine);
 
   void helpersEntry();
 
@@ -97,16 +95,11 @@ private:
   void pointingDeviceInterface();
 
 
+
+  Machine *       m_machine;
   uint8_t *       m_memory;
-
-  // callbacks
-  void *          m_context;
-  ReadPort        m_readPort;
-  WritePort       m_writePort;
-
   Keyboard *      m_keyboard;
   Mouse *         m_mouse;
-
   i8042 *         m_i8042;
 
   // state of multibyte scancode intermediate reception:
