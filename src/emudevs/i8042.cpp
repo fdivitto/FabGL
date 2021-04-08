@@ -85,11 +85,8 @@ i8042::~i8042()
 }
 
 
-void i8042::init(PIC8259 * pic8259A, PIC8259 * pic8259B)
+void i8042::init()
 {
-  m_PIC8259A = pic8259A;
-  m_PIC8259B = pic8259B;
-
   // because mouse is optional, don't re-try if it is not found (to speed-up boot)
   Mouse::quickCheckHardware();
 
@@ -330,15 +327,13 @@ void i8042::updateCommandByte(uint8_t newValue)
 
 bool i8042::trigKeyboardInterrupt()
 {
-  // IR1 (IRQ1) of 8259A (INT9)
-  return m_commandByte & CMDBYTE_ENABLE_KEYBOARD_IRQ ? m_PIC8259A->signalInterrupt(1) : true;
+  return m_commandByte & CMDBYTE_ENABLE_KEYBOARD_IRQ ? m_keyboardInterrupt(m_context) : true;
 }
 
 
 bool i8042::trigMouseInterrupt()
 {
-  // IR4 (IRQ12) of 8259B (INT74)
-  return m_commandByte & CMDBYTE_ENABLE_MOUSE_IRQ ? m_PIC8259B->signalInterrupt(4) : true;
+  return m_commandByte & CMDBYTE_ENABLE_MOUSE_IRQ ? m_mouseInterrupt(m_context) : true;
 }
 
 

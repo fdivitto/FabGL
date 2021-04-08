@@ -75,6 +75,9 @@ private:
   static void PITChangeOut(void * context, int timerIndex);
   static void PITTick(void * context, int timerIndex);
 
+  static bool keyboardInterrupt(void * context);
+  static bool mouseInterrupt(void * context);
+
   void speakerSetFreq();
   void speakerEnableDisable();
 
@@ -89,8 +92,8 @@ private:
   static uint8_t *         s_videoMemory;
 
   // 8259 Programmable Interrupt Controllers
-  PIC8259                  m_PIC8259A;
-  PIC8259                  m_PIC8259B;
+  PIC8259                  m_PIC8259A;  // master
+  PIC8259                  m_PIC8259B;  // slave
 
   // 8253 Programmable Interval Timers
   // pin connections of PIT8253 on the IBM XT:

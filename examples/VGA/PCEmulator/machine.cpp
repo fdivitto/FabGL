@@ -120,7 +120,8 @@ void Machine::init()
   m_soundGen.play(true);
   m_soundGen.attach(&m_sinWaveGen);
 
-  m_i8042.init(&m_PIC8259A, &m_PIC8259B);
+  m_i8042.init();
+  m_i8042.setCallbacks(this, keyboardInterrupt, mouseInterrupt);
 
   m_PIC8259A.reset();
   m_PIC8259B.reset();
@@ -527,11 +528,26 @@ void Machine::PITChangeOut(void * context, int timerIndex)
 
   // timer 0 trigged?
   if (timerIndex == 0 &&  m->m_PIT8253.getOut(0) == true) {
-    // yes, report IR0 (IRQ8)
+    // yes, report 8259A-IR0 (IRQ0, INT 08h)
     m->m_PIC8259A.signalInterrupt(0);
   }
 }
 
+
+// 8259A-IR1 (IRQ1, INT 09h)
+bool Machine::keyboardInterrupt(void * context)
+{
+  auto m = (Machine*)context;
+  return m->m_PIC8259A.signalInterrupt(1);
+}
+
+
+// 8259B-IR4 (IRQ12, INT 074h)
+bool Machine::mouseInterrupt(void * context)
+{
+  auto m = (Machine*)context;
+  return m->m_PIC8259B.signalInterrupt(4);
+}
 
 void Machine::PITTick(void * context, int timerIndex)
 {

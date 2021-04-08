@@ -23,7 +23,6 @@
 #pragma once
 
 #include "fabgl.h"
-#include "emudevs/PIC8259.h"
 
 
 
@@ -36,10 +35,18 @@ class i8042 {
 
 public:
 
+  typedef bool (*InterruptCallback)(void * context);
+
   i8042();
   ~i8042();
 
-  void init(PIC8259 * pic8259A, PIC8259 * pic8259B);
+  void init();
+
+  void setCallbacks(void * context, InterruptCallback keyboardInterrupt, InterruptCallback mouseInterrupt) {
+    m_context           = context;
+    m_keyboardInterrupt = keyboardInterrupt;
+    m_mouseInterrupt    = mouseInterrupt;
+  }
 
   void tick();
 
@@ -59,10 +66,12 @@ private:
   bool trigMouseInterrupt();
 
   PS2Controller     m_PS2Controller;
-  Keyboard        * m_keyboard;
-  Mouse           * m_mouse;
-  PIC8259         * m_PIC8259A;
-  PIC8259         * m_PIC8259B;
+  Keyboard *        m_keyboard;
+  Mouse *           m_mouse;
+
+  void *            m_context;
+  InterruptCallback m_keyboardInterrupt;
+  InterruptCallback m_mouseInterrupt;
 
   uint8_t           m_STATUS;
   uint8_t           m_DBBOUT;
