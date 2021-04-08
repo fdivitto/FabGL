@@ -36,6 +36,7 @@
 ;   - INT9, support for CTRL+ALT+DEL, PRINTSCREEN, CTRLBREAK, SYSREQ, PAUSE
 ;   - INT15 implemented function 0xC2
 ;   - implemented INT74 (pointing device)
+;   - INT8, implemented 24H rollover
 ;
 ;
 ;
@@ -479,23 +480,29 @@ int7:
 ; ************************* INT 8h handler - timer
 
 int8:
-  ; timer interupt evert 1/18.2 seconds
+  ; timer interupt every 1/18.2 seconds
   push  ax
-  push  bx
-  push  dx
-  push  bp
-  push  es
-
-  push  cx
-  push  di
   push  ds
-  push  si
 
-  mov   bx, 0x40
-  mov   es, bx
+  mov   ax, 0x40
+  mov   ds, ax
 
-  add   word [es:0x6C], 1
-  adc   word [es:0x6E], 0
+  add   word [clk_dtimer_lo - bios_data], 1
+  adc   word [clk_dtimer_hi - bios_data], 0
+
+  ; does time count exceed 24 hours?
+  ; 60*60*24*18.2 = 0x17fe80
+  ; IBM-AT BIOS compares to 0x0018:0x00b0
+  cmp   word [clk_dtimer_hi - bios_data], 0x18
+  jnz   i8_end
+  cmp   word [clk_dtimer_lo - bios_data], 0xb0
+  jnz   i8_end
+
+  ; reset counter and set 24h rollover flag
+  xor   ax, ax
+  mov   [clk_dtimer_hi - bios_data], ax
+  mov   [clk_dtimer_lo - bios_data], ax
+  mov   byte [clk_rollover - bios_data], 1
 
 i8_end:
 
@@ -504,15 +511,7 @@ i8_end:
 
   call  reportEOIA
 
-  pop   si
   pop   ds
-  pop   di
-  pop   cx
-
-  pop   es
-  pop   bp
-  pop   dx
-  pop   bx
   pop   ax
 
   iret
@@ -3599,11 +3598,13 @@ int1a_init:
 
   jmp  reach_stack_clc
 
+
 ; ************************* INT 1Ch - the other timer interrupt
 
 int1c:
 
   iret
+
 
 ; ************************* INT 1Eh - diskette parameter table
 
@@ -3621,6 +3622,7 @@ int1e_spt  db 18  ; 18 sectors per track (1.44MB)
     db 0x0F ; Head settle time (1 ms)
     db 0x08 ; Motor start time in 1/8 seconds
 
+
 ; ************************* INT 41h - hard disk parameter table
 
 int41:
@@ -3637,6 +3639,7 @@ int41_max_heads  db 0
     dw 0
 int41_max_sect  db 0
     db 0
+
 
 ; ************************* ROM configuration table
 
@@ -3701,6 +3704,7 @@ int1b:
 int1d:
 
 iret
+
 
 ; ************ Function call library ************
 
@@ -6420,8 +6424,10 @@ vid_rom_segaddr  dw  0
 biod_data_vid_end:
 
 last_intr        db  0
-clk_dtimer       dd  0
-clk_rollover     db  0
+clk_dtimer:
+clk_dtimer_lo    dw  0   ; 0x6c
+clk_dtimer_hi    dw  0   ; 0x6e
+clk_rollover     db  0   ; 0x70
 ctrl_break       db  0
 soft_rst_flg     dw  0x1234
                  db  0
