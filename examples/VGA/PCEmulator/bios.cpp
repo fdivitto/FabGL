@@ -37,7 +37,7 @@ static const uint8_t biosrom[] = {
 
 void BIOS::init(Machine * machine)
 {
-  m_machine   = m_machine;
+  m_machine   = machine;
   m_memory    = m_machine->memory();
   m_i8042     = m_machine->getI8042();
   m_keyboard  = m_i8042->keyboard();
