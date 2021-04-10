@@ -30,7 +30,7 @@
 #include "fabgl.h"
 
 
-#if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 4)
+#if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 5)
 typedef nvs_handle nvs_handle_t;
 #endif
 

@@ -25,7 +25,7 @@
 
 #pragma GCC optimize ("O2")
 
-#if FABGL_ESP_IDF_VERSION > FABGL_ESP_IDF_VERSION_VAL(3, 3, 4)
+#if FABGL_ESP_IDF_VERSION > FABGL_ESP_IDF_VERSION_VAL(3, 3, 5)
   #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
