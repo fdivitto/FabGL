@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - www.fabgl.com
-  Copyright (c) 2019-2020 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
   All rights reserved.
 
   This file is part of FabGL Library.
@@ -69,7 +69,7 @@ void demo1()
   Terminal.write("\e[2J");     // clear screen
   Terminal.write("\e[1;1H");   // move cursor to 1,1
   slowPrintf("* * * *  W E L C O M E   T O   F a b G L  * * * *\r\n");
-  slowPrintf("2019-2020 by Fabrizio Di Vittorio - www.fabgl.com\r\n");
+  slowPrintf("2019-2021 by Fabrizio Di Vittorio - www.fabgl.com\r\n");
   slowPrintf("===============================================\r\n\n");
   slowPrintf("Text only VGA display controller demo\r\n\n");
   slowPrintf("Current settings\r\n");

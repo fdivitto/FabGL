@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - www.fabgl.com
-  Copyright (c) 2019-2020 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
   All rights reserved.
 
   This file is part of FabGL Library.
@@ -177,7 +177,7 @@ struct TestApp : public uiApp {
     };
 
 
-    new uiLabel(frame, "FabGL - Copyright 2019-2020 by Fabrizio Di Vittorio", Point(175, 313));
+    new uiLabel(frame, "FabGL - Copyright 2019-2021 by Fabrizio Di Vittorio", Point(175, 313));
     new uiLabel(frame, "WWW.FABGL.COM", Point(260, 330));
 
   }

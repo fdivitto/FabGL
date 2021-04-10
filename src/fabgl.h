@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2020 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
   All rights reserved.
 
   This file is part of FabGL Library.
@@ -40,7 +40,7 @@
  * <a href="https://www.github.com/fdivitto/fabgl"> <img src="github.png" style="width:230px;height:80px;border:0;"> </a>
  * @endhtmlonly
  *
- * [www.FabGL.com](http://www.fabgl.com) - 2019-2020 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
+ * [www.FabGL.com](http://www.fabgl.com) - 2019-2021 by Fabrizio Di Vittorio (fdivitto2013@gmail.com)
  *
  * [Demos and Tutorials](https://www.youtube.com/user/fdivitto/videos)
  *
@@ -148,7 +148,7 @@
  * - - -
  *
  * Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com> <br>
- * Copyright (c) 2019-2020 Fabrizio Di Vittorio. <br>
+ * Copyright (c) 2019-2021 Fabrizio Di Vittorio. <br>
  * All rights reserved. <br>
  *
  * This file is part of FabGL Library.
