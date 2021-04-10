@@ -76,7 +76,12 @@ void setup()
     printf("This app requires an SD-CARD\n");
     while (1);
   }
-  
+
+  // setup time (@TODO: use WiFi and sntp)
+  auto tm = (struct tm){ .tm_sec  = 0, .tm_min  = 0, .tm_hour = 8, .tm_mday = 14, .tm_mon  = 7, .tm_year = 84 };
+  auto now = (timeval){ .tv_sec = mktime(&tm) };
+  settimeofday(&now, nullptr);
+
   machine.run();
 }
 

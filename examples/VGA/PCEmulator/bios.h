@@ -25,6 +25,7 @@
 
 #include "fabgl.h"
 #include "emudevs/i8042.h"
+#include "emudevs/MC146818.h"
 
 
 #define BIOS_SEG             0xF000
@@ -43,6 +44,8 @@
 #define BIOS_KBDBUFHEAD        0x1a     // pointer to next character in keyboard buffer
 #define BIOS_KBDBUFTAIL        0x1c     // pointer to first available spot in keyboard buffer
 #define BIOS_KBDBUF            0x1e     // keyboard buffer (32 bytes, 16 keys, but actually 15)
+#define BIOS_SYSTICKS          0x6c     // system ticks (dword)
+#define BIOS_CLKROLLOVER       0x70     // system tick rollover flag (24h)
 #define BIOS_CTRLBREAKFLAG     0x71     // Ctrl-Break flag
 #define BIOS_KBDMODE           0x96     // keyboard mode and other shift flags
 #define BIOS_KBDLEDS           0x97     // keyboard LEDs
@@ -67,6 +70,7 @@ using fabgl::PS2Controller;
 using fabgl::Keyboard;
 using fabgl::Mouse;
 using fabgl::i8042;
+using fabgl::MC146818;
 
 
 class Machine;
@@ -94,13 +98,14 @@ private:
 
   void pointingDeviceInterface();
 
-
+  void syncTicksWithRTC();
 
   Machine *       m_machine;
   uint8_t *       m_memory;
   Keyboard *      m_keyboard;
   Mouse *         m_mouse;
   i8042 *         m_i8042;
+  MC146818 *      m_MC146818;
 
   // state of multibyte scancode intermediate reception:
   // 0 = none

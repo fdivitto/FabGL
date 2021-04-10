@@ -33,16 +33,6 @@
 
 
 
-#define RAM_SIZE             1048576    // must correspond to bios MEMSIZE
-#define VIDEOMEMSIZE         65536
-
-// PIT (timers) frequency in Hertz
-#define PIT_TICK_FREQ        1193182
-
-// number of times PIT is updated every second
-#define PIT_UPDATES_PER_SEC  500
-
-
 
 // CGA Craphics Card Ports Bits
 
@@ -131,6 +121,10 @@ void Machine::init()
   m_PIT8253.runAutoTick(PIT_TICK_FREQ, PIT_UPDATES_PER_SEC);
   m_PIT8253.setGate(0, true);
   m_PIT8253.setGate(1, true);
+
+  m_MC146818.init("PCEmulator");
+  m_MC146818.setCallbacks(this, MC146818Interrupt);
+  m_MC146818.reset();
 
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
@@ -360,7 +354,6 @@ void Machine::writePort(void * context, int address, uint8_t value)
     case 0x0041:
     case 0x0042:
     case 0x0043:
-      //printf("OUT %04x=%02x\n", address, value);
       m->m_PIT8253.write(address & 3, value);
       if ((address == 0x43 && (value >> 6) == 2) || address == 0x42)
         m->speakerSetFreq();
@@ -375,7 +368,6 @@ void Machine::writePort(void * context, int address, uint8_t value)
     //   bit 1 : speaker data enable
     //   bit 0 : timer 2 gate
     case 0x0061:
-      //printf("OUT %04x=%02x\n", address, value);
       m->m_speakerDataEnable = value & 0x02;
       m->m_PIT8253.setGate(2, value & 0x01);
       m->speakerEnableDisable();
@@ -384,6 +376,12 @@ void Machine::writePort(void * context, int address, uint8_t value)
     // 8042 keyboard controller input
     case 0x0064:
       m->m_i8042.write(1, value);
+      break;
+
+    // MC146818 RTC & RAM
+    case 0x0070:
+    case 0x0071:
+      m->m_MC146818.write(address & 1, value);
       break;
 
     // CGA - CRT 6845 - register selection register
@@ -485,6 +483,11 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x0064:
       return m->m_i8042.read(1);
 
+    // MC146818 RTC & RAM
+    case 0x0070:
+    case 0x0071:
+      return m->m_MC146818.read(address & 1);
+
     // CGA - CRT 6845 - register selection register
     case 0x3d4:
       return 0x00;  // not readable
@@ -549,6 +552,15 @@ bool Machine::mouseInterrupt(void * context)
   return m->m_PIC8259B.signalInterrupt(4);
 }
 
+
+// interrupt from MC146818, trig 8259B-IR0 (IRQ8, INT 70h)
+bool Machine::MC146818Interrupt(void * context)
+{
+  auto m = (Machine*)context;
+  return m->m_PIC8259B.signalInterrupt(0);
+}
+
+
 void Machine::PITTick(void * context, int timerIndex)
 {
   auto m = (Machine*)context;
@@ -606,17 +618,6 @@ bool Machine::interrupt(void * context, int num)
         auto r = fwrite(s_memory + src, 1, count, m->m_disk[diskIndex]);
         i8086::setAL(r & 0xff);
         //printf("write(0x%05X, %d, %d) => %d\n", src, count, diskIndex, r);
-        return true;
-      }
-
-      // Get RTC
-      case 0xf3:
-      {
-        // @TODO
-        //printf("Get RTC\n");
-        uint32_t dest = i8086::ES() * 16 + i8086::BX();
-        memset(s_memory + dest, 0, 36);
-        *(int16_t*)(s_memory + dest + 36) = xTaskGetTickCount() * portTICK_PERIOD_MS;
         return true;
       }
 
@@ -695,4 +696,6 @@ void Machine::speakerEnableDisable()
     m_sinWaveGen.enable(false);
   }
 }
+
+
 

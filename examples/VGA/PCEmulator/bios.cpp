@@ -42,6 +42,7 @@ void BIOS::init(Machine * machine)
   m_i8042     = m_machine->getI8042();
   m_keyboard  = m_i8042->keyboard();
   m_mouse     = m_i8042->mouse();
+  m_MC146818  = m_machine->getMC146818();
 
 	// copy bios
   memcpy(m_memory + BIOS_ADDR, biosrom, sizeof(biosrom));
@@ -91,6 +92,11 @@ void BIOS::helpersEntry()
     // AH = 0x06, pointing device interface
     case 0x06:
       pointingDeviceInterface();
+      break;
+
+    // AH = 0x07, synchronize system ticks with RTC
+    case 0x07:
+      syncTicksWithRTC();
       break;
 
     default:
@@ -673,3 +679,20 @@ void BIOS::pointingDeviceInterface()
   }
 }
 
+
+// convert packed BCD to decimal
+static uint8_t BCDtoByte(uint8_t v)
+{
+  return (v & 0x0F) + (v >> 4) * 10;
+}
+
+// synchronize system ticks with RTC
+void BIOS::syncTicksWithRTC()
+{
+  int ss = BCDtoByte(m_MC146818->reg(0x00));
+  int mm = BCDtoByte(m_MC146818->reg(0x02));
+  int hh = BCDtoByte(m_MC146818->reg(0x04));
+  int totSecs = ss + mm * 60 + hh * 3600;
+  int64_t pitTicks = totSecs * PIT_TICK_FREQ;
+  *(uint32_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_SYSTICKS) = pitTicks / 65536;
+}
