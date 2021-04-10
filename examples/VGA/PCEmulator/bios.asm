@@ -37,6 +37,8 @@
 ;   - INT15 implemented function 0xC2
 ;   - implemented INT74 (pointing device)
 ;   - INT8, implemented 24H rollover
+;   - rewritten INT1A from scratch, now fully implemented
+;   - INT15, implemented 0x80, 0x81, 0x82, 0x83, 0x85, 0x86 functions
 ;
 ;
 ;
@@ -53,6 +55,10 @@ PIC8259A_A01 equ 0x21 ; 8259A PORT
 PIC8259B_A00 equ 0xa0 ; 8259B PORT
 PIC8259B_A01 equ 0xa1 ; 8259B PORT
 PIC8259_EOI equ 0x20 ; EOI (End Of Interrupt)
+
+; MC156818 stuff
+RTC_SEL equ 0x70
+RTC_REG equ 0x71
 
 ; memory size in K
 MEMSIZE equ 639
@@ -84,10 +90,6 @@ BIOSREV  equ 0x00
 
 %macro  emu_write_disk 0
   int 0xf2
-%endmacro
-
-%macro  emu_get_rtc 0
-  int 0xf3
 %endmacro
 
 %macro  emu_putchar_al 0
@@ -356,7 +358,6 @@ boot:
   mov  cx, 1024
   rep  movsb
 
-
 ; Add BIOS redirects for 100% compatible vectors
   mov  ax, cs
   mov  es, ax
@@ -365,7 +366,6 @@ boot:
   mov  si, int09_redirect_start
   mov  cx, (int09_redirect_end - int09_redirect_start)
   rep  movsb
-
 
 ; Set initial CRTC register values and CGA registers for 80x25 colour mode
   mov  si, 0
@@ -380,7 +380,6 @@ init_crtc_loop:
   inc  si
   cmp  si, 16
   jl  init_crtc_loop
-
 
   mov  dx, 0x3DA  ; CGA status port
   mov  al, 0
@@ -411,8 +410,7 @@ init_crtc_loop:
   mov  al, 0
   out  dx, al
 
-
-;  Initialize the 8259A interrupt controller
+; Initialize the 8259A interrupt controller
 
   mov  al, 0x13          ; ICW1 - EDGE, SNGL, ICW4
   out  PIC8259A_A00, al
@@ -423,8 +421,7 @@ init_crtc_loop:
   mov  al, 0x00          ; enable all interrupts
   out  PIC8259A_A01, al
 
-
-;  Initialize the 8259B interrupt controller
+; Initialize the 8259B interrupt controller
 
   mov  al, 0x13          ; ICW1 - EDGE, SNGL, ICW4
   out  PIC8259B_A00, al
@@ -435,6 +432,15 @@ init_crtc_loop:
   mov  al, 0x00          ; enable all interrupts
   out  PIC8259B_A01, al
 
+; Initialize RTC
+
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  mov  al, 0b00000010 ; just set h24 mode
+  out  RTC_REG, al
+  ; synchronize system tick with RTC
+  mov  ah, 0x07
+  emu_helper
 
 ; Enable interrupts
   sti
@@ -472,12 +478,14 @@ reportEOIB:
 
 
 
-; ************************* INT 7h handler
+; ************************* INT 07h handler
 
 int7:
   iret
 
-; ************************* INT 8h handler - timer
+
+
+; ************************* INT 08h handler - timer
 
 int8:
   ; timer interupt every 1/18.2 seconds
@@ -517,6 +525,7 @@ i8_end:
   iret
 
 
+
 ; ************************* INT 09h handler - keyboard data ready
 
 int9:
@@ -538,7 +547,7 @@ int9_getcode:
   stc
   mov  ah, 0x4f
   int  0x15
-  jnc  int9_exit  ; keystroke absorbed by INT 15
+  jnc  int9_exit  ; CF=0, keystroke absorbed by INT 15
 
   ; emulator does the actual job (convert to ASCII and insert into the keyboard buffer)
   mov  ah, 0x00
@@ -2518,17 +2527,23 @@ int10_get_state_info_pages_done:
   mov  al, 0x1b
   iret
 
+
+
 ; ************************* INT 11h - get equipment list
 
 int11:
   mov  ax, [cs:equip]
   iret
 
+
+
 ; ************************* INT 12h - return memory size
 
 int12:
   mov   ax, [cs:memsize]
   iret
+
+
 
 ; ************************* INT 13h handler - disk services
 
@@ -2900,6 +2915,8 @@ int13_diskchange:
   mov  ah, 0 ; Disk not changed
   jmp  reach_stack_clc
 
+
+
 ; ************************* INT 14h - serial port functions
 
 ; baud rate divisors
@@ -3207,6 +3224,18 @@ int14_get_port_status:
 
 int15:
 
+  cmp  ah, 0x80
+  je   int15_80   ; Device Open
+  cmp  ah, 0x81
+  je   int15_81   ; Device Close
+  cmp  ah, 0x82
+  je   int15_82   ; Program Termination
+  cmp  ah, 0x83
+  je   int15_83   ; Set Event Wait Interval
+  cmp  ah, 0x85
+  je   int15_85   ; System Request Key
+  cmp  ah, 0x86
+  je   int15_86   ; Wait
   cmp  ah, 0xc0
   je   int15_c0
   cmp  ah, 0xc1
@@ -3218,6 +3247,135 @@ int15:
   mov  ah, 0x86
   jmp  reach_stack_stc
 
+
+; Device Open
+int15_80:
+; Device Close
+int15_81:
+; Program Termination
+int15_82:
+; System Request Key
+int15_85:
+  mov  ah, 0x00
+  jmp  reach_stack_clc
+
+
+; Set Event Wait Interval
+int15_83:
+
+  push ds
+
+  ; load DS with bios data
+  push ax
+  mov  ax, 0x0040
+  mov  ds, ax
+  pop  ax
+
+  ; cancel set interval?
+  cmp  al, 0x01
+  je   int15_83_cancel   ; yes, jump to service routine
+
+  ; check if wait already in progress
+  test byte [wait_active_flag - bios_data], 0x01
+  jnz  int15_83_err
+
+  ; setup count
+  mov  [wait_count_lo - bios_data], dx           ; microseconds low byte
+  mov  [wait_count_hi - bios_data], cx           ; microseconds high byte
+  mov  [usr_waitflag_off - bios_data], bx        ; offset of user flag byte
+  mov  [usr_waitfalg_seg - bios_data], es        ; segment of user flag byte
+  mov  byte [wait_active_flag - bios_data], 0x01 ; wait active flag
+
+  ; setup RTC periodic interrupt
+  mov  al, 0x0a     ; select register A
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xf0
+  or   al, 0b0110   ; rate = 1024Khz (976.562us)
+  out  RTC_REG, al
+  mov  al, 0x0b     ; select register B
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  or   al, 0x40     ; set PIE
+  out  RTC_REG, al
+
+  ; success
+  pop  ds
+  mov  ah, 0x00
+  jmp  reach_stack_clc
+
+; int 15, 83, subfunction 01 (cancel set event)
+int15_83_cancel:
+  ; clear PIE
+  mov  al, 0x0b      ; select register B
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xbf
+  out  RTC_REG, al
+  ; clear wait_active_flag
+  mov  byte [wait_active_flag - bios_data], 0x00
+  ; success
+  pop  ds
+  mov  ah, 0x00
+  jmp  reach_stack_clc
+
+; wait already in progress
+int15_83_err:
+  pop  ds
+  mov  ah, 0x00
+  mov  al, 0x00
+  jmp  reach_stack_stc
+
+
+; Wait
+int15_86:
+  push ds
+  push ax
+
+  ; load DS with bios data
+  mov  ax, 0x0040
+  mov  ds, ax
+
+  ; other wait already active?
+  test byte [wait_active_flag - bios_data], 0x01
+  jnz  int15_86_err     ; yes, error
+
+  ; setup fields
+  mov  word [usr_waitflag_off - bios_data], wait_active_flag - bios_data
+  mov  word [usr_waitfalg_seg - bios_data], ds
+  mov  word [wait_count_lo - bios_data], dx
+  mov  word [wait_count_hi - bios_data], cx
+  mov  byte [wait_active_flag - bios_data], 0x01
+
+  ; setup RTC periodic interrupt
+  mov  al, 0x0a     ; select register A
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xf0
+  or   al, 0b0110   ; rate = 1024Khz (976.562us)
+  out  RTC_REG, al
+  mov  al, 0x0b     ; select register B
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  or   al, 0x40     ; set PIE
+  out  RTC_REG, al
+
+  ; and wait...
+  sti
+int15_86_wait:
+  test byte [wait_active_flag - bios_data], 0x80
+  jz   int15_86_wait
+  mov  byte [wait_active_flag - bios_data], 0x00
+  pop  ax
+  pop  ds
+  jmp  reach_stack_clc
+
+int15_86_err:
+  pop  ax
+  pop  ds
+  jmp  reach_stack_stc
+
+
 ; Return address of system configuration table in ROM
 int15_c0:
   mov  bx, cs
@@ -3226,6 +3384,7 @@ int15_c0:
   mov  ah, 0
   jmp  reach_stack_clc
 
+
 ; RETURN EXTENDED-BIOS DATA-AREA SEGMENT ADDRESS
 int15_c1:
   push ax
@@ -3233,6 +3392,7 @@ int15_c1:
   mov  es, ax
   pop  ax
   jmp  reach_stack_clc
+
 
 ; Pointing device interface
 int15_c2:
@@ -3432,171 +3592,246 @@ int17_initprint:
   mov  ah, 0
   iret
 
+
+
 ; ************************* INT 19h = reboot
 
 int19:
   jmp  boot
 
-; ************************* INT 1Ah - clock
+
+
+; ************************* INT 1Ah - System-Timer and Real-Time Clock Services
 
 int1a:
-  cmp  ah, 0
-  je   int1a_getsystime ; Get ticks since midnight (used for RTC time)
-  cmp  ah, 2
-  je   int1a_gettime ; Get RTC time (not actually used by DOS)
-  cmp  ah, 4
-  je   int1a_getdate ; Get RTC date
-  cmp  ah, 0x0f
-  je   int1a_init    ; Initialise RTC
+  cmp   ah, 0x00
+  je    int1a_00  ; Read System Time Counter
+  cmp   ah, 0x01
+  je    int1a_01  ; Set System Time Counter
+  cmp   ah, 0x02
+  je    int1a_02  ; Read Real-Time Clock Time
+  cmp   ah, 0x03
+  je    int1a_03  ; Set Real-Time Clock Time
+  cmp   ah, 0x04
+  je    int1a_04  ; Read Real-Time Clock Date
+  cmp   ah, 0x05
+  je    int1a_05  ; Set Real-Time Clock Date
+  cmp   ah, 0x06
+  je    int1a_06  ; Set Real-Time Clock Alarm
+  cmp   ah, 0x07
+  je    int1a_07  ; Reset Real-Time Clock Alarm
 
+  ; unsupported function
+  stc
+  emu_iret_replace_CF
   iret
 
-int1a_getsystime:
-
-  push  ax
-  push  bx
-  push  ds
-  push  es
-
-  push  cs
-  push  cs
-  pop   ds
-  pop   es
-
-  mov   bx, timetable
-
-  emu_get_rtc
-
-  mov  ax, 182  ; Clock ticks in 10 seconds
-  mul  word [tm_msec]
-  mov  bx, 10000
-  div  bx ; AX now contains clock ticks in milliseconds counter
-  mov  [tm_msec], ax
-
-  mov  ax, 182  ; Clock ticks in 10 seconds
-  mul  word [tm_sec]
-  mov  bx, 10
-  mov  dx, 0
-  div  bx ; AX now contains clock ticks in seconds counter
-  mov  [tm_sec], ax
-
-  mov  ax, 1092 ; Clock ticks in a minute
-  mul  word [tm_min] ; AX now contains clock ticks in minutes counter
-  mov  [tm_min], ax
-
-  mov  ax, 65520 ; Clock ticks in an hour
-  mul  word [tm_hour] ; DX:AX now contains clock ticks in hours counter
-
-  add  ax, [tm_msec] ; Add milliseconds in to AX
-  adc  dx, 0 ; Carry into DX if necessary
-  add  ax, [tm_sec] ; Add seconds in to AX
-  adc  dx, 0 ; Carry into DX if necessary
-  add  ax, [tm_min] ; Add minutes in to AX
-  adc  dx, 0 ; Carry into DX if necessary
-
-  push dx
-  push ax
-  pop  dx
-  pop  cx
-
-  pop  es
-  pop  ds
-  pop  bx
-  pop  ax
-
-  mov  al, 0
+  ; success (AH = 0x00, CF = 0)
+int1a_success:
+  mov  ah, 0x00
+  clc
+  emu_iret_replace_CF
   iret
 
-int1a_gettime:
+  ; fail (AH = 0x00, AL = 0x00, CF = 1)
+int1a_fail:
+  xor ax, ax
+  stc
+  emu_iret_replace_CF
+  iret
 
-  ; Return the system time in BCD format. DOS doesn't use this, but we need to return
-  ; something or the system thinks there is no RTC.
-
-  push  ds
-  push  es
-  push  ax
-  push  bx
-
-  push  cs
-  push  cs
-  pop   ds
-  pop   es
-
-  mov   bx, timetable
-
-  emu_get_rtc
-
-  mov  ax, 0
-  mov  cx, [tm_hour]
-  call hex_to_bcd
-  mov  bh, al    ; Hour in BCD is in BH
-
-  mov  ax, 0
-  mov  cx, [tm_min]
-  call hex_to_bcd
-  mov  bl, al    ; Minute in BCD is in BL
-
-  mov  ax, 0
-  mov  cx, [tm_sec]
-  call hex_to_bcd
-  mov  dh, al    ; Second in BCD is in DH
-
-  mov  dl, 0    ; Daylight saving flag = 0 always
-
-  mov  cx, bx    ; Hour:minute now in CH:CL
-
-  pop  bx
-  pop  ax
-  pop  es
+; Read System Time Counter
+int1a_00:
+  push ds
+  mov  dx, 0x0040
+  mov  ds, dx
+  mov  ah, 0x00                         ; AH = 0x00 (success)
+  mov  al, [clk_rollover - bios_data]   ; AL = rollover flag
+  mov  [clk_rollover - bios_data], ah   ; reset rollover flag
+  mov  cx, [clk_dtimer_hi - bios_data]  ; CX = ticks high word
+  mov  dx, [clk_dtimer_lo - bios_data]  ; DX = ticks low word
   pop  ds
+  iret
 
-  jmp  reach_stack_clc
 
-int1a_getdate:
-
-  ; Return the system date in BCD format.
-
-  push  ds
-  push  es
-  push  bx
-  push  ax
-
-  push  cs
-  push  cs
-  pop   ds
-  pop   es
-
-  mov   bx, timetable
-
-  emu_get_rtc
-
-  mov   ax, 0x1900
-  mov   cx, [tm_year]
-  call  hex_to_bcd
-  mov   cx, ax
-  push  cx
-
-  mov   ax, 1
-  mov   cx, [tm_mon]
-  call  hex_to_bcd
-  mov   dh, al
-
-  mov   ax, 0
-  mov   cx, [tm_mday]
-  call  hex_to_bcd
-  mov   dl, al
-
-  pop  cx
-  pop  ax
-  pop  bx
-  pop  es
+; Set System Time Counter
+int1a_01:
+  push ds
+  mov  dx, 0x0040
+  mov  ds, dx
+  mov  ah, 0x00                         ; AH = 0x00 (success)
+  mov  [clk_rollover - bios_data],  ah  ; reset rollover flag
+  mov  [clk_dtimer_hi - bios_data], cx  ; ticks high word = CX
+  mov  [clk_dtimer_lo - bios_data], dx  ; ticks low word  = DX
   pop  ds
+  iret
 
-  jmp  reach_stack_clc
 
-int1a_init:
+; Read Real-Time Clock Time
+; note: because emulation we never check that RTC is actually updating
+int1a_02:
+  ; DL = daylight
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 1
+  mov  dl, al
+  ; DH = seconds in BCD
+  mov  al, 0x00
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  dh, al
+  ; CL = minutes in BCD
+  mov  al, 0x02
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  cl, al
+  ; CH = AL = hours in BCD
+  mov  al, 0x04
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  ch, al
+  ; exit
+  jmp int1a_success
 
-  jmp  reach_stack_clc
+
+; Set Real-Time Clock Time
+; note: because emulation we never check that RTC is actually updating
+int1a_03:
+  ; set seconds in BCD (from DH)
+  mov  al, 0x00
+  out  RTC_SEL, al
+  mov  al, dh
+  out  RTC_REG, al
+  ; set minutes in BCD (from CL)
+  mov  al, 0x02
+  out  RTC_SEL, al
+  mov  al, cl
+  out  RTC_REG, al
+  ; set hours in BCD (from CH)
+  mov  al, 0x04
+  out  RTC_SEL, al
+  mov  al, ch
+  out  RTC_REG, al
+  ; set daylight (from DL)
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xfe
+  or   al, dl
+  or   al, 0x02     ; set 24h mode
+  out  RTC_REG, al  ; AL = Value written to CMOS RAM register OBh
+  ; exit
+  jmp int1a_success
+
+
+; Read Real-Time Clock Date
+; note: because emulation we never check that RTC is actually updating
+int1a_04:
+  ; CL = year in BCD
+  mov  al, 0x09
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  cl, al
+  ; DH = month in BCD
+  mov  al, 0x08
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  dh, al
+  ; DL = day in BCD
+  mov  al, 0x07
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  dl, al
+  ; CH = AL = century
+  mov  al, 0x32
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  mov  ch, al
+  ; exit
+  jmp int1a_success
+
+
+; Set Real-Time Clock Date
+; note: because emulation we never check that RTC is actually updating
+int1a_05:
+  ; set century in BCD (from CH)
+  mov  al, 0x32
+  out  RTC_SEL, al
+  mov  al, ch
+  out  RTC_REG, al
+  ; set year in BCD (from CL)
+  mov  al, 0x09
+  out  RTC_SEL, al
+  mov  al, cl
+  out  RTC_REG, al
+  ; set month in BCD (from DH)
+  mov  al, 0x08
+  out  RTC_SEL, al
+  mov  al, dh
+  out  RTC_REG, al
+  ; set month in BCD (from DL)
+  mov  al, 0x07
+  out  RTC_SEL, al
+  mov  al, dl
+  out  RTC_REG, al
+  ; set 24h mode
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  or   al, 0x02     ; set 24h mode
+  out  RTC_REG, al  ; AL = Value written to CMOS RAM register OBh
+  ; exit
+  jmp int1a_success
+
+
+; Set Real-Time Clock Alarm
+; note: because emulation we never check that RTC is actually updating
+int1a_06:
+  ; alarm already in progress?
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  test al, 0x20     ; AIE = 1?
+  jnz  int1a_fail   ; fail, alarm is already in progress
+  ; set seconds in BCD (from DH)
+  mov  al, 0x01
+  out  RTC_SEL, al
+  mov  al, dh
+  out  RTC_REG, al
+  ; set minutes in BCD (from CL)
+  mov  al, 0x03
+  out  RTC_SEL, al
+  mov  al, cl
+  out  RTC_REG, al
+  ; set hours in BCD (from CH)
+  mov  al, 0x05
+  out  RTC_SEL, al
+  mov  al, ch
+  out  RTC_REG, al
+  ; enable alarm interrupt (AIE)
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  or   al, 0x20
+  out  RTC_REG, al
+  ; exit
+  mov  al, 0x00
+  jmp int1a_success
+
+
+; Reset Real-Time Clock Alarm
+; note: because emulation we never check that RTC is actually updating
+int1a_07:
+  ; disable alarm interrupt (AIE)
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xdf     ; reset AIE
+  out  RTC_REG, al
+  ; exit
+  jmp int1a_success
+
 
 
 ; ************************* INT 1Ch - the other timer interrupt
@@ -3604,6 +3839,7 @@ int1a_init:
 int1c:
 
   iret
+
 
 
 ; ************************* INT 1Eh - diskette parameter table
@@ -3623,6 +3859,7 @@ int1e_spt  db 18  ; 18 sectors per track (1.44MB)
     db 0x08 ; Motor start time in 1/8 seconds
 
 
+
 ; ************************* INT 41h - hard disk parameter table
 
 int41:
@@ -3639,6 +3876,7 @@ int41_max_heads  db 0
     dw 0
 int41_max_sect  db 0
     db 0
+
 
 
 ; ************************* ROM configuration table
@@ -3660,6 +3898,7 @@ rom_config  dw 16          ; 16 bytes following
             db 0b00000000   ; Feature 4
             db 0b00000000   ; Feature 5
             db 0, 0, 0, 0, 0, 0, 0
+
 
 
 ; ************************* Extended BIOS Data Area (EBDA)
@@ -3704,6 +3943,7 @@ int1b:
 int1d:
 
 iret
+
 
 
 ; ************ Function call library ************
@@ -6258,6 +6498,70 @@ put_mode13_char_done:
 
 
 
+; ************************* INT 70h handler - MC146818 RTC
+int70:
+  push ds
+  push ax
+
+  ; load DS with BIOS data area
+  mov  ax, 0x0040
+  mov  ds, ax
+
+  ; get interrupt flags (clear on read)
+  mov  al, 0x0b       ; RTC register B
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  xchg al, ah         ; save into AH
+
+  ; get interrupt enabled flags
+  mov  al, 0x0c       ; RTC register C
+  out  RTC_SEL, al
+  in   al, RTC_REG
+
+  ; match reported flags with enabled interrupts
+  and  ah, al
+
+  ; periodic interrupt?
+  test ah, 0x40
+  jz   int70_checkAlarm ; no, bypass
+
+  ; handle Periodic Interrupt
+  ; subtract 976us to wait count
+  sub  word [wait_count_lo - bios_data], 976
+  sbb  word [wait_count_hi - bios_data], 0
+  jnc  int70_checkAlarm ; bypass if result is > 0
+
+  ; it is the time for disable periodic interrupt
+  ; reset PIE in register B
+  mov  al, 0x0b
+  out  RTC_SEL, al
+  in   al, RTC_REG
+  and  al, 0xbf
+  out  RTC_REG, al
+  ; reset wait flag
+  mov  byte [wait_active_flag - bios_data], 0x00
+  ; reset user wait flag
+  push bx
+  lds  bx, [usr_waitflag_off - bios_data] ; load DS from usr_waitfalg_seg and BX from usr_waitflag_off
+  mov  byte [bx], 0x80
+  pop  bx
+  ; note: from here DS is no more valid
+
+int70_checkAlarm:
+  ; alarm interrupt?
+  test ah, 0x20
+  jz   int70_exit       ; no, exit
+  ; handle Alarm Interrupt
+  int  0x4a
+
+int70_exit:
+  call reportEOIB
+  pop  ax
+  pop  ds
+  iret
+
+
+
 ; ************************* INT 74h handler - PS/2 mouse
 int74:
   push ax
@@ -6461,11 +6765,11 @@ video_card       db  0x0c ; 0x0c
                  db  0
 kb_mode          db  0x10    ; 40:96, bit 4 = 1, 101/102 enhanced keyboard
 kb_led           db  0x10    ; 40:97, bit 4 = 1, ACK received (always on)
-                 dw  0       ; 40:98
-                 dw  0       ; 40:9a
-                 dw  0       ; 40:9c
-                 dw  0       ; 40:9e
-                 db  0       ; 40:a0
+usr_waitflag_off dw  0       ; 40:98
+usr_waitfalg_seg dw  0       ; 40:9a
+wait_count_lo    dw  0       ; 40:9c
+wait_count_hi    dw  0       ; 40:9e
+wait_active_flag db  0       ; 40:a0
 
 ending:
 times (0xff-($-com1addr)) db  0
@@ -6709,8 +7013,8 @@ int_table   dw int0
             dw 0x0000   ; int6f
             dw 0x0000
 
-            dw 0x0000   ; int70
-            dw 0x0000
+            dw int70    ; int70
+            dw 0xf000
             dw 0x0000   ; int71
             dw 0x0000
             dw 0x0000   ; int72
