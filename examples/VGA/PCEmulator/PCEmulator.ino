@@ -56,6 +56,7 @@ void setup()
   Serial.begin(115200); delay(500); printf("\n\n\nReset\n\n");// DEBUG ONLY
 
   disableCore0WDT();
+  delay(100); // experienced crashes without this delay!
   disableCore1WDT();
 
   // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env
