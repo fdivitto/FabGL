@@ -31,6 +31,7 @@
  */
 
 
+#pragma message "This sketch requires Tools->Partition Scheme = Huge APP"
 
 
 #include <Preferences.h>
@@ -112,10 +113,6 @@ const EmbeddedProgDef embeddedProgs[] = {
   { pooyan_filename, pooyan_prg, sizeof(pooyan_prg) },
   { popeye_filename, popeye_prg, sizeof(popeye_prg) },
   { tetris_plus_filename, tetris_plus_prg, sizeof(tetris_plus_prg) },
-
-  // you need more program flash in order to use remaining games. To do this select
-  // the board name "ESP32 Dev Module" and in menu "Tools->Partition Scheme", select "No OTA 2MB/2MB" or "Huge App".
-  /*
   { spikes_filename, spikes_prg, sizeof(spikes_prg) },
   { astro_panic_filename, astro_panic_prg, sizeof(astro_panic_prg) },
   { splatform_filename, splatform_prg, sizeof(splatform_prg) },
@@ -128,7 +125,6 @@ const EmbeddedProgDef embeddedProgs[] = {
   { tammerfors_filename, tammerfors_prg, sizeof(tammerfors_prg) },
   { pulse_filename, pulse_prg, sizeof(pulse_prg) },
   { omega_fury_filename, omega_fury_prg, sizeof(omega_fury_prg) },
-  */
 };
 
 
@@ -326,7 +322,7 @@ class Menu : public uiApp {
       cv->selectFont(&fabgl::FONT_std_12);
       cv->setPenColor(RGB888(255, 128, 0));
       cv->drawText(160, 358, "www.fabgl.com");
-      cv->drawText(130, 371, "2019/20 by Fabrizio Di Vittorio");
+      cv->drawText(130, 371, "2019/21 by Fabrizio Di Vittorio");
     };
 
     // programs list
@@ -700,9 +696,10 @@ class Menu : public uiApp {
         return false;
     }
     WiFi.begin(SSID, psw);
-    for (int i = 0; i < 6 && WiFi.status() != WL_CONNECTED; ++i) {
+    for (int i = 0; i < 2 && WiFi.status() != WL_CONNECTED; ++i) {
+      for (int j = 0; j < 8 && WiFi.status() == WL_DISCONNECTED; ++j)
+        delay(1000);
       WiFi.reconnect();
-      delay(1000);
     }
     bool connected = (WiFi.status() == WL_CONNECTED);
     if (!connected) {
@@ -799,13 +796,14 @@ class Menu : public uiApp {
 
       if (f) {
         int len = http.getSize();
-        uint8_t * buf = (uint8_t*) malloc(128);
+        constexpr int BUFSIZE = 1024;
+        uint8_t * buf = (uint8_t*) malloc(BUFSIZE);
         WiFiClient * stream = http.getStreamPtr();
         int dsize = 0;
         while (http.connected() && (len > 0 || len == -1)) {
           size_t size = stream->available();
           if (size) {
-            int c = stream->readBytes(buf, fabgl::imin(sizeof(buf), size));
+            int c = stream->readBytes(buf, fabgl::imin(BUFSIZE, size));
             fwrite(buf, c, 1, f);
             dsize += c;
             if (len > 0)
