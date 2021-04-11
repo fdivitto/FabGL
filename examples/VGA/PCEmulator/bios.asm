@@ -3657,8 +3657,10 @@ int1a_00:
 ; Set System Time Counter
 int1a_01:
   push ds
+  push dx
   mov  dx, 0x0040
   mov  ds, dx
+  pop  dx
   mov  ah, 0x00                         ; AH = 0x00 (success)
   mov  [clk_rollover - bios_data],  ah  ; reset rollover flag
   mov  [clk_dtimer_hi - bios_data], cx  ; ticks high word = CX
