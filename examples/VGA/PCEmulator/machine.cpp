@@ -153,7 +153,7 @@ void Machine::init()
 
 void Machine::run()
 {
-  xTaskCreatePinnedToCore(&runTask, "", 3000, this, 5, &m_taskHandle, CoreUsage::quietCore());
+  xTaskCreatePinnedToCore(&runTask, "", 4000, this, 5, &m_taskHandle, CoreUsage::quietCore());
 }
 
 
