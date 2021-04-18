@@ -87,6 +87,8 @@ private:
 
   static void writeVideoMemory8(void * context, int address, uint8_t value);
   static void writeVideoMemory16(void * context, int address, uint16_t value);
+  static uint8_t readVideoMemory8(void * context, int address);
+  static uint16_t readVideoMemory16(void * context, int address);
 
   static bool interrupt(void * context, int num);
 

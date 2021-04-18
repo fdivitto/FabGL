@@ -131,7 +131,7 @@ void Machine::init()
 
   m_BIOS.init(this);
 
-  i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, interrupt);
+  i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, readVideoMemory8, readVideoMemory16, interrupt);
   i8086::setMemory(s_memory);
   i8086::reset();
 
@@ -572,14 +572,34 @@ void Machine::PITTick(void * context, int timerIndex)
 void Machine::writeVideoMemory8(void * context, int address, uint8_t value)
 {
   //printf("WVMEM %05X <= %02X\n", address, value);
-  s_videoMemory[address - 0xb0000] = value;
+  if (address >= 0xb0000)
+    s_videoMemory[address - 0xb0000] = value;
 }
 
 
 void Machine::writeVideoMemory16(void * context, int address, uint16_t value)
 {
   //printf("WVMEM %05X <= %04X\n", address, value);
-  *(uint16_t*)(s_videoMemory + address - 0xb0000) = value;
+  if (address >= 0xb0000)
+    *(uint16_t*)(s_videoMemory + address - 0xb0000) = value;
+}
+
+
+uint8_t Machine::readVideoMemory8(void * context, int address)
+{
+  if (address >= 0xb0000)
+    return s_videoMemory[address - 0xb0000];
+  else
+    return 0xff;
+}
+
+
+uint16_t Machine::readVideoMemory16(void * context, int address)
+{
+  if (address >= 0xb0000)
+    return *(uint16_t*)(s_videoMemory + address - 0xb0000);
+  else
+    return 0xffff;
 }
 
 

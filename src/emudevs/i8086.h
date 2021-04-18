@@ -29,15 +29,19 @@ public:
   typedef uint8_t (*ReadPort)(void * context, int address);
   typedef void (*WriteVideoMemory8)(void * context, int address, uint8_t value);
   typedef void (*WriteVideoMemory16)(void * context, int address, uint16_t value);
+  typedef uint8_t (*ReadVideoMemory8)(void * context, int address);
+  typedef uint16_t (*ReadVideoMemory16)(void * context, int address);
   typedef bool (*Interrupt)(void * context, int num);
 
 
-  static void setCallbacks(void * context, ReadPort readPort, WritePort writePort, WriteVideoMemory8 writeVideoMemory8, WriteVideoMemory16 writeVideoMemory16, Interrupt interrupt) {
+  static void setCallbacks(void * context, ReadPort readPort, WritePort writePort, WriteVideoMemory8 writeVideoMemory8, WriteVideoMemory16 writeVideoMemory16, ReadVideoMemory8 readVideoMemory8, ReadVideoMemory16 readVideoMemory16,Interrupt interrupt) {
     s_context            = context;
     s_readPort           = readPort;
     s_writePort          = writePort;
     s_writeVideoMemory8  = writeVideoMemory8;
     s_writeVideoMemory16 = writeVideoMemory16;
+    s_readVideoMemory8   = readVideoMemory8;
+    s_readVideoMemory16  = readVideoMemory16;
     s_interrupt          = interrupt;
   }
 
@@ -98,12 +102,13 @@ public:
 
 private:
 
-  static void WMEM8(int addr, uint8_t value);
-  static void WMEM16(int addr, uint16_t value);
+  static uint8_t WMEM8(int addr, uint8_t value);
+  static uint16_t WMEM16(int addr, uint16_t value);
+  static uint8_t RMEM8(int addr);
+  static uint16_t RMEM16(int addr);
 
-  // debug only
-  static uint8_t & MEM8(int addr);
-  static uint16_t & MEM16(int addr);
+  //static uint8_t & MEM8(int addr);
+  //static uint16_t & MEM16(int addr);
 
   static uint16_t make_flags();
   static void set_flags(int new_flags);
@@ -124,6 +129,8 @@ private:
   static WritePort          s_writePort;
   static WriteVideoMemory8  s_writeVideoMemory8;
   static WriteVideoMemory16 s_writeVideoMemory16;
+  static ReadVideoMemory8   s_readVideoMemory8;
+  static ReadVideoMemory16  s_readVideoMemory16;
   static Interrupt          s_interrupt;
 
   static bool               s_pendingIRQ;
