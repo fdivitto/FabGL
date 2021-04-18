@@ -689,10 +689,11 @@ static uint8_t BCDtoByte(uint8_t v)
 // synchronize system ticks with RTC
 void BIOS::syncTicksWithRTC()
 {
+  m_MC146818->updateTime();
   int ss = BCDtoByte(m_MC146818->reg(0x00));
   int mm = BCDtoByte(m_MC146818->reg(0x02));
   int hh = BCDtoByte(m_MC146818->reg(0x04));
-  int totSecs = ss + mm * 60 + hh * 3600;
-  int64_t pitTicks = totSecs * PIT_TICK_FREQ;
+  int totSecs = ss + mm * 60 + hh * 3600 + 1000;
+  int64_t pitTicks = (int64_t)totSecs * PIT_TICK_FREQ;
   *(uint32_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_SYSTICKS) = pitTicks / 65536;
 }
