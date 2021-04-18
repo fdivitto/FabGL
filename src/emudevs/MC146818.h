@@ -80,10 +80,9 @@ public:
 
   uint8_t & reg(int address) { return m_regs[address]; }
 
+  void updateTime();
 
 private:
-
-  void updateTime();
 
   void enableTimers();
 
