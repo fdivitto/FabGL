@@ -79,6 +79,11 @@ namespace fabgl {
   #define PSRAM_HACK
 #endif
 
+// ESP32 PSRAM bug workaround (use when the library is NOT compiled with PSRAM hack enabled)
+// Plase between a write and a read PSRAM operation (write->ASM_MEMW->read), not viceversa
+#define ASM_MEMW asm(" MEMW");
+
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
