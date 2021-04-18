@@ -1023,8 +1023,8 @@ void i8086::stepEx(uint8_t const * opcode_stream)
           // JMP|CALL (far)
           regs16[REG_CS] = MEM16(op_from_addr + 2);
         }
-        calcIP = false;
         reg_ip = jumpTo;
+        return; // no calc IP, no flags
       } else {
         // PUSH
         i_w = 1;
@@ -1315,8 +1315,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
         }
       }
       reg_ip += 3;
-      calcIP = false;
-      break;
+      return; // no calc IP, no flags
     case 12: // ROL|ROR|RCL|RCR|SHL|SHR|???|SAR reg/MEM, 1/CL/imm (80186)
     {
       uint16_t scratch2_uint = (1 & (i_w ? (int16_t)RMEM16(rm_addr) : RMEM8(rm_addr)) >> (8 * (i_w + 1) - 1));
@@ -1458,8 +1457,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
         }
       }
       reg_ip += i_d && i_w ? (int8_t) i_data0 : i_data0;
-      calcIP = false;
-      break;
+      return; // no calc IP, no flags
     case 15: // TEST reg, r/m
       if (i_w) {
         op_result = RMEM16(op_from_addr) & RMEM16(op_to_addr);
@@ -1468,15 +1466,13 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       }
       break;
     case 16: // XCHG AX, regs16
-    {
-      i_w = 1;
-      uint16_t t = regs16[REG_AX];
-      regs16[REG_AX] = regs16[i_reg4bit];
-      regs16[i_reg4bit] = t;
+      if (i_reg4bit != REG_AX) {
+        uint16_t t = regs16[REG_AX];
+        regs16[REG_AX] = regs16[i_reg4bit];
+        regs16[i_reg4bit] = t;
+      }
       ++reg_ip;
-      calcIP = false;
-      break;
-    }
+      return; // no calc ip, no flags
     case 24: // NOP|XCHG reg, r/m
       if (op_to_addr != op_from_addr) {
         if (i_w) {
@@ -1519,8 +1515,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       if (rep_override_en)
         regs16[REG_CX] = 0;
       ++reg_ip;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     }
     case 18: // CMPSx (extra=0)|SCASx (extra=1)
     {
@@ -1577,8 +1572,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
         regs16[REG_SP] += 2;
       } else if (!i_d) // RET|RETF imm16
         regs16[REG_SP] += i_data0;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 20: // MOV r/m, immed
       if (i_w) {
         WMEM16(op_from_addr, i_data2);
@@ -1607,14 +1601,12 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       rep_mode = i_w;
       seg_override_en && seg_override_en++;
       ++reg_ip;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 25: // PUSH segreg
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[extra];
       ++reg_ip;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 28: // DAA/DAS
       // fab: fixed to pass test186
       i_w = 0;
@@ -1653,20 +1645,17 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip + 5;
       regs16[REG_CS] = i_data2;
       reg_ip = i_data0;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 33: // PUSHF
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = make_flags();
       ++reg_ip;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 34: // POPF
       regs16[REG_SP] += 2;
       set_flags(MEM16(16 * regs16[REG_SS] + (uint16_t)(-2 + regs16[REG_SP])));
       ++reg_ip;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 35: // SAHF
       set_flags((make_flags() & 0xFF00) + regs8[REG_AH]);
       break;
@@ -1681,18 +1670,15 @@ void i8086::stepEx(uint8_t const * opcode_stream)
     case 38: // INT 3
       ++reg_ip;
       pc_interrupt(3);
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 39: // INT imm8
       reg_ip += 2;
       pc_interrupt(i_data0);
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 40: // INTO
       ++reg_ip;
       FLAG_OF && pc_interrupt(4);
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     case 41: // AAM;
       if (i_data0 &= 0xFF) {
         regs8[REG_AH] = regs8[REG_AL] / i_data0;
@@ -1700,7 +1686,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       } else {
         // Divide by zero
         raiseDivideByZeroInterrupt();
-        calcIP = false;
+        return; // no calc ip, no flags
       }
       break;
     case 42: // AAD
@@ -1716,7 +1702,8 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       return; // no calc ip, no flags
     case 45: // CMC
       FLAG_CF ^= 1;
-      break;
+      ++reg_ip;
+      return; // no calc ip, no flags
     case 47: // TEST AL/AX, immed
       if (i_w) {
         op_result = regs16[REG_AX] & i_data0;
@@ -1730,8 +1717,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
     case 49: // HLT
       //printf("CPU HALT, IP = %04X:%04X, AX = %04X, BX = %04X, CX = %04X, DX = %04X\n", regs16[REG_CS], reg_ip, regs16[REG_AX], regs16[REG_BX], regs16[REG_CX], regs16[REG_DX]);
       s_halted = true;
-      calcIP = false;
-      break;
+      return; // no calc ip, no flags
     /*
     case 51: // 80186, NEC V20: ENTER
       printf("80186, NEC V20: ENTER\n");
