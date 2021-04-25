@@ -499,7 +499,7 @@ void IRAM_ATTR VGA2Controller::ISRHandler(void * arg)
 
     s_scanLine += VGA2_LinesCount / 2;
 
-    if (scanLine >= height && !ctrl->m_primitiveProcessingSuspended && spi_flash_cache_enabled()) {
+    if (scanLine >= height && !ctrl->m_primitiveProcessingSuspended && spi_flash_cache_enabled() && ctrl->m_primitiveExecTask) {
       // vertical sync, unlock primitive execution task
       // warn: don't use vTaskSuspendAll() in primitive drawing, otherwise vTaskNotifyGiveFromISR may be blocked and screen will flick!
       vTaskNotifyGiveFromISR(ctrl->m_primitiveExecTask, NULL);

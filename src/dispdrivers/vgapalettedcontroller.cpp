@@ -99,6 +99,7 @@ void VGAPalettedController::end()
   if (m_primitiveExecTask) {
     vTaskDelete(m_primitiveExecTask);
     m_primitiveExecTask = nullptr;
+    m_taskProcessingPrimitives = false;
   }
   VGABaseController::end();
 }

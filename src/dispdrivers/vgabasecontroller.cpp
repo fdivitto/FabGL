@@ -114,16 +114,14 @@ void VGABaseController::begin()
 void VGABaseController::end()
 {
   if (m_DMABuffers) {
+    suspendBackgroundPrimitiveExecution();
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+    m_GPIOStream.stop();
+    vTaskDelay(10 / portTICK_PERIOD_MS);
     if (m_isr_handle) {
       esp_intr_free(m_isr_handle);
       m_isr_handle = nullptr;
     }
-    suspendBackgroundPrimitiveExecution();
-    m_GPIOStream.stop();
-
-    // just in case interrupt is still runing
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-
     freeBuffers();
   }
 }
