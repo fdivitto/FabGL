@@ -727,8 +727,7 @@ class BitmappedDisplayController : public BaseDisplayController {
 public:
 
   BitmappedDisplayController();
-
-  ~BitmappedDisplayController();
+  virtual ~BitmappedDisplayController();
 
   DisplayControllerType controllerType() { return DisplayControllerType::Bitmapped; }
 
