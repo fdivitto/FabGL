@@ -1290,12 +1290,14 @@ struct uiTextEditStyle {
  * @brief Properties of the text edit
  */
 struct uiTextEditProps {
-  uint8_t hasCaret  : 1;   /**< If True the edit box has a blinking caret */
-  uint8_t allowEdit : 1;   /**< If True the edit box allows edit */
+  uint8_t hasCaret     : 1;   /**< If True the edit box has a blinking caret */
+  uint8_t allowEdit    : 1;   /**< If True the edit box allows edit */
+  uint8_t passwordMode : 1;   /**< If True the edit box shows '*' in place of actual characters */
 
   uiTextEditProps()
     : hasCaret(true),
-      allowEdit(true)
+      allowEdit(true),
+      passwordMode(false)
     {
     }
 };

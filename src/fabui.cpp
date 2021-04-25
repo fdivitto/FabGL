@@ -2700,6 +2700,8 @@ void uiTextEdit::paintTextEdit()
 // return glyph data of the specified character
 uint8_t const * uiTextEdit::getCharInfo(char ch, int * width)
 {
+  if (m_textEditProps.passwordMode)
+    ch = '*';
   uint8_t const * chptr;
   if (m_textEditStyle.textFont->chptr) {
     // variable width
