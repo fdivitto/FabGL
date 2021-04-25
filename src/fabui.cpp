@@ -1087,7 +1087,7 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
   mainFrame->frameProps().hasMaximizeButton = false;
   mainFrame->frameProps().hasMinimizeButton = false;
   mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
-    if (key.VK == VK_RETURN)
+    if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER)
       mainFrame->exitModal(1);
     else if (key.VK == VK_ESCAPE)
       mainFrame->exitModal(0);
