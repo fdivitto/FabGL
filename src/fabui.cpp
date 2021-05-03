@@ -3646,7 +3646,12 @@ void uiCustomListBox::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1)
-        handleMouseDown(event->params.mouse.status.X, event->params.mouse.status.Y);
+        mouseDownSelect(event->params.mouse.status.X, event->params.mouse.status.Y);
+      break;
+
+    case UIEVT_MOUSEMOVE:
+      if (m_listBoxProps.selectOnMouseOver)
+        mouseMoveSelect(event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
 
     case UIEVT_KEYDOWN:
@@ -3716,9 +3721,9 @@ void uiCustomListBox::selectItem(int index, bool add, bool range)
   if (items_getCount() > 0) {
     index = iclamp(index, 0, items_getCount() - 1);
     int first = firstSelectedItem();
-    if (!add)
+    if (!add || !m_listBoxProps.allowMultiSelect)
       items_deselectAll();
-    if (range) {
+    if (m_listBoxProps.allowMultiSelect && range) {
       if (index <= first) {
         for (int i = index; i <= first; ++i)
           items_select(i, true);
@@ -3852,13 +3857,20 @@ int uiCustomListBox::getItemAtMousePos(int mouseX, int mouseY)
 }
 
 
-void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
+void uiCustomListBox::mouseDownSelect(int mouseX, int mouseY)
 {
   int idx = getItemAtMousePos(mouseX, mouseY);
   if (idx >= 0) {
     if (app()->keyboard()->isVKDown(VK_LCTRL) || app()->keyboard()->isVKDown(VK_RCTRL)) {
       // CTRL is down
-      items_select(idx, !items_selected(idx));
+      bool wasSelected = items_selected(idx);
+      if (m_listBoxProps.allowMultiSelect) {
+        items_select(idx, !wasSelected);
+      } else {
+        items_deselectAll();
+        if (!wasSelected)
+          items_select(idx, true);
+      }
     } else {
       // CTRL is up
       items_deselectAll();
@@ -3870,6 +3882,18 @@ void uiCustomListBox::handleMouseDown(int mouseX, int mouseY)
     return;
   onChange();
   repaint();
+}
+
+
+void uiCustomListBox::mouseMoveSelect(int mouseX, int mouseY)
+{
+  int idx = getItemAtMousePos(mouseX, mouseY);
+  if (idx >= 0 && !items_selected(idx)) {
+    items_deselectAll();
+    items_select(idx, true);
+    onChange();
+    repaint();
+  }
 }
 
 

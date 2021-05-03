@@ -1745,6 +1745,21 @@ struct uiListBoxStyle {
 };
 
 
+/**
+ * @brief Properties of the list box
+ */
+struct uiListBoxProps {
+  uint8_t allowMultiSelect  : 1;   /**< If True the listbox allows to select multiple items */
+  uint8_t selectOnMouseOver : 1;   /**< If True an item is selected when the mouse is over it */
+
+  uiListBoxProps()
+    : allowMultiSelect(true),
+      selectOnMouseOver(false)
+    {
+    }
+};
+
+
 /** @brief Shows generic a list of selectable items */
 class uiCustomListBox : public uiScrollableControl {
 
@@ -1771,6 +1786,13 @@ public:
    * @return L-value representing listbox style
    */
   uiListBoxStyle & listBoxStyle() { return m_listBoxStyle; }
+
+  /**
+   * @brief Sets or gets list box properties
+   *
+   * @return L-value representing some list box properties
+   */
+  uiListBoxProps & listBoxProps() { return m_listBoxProps; }
 
   /**
    * @brief Gets the first selected item
@@ -1836,12 +1858,14 @@ private:
 
   void paintListBox();
   int getItemAtMousePos(int mouseX, int mouseY);
-  void handleMouseDown(int mouseX, int mouseY);
+  void mouseDownSelect(int mouseX, int mouseY);
+  void mouseMoveSelect(int mouseX, int mouseY);
   void handleKeyDown(uiKeyEventInfo key);
   void makeItemVisible(int index);
 
 
   uiListBoxStyle m_listBoxStyle;
+  uiListBoxProps m_listBoxProps;
   int            m_firstVisibleItem;     // the item on the top
 };
 
@@ -1849,6 +1873,7 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiListBox
+
 
 /** @brief Shows a list of selectable string items */
 class uiListBox : public uiCustomListBox {
@@ -1874,7 +1899,7 @@ public:
    *
    * @return L-value representing listbox items
    */
-  StringList & items() { return m_items; }
+  StringList & items()                              { return m_items; }
 
 protected:
 
