@@ -404,6 +404,7 @@ public:
   void select(int index, bool value);
   void deselectAll();
   bool selected(int index);
+  int getFirstSelected();
   void copyFrom(StringList const & src);
   void copySelectionMapFrom(StringList const & src);
 

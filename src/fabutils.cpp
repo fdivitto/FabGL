@@ -577,6 +577,16 @@ bool StringList::selected(int index)
 }
 
 
+// -1 = no items selected
+int StringList::getFirstSelected()
+{
+  for (int i = 0; i < m_count; ++i)
+    if (selected(i))
+      return i;
+  return -1;
+}
+
+
 void StringList::select(int index, bool value)
 {
   if (value)
