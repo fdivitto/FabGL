@@ -68,6 +68,7 @@ void Mouse::begin(int PS2Port)
   reset();
   m_receivedPacket = xQueueCreate(1, sizeof(MousePacket));
   xTaskCreate(&mouseUpdateTask, "", 1600, this, 5, &m_mouseUpdateTask);
+  m_area = Size(0, 0);
 }
 
 
@@ -183,9 +184,11 @@ bool Mouse::getNextDelta(MouseDelta * delta, int timeOutMS, bool requestResendOn
 
 void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePositionsQueue, BitmappedDisplayController * updateDisplayController, uiApp * app)
 {
-  m_area                  = Size(width, height);
-  m_status.X              = width >> 1;
-  m_status.Y              = height >> 1;
+  if (m_area != Size(width, height)) {
+    m_area                  = Size(width, height);
+    m_status.X              = width >> 1;
+    m_status.Y              = height >> 1;
+  }
   m_status.wheelDelta     = 0;
   m_status.buttons.left   = 0;
   m_status.buttons.middle = 0;
