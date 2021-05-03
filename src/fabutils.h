@@ -195,6 +195,8 @@ struct Size {
 
   Size() : width(0), height(0) { }
   Size(int width_, int height_) : width(width_), height(height_) { }
+  bool operator==(Size const & r) { return width == r.width && height == r.height; }
+  bool operator!=(Size const & r) { return width != r.width || height != r.height; }
 } __attribute__ ((packed));
 
 
@@ -391,6 +393,7 @@ public:
   int append(char const * str);
   int appendFmt(const char *format, ...);
   void append(char const * strlist[], int count);
+  void appendSepList(char const * strlist, char separator);
   void insert(int index, char const * str);
   void set(int index, char const * str);
   void remove(int index);
@@ -402,6 +405,7 @@ public:
   void deselectAll();
   bool selected(int index);
   void copyFrom(StringList const & src);
+  void copySelectionMapFrom(StringList const & src);
 
 private:
   void checkAllocatedSpace(int requiredItems);

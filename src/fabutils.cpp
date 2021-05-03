@@ -439,6 +439,14 @@ void StringList::copyFrom(StringList const & src)
 }
 
 
+void StringList::copySelectionMapFrom(StringList const & src)
+{
+  int maskLen = (31 + m_allocated) / 32;
+  for (int i = 0; i < maskLen; ++i)
+    m_selMap[i] = src.m_selMap[i];
+}
+
+
 void StringList::checkAllocatedSpace(int requiredItems)
 {
   if (m_allocated < requiredItems) {
@@ -496,6 +504,27 @@ void StringList::append(char const * strlist[], int count)
 {
   for (int i = 0; i < count; ++i)
     insert(m_count, strlist[i]);
+}
+
+
+// separator cannot be "0"
+void StringList::appendSepList(char const * strlist, char separator)
+{
+  if (strlist) {
+    takeStrings();
+    char const * start = strlist;
+    while (*start) {
+      auto end = strchr(start, separator);
+      if (!end)
+        end = strchr(start, 0);
+      int len = end - start;
+      char str[len + 1];
+      memcpy(str, start, len);
+      str[len] = 0;
+      insert(m_count, str);
+      start += len + (*end == 0 ? 0 : 1);
+    }
+  }
 }
 
 
