@@ -359,16 +359,34 @@ private:
 template <typename ...Params>
 struct Delegate {
 
+  // empty constructor
+  Delegate() : m_func(nullptr) {
+  }
+
+  // denied copy
+  Delegate(const Delegate & c) = delete;
+
+  // construct from lambda
   template <typename Func>
-  void operator=(Func f) {
-    m_closure = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
-    m_func = heap_caps_malloc(sizeof(Func), MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
-    moveItems<uint32_t*>((uint32_t*)m_func, (uint32_t*)&f, sizeof(Func) / sizeof(uint32_t));
+  Delegate(Func f) : Delegate() {
+    *this = f;
   }
 
   ~Delegate() {
-    heap_caps_free(m_func);
+    cleanUp();
   }
+
+  // assignment operator from Func
+  template <typename Func>
+  void operator=(Func f) {
+    cleanUp();
+    m_closure  = [] (void * func, const Params & ...params) -> void { (*(Func *)func)(params...); };
+    m_func     = heap_caps_malloc(sizeof(Func), MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
+    moveItems<uint32_t*>((uint32_t*)m_func, (uint32_t*)&f, sizeof(Func) / sizeof(uint32_t));
+  }
+
+  // denied assignment from Delegate
+  void operator=(const Delegate&) = delete;
 
   void operator()(const Params & ...params) {
     if (m_func)
@@ -376,8 +394,14 @@ struct Delegate {
   }
 
 private:
+
   void (*m_closure)(void * func, const Params & ...params);
-  void * m_func = nullptr;
+  void * m_func;
+
+  void cleanUp() {
+    if (m_func)
+      heap_caps_free(m_func);
+  }
 };
 
 
