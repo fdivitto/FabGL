@@ -358,6 +358,7 @@ using fabgl::uiSliderStyle;
 using fabgl::uiColorListBox;
 using fabgl::uiColorBox;
 using fabgl::uiColorComboBox;
+using fabgl::uiProgressBar;
 using fabgl::SoundGenerator;
 using fabgl::uiMessageBoxResult;
 using fabgl::SineWaveformGenerator;

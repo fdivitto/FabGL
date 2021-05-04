@@ -4707,6 +4707,88 @@ void uiSlider::handleKeyDown(uiKeyEventInfo key)
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiProgressBar
+
+
+uiProgressBar::uiProgressBar(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiControl(parent, pos, size, visible, 0)
+{
+  objectType().uiProgressBar = true;
+
+  windowProps().focusable = false;
+  windowStyle().borderSize = 1;
+  windowStyle().borderColor = RGB888(64, 64, 64);
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+
+  m_percentage = 0;
+}
+
+
+uiProgressBar::~uiProgressBar()
+{
+}
+
+
+void uiProgressBar::paintProgressBar()
+{
+  Rect cRect = uiControl::clientRect(uiOrigin::Window);
+
+  int splitPos = cRect.width() * m_percentage / 100;
+  Rect fRect = Rect(cRect.X1, cRect.Y1, cRect.X1 + splitPos, cRect.Y2);
+  Rect bRect = Rect(cRect.X1 + splitPos + 1, cRect.Y1, cRect.X2, cRect.Y2);
+
+  // the bar
+  canvas()->setBrushColor(m_progressBarStyle.foregroundColor);
+  canvas()->fillRectangle(fRect);
+  canvas()->setBrushColor(m_progressBarStyle.backgroundColor);
+  canvas()->fillRectangle(bRect);
+
+  if (m_progressBarProps.showPercentage) {
+    char txt[5];
+    sprintf(txt, "%d%%", m_percentage);
+    canvas()->setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
+    canvas()->setPenColor(m_progressBarStyle.textColor);
+    int x = fRect.X2 - canvas()->textExtent(m_progressBarStyle.textFont, txt);
+    int y = cRect.Y1 + (cRect.height() - m_progressBarStyle.textFont->height) / 2;
+    canvas()->drawText(m_progressBarStyle.textFont, x, y, txt);
+  }
+}
+
+
+void uiProgressBar::processEvent(uiEvent * event)
+{
+  uiControl::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_PAINT:
+      beginPaint(event, uiControl::clientRect(uiOrigin::Window));
+      paintProgressBar();
+      break;
+
+    default:
+      break;
+  }
+}
+
+
+void uiProgressBar::setPercentage(int value)
+{
+  value = imin(imax(0, value), 100);
+  if (value != m_percentage) {
+    m_percentage = value;
+    repaint();
+  }
+}
+
+
+// uiProgressBar
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 } // end of namespace
 
