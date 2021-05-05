@@ -333,7 +333,7 @@ void TextInputApp::addControls()
   const Point clientPos = mainFrame->clientPos();
 
   int x = clientPos.X + 4;
-  int y = (clientPos.Y + panel->pos().Y) / 2 - font->height / 2;
+  int y = clientPos.Y + 8;
 
   new uiLabel(mainFrame, labelText, Point(x, y));
 
@@ -371,7 +371,7 @@ void MessageApp::calcRequiredSize()
 void MessageApp::addControls()
 {
   int x = mainFrame->clientPos().X + (mainFrame->clientSize().width - messageExtent) / 2;
-  int y = (mainFrame->clientPos().Y + panel->pos().Y) / 2 - font->height / 2;
+  int y = mainFrame->clientPos().Y + 6;
 
   new uiLabel(mainFrame, messageText, Point(x, y));
 }
@@ -407,8 +407,8 @@ void SelectApp::calcRequiredSize()
 
 void SelectApp::addControls()
 {
-  int x = mainFrame->clientPos().X + 5;
-  int y = mainFrame->clientPos().Y + 5;
+  int x = mainFrame->clientPos().X + 4;
+  int y = mainFrame->clientPos().Y + 6;
 
   new uiLabel(mainFrame, messageText, Point(x, y));
 
@@ -482,7 +482,7 @@ void ProgressApp::calcRequiredSize()
 void ProgressApp::addControls()
 {
   int x = mainFrame->clientPos().X + 4;
-  int y = mainFrame->clientPos().Y + 4;
+  int y = mainFrame->clientPos().Y + 6;
 
   label = new uiLabel(mainFrame, "", Point(x, y));
 
