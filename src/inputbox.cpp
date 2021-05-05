@@ -503,7 +503,6 @@ void ProgressApp::addControls()
 
 void ProgressApp::finalize()
 {
-  quit(0);
 }
 
 
@@ -526,7 +525,7 @@ bool ProgressApp::update(int percentage, char const * format, ...)
   va_end(ap);
 
   processEvents();
-  return retval != InputResult::Cancel;
+  return retval == InputResult::None;
 }
 
 
