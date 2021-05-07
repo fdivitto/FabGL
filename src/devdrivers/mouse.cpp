@@ -219,13 +219,13 @@ void Mouse::setupAbsolutePositioner(int width, int height, bool createAbsolutePo
 
 void Mouse::terminateAbsolutePositioner()
 {
-  m_absoluteUpdate = false;
-  m_updateDisplayController = nullptr;
-  m_uiApp = nullptr;
   if (m_absoluteQueue) {
     vQueueDelete(m_absoluteQueue);
     m_absoluteQueue = nullptr;
   }
+  m_absoluteUpdate = false;
+  m_updateDisplayController = nullptr;
+  m_uiApp = nullptr;
 }
 
 
