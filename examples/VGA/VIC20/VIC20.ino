@@ -697,7 +697,7 @@ class Menu : public uiApp {
     }
     WiFi.begin(SSID, psw);
     for (int i = 0; i < 2 && WiFi.status() != WL_CONNECTED; ++i) {
-      for (int j = 0; j < 8 && WiFi.status() == WL_DISCONNECTED; ++j)
+      for (int j = 0; j < 16 && WiFi.status() != WL_CONNECTED; ++j)
         delay(1000);
       WiFi.reconnect();
     }
@@ -736,7 +736,8 @@ class Menu : public uiApp {
           int c = stream->readBytes(dest, fabgl::imin(bufspace, size));
           dest += c;
           bufspace -= c;
-        }
+        } else
+          break;
       }
     }
     *dest = 0;
