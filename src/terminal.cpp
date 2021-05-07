@@ -332,9 +332,9 @@ bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, 
   }
 
   m_keyboard = keyboard;
-  if (m_keyboard == nullptr && PS2Controller::instance()) {
+  if (m_keyboard == nullptr && PS2Controller::initialized()) {
     // get default keyboard from PS/2 controller
-    m_keyboard = PS2Controller::instance()->keyboard();
+    m_keyboard = PS2Controller::keyboard();
   }
 
   m_logStream = nullptr;
@@ -4002,7 +4002,7 @@ void Terminal::consumeFabGLSeq()
       bool value = (extGetByteParam() == '1');
       if (m_bitmappedDisplayController) {
         auto dispctrl = static_cast<BitmappedDisplayController*>(m_displayController);
-        auto mouse = PS2Controller::instance()->mouse();
+        auto mouse = PS2Controller::mouse();
         if (mouse && mouse->isMouseAvailable()) {
           if (value) {
             mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, dispctrl);
@@ -4035,7 +4035,7 @@ void Terminal::consumeFabGLSeq()
     {
       extGetByteParam();  // FABGLEXT_ENDCODE
       if (m_bitmappedDisplayController) {
-        auto mouse = PS2Controller::instance()->mouse();
+        auto mouse = PS2Controller::mouse();
         auto x = mouse->status().X;
         auto y = mouse->status().Y;
         send(FABGLEXT_REPLYCODE);

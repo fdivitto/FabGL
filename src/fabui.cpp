@@ -199,12 +199,12 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
 
   m_keyboard = keyboard;
   m_mouse    = mouse;
-  if (PS2Controller::instance()) {
+  if (PS2Controller::initialized()) {
     // get default keyboard and mouse from the PS/2 controller
     if (m_keyboard == nullptr)
-      m_keyboard = PS2Controller::instance()->keyboard();
+      m_keyboard = PS2Controller::keyboard();
     if (m_mouse == nullptr)
-      m_mouse = PS2Controller::instance()->mouse();
+      m_mouse = PS2Controller::mouse();
   }
 
   m_eventsQueue = xQueueCreate(FABGLIB_UI_EVENTS_QUEUE_SIZE, sizeof(uiEvent));

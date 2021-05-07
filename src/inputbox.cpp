@@ -57,11 +57,8 @@ void InputBox::begin(char const * modeline)
   m_vga16Ctrl->setResolution(modeline ? modeline : VESA_640x480_75Hz);
 
   // setup keyboard and mouse
-  m_ps2Ctrl = PS2Controller::instance();
-  if (!m_ps2Ctrl) {
-    m_ps2Ctrl = new PS2Controller;
-    m_ps2Ctrl->begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
-  }
+  if (!PS2Controller::initialized())
+    PS2Controller::begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 }
 
 

@@ -215,7 +215,7 @@ void Machine::handleMouse()
     setJoy(JoyDown,  false);
     setJoy(JoyLeft,  false);
     setJoy(JoyRight, false);
-    auto mouse = fabgl::PS2Controller::instance()->mouse();
+    auto mouse = fabgl::PS2Controller::mouse();
     if (mouse->deltaAvailable()) {
       MouseDelta d;
       mouse->getNextDelta(&d);
@@ -467,7 +467,7 @@ void Machine::busWrite(int addr, uint8_t value)
 */
 void Machine::setKeyboard(VirtualKey key, bool down)
 {
-  auto keyboard = fabgl::PS2Controller::instance()->keyboard();
+  auto keyboard = fabgl::PS2Controller::keyboard();
 
   #if DEBUGMACHINE
   Serial.printf("VirtualKey = %s %s\n", keyboard->virtualKeyToString(key), down ? "DN" : "UP");

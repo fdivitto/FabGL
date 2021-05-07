@@ -244,7 +244,7 @@ void Machine::run(CPU cpu, int address)
     timeToCheckKeyboard -= cycles;
     if (timeToCheckKeyboard < 0) {
       timeToCheckKeyboard = timeToCheckKeyboardReset;
-      auto keyboard = fabgl::PS2Controller::instance()->keyboard();
+      auto keyboard = fabgl::PS2Controller::keyboard();
       if (m_menuCallback && (keyboard->isVKDown(VirtualKey::VK_PAUSE) || keyboard->isVKDown(VirtualKey::VK_F12)))
         m_menuCallback();
     }

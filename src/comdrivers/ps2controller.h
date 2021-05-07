@@ -80,6 +80,7 @@ class PS2Controller {
 public:
 
   PS2Controller();
+  ~PS2Controller();
 
   // unwanted methods
   PS2Controller(PS2Controller const&)   = delete;
@@ -98,7 +99,7 @@ public:
   * @param port1_clkGPIO The GPIO number of Clock line for PS/2 port 1 (GPIO_UNUSED to disable).
   * @param port1_datGPIO The GPIO number of Data line for PS/2 port 1 (GPIO_UNUSED to disable).
   */
-  void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_UNUSED, gpio_num_t port1_datGPIO = GPIO_UNUSED);
+  static void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO = GPIO_UNUSED, gpio_num_t port1_datGPIO = GPIO_UNUSED);
 
   /**
   * @brief Initializes PS2 device controller using default GPIOs.
@@ -115,7 +116,11 @@ public:
   *     // Keyboard connected to port 0 and mouse to port1
   *     PSController.begin(PS2Preset::KeyboardPort0_MousePort1);
   */
-  void begin(PS2Preset preset = PS2Preset::KeyboardPort0_MousePort1, KbdMode keyboardMode = KbdMode::CreateVirtualKeysQueue);
+  static void begin(PS2Preset preset = PS2Preset::KeyboardPort0_MousePort1, KbdMode keyboardMode = KbdMode::CreateVirtualKeysQueue);
+
+  static void end();
+
+  static bool initialized() { return s_initDone; }
 
   /**
    * @brief Determines if one byte has been received from the specified port
@@ -124,7 +129,7 @@ public:
    *
    * @return True if one byte is available
    */
-  bool dataAvailable(int PS2Port);
+  static bool dataAvailable(int PS2Port);
 
   /**
    * @brief Gets a scancode from the queue.
@@ -133,7 +138,7 @@ public:
    *
    * @return The first scancode of the queue (-1 if no data is available).
    */
-  int getData(int PS2Port, int timeOutMS);
+  static int getData(int PS2Port, int timeOutMS);
 
   /**
    * @brief Sends a command to the device.
@@ -141,7 +146,7 @@ public:
    * @param data Byte to send to the PS2 device.
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void sendData(uint8_t data, int PS2Port);
+  static void sendData(uint8_t data, int PS2Port);
 
   /**
    * @brief Disables inputs from PS/2 port driving the CLK line Low
@@ -150,7 +155,7 @@ public:
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void disableRX(int PS2Port);
+  static void disableRX(int PS2Port);
 
   /**
    * @brief Enables inputs from PS/2 port releasing CLK line
@@ -159,38 +164,38 @@ public:
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void enableRX(int PSPort);
+  static void enableRX(int PSPort);
 
   /**
    * @brief Returns the instance of Keyboard object automatically created by PS2Controller.
    *
    * @return A pointer to a Keyboard object
    */
-  Keyboard * keyboard() { return m_keyboard; }
+  static Keyboard * keyboard()                { return s_keyboard; }
 
-  void setKeyboard(Keyboard * value) { m_keyboard = value; }
+  static void setKeyboard(Keyboard * value)   { s_keyboard = value; }
 
   /**
    * @brief Returns the instance of Mouse object automatically created by PS2Controller.
    *
    * @return A pointer to a Mouse object
    */
-  Mouse * mouse() { return m_mouse; }
+  static Mouse * mouse()                      { return s_mouse; }
 
-  void setMouse(Mouse * value) { m_mouse = value; }
+  static void setMouse(Mouse * value)         { s_mouse = value; }
 
   /**
    * @brief Returns the singleton instance of PS2Controller class
    *
    * @return A pointer to PS2Controller singleton object
    */
-  static PS2Controller * instance()  { return s_instance; }
+  static PS2Controller * instance()           { return s_instance; }
 
-  bool parityError(int PS2Port)      { return m_parityError[PS2Port]; }
+  static bool parityError(int PS2Port)        { return s_parityError[PS2Port]; }
 
-  bool syncError(int PS2Port)        { return m_syncError[PS2Port]; }
+  static bool syncError(int PS2Port)          { return s_syncError[PS2Port]; }
 
-  bool CLKTimeOutError(int PS2Port)  { return m_CLKTimeOutError[PS2Port]; }
+  static bool CLKTimeOutError(int PS2Port)    { return s_CLKTimeOutError[PS2Port]; }
 
   /**
    * @brief Gets exclusive access to the specified PS/2 port
@@ -200,14 +205,14 @@ public:
    *
    * @return True if the device has been locked.
    */
-  bool lock(int PS2Port, int timeOutMS);
+  static bool lock(int PS2Port, int timeOutMS);
 
   /**
    * @brief Releases port from exclusive access.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  void unlock(int PS2Port);
+  static void unlock(int PS2Port);
 
 
 private:
@@ -215,36 +220,41 @@ private:
 
   static void IRAM_ATTR ULPWakeISR(void * arg);
 
-  static PS2Controller * s_instance;
+  static PS2Controller *    s_instance;
 
   // Keyboard and Mouse instances can be created by PS2Controller in one of the begin() calls, or can be
   // set using setKeyboard() and setMouse() calls.
-  Keyboard *            m_keyboard;
-  Mouse *               m_mouse;
+  static Keyboard *         s_keyboard;
+  static Mouse *            s_mouse;
 
-  bool                  m_portEnabled[2];
+  static bool               s_keyboardAllocated;
+  static bool               s_mouseAllocated;
 
-  intr_handle_t         m_ULPWakeISRHandle;
+  static bool               s_portEnabled[2];
+
+  static intr_handle_t      s_ULPWakeISRHandle;
 
   // true if last call to getData() had a parity, sync error (start or stop missing bits) or CLK timeout
-  bool                  m_parityError[2];
-  bool                  m_syncError[2];
-  bool                  m_CLKTimeOutError[2];
+  static bool               s_parityError[2];
+  static bool               s_syncError[2];
+  static bool               s_CLKTimeOutError[2];
 
   // one word queue (contains just the last received word)
-  QueueHandle_t         m_dataIn[2];
+  static QueueHandle_t      s_dataIn[2];
 
-  SemaphoreHandle_t     m_portLock[2];
+  static SemaphoreHandle_t  s_portLock[2];
+
+  static bool               s_initDone;
 
 };
 
 
 struct PS2PortAutoDisableRX {
   PS2PortAutoDisableRX(int PS2Port) : port(PS2Port) {
-    PS2Controller::instance()->disableRX(port);
+    PS2Controller::disableRX(port);
   }
   ~PS2PortAutoDisableRX() {
-    PS2Controller::instance()->enableRX(port);
+    PS2Controller::enableRX(port);
   }
 private:
   int port;

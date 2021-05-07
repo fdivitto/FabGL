@@ -78,9 +78,8 @@ void Mouse::begin(int PS2Port)
 
 void Mouse::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO)
 {
-  PS2Controller * PS2 = PS2Controller::instance();
-  PS2->begin(clkGPIO, dataGPIO);
-  PS2->setMouse(this);
+  PS2Controller::begin(clkGPIO, dataGPIO);
+  PS2Controller::setMouse(this);
   begin(0);
 }
 

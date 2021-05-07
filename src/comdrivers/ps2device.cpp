@@ -90,13 +90,13 @@ void PS2Device::quickCheckHardware()
 
 bool PS2Device::lock(int timeOutMS)
 {
-  return PS2Controller::instance()->lock(m_PS2Port, timeOutMS);
+  return PS2Controller::lock(m_PS2Port, timeOutMS);
 }
 
 
 void PS2Device::unlock()
 {
-  PS2Controller::instance()->unlock(m_PS2Port);
+  PS2Controller::unlock(m_PS2Port);
 }
 
 
@@ -108,37 +108,37 @@ void PS2Device::begin(int PS2Port)
 
 int PS2Device::dataAvailable()
 {
-  return PS2Controller::instance()->dataAvailable(m_PS2Port);
+  return PS2Controller::dataAvailable(m_PS2Port);
 }
 
 
 bool PS2Device::parityError()
 {
-  return PS2Controller::instance()->parityError(m_PS2Port);
+  return PS2Controller::parityError(m_PS2Port);
 }
 
 
 bool PS2Device::syncError()
 {
-  return PS2Controller::instance()->syncError(m_PS2Port);
+  return PS2Controller::syncError(m_PS2Port);
 }
 
 
 bool PS2Device::CLKTimeOutError()
 {
-  return PS2Controller::instance()->CLKTimeOutError(m_PS2Port);
+  return PS2Controller::CLKTimeOutError(m_PS2Port);
 }
 
 
 void PS2Device::suspendPort()
 {
-  PS2Controller::instance()->disableRX(m_PS2Port);
+  PS2Controller::disableRX(m_PS2Port);
 }
 
 
 void PS2Device::resumePort()
 {
-  PS2Controller::instance()->enableRX(m_PS2Port);
+  PS2Controller::enableRX(m_PS2Port);
 }
 
 
@@ -153,7 +153,7 @@ int PS2Device::getData(int timeOutMS)
   TimeOut timeout;
   while (true) {
     lock(-1);
-    ret = PS2Controller::instance()->getData(m_PS2Port, interTimeOut);
+    ret = PS2Controller::getData(m_PS2Port, interTimeOut);
     unlock();
     if (ret > -1 || parityError() || syncError() || CLKTimeOutError() || timeout.expired(timeOutMS))
       break;
@@ -173,10 +173,10 @@ bool PS2Device::sendCommand(uint8_t cmd, uint8_t expectedReply)
   // temporary disable RX for the other port
   PS2PortAutoDisableRX autoDisableRX(!m_PS2Port);
 
-  PS2Controller::instance()->sendData(cmd, m_PS2Port);
+  PS2Controller::sendData(cmd, m_PS2Port);
   TimeOut timeout;
   do {
-    if (PS2Controller::instance()->getData(m_PS2Port, INTER_WAITREPLY_TIMEOUT_MS) == expectedReply)
+    if (PS2Controller::getData(m_PS2Port, INTER_WAITREPLY_TIMEOUT_MS) == expectedReply)
       return true;
   } while (!timeout.expired(m_cmdTimeOut));
   return false;
@@ -185,13 +185,13 @@ bool PS2Device::sendCommand(uint8_t cmd, uint8_t expectedReply)
 
 void PS2Device::sendCommand(uint8_t cmd)
 {
-  PS2Controller::instance()->sendData(cmd, m_PS2Port);
+  PS2Controller::sendData(cmd, m_PS2Port);
 }
 
 
 void PS2Device::requestToResendLastByte()
 {
-  PS2Controller::instance()->sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);
+  PS2Controller::sendData(PS2_CMD_RESEND_LAST_BYTE, m_PS2Port);
 }
 
 

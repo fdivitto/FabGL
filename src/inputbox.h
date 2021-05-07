@@ -419,7 +419,6 @@ private:
 
   BitmappedDisplayController * m_dispCtrl;
   VGA16Controller            * m_vga16Ctrl;
-  PS2Controller              * m_ps2Ctrl;
   RGB888                       m_backgroundColor;
 };
 

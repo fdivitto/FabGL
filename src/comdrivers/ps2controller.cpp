@@ -988,7 +988,7 @@ M_LABEL(LABEL_PORT1_RX_CLK_IS_HIGH),
 // Not allowed from GPIO_NUM_34 to GPIO_NUM_39
 // prg_start in 32 bit words
 // size in 32 bit words
-void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, bool port1Enabled, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
+static void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, bool port1Enabled, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
   uint32_t CLK_rtc_gpio_num[2], CLK_rtc_gpio_reg[2], CLK_rtc_gpio_ie_s[2];
   uint32_t DAT_rtc_gpio_num[2], DAT_rtc_gpio_reg[2], DAT_rtc_gpio_ie_s[2];
@@ -1077,82 +1077,126 @@ void replace_placeholders(uint32_t prg_start, int size, bool port0Enabled, gpio_
 }
 
 
-PS2Controller * PS2Controller::s_instance = nullptr;
+PS2Controller *    PS2Controller::s_instance = nullptr;
+Keyboard *         PS2Controller::s_keyboard = nullptr;
+Mouse *            PS2Controller::s_mouse    = nullptr;
+bool               PS2Controller::s_keyboardAllocated = false;
+bool               PS2Controller::s_mouseAllocated    = false;
+bool               PS2Controller::s_portEnabled[2];
+intr_handle_t      PS2Controller::s_ULPWakeISRHandle;
+bool               PS2Controller::s_parityError[2];
+bool               PS2Controller::s_syncError[2];
+bool               PS2Controller::s_CLKTimeOutError[2];
+QueueHandle_t      PS2Controller::s_dataIn[2];
+SemaphoreHandle_t  PS2Controller::s_portLock[2];
+bool               PS2Controller::s_initDone = false;
 
 
 PS2Controller::PS2Controller()
-  : m_keyboard(nullptr),
-    m_mouse(nullptr)
 {
-  s_instance = this;
+  if (!s_instance)
+    s_instance = this;
+}
+
+
+PS2Controller::~PS2Controller()
+{
+  end();
+  if (this == s_instance)
+    s_instance = nullptr;
 }
 
 
 // Note: GPIO_UNUSED is a placeholder used to disable PS/2 port 1.
 void PS2Controller::begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO, gpio_num_t port1_datGPIO)
 {
-  m_portEnabled[0] = (port0_clkGPIO != GPIO_UNUSED && port0_datGPIO != GPIO_UNUSED);
-  m_portEnabled[1] = (port1_clkGPIO != GPIO_UNUSED && port1_datGPIO != GPIO_UNUSED);
+  // ULP stuff is always active, even when end() is called
+  if (!s_initDone) {
 
-  if (m_portEnabled[0]) {
-    if (!rtc_gpio_is_valid_gpio(port0_clkGPIO) || !rtc_gpio_is_valid_gpio(port0_datGPIO)) {
-      ESP_LOGE("FabGL", "Invalid PS/2 Port 0 pins");
-      m_portEnabled[0] = false;
-    } else {
-      rtc_gpio_init(port0_clkGPIO);
-      rtc_gpio_init(port0_datGPIO);
+    s_portEnabled[0] = (port0_clkGPIO != GPIO_UNUSED && port0_datGPIO != GPIO_UNUSED);
+    s_portEnabled[1] = (port1_clkGPIO != GPIO_UNUSED && port1_datGPIO != GPIO_UNUSED);
+
+    if (s_portEnabled[0]) {
+      if (!rtc_gpio_is_valid_gpio(port0_clkGPIO) || !rtc_gpio_is_valid_gpio(port0_datGPIO)) {
+        ESP_LOGE("FabGL", "Invalid PS/2 Port 0 pins");
+        s_portEnabled[0] = false;
+      } else {
+        rtc_gpio_init(port0_clkGPIO);
+        rtc_gpio_init(port0_datGPIO);
+      }
+    }
+
+    if (s_portEnabled[1]) {
+      if (!rtc_gpio_is_valid_gpio(port1_clkGPIO) || !rtc_gpio_is_valid_gpio(port1_datGPIO)) {
+        ESP_LOGE("FabGL", "Invalid PS/2 Port 1 pins");
+        s_portEnabled[1] = false;
+      } else {
+        rtc_gpio_init(port1_clkGPIO);
+        rtc_gpio_init(port1_datGPIO);
+      }
+    }
+
+    // clear ULP memory (without this may fail to run ULP on softreset)
+    for (int i = RTCMEM_PROG_START; i < RTCMEM_LASTVAR; ++i)
+      RTC_SLOW_MEM[i] = 0x0000;
+
+    // process, load and execute ULP program
+    size_t size = sizeof(ULP_code) / sizeof(ulp_insn_t);
+    ulp_process_macros_and_load_ex(RTCMEM_PROG_START, ULP_code, &size);         // convert macros to ULP code
+    replace_placeholders(RTCMEM_PROG_START, size, s_portEnabled[0], port0_clkGPIO, port0_datGPIO, s_portEnabled[1], port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
+    //printf("prog size = %d\n", size);
+    assert(size < RTCMEM_VARS_START && "ULP Program too long, increase RTCMEM_VARS_START");
+
+    REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTCMEM_PROG_START);   // set entry point
+    SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START
+
+    for (int p = 0; p < 2; ++p) {
+      RTC_SLOW_MEM[RTCMEM_PORT0_TX + p]         = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + p]  = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_DISABLE + p] = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX + p]         = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLED + p] = 0;
+      s_parityError[p] = s_syncError[p] = false;
+      s_dataIn[p]   = (s_portEnabled[p] ? xQueueCreate(1, sizeof(uint16_t)) : nullptr);
+      s_portLock[p] = (s_portEnabled[p] ? xSemaphoreCreateRecursiveMutex() : nullptr);
+      enableRX(p);
+    }
+
+    // ULP start
+    SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);
+
+    // install RTC interrupt handler (on ULP Wake() instruction)
+    // note about ESP_INTR_FLAG_LEVEL2: this is necessary in order to work reliably with interrupt intensive VGATextController, when running on the same core
+    // On some boards only core "1" can -read- RTC slow memory and receive interrupts, hence we have to force core 1.
+    esp_intr_alloc_pinnedToCore(ETS_RTC_CORE_INTR_SOURCE, ESP_INTR_FLAG_LEVEL2, ULPWakeISR, nullptr, &s_ULPWakeISRHandle, 1);
+    SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
+
+    s_initDone = true;
+
+  } else {
+
+    // ULP already initialized
+    for (int p = 0; p < 2; ++p) {
+      RTC_SLOW_MEM[RTCMEM_PORT0_TX + p]         = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + p]  = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_DISABLE + p] = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX + p]         = 0;
+      RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLED + p] = 0;
+      s_parityError[p] = s_syncError[p] = false;
+      if (s_portEnabled[p]) {
+        xQueueReset(s_dataIn[p]);
+        xSemaphoreGiveRecursive(s_portLock[p]);
+        enableRX(p);
+      }
     }
   }
-
-  if (m_portEnabled[1]) {
-    if (!rtc_gpio_is_valid_gpio(port1_clkGPIO) || !rtc_gpio_is_valid_gpio(port1_datGPIO)) {
-      ESP_LOGE("FabGL", "Invalid PS/2 Port 1 pins");
-      m_portEnabled[1] = false;
-    } else {
-      rtc_gpio_init(port1_clkGPIO);
-      rtc_gpio_init(port1_datGPIO);
-    }
-  }
-
-  // clear ULP memory (without this may fail to run ULP on softreset)
-  for (int i = RTCMEM_PROG_START; i < RTCMEM_LASTVAR; ++i)
-    RTC_SLOW_MEM[i] = 0x0000;
-
-  // process, load and execute ULP program
-  size_t size = sizeof(ULP_code) / sizeof(ulp_insn_t);
-  ulp_process_macros_and_load_ex(RTCMEM_PROG_START, ULP_code, &size);         // convert macros to ULP code
-  replace_placeholders(RTCMEM_PROG_START, size, m_portEnabled[0], port0_clkGPIO, port0_datGPIO, m_portEnabled[1], port1_clkGPIO, port1_datGPIO); // replace GPIO placeholders
-  //printf("prog size = %d\n", size);
-  assert(size < RTCMEM_VARS_START && "ULP Program too long, increase RTCMEM_VARS_START");
-
-  REG_SET_FIELD(SENS_SAR_START_FORCE_REG, SENS_PC_INIT, RTCMEM_PROG_START);   // set entry point
-  SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_FORCE_START_TOP);   // enable FORCE START
-
-  for (int p = 0; p < 2; ++p) {
-    RTC_SLOW_MEM[RTCMEM_PORT0_TX + p]         = 0;
-    RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + p]  = 0;
-    RTC_SLOW_MEM[RTCMEM_PORT0_RX_DISABLE + p] = 0;
-    RTC_SLOW_MEM[RTCMEM_PORT0_RX + p]         = 0;
-    RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLED + p] = 0;
-    m_parityError[p] = m_syncError[p] = false;
-    m_dataIn[p]   = (m_portEnabled[p] ? xQueueCreate(1, sizeof(uint16_t)) : nullptr);
-    m_portLock[p] = (m_portEnabled[p] ? xSemaphoreCreateRecursiveMutex() : nullptr);
-    enableRX(p);
-  }
-
-  // ULP start
-  SET_PERI_REG_MASK(SENS_SAR_START_FORCE_REG, SENS_ULP_CP_START_TOP);
-
-  // install RTC interrupt handler (on ULP Wake() instruction)
-  // note about ESP_INTR_FLAG_LEVEL2: this is necessary in order to work reliably with interrupt intensive VGATextController, when running on the same core
-  // On some boards only core "1" can -read- RTC slow memory and receive interrupts, hence we have to force core 1.
-  esp_intr_alloc_pinnedToCore(ETS_RTC_CORE_INTR_SOURCE, ESP_INTR_FLAG_LEVEL2, ULPWakeISR, this, &m_ULPWakeISRHandle, 1);
-  SET_PERI_REG_MASK(RTC_CNTL_INT_ENA_REG, RTC_CNTL_ULP_CP_INT_ENA);
 }
 
 
 void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
 {
+  end();
+
   bool generateVirtualKeys = (keyboardMode == KbdMode::GenerateVirtualKeys || keyboardMode == KbdMode::CreateVirtualKeysQueue);
   bool createVKQueue       = (keyboardMode == KbdMode::CreateVirtualKeysQueue);
   switch (preset) {
@@ -1163,6 +1207,7 @@ void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
       keyboard()->begin(generateVirtualKeys, createVKQueue, 0);
       setMouse(new Mouse);
       mouse()->begin(1);
+      s_keyboardAllocated = s_mouseAllocated = true;
       break;
     case PS2Preset::KeyboardPort1_MousePort0:
       // both keyboard (port 1) and mouse configured (port 0)
@@ -1171,41 +1216,63 @@ void PS2Controller::begin(PS2Preset preset, KbdMode keyboardMode)
       mouse()->begin(0);
       setKeyboard(new Keyboard);
       keyboard()->begin(generateVirtualKeys, createVKQueue, 1);
+      s_keyboardAllocated = s_mouseAllocated = true;
       break;
     case PS2Preset::KeyboardPort0:
       // only keyboard configured on port 0
       // this will call setKeyboard and begin()
       (new Keyboard)->begin(GPIO_NUM_33, GPIO_NUM_32, generateVirtualKeys, createVKQueue);
+      s_keyboardAllocated = true;
       break;
     case PS2Preset::KeyboardPort1:
       // only keyboard configured on port 1
       // this will call setKeyboard and begin()
       (new Keyboard)->begin(GPIO_NUM_26, GPIO_NUM_27, generateVirtualKeys, createVKQueue);
+      s_keyboardAllocated = true;
       break;
     case PS2Preset::MousePort0:
       // only mouse configured on port 0
       // this will call setMouse and begin()
       (new Mouse)->begin(GPIO_NUM_33, GPIO_NUM_32);
+      s_mouseAllocated = true;
       break;
     case PS2Preset::MousePort1:
       // only mouse configured on port 1
       // this will call setMouse and begin()
       (new Mouse)->begin(GPIO_NUM_26, GPIO_NUM_27);
+      s_mouseAllocated = true;
       break;
   };
 }
 
 
+void PS2Controller::end()
+{
+  if (s_initDone) {
+    if (s_keyboardAllocated)
+      delete s_keyboard;
+    s_keyboard = nullptr;
+
+    if (s_mouseAllocated)
+      delete s_mouse;
+    s_mouse = nullptr;
+
+    for (int p = 0; p < 2; ++p)
+      disableRX(p);
+  }
+}
+
+
 void PS2Controller::disableRX(int PS2Port)
 {
-  if (m_portEnabled[PS2Port])
+  if (s_portEnabled[PS2Port])
     RTC_SLOW_MEM[RTCMEM_PORT0_RX_DISABLE + PS2Port] = 1;
 }
 
 
 void PS2Controller::enableRX(int PS2Port)
 {
-  if (m_portEnabled[PS2Port]) {
+  if (s_portEnabled[PS2Port]) {
     // enable RX only if there is not data waiting
     if (!dataAvailable(PS2Port))
       RTC_SLOW_MEM[RTCMEM_PORT0_RX_ENABLE + PS2Port] = 1;
@@ -1215,7 +1282,7 @@ void PS2Controller::enableRX(int PS2Port)
 
 bool PS2Controller::dataAvailable(int PS2Port)
 {
-  return uxQueueMessagesWaiting(m_dataIn[PS2Port]);
+  return uxQueueMessagesWaiting(s_dataIn[PS2Port]);
 }
 
 
@@ -1225,18 +1292,18 @@ int PS2Controller::getData(int PS2Port, int timeOutMS)
   int r = -1;
 
   uint16_t w;
-  if (xQueueReceive(m_dataIn[PS2Port], &w, msToTicks(timeOutMS))) {
+  if (xQueueReceive(s_dataIn[PS2Port], &w, msToTicks(timeOutMS))) {
 
     // check CLK timeout, parity, start and stop bits
-    m_CLKTimeOutError[PS2Port] = (w == 0xffff);
-    if (!m_CLKTimeOutError[PS2Port]) {
+    s_CLKTimeOutError[PS2Port] = (w == 0xffff);
+    if (!s_CLKTimeOutError[PS2Port]) {
       uint8_t startBit = w & 1;
       uint8_t stopBit  = (w >> 10) & 1;
       uint8_t parity   = (w >> 9) & 1;
       r = (w >> 1) & 0xff;
-      m_parityError[PS2Port] = (parity != !calcParity(r));
-      m_syncError[PS2Port]   = (startBit != 0 || stopBit != 1);
-      if (m_parityError[PS2Port] || m_syncError[PS2Port])
+      s_parityError[PS2Port] = (parity != !calcParity(r));
+      s_syncError[PS2Port]   = (startBit != 0 || stopBit != 1);
+      if (s_parityError[PS2Port] || s_syncError[PS2Port])
         r = -1;
     }
 
@@ -1251,7 +1318,7 @@ int PS2Controller::getData(int PS2Port, int timeOutMS)
 
 void PS2Controller::sendData(uint8_t data, int PS2Port)
 {
-  if (m_portEnabled[PS2Port]) {
+  if (s_portEnabled[PS2Port]) {
     RTC_SLOW_MEM[RTCMEM_PORT0_DATAOUT + PS2Port] = 0x200 | ((!calcParity(data) & 1) << 8) | data;  // 0x200 = stop bit. Start bit is not specified here.
     RTC_SLOW_MEM[RTCMEM_PORT0_TX + PS2Port]      = 1;
   }
@@ -1260,14 +1327,14 @@ void PS2Controller::sendData(uint8_t data, int PS2Port)
 
 bool PS2Controller::lock(int PS2Port, int timeOutMS)
 {
-  return m_portEnabled[PS2Port] ? xSemaphoreTakeRecursive(m_portLock[PS2Port], msToTicks(timeOutMS)) : true;
+  return s_portEnabled[PS2Port] ? xSemaphoreTakeRecursive(s_portLock[PS2Port], msToTicks(timeOutMS)) : true;
 }
 
 
 void PS2Controller::unlock(int PS2Port)
 {
-  if (m_portEnabled[PS2Port])
-    xSemaphoreGiveRecursive(m_portLock[PS2Port]);
+  if (s_portEnabled[PS2Port])
+    xSemaphoreGiveRecursive(s_portLock[PS2Port]);
 }
 
 
@@ -1278,18 +1345,16 @@ void IRAM_ATTR PS2Controller::ULPWakeISR(void * arg)
 
   if (rtc_intr & RTC_CNTL_SAR_INT_ST) {
 
-    PS2Controller * ctrl = (PS2Controller*) arg;
-
     for (int p = 0; p < 2; ++p) {
       if (RTC_SLOW_MEM[RTCMEM_PORT0_RX + p] & 0xffff) {
         // RX
         uint16_t d = RTC_SLOW_MEM[RTCMEM_PORT0_DATAIN + p] & 0xffff;
-        xQueueOverwriteFromISR(ctrl->m_dataIn[p], &d, nullptr);
+        xQueueOverwriteFromISR(PS2Controller::s_dataIn[p], &d, nullptr);
         RTC_SLOW_MEM[RTCMEM_PORT0_RX + p] = 0;
       } else if (RTC_SLOW_MEM[RTCMEM_PORT0_RX_CLK_TIMEOUT + p] & 0xffff) {
         // CLK timeout
         uint16_t d = 0xffff;
-        xQueueOverwriteFromISR(ctrl->m_dataIn[p], &d, nullptr);
+        xQueueOverwriteFromISR(PS2Controller::s_dataIn[p], &d, nullptr);
         RTC_SLOW_MEM[RTCMEM_PORT0_RX_CLK_TIMEOUT + p] = 0;
       }
     }
