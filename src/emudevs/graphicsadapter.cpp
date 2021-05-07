@@ -97,6 +97,7 @@ GraphicsAdapter::GraphicsAdapter()
     m_cursorStart(0),
     m_cursorEnd(0),
     m_cursorVisible(false),
+    m_cursorGlyph(nullptr),
     m_bit7blink(true),
     m_PCGraphicsBackgroundColorIndex(0),
     m_PCGraphicsForegroundColorIndex(15),
