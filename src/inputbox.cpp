@@ -48,13 +48,13 @@ InputBox::~InputBox()
 }
 
 
-void InputBox::begin(char const * modeline)
+void InputBox::begin(char const * modeline, int viewPortWidth, int viewPortHeight)
 {
   // setup display controller
   m_vga16Ctrl = new VGA16Controller;
   m_dispCtrl = m_vga16Ctrl;
   m_vga16Ctrl->begin();
-  m_vga16Ctrl->setResolution(modeline ? modeline : VESA_640x480_75Hz);
+  m_vga16Ctrl->setResolution(modeline ? modeline : VESA_640x480_75Hz, viewPortWidth, viewPortHeight);
 
   // setup keyboard and mouse
   if (!PS2Controller::initialized())

@@ -190,7 +190,7 @@ public:
    *
    * @param modeline Optional modeline (uses 640x480 resolution if not specified)
    */
-  void begin(char const * modeline = nullptr);
+  void begin(char const * modeline = nullptr, int viewPortWidth = -1, int viewPortHeight = -1);
 
   /**
    * @brief Initializes InputBox from already initialized display controller
