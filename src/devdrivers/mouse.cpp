@@ -41,6 +41,7 @@ Mouse::Mouse()
   : m_mouseAvailable(false),
     m_mouseType(LegacyMouse),
     m_mouseUpdateTask(nullptr),
+    m_receivedPacket(nullptr),
     m_absoluteUpdate(false),
     m_prevDeltaTime(0),
     m_movementAcceleration(180),
