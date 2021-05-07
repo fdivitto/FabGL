@@ -55,9 +55,12 @@ Mouse::Mouse()
 
 Mouse::~Mouse()
 {
+  PS2DeviceLock lock(this);
   terminateAbsolutePositioner();
-  vTaskDelete(m_mouseUpdateTask);
-  vQueueDelete(m_receivedPacket);
+  if (m_mouseUpdateTask)
+    vTaskDelete(m_mouseUpdateTask);
+  if (m_receivedPacket)
+    vQueueDelete(m_receivedPacket);
 }
 
 
