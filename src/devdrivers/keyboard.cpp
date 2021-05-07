@@ -107,6 +107,8 @@ bool Keyboard::reset()
       break;
     vTaskDelay(500 / portTICK_PERIOD_MS);
   }
+  // give the time to the device to be fully initialized
+  vTaskDelay(200 / portTICK_PERIOD_MS);
 
   return m_keyboardAvailable;
 }
