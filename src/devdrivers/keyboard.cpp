@@ -51,6 +51,16 @@ Keyboard::Keyboard()
 }
 
 
+Keyboard::~Keyboard()
+{
+  PS2DeviceLock lock(this);
+  if (m_SCodeToVKConverterTask)
+    vTaskDelete(m_SCodeToVKConverterTask);
+  if (m_virtualKeyQueue)
+    vQueueDelete(m_virtualKeyQueue);
+}
+
+
 void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
 {
   PS2Device::begin(PS2Port);

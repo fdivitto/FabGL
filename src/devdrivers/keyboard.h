@@ -94,6 +94,7 @@ class Keyboard : public PS2Device {
 public:
 
   Keyboard();
+  ~Keyboard();
 
   /**
    * @brief Initializes Keyboard specifying CLOCK and DATA GPIOs.
