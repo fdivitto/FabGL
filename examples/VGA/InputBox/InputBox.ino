@@ -93,8 +93,7 @@ void loop()
 
   ////////////////////////////////////////////////////
   // Example of text input box
-  char name[32];
-  strcpy(name, "");
+  char name[32] = "";
   if (ib.textInput("Asking name", "What's your name?", name, 31) == InputResult::Enter)
     ib.messageFmt("", nullptr, "OK", "Nice to meet you %s!", name);
 
@@ -123,8 +122,7 @@ void loop()
       if (s > -1) {
 
         // yes, ask for WiFi password
-        char psw[32];
-        strcpy(psw, "");
+        char psw[32] = "";
         if (ib.textInput("WiFi Configuration", "Insert WiFi password", psw, 31, "Cancel", "OK", true) == InputResult::Enter) {
 
           // user pressed OK, connect to WiFi...
@@ -133,12 +131,12 @@ void loop()
           bool connected = false;
           ib.progressBox("", nullptr, true, 200, [&](fabgl::ProgressApp * app) {
             WiFi.begin(SSID, psw);
-            for (int i = 0; i < 2 && WiFi.status() != WL_CONNECTED; ++i) {
-              for (int j = 0; j < 8 && WiFi.status() == WL_DISCONNECTED; ++j) {
-                app->update((i * 8 + j) * 100 / 16, "Connecting to %s...", SSID);
-                delay(1000);
-              }
-              WiFi.reconnect();
+            for (int i = 0; i < 32 && WiFi.status() != WL_CONNECTED; ++i) {
+              if (!app->update(i * 100 / 32, "Connecting to %s...", SSID))
+                break;
+              delay(500);
+              if (i == 16)
+                WiFi.reconnect();
             }
             connected = (WiFi.status() == WL_CONNECTED);
           });
