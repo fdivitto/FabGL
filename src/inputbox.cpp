@@ -426,6 +426,8 @@ void SelectApp::addControls()
       finalize();
     };
   }
+
+  mainFrame->onShow = [&]() { setFocusedWindow(listBox); };
 }
 
 
