@@ -3041,14 +3041,29 @@ public:
    *
    * @param value Style class descriptor
    */
-  void setStyle(uiStyle * value)           { m_style = value; }
+  void setStyle(uiStyle * value)                   { m_style = value; }
 
   /**
    * @brief Gets current application controls style
    *
    * @return Current style (nullptr = default).
    */
-  uiStyle * style()                        { return m_style; }
+  uiStyle * style()                                { return m_style; }
+
+  Keyboard * keyboard()                            { return m_keyboard; }
+
+  Mouse * mouse()                                  { return m_mouse; }
+
+  BitmappedDisplayController * displayController() { return m_displayController; }
+
+  Canvas * canvas()                                { return m_canvas; }
+
+  /**
+   * @brief Returns time when last user action (mouse/keyboard) has been received, measured in milliseconds since boot
+   *
+   * @return Time in milliseconds
+   */
+  int lastUserActionTime()                         { return m_lastUserActionTimeMS; }
 
 
   // delegates
@@ -3060,14 +3075,6 @@ public:
    * To create a timer use uiApp.setTimer().
    */
   Delegate<uiTimerHandle> onTimer;
-
-  Keyboard * keyboard() { return m_keyboard; }
-
-  Mouse * mouse() { return m_mouse; }
-
-  BitmappedDisplayController * displayController() { return m_displayController; }
-
-  Canvas * canvas() { return m_canvas; }
 
 
 protected:
@@ -3126,6 +3133,9 @@ private:
   Point           m_lastMouseUpPos;      // screen position of last mouse up
 
   uiStyle *       m_style;
+
+  int             m_lastUserActionTimeMS; // time when last user action (mouse/keyboard) has been received, measured in milliseconds since boot
+
 };
 
 

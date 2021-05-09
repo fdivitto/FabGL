@@ -235,6 +235,8 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   // avoid slow paint on low resolutions
   m_displayController->enableBackgroundPrimitiveTimeout(false);
 
+  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+
   showWindow(m_rootWindow, true);
 
   m_activeWindow = m_rootWindow;
@@ -412,6 +414,8 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       getEvent(event, -1);
   }
 
+  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+
   Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
 
   // search for window under the mouse or mouse capturing window
@@ -469,6 +473,8 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 
 void uiApp::preprocessKeyboardEvent(uiEvent * event)
 {
+  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+
   // keyboard events go to focused window
   if (m_focusedWindow) {
     event->dest = m_focusedWindow;
