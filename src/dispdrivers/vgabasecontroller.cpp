@@ -65,6 +65,8 @@ void VGABaseController::init()
   m_primitiveProcessingSuspended = 1; // >0 suspended
   m_isr_handle                   = nullptr;
   m_doubleBufferOverDMA          = false;
+  m_viewPort                     = nullptr;
+  m_viewPortMemoryPool[0]        = nullptr;
 
   m_GPIOStream.begin();
 }
@@ -153,8 +155,10 @@ void VGABaseController::freeViewPort()
     heap_caps_free((void*) *poolPtr);
     *poolPtr = nullptr;
   }
-  heap_caps_free(m_viewPort);
-  m_viewPort = nullptr;
+  if (m_viewPort) {
+    heap_caps_free(m_viewPort);
+    m_viewPort = nullptr;
+  }
   if (isDoubleBuffered())
     heap_caps_free(m_viewPortVisible);
   m_viewPortVisible = nullptr;
