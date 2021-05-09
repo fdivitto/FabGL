@@ -854,6 +854,7 @@ void uiApp::killTimer(uiTimerHandle handle)
 {
   auto dest = (uiEvtHandler *) pvTimerGetTimerID(handle);
   m_timers.remove(uiTimerAssoc(dest, handle));
+  xTimerStop(handle, portMAX_DELAY);
   xTimerDelete(handle, portMAX_DELAY);
 }
 
@@ -861,8 +862,10 @@ void uiApp::killTimer(uiTimerHandle handle)
 void uiApp::killEvtHandlerTimers(uiEvtHandler * dest)
 {
   for (auto t : m_timers)
-    if (t.first == dest)
+    if (t.first == dest) {
+      xTimerStop(t.second, portMAX_DELAY);
       xTimerDelete(t.second, portMAX_DELAY);
+    }
   m_timers.remove_if([&](uiTimerAssoc const & p) { return p.first == dest; });
 }
 
