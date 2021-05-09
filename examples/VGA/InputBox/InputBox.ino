@@ -74,8 +74,8 @@ void loop()
 
 
   ////////////////////////////////////////////////////
-  // Example of options selection box with OK button (items from separated strings)
-  s = ib.select("Download Boot Disk", "Select boot disk to download", "FreeDOS;Minix 2.0;MS-DOS 5");
+  // Example of options selection box with OK button (items from separated strings) and autoOK of 5 seconds
+  s = ib.select("Download Boot Disk", "Select boot disk to download", "FreeDOS;Minix 2.0;MS-DOS 5", ';', "Cancel", "OK", 5);
   ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
 
 
