@@ -159,7 +159,7 @@ void Machine::run()
 }
 
 
-void Machine::runTask(void * pvParameters)
+void IRAM_ATTR Machine::runTask(void * pvParameters)
 {
   auto m = (Machine*)pvParameters;
 

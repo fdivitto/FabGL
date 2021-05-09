@@ -267,7 +267,10 @@ void setup()
   // we enable PSRAM at runtime, otherwise the hack slows down CPU too much (PSRAM_HACK is no more required).
   if (esp_spiram_init() != ESP_OK)
     ibox.message("Error!", "This app requires a board with PSRAM!", nullptr, nullptr);
+
+  #ifndef BOARD_HAS_PSRAM
   esp_spiram_init_cache();
+  #endif
 
   if (!FileBrowser::mountSDCard(false, "/SD", 8))
     ibox.message("Error!", "This app requires a SD-CARD!", nullptr, nullptr);
