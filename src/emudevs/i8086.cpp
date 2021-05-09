@@ -79,31 +79,16 @@ namespace fabgl {
 
 // FLAGS
 
-#if I8086_FLAGSINREGS
-  #define flags regs8
-  #define CF_ADDR 40
-  #define PF_ADDR 41
-  #define AF_ADDR 42
-  #define ZF_ADDR 43
-  #define SF_ADDR 44
-  #define TF_ADDR 45
-  #define IF_ADDR 46
-  #define DF_ADDR 47
-  #define OF_ADDR 48
-  #define XX_ADDR 49
-#else
-  static uint8_t flags[10];
-  #define CF_ADDR 0
-  #define PF_ADDR 1
-  #define AF_ADDR 2
-  #define ZF_ADDR 3
-  #define SF_ADDR 4
-  #define TF_ADDR 5
-  #define IF_ADDR 6
-  #define DF_ADDR 7
-  #define OF_ADDR 8
-  #define XX_ADDR 9
-#endif
+#define CF_ADDR 0
+#define PF_ADDR 1
+#define AF_ADDR 2
+#define ZF_ADDR 3
+#define SF_ADDR 4
+#define TF_ADDR 5
+#define IF_ADDR 6
+#define DF_ADDR 7
+#define OF_ADDR 8
+#define XX_ADDR 9
 
 #define FLAG_CF                                  (flags[CF_ADDR])
 #define FLAG_PF                                  (flags[PF_ADDR])
@@ -119,6 +104,7 @@ namespace fabgl {
 
 // Global variable definitions
 static uint8_t    regs[46];
+static uint8_t    flags[10];
 static int32_t    regs_offset;
 static uint8_t    * regs8, i_mod_size, i_d, i_w, raw_opcode_id, xlat_opcode_id, extra, rep_mode, seg_override_en, rep_override_en, trap_flag;
 static uint16_t   * regs16, reg_ip, seg_override;
