@@ -34,6 +34,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include <list>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/timers.h"
@@ -87,6 +89,9 @@ namespace fabgl {
 // increase in case of garbage between windows!
 #define FABGLIB_UI_EVENTS_QUEUE_SIZE 256
 
+
+using std::list;
+using std::pair;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2657,6 +2662,9 @@ struct ModalWindowState {
 };
 
 
+typedef pair<uiEvtHandler *, TimerHandle_t> uiTimerAssoc;
+
+
 class Keyboard;
 class Mouse;
 
@@ -2975,6 +2983,8 @@ public:
    */
   void killTimer(uiTimerHandle handle);
 
+  void killEvtHandlerTimers(uiEvtHandler * dest);
+
   /**
    * @brief Sets or gets application properties
    *
@@ -3136,6 +3146,8 @@ private:
 
   int             m_lastUserActionTimeMS; // time when last user action (mouse/keyboard) has been received, measured in milliseconds since boot
 
+  // associates event handler with FreeRTOS timer
+  list<uiTimerAssoc> m_timers;
 };
 
 

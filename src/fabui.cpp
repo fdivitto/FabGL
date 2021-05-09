@@ -143,6 +143,8 @@ uiEvtHandler::uiEvtHandler(uiApp * app)
 
 uiEvtHandler::~uiEvtHandler()
 {
+  if (m_app)
+    m_app->killEvtHandlerTimers(this);
 }
 
 
@@ -266,6 +268,8 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
       }
     }
   }
+
+  killEvtHandlerTimers(this);
 
   showCaret(nullptr);
 
@@ -840,6 +844,7 @@ void uiApp::timerFunc(TimerHandle_t xTimer)
 uiTimerHandle uiApp::setTimer(uiEvtHandler * dest, int periodMS)
 {
   TimerHandle_t h = xTimerCreate("", pdMS_TO_TICKS(periodMS), pdTRUE, dest, &uiApp::timerFunc);
+  m_timers.push_back(uiTimerAssoc(dest, h));
   xTimerStart(h, 0);
   return h;
 }
@@ -847,7 +852,18 @@ uiTimerHandle uiApp::setTimer(uiEvtHandler * dest, int periodMS)
 
 void uiApp::killTimer(uiTimerHandle handle)
 {
+  auto dest = (uiEvtHandler *) pvTimerGetTimerID(handle);
+  m_timers.remove(uiTimerAssoc(dest, handle));
   xTimerDelete(handle, portMAX_DELAY);
+}
+
+
+void uiApp::killEvtHandlerTimers(uiEvtHandler * dest)
+{
+  for (auto t : m_timers)
+    if (t.first == dest)
+      xTimerDelete(t.second, portMAX_DELAY);
+  m_timers.remove_if([&](uiTimerAssoc const & p) { return p.first == dest; });
 }
 
 
