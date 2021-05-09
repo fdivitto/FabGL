@@ -57,6 +57,9 @@ public:
   Machine();
   ~Machine();
 
+  void setDriveA(char const * filename) { m_diskImageFile[1] = filename; }
+  void setDriveC(char const * filename) { m_diskImageFile[0] = filename; }
+
   void run();
 
   uint32_t ticksCounter()    { return m_ticksCounter; }
@@ -109,6 +112,7 @@ private:
   BIOS                     m_BIOS;
 
   FILE *                   m_disk[2];
+  char const *             m_diskImageFile[2];
 
   static uint8_t *         s_memory;
   static uint8_t *         s_videoMemory;

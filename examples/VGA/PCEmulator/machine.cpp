@@ -135,8 +135,10 @@ void Machine::init()
   i8086::setMemory(s_memory);
   i8086::reset();
 
-  m_disk[0] = fopen("/SD/hd.img", "r+b");
-  m_disk[1] = fopen("/SD/fd.img", "r+b");
+  FileBrowser fb;
+  fb.setDirectory("/SD");
+  m_disk[0] = m_diskImageFile[0] ? fb.openFile(m_diskImageFile[0], "r+b") : nullptr; // drive C
+  m_disk[1] = m_diskImageFile[1] ? fb.openFile(m_diskImageFile[1], "r+b") : nullptr; // drive A
 
 	// Set CX:AX equal to the hard disk image size, if present
   if (m_disk[0]) {
