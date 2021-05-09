@@ -89,6 +89,7 @@ InputResult InputBox::textInput(char const * titleText, char const * labelText, 
   app.buttonCancelText = buttonCancelText;
   app.buttonOKText     = buttonOKText;
   app.passwordMode     = passwordMode;
+  app.autoOK           = 0;
 
   app.run(m_dispCtrl);
 
@@ -104,6 +105,7 @@ InputResult InputBox::message(char const * titleText, char const * messageText, 
   app.messageText      = messageText;
   app.buttonCancelText = buttonCancelText;
   app.buttonOKText     = buttonOKText;
+  app.autoOK           = 0;
 
   app.run(m_dispCtrl);
 
@@ -129,7 +131,7 @@ InputResult InputBox::messageFmt(char const * titleText, char const * buttonCanc
 }
 
 
-int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText)
+int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText, int OKAfter)
 {
   SelectApp app;
   app.backgroundColor  = m_backgroundColor;
@@ -141,6 +143,7 @@ int InputBox::select(char const * titleText, char const * messageText, char cons
   app.buttonCancelText = buttonCancelText;
   app.buttonOKText     = buttonOKText;
   app.menuMode         = false;
+  app.autoOK           = OKAfter;
 
   app.run(m_dispCtrl);
 
@@ -148,7 +151,7 @@ int InputBox::select(char const * titleText, char const * messageText, char cons
 }
 
 
-InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText)
+InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText, int OKAfter)
 {
   SelectApp app;
   app.backgroundColor  = m_backgroundColor;
@@ -160,6 +163,7 @@ InputResult InputBox::select(char const * titleText, char const * messageText, S
   app.buttonCancelText = buttonCancelText;
   app.buttonOKText     = buttonOKText;
   app.menuMode         = false;
+  app.autoOK           = OKAfter;
 
   app.run(m_dispCtrl);
 
@@ -179,6 +183,7 @@ int InputBox::menu(char const * titleText, char const * messageText, char const 
   app.buttonCancelText = nullptr;
   app.buttonOKText     = nullptr;
   app.menuMode         = true;
+  app.autoOK           = 0;
 
   app.run(m_dispCtrl);
 
@@ -198,6 +203,7 @@ int InputBox::menu(char const * titleText, char const * messageText, StringList 
   app.buttonCancelText = nullptr;
   app.buttonOKText     = nullptr;
   app.menuMode         = true;
+  app.autoOK           = 0;
 
   app.run(m_dispCtrl);
 
@@ -213,6 +219,7 @@ InputResult InputBox::progressBoxImpl(ProgressApp & app, char const * titleText,
   app.buttonOKText     = nullptr;
   app.hasProgressBar   = hasProgressBar;
   app.width            = width;
+  app.autoOK           = 0;
 
   app.run(m_dispCtrl);
 
@@ -263,6 +270,8 @@ void InputApp::init()
     }
   };
 
+  autoOKLabel = nullptr;
+
   uiWindow * controlToFocus = nullptr;
 
   if (buttonsExist) {
@@ -296,6 +305,28 @@ void InputApp::init()
         finalize();
       };
       controlToFocus = buttonOK;
+    }
+
+    if (autoOK > 0) {
+      autoOKLabel = new uiLabel(panel, "", Point(4, y + 2));
+
+      onTimer = [&](uiTimerHandle t) {
+        int now = esp_timer_get_time() / 1000;
+        if (lastUserActionTime() + 900 > now) {
+          killTimer(t);
+          destroyWindow(autoOKLabel);
+          return;
+        }
+        if (autoOK <= 0) {
+          killTimer(t);
+          retval = InputResult::Enter;
+          finalize();
+        }
+        --autoOK;
+        autoOKLabel->setTextFmt("%d", autoOK);
+      };
+      setTimer(this, 1000);
+
     }
 
   } else {

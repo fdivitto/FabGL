@@ -72,6 +72,7 @@ struct InputApp : public uiApp {
   char const *     buttonCancelText;
   char const *     buttonOKText;
   InputResult      retval;
+  int              autoOK;
 
   FontInfo const * font;
   int              requiredWidth;
@@ -79,6 +80,7 @@ struct InputApp : public uiApp {
 
   uiFrame *        mainFrame;
   uiPanel *        panel;
+  uiLabel *        autoOKLabel;
 };
 
 
@@ -293,6 +295,7 @@ public:
    * @param separator Optional items separator. Default is ';'
    * @param buttonCancelText Optional text for CANCEL button (nullptr = hasn't CANCEL button). Default is "Cancel".
    * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "OK".
+   * @param OKAfter If >0, OK is automatically trigged after specified number of seconds
    *
    * @return Index of the selected item or -1 if dialog has been canceled
    *
@@ -304,7 +307,7 @@ public:
    *     ib.messageFmt("", nullptr, "OK", "You have selected %d", s);
    *     ib.end();
    */
-  int select(char const * titleText, char const * messageText, char const * itemsText, char separator = ';', char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK");
+  int select(char const * titleText, char const * messageText, char const * itemsText, char separator = ';', char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK", int OKAfter = 0);
 
   /**
    * @brief Shows a dialog with a label and a list box
@@ -314,6 +317,7 @@ public:
    * @param items StringList object containing the items to show into the listbox. This parameter contains items selected before and after the dialog
    * @param buttonCancelText Optional text for CANCEL button (nullptr = hasn't CANCEL button). Default is "Cancel".
    * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "OK".
+   * @param OKAfter If >0, OK is automatically trigged after specified number of seconds
    *
    * @return Dialog box result (Cancel or Enter)
    *
@@ -334,7 +338,7 @@ public:
    *     }
    *     ib.end();
    */
-  InputResult select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK");
+  InputResult select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK", int OKAfter = 0);
 
   /**
    * @brief Shows a dialog with a label and a list box. The dialog exits when an item is selected, just like a menu
