@@ -426,10 +426,13 @@ void SelectApp::calcRequiredSize()
 
   // calc space for list box
   size_t maxLength;
-  auto itemsCount    = countItems(&maxLength);
-  listBoxHeight      = (font->height + 4) * itemsCount;
-  requiredHeight     = imin(requiredHeight + listBoxHeight, canvas()->getHeight() * 2 / 3);
-  requiredWidth      = imax(requiredWidth, maxLength * canvas()->textExtent(font, "M"));
+  auto itemsCount         = countItems(&maxLength);
+  listBoxHeight           = (font->height + 4) * itemsCount;
+  int requiredHeightUnCut = requiredHeight + listBoxHeight;
+  requiredHeight          = imin(requiredHeightUnCut, canvas()->getHeight());
+  requiredWidth           = imax(requiredWidth, maxLength * canvas()->textExtent(font, "M"));
+  if (requiredHeightUnCut > requiredHeight)
+    listBoxHeight -= requiredHeightUnCut - requiredHeight;
 }
 
 
