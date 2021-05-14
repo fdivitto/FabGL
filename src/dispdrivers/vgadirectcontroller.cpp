@@ -131,7 +131,7 @@ void VGADirectController::run()
 void VGADirectController::onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow)
 {
   if (isVisible) {
-    buffer->buf = (uint8_t *) m_lines[visibleRow % m_linesCount];
+    buffer->buf = (uint8_t *) m_lines[(visibleRow & this->m_repeatTwice) >> 1];
 
     // generate interrupt every half m_linesCount
     if ((scan == 0 && (visibleRow % (m_linesCount / 2)) == 0)) {
@@ -265,7 +265,7 @@ void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
     int linesCount = ctrl->m_linesCount;
     int scanLine = (s_scanLine + linesCount / 2) % viewPortHeight;
 
-    const auto lineIndex = scanLine & (linesCount - 1);
+    const auto lineIndex = scanLine & ctrl->m_repeatTwice;
 
     ctrl->m_drawScanlineCallback(ctrl->m_drawScanlineArg, (uint8_t*)(ctrl->m_lines[lineIndex]), scanLine);
 
@@ -283,7 +283,10 @@ void IRAM_ATTR VGADirectController::ISRHandler(void * arg)
   I2S1.int_clr.val = I2S1.int_st.val;
 }
 
-
+void VGADirectController::setRepeatTwice(bool repeatTwice)
+{
+  this->m_repeatTwice = repeatTwice ? 1 : 2;
+}
 
 } // end of namespace
 
