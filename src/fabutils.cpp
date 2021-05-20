@@ -1158,10 +1158,14 @@ bool FileBrowser::format(DriveType driveType, int drive)
 bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
   switch (getChipPackage()) {
-    case ChipPackage::ESP32D0WDQ5:
     case ChipPackage::ESP32PICOD4:
       MISO = 2;
       MOSI = 12;
+      break;
+    case ChipPackage::ESP32D0WDQ5:
+      MISO = 35;
+      MOSI = 12;
+      break;
     default:
       break;
   }
