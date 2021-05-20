@@ -99,6 +99,7 @@
  * Other classes:
  *    * fabgl::I2C, thread safe I2C (Wire) class
  *    * fabgl::DS3231, Real Time Clock driver which uses the thread safe fabgl::I2C library
+ *    * fabgl::MCP23S17, 16 bit SPI port expander
  *
  * See @ref confVGA "VGA output" for VGA connection sample schema.
  *
