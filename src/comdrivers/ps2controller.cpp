@@ -292,7 +292,7 @@ namespace fabgl {
 #define CLK_RX_TIMEOUT_VAL 100
 
 // TX maximum time between CLK cycles
-#define CLK_TX_TIMEOUT_VAL 500
+#define CLK_TX_TIMEOUT_VAL 1200    // fine tuned to work with PERIBOARD 409P
 
 // counter (R2) re-wake value
 #define WAKE_THRESHOLD     3000
@@ -545,9 +545,9 @@ M_LABEL(LABEL_PORT0_TX),
   // maintain CLK and DAT low for 200us
   CONFIGURE_CLK_OUTPUT(PS2_PORT0),
   WRITE_CLK(PS2_PORT0, 0),
+  M_DELAY_US(200),
   CONFIGURE_DAT_OUTPUT(PS2_PORT0),
   WRITE_DAT(PS2_PORT0, 0),
-  M_DELAY_US(200),
 
   // configure CLK as input
   CONFIGURE_CLK_INPUT(PS2_PORT0),
@@ -640,9 +640,9 @@ M_LABEL(LABEL_PORT1_TX),
   // maintain CLK and DAT low for 200us
   CONFIGURE_CLK_OUTPUT(PS2_PORT1),
   WRITE_CLK(PS2_PORT1, 0),
+  M_DELAY_US(200),
   CONFIGURE_DAT_OUTPUT(PS2_PORT1),
   WRITE_DAT(PS2_PORT1, 0),
-  M_DELAY_US(200),
 
   // configure CLK as input
   CONFIGURE_CLK_INPUT(PS2_PORT1),
