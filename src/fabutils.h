@@ -892,12 +892,15 @@ inline int hex2digit(char hex)
 uint32_t msToTicks(int ms);
 
 
+/** \ingroup Enumerations
+* @brief This enum defines ESP32 module types (packages)
+*/
 enum class ChipPackage {
   Unknown,
-  ESP32D0WDQ6,
-  ESP32D0WDQ5,
-  ESP32D2WDQ5,
-  ESP32PICOD4,
+  ESP32D0WDQ6,  /**< Unknown */
+  ESP32D0WDQ5,  /**< ESP32D0WDQ5 */
+  ESP32D2WDQ5,  /**< ESP32D2WDQ5 */
+  ESP32PICOD4,  /**< ESP32PICOD4 */
 };
 
 

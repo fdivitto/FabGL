@@ -191,6 +191,8 @@ public:
    * @brief Initializes InputBox from VGA modeline, using a VGA16Controller
    *
    * @param modeline Optional modeline (uses 640x480 resolution if not specified)
+   * @param viewPortWidth
+   * @param viewPortHeight
    */
   void begin(char const * modeline = nullptr, int viewPortWidth = -1, int viewPortHeight = -1);
 
@@ -366,7 +368,6 @@ public:
    * @param titleText Optional title of the dialog (nullptr = the dialogs hasn't a title)
    * @param messageText Message to show
    * @param items StringList object containing the items to show into the listbox
-   * @param separator Optional items separator. Default is ';'
    *
    * @return Index of the selected item or -1 if dialog has been canceled
    *

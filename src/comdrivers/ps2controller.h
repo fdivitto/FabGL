@@ -135,6 +135,7 @@ public:
    * @brief Gets a scancode from the queue.
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
+   * @param timeOutMS
    *
    * @return The first scancode of the queue (-1 if no data is available).
    */
@@ -164,7 +165,7 @@ public:
    *
    * @param PS2Port PS2 port number (0 = port 0, 1 = port1).
    */
-  static void enableRX(int PSPort);
+  static void enableRX(int PS2Port);
 
   /**
    * @brief Returns the instance of Keyboard object automatically created by PS2Controller.

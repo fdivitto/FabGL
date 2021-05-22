@@ -768,20 +768,23 @@ struct uiFrameProps {
 };
 
 
+/** \ingroup Enumerations
+ * @brief
+ */
 enum class uiFrameItem : uint8_t {
-  None,
-  MoveArea,
-  TopLeftResize,
-  TopCenterResize,
-  TopRightResize,
-  CenterLeftResize,
-  CenterRightResize,
-  BottomLeftResize,
-  BottomCenterResize,
-  BottomRightResize,
-  CloseButton,
-  MaximizeButton,
-  MinimizeButton,
+  None,                 /**<     */
+  MoveArea,             /**<     */
+  TopLeftResize,        /**<     */
+  TopCenterResize,      /**<     */
+  TopRightResize,       /**<     */
+  CenterLeftResize,     /**<     */
+  CenterRightResize,    /**<     */
+  BottomLeftResize,     /**<     */
+  BottomCenterResize,   /**<     */
+  BottomRightResize,    /**<     */
+  CloseButton,          /**<     */
+  MaximizeButton,       /**<     */
+  MinimizeButton,       /**<     */
 };
 
 
@@ -983,18 +986,21 @@ struct uiScrollableControlStyle {
 };
 
 
+/** \ingroup Enumerations
+ * @brief
+ */
 enum class uiScrollBarItem {
-  None,
-  LeftButton,
-  RightButton,
-  TopButton,
-  BottomButton,
-  HBar,
-  VBar,
-  PageUp,
-  PageDown,
-  PageLeft,
-  PageRight,
+  None,           /**<     */
+  LeftButton,     /**<     */
+  RightButton,    /**<     */
+  TopButton,      /**<     */
+  BottomButton,   /**<     */
+  HBar,           /**<     */
+  VBar,           /**<     */
+  PageUp,         /**<     */
+  PageDown,       /**<     */
+  PageLeft,       /**<     */
+  PageRight,      /**<     */
 };
 
 

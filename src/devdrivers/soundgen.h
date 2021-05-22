@@ -310,11 +310,14 @@ private:
 };
 
 
+/** \ingroup Enumerations
+ * @brief
+ */
 enum class SoundGeneratorState {
-  Stop,
-  RequestToPlay,
-  Playing,
-  RequestToStop,
+  Stop,             /**<  */
+  RequestToPlay,    /**<  */
+  Playing,          /**<  */
+  RequestToStop,    /**<  */
 };
 
 

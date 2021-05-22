@@ -255,6 +255,7 @@
  * @example VGA/MouseOnScreen/MouseOnScreen.ino PS/2 mouse and mouse pointer on screen
  * @example VGA/MultitaskingCPM/MultitaskingCPM.ino Multitasking - Multisession CP/M 3 compatible system. Supports directories and FAT32 file system with SD Cards.
  * @example VGA/NetworkTerminal/NetworkTerminal.ino Network VT/ANSI Terminal
+ * @example VGA/PCEmulator/PCEmulator.ino A i8086 based IBM PC emulator (runs FreeDOS, MS-DOS, CPM86, Linux-ELK, Windows 3.0)
  * @example VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple terminal - output only
  * @example VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino Simple terminal text-only mode - output only
  * @example VGA/Songs/Songs.ino Music and sound demo, from Carles Oriol
@@ -284,7 +285,7 @@
 
 
 /*!
-    \defgroup Enumerations
+    \defgroup Enumerations Enumerations
         Enumeration types
 */
 

@@ -250,6 +250,7 @@ public:
    * @brief Set display orientation and rotation
    *
    * @param value Display orientation and rotation
+   * @param force
    *
    * Example:
    *
