@@ -31,14 +31,18 @@ var classfabgl_1_1_terminal =
     [ "send", "classfabgl_1_1_terminal_ad0a417d6d62255946aa582980b4a74a7.html#ad0a417d6d62255946aa582980b4a74a7", null ],
     [ "send", "classfabgl_1_1_terminal_ad725948423717030f8c688d9cf3a688c.html#ad725948423717030f8c688d9cf3a688c", null ],
     [ "setBackgroundColor", "classfabgl_1_1_terminal_ae6f04360ccc33a519bdff509fd81df62.html#ae6f04360ccc33a519bdff509fd81df62", null ],
+    [ "setColorForAttribute", "classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43", null ],
+    [ "setColorForAttribute", "classfabgl_1_1_terminal_ad34fa6c7d2e02ce2a0c3d62597fca36d.html#ad34fa6c7d2e02ce2a0c3d62597fca36d", null ],
     [ "setForegroundColor", "classfabgl_1_1_terminal_afad23f091c4bb07a71963f5f7aa1831d.html#afad23f091c4bb07a71963f5f7aa1831d", null ],
     [ "setLogStream", "classfabgl_1_1_terminal_a4b5a116dd0c23f47197ff61b5d9d7f41.html#a4b5a116dd0c23f47197ff61b5d9d7f41", null ],
     [ "setTerminalType", "classfabgl_1_1_terminal_ae338b7372e1272a016ee97143d7351f8.html#ae338b7372e1272a016ee97143d7351f8", null ],
+    [ "soundGenerator", "classfabgl_1_1_terminal_ac737f68a707c256b2cdb0997a4cbb362.html#ac737f68a707c256b2cdb0997a4cbb362", null ],
     [ "terminalType", "classfabgl_1_1_terminal_aea106b64cc1ec83c9ed25f7802831fb2.html#aea106b64cc1ec83c9ed25f7802831fb2", null ],
     [ "unRead", "classfabgl_1_1_terminal_afcc6153b0a41d2380b5aeabe4313ff6a.html#afcc6153b0a41d2380b5aeabe4313ff6a", null ],
     [ "waitFor", "classfabgl_1_1_terminal_a27dbdfaa93b84ae587d92854e536a419.html#a27dbdfaa93b84ae587d92854e536a419", null ],
     [ "write", "classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7", null ],
     [ "write", "classfabgl_1_1_terminal_a567dd45033d29f066653e6a26b92cbf4.html#a567dd45033d29f066653e6a26b92cbf4", null ],
     [ "onUserSequence", "classfabgl_1_1_terminal_af05ed15439143da3bc5b6b58d2e65daa.html#af05ed15439143da3bc5b6b58d2e65daa", null ],
-    [ "onVirtualKey", "classfabgl_1_1_terminal_a41c6325db16da56b81f05e8d9dcabd0e.html#a41c6325db16da56b81f05e8d9dcabd0e", null ]
+    [ "onVirtualKey", "classfabgl_1_1_terminal_a41c6325db16da56b81f05e8d9dcabd0e.html#a41c6325db16da56b81f05e8d9dcabd0e", null ],
+    [ "onVirtualKeyItem", "classfabgl_1_1_terminal_abeb3bffa27a71e1c6dbdba8ac88d14fe.html#abeb3bffa27a71e1c6dbdba8ac88d14fe", null ]
 ];

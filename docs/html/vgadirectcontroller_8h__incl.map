@@ -1,7 +1,7 @@
 <map id="vgadirectcontroller.h" name="vgadirectcontroller.h">
-<area shape="rect" id="node9" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="368,225,455,251"/>
-<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="270,225,345,251"/>
-<area shape="rect" id="node14" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="524,152,694,177"/>
-<area shape="rect" id="node15" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="820,152,948,177"/>
-<area shape="rect" id="node17" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="341,79,546,104"/>
+<area shape="rect" id="node8" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="536,229,623,256"/>
+<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="306,229,381,256"/>
+<area shape="rect" id="node14" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="108,155,275,181"/>
+<area shape="rect" id="node16" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="452,155,579,181"/>
+<area shape="rect" id="node18" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="524,80,725,107"/>
 </map>

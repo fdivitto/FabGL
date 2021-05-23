@@ -1,0 +1,12 @@
+<map id="inputbox.h" name="inputbox.h">
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="4931,311,5018,338"/>
+<area shape="rect" id="node6" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="4207,80,4268,107"/>
+<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="3880,311,3955,338"/>
+<area shape="rect" id="node45" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="4724,80,4911,107"/>
+<area shape="rect" id="node50" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="3971,229,4146,256"/>
+<area shape="rect" id="node15" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="4374,229,4501,256"/>
+<area shape="rect" id="node17" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="4477,155,4552,181"/>
+<area shape="rect" id="node18" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2100,229,2180,256"/>
+<area shape="rect" id="node48" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="5033,229,5199,256"/>
+<area shape="rect" id="node49" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="4784,155,5003,181"/>
+</map>

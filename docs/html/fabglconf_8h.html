@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -86,6 +87,8 @@ $(document).ready(function(){initNavTree('fabglconf_8h.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">fabglconf.h File Reference</div>  </div>
 </div><!--header-->
@@ -93,8 +96,218 @@ $(document).ready(function(){initNavTree('fabglconf_8h.html','');});
 
 <p>This file contains FabGL library configuration settings, like number of supported colors, maximum usable memory, terminal fonts, etc...  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;esp_wifi.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for fabglconf.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabglconf_8h__incl.png" border="0" usemap="#fabglconf_8h" alt=""/></div>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabglconf_8h__dep__incl.png" border="0" usemap="#fabglconf_8hdep" alt=""/></div>
+<map name="fabglconf_8hdep" id="fabglconf_8hdep">
+<area shape="rect" id="node2" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="2016,80,2143,107"/>
+<area shape="rect" id="node5" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="327,453,405,480"/>
+<area shape="rect" id="node8" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="729,229,790,256"/>
+<area shape="rect" id="node9" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="477,304,564,331"/>
+<area shape="rect" id="node14" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="1711,379,1794,405"/>
+<area shape="rect" id="node15" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="667,304,739,331"/>
+<area shape="rect" id="node17" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="1445,155,1572,181"/>
+<area shape="rect" id="node19" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="1404,229,1472,256"/>
+<area shape="rect" id="node21" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="2862,229,2969,256"/>
+<area shape="rect" id="node22" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="3466,304,3594,331"/>
+<area shape="rect" id="node26" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="3626,155,3770,181"/>
+<area shape="rect" id="node28" href="_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="3240,155,3399,181"/>
+<area shape="rect" id="node29" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="3341,229,3492,256"/>
+<area shape="rect" id="node32" href="vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="2008,304,2121,331"/>
+<area shape="rect" id="node34" href="vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="2701,304,2815,331"/>
+<area shape="rect" id="node36" href="vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="2187,304,2300,331"/>
+<area shape="rect" id="node37" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="1863,304,1983,331"/>
+<area shape="rect" id="node38" href="vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="2547,229,2686,256"/>
+<area shape="rect" id="node39" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="2624,155,2759,181"/>
+<area shape="rect" id="node40" href="vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="2167,229,2319,256"/>
+<area shape="rect" id="node41" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="1139,155,1219,181"/>
+<area shape="rect" id="node43" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="12,379,101,405"/>
+<area shape="rect" id="node45" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="990,155,1097,181"/>
+<area shape="rect" id="node46" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="511,229,603,256"/>
+<area shape="rect" id="node47" href="tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="3677,80,3738,107"/>
+<area shape="rect" id="node48" href="_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="3947,155,4027,181"/>
+<area shape="rect" id="node49" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="2821,80,2924,107"/>
+<area shape="rect" id="node50" href="_i_c_m_p_8h.html" title="This file contains ICMP (ping) class. " alt="" coords="3813,80,3879,107"/>
+<area shape="rect" id="node3" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="847,155,922,181"/>
+<area shape="rect" id="node6" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="1829,528,1890,555"/>
+<area shape="rect" id="node16" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="953,379,1040,405"/>
+<area shape="rect" id="node20" href="displaycontroller_8cpp_source.html" title="displaycontroller.cpp" alt="" coords="1851,155,1991,181"/>
+<area shape="rect" id="node4" href="canvas_8cpp_source.html" title="canvas.cpp" alt="" coords="916,229,1005,256"/>
+<area shape="rect" id="node11" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="803,379,878,405"/>
+<area shape="rect" id="node7" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="494,528,587,555"/>
+<area shape="rect" id="node10" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="403,379,483,405"/>
+<area shape="rect" id="node12" href="ps2controller_8cpp_source.html" title="ps2controller.cpp" alt="" coords="558,379,678,405"/>
+<area shape="rect" id="node13" href="keyboard_8cpp_source.html" title="keyboard.cpp" alt="" coords="228,379,328,405"/>
+<area shape="rect" id="node18" href="collisiondetector_8cpp_source.html" title="collisiondetector.cpp" alt="" coords="1496,229,1636,256"/>
+<area shape="rect" id="node24" href="fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="1931,379,2020,405"/>
+<area shape="rect" id="node25" href="vgacontroller_8cpp_source.html" title="vgacontroller.cpp" alt="" coords="2950,304,3070,331"/>
+<area shape="rect" id="node23" href="vgatextcontroller_8cpp_source.html" title="vgatextcontroller.cpp" alt="" coords="3501,379,3644,405"/>
+<area shape="rect" id="node27" href="_s_s_d1306_controller_8cpp_source.html" title="SSD1306Controller.cpp" alt="" coords="3720,229,3879,256"/>
+<area shape="rect" id="node31" href="_t_f_t_controller_generic_8cpp_source.html" title="TFTControllerGeneric.cpp" alt="" coords="3145,229,3317,256"/>
+<area shape="rect" id="node30" href="_t_f_t_controller_specif_8cpp_source.html" title="TFTControllerSpecif.cpp" alt="" coords="3211,304,3375,331"/>
+<area shape="rect" id="node33" href="vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="2360,379,2487,405"/>
+<area shape="rect" id="node35" href="vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="2748,379,2875,405"/>
+<area shape="rect" id="node42" href="fabfonts_8cpp_source.html" title="fabfonts.cpp" alt="" coords="1132,229,1227,256"/>
+<area shape="rect" id="node44" href="soundgen_8cpp_source.html" title="soundgen.cpp" alt="" coords="5,453,108,480"/>
+</map>
+</div>
+</div>
 <p><a href="fabglconf_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ae5a55be91876411c145bad5d05e1e492"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae5a55be91876411c145bad5d05e1e492.html#ae5a55be91876411c145bad5d05e1e492">FABGLIB_CACHE_FONT_IN_RAM</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ae5a55be91876411c145bad5d05e1e492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5c5db52013c30acb1ef5cdef6dcc9ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae5c5db52013c30acb1ef5cdef6dcc9ea.html#ae5c5db52013c30acb1ef5cdef6dcc9ea">FABGLIB_CHARS_CONSUMER_TASK_PRIORITY</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:ae5c5db52013c30acb1ef5cdef6dcc9ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b200384a3c85e55416a5e7aeb9dfd2c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a4b200384a3c85e55416a5e7aeb9dfd2c.html#a4b200384a3c85e55416a5e7aeb9dfd2c">FABGLIB_DEFAULT_BLINK_PERIOD_MS</a>&#160;&#160;&#160;500</td></tr>
+<tr class="separator:a4b200384a3c85e55416a5e7aeb9dfd2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96296efdb9380ae194edf41f76134a58"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a96296efdb9380ae194edf41f76134a58.html#a96296efdb9380ae194edf41f76134a58">FABGLIB_DEFAULT_DISPLAYCONTROLLER_QUEUE_SIZE</a>&#160;&#160;&#160;1024</td></tr>
+<tr class="separator:a96296efdb9380ae194edf41f76134a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5386d1d23edc7f81dc1c7362187e28d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ad5386d1d23edc7f81dc1c7362187e28d.html#ad5386d1d23edc7f81dc1c7362187e28d">FABGLIB_DEFAULT_SCODETOVK_TASK_STACK_SIZE</a>&#160;&#160;&#160;1500</td></tr>
+<tr class="separator:ad5386d1d23edc7f81dc1c7362187e28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e2706db55053599187a7425f4e66bc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a14e2706db55053599187a7425f4e66bc.html#a14e2706db55053599187a7425f4e66bc">FABGLIB_DEFAULT_TERMINAL_INPUT_CONSUMER_TASK_STACK_SIZE</a>&#160;&#160;&#160;2048</td></tr>
+<tr class="separator:a14e2706db55053599187a7425f4e66bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3fca24a01170ebb28478fbfd8bdb4f0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae3fca24a01170ebb28478fbfd8bdb4f0.html#ae3fca24a01170ebb28478fbfd8bdb4f0">FABGLIB_DEFAULT_TERMINAL_INPUT_QUEUE_SIZE</a>&#160;&#160;&#160;1024</td></tr>
+<tr class="separator:ae3fca24a01170ebb28478fbfd8bdb4f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43c6ca9559a450f58fdf5640a85305c4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a43c6ca9559a450f58fdf5640a85305c4.html#a43c6ca9559a450f58fdf5640a85305c4">FABGLIB_DEFAULT_TERMINAL_KEYBOARD_READER_TASK_STACK_SIZE</a>&#160;&#160;&#160;2048</td></tr>
+<tr class="separator:a43c6ca9559a450f58fdf5640a85305c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af63d7f6c2c7a6d7beb99052cb0b01434"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_af63d7f6c2c7a6d7beb99052cb0b01434.html#af63d7f6c2c7a6d7beb99052cb0b01434">FABGLIB_HAS_VirtualKeyO_STRING</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:af63d7f6c2c7a6d7beb99052cb0b01434"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab67fe681c8f9ab3ff369e0989a769259"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ab67fe681c8f9ab3ff369e0989a769259.html#ab67fe681c8f9ab3ff369e0989a769259">FABGLIB_KEYBOARD_READER_TASK_PRIORITY</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:ab67fe681c8f9ab3ff369e0989a769259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae75fceca4fe46e0258a376be50f6c692"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae75fceca4fe46e0258a376be50f6c692.html#ae75fceca4fe46e0258a376be50f6c692">FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:ae75fceca4fe46e0258a376be50f6c692"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99b271b008df5c718700df60533916db"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a99b271b008df5c718700df60533916db.html#a99b271b008df5c718700df60533916db">FABGLIB_MAX_CSI_PARAMS</a>&#160;&#160;&#160;12</td></tr>
+<tr class="separator:a99b271b008df5c718700df60533916db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88492a438ec3ba7cd8f59e36b81d719b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a88492a438ec3ba7cd8f59e36b81d719b.html#a88492a438ec3ba7cd8f59e36b81d719b">FABGLIB_MAX_DCS_CONTENT</a>&#160;&#160;&#160;12</td></tr>
+<tr class="separator:a88492a438ec3ba7cd8f59e36b81d719b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed8f72017c1de9d95dedeb6e37b199b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a4ed8f72017c1de9d95dedeb6e37b199b.html#a4ed8f72017c1de9d95dedeb6e37b199b">FABGLIB_MOUSE_EVENTS_QUEUE_SIZE</a>&#160;&#160;&#160;64</td></tr>
+<tr class="separator:a4ed8f72017c1de9d95dedeb6e37b199b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a28696a36e7ed9d40cee15b3dba1330"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a6a28696a36e7ed9d40cee15b3dba1330.html#a6a28696a36e7ed9d40cee15b3dba1330">FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE</a>&#160;&#160;&#160;512</td></tr>
+<tr class="separator:a6a28696a36e7ed9d40cee15b3dba1330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad011d9ff772ecf5ab8be25d0261c38f9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ad011d9ff772ecf5ab8be25d0261c38f9.html#ad011d9ff772ecf5ab8be25d0261c38f9">FABGLIB_SCODETOVK_TASK_PRIORITY</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:ad011d9ff772ecf5ab8be25d0261c38f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0904a4c56bb853cd14ad75ed9c89550f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a0904a4c56bb853cd14ad75ed9c89550f.html#a0904a4c56bb853cd14ad75ed9c89550f">FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE</a>&#160;&#160;&#160;32</td></tr>
+<tr class="separator:a0904a4c56bb853cd14ad75ed9c89550f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8d65c6f9d580f607cd2ff361955c00"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a6d8d65c6f9d580f607cd2ff361955c00.html#a6d8d65c6f9d580f607cd2ff361955c00">FABGLIB_UNDERLINE_POSITION</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a6d8d65c6f9d580f607cd2ff361955c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa14f2e047e477a9064f3c38b4b67b4e6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aa14f2e047e477a9064f3c38b4b67b4e6.html#aa14f2e047e477a9064f3c38b4b67b4e6">FABGLIB_USE_APLL_AB_COEF</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:aa14f2e047e477a9064f3c38b4b67b4e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07d5320881f69a2537e5ee14788e1b53"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a07d5320881f69a2537e5ee14788e1b53.html#a07d5320881f69a2537e5ee14788e1b53">FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_PRIORITY</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:a07d5320881f69a2537e5ee14788e1b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91ceddd39f026c4f78b41ef8353d245b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a91ceddd39f026c4f78b41ef8353d245b.html#a91ceddd39f026c4f78b41ef8353d245b">FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_STACK_SIZE</a>&#160;&#160;&#160;1024</td></tr>
+<tr class="separator:a91ceddd39f026c4f78b41ef8353d245b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a447d700c9e4cb4889f3517928ecfac31"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a447d700c9e4cb4889f3517928ecfac31.html#a447d700c9e4cb4889f3517928ecfac31">FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE</a>&#160;&#160;&#160;(WIFI_TASK_CORE_ID ^ 1)</td></tr>
+<tr class="separator:a447d700c9e4cb4889f3517928ecfac31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab4da26b781d3790348f83fe5c88f70"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a1ab4da26b781d3790348f83fe5c88f70.html#a1ab4da26b781d3790348f83fe5c88f70">FABGLIB_VIEWPORT_MEMORY_POOL_COUNT</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:a1ab4da26b781d3790348f83fe5c88f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa53fb2fcd9e8b5430c83a58928892f2c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aa53fb2fcd9e8b5430c83a58928892f2c.html#aa53fb2fcd9e8b5430c83a58928892f2c">FABGLIB_XTAL</a>&#160;&#160;&#160;40000000</td></tr>
+<tr class="separator:aa53fb2fcd9e8b5430c83a58928892f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82a94204721377d7b3c0f6fc615c1d0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aa82a94204721377d7b3c0f6fc615c1d0.html#aa82a94204721377d7b3c0f6fc615c1d0">OLED_128x32</a>&#160;&#160;&#160;&quot;\&quot;OLED_128x32\&quot; 128 32&quot;</td></tr>
+<tr class="separator:aa82a94204721377d7b3c0f6fc615c1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48a7b2c95a1f0546c72310844fa6fc74"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a48a7b2c95a1f0546c72310844fa6fc74.html#a48a7b2c95a1f0546c72310844fa6fc74">OLED_128x64</a>&#160;&#160;&#160;&quot;\&quot;OLED_128x64\&quot; 128 64&quot;</td></tr>
+<tr class="separator:a48a7b2c95a1f0546c72310844fa6fc74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78928748f0005d2888c16c0d562f6ca8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a78928748f0005d2888c16c0d562f6ca8.html#a78928748f0005d2888c16c0d562f6ca8">PAL_720x576_50Hz</a>&#160;&#160;&#160;&quot;\&quot;720x576@50Hz\&quot; 27 720 732 795 864 576 581 586 625 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a78928748f0005d2888c16c0d562f6ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9321d0294fbf5e167be1627b5660d933"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a9321d0294fbf5e167be1627b5660d933.html#a9321d0294fbf5e167be1627b5660d933">QVGA_320x240_60Hz</a>&#160;&#160;&#160;&quot;\&quot;320x240@60Hz\&quot; 12.6 320 328 376 400 240 245 246 262 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a9321d0294fbf5e167be1627b5660d933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349d86403542e306aeeb34b9eb354ae0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a349d86403542e306aeeb34b9eb354ae0.html#a349d86403542e306aeeb34b9eb354ae0">SVGA_1024x768_60Hz</a>&#160;&#160;&#160;&quot;\&quot;1024x768@60Hz\&quot; 65 1024 1048 1184 1344 768 771 777 806 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a349d86403542e306aeeb34b9eb354ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa182226803a2bce5d7492c9e099c82f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_afa182226803a2bce5d7492c9e099c82f.html#afa182226803a2bce5d7492c9e099c82f">SVGA_1024x768_70Hz</a>&#160;&#160;&#160;&quot;\&quot;1024x768@70Hz\&quot; 75 1024 1048 1184 1328 768 771 777 806 -HSync -VSync&quot;</td></tr>
+<tr class="separator:afa182226803a2bce5d7492c9e099c82f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af75e69a82860f711465a1b1160aa0438"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_af75e69a82860f711465a1b1160aa0438.html#af75e69a82860f711465a1b1160aa0438">SVGA_1024x768_75Hz</a>&#160;&#160;&#160;&quot;\&quot;1024x768@75Hz\&quot; 78.80 1024 1040 1136 1312 768 769 772 800 +HSync +VSync&quot;</td></tr>
+<tr class="separator:af75e69a82860f711465a1b1160aa0438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba4cbadc451b8dc2f85eb92a422f4bbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aba4cbadc451b8dc2f85eb92a422f4bbd.html#aba4cbadc451b8dc2f85eb92a422f4bbd">SVGA_1280x600_60Hz</a>&#160;&#160;&#160;&quot;\&quot;1280x600@60Hz\&quot; 61.5 1280 1336 1464 1648 600 601 604 622 -HSync -VSync  FrontPorchBegins&quot;</td></tr>
+<tr class="separator:aba4cbadc451b8dc2f85eb92a422f4bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d56b9b88c3995106060ef08709b493a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a5d56b9b88c3995106060ef08709b493a.html#a5d56b9b88c3995106060ef08709b493a">SVGA_1280x720_60Hz</a>&#160;&#160;&#160;&quot;\&quot;1280x720@60Hz\&quot; 74.48 1280 1468 1604 1664 720 721 724 746 +hsync +vsync&quot;</td></tr>
+<tr class="separator:a5d56b9b88c3995106060ef08709b493a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6282deed5946ea85d61a296da78febf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_af6282deed5946ea85d61a296da78febf.html#af6282deed5946ea85d61a296da78febf">SVGA_1280x720_60HzAlt1</a>&#160;&#160;&#160;&quot;\&quot;1280x720@60HzAlt1\&quot; 73.78 1280 1312 1592 1624 720 735 742 757&quot;</td></tr>
+<tr class="separator:af6282deed5946ea85d61a296da78febf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a435672b58c0e7eb0fcf9855389e2a254"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a435672b58c0e7eb0fcf9855389e2a254.html#a435672b58c0e7eb0fcf9855389e2a254">SVGA_1280x768_50Hz</a>&#160;&#160;&#160;&quot;\&quot;1280x768@50Hz\&quot; 64.050004 1280 1312 1552 1584 768 784 791 807 -HSync -VSync  FrontPorchBegins&quot;</td></tr>
+<tr class="separator:a435672b58c0e7eb0fcf9855389e2a254"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a149ab7cf990772ba8a9148eb5dd6e4d6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a149ab7cf990772ba8a9148eb5dd6e4d6.html#a149ab7cf990772ba8a9148eb5dd6e4d6">SVGA_800x300_60Hz</a>&#160;&#160;&#160;&quot;\&quot;800x300@60Hz\&quot; 40 800 840 968 1056 300 301 303 314 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a149ab7cf990772ba8a9148eb5dd6e4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eee2772f4d1f6601f4c2584857b513a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a0eee2772f4d1f6601f4c2584857b513a.html#a0eee2772f4d1f6601f4c2584857b513a">SVGA_800x600_56Hz</a>&#160;&#160;&#160;&quot;\&quot;800x600@56Hz\&quot; 36 800 824 896 1024 600 601 603 625 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a0eee2772f4d1f6601f4c2584857b513a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b508213a3ab1ad056d8c4e59b1708d3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a2b508213a3ab1ad056d8c4e59b1708d3.html#a2b508213a3ab1ad056d8c4e59b1708d3">SVGA_800x600_60Hz</a>&#160;&#160;&#160;&quot;\&quot;800x600@60Hz\&quot; 40 800 840 968 1056 600 601 605 628 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a2b508213a3ab1ad056d8c4e59b1708d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ebbbad6eadde815fb809e7f731bf7df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a3ebbbad6eadde815fb809e7f731bf7df.html#a3ebbbad6eadde815fb809e7f731bf7df">SVGA_960x540_60Hz</a>&#160;&#160;&#160;&quot;\&quot;960x540@60Hz\&quot; 37.26 960 976 1008 1104 540 542 548 563 +hsync +vsync&quot;</td></tr>
+<tr class="separator:a3ebbbad6eadde815fb809e7f731bf7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89682a57a015e43069041705b4cc6d89"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a89682a57a015e43069041705b4cc6d89.html#a89682a57a015e43069041705b4cc6d89">TFT_240x240</a>&#160;&#160;&#160;&quot;\&quot;TFT_240x240\&quot; 240 240&quot;</td></tr>
+<tr class="separator:a89682a57a015e43069041705b4cc6d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4318011b5f7c0b1cf2cbbfb65f9fa9e1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a4318011b5f7c0b1cf2cbbfb65f9fa9e1.html#a4318011b5f7c0b1cf2cbbfb65f9fa9e1">TFT_240x320</a>&#160;&#160;&#160;&quot;\&quot;TFT_240x320\&quot; 240 320&quot;</td></tr>
+<tr class="separator:a4318011b5f7c0b1cf2cbbfb65f9fa9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e0bf63e5ba6bfe1badb621c235e3f9b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a2e0bf63e5ba6bfe1badb621c235e3f9b.html#a2e0bf63e5ba6bfe1badb621c235e3f9b">VESA_640x350_85Hz</a>&#160;&#160;&#160;&quot;\&quot;640x350@85Hz\&quot; 31.5 640 672 736 832 350 382 385 445 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a2e0bf63e5ba6bfe1badb621c235e3f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addea82fe18c9c78642f2754141fbcc43"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_addea82fe18c9c78642f2754141fbcc43.html#addea82fe18c9c78642f2754141fbcc43">VESA_640x480_75Hz</a>&#160;&#160;&#160;&quot;\&quot;640x480@75Hz\&quot; 31.5 640 656 720 840 480 481 484 500 -HSync -VSync&quot;</td></tr>
+<tr class="separator:addea82fe18c9c78642f2754141fbcc43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa25f5e5fe69b269367ac35791e502c03"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aa25f5e5fe69b269367ac35791e502c03.html#aa25f5e5fe69b269367ac35791e502c03">VESA_720x400_85Hz</a>&#160;&#160;&#160;&quot;\&quot;720x400@85Hz\&quot; 35.5 720 756 828 936 400 401 404 446 -HSync -VSync&quot;</td></tr>
+<tr class="separator:aa25f5e5fe69b269367ac35791e502c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82f3c24fd89e8698ef7a729e0711690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a82f3c24fd89e8698ef7a729e0711690e.html#a82f3c24fd89e8698ef7a729e0711690e">VESA_768x576_60Hz</a>&#160;&#160;&#160;&quot;\&quot;768x576@60Hz\&quot; 34.96 768 792 872 976 576 577 580 597 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a82f3c24fd89e8698ef7a729e0711690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c16e345febd0d26723e122a4b939b4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a79c16e345febd0d26723e122a4b939b4.html#a79c16e345febd0d26723e122a4b939b4">VGA_256x384_60Hz</a>&#160;&#160;&#160;&quot;\&quot;256x384@60\&quot; 17.09 256 272 304 352 384 387 391 404 -HSync -VSync DoubleScan FrontPorchBegins&quot;</td></tr>
+<tr class="separator:a79c16e345febd0d26723e122a4b939b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa08efd3a20f2e08714be84f244972c3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aaa08efd3a20f2e08714be84f244972c3.html#aaa08efd3a20f2e08714be84f244972c3">VGA_320x200_70Hz</a>&#160;&#160;&#160;&quot;\&quot;320x200@70Hz\&quot; 12.5875 320 328 376 400 200 206 207 224 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:aaa08efd3a20f2e08714be84f244972c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a053cde6629b66d4ba3e31e92af8861bb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb.html#a053cde6629b66d4ba3e31e92af8861bb">VGA_320x200_75Hz</a>&#160;&#160;&#160;&quot;\&quot;320x200@75Hz\&quot; 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a053cde6629b66d4ba3e31e92af8861bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d2c0a4aa4d99fd8e4e32b0f9f7211ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a4d2c0a4aa4d99fd8e4e32b0f9f7211ab.html#a4d2c0a4aa4d99fd8e4e32b0f9f7211ab">VGA_320x200_75HzRetro</a>&#160;&#160;&#160;&quot;\&quot;320x200@75Hz\&quot; 12.93 320 352 376 408 200 208 211 229 -HSync -VSync DoubleScan MultiScanBlank&quot;</td></tr>
+<tr class="separator:a4d2c0a4aa4d99fd8e4e32b0f9f7211ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8052201f91850dfc935be639a91da6ee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a8052201f91850dfc935be639a91da6ee.html#a8052201f91850dfc935be639a91da6ee">VGA_400x300_60Hz</a>&#160;&#160;&#160;&quot;\&quot;400x300@60Hz\&quot; 20 400 420 484 528 300 300 302 314 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a8052201f91850dfc935be639a91da6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e68e4a75777e8962beec2fb37a4b1e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a6e68e4a75777e8962beec2fb37a4b1e0.html#a6e68e4a75777e8962beec2fb37a4b1e0">VGA_480x300_75Hz</a>&#160;&#160;&#160;&quot;\&quot;480x300@75Hz\&quot; 31.22 480 504 584 624 300 319 322 333 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a6e68e4a75777e8962beec2fb37a4b1e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb88bbc49bcbf318cd6310ce46975c13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_afb88bbc49bcbf318cd6310ce46975c13.html#afb88bbc49bcbf318cd6310ce46975c13">VGA_512x192_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x192@60Hz\&quot; 32.5 512 524 592 672 192 193 194 202 -HSync -VSync QuadScan&quot;</td></tr>
+<tr class="separator:afb88bbc49bcbf318cd6310ce46975c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d89ffdbe287a195d0f62d4e12a31f36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a8d89ffdbe287a195d0f62d4e12a31f36.html#a8d89ffdbe287a195d0f62d4e12a31f36">VGA_512x384_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x384@60Hz\&quot; 32.5 512 524 592 672 384 385 388 403 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a8d89ffdbe287a195d0f62d4e12a31f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8f98eb11654d95f40f8b0f8ac1bf62"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aad8f98eb11654d95f40f8b0f8ac1bf62.html#aad8f98eb11654d95f40f8b0f8ac1bf62">VGA_512x448_60Hz</a>&#160;&#160;&#160;&quot;\&quot;512x448@60Hz\&quot; 21.21 512 542 598 672 448 469 472 527 -HSync -VSync&quot;</td></tr>
+<tr class="separator:aad8f98eb11654d95f40f8b0f8ac1bf62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebe5d4fd9da20fc7ca153c8ade3938f5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aebe5d4fd9da20fc7ca153c8ade3938f5.html#aebe5d4fd9da20fc7ca153c8ade3938f5">VGA_512x512_58Hz</a>&#160;&#160;&#160;&quot;\&quot;512x512@58Hz\&quot; 21.21 512 538 594 668 512 513 516 545 -HSync -VSync&quot;</td></tr>
+<tr class="separator:aebe5d4fd9da20fc7ca153c8ade3938f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a731e33dbeed1acbe5a0a2759531ba4b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a731e33dbeed1acbe5a0a2759531ba4b0.html#a731e33dbeed1acbe5a0a2759531ba4b0">VGA_640x200_60HzD</a>&#160;&#160;&#160;&quot;\&quot;640x200@60HzD\&quot; 25.175 640 656 752 800 200 226 227 262 -HSync -VSync doublescan FrontPorchBegins&quot;</td></tr>
+<tr class="separator:a731e33dbeed1acbe5a0a2759531ba4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5e5d3057b7f87058c6191c87d9a1d54"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ac5e5d3057b7f87058c6191c87d9a1d54.html#ac5e5d3057b7f87058c6191c87d9a1d54">VGA_640x200_70Hz</a>&#160;&#160;&#160;&quot;\&quot;640x200@70Hz\&quot; 25.175 640 656 752 800 200 206 207 224 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:ac5e5d3057b7f87058c6191c87d9a1d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ad04e1bb6af1e841cf9785acf037e92"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a7ad04e1bb6af1e841cf9785acf037e92.html#a7ad04e1bb6af1e841cf9785acf037e92">VGA_640x200_70HzRetro</a>&#160;&#160;&#160;&quot;\&quot;640x200@70Hz\&quot; 25.175 640 663 759 808 200 208 211 226 -HSync -VSync DoubleScan MultiScanBlank&quot;</td></tr>
+<tr class="separator:a7ad04e1bb6af1e841cf9785acf037e92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8acc61f3b1a9d4c0be718b22fa05c767"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a8acc61f3b1a9d4c0be718b22fa05c767.html#a8acc61f3b1a9d4c0be718b22fa05c767">VGA_640x240_60Hz</a>&#160;&#160;&#160;&quot;\&quot;640x240@60Hz\&quot; 25.175 640 656 752 800 240 245 247 262 -HSync -VSync DoubleScan&quot;</td></tr>
+<tr class="separator:a8acc61f3b1a9d4c0be718b22fa05c767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3590c227bd5abf54fdad55450aa2b7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a4f3590c227bd5abf54fdad55450aa2b7.html#a4f3590c227bd5abf54fdad55450aa2b7">VGA_640x350_70Hz</a>&#160;&#160;&#160;&quot;\&quot;640x350@70Hz\&quot; 25.175 640 656 752 800 350 387 389 449 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a4f3590c227bd5abf54fdad55450aa2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae913dffdd13bd77b79d1a253e88bf22f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae913dffdd13bd77b79d1a253e88bf22f.html#ae913dffdd13bd77b79d1a253e88bf22f">VGA_640x350_70HzAlt1</a>&#160;&#160;&#160;&quot;\&quot;640x350@70HzAlt1\&quot; 25.175 640 658 754 808 350 387 389 449 -HSync -VSync&quot;</td></tr>
+<tr class="separator:ae913dffdd13bd77b79d1a253e88bf22f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe328eafdaa469a1c68be7c38059efb8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_afe328eafdaa469a1c68be7c38059efb8.html#afe328eafdaa469a1c68be7c38059efb8">VGA_640x382_60Hz</a>&#160;&#160;&#160;&quot;\&quot;640x382@60Hz\&quot; 40 640 672 740 840 382 385 387 397 -HSync +VSync DoubleScan&quot;</td></tr>
+<tr class="separator:afe328eafdaa469a1c68be7c38059efb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6b2ada76eb9e786172122175d019582"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_aa6b2ada76eb9e786172122175d019582.html#aa6b2ada76eb9e786172122175d019582">VGA_640x384_60Hz</a>&#160;&#160;&#160;&quot;\&quot;640x384@60Hz\&quot; 40 640 672 740 840 384 384 386 397 -HSync +VSync DoubleScan&quot;</td></tr>
+<tr class="separator:aa6b2ada76eb9e786172122175d019582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4d29e8fc41688ff838f237359ec56bd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ae4d29e8fc41688ff838f237359ec56bd.html#ae4d29e8fc41688ff838f237359ec56bd">VGA_640x400_60Hz</a>&#160;&#160;&#160;&quot;\&quot;640x400@60Hz-mod\&quot; 25.175 640 656 752 800 400 452 454 525 -HSync -VSync&quot;</td></tr>
+<tr class="separator:ae4d29e8fc41688ff838f237359ec56bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b59f35df218823a6165d836cfc22c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a86b59f35df218823a6165d836cfc22c0.html#a86b59f35df218823a6165d836cfc22c0">VGA_640x400_70Hz</a>&#160;&#160;&#160;&quot;\&quot;640x400@70Hz\&quot; 25.175 640 656 752 800 400 412 414 449 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a86b59f35df218823a6165d836cfc22c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d4571e9072b78877c36bf32bc9423f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>&#160;&#160;&#160;&quot;\&quot;640x480@60Hz\&quot; 25.175 640 656 752 800 480 490 492 525 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a2d4571e9072b78877c36bf32bc9423f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a71a8ca2b76872336ace9a316dd8965"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a0a71a8ca2b76872336ace9a316dd8965.html#a0a71a8ca2b76872336ace9a316dd8965">VGA_640x480_60HzAlt1</a>&#160;&#160;&#160;&quot;\&quot;640x480@60HzAlt1\&quot; 27.5 640 672 768 864 480 482 488 530 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a0a71a8ca2b76872336ace9a316dd8965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad897c93be5d8d1d533f32b17aeb6d5c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_ad897c93be5d8d1d533f32b17aeb6d5c0.html#ad897c93be5d8d1d533f32b17aeb6d5c0">VGA_640x480_60HzD</a>&#160;&#160;&#160;&quot;\&quot;640x480@60HzD\&quot; 54.00 640 688 744 900 480 480 482 500 +HSync +VSync DoubleScan&quot;</td></tr>
+<tr class="separator:ad897c93be5d8d1d533f32b17aeb6d5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dd5ee24424e059948701119687589e6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a3dd5ee24424e059948701119687589e6.html#a3dd5ee24424e059948701119687589e6">VGA_640x480_73Hz</a>&#160;&#160;&#160;&quot;\&quot;640x480@73Hz\&quot; 31.5 640 664 704 832 480 489 491 520 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a3dd5ee24424e059948701119687589e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a412cf149c885e4929aff0f246a98ad8a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a412cf149c885e4929aff0f246a98ad8a.html#a412cf149c885e4929aff0f246a98ad8a">VGA_720x348_50HzD</a>&#160;&#160;&#160;&quot;\&quot;720x348@50HzD\&quot; 30.84 720 752 808 840 348 355 358 366 -hsync -vsync doublescan&quot;</td></tr>
+<tr class="separator:a412cf149c885e4929aff0f246a98ad8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30629859b390a433f51a0672ae0ca41b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_a30629859b390a433f51a0672ae0ca41b.html#a30629859b390a433f51a0672ae0ca41b">VGA_720x348_73Hz</a>&#160;&#160;&#160;&quot;\&quot;720x348@73Hz\&quot; 27 720 736 799 872 348 379 381 433 -HSync -VSync&quot;</td></tr>
+<tr class="separator:a30629859b390a433f51a0672ae0ca41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acab226c21682068088776984adf72be0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabglconf_8h_acab226c21682068088776984adf72be0.html#acab226c21682068088776984adf72be0">VGA_720x400_70Hz</a>&#160;&#160;&#160;&quot;\&quot;720x400@70Hz\&quot; 28.32  720 738 846 900  400 412 414 449 -hsync +vsync&quot;</td></tr>
+<tr class="separator:acab226c21682068088776984adf72be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This file contains FabGL library configuration settings, like number of supported colors, maximum usable memory, terminal fonts, etc... </p>
 
@@ -105,7 +318,7 @@ $(document).ready(function(){initNavTree('fabglconf_8h.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="fabglconf_8h.html">fabglconf.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

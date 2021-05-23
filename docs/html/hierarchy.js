@@ -19,11 +19,16 @@ var hierarchy =
     [ "Glyph", "structfabgl_1_1_glyph.html", null ],
     [ "GlyphOptions", "unionfabgl_1_1_glyph_options.html", null ],
     [ "I2C", "classfabgl_1_1_i2_c.html", null ],
+    [ "i8080", "classfabgl_1_1i8080.html", null ],
     [ "ICMP", "classfabgl_1_1_i_c_m_p.html", null ],
+    [ "InputBox", "classfabgl_1_1_input_box.html", null ],
     [ "KeyboardLayout", "structfabgl_1_1_keyboard_layout.html", null ],
     [ "LineEditor", "classfabgl_1_1_line_editor.html", null ],
+    [ "MCP23S17", "classfabgl_1_1_m_c_p23_s17.html", null ],
+    [ "MOS6502", "classfabgl_1_1_m_o_s6502.html", null ],
     [ "MouseButtons", "structfabgl_1_1_mouse_buttons.html", null ],
     [ "MouseDelta", "structfabgl_1_1_mouse_delta.html", null ],
+    [ "MousePacket", "structfabgl_1_1_mouse_packet.html", null ],
     [ "MouseStatus", "structfabgl_1_1_mouse_status.html", null ],
     [ "PaintOptions", "structfabgl_1_1_paint_options.html", null ],
     [ "Point", "structfabgl_1_1_point.html", null ],
@@ -59,6 +64,7 @@ var hierarchy =
     [ "uiImageStyle", "structfabgl_1_1ui_image_style.html", null ],
     [ "uiKeyEventInfo", "structfabgl_1_1ui_key_event_info.html", null ],
     [ "uiLabelStyle", "structfabgl_1_1ui_label_style.html", null ],
+    [ "uiListBoxProps", "structfabgl_1_1ui_list_box_props.html", null ],
     [ "uiListBoxStyle", "structfabgl_1_1ui_list_box_style.html", null ],
     [ "uiMouseEventInfo", "structfabgl_1_1ui_mouse_event_info.html", null ],
     [ "uiObject", "classfabgl_1_1ui_object.html", [
@@ -76,6 +82,7 @@ var hierarchy =
             [ "uiImage", "classfabgl_1_1ui_image.html", null ],
             [ "uiLabel", "classfabgl_1_1ui_label.html", null ],
             [ "uiPanel", "classfabgl_1_1ui_panel.html", null ],
+            [ "uiProgressBar", "classfabgl_1_1ui_progress_bar.html", null ],
             [ "uiScrollableControl", "classfabgl_1_1ui_scrollable_control.html", [
               [ "uiCustomListBox", "classfabgl_1_1ui_custom_list_box.html", [
                 [ "uiColorListBox", "classfabgl_1_1ui_color_list_box.html", null ],
@@ -94,6 +101,8 @@ var hierarchy =
     [ "uiObjectType", "structfabgl_1_1ui_object_type.html", null ],
     [ "uiPaintBoxStyle", "structfabgl_1_1ui_paint_box_style.html", null ],
     [ "uiPanelStyle", "structfabgl_1_1ui_panel_style.html", null ],
+    [ "uiProgressBarProps", "structfabgl_1_1ui_progress_bar_props.html", null ],
+    [ "uiProgressBarStyle", "structfabgl_1_1ui_progress_bar_style.html", null ],
     [ "uiScrollableControlStyle", "structfabgl_1_1ui_scrollable_control_style.html", null ],
     [ "uiSliderStyle", "structfabgl_1_1ui_slider_style.html", null ],
     [ "uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", null ],
@@ -110,7 +119,9 @@ var hierarchy =
       [ "VGA8Controller", "classfabgl_1_1_v_g_a8_controller.html", null ]
     ] ],
     [ "VGATimings", "structfabgl_1_1_v_g_a_timings.html", null ],
+    [ "VIA6522", "classfabgl_1_1_v_i_a6522.html", null ],
     [ "VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ],
+    [ "VirtualKeyItem", "structfabgl_1_1_virtual_key_item.html", null ],
     [ "WaveformGenerator", "classfabgl_1_1_waveform_generator.html", [
       [ "NoiseWaveformGenerator", "classfabgl_1_1_noise_waveform_generator.html", null ],
       [ "SamplesGenerator", "classfabgl_1_1_samples_generator.html", null ],
@@ -119,5 +130,6 @@ var hierarchy =
       [ "SquareWaveformGenerator", "classfabgl_1_1_square_waveform_generator.html", null ],
       [ "TriangleWaveformGenerator", "classfabgl_1_1_triangle_waveform_generator.html", null ],
       [ "VICNoiseGenerator", "classfabgl_1_1_v_i_c_noise_generator.html", null ]
-    ] ]
+    ] ],
+    [ "Z80", "classfabgl_1_1_z80.html", null ]
 ];

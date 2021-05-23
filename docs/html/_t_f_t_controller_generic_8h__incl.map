@@ -1,5 +1,5 @@
 <map id="TFTControllerGeneric.h" name="TFTControllerGeneric.h">
-<area shape="rect" id="node6" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5,152,92,177"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="694,152,769,177"/>
-<area shape="rect" id="node11" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="425,79,553,104"/>
+<area shape="rect" id="node7" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="877,155,963,181"/>
+<area shape="rect" id="node9" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="220,155,295,181"/>
+<area shape="rect" id="node13" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="499,80,626,107"/>
 </map>

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller, VGA8Controller, etc.. " alt="" coords="5,81,160,108"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller. " alt="" coords="208,5,328,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller. " alt="" coords="211,56,325,83"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller. " alt="" coords="211,107,325,133"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller. " alt="" coords="211,157,325,184"/>
+</map>

@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -98,7 +99,79 @@ $(document).ready(function(){initNavTree('displaycontroller_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers. ">fabgl::BitmappedDisplayController</a> definition.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stddef.h&gt;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/queue.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for displaycontroller.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="displaycontroller_8h__incl.png" border="0" usemap="#displaycontroller_8h" alt=""/></div>
+<map name="displaycontroller_8h" id="displaycontroller_8h">
+<area shape="rect" id="node7" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="189,80,276,107"/>
+<area shape="rect" id="node9" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="658,80,733,107"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="displaycontroller_8h__dep__incl.png" border="0" usemap="#displaycontroller_8hdep" alt=""/></div>
+<map name="displaycontroller_8hdep" id="displaycontroller_8hdep">
+<area shape="rect" id="node2" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="146,80,221,107"/>
+<area shape="rect" id="node5" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="979,379,1041,405"/>
+<area shape="rect" id="node17" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="389,155,450,181"/>
+<area shape="rect" id="node22" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="425,304,512,331"/>
+<area shape="rect" id="node23" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="688,229,815,256"/>
+<area shape="rect" id="node27" href="displaycontroller_8cpp_source.html" title="displaycontroller.cpp" alt="" coords="955,80,1095,107"/>
+<area shape="rect" id="node28" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="1629,229,1735,256"/>
+<area shape="rect" id="node32" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="1119,80,1263,107"/>
+<area shape="rect" id="node34" href="_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="1328,80,1487,107"/>
+<area shape="rect" id="node37" href="vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="1951,229,2064,256"/>
+<area shape="rect" id="node39" href="vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="2319,229,2432,256"/>
+<area shape="rect" id="node41" href="vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="1211,229,1324,256"/>
+<area shape="rect" id="node43" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="1451,229,1571,256"/>
+<area shape="rect" id="node45" href="vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="2121,155,2259,181"/>
+<area shape="rect" id="node47" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="1789,80,1924,107"/>
+<area shape="rect" id="node49" href="vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="1894,155,2046,181"/>
+<area shape="rect" id="node3" href="canvas_8cpp_source.html" title="canvas.cpp" alt="" coords="5,155,95,181"/>
+<area shape="rect" id="node4" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="71,304,149,331"/>
+<area shape="rect" id="node19" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="174,304,249,331"/>
+<area shape="rect" id="node16" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="151,379,245,405"/>
+<area shape="rect" id="node6" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="631,453,755,480"/>
+<area shape="rect" id="node8" href="i8042_8h_source.html" title="i8042.h" alt="" coords="786,453,850,480"/>
+<area shape="rect" id="node10" href="i8086_8h_source.html" title="i8086.h" alt="" coords="874,453,938,480"/>
+<area shape="rect" id="node12" href="_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="962,453,1058,480"/>
+<area shape="rect" id="node13" href="_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="1083,453,1167,480"/>
+<area shape="rect" id="node14" href="_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="1191,453,1274,480"/>
+<area shape="rect" id="node15" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="1298,453,1381,480"/>
+<area shape="rect" id="node7" href="graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="615,528,754,555"/>
+<area shape="rect" id="node9" href="i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="779,528,857,555"/>
+<area shape="rect" id="node11" href="i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="881,528,960,555"/>
+<area shape="rect" id="node18" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="272,229,359,256"/>
+<area shape="rect" id="node20" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="1250,304,1333,331"/>
+<area shape="rect" id="node21" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="383,229,455,256"/>
+<area shape="rect" id="node24" href="collisiondetector_8cpp_source.html" title="collisiondetector.cpp" alt="" coords="680,304,820,331"/>
+<area shape="rect" id="node25" href="scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="588,304,656,331"/>
+<area shape="rect" id="node26" href="scene_8cpp_source.html" title="scene.cpp" alt="" coords="581,379,663,405"/>
+<area shape="rect" id="node29" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="1875,304,2003,331"/>
+<area shape="rect" id="node30" href="fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="1567,304,1656,331"/>
+<area shape="rect" id="node31" href="vgacontroller_8cpp_source.html" title="vgacontroller.cpp" alt="" coords="1681,304,1801,331"/>
+<area shape="rect" id="node33" href="_s_s_d1306_controller_8cpp_source.html" title="SSD1306Controller.cpp" alt="" coords="964,155,1123,181"/>
+<area shape="rect" id="node35" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="1147,155,1297,181"/>
+<area shape="rect" id="node36" href="_t_f_t_controller_generic_8cpp_source.html" title="TFTControllerGeneric.cpp" alt="" coords="1321,155,1493,181"/>
+<area shape="rect" id="node38" href="vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="2079,304,2205,331"/>
+<area shape="rect" id="node40" href="vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="2315,304,2441,331"/>
+<area shape="rect" id="node42" href="vga8controller_8cpp_source.html" title="vga8controller.cpp" alt="" coords="1099,304,1225,331"/>
+<area shape="rect" id="node44" href="vga16controller_8cpp_source.html" title="vga16controller.cpp" alt="" coords="1408,304,1543,331"/>
+<area shape="rect" id="node46" href="vgadirectcontroller_8cpp_source.html" title="vgadirectcontroller.cpp" alt="" coords="2089,229,2241,256"/>
+<area shape="rect" id="node48" href="vgabasecontroller_8cpp_source.html" title="vgabasecontroller.cpp" alt="" coords="1671,155,1819,181"/>
+<area shape="rect" id="node50" href="vgapalettedcontroller_8cpp_source.html" title="vgapalettedcontroller.cpp" alt="" coords="1760,229,1927,256"/>
+</map>
+</div>
+</div>
 <p><a href="displaycontroller_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -289,7 +362,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="displaycontroller_8h.html">displaycontroller.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

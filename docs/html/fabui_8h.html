@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -96,7 +97,64 @@ $(document).ready(function(){initNavTree('fabui_8h.html','');});
 
 <p>This file contains all classes related to FabGL Graphical User Interface.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stddef.h&gt;</code><br />
+<code>#include &lt;list&gt;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/queue.h&quot;</code><br />
+<code>#include &quot;freertos/timers.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="canvas_8h_source.html">canvas.h</a>&quot;</code><br />
+<code>#include &quot;fabfonts.h&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for fabui.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabui_8h__incl.png" border="0" usemap="#fabui_8h" alt=""/></div>
+<map name="fabui_8h" id="fabui_8h">
+<area shape="rect" id="node8" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="661,237,748,263"/>
+<area shape="rect" id="node10" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="562,237,637,263"/>
+<area shape="rect" id="node14" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="269,155,396,181"/>
+<area shape="rect" id="node16" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="110,80,185,107"/>
+<area shape="rect" id="node17" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="3041,155,3121,181"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabui_8h__dep__incl.png" border="0" usemap="#fabui_8hdep" alt=""/></div>
+<map name="fabui_8hdep" id="fabui_8hdep">
+<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="498,80,585,107"/>
+<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="399,304,460,331"/>
+<area shape="rect" id="node22" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="765,155,840,181"/>
+<area shape="rect" id="node25" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="127,80,209,107"/>
+<area shape="rect" id="node27" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="804,80,876,107"/>
+<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="586,229,665,256"/>
+<area shape="rect" id="node20" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="467,155,547,181"/>
+<area shape="rect" id="node23" href="ps2controller_8cpp_source.html" title="ps2controller.cpp" alt="" coords="621,155,741,181"/>
+<area shape="rect" id="node24" href="keyboard_8cpp_source.html" title="keyboard.cpp" alt="" coords="291,155,391,181"/>
+<area shape="rect" id="node19" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="729,304,823,331"/>
+<area shape="rect" id="node5" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,379,151,405"/>
+<area shape="rect" id="node7" href="i8042_8h_source.html" title="i8042.h" alt="" coords="183,379,247,405"/>
+<area shape="rect" id="node9" href="i8086_8h_source.html" title="i8086.h" alt="" coords="285,379,349,405"/>
+<area shape="rect" id="node11" href="_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,379,477,405"/>
+<area shape="rect" id="node13" href="_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,379,593,405"/>
+<area shape="rect" id="node15" href="_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,379,711,405"/>
+<area shape="rect" id="node17" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,379,829,405"/>
+<area shape="rect" id="node6" href="graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,453,144,480"/>
+<area shape="rect" id="node8" href="i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,453,247,480"/>
+<area shape="rect" id="node10" href="i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,453,350,480"/>
+<area shape="rect" id="node12" href="_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,453,485,480"/>
+<area shape="rect" id="node14" href="_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,453,608,480"/>
+<area shape="rect" id="node16" href="_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,453,728,480"/>
+<area shape="rect" id="node18" href="_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,453,850,480"/>
+<area shape="rect" id="node21" href="terminfo_8cpp_source.html" title="terminfo.cpp" alt="" coords="467,229,562,256"/>
+<area shape="rect" id="node26" href="inputbox_8cpp_source.html" title="inputbox.cpp" alt="" coords="120,155,216,181"/>
+<area shape="rect" id="node28" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="966,155,1053,181"/>
+</map>
+</div>
+</div>
 <p><a href="fabui_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -181,6 +239,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_list_box.html">uiListBox</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows a list of selectable string items.  <a href="classfabgl_1_1ui_list_box.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_list_box_props.html">uiListBoxProps</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Properties of the list box.  <a href="structfabgl_1_1ui_list_box_props.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_list_box_style.html">uiListBoxStyle</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the listbox style.  <a href="structfabgl_1_1ui_list_box_style.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,6 +265,15 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_panel_style.html">uiPanelStyle</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the panel style.  <a href="structfabgl_1_1ui_panel_style.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_progress_bar.html">uiProgressBar</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A progress bar shows progress percentage using a colored bar.  <a href="classfabgl_1_1ui_progress_bar.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_progress_bar_props.html">uiProgressBarProps</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Properties of the progress bar.  <a href="structfabgl_1_1ui_progress_bar_props.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1ui_progress_bar_style.html">uiProgressBarStyle</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains the progress bar style.  <a href="structfabgl_1_1ui_progress_bar_style.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1ui_scrollable_control.html">uiScrollableControl</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A scrollable control is a control with optionally vertical and/or horizontal scrollbars.  <a href="classfabgl_1_1ui_scrollable_control.html#details">More...</a><br /></td></tr>
@@ -291,7 +361,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="fabui_8h.html">fabui.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

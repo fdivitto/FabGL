@@ -1,10 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classfabgl_1_1_waveform_generator.html" title="Base abstract class for waveform generators. A waveform generator can be seen as an audio channel tha..." alt="" coords="5,157,144,184"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1_noise_waveform_generator.html" title="Noise generator. " alt="" coords="203,5,375,32"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_samples_generator.html" title="Samples generator. " alt="" coords="223,56,354,83"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1_sawtooth_waveform_generator.html" title="Sawtooth waveform generator. " alt="" coords="192,107,385,133"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1_sine_waveform_generator.html" title="Sine waveform generator. " alt="" coords="207,157,371,184"/>
-<area shape="rect" id="node6" href="$classfabgl_1_1_square_waveform_generator.html" title="Square waveform generator. " alt="" coords="199,208,378,235"/>
-<area shape="rect" id="node7" href="$classfabgl_1_1_triangle_waveform_generator.html" title="Triangle waveform generator. " alt="" coords="197,259,381,285"/>
-<area shape="rect" id="node8" href="$classfabgl_1_1_v_i_c_noise_generator.html" title="Emulates VIC6561 (VIC20) noise generator. " alt="" coords="221,309,357,336"/>
+<area shape="rect" id="node1" href="$structfabgl_1_1ui_window_props.html" title="Contains some window options. " alt="" coords="5,5,119,32"/>
 </map>

@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -96,7 +97,58 @@ $(document).ready(function(){initNavTree('ps2controller_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_p_s2_controller.html" title="The PS2 device controller class. ">fabgl::PS2Controller</a> definition.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;freertos/timers.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for ps2controller.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="ps2controller_8h__incl.png" border="0" usemap="#ps2controller_8h" alt=""/></div>
+<map name="ps2controller_8h" id="ps2controller_8h">
+<area shape="rect" id="node5" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="357,80,432,107"/>
+<area shape="rect" id="node9" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="509,80,595,107"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="ps2controller_8h__dep__incl.png" border="0" usemap="#ps2controller_8hdep" alt=""/></div>
+<map name="ps2controller_8hdep" id="ps2controller_8hdep">
+<area shape="rect" id="node2" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="469,80,552,107"/>
+<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="399,379,460,405"/>
+<area shape="rect" id="node19" href="fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="1165,80,1254,107"/>
+<area shape="rect" id="node20" href="ps2controller_8cpp_source.html" title="ps2controller.cpp" alt="" coords="747,229,867,256"/>
+<area shape="rect" id="node21" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="858,80,950,107"/>
+<area shape="rect" id="node30" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="1091,229,1178,256"/>
+<area shape="rect" id="node18" href="inputbox_8cpp_source.html" title="inputbox.cpp" alt="" coords="463,155,559,181"/>
+<area shape="rect" id="node4" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,453,151,480"/>
+<area shape="rect" id="node6" href="i8042_8h_source.html" title="i8042.h" alt="" coords="183,453,247,480"/>
+<area shape="rect" id="node8" href="i8086_8h_source.html" title="i8086.h" alt="" coords="285,453,349,480"/>
+<area shape="rect" id="node10" href="_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,453,477,480"/>
+<area shape="rect" id="node12" href="_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,453,593,480"/>
+<area shape="rect" id="node14" href="_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,453,711,480"/>
+<area shape="rect" id="node16" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,453,829,480"/>
+<area shape="rect" id="node5" href="graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,528,144,555"/>
+<area shape="rect" id="node7" href="i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,528,247,555"/>
+<area shape="rect" id="node9" href="i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,528,350,555"/>
+<area shape="rect" id="node11" href="_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,528,485,555"/>
+<area shape="rect" id="node13" href="_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,528,608,555"/>
+<area shape="rect" id="node15" href="_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,528,728,555"/>
+<area shape="rect" id="node17" href="_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,528,850,555"/>
+<area shape="rect" id="node22" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="629,155,715,181"/>
+<area shape="rect" id="node29" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="887,155,959,181"/>
+<area shape="rect" id="node31" href="ps2device_8cpp_source.html" title="ps2device.cpp" alt="" coords="983,155,1089,181"/>
+<area shape="rect" id="node23" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="467,304,546,331"/>
+<area shape="rect" id="node25" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="517,229,597,256"/>
+<area shape="rect" id="node27" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="891,229,965,256"/>
+<area shape="rect" id="node28" href="keyboard_8cpp_source.html" title="keyboard.cpp" alt="" coords="622,229,722,256"/>
+<area shape="rect" id="node24" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="745,379,839,405"/>
+<area shape="rect" id="node26" href="terminfo_8cpp_source.html" title="terminfo.cpp" alt="" coords="570,304,665,331"/>
+</map>
+</div>
+</div>
 <p><a href="ps2controller_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -113,9 +165,15 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ga5d7071ad7a22fa20e52ba3e855cb4cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines how handle keyboard virtual keys.  <a href="group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#ga5d7071ad7a22fa20e52ba3e855cb4cff">More...</a><br /></td></tr>
 <tr class="separator:ga5d7071ad7a22fa20e52ba3e855cb4cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaca5d0f920057bf01d133384645a654da"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#gaca5d0f920057bf01d133384645a654da">PS2Preset</a> { <a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa930833460d824d9daf937c25c8b7ed74">KeyboardPort0_MousePort1</a>, 
+<tr class="memitem:gaca5d0f920057bf01d133384645a654da"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#gaca5d0f920057bf01d133384645a654da">PS2Preset</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa930833460d824d9daf937c25c8b7ed74">KeyboardPort0_MousePort1</a>, 
+<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab76bbc57fe0157e929fd128e8a53f907">KeyboardPort1_MousePort0</a>, 
 <a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa140efa5bba007b81c709c0dc5f443ef7">KeyboardPort0</a>, 
-<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4">MousePort0</a>
+<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa57f4b4de9e4e8642525f0cd7c991283d">KeyboardPort1</a>, 
+<br />
+&#160;&#160;<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4">MousePort0</a>, 
+<a class="el" href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa0e528e35537f6d49cb912f4bcaaf5c12">MousePort1</a>
+<br />
  }</td></tr>
 <tr class="memdesc:gaca5d0f920057bf01d133384645a654da"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines what is connected to PS/2 ports.  <a href="group___enumerations_gaca5d0f920057bf01d133384645a654da.html#gaca5d0f920057bf01d133384645a654da">More...</a><br /></td></tr>
 <tr class="separator:gaca5d0f920057bf01d133384645a654da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,7 +188,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b741fed86bf5fa30eab98075f2fe4281.html">comdrivers</a></li><li class="navelem"><a class="el" href="ps2controller_8h.html">ps2controller.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

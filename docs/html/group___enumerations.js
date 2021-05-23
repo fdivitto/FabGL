@@ -9,6 +9,12 @@ var group___enumerations =
       [ "Blank", "group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fae885c31e41fc9fcb8ac14496dc4346df", null ],
       [ "Inverse", "group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa17e68c01437379e2ee2ae4ad92a918ac", null ]
     ] ],
+    [ "ChipPackage", "group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#ga5d4cf45276f202b6a848d0baf97adea0", [
+      [ "ESP32D0WDQ6", "group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0ac1e5a622092c4a6696ffda151efefb66", null ],
+      [ "ESP32D0WDQ5", "group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0ade1d97e9e28e4b67a2a96c2b400ca4b1", null ],
+      [ "ESP32D2WDQ5", "group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0aa7b909e660bafe1f45ca286c1bc5937a", null ],
+      [ "ESP32PICOD4", "group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0a5d8d61514b6162c2cf210601418a160f", null ]
+    ] ],
     [ "Color", "group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#gab87bacfdad76e61b9412d7124be44c1c", [
       [ "Black", "group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cac1e9bce8242f443c54c7405223d616cd", null ],
       [ "Red", "group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cad3163c1fcda01965b692ec2c3122b743", null ],
@@ -61,6 +67,11 @@ var group___enumerations =
       [ "None", "group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Software", "group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a719d067b229178f03bcfa1da4ac4dede", null ]
     ] ],
+    [ "InputResult", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#ga25f6dff2b7711962b46d7c9313d28aa2", [
+      [ "None", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "Cancel", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2aea4788705e6873b424c65e91c2846b19", null ],
+      [ "Enter", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2af1851d5600eae616ee802a31ac74701b", null ]
+    ] ],
     [ "KbdMode", "group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#ga5d7071ad7a22fa20e52ba3e855cb4cff", [
       [ "NoVirtualKeys", "group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#gga5d7071ad7a22fa20e52ba3e855cb4cffadaa64f7602ad3caa98f09799e3e683b1", null ],
       [ "GenerateVirtualKeys", "group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#gga5d7071ad7a22fa20e52ba3e855cb4cffa14554899c6e943f788d3652c4c0e11e4", null ],
@@ -73,6 +84,14 @@ var group___enumerations =
     [ "LineEnds", "group___enumerations_ga8ac9813c9c9df8a1e7f6ec66b346f08e.html#ga8ac9813c9c9df8a1e7f6ec66b346f08e", [
       [ "None", "group___enumerations_ga8ac9813c9c9df8a1e7f6ec66b346f08e.html#gga8ac9813c9c9df8a1e7f6ec66b346f08ea6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Circle", "group___enumerations_ga8ac9813c9c9df8a1e7f6ec66b346f08e.html#gga8ac9813c9c9df8a1e7f6ec66b346f08ea30954d90085f6eaaf5817917fc5fecb3", null ]
+    ] ],
+    [ "MCPDir", "group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#ga8389ac8ebb8a33d21364f84ddfa64c00", [
+      [ "Input", "group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#gga8389ac8ebb8a33d21364f84ddfa64c00a324118a6721dd6b8a9b9f4e327df2bf5", null ],
+      [ "Output", "group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#gga8389ac8ebb8a33d21364f84ddfa64c00a29c2c02a361c9d7028472e5d92cd4a54", null ]
+    ] ],
+    [ "MCPIntTrigger", "group___enumerations_gacca22cd3567afc98587db31349ba00c7.html#gacca22cd3567afc98587db31349ba00c7", [
+      [ "DefaultChange", "group___enumerations_gacca22cd3567afc98587db31349ba00c7.html#ggacca22cd3567afc98587db31349ba00c7a6ca33b1f5de2b2497a794ae17e9f25ed", null ],
+      [ "PreviousChange", "group___enumerations_gacca22cd3567afc98587db31349ba00c7.html#ggacca22cd3567afc98587db31349ba00c7a35518ad8af987f12c3c6557003ab8da2", null ]
     ] ],
     [ "MouseType", "group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#ga1a15f1712ba14a6877038ffe9c6f7708", [
       [ "LegacyMouse", "group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#gga1a15f1712ba14a6877038ffe9c6f7708a64426cb7833b3604fe0ab5d0eec32edf", null ],
@@ -105,8 +124,11 @@ var group___enumerations =
     ] ],
     [ "PS2Preset", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#gaca5d0f920057bf01d133384645a654da", [
       [ "KeyboardPort0_MousePort1", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa930833460d824d9daf937c25c8b7ed74", null ],
+      [ "KeyboardPort1_MousePort0", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab76bbc57fe0157e929fd128e8a53f907", null ],
       [ "KeyboardPort0", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa140efa5bba007b81c709c0dc5f443ef7", null ],
-      [ "MousePort0", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4", null ]
+      [ "KeyboardPort1", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa57f4b4de9e4e8642525f0cd7c991283d", null ],
+      [ "MousePort0", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4", null ],
+      [ "MousePort1", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa0e528e35537f6d49cb912f4bcaaf5c12", null ]
     ] ],
     [ "SSD1306Orientation", "group___enumerations_ga56be86abe812065345408e6741aa1e37.html#ga56be86abe812065345408e6741aa1e37", [
       [ "Normal", "group___enumerations_ga56be86abe812065345408e6741aa1e37.html#gga56be86abe812065345408e6741aa1e37a960b44c579bc2f6818d2daaf9e4c16f0", null ],
@@ -169,6 +191,14 @@ var group___enumerations =
       [ "Sync", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#ggac2082e5f1e16f3780b8e7d796ea10632aa1c3e25967ce8edc4bf943ae05fa7af9", null ],
       [ "BackPorch", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#ggac2082e5f1e16f3780b8e7d796ea10632ad5f83b0219ea6b63db4fedab582a2da5", null ],
       [ "VisibleArea", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#ggac2082e5f1e16f3780b8e7d796ea10632ad37a59f433488f345c4201a061f088e6", null ]
+    ] ],
+    [ "VIA6522Port", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#ga69838990f93c3301289776790e4fc0e0", [
+      [ "PA", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a06f6a489209115c5cef3f45036aad3ec", null ],
+      [ "PB", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0acd203ccd68b84de1c5df8fd890e104e0", null ],
+      [ "CA1", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0ac93bf9a243a391a65da5b60116ee9a5c", null ],
+      [ "CA2", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a3702f3bfbd91df0d6105cbd8b8d8b963", null ],
+      [ "CB1", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0ac479bbda96996453098aaa0687a9197e", null ],
+      [ "CB2", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a96d495d6079a5d50e1b6bc3fc9255f09", null ]
     ] ],
     [ "VirtualKey", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02", [
       [ "VK_NONE", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06", null ],
@@ -297,8 +327,7 @@ var group___enumerations =
       [ "VK_LGUI", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aafe11fd78fa4f908291ee69aed38c96c", null ],
       [ "VK_RGUI", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a72addb7597baf0807bf3726fcd3eb6e2", null ],
       [ "VK_ESCAPE", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98", null ],
-      [ "VK_PRINTSCREEN1", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a60e6329fe3371c76d96749e9cc766bd9", null ],
-      [ "VK_PRINTSCREEN2", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ea901cf9c58cb90854f7e6dc8a15d0e", null ],
+      [ "VK_PRINTSCREEN", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0181eb77776b1cdc4d6bbf10ddc132fc", null ],
       [ "VK_SYSREQ", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2911995849a379119007a3432d01d6e7", null ],
       [ "VK_INSERT", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02affe38fa10d133342bae3f69f49929a84", null ],
       [ "VK_KP_INSERT", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad79bc3cd7115d844622174609074d4f7", null ],
@@ -392,6 +421,7 @@ var group___enumerations =
       [ "VK_CARET_E", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa25a81fdcaedc350f498b1646b580112", null ],
       [ "VK_CARET_I", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a5fee424466feade4c10c540200bde1e9", null ],
       [ "VK_CARET_O", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a8ec3804bfb404833d93119073bf7006d", null ],
-      [ "VK_CARET_U", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84", null ]
+      [ "VK_CARET_U", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84", null ],
+      [ "VK_ASCII", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6", null ]
     ] ]
 ];

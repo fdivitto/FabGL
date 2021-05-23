@@ -1,6 +1,6 @@
 <map id="SSD1306Controller.h" name="SSD1306Controller.h">
-<area shape="rect" id="node6" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="717,152,803,177"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="13,152,88,177"/>
-<area shape="rect" id="node10" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="343,79,471,104"/>
-<area shape="rect" id="node13" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="601,79,730,104"/>
+<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="745,155,831,181"/>
+<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="856,155,931,181"/>
+<area shape="rect" id="node11" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="471,80,598,107"/>
+<area shape="rect" id="node14" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="226,80,355,107"/>
 </map>

@@ -1,11 +1,12 @@
 <map id="terminfo.h" name="terminfo.h">
-<area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="4971,79,5123,104"/>
-<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5060,379,5146,404"/>
-<area shape="rect" id="node6" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="4532,225,4693,251"/>
-<area shape="rect" id="node12" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="5162,152,5223,177"/>
-<area shape="rect" id="node8" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="4820,299,4928,324"/>
-<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="4780,379,4855,404"/>
-<area shape="rect" id="node17" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="5003,299,5131,324"/>
-<area shape="rect" id="node18" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="5155,225,5230,251"/>
-<area shape="rect" id="node19" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2510,299,2590,324"/>
+<area shape="rect" id="node2" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="435,80,586,107"/>
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="518,386,605,413"/>
+<area shape="rect" id="node6" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition. " alt="" coords="93,229,253,256"/>
+<area shape="rect" id="node14" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="747,155,808,181"/>
+<area shape="rect" id="node50" href="$kbdlayouts_8h.html" title="This file contains keyboard layouts. " alt="" coords="1004,304,1100,331"/>
+<area shape="rect" id="node8" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="316,304,423,331"/>
+<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="1004,386,1079,413"/>
+<area shape="rect" id="node19" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="650,304,777,331"/>
+<area shape="rect" id="node20" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="852,229,927,256"/>
+<area shape="rect" id="node21" href="$fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="2867,304,2947,331"/>
 </map>

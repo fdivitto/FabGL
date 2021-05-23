@@ -1,3 +1,18 @@
 <map id="DS3231.h" name="DS3231.h">
-<area shape="rect" id="node2" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="15,79,76,104"/>
+<area shape="rect" id="node2" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="399,80,460,107"/>
+<area shape="rect" id="node17" href="$_d_s3231_8cpp_source.html" title="DS3231.cpp" alt="" coords="485,80,579,107"/>
+<area shape="rect" id="node3" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,155,151,181"/>
+<area shape="rect" id="node5" href="$i8042_8h_source.html" title="i8042.h" alt="" coords="183,155,247,181"/>
+<area shape="rect" id="node7" href="$i8086_8h_source.html" title="i8086.h" alt="" coords="285,155,349,181"/>
+<area shape="rect" id="node9" href="$_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,155,477,181"/>
+<area shape="rect" id="node11" href="$_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,155,593,181"/>
+<area shape="rect" id="node13" href="$_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,155,711,181"/>
+<area shape="rect" id="node15" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,155,829,181"/>
+<area shape="rect" id="node4" href="$graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,229,144,256"/>
+<area shape="rect" id="node6" href="$i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,229,247,256"/>
+<area shape="rect" id="node8" href="$i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,229,350,256"/>
+<area shape="rect" id="node10" href="$_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,229,485,256"/>
+<area shape="rect" id="node12" href="$_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,229,608,256"/>
+<area shape="rect" id="node14" href="$_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,229,728,256"/>
+<area shape="rect" id="node16" href="$_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,229,850,256"/>
 </map>

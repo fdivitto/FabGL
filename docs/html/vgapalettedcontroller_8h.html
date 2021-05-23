@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -95,7 +96,64 @@ $(document).ready(function(){initNavTree('vgapalettedcontroller_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller, VGA8Controller, etc.. ">fabgl::VGAPalettedController</a> definition.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stddef.h&gt;</code><br />
+<code>#include &lt;atomic&gt;</code><br />
+<code>#include &quot;driver/gpio.h&quot;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/queue.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="swgenerator_8h_source.html">devdrivers/swgenerator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="displaycontroller_8h_source.html">displaycontroller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="vgabasecontroller_8h_source.html">dispdrivers/vgabasecontroller.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for vgapalettedcontroller.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="vgapalettedcontroller_8h__incl.png" border="0" usemap="#vgapalettedcontroller_8h" alt=""/></div>
+<map name="vgapalettedcontroller_8h" id="vgapalettedcontroller_8h">
+<area shape="rect" id="node8" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="536,229,623,256"/>
+<area shape="rect" id="node10" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="306,229,381,256"/>
+<area shape="rect" id="node14" href="swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="108,155,275,181"/>
+<area shape="rect" id="node16" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="452,155,579,181"/>
+<area shape="rect" id="node18" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="524,80,725,107"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="vgapalettedcontroller_8h__dep__incl.png" border="0" usemap="#vgapalettedcontroller_8hdep" alt=""/></div>
+<map name="vgapalettedcontroller_8hdep" id="vgapalettedcontroller_8hdep">
+<area shape="rect" id="node2" href="vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="722,80,835,107"/>
+<area shape="rect" id="node20" href="vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="119,80,233,107"/>
+<area shape="rect" id="node22" href="vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="322,80,435,107"/>
+<area shape="rect" id="node24" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="525,80,645,107"/>
+<area shape="rect" id="node28" href="vgapalettedcontroller_8cpp_source.html" title="vgapalettedcontroller.cpp" alt="" coords="859,80,1026,107"/>
+<area shape="rect" id="node3" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="399,229,460,256"/>
+<area shape="rect" id="node18" href="fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="734,155,823,181"/>
+<area shape="rect" id="node19" href="vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="899,155,1026,181"/>
+<area shape="rect" id="node4" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,304,151,331"/>
+<area shape="rect" id="node6" href="i8042_8h_source.html" title="i8042.h" alt="" coords="183,304,247,331"/>
+<area shape="rect" id="node8" href="i8086_8h_source.html" title="i8086.h" alt="" coords="285,304,349,331"/>
+<area shape="rect" id="node10" href="_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,304,477,331"/>
+<area shape="rect" id="node12" href="_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,304,593,331"/>
+<area shape="rect" id="node14" href="_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,304,711,331"/>
+<area shape="rect" id="node16" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,304,829,331"/>
+<area shape="rect" id="node5" href="graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,379,144,405"/>
+<area shape="rect" id="node7" href="i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,379,247,405"/>
+<area shape="rect" id="node9" href="i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,379,350,405"/>
+<area shape="rect" id="node11" href="_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,379,485,405"/>
+<area shape="rect" id="node13" href="_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,379,608,405"/>
+<area shape="rect" id="node15" href="_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,379,728,405"/>
+<area shape="rect" id="node17" href="_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,379,850,405"/>
+<area shape="rect" id="node21" href="vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="11,155,138,181"/>
+<area shape="rect" id="node23" href="vga8controller_8cpp_source.html" title="vga8controller.cpp" alt="" coords="214,155,341,181"/>
+<area shape="rect" id="node25" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="627,155,709,181"/>
+<area shape="rect" id="node27" href="vga16controller_8cpp_source.html" title="vga16controller.cpp" alt="" coords="467,155,602,181"/>
+<area shape="rect" id="node26" href="inputbox_8cpp_source.html" title="inputbox.cpp" alt="" coords="620,229,716,256"/>
+</map>
+</div>
+</div>
 <p><a href="vgapalettedcontroller_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -114,7 +172,7 @@ Classes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_10a80204b5b551c852b7cab5e1f7cbce.html">dispdrivers</a></li><li class="navelem"><a class="el" href="vgapalettedcontroller_8h.html">vgapalettedcontroller.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:34 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

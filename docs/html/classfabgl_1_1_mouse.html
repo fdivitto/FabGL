@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -119,18 +120,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a94b7ea8e055cee23e457cec665b0c779"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a94b7ea8e055cee23e457cec665b0c779.html#a94b7ea8e055cee23e457cec665b0c779">begin</a> (int PS2Port)</td></tr>
 <tr class="memdesc:a94b7ea8e055cee23e457cec665b0c779"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes <a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">Mouse</a> without initializing the PS/2 controller.  <a href="classfabgl_1_1_mouse_a94b7ea8e055cee23e457cec665b0c779.html#a94b7ea8e055cee23e457cec665b0c779">More...</a><br /></td></tr>
 <tr class="separator:a94b7ea8e055cee23e457cec665b0c779"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45e792c12ebda5d6d31403865e413d79"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a45e792c12ebda5d6d31403865e413d79.html#a45e792c12ebda5d6d31403865e413d79">deltaAvailable</a> ()</td></tr>
-<tr class="memdesc:a45e792c12ebda5d6d31403865e413d79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the number of mouse movements available in the queue.  <a href="classfabgl_1_1_mouse_a45e792c12ebda5d6d31403865e413d79.html#a45e792c12ebda5d6d31403865e413d79">More...</a><br /></td></tr>
-<tr class="separator:a45e792c12ebda5d6d31403865e413d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a231264f15f33e8986765d7644c0c3615"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a231264f15f33e8986765d7644c0c3615.html#a231264f15f33e8986765d7644c0c3615">deltaAvailable</a> ()</td></tr>
+<tr class="memdesc:a231264f15f33e8986765d7644c0c3615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if there is a mouse movement available in the queue.  <a href="classfabgl_1_1_mouse_a231264f15f33e8986765d7644c0c3615.html#a231264f15f33e8986765d7644c0c3615">More...</a><br /></td></tr>
+<tr class="separator:a231264f15f33e8986765d7644c0c3615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefe587a398d3614e3da20cad4b8e2845"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_aefe587a398d3614e3da20cad4b8e2845.html#aefe587a398d3614e3da20cad4b8e2845">emptyQueue</a> ()</td></tr>
 <tr class="memdesc:aefe587a398d3614e3da20cad4b8e2845"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the mouse status and events queue.  <a href="classfabgl_1_1_mouse_aefe587a398d3614e3da20cad4b8e2845.html#aefe587a398d3614e3da20cad4b8e2845">More...</a><br /></td></tr>
 <tr class="separator:aefe587a398d3614e3da20cad4b8e2845"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72788b215173ebeed6b8fe0f40368c90"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a72788b215173ebeed6b8fe0f40368c90.html#a72788b215173ebeed6b8fe0f40368c90">getNextDelta</a> (<a class="el" href="structfabgl_1_1_mouse_delta.html">MouseDelta</a> *delta, int timeOutMS=-1, bool requestResendOnTimeOut=false)</td></tr>
 <tr class="memdesc:a72788b215173ebeed6b8fe0f40368c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mouse movement from the queue.  <a href="classfabgl_1_1_mouse_a72788b215173ebeed6b8fe0f40368c90.html#a72788b215173ebeed6b8fe0f40368c90">More...</a><br /></td></tr>
 <tr class="separator:a72788b215173ebeed6b8fe0f40368c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11d4bf156584e08773498e4de00ca1ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a11d4bf156584e08773498e4de00ca1ff.html#a11d4bf156584e08773498e4de00ca1ff">getNextPacket</a> (<a class="el" href="structfabgl_1_1_mouse_packet.html">MousePacket</a> *packet, int timeOutMS=-1, bool requestResendOnTimeOut=false)</td></tr>
+<tr class="memdesc:a11d4bf156584e08773498e4de00ca1ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a mouse raw movement (packet) from the queue.  <a href="classfabgl_1_1_mouse_a11d4bf156584e08773498e4de00ca1ff.html#a11d4bf156584e08773498e4de00ca1ff">More...</a><br /></td></tr>
+<tr class="separator:a11d4bf156584e08773498e4de00ca1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc9072ef74a767f7b1f39880df870a96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_abc9072ef74a767f7b1f39880df870a96.html#abc9072ef74a767f7b1f39880df870a96">getNextStatus</a> (int timeOutMS=-1)</td></tr>
 <tr class="memdesc:abc9072ef74a767f7b1f39880df870a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the next status from the status queue.  <a href="classfabgl_1_1_mouse_abc9072ef74a767f7b1f39880df870a96.html#abc9072ef74a767f7b1f39880df870a96">More...</a><br /></td></tr>
 <tr class="separator:abc9072ef74a767f7b1f39880df870a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f62cc2900d28231ffc61d200af2aafa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a9f62cc2900d28231ffc61d200af2aafa.html#a9f62cc2900d28231ffc61d200af2aafa">getPacketSize</a> ()</td></tr>
+<tr class="memdesc:a9f62cc2900d28231ffc61d200af2aafa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets mouse packet size.  <a href="classfabgl_1_1_mouse_a9f62cc2900d28231ffc61d200af2aafa.html#a9f62cc2900d28231ffc61d200af2aafa">More...</a><br /></td></tr>
+<tr class="separator:a9f62cc2900d28231ffc61d200af2aafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad71b1d9186542ee488f761280b7b76da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#gab1e29a3412c837d0e4e7599473e8948f">PS2DeviceType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_ad71b1d9186542ee488f761280b7b76da.html#ad71b1d9186542ee488f761280b7b76da">identify</a> ()</td></tr>
 <tr class="memdesc:ad71b1d9186542ee488f761280b7b76da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Identifies the device attached to the PS2 port.  <a href="classfabgl_1_1_p_s2_device_ad71b1d9186542ee488f761280b7b76da.html#ad71b1d9186542ee488f761280b7b76da">More...</a><br /></td></tr>
 <tr class="separator:ad71b1d9186542ee488f761280b7b76da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,9 +150,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a04c832e086bc612e5a4cec2cb15188ef"><td class="memItemLeft" align="right" valign="top">int &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a04c832e086bc612e5a4cec2cb15188ef.html#a04c832e086bc612e5a4cec2cb15188ef">movementAcceleration</a> ()</td></tr>
 <tr class="memdesc:a04c832e086bc612e5a4cec2cb15188ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or set mouse movement acceleration factor.  <a href="classfabgl_1_1_mouse_a04c832e086bc612e5a4cec2cb15188ef.html#a04c832e086bc612e5a4cec2cb15188ef">More...</a><br /></td></tr>
 <tr class="separator:a04c832e086bc612e5a4cec2cb15188ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fd3cdfc66306ff22b53325aeb4e2c64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a3fd3cdfc66306ff22b53325aeb4e2c64.html#a3fd3cdfc66306ff22b53325aeb4e2c64">packetAvailable</a> ()</td></tr>
+<tr class="memdesc:a3fd3cdfc66306ff22b53325aeb4e2c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if there is a raw mouse movement available in the queue.  <a href="classfabgl_1_1_mouse_a3fd3cdfc66306ff22b53325aeb4e2c64.html#a3fd3cdfc66306ff22b53325aeb4e2c64">More...</a><br /></td></tr>
+<tr class="separator:a3fd3cdfc66306ff22b53325aeb4e2c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50910ef42a65d4c139af341f1ef2323f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a50910ef42a65d4c139af341f1ef2323f.html#a50910ef42a65d4c139af341f1ef2323f">reset</a> ()</td></tr>
 <tr class="memdesc:a50910ef42a65d4c139af341f1ef2323f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a Reset command to the mouse.  <a href="classfabgl_1_1_mouse_a50910ef42a65d4c139af341f1ef2323f.html#a50910ef42a65d4c139af341f1ef2323f">More...</a><br /></td></tr>
 <tr class="separator:a50910ef42a65d4c139af341f1ef2323f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5e89fd1fac0904104dfab776e4fb15c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_ae5e89fd1fac0904104dfab776e4fb15c.html#ae5e89fd1fac0904104dfab776e4fb15c">resumePort</a> ()</td></tr>
+<tr class="memdesc:ae5e89fd1fac0904104dfab776e4fb15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resumes PS/2 port releasing CLK line.  <a href="classfabgl_1_1_p_s2_device_ae5e89fd1fac0904104dfab776e4fb15c.html#ae5e89fd1fac0904104dfab776e4fb15c">More...</a><br /></td></tr>
+<tr class="separator:ae5e89fd1fac0904104dfab776e4fb15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cca4ba4bef3e1e010b7614be84323e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_a2cca4ba4bef3e1e010b7614be84323e3.html#a2cca4ba4bef3e1e010b7614be84323e3">sendCommand</a> (uint8_t cmd, uint8_t expectedReply)</td></tr>
+<tr class="memdesc:a2cca4ba4bef3e1e010b7614be84323e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a raw command to the PS/2 device and wait for reply.  <a href="classfabgl_1_1_p_s2_device_a2cca4ba4bef3e1e010b7614be84323e3.html#a2cca4ba4bef3e1e010b7614be84323e3">More...</a><br /></td></tr>
+<tr class="separator:a2cca4ba4bef3e1e010b7614be84323e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_a069efe90366fe5ca0c22eaf17a0e30fc.html#a069efe90366fe5ca0c22eaf17a0e30fc">sendCommand</a> (uint8_t cmd)</td></tr>
+<tr class="memdesc:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a raw command to the PS/2 device.  <a href="classfabgl_1_1_p_s2_device_a069efe90366fe5ca0c22eaf17a0e30fc.html#a069efe90366fe5ca0c22eaf17a0e30fc">More...</a><br /></td></tr>
+<tr class="separator:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1186aeacb40aa5879e71862695140222"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a1186aeacb40aa5879e71862695140222.html#a1186aeacb40aa5879e71862695140222">setResolution</a> (int value)</td></tr>
 <tr class="memdesc:a1186aeacb40aa5879e71862695140222"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the resolution.  <a href="classfabgl_1_1_mouse_a1186aeacb40aa5879e71862695140222.html#a1186aeacb40aa5879e71862695140222">More...</a><br /></td></tr>
 <tr class="separator:a1186aeacb40aa5879e71862695140222"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,6 +183,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13ff5f44b3a7fca9f3e1e8d74242365b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structfabgl_1_1_mouse_status.html">MouseStatus</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a13ff5f44b3a7fca9f3e1e8d74242365b.html#a13ff5f44b3a7fca9f3e1e8d74242365b">status</a> ()</td></tr>
 <tr class="memdesc:a13ff5f44b3a7fca9f3e1e8d74242365b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets or sets current mouse status.  <a href="classfabgl_1_1_mouse_a13ff5f44b3a7fca9f3e1e8d74242365b.html#a13ff5f44b3a7fca9f3e1e8d74242365b">More...</a><br /></td></tr>
 <tr class="separator:a13ff5f44b3a7fca9f3e1e8d74242365b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2516eb2086876de9d8abad203aea15c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_ac2516eb2086876de9d8abad203aea15c.html#ac2516eb2086876de9d8abad203aea15c">suspendPort</a> ()</td></tr>
+<tr class="memdesc:ac2516eb2086876de9d8abad203aea15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends PS/2 port driving the CLK line Low.  <a href="classfabgl_1_1_p_s2_device_ac2516eb2086876de9d8abad203aea15c.html#ac2516eb2086876de9d8abad203aea15c">More...</a><br /></td></tr>
+<tr class="separator:ac2516eb2086876de9d8abad203aea15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f7c9c26b1d53a42eda487efa8f7e546"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_mouse_a3f7c9c26b1d53a42eda487efa8f7e546.html#a3f7c9c26b1d53a42eda487efa8f7e546">terminateAbsolutePositioner</a> ()</td></tr>
 <tr class="memdesc:a3f7c9c26b1d53a42eda487efa8f7e546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Terminates absolute position handler.  <a href="classfabgl_1_1_mouse_a3f7c9c26b1d53a42eda487efa8f7e546.html#a3f7c9c26b1d53a42eda487efa8f7e546">More...</a><br /></td></tr>
 <tr class="separator:a3f7c9c26b1d53a42eda487efa8f7e546"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,7 +226,7 @@ if (Mouse.deltaAvailable()) {
                 mouseDelta.deltaX, mouseDelta.deltaY, mouseDelta.deltaZ,
                 mouseDelta.leftButton, mouseDelta.middleButton, mouseDelta.rightButton);
 }</pre> 
-<p class="definition">Definition at line <a class="el" href="mouse_8h_source.html#l00099">99</a> of file <a class="el" href="mouse_8h_source.html">mouse.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mouse_8h_source.html#l00107">107</a> of file <a class="el" href="mouse_8h_source.html">mouse.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="mouse_8h_source.html">mouse.h</a></li>
 <li><a class="el" href="mouse_8cpp_source.html">mouse.cpp</a></li>
@@ -215,7 +237,7 @@ if (Mouse.deltaAvailable()) {
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_mouse.html">Mouse</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:35 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

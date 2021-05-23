@@ -1,6 +1,6 @@
 <map id="scene.h" name="scene.h">
-<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="626,225,712,251"/>
-<area shape="rect" id="node5" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="408,79,535,104"/>
-<area shape="rect" id="node8" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="341,152,469,177"/>
-<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="438,225,513,251"/>
+<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="629,229,716,256"/>
+<area shape="rect" id="node5" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="410,80,537,107"/>
+<area shape="rect" id="node8" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="344,155,470,181"/>
+<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="440,229,515,256"/>
 </map>

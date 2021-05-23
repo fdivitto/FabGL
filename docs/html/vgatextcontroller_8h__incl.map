@@ -1,8 +1,8 @@
 <map id="vgatextcontroller.h" name="vgatextcontroller.h">
-<area shape="rect" id="node6" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="609,299,695,324"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="1231,299,1305,324"/>
-<area shape="rect" id="node12" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="191,225,361,251"/>
-<area shape="rect" id="node13" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="704,79,880,104"/>
-<area shape="rect" id="node16" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="927,225,1055,251"/>
-<area shape="rect" id="node18" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="689,152,895,177"/>
+<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="288,304,375,331"/>
+<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="1167,304,1242,331"/>
+<area shape="rect" id="node12" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="127,229,293,256"/>
+<area shape="rect" id="node14" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="545,80,718,107"/>
+<area shape="rect" id="node17" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="740,229,867,256"/>
+<area shape="rect" id="node19" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="588,155,789,181"/>
 </map>

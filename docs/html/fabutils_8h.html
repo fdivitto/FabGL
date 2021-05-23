@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -98,7 +99,74 @@ $(document).ready(function(){initNavTree('fabutils_8h.html','');});
 
 <p>This file contains some utility classes and functions.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/semphr.h&quot;</code><br />
+<code>#include &lt;driver/adc.h&gt;</code><br />
+<code>#include &lt;esp_system.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for fabutils.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabutils_8h__incl.png" border="0" usemap="#fabutils_8h" alt=""/></div>
+<map name="fabutils_8h" id="fabutils_8h">
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="fabutils_8h__dep__incl.png" border="0" usemap="#fabutils_8hdep" alt=""/></div>
+<map name="fabutils_8hdep" id="fabutils_8hdep">
+<area shape="rect" id="node2" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="1810,80,1937,107"/>
+<area shape="rect" id="node5" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="709,229,771,256"/>
+<area shape="rect" id="node6" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="1255,453,1316,480"/>
+<area shape="rect" id="node7" href="inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="1165,379,1248,405"/>
+<area shape="rect" id="node8" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="811,304,883,331"/>
+<area shape="rect" id="node9" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="709,379,784,405"/>
+<area shape="rect" id="node10" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="393,379,487,405"/>
+<area shape="rect" id="node11" href="ps2controller_8cpp_source.html" title="ps2controller.cpp" alt="" coords="859,379,979,405"/>
+<area shape="rect" id="node14" href="collisiondetector_8cpp_source.html" title="collisiondetector.cpp" alt="" coords="1081,229,1221,256"/>
+<area shape="rect" id="node15" href="displaycontroller_8cpp_source.html" title="displaycontroller.cpp" alt="" coords="1106,155,1246,181"/>
+<area shape="rect" id="node16" href="vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="1932,229,2039,256"/>
+<area shape="rect" id="node17" href="vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="1796,304,1924,331"/>
+<area shape="rect" id="node18" href="vgatextcontroller_8cpp_source.html" title="vgatextcontroller.cpp" alt="" coords="1831,379,1974,405"/>
+<area shape="rect" id="node19" href="fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="1718,379,1807,405"/>
+<area shape="rect" id="node20" href="vgacontroller_8cpp_source.html" title="vgacontroller.cpp" alt="" coords="2049,304,2169,331"/>
+<area shape="rect" id="node21" href="_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="329,155,473,181"/>
+<area shape="rect" id="node22" href="_s_s_d1306_controller_8cpp_source.html" title="SSD1306Controller.cpp" alt="" coords="361,229,519,256"/>
+<area shape="rect" id="node23" href="_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="1525,155,1683,181"/>
+<area shape="rect" id="node24" href="_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="1358,229,1509,256"/>
+<area shape="rect" id="node25" href="_t_f_t_controller_specif_8cpp_source.html" title="TFTControllerSpecif.cpp" alt="" coords="1446,304,1610,331"/>
+<area shape="rect" id="node26" href="_t_f_t_controller_generic_8cpp_source.html" title="TFTControllerGeneric.cpp" alt="" coords="1533,229,1705,256"/>
+<area shape="rect" id="node27" href="vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="2615,304,2729,331"/>
+<area shape="rect" id="node28" href="vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="2666,379,2793,405"/>
+<area shape="rect" id="node29" href="vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="2753,304,2866,331"/>
+<area shape="rect" id="node30" href="vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="2914,379,3041,405"/>
+<area shape="rect" id="node31" href="vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="3183,304,3297,331"/>
+<area shape="rect" id="node32" href="vga8controller_8cpp_source.html" title="vga8controller.cpp" alt="" coords="3315,379,3442,405"/>
+<area shape="rect" id="node33" href="vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="2193,304,2313,331"/>
+<area shape="rect" id="node34" href="vga16controller_8cpp_source.html" title="vga16controller.cpp" alt="" coords="3151,379,3286,405"/>
+<area shape="rect" id="node35" href="vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="2439,229,2577,256"/>
+<area shape="rect" id="node36" href="vgadirectcontroller_8cpp_source.html" title="vgadirectcontroller.cpp" alt="" coords="2337,304,2489,331"/>
+<area shape="rect" id="node37" href="vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="2367,155,2502,181"/>
+<area shape="rect" id="node38" href="vgabasecontroller_8cpp_source.html" title="vgabasecontroller.cpp" alt="" coords="2266,229,2414,256"/>
+<area shape="rect" id="node39" href="vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="2804,229,2956,256"/>
+<area shape="rect" id="node40" href="vgapalettedcontroller_8cpp_source.html" title="vgapalettedcontroller.cpp" alt="" coords="2890,304,3057,331"/>
+<area shape="rect" id="node41" href="fabfonts_8h_source.html" title="fabfonts.h" alt="" coords="548,155,628,181"/>
+<area shape="rect" id="node42" href="kbdlayouts_8h.html" title="This file contains keyboard layouts. " alt="" coords="3151,80,3247,107"/>
+<area shape="rect" id="node43" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System. " alt="" coords="43,155,133,181"/>
+<area shape="rect" id="node44" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="1027,304,1133,331"/>
+<area shape="rect" id="node45" href="_d_s3231_8h.html" title="This file contains the DS3231 (Real Time Clock) device driver. " alt="" coords="104,80,184,107"/>
+<area shape="rect" id="node46" href="scene_8cpp_source.html" title="scene.cpp" alt="" coords="3423,80,3505,107"/>
+<area shape="rect" id="node47" href="ps2device_8cpp_source.html" title="ps2device.cpp" alt="" coords="3529,80,3636,107"/>
+<area shape="rect" id="node48" href="_m_c_p23_s17_8h.html" title="This file contains the MCP23S17 driver class. " alt="" coords="3661,80,3761,107"/>
+<area shape="rect" id="node49" href="swgenerator_8cpp_source.html" title="swgenerator.cpp" alt="" coords="3785,80,3903,107"/>
+<area shape="rect" id="node50" href="_i_c_m_p_8h.html" title="This file contains ICMP (ping) class. " alt="" coords="3927,80,3993,107"/>
+<area shape="rect" id="node3" href="canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="703,155,777,181"/>
+<area shape="rect" id="node12" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="1003,379,1090,405"/>
+<area shape="rect" id="node13" href="collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="1322,155,1449,181"/>
+<area shape="rect" id="node4" href="canvas_8cpp_source.html" title="canvas.cpp" alt="" coords="595,229,685,256"/>
+</map>
+</div>
+</div>
 <p><a href="fabutils_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -130,6 +198,13 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ga5d4cf45276f202b6a848d0baf97adea0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#ga5d4cf45276f202b6a848d0baf97adea0">ChipPackage</a> { , <a class="el" href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0ac1e5a622092c4a6696ffda151efefb66">ESP32D0WDQ6</a>, 
+<a class="el" href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0ade1d97e9e28e4b67a2a96c2b400ca4b1">ESP32D0WDQ5</a>, 
+<a class="el" href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0aa7b909e660bafe1f45ca286c1bc5937a">ESP32D2WDQ5</a>, 
+<a class="el" href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#gga5d4cf45276f202b6a848d0baf97adea0a5d8d61514b6162c2cf210601418a160f">ESP32PICOD4</a>
+ }</td></tr>
+<tr class="memdesc:ga5d4cf45276f202b6a848d0baf97adea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines ESP32 module types (packages)  <a href="group___enumerations_ga5d4cf45276f202b6a848d0baf97adea0.html#ga5d4cf45276f202b6a848d0baf97adea0">More...</a><br /></td></tr>
+<tr class="separator:ga5d4cf45276f202b6a848d0baf97adea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6c3316022eddc73875d854fcf43e61aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#ga6c3316022eddc73875d854fcf43e61aa">DriveType</a> { <a class="el" href="group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#gga6c3316022eddc73875d854fcf43e61aaa6adf97f83acf6453d4a6a4b1070f3754">None</a>, 
 <a class="el" href="group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#gga6c3316022eddc73875d854fcf43e61aaa146673cebceb52efdad49e33019dd764">SPIFFS</a>, 
 <a class="el" href="group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#gga6c3316022eddc73875d854fcf43e61aaa826ee4b27642806340fe4905532841e8">SDCard</a>
@@ -294,126 +369,126 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a72addb7597baf0807bf3726fcd3eb6e2">VK_RGUI</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98">VK_ESCAPE</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a60e6329fe3371c76d96749e9cc766bd9">VK_PRINTSCREEN1</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ea901cf9c58cb90854f7e6dc8a15d0e">VK_PRINTSCREEN2</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0181eb77776b1cdc4d6bbf10ddc132fc">VK_PRINTSCREEN</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2911995849a379119007a3432d01d6e7">VK_SYSREQ</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2911995849a379119007a3432d01d6e7">VK_SYSREQ</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02affe38fa10d133342bae3f69f49929a84">VK_INSERT</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02affe38fa10d133342bae3f69f49929a84">VK_INSERT</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad79bc3cd7115d844622174609074d4f7">VK_KP_INSERT</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa9d7938ace5b7bbf6d6774a7c970a8be">VK_DELETE</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a722f92e17397a2f0d4b6c61e8057c177">VK_KP_DELETE</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a722f92e17397a2f0d4b6c61e8057c177">VK_KP_DELETE</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac510d55ee0ba12227a7f62829aca8fea">VK_BACKSPACE</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac510d55ee0ba12227a7f62829aca8fea">VK_BACKSPACE</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a868a210a02b677a2b15929319cf064fb">VK_HOME</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ae7da65fdbb312ca38493f03c02be2ae6">VK_KP_HOME</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6df3e6dff6dbad9ef55c1864a9dd8984">VK_END</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6df3e6dff6dbad9ef55c1864a9dd8984">VK_END</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a33b084b8c2312723a634a317715d30b6">VK_KP_END</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a33b084b8c2312723a634a317715d30b6">VK_KP_END</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6e503b7a0b1400d0264c62e89edb54ff">VK_PAUSE</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a154da32b5a45641d6ff1af9e25dc7516">VK_BREAK</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a8a94ce3ee531dbdb2feb8924349cccfd">VK_SCROLLLOCK</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a8a94ce3ee531dbdb2feb8924349cccfd">VK_SCROLLLOCK</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a17c1d2c7a892a59a9c15ad56f4111801">VK_NUMLOCK</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a17c1d2c7a892a59a9c15ad56f4111801">VK_NUMLOCK</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af179887eb749d16a363394a032d04ca6">VK_CAPSLOCK</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a95db6dfd6bf60eea3c55783659855cf7">VK_TAB</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b">VK_RETURN</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b">VK_RETURN</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aab6a275190de692792bbc32771b8ed90">VK_KP_ENTER</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aab6a275190de692792bbc32771b8ed90">VK_KP_ENTER</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a031c727d9e93e9f4725827b1e84fc254">VK_APPLICATION</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a31b64346dc78f446aced5cd283ec3e76">VK_PAGEUP</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af908dbf3c812bf456942de9de72f9c3a">VK_KP_PAGEUP</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af908dbf3c812bf456942de9de72f9c3a">VK_KP_PAGEUP</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6f6ef2f415f4be2dca259694924a267d">VK_PAGEDOWN</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6f6ef2f415f4be2dca259694924a267d">VK_PAGEDOWN</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a58b639318dd9aebdb0b871d51817b89d">VK_KP_PAGEDOWN</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a5e6713ca12a9359631fa25166a14db51">VK_UP</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a66af7f3c01ab787d9398912f8e702e3e">VK_KP_UP</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a66af7f3c01ab787d9398912f8e702e3e">VK_KP_UP</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a839718d2d233e445b65286817a0a0f2d">VK_DOWN</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a839718d2d233e445b65286817a0a0f2d">VK_DOWN</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a997b4dad7ebb6d380062e45a2a44b8f9">VK_KP_DOWN</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad1093d0c4350abe99ccd39bd6717020d">VK_LEFT</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0f17f0b60c0528c4ea8707dd392491e9">VK_KP_LEFT</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0f17f0b60c0528c4ea8707dd392491e9">VK_KP_LEFT</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aea80fc6815468c273ef3674aa7eae7f1">VK_RIGHT</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aea80fc6815468c273ef3674aa7eae7f1">VK_RIGHT</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1821812066b129b75789fe9d56687b8a">VK_KP_RIGHT</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a7a33fac2ba6f18996740521839ddc019">VK_KP_CENTER</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">VK_F1</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">VK_F1</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4e4c65536f7dce58ff38a06e309b999d">VK_F2</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4e4c65536f7dce58ff38a06e309b999d">VK_F2</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a933212384618e1dc7ab8e9d90c097252">VK_F3</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aed005a36d2f80d16487c74d1f3fbec6d">VK_F4</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a80c3d66698c44436634352f393536aa8">VK_F5</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a80c3d66698c44436634352f393536aa8">VK_F5</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a85815749c670d931ab0f2bff83c0dbe9">VK_F6</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a85815749c670d931ab0f2bff83c0dbe9">VK_F6</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1ce5373daf58b6e30d8515dd128ff9c3">VK_F7</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0ff3761ff30743af2161a218194e8864">VK_F8</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a406c9205ef7e10448a7950a01be289b9">VK_F9</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a406c9205ef7e10448a7950a01be289b9">VK_F9</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac2f7925dbc0e9600a4c172af1159f478">VK_F10</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac2f7925dbc0e9600a4c172af1159f478">VK_F10</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3f4973e40443d80475bd6be0cc8e7fc1">VK_F11</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">VK_F12</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1e8b73feccf4113c58c0fe6a31b8b8a4">VK_GRAVE_a</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1e8b73feccf4113c58c0fe6a31b8b8a4">VK_GRAVE_a</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a006a65dbd27c73fd8bea4026c2696a70">VK_GRAVE_e</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a006a65dbd27c73fd8bea4026c2696a70">VK_GRAVE_e</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a56af68ece013b31b6a93e4cd6af013a9">VK_ACUTE_e</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02afb746ee7a0fbaa0616a6f65ff57af1b1">VK_GRAVE_i</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a5fea34f9fa24a69b9041290dde273f5b">VK_GRAVE_o</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a5fea34f9fa24a69b9041290dde273f5b">VK_GRAVE_o</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02abc16dee1594e1037b9b0ce5bf948b76b">VK_GRAVE_u</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02abc16dee1594e1037b9b0ce5bf948b76b">VK_GRAVE_u</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3aab719a5c4abd3dc1ddc2e790c36984">VK_CEDILLA_c</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1c35c7011f425c49a7e96c22a2afa652">VK_ESZETT</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa2ff2548819e4cc7d81f1d859995c7d4">VK_UMLAUT_u</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa2ff2548819e4cc7d81f1d859995c7d4">VK_UMLAUT_u</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ab8080072b1eaf37d4dca8fb10e23da60">VK_UMLAUT_o</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ab8080072b1eaf37d4dca8fb10e23da60">VK_UMLAUT_o</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c222714aa65b3273ea5a66bb90d7006">VK_UMLAUT_a</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a9c0feb1eb1db141ca4a808b3af644a89">VK_CEDILLA_C</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a9aa311af6bf1efa3d378ab5db176b16b">VK_TILDE_n</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a9aa311af6bf1efa3d378ab5db176b16b">VK_TILDE_n</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa196094846a399e5114c4bff92995f88">VK_TILDE_N</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa196094846a399e5114c4bff92995f88">VK_TILDE_N</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2c7c585a118a3a1abbe1db9587bde828">VK_UPPER_a</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4ccbcb1eb91a4dac479e8996b560c81a">VK_ACUTE_a</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6dc2cf5f28434f85d628321e6822f082">VK_ACUTE_i</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6dc2cf5f28434f85d628321e6822f082">VK_ACUTE_i</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac48b46c3753b5b8278a1d8dc24ad3ee0">VK_ACUTE_o</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac48b46c3753b5b8278a1d8dc24ad3ee0">VK_ACUTE_o</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af2c09ed1b3cd70f30c146f984c9530f2">VK_ACUTE_u</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ae7f82019c0da78028678976161b8c8d6">VK_UMLAUT_i</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af69b75d09b7677a84a7d0ea527c70b4f">VK_EXCLAIM_INV</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02af69b75d09b7677a84a7d0ea527c70b4f">VK_EXCLAIM_INV</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6a41c8269ff3a316789a719869afec66">VK_QUESTION_INV</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6a41c8269ff3a316789a719869afec66">VK_QUESTION_INV</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4b278f602089bd3df64c65403d2164de">VK_ACUTE_A</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa5c704c2e4c7d1ee0d0296da4dffcb3b">VK_ACUTE_E</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aaf9150f98c72ca9e9129d5ceb843720c">VK_ACUTE_I</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aaf9150f98c72ca9e9129d5ceb843720c">VK_ACUTE_I</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a74720ca7c371b8763c8b247dc0d51983">VK_ACUTE_O</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a74720ca7c371b8763c8b247dc0d51983">VK_ACUTE_O</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad36fe503ef6d6f73c68c0b1a7c0f1543">VK_ACUTE_U</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6a6813b1b6ac0d65db13fa8342318329">VK_GRAVE_A</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2d88e5c4830437c519f09adf0671b20c">VK_GRAVE_E</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2d88e5c4830437c519f09adf0671b20c">VK_GRAVE_E</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a197b3b0e372b991ba05d99cc67ec621e">VK_GRAVE_I</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a197b3b0e372b991ba05d99cc67ec621e">VK_GRAVE_I</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa6f35796bde7a8f0835685725e8642ac">VK_GRAVE_O</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a1e03956d700d1902ff9d2574585adbd6">VK_GRAVE_U</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad145ff3542eaa6c526bf81b8a4a53c1f">VK_INTERPUNCT</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ad145ff3542eaa6c526bf81b8a4a53c1f">VK_INTERPUNCT</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a7ffdc444832c0c800da927af3b20d64a">VK_DIAERESIS</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a7ffdc444832c0c800da927af3b20d64a">VK_DIAERESIS</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a308a28e06a3057d0df6801a031a98135">VK_UMLAUT_e</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a47322b8986a0c49e6ea6a6b3403bf8b3">VK_UMLAUT_A</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac95cfa3c0d3de694912e88953c9d750d">VK_UMLAUT_E</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac95cfa3c0d3de694912e88953c9d750d">VK_UMLAUT_E</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6b81c5f7d79eed028fa32da5448adc83">VK_UMLAUT_I</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a6b81c5f7d79eed028fa32da5448adc83">VK_UMLAUT_I</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a58eb8c1b58164bf53c08f4feab05dc1f">VK_UMLAUT_O</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a573df72d032f491c1a4170c2e211fcbe">VK_UMLAUT_U</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02abf34fbbf558b2b2ff87464658d81581f">VK_CARET_a</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02abf34fbbf558b2b2ff87464658d81581f">VK_CARET_a</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4fd39c00664141618768333cffae5a69">VK_CARET_e</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a4fd39c00664141618768333cffae5a69">VK_CARET_e</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02add4b8315abda9a50401be464a1c85060">VK_CARET_i</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a157b2e8539488a12ced93c282870731b">VK_CARET_o</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a7c33cb57a15b8f4da3b474c883394dca">VK_CARET_u</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a7c33cb57a15b8f4da3b474c883394dca">VK_CARET_u</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a05dff1538213480ca69c543b1e8ad406">VK_CARET_A</a>, 
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a05dff1538213480ca69c543b1e8ad406">VK_CARET_A</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa25a81fdcaedc350f498b1646b580112">VK_CARET_E</a>, 
 <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a5fee424466feade4c10c540200bde1e9">VK_CARET_I</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a8ec3804bfb404833d93119073bf7006d">VK_CARET_O</a>, 
 <br />
-&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a8ec3804bfb404833d93119073bf7006d">VK_CARET_O</a>, 
-<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84">VK_CARET_U</a>
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84">VK_CARET_U</a>, 
+<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6">VK_ASCII</a>
 <br />
  }</td></tr>
 <tr class="memdesc:gad0e6e31d5953384be4ea987eb3923e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents each possible real or derived (SHIFT + real) key.  <a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">More...</a><br /></td></tr>
@@ -457,7 +532,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="fabutils_8h.html">fabutils.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

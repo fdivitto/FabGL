@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['info',['Info',['../group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#ggaae85628862e3db5a13e7c21a90589c1da4059b0251f66a18cb56f544728796875',1,'fabgl']]],
-  ['intellimouse',['Intellimouse',['../group___enumerations_ga1a15f1712ba14a6877038ffe9c6f7708.html#gga1a15f1712ba14a6877038ffe9c6f7708a2e71c963cb7659a2783aa306391051ec',1,'fabgl']]],
-  ['inverse',['Inverse',['../group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fa17e68c01437379e2ee2ae4ad92a918ac',1,'fabgl']]],
-  ['italic',['Italic',['../group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#gga58734f6595a1eefb555afc0f1897fc3fac2a214096085052039c5b35d6aae7bd0',1,'fabgl']]]
+  ['hazeltine1500',['Hazeltine1500',['../group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a40e0f1b332fd17171a30aa39461877b2',1,'fabgl']]],
+  ['horizontal',['Horizontal',['../group___enumerations_gaabef129474b75f60ee5d3ee1ee1f8890.html#ggaabef129474b75f60ee5d3ee1ee1f8890ac1b5fa03ecdb95d4a45dd1c40b02527f',1,'fabgl']]]
 ];

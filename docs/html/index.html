@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -93,7 +94,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="textblock"><p> 
 <a href="https://www.github.com/fdivitto/fabgl"> <img src="github.png" style="width:230px;height:80px;border:0;"> </a>
 </p>
-<p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019-2020 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
+<p><a href="http://www.fabgl.com">www.FabGL.com</a> - 2019-2021 by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>)</p>
 <p><a href="https://www.youtube.com/user/fdivitto/videos">Demos and Tutorials</a></p>
 <hr/>
 <p>FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).<br />
@@ -119,33 +120,42 @@ $(document).ready(function(){initNavTree('index.html','');});
  Audio output, like VGA output, is generated using DMA. CPU just mixes audio channels and prepares waveforms.<br />
 </p>
 <hr/>
-<p>The main classes of FabGL library are:</p><ul>
-<li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA bitmapped controller. ">fabgl::VGAController</a>, device driver for VGA bitmapped output.</li>
-<li><a class="el" href="classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller. ">fabgl::VGA2Controller</a>, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller. ">fabgl::VGA4Controller</a>, device driver for VGA 4 colors bitmapped output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller. ">fabgl::VGA8Controller</a>, device driver for VGA 8 colors bitmapped output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller. ">fabgl::VGA16Controller</a>, device driver for VGA 16 colors bitmapped output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_v_g_a_text_controller.html" title="Represents the VGA text-only controller. ">fabgl::VGATextController</a>, device driver for VGA textual output (low RAM requirements, CPU intensive).</li>
-<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, device driver for SSD1306 based OLED displays.</li>
-<li><a class="el" href="classfabgl_1_1_s_t7789_controller.html" title="Implements ST7789 display driver controller. ">fabgl::ST7789Controller</a>, device driver for ST7789 based TFT displays.</li>
-<li><a class="el" href="classfabgl_1_1_i_l_i9341_controller.html" title="Implements ILI9341 display driver controller. ">fabgl::ILI9341Controller</a>, device driver for ILI9341 based TFT displays.</li>
-<li><a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a>, that provides a set of drawing primitives (lines, rectangles, text...).</li>
-<li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102/etc and up terminal (look at <a class="el" href="vttest.html">vttest score</a>).</li>
-<li><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a>, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes.</li>
-<li><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a>, that controls a PS2 mouse.</li>
-<li><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">fabgl::Scene</a> abstract class that handles sprites, timings and collision detection.</li>
+<p>Main classes of FabGL library:</p><ul>
+<li><a class="el" href="classfabgl_1_1_v_g_a_controller.html" title="Represents the VGA bitmapped controller. ">fabgl::VGAController</a>, device driver for VGA bitmapped output</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller. ">fabgl::VGA2Controller</a>, device driver for VGA 2 colors bitmapped output (low RAM requirements, CPU intensive)</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller. ">fabgl::VGA4Controller</a>, device driver for VGA 4 colors bitmapped output (low RAM requirements, CPU intensive)</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller. ">fabgl::VGA8Controller</a>, device driver for VGA 8 colors bitmapped output (low RAM requirements, CPU intensive)</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller. ">fabgl::VGA16Controller</a>, device driver for VGA 16 colors bitmapped output (low RAM requirements, CPU intensive)</li>
+<li><a class="el" href="classfabgl_1_1_v_g_a_text_controller.html" title="Represents the VGA text-only controller. ">fabgl::VGATextController</a>, device driver for VGA textual output (low RAM requirements, CPU intensive)</li>
+<li><a class="el" href="classfabgl_1_1_s_s_d1306_controller.html" title="Display driver for SSD1306 based OLED display, with I2C connection. ">fabgl::SSD1306Controller</a>, device driver for SSD1306 based OLED displays</li>
+<li><a class="el" href="classfabgl_1_1_s_t7789_controller.html" title="Implements ST7789 display driver controller. ">fabgl::ST7789Controller</a>, device driver for ST7789 based TFT displays</li>
+<li><a class="el" href="classfabgl_1_1_i_l_i9341_controller.html" title="Implements ILI9341 display driver controller. ">fabgl::ILI9341Controller</a>, device driver for ILI9341 based TFT displays</li>
+<li><a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">fabgl::Canvas</a>, that provides a set of drawing primitives (lines, rectangles, text...)</li>
+<li><a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal. ">fabgl::Terminal</a>, that emulates an ANSI/VT100/VT102/etc and up terminal (look at <a class="el" href="vttest.html">vttest score</a>)</li>
+<li><a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">fabgl::Keyboard</a>, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes</li>
+<li><a class="el" href="classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. ">fabgl::Mouse</a>, that controls a PS2 mouse</li>
+<li><a class="el" href="classfabgl_1_1_scene.html" title="Scene is an abstract class useful to encapsulate functionalities of a scene (sprites, collision detector and updates). ">fabgl::Scene</a> abstract class that handles sprites, timings and collision detection</li>
 <li><a class="el" href="classfabgl_1_1ui_app.html" title="Represents the whole application base class. ">fabgl::uiApp</a> base class to build Graphical User Interface applications</li>
-<li><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output. ">fabgl::SoundGenerator</a> to generate sound and music.</li>
+<li><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output. ">fabgl::SoundGenerator</a> to generate sound and music</li>
+<li><a class="el" href="classfabgl_1_1_input_box.html" title="InputBox is an helper class which allows to create simple UI interfaces, like wizards or simple input...">fabgl::InputBox</a> to generate simple UI wizards</li>
 </ul>
-<p>Other classes are:</p><ul>
+<p>Devices emulation classes:</p><ul>
+<li><a class="el" href="classfabgl_1_1_z80.html" title="Zilog Z80 CPU emulator. ">fabgl::Z80</a>, Zilog Z80 CPU emulator</li>
+<li><a class="el" href="classfabgl_1_1i8080.html" title="Intel 8080 CPU emulator. ">fabgl::i8080</a>, Intel 8080 CPU emulator</li>
+<li><a class="el" href="classfabgl_1_1_m_o_s6502.html" title="MOS 6502 CPU emulator. ">fabgl::MOS6502</a>, MOS 6502 CPU emulator</li>
+<li><a class="el" href="classfabgl_1_1_v_i_a6522.html" title="VIA 6522 emulator. ">fabgl::VIA6522</a>, VIA 6522 emulator</li>
+</ul>
+<p>Other classes:</p><ul>
 <li><a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a>, thread safe I2C (Wire) class</li>
 <li><a class="el" href="classfabgl_1_1_d_s3231.html" title="DS3231 Real Time Clock driver. ">fabgl::DS3231</a>, Real Time Clock driver which uses the thread safe <a class="el" href="classfabgl_1_1_i2_c.html" title="I2C class allows multiple tasks to communicate with I2C devices, serializing read/write jobs...">fabgl::I2C</a> library</li>
+<li><a class="el" href="classfabgl_1_1_m_c_p23_s17.html" title="MCP23S17 driver. ">fabgl::MCP23S17</a>, 16 bit SPI port expander</li>
 </ul>
 <p>See <a class="el" href="conf_v_g_a.html">VGA output</a> for VGA connection sample schema.</p>
 <p>See <a class="el" href="conf_p_s2.html">PS/2 ports</a> for PS/2 connections sample schema.</p>
 <p>See <a class="el" href="conf_audio.html">Configuring Audio port</a> for audio connection sample schema.</p>
 <hr/>
  <center> Installation Tutorial </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_p_c_emulator_2_p_c_emulator_8ino-example.html">IBM PC Emulator Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3I1U2nEoxIQ?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html">Space Invaders Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_graphical_user_interface_2_graphical_user_interface_8ino-example.html">Graphical User Interface - GUI Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_audio_2_audio_8ino-example.html">Audio output demo </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
@@ -158,8 +168,9 @@ $(document).ready(function(){initNavTree('index.html','');});
  <center> <a class="el" href="_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html">Loopback Terminal Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_double_buffer_2_double_buffer_8ino-example.html">Double Buffering Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
  <center> <a class="el" href="_v_g_a_2_collision_detection_2_collision_detection_8ino-example.html">Collision Detection Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
+ <center> <a class="el" href="_v_g_a_2_multitasking_c_p_m_2_multitasking_c_p_m_8ino-example.html">Multitasking CP/M Plus Example </a> </center><p>  <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3UevsxMQZ5w?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div>  </p><hr/>
 <p>Created by Fabrizio Di Vittorio (<a href="#" onclick="location.href='mai'+'lto:'+'fdi'+'vi'+'tto'+'20'+'13@'+'gm'+'ail'+'.c'+'om'; return false;">fdivi<span style="display: none;">.nosp@m.</span>tto2<span style="display: none;">.nosp@m.</span>013@g<span style="display: none;">.nosp@m.</span>mail<span style="display: none;">.nosp@m.</span>.com</a>) - <a href="http://www.fabgl.com">http://www.fabgl.com</a> <br />
- Copyright (c) 2019-2020 Fabrizio Di Vittorio. <br />
+ Copyright (c) 2019-2021 Fabrizio Di Vittorio. <br />
  All rights reserved. <br />
 </p>
 <p>This file is part of FabGL Library.</p>
@@ -181,7 +192,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:34 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:39 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

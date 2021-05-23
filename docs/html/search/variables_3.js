@@ -4,7 +4,7 @@ var searchData=
   ['dataallocated',['dataAllocated',['../structfabgl_1_1_bitmap_a655d553e67e161e0952ce91663de4cd1.html#a655d553e67e161e0952ce91663de4cd1',1,'fabgl::Bitmap']]],
   ['dayofmonth',['dayOfMonth',['../structfabgl_1_1_date_time_a5f0b5de23fa9acb3542c09b4d8e338e6.html#a5f0b5de23fa9acb3542c09b4d8e338e6',1,'fabgl::DateTime']]],
   ['dayofweek',['dayOfWeek',['../structfabgl_1_1_date_time_acb1264377521faab9e0ede2a086ba956.html#acb1264377521faab9e0ede2a086ba956',1,'fabgl::DateTime']]],
-  ['deadkeystovk',['deadkeysToVK',['../structfabgl_1_1_keyboard_layout_a0ede61cf5f83095ea3ec5acacc39e183.html#a0ede61cf5f83095ea3ec5acacc39e183',1,'fabgl::KeyboardLayout']]],
+  ['deadkeystovk',['deadkeysToVK',['../structfabgl_1_1_keyboard_layout_afeb30afd42398a705008b72fae0531db.html#afeb30afd42398a705008b72fae0531db',1,'fabgl::KeyboardLayout']]],
   ['deadkeysvk',['deadKeysVK',['../structfabgl_1_1_keyboard_layout_ad0d829bcf251d4905509f2bd5001c770.html#ad0d829bcf251d4905509f2bd5001c770',1,'fabgl::KeyboardLayout']]],
   ['defaultcursor',['defaultCursor',['../structfabgl_1_1ui_window_style_a0195b95c6a40056ec20ca1924bfd827a.html#a0195b95c6a40056ec20ca1924bfd827a',1,'fabgl::uiWindowStyle']]],
   ['deltax',['deltaX',['../structfabgl_1_1_mouse_delta_aa619bed5b36c23065f6b3c1faf8ac31d.html#aa619bed5b36c23065f6b3c1faf8ac31d',1,'fabgl::MouseDelta']]],
@@ -13,6 +13,7 @@ var searchData=
   ['desc',['desc',['../structfabgl_1_1_keyboard_layout_a710bce51374aba96ab04912897666c35.html#a710bce51374aba96ab04912897666c35',1,'fabgl::KeyboardLayout']]],
   ['doubleclicktime',['doubleClickTime',['../structfabgl_1_1ui_app_props_a6bb8300a9b1a94627cf4188bb1b5d17a.html#a6bb8300a9b1a94627cf4188bb1b5d17a',1,'fabgl::uiAppProps']]],
   ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options_a89a44c5e986590e4eca4fb8649bba64e.html#a89a44c5e986590e4eca4fb8649bba64e',1,'fabgl::GlyphOptions::doubleWidth()'],['../displaycontroller_8h_a89a44c5e986590e4eca4fb8649bba64e.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h']]],
+  ['down',['down',['../structfabgl_1_1_virtual_key_item_a957456ebb10d8e0ec184480894c0b885.html#a957456ebb10d8e0ec184480894c0b885',1,'fabgl::VirtualKeyItem']]],
   ['downbackgroundcolor',['downBackgroundColor',['../structfabgl_1_1ui_button_style_ad030d951c454d9a353c1d1fcc206b9cc.html#ad030d951c454d9a353c1d1fcc206b9cc',1,'fabgl::uiButtonStyle']]],
   ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style_a28a83a5f7d4066995791678c57411fdb.html#a28a83a5f7d4066995791678c57411fdb',1,'fabgl::uiButtonStyle']]]
 ];

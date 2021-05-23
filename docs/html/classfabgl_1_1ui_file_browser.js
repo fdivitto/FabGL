@@ -27,6 +27,7 @@ var classfabgl_1_1ui_file_browser =
     [ "isMouseOver", "classfabgl_1_1ui_file_browser.html#a28c46beb152c3da8f65c1382a960c013", null ],
     [ "lastChild", "classfabgl_1_1ui_file_browser.html#ae59d2e22c889f42bfba84e0534ecb824", null ],
     [ "lastSelectedItem", "classfabgl_1_1ui_file_browser.html#a4610b49a13217bc61f731b6e2d75a114", null ],
+    [ "listBoxProps", "classfabgl_1_1ui_file_browser.html#aec7a760050cfb59610044b0e8bdd752c", null ],
     [ "listBoxStyle", "classfabgl_1_1ui_file_browser.html#a27cf553170e5a2058e15278412ee8f09", null ],
     [ "mouseDownPos", "classfabgl_1_1ui_file_browser.html#ace505188cc5b850f8ae1cb7b24c0d301", null ],
     [ "next", "classfabgl_1_1ui_file_browser.html#a0e7dd6748ff0d88ee369eaec7ed3e8df", null ],

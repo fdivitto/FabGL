@@ -1,5 +1,5 @@
 <map id="DS3231.h" name="DS3231.h">
-<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="878,152,965,177"/>
-<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="156,79,231,104"/>
-<area shape="rect" id="node9" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="457,79,586,104"/>
+<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="189,155,276,181"/>
+<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="735,80,810,107"/>
+<area shape="rect" id="node11" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="283,80,412,107"/>
 </map>

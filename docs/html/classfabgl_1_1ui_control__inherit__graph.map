@@ -6,17 +6,18 @@
 <area shape="rect" id="node11" href="$classfabgl_1_1ui_image.html" title="Image control to display a static bitmap. " alt="" coords="556,208,624,235"/>
 <area shape="rect" id="node12" href="$classfabgl_1_1ui_label.html" title="A label is a static text UI element. " alt="" coords="559,259,621,285"/>
 <area shape="rect" id="node13" href="$classfabgl_1_1ui_panel.html" title="A panel is used to contain and to group some controls. " alt="" coords="557,309,623,336"/>
-<area shape="rect" id="node14" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars. " alt="" coords="525,360,655,387"/>
-<area shape="rect" id="node20" href="$classfabgl_1_1ui_slider.html" title="A slider or track bar is a graphical control element with which a user may set a value by moving an i..." alt="" coords="557,411,623,437"/>
-<area shape="rect" id="node21" href="$classfabgl_1_1ui_text_edit.html" title="Represents a text edit control. " alt="" coords="550,461,630,488"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="269,233,348,260"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="124,233,221,260"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="5,233,76,260"/>
+<area shape="rect" id="node14" href="$classfabgl_1_1ui_progress_bar.html" title="A progress bar shows progress percentage using a colored bar. " alt="" coords="538,360,642,387"/>
+<area shape="rect" id="node15" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars. " alt="" coords="525,411,655,437"/>
+<area shape="rect" id="node21" href="$classfabgl_1_1ui_slider.html" title="A slider or track bar is a graphical control element with which a user may set a value by moving an i..." alt="" coords="557,461,623,488"/>
+<area shape="rect" id="node22" href="$classfabgl_1_1ui_text_edit.html" title="Represents a text edit control. " alt="" coords="550,512,630,539"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="269,259,348,285"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="124,259,221,285"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="5,259,76,285"/>
 <area shape="rect" id="node9" href="$classfabgl_1_1ui_color_combo_box.html" title="This is a combination of a color listbox and a colorbox. " alt="" coords="709,132,837,159"/>
 <area shape="rect" id="node10" href="$classfabgl_1_1ui_combo_box.html" title="This is a combination of a listbox and a single&#45;line editable textbox. " alt="" coords="725,183,822,209"/>
-<area shape="rect" id="node15" href="$classfabgl_1_1ui_custom_list_box.html" title="Shows generic a list of selectable items. " alt="" coords="712,335,835,361"/>
-<area shape="rect" id="node19" href="$classfabgl_1_1ui_paint_box.html" title="A paintbox control allows applications to perform custom drawings providing uiPaintBox.onPaint delegate. A paintbox can have horizontal and vertical scrollbars. " alt="" coords="731,385,816,412"/>
-<area shape="rect" id="node16" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable. " alt="" coords="885,284,992,311"/>
-<area shape="rect" id="node17" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content. " alt="" coords="888,335,989,361"/>
-<area shape="rect" id="node18" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items. " alt="" coords="901,385,977,412"/>
+<area shape="rect" id="node16" href="$classfabgl_1_1ui_custom_list_box.html" title="Shows generic a list of selectable items. " alt="" coords="712,385,835,412"/>
+<area shape="rect" id="node20" href="$classfabgl_1_1ui_paint_box.html" title="A paintbox control allows applications to perform custom drawings providing uiPaintBox.onPaint delegate. A paintbox can have horizontal and vertical scrollbars. " alt="" coords="731,436,816,463"/>
+<area shape="rect" id="node17" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable. " alt="" coords="885,335,992,361"/>
+<area shape="rect" id="node18" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content. " alt="" coords="888,385,989,412"/>
+<area shape="rect" id="node19" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items. " alt="" coords="901,436,977,463"/>
 </map>

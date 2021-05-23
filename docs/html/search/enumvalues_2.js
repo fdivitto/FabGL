@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['cancel',['Cancel',['../group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eaea4788705e6873b424c65e91c2846b19',1,'fabgl']]],
+  ['ca1',['CA1',['../group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0ac93bf9a243a391a65da5b60116ee9a5c',1,'fabgl']]],
+  ['ca2',['CA2',['../group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a3702f3bfbd91df0d6105cbd8b8d8b963',1,'fabgl']]],
+  ['cancel',['Cancel',['../group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eaea4788705e6873b424c65e91c2846b19',1,'fabgl::Cancel()'],['../group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2aea4788705e6873b424c65e91c2846b19',1,'fabgl::Cancel()']]],
+  ['cb1',['CB1',['../group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0ac479bbda96996453098aaa0687a9197e',1,'fabgl']]],
+  ['cb2',['CB2',['../group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a96d495d6079a5d50e1b6bc3fc9255f09',1,'fabgl']]],
   ['checkbox',['CheckBox',['../group___enumerations_gacfde9a9ea22383d7dab2856f9319bec9.html#ggacfde9a9ea22383d7dab2856f9319bec9a7ea0f1332ade5b23b34502a3bfe715a2',1,'fabgl']]],
   ['circle',['Circle',['../group___enumerations_ga8ac9813c9c9df8a1e7f6ec66b346f08e.html#gga8ac9813c9c9df8a1e7f6ec66b346f08ea30954d90085f6eaaf5817917fc5fecb3',1,'fabgl']]],
   ['createvirtualkeysqueue',['CreateVirtualKeysQueue',['../group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#gga5d7071ad7a22fa20e52ba3e855cb4cffa382b3f9e2c83958197e451c23d848f97',1,'fabgl']]],

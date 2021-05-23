@@ -1,22 +1,51 @@
 <map id="displaycontroller.h" name="displaycontroller.h">
-<area shape="rect" id="node2" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="297,79,372,104"/>
-<area shape="rect" id="node4" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="628,445,689,471"/>
-<area shape="rect" id="node5" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="304,152,365,177"/>
-<area shape="rect" id="node9" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="395,299,522,324"/>
-<area shape="rect" id="node11" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="685,152,793,177"/>
-<area shape="rect" id="node13" href="$_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="570,79,731,104"/>
-<area shape="rect" id="node15" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="816,225,931,251"/>
-<area shape="rect" id="node16" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="956,225,1071,251"/>
-<area shape="rect" id="node17" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="1096,225,1211,251"/>
-<area shape="rect" id="node18" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="1235,225,1357,251"/>
-<area shape="rect" id="node19" href="$vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="1231,152,1372,177"/>
-<area shape="rect" id="node20" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="918,79,1055,104"/>
-<area shape="rect" id="node21" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="942,152,1098,177"/>
-<area shape="rect" id="node3" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="169,372,249,397"/>
-<area shape="rect" id="node6" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="152,225,240,251"/>
-<area shape="rect" id="node8" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="298,299,371,324"/>
-<area shape="rect" id="node7" href="$terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="194,299,275,324"/>
-<area shape="rect" id="node10" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="513,372,581,397"/>
-<area shape="rect" id="node12" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="722,372,851,397"/>
-<area shape="rect" id="node14" href="$_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="547,299,699,324"/>
+<area shape="rect" id="node2" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition. " alt="" coords="146,80,221,107"/>
+<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="979,379,1041,405"/>
+<area shape="rect" id="node17" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface. " alt="" coords="389,155,450,181"/>
+<area shape="rect" id="node22" href="$mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="425,304,512,331"/>
+<area shape="rect" id="node23" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition. " alt="" coords="688,229,815,256"/>
+<area shape="rect" id="node27" href="$displaycontroller_8cpp_source.html" title="displaycontroller.cpp" alt="" coords="955,80,1095,107"/>
+<area shape="rect" id="node28" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="1629,229,1735,256"/>
+<area shape="rect" id="node32" href="$_s_s_d1306_controller_8h.html" title="This file contains fabgl::SSD1306Controller definition. " alt="" coords="1119,80,1263,107"/>
+<area shape="rect" id="node34" href="$_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="1328,80,1487,107"/>
+<area shape="rect" id="node37" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="1951,229,2064,256"/>
+<area shape="rect" id="node39" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="2319,229,2432,256"/>
+<area shape="rect" id="node41" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="1211,229,1324,256"/>
+<area shape="rect" id="node43" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="1451,229,1571,256"/>
+<area shape="rect" id="node45" href="$vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="2121,155,2259,181"/>
+<area shape="rect" id="node47" href="$vgabasecontroller_8h.html" title="This file contains fabgl::VGABaseController definition. " alt="" coords="1789,80,1924,107"/>
+<area shape="rect" id="node49" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="1894,155,2046,181"/>
+<area shape="rect" id="node3" href="$canvas_8cpp_source.html" title="canvas.cpp" alt="" coords="5,155,95,181"/>
+<area shape="rect" id="node4" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="71,304,149,331"/>
+<area shape="rect" id="node19" href="$fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="174,304,249,331"/>
+<area shape="rect" id="node16" href="$terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="151,379,245,405"/>
+<area shape="rect" id="node6" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="631,453,755,480"/>
+<area shape="rect" id="node8" href="$i8042_8h_source.html" title="i8042.h" alt="" coords="786,453,850,480"/>
+<area shape="rect" id="node10" href="$i8086_8h_source.html" title="i8086.h" alt="" coords="874,453,938,480"/>
+<area shape="rect" id="node12" href="$_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="962,453,1058,480"/>
+<area shape="rect" id="node13" href="$_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="1083,453,1167,480"/>
+<area shape="rect" id="node14" href="$_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="1191,453,1274,480"/>
+<area shape="rect" id="node15" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="1298,453,1381,480"/>
+<area shape="rect" id="node7" href="$graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="615,528,754,555"/>
+<area shape="rect" id="node9" href="$i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="779,528,857,555"/>
+<area shape="rect" id="node11" href="$i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="881,528,960,555"/>
+<area shape="rect" id="node18" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="272,229,359,256"/>
+<area shape="rect" id="node20" href="$inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="1250,304,1333,331"/>
+<area shape="rect" id="node21" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="383,229,455,256"/>
+<area shape="rect" id="node24" href="$collisiondetector_8cpp_source.html" title="collisiondetector.cpp" alt="" coords="680,304,820,331"/>
+<area shape="rect" id="node25" href="$scene_8h.html" title="This file contains fabgl::Scene definition. " alt="" coords="588,304,656,331"/>
+<area shape="rect" id="node26" href="$scene_8cpp_source.html" title="scene.cpp" alt="" coords="581,379,663,405"/>
+<area shape="rect" id="node29" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="1875,304,2003,331"/>
+<area shape="rect" id="node30" href="$fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="1567,304,1656,331"/>
+<area shape="rect" id="node31" href="$vgacontroller_8cpp_source.html" title="vgacontroller.cpp" alt="" coords="1681,304,1801,331"/>
+<area shape="rect" id="node33" href="$_s_s_d1306_controller_8cpp_source.html" title="SSD1306Controller.cpp" alt="" coords="964,155,1123,181"/>
+<area shape="rect" id="node35" href="$_t_f_t_controller_specif_8h.html" title="This file contains TFT controllers definitions. " alt="" coords="1147,155,1297,181"/>
+<area shape="rect" id="node36" href="$_t_f_t_controller_generic_8cpp_source.html" title="TFTControllerGeneric.cpp" alt="" coords="1321,155,1493,181"/>
+<area shape="rect" id="node38" href="$vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="2079,304,2205,331"/>
+<area shape="rect" id="node40" href="$vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="2315,304,2441,331"/>
+<area shape="rect" id="node42" href="$vga8controller_8cpp_source.html" title="vga8controller.cpp" alt="" coords="1099,304,1225,331"/>
+<area shape="rect" id="node44" href="$vga16controller_8cpp_source.html" title="vga16controller.cpp" alt="" coords="1408,304,1543,331"/>
+<area shape="rect" id="node46" href="$vgadirectcontroller_8cpp_source.html" title="vgadirectcontroller.cpp" alt="" coords="2089,229,2241,256"/>
+<area shape="rect" id="node48" href="$vgabasecontroller_8cpp_source.html" title="vgabasecontroller.cpp" alt="" coords="1671,155,1819,181"/>
+<area shape="rect" id="node50" href="$vgapalettedcontroller_8cpp_source.html" title="vgapalettedcontroller.cpp" alt="" coords="1760,229,1927,256"/>
 </map>

@@ -13,6 +13,7 @@ var classfabgl_1_1ui_app =
     [ "inputBox", "classfabgl_1_1ui_app_a655f17076c2a5b777e938e4bb0bec6b5.html#a655f17076c2a5b777e938e4bb0bec6b5", null ],
     [ "insertEvent", "classfabgl_1_1ui_app_af667cdcdd8da6844aa694b5b13dbdda4.html#af667cdcdd8da6844aa694b5b13dbdda4", null ],
     [ "killTimer", "classfabgl_1_1ui_app_a028b2191c2f561c8a5ac1ae3460a40ec.html#a028b2191c2f561c8a5ac1ae3460a40ec", null ],
+    [ "lastUserActionTime", "classfabgl_1_1ui_app_a8071e191ba94de4b26741ecc9cb6cd0c.html#a8071e191ba94de4b26741ecc9cb6cd0c", null ],
     [ "maximizeWindow", "classfabgl_1_1ui_app_a82ef29530e5139d9fdc9776d0fa1bf0d.html#a82ef29530e5139d9fdc9776d0fa1bf0d", null ],
     [ "messageBox", "classfabgl_1_1ui_app_a497f4d275a00138ea8e40cae63c18946.html#a497f4d275a00138ea8e40cae63c18946", null ],
     [ "minimizeWindow", "classfabgl_1_1ui_app_ac02d4322b836f25a620748f1f9c0dbf8.html#ac02d4322b836f25a620748f1f9c0dbf8", null ],

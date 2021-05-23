@@ -21,6 +21,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -96,7 +97,54 @@ $(document).ready(function(){initNavTree('ps2device_8h.html','');});
 
 <p>This file contains <a class="el" href="classfabgl_1_1_p_s2_device.html" title="Base class for PS2 devices (like mouse or keyboard). ">fabgl::PS2Device</a> definition.  
 <a href="#details">More...</a></p>
-
+<div class="textblock"><code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/semphr.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ps2controller_8h_source.html">ps2controller.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for ps2device.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="ps2device_8h__incl.png" border="0" usemap="#ps2device_8h" alt=""/></div>
+<map name="ps2device_8h" id="ps2device_8h">
+<area shape="rect" id="node4" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="5,155,92,181"/>
+<area shape="rect" id="node6" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition. " alt="" coords="193,80,299,107"/>
+<area shape="rect" id="node9" href="fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="490,155,565,181"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="ps2device_8h__dep__incl.png" border="0" usemap="#ps2device_8hdep" alt=""/></div>
+<map name="ps2device_8hdep" id="ps2device_8hdep">
+<area shape="rect" id="node2" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition. " alt="" coords="345,80,431,107"/>
+<area shape="rect" id="node25" href="mouse_8h.html" title="This file contains fabgl::Mouse definition. " alt="" coords="608,80,680,107"/>
+<area shape="rect" id="node27" href="ps2device_8cpp_source.html" title="ps2device.cpp" alt="" coords="704,80,811,107"/>
+<area shape="rect" id="node3" href="terminal_8h.html" title="This file contains fabgl::Terminal definition. " alt="" coords="390,229,469,256"/>
+<area shape="rect" id="node4" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="399,304,460,331"/>
+<area shape="rect" id="node20" href="terminfo_8h.html" title="This file contains terminal emulation definitions. " alt="" coords="271,155,351,181"/>
+<area shape="rect" id="node22" href="fabui_8cpp_source.html" title="fabui.cpp" alt="" coords="569,155,644,181"/>
+<area shape="rect" id="node23" href="ps2controller_8cpp_source.html" title="ps2controller.cpp" alt="" coords="425,155,545,181"/>
+<area shape="rect" id="node24" href="keyboard_8cpp_source.html" title="keyboard.cpp" alt="" coords="95,155,195,181"/>
+<area shape="rect" id="node19" href="terminal_8cpp_source.html" title="terminal.cpp" alt="" coords="584,304,677,331"/>
+<area shape="rect" id="node5" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,379,151,405"/>
+<area shape="rect" id="node7" href="i8042_8h_source.html" title="i8042.h" alt="" coords="183,379,247,405"/>
+<area shape="rect" id="node9" href="i8086_8h_source.html" title="i8086.h" alt="" coords="285,379,349,405"/>
+<area shape="rect" id="node11" href="_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,379,477,405"/>
+<area shape="rect" id="node13" href="_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,379,593,405"/>
+<area shape="rect" id="node15" href="_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,379,711,405"/>
+<area shape="rect" id="node17" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,379,829,405"/>
+<area shape="rect" id="node6" href="graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,453,144,480"/>
+<area shape="rect" id="node8" href="i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,453,247,480"/>
+<area shape="rect" id="node10" href="i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,453,350,480"/>
+<area shape="rect" id="node12" href="_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,453,485,480"/>
+<area shape="rect" id="node14" href="_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,453,608,480"/>
+<area shape="rect" id="node16" href="_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,453,728,480"/>
+<area shape="rect" id="node18" href="_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,453,850,480"/>
+<area shape="rect" id="node21" href="terminfo_8cpp_source.html" title="terminfo.cpp" alt="" coords="271,229,366,256"/>
+<area shape="rect" id="node26" href="mouse_8cpp_source.html" title="mouse.cpp" alt="" coords="770,155,857,181"/>
+</map>
+</div>
+</div>
 <p><a href="ps2device_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -131,7 +179,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b741fed86bf5fa30eab98075f2fe4281.html">comdrivers</a></li><li class="navelem"><a class="el" href="ps2device_8h.html">ps2device.h</a></li>
-    <li class="footer">Generated on Wed Dec 9 2020 16:48:31 for FabGL by
+    <li class="footer">Generated on Sun May 23 2021 23:04:33 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

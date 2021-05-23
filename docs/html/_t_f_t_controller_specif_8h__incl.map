@@ -1,6 +1,6 @@
 <map id="TFTControllerSpecif.h" name="TFTControllerSpecif.h">
-<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="98,225,184,251"/>
-<area shape="rect" id="node6" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="684,225,758,251"/>
-<area shape="rect" id="node10" href="$_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="331,79,492,104"/>
-<area shape="rect" id="node12" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="246,152,374,177"/>
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="777,229,863,256"/>
+<area shape="rect" id="node6" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="135,229,209,256"/>
+<area shape="rect" id="node11" href="$_t_f_t_controller_generic_8h.html" title="This file contains fabgl::TFTController definition. " alt="" coords="457,80,615,107"/>
+<area shape="rect" id="node14" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="267,155,394,181"/>
 </map>

@@ -8,6 +8,12 @@ var fabutils_8h =
     [ "Point", "structfabgl_1_1_point.html", "structfabgl_1_1_point" ],
     [ "Rect", "structfabgl_1_1_rect.html", "structfabgl_1_1_rect" ],
     [ "Size", "structfabgl_1_1_size.html", "structfabgl_1_1_size" ],
+    [ "ChipPackage", "fabutils_8h.html#ga5d4cf45276f202b6a848d0baf97adea0", [
+      [ "ESP32D0WDQ6", "fabutils_8h.html#gga5d4cf45276f202b6a848d0baf97adea0ac1e5a622092c4a6696ffda151efefb66", null ],
+      [ "ESP32D0WDQ5", "fabutils_8h.html#gga5d4cf45276f202b6a848d0baf97adea0ade1d97e9e28e4b67a2a96c2b400ca4b1", null ],
+      [ "ESP32D2WDQ5", "fabutils_8h.html#gga5d4cf45276f202b6a848d0baf97adea0aa7b909e660bafe1f45ca286c1bc5937a", null ],
+      [ "ESP32PICOD4", "fabutils_8h.html#gga5d4cf45276f202b6a848d0baf97adea0a5d8d61514b6162c2cf210601418a160f", null ]
+    ] ],
     [ "DriveType", "fabutils_8h.html#ga6c3316022eddc73875d854fcf43e61aa", [
       [ "None", "fabutils_8h.html#gga6c3316022eddc73875d854fcf43e61aaa6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "SPIFFS", "fabutils_8h.html#gga6c3316022eddc73875d854fcf43e61aaa146673cebceb52efdad49e33019dd764", null ],
@@ -140,8 +146,7 @@ var fabutils_8h =
       [ "VK_LGUI", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aafe11fd78fa4f908291ee69aed38c96c", null ],
       [ "VK_RGUI", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a72addb7597baf0807bf3726fcd3eb6e2", null ],
       [ "VK_ESCAPE", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98", null ],
-      [ "VK_PRINTSCREEN1", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a60e6329fe3371c76d96749e9cc766bd9", null ],
-      [ "VK_PRINTSCREEN2", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a2ea901cf9c58cb90854f7e6dc8a15d0e", null ],
+      [ "VK_PRINTSCREEN", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a0181eb77776b1cdc4d6bbf10ddc132fc", null ],
       [ "VK_SYSREQ", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a2911995849a379119007a3432d01d6e7", null ],
       [ "VK_INSERT", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02affe38fa10d133342bae3f69f49929a84", null ],
       [ "VK_KP_INSERT", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02ad79bc3cd7115d844622174609074d4f7", null ],
@@ -235,7 +240,8 @@ var fabutils_8h =
       [ "VK_CARET_E", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aa25a81fdcaedc350f498b1646b580112", null ],
       [ "VK_CARET_I", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a5fee424466feade4c10c540200bde1e9", null ],
       [ "VK_CARET_O", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a8ec3804bfb404833d93119073bf7006d", null ],
-      [ "VK_CARET_U", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84", null ]
+      [ "VK_CARET_U", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a2ab50922b693792827e3a542ee839c84", null ],
+      [ "VK_ASCII", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6", null ]
     ] ],
     [ "replacePathSep", "fabutils_8h.html#ae290b4bddb18288d7c1ab44d059a4d32", null ],
     [ "UARTConf", "fabutils_8h.html#a8658ffb2de6d8bd0d22fc9ca1bcf3a91", null ],

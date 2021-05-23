@@ -1,12 +1,8 @@
 var searchData=
 [
-  ['vga16controller_2eh',['vga16controller.h',['../vga16controller_8h.html',1,'']]],
-  ['vga2controller_2eh',['vga2controller.h',['../vga2controller_8h.html',1,'']]],
-  ['vga4controller_2eh',['vga4controller.h',['../vga4controller_8h.html',1,'']]],
-  ['vga8controller_2eh',['vga8controller.h',['../vga8controller_8h.html',1,'']]],
-  ['vgabasecontroller_2eh',['vgabasecontroller.h',['../vgabasecontroller_8h.html',1,'']]],
-  ['vgacontroller_2eh',['vgacontroller.h',['../vgacontroller_8h.html',1,'']]],
-  ['vgadirectcontroller_2eh',['vgadirectcontroller.h',['../vgadirectcontroller_8h.html',1,'']]],
-  ['vgapalettedcontroller_2eh',['vgapalettedcontroller.h',['../vgapalettedcontroller_8h.html',1,'']]],
-  ['vgatextcontroller_2eh',['vgatextcontroller.h',['../vgatextcontroller_8h.html',1,'']]]
+  ['terminal_2eh',['terminal.h',['../terminal_8h.html',1,'']]],
+  ['terminfo_2eh',['terminfo.h',['../terminfo_8h.html',1,'']]],
+  ['tftcontrollergeneric_2eh',['TFTControllerGeneric.h',['../_t_f_t_controller_generic_8h.html',1,'']]],
+  ['tftcontrollerspecif_2eh',['TFTControllerSpecif.h',['../_t_f_t_controller_specif_8h.html',1,'']]],
+  ['tsi2c_2eh',['tsi2c.h',['../tsi2c_8h.html',1,'']]]
 ];

@@ -1,7 +1,13 @@
 var searchData=
 [
-  ['native',['Native',['../group___enumerations_gafe919d7a7aeba256337f0fc494cf7221.html#ggafe919d7a7aeba256337f0fc494cf7221a925641e0b76c28cc940e8f3ca178d826',1,'fabgl']]],
-  ['none',['None',['../group___enumerations_ga8ac9813c9c9df8a1e7f6ec66b346f08e.html#gga8ac9813c9c9df8a1e7f6ec66b346f08ea6adf97f83acf6453d4a6a4b1070f3754',1,'fabgl::None()'],['../group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#ggaae85628862e3db5a13e7c21a90589c1da6adf97f83acf6453d4a6a4b1070f3754',1,'fabgl::None()'],['../group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#gga6c3316022eddc73875d854fcf43e61aaa6adf97f83acf6453d4a6a4b1070f3754',1,'fabgl::None()'],['../group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a6adf97f83acf6453d4a6a4b1070f3754',1,'fabgl::None()']]],
-  ['normal',['Normal',['../group___enumerations_ga56be86abe812065345408e6741aa1e37.html#gga56be86abe812065345408e6741aa1e37a960b44c579bc2f6818d2daaf9e4c16f0',1,'fabgl']]],
-  ['novirtualkeys',['NoVirtualKeys',['../group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#gga5d7071ad7a22fa20e52ba3e855cb4cffadaa64f7602ad3caa98f09799e3e683b1',1,'fabgl']]]
+  ['m2keyboard',['M2Keyboard',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948facd84073eb44e25384b4dfab30e81d441',1,'fabgl']]],
+  ['magenta',['Magenta',['../group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab5059a620e2c7dc57556b1e275c2f9bc',1,'fabgl']]],
+  ['mask',['Mask',['../group___enumerations_gafe919d7a7aeba256337f0fc494cf7221.html#ggafe919d7a7aeba256337f0fc494cf7221a4a18312b5b75f549d5551e5912ad6ebf',1,'fabgl']]],
+  ['mf2keyboardwithtranslation',['MF2KeyboardWithTranslation',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948faf538f76f49a8e36da8fc9c30ded61260',1,'fabgl']]],
+  ['mono',['Mono',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276a5d9b47bd3b65072e0d5daf55f01da086',1,'fabgl']]],
+  ['mouse5buttons',['Mouse5Buttons',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948faf1d7e419c78438778a0aff8adab862b5',1,'fabgl']]],
+  ['mouseport0',['MousePort0',['../group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4',1,'fabgl']]],
+  ['mouseport1',['MousePort1',['../group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa0e528e35537f6d49cb912f4bcaaf5c12',1,'fabgl']]],
+  ['mousestandard',['MouseStandard',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa587da6d8dc703c1519c5f5878034d791',1,'fabgl']]],
+  ['mousewithscrollwheel',['MouseWithScrollWheel',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa7b1bf224080b249a7253c8c26f56b13f',1,'fabgl']]]
 ];

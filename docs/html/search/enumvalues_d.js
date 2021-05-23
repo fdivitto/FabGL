@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['palette16',['PALETTE16',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276a2305a7e1bcc1d10f990698ed574363ac',1,'fabgl']]],
-  ['palette2',['PALETTE2',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276ab4b9dd494783e3c156b72596ce15ff17',1,'fabgl']]],
-  ['palette4',['PALETTE4',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276a3ad9f499f52bd79815ec9efb1c0a11ad',1,'fabgl']]],
-  ['palette8',['PALETTE8',['../group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#gga03403b592cc00776d70bc5ad6c177276a2c2e91aa769aa411b0db57883d167601',1,'fabgl']]],
-  ['parent',['Parent',['../group___enumerations_gae0a6bb526c02e563aee7e7ccd4df7212.html#ggae0a6bb526c02e563aee7e7ccd4df7212a30269022e9d8f51beaabb52e5d0de2b7',1,'fabgl']]]
+  ['oldatkeyboard',['OldATKeyboard',['../group___enumerations_gab1e29a3412c837d0e4e7599473e8948f.html#ggab1e29a3412c837d0e4e7599473e8948fa45e3ba6c41a9110f3478fff0794acde1',1,'fabgl']]],
+  ['osborne',['Osborne',['../group___enumerations_ga67edd9a04814c247a553dfde047e6f62.html#gga67edd9a04814c247a553dfde047e6f62a108a576e87babb484f7af94772834609',1,'fabgl']]],
+  ['output',['Output',['../group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#gga8389ac8ebb8a33d21364f84ddfa64c00a29c2c02a361c9d7028472e5d92cd4a54',1,'fabgl']]]
 ];

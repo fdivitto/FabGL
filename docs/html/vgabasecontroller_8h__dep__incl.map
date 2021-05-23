@@ -1,11 +1,37 @@
 <map id="vgabasecontroller.h" name="vgabasecontroller.h">
-<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="12,79,120,104"/>
-<area shape="rect" id="node5" href="$vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="144,79,284,104"/>
-<area shape="rect" id="node6" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="348,79,504,104"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="255,225,317,251"/>
-<area shape="rect" id="node4" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="24,152,153,177"/>
-<area shape="rect" id="node7" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="228,152,344,177"/>
-<area shape="rect" id="node8" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="368,152,484,177"/>
-<area shape="rect" id="node9" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="508,152,624,177"/>
-<area shape="rect" id="node10" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="647,152,770,177"/>
+<area shape="rect" id="node2" href="$vgacontroller_8h.html" title="This file contains fabgl::VGAController definition. " alt="" coords="89,155,195,181"/>
+<area shape="rect" id="node22" href="$vgadirectcontroller_8h.html" title="This file contains fabgl::VGADirectController definition. " alt="" coords="339,80,478,107"/>
+<area shape="rect" id="node24" href="$vgabasecontroller_8cpp_source.html" title="vgabasecontroller.cpp" alt="" coords="777,80,925,107"/>
+<area shape="rect" id="node25" href="$vgapalettedcontroller_8h.html" title="This file contains fabgl::VGAPalettedController definition. " alt="" coords="601,80,753,107"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="609,304,670,331"/>
+<area shape="rect" id="node18" href="$vgatextcontroller_8h.html" title="This file contains fabgl::VGATextController definition. " alt="" coords="13,229,141,256"/>
+<area shape="rect" id="node20" href="$fabutils_8cpp_source.html" title="fabutils.cpp" alt="" coords="411,229,500,256"/>
+<area shape="rect" id="node21" href="$vgacontroller_8cpp_source.html" title="vgacontroller.cpp" alt="" coords="165,229,285,256"/>
+<area shape="rect" id="node4" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="237,379,361,405"/>
+<area shape="rect" id="node6" href="$i8042_8h_source.html" title="i8042.h" alt="" coords="393,379,457,405"/>
+<area shape="rect" id="node8" href="$i8086_8h_source.html" title="i8086.h" alt="" coords="495,379,559,405"/>
+<area shape="rect" id="node10" href="$_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="591,379,687,405"/>
+<area shape="rect" id="node12" href="$_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="719,379,803,405"/>
+<area shape="rect" id="node14" href="$_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="838,379,921,405"/>
+<area shape="rect" id="node16" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="957,379,1039,405"/>
+<area shape="rect" id="node5" href="$graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="215,453,354,480"/>
+<area shape="rect" id="node7" href="$i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="379,453,457,480"/>
+<area shape="rect" id="node9" href="$i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="481,453,560,480"/>
+<area shape="rect" id="node11" href="$_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="584,453,695,480"/>
+<area shape="rect" id="node13" href="$_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="719,453,818,480"/>
+<area shape="rect" id="node15" href="$_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="842,453,938,480"/>
+<area shape="rect" id="node17" href="$_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="963,453,1060,480"/>
+<area shape="rect" id="node19" href="$vgatextcontroller_8cpp_source.html" title="vgatextcontroller.cpp" alt="" coords="5,304,148,331"/>
+<area shape="rect" id="node23" href="$vgadirectcontroller_8cpp_source.html" title="vgadirectcontroller.cpp" alt="" coords="219,155,371,181"/>
+<area shape="rect" id="node26" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition. " alt="" coords="481,155,595,181"/>
+<area shape="rect" id="node28" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition. " alt="" coords="620,155,733,181"/>
+<area shape="rect" id="node30" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition. " alt="" coords="948,155,1061,181"/>
+<area shape="rect" id="node32" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition. " alt="" coords="1086,155,1206,181"/>
+<area shape="rect" id="node36" href="$vgapalettedcontroller_8cpp_source.html" title="vgapalettedcontroller.cpp" alt="" coords="757,155,924,181"/>
+<area shape="rect" id="node27" href="$vga2controller_8cpp_source.html" title="vga2controller.cpp" alt="" coords="576,229,703,256"/>
+<area shape="rect" id="node29" href="$vga4controller_8cpp_source.html" title="vga4controller.cpp" alt="" coords="779,229,905,256"/>
+<area shape="rect" id="node31" href="$vga8controller_8cpp_source.html" title="vga8controller.cpp" alt="" coords="981,229,1108,256"/>
+<area shape="rect" id="node33" href="$inputbox_8h.html" title="This file contains the InputBox class. " alt="" coords="1183,229,1266,256"/>
+<area shape="rect" id="node35" href="$vga16controller_8cpp_source.html" title="vga16controller.cpp" alt="" coords="1291,229,1425,256"/>
+<area shape="rect" id="node34" href="$inputbox_8cpp_source.html" title="inputbox.cpp" alt="" coords="1177,304,1273,331"/>
 </map>

@@ -1,5 +1,6 @@
 var classfabgl_1_1_v_g_a_direct_controller =
 [
+    [ "VGADirectController", "classfabgl_1_1_v_g_a_direct_controller_a8a53693107c15d147a4cbae5e6c38192.html#a8a53693107c15d147a4cbae5e6c38192", null ],
     [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#a406a206bc0e13ee2a48591fcfdae6e22", null ],
     [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#ada2833a4d6b69eb90c28a273438735d6", null ],
     [ "begin", "classfabgl_1_1_v_g_a_direct_controller.html#ab0bdf5cca484fb2ba637c39384b27fb2", null ],
@@ -19,12 +20,14 @@ var classfabgl_1_1_v_g_a_direct_controller =
     [ "processPrimitives", "classfabgl_1_1_v_g_a_direct_controller.html#a94887c6019244300620e71d52e61a554", null ],
     [ "refreshSprites", "classfabgl_1_1_v_g_a_direct_controller.html#aeb689cfc2364a4d66e3ac3368146c70d", null ],
     [ "removeSprites", "classfabgl_1_1_v_g_a_direct_controller.html#ad968eec19f2e3663a5431b96894636df", null ],
+    [ "run", "classfabgl_1_1_v_g_a_direct_controller_a13a43e6d814de94978c515cb084873b1.html#a13a43e6d814de94978c515cb084873b1", null ],
     [ "setDrawScanlineCallback", "classfabgl_1_1_v_g_a_direct_controller_a18497a8f427eca28ee4bc4fed3a76508.html#a18497a8f427eca28ee4bc4fed3a76508", null ],
     [ "setMouseCursor", "classfabgl_1_1_v_g_a_direct_controller.html#a94fd39f8c9245ed51545f9dd6ce7f6ee", null ],
     [ "setMouseCursor", "classfabgl_1_1_v_g_a_direct_controller.html#a43a95ed39cce3e065407d1e7a30b2f4f", null ],
     [ "setMouseCursorPos", "classfabgl_1_1_v_g_a_direct_controller.html#ae0897f2355f7462b5ab003083418e3b4", null ],
     [ "setRawPixel", "classfabgl_1_1_v_g_a_direct_controller.html#a6922854f04ed5c95f625becd5ef59df2", null ],
     [ "setResolution", "classfabgl_1_1_v_g_a_direct_controller.html#a2ac60f74ade23bfba42ef0985635589d", null ],
+    [ "setScanlinesPerCallBack", "classfabgl_1_1_v_g_a_direct_controller_a22746803b0a00aea677779c4994b5980.html#a22746803b0a00aea677779c4994b5980", null ],
     [ "setSprites", "classfabgl_1_1_v_g_a_direct_controller.html#a75ba732cc6ae90f53757b588f6c75d7e", null ],
     [ "shrinkScreen", "classfabgl_1_1_v_g_a_direct_controller.html#a770ea50d044c8c792185fbcb5b766736", null ]
 ];

@@ -1,0 +1,16 @@
+<map id="fabgl.h" name="fabgl.h">
+<area shape="rect" id="node2" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition. " alt="" coords="27,80,151,107"/>
+<area shape="rect" id="node4" href="$i8042_8h_source.html" title="i8042.h" alt="" coords="183,80,247,107"/>
+<area shape="rect" id="node6" href="$i8086_8h_source.html" title="i8086.h" alt="" coords="285,80,349,107"/>
+<area shape="rect" id="node8" href="$_m_c146818_8h_source.html" title="MC146818.h" alt="" coords="381,80,477,107"/>
+<area shape="rect" id="node10" href="$_p_i_c8259_8h_source.html" title="PIC8259.h" alt="" coords="509,80,593,107"/>
+<area shape="rect" id="node12" href="$_p_i_t8253_8h_source.html" title="PIT8253.h" alt="" coords="628,80,711,107"/>
+<area shape="rect" id="node14" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition. " alt="" coords="747,80,829,107"/>
+<area shape="rect" id="node3" href="$graphicsadapter_8cpp_source.html" title="graphicsadapter.cpp" alt="" coords="5,155,144,181"/>
+<area shape="rect" id="node5" href="$i8042_8cpp_source.html" title="i8042.cpp" alt="" coords="169,155,247,181"/>
+<area shape="rect" id="node7" href="$i8086_8cpp_source.html" title="i8086.cpp" alt="" coords="271,155,350,181"/>
+<area shape="rect" id="node9" href="$_m_c146818_8cpp_source.html" title="MC146818.cpp" alt="" coords="374,155,485,181"/>
+<area shape="rect" id="node11" href="$_p_i_c8259_8cpp_source.html" title="PIC8259.cpp" alt="" coords="509,155,608,181"/>
+<area shape="rect" id="node13" href="$_p_i_t8253_8cpp_source.html" title="PIT8253.cpp" alt="" coords="632,155,728,181"/>
+<area shape="rect" id="node15" href="$_v_i_a6522_8cpp_source.html" title="VIA6522.cpp" alt="" coords="753,155,850,181"/>
+</map>

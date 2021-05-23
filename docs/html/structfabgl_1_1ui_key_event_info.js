@@ -1,5 +1,6 @@
 var structfabgl_1_1ui_key_event_info =
 [
+    [ "ASCII", "structfabgl_1_1ui_key_event_info_a14c28480cb8b82ead8173e043f4fd147.html#a14c28480cb8b82ead8173e043f4fd147", null ],
     [ "CTRL", "structfabgl_1_1ui_key_event_info_a8d39f2f3ea6b8ef4e4684a3507e90609.html#a8d39f2f3ea6b8ef4e4684a3507e90609", null ],
     [ "GUI", "structfabgl_1_1ui_key_event_info_a5bc61b59865bbe0773d5d8e30d0f75ff.html#a5bc61b59865bbe0773d5d8e30d0f75ff", null ],
     [ "LALT", "structfabgl_1_1ui_key_event_info_a47ea40cf04a32cf7688d9cba2348954d.html#a47ea40cf04a32cf7688d9cba2348954d", null ],
