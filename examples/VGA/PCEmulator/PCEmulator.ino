@@ -255,7 +255,7 @@ void setup()
   // uncomment to clear preferences
   //preferences.clear();
 
-  ibox.begin(VGA_640x400_70Hz, 400, 300);
+  ibox.begin(VGA_640x400_70Hz, 400, 300); // VGA_640x400_60Hz as alternative?
   ibox.setBackgroundColor(RGB888(0, 0, 0));
 
   // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env

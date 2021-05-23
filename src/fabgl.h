@@ -112,6 +112,9 @@
  * <CENTER> Installation Tutorial </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
+ * <CENTER> @link VGA/PCEmulator/PCEmulator.ino IBM PC Emulator Example @endlink </CENTER>
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3I1U2nEoxIQ?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * - - -
  * <CENTER> @link VGA/SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
