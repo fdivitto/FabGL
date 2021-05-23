@@ -23,7 +23,7 @@ Audio
 
 SDCard - HSPI
   MOSI  => 17 (12 on TTGO/WROVER)
-  MISO  => 16 (2 on TTGO/WROVER)
+  MISO  => 16 (2 on TTGO, 35 WROVER)
   CLK   => 14
   CS    => 13
 

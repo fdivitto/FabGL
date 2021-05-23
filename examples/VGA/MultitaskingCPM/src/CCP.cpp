@@ -1166,6 +1166,9 @@ bool CCP::cmd_INFO(uint16_t paramsAddr)
   }
   #endif
 
+  m_termCtrl.setForegroundColor(Color::BrightWhite);
+  consoleOut("\r\nPress F1...F12 to change session. Type \"help\" to get command list\r\n");
+
   return true;
 }
 

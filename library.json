@@ -1,6 +1,6 @@
 {
   "name": "FabGL",
-  "keywords": "sprite, terminal, VT100, ANSI, keyboard, mouse, VGA, SSD1306, ILI9341, ST7789, OLED, DS3231, I2S, I2C, game, engine, PS2, graphics, audio, sound, font, arduino, ESP32, display",
+  "keywords": "sprite, terminal, VT100, ANSI, keyboard, mouse, VGA, SSD1306, ILI9341, ST7789, OLED, DS3231, I2S, I2C, game, engine, PS2, graphics, audio, sound, font, arduino, ESP32, display, vic20, emulator, 8086, z80, 6502",
   "description": "VGA Controller, PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Game Engine and ANSI/VT Terminal for the ESP32.",
   "repository":
   {
@@ -16,7 +16,7 @@
       "maintainer": true
     }
   ],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "frameworks": "arduino",
   "platforms": "espressif32"
 }
