@@ -117,7 +117,8 @@ static const char SOUND_BAS[] =       "1 PRINT \"Generates some sounds\"" NL
 
 
 static const char MOUSE_BAS[] =       "1 PRINT \"Shows mouse positions and status\"" NL
-                                      "2 REM" NL
+                                      "2 PRINT \"This program requires Graphics Controller\"" NL
+                                      "3 REM" NL
                                       "100 WIDTH 255" NL
                                       "110 REM Enable mouse" NL
                                       "120 PRINT CHR$(27);\"_H1$\";" NL
@@ -131,6 +132,7 @@ static const char MOUSE_BAS[] =       "1 PRINT \"Shows mouse positions and statu
 
 
 static const char GRAPH_BAS[] =       "1 REM Draws some graphics" NL
+                                      "2 PRINT \"This program requires Graphics Controller\"" NL
                                       "100 WIDTH 255" NL
                                       "105 GOSUB 10000: REM Define functions" NL
                                       "106 REM Disable cursor and clear screen" NL
@@ -225,6 +227,7 @@ static const char GRAPH_BAS[] =       "1 REM Draws some graphics" NL
 
 
 static const char SPRITE_BAS[] =      "1 REM Sprites demo" NL
+                                      "2 PRINT \"This program requires Graphics Controller\"" NL
                                       "100 WIDTH 255" NL
                                       "110 GOSUB 10000: REM Define functions" NL
                                       "120 REM Cursor off" NL
