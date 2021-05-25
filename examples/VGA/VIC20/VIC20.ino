@@ -153,7 +153,7 @@ void copyEmbeddedPrograms()
 {
   auto dir = FileBrowser();
   dir.setDirectory(basepath);
-  if (!dir.exists(EMBDIR)) {
+  if (!dir.exists(EMBDIR, false)) {
     // there isn't a EMBDIR folder, create and populate it
     dir.makeDirectory(EMBDIR);
     dir.changeDirectory(EMBDIR);
@@ -328,7 +328,7 @@ class Menu : public uiApp {
     // programs list
     fileBrowser = new uiFileBrowser(rootWindow(), Point(5, 10), Size(140, 290), true, STYLE_FILEBROWSER);
     fileBrowser->setDirectory(basepath);  // set absolute path
-    fileBrowser->changeDirectory( fileBrowser->content().exists(DOWNDIR) ? DOWNDIR : EMBDIR ); // set relative path
+    fileBrowser->changeDirectory( fileBrowser->content().exists(DOWNDIR, false) ? DOWNDIR : EMBDIR ); // set relative path
     fileBrowser->onChange = [&]() {
       setSelectedProgramConf();
     };
@@ -547,7 +547,7 @@ class Menu : public uiApp {
 
     // setup user directory
     machine->fileBrowser()->setDirectory(basepath);
-    if (!machine->fileBrowser()->exists(USERDIR))
+    if (!machine->fileBrowser()->exists(USERDIR, false))
       machine->fileBrowser()->makeDirectory(USERDIR);
     machine->fileBrowser()->changeDirectory(USERDIR);
 
@@ -781,7 +781,7 @@ class Menu : public uiApp {
   bool downloadURL(char const * URL, char const * filename)
   {
     FileBrowser & dir = fileBrowser->content();
-    if (dir.exists(filename)) {
+    if (dir.exists(filename, false)) {
       return true;
     }
     bool success = false;

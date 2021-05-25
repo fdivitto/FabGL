@@ -114,7 +114,7 @@ void setup()
   FileBrowser fb;
 
   fb.setDirectory(basepath);
-  if (!fb.exists("driveA")) {
+  if (!fb.exists("driveA", false)) {
 
     fb.makeDirectory("driveA");
 
@@ -124,7 +124,7 @@ void setup()
       term->flush();
       // check directory
       fb.setDirectory(driveA_path.c_str());
-      if (!fb.exists(programs[i].path))
+      if (!fb.exists(programs[i].path, false))
         fb.makeDirectory(programs[i].path);
       fb.changeDirectory(programs[i].path);
       // copy file
@@ -140,7 +140,7 @@ void setup()
   }
 
   fb.setDirectory(basepath);
-  if (!fb.exists("driveB"))
+  if (!fb.exists("driveB", false))
     fb.makeDirectory("driveB");
 
   delete term;

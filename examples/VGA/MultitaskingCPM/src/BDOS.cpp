@@ -1939,7 +1939,7 @@ FILE * BDOS::openFile(uint16_t FCBaddr, bool create, bool tempext, int errFunc, 
   FILE * f = nullptr;
 
   if (create) {
-    if (m_fileBrowser.exists(filename))
+    if (m_fileBrowser.exists(filename, false))
       *err = 2;
     else
       f = fopen(fullpath, "w+b");
@@ -2416,7 +2416,7 @@ void BDOS::BDOS_setFileAttributes()
   getFilenameFromFCB(FCBaddr, filename);
   setBrowserAtDrive(drive);
 
-  if (m_fileBrowser.exists(filename)) {
+  if (m_fileBrowser.exists(filename, false)) {
 
     // sets last record byte count?
     if ((m_HAL->readByte(FCBaddr + FCB_F6) & 0x80) != 0 && m_HAL->readByte(FCBaddr + FCB_CR) > 0) {
@@ -2912,7 +2912,7 @@ void BDOS::BDOS_truncateFile()
   getFilenameFromFCB(FCBaddr, filename);
   setBrowserAtDrive(drive);
 
-  if (m_fileBrowser.exists(filename)) {
+  if (m_fileBrowser.exists(filename, false)) {
 
     // copy "absolute pos"+128 bytes
     // round to blocks (newlen should be already 128 bytes aligned)

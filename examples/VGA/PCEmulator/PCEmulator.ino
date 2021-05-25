@@ -297,7 +297,7 @@ void setup()
   char const * filenameDiskC = nullptr;
   if (diskConfs[idx].diskA_URL) {
     filenameDiskA = strrchr(diskConfs[idx].diskA_URL, '/') + 1;
-    disksExist = fb.exists(filenameDiskA);
+    disksExist = fb.exists(filenameDiskA, false);
     if (!disksExist) {
       // disk A doesn't exist, download
       auto file = fb.openFile(filenameDiskA, "wb");
@@ -309,7 +309,7 @@ void setup()
   }
   if (diskConfs[idx].diskC_URL) {
     filenameDiskC = strrchr(diskConfs[idx].diskC_URL, '/') + 1;
-    disksExist = disksExist && fb.exists(filenameDiskC);
+    disksExist = disksExist && fb.exists(filenameDiskC, false);
     if (!disksExist) {
       // disk C doesn't exist, download
       auto file = fb.openFile(filenameDiskC, "wb");

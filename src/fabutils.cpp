@@ -1015,7 +1015,7 @@ char * FileBrowser::createTempFilename()
     for (int i = 0; i < FLEN; ++i)
       name[i] = 65 + (rand() % 26);
     sprintf(ret, "%s/%s.TMP", m_dir, name);
-    if (!exists(name))
+    if (!exists(name, false))
       return ret;
   }
 }
