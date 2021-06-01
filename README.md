@@ -8,6 +8,25 @@
 
 You can support development by purchasing my own [development board](https://www.tindie.com/products/18910/) and [Serial Terminal](https://www.tindie.com/products/21107/).
 
+=================================================================================
+
+License terms:
+
+Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
+
+Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+
+All rights reserved.
+
+This library and related software is available under GPL v3 or commercial license. 
+
+It is always free for students, hobbyists, professors and researchers.
+
+It is not-free if embedded as firmware in commercial boards.
+
+
+=================================================================================
+
 This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
 FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (for direct VGA output and for I2C and SPI LCD drivers).
