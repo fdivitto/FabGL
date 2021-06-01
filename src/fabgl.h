@@ -3,7 +3,14 @@
   Copyright (c) 2019-2021 Fabrizio Di Vittorio.
   All rights reserved.
 
-  This file is part of FabGL Library.
+  This library and related software is available under GPL v3 or commercial license. It is always free for students, hobbyists, professors and researchers.
+  It is not-free if embedded as firmware in commercial boards.
+
+
+* Contact for commercial license: fdivitto2013@gmail.com
+
+
+* GPL license version 3, for non-commercial use:
 
   FabGL is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -155,24 +162,31 @@
  * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3UevsxMQZ5w?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  *
- * Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com> <br>
- * Copyright (c) 2019-2021 Fabrizio Di Vittorio. <br>
- * All rights reserved. <br>
  *
- * This file is part of FabGL Library.
+ * Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
+ * Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+ * All rights reserved.
  *
- * FabGL is free software: you can redistribute it and/or modify<br>
- * it under the terms of the GNU General Public License as published by<br>
- * the Free Software Foundation, either version 3 of the License, or<br>
- * (at your option) any later version.<br>
+ * This library and related software is available under GPL v3 or commercial license. It is always free for students, hobbyists, professors and researchers.
+ * It is not-free if embedded as firmware in commercial boards.
  *
- * FabGL is distributed in the hope that it will be useful,<br>
- * but WITHOUT ANY WARRANTY; without even the implied warranty of<br>
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br>
- * GNU General Public License for more details.<br>
+ * - Contact for commercial license: fdivitto2013@gmail.com
  *
- * You should have received a copy of the GNU General Public License<br>
- * along with FabGL.  If not, see <http://www.gnu.org/licenses/>.<br>
+ * - GPL license version 3, for non-commercial use:
+ *
+ * FabGL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * FabGL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with FabGL.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 
