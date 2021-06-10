@@ -111,16 +111,19 @@ extern const KeyboardLayout ItalianLayout;
 /** @brief Spanish keyboard layout */
 extern const KeyboardLayout SpanishLayout;
 
+/** @brief French keyboard layout */
+extern const KeyboardLayout FrenchLayout;
 
 struct SupportedLayouts {
-  static int count()               { return 5; }
+  static int count()               { return 6; }
   static char const * * names() {
     static char const * NAMES[] =  {
         GermanLayout.desc,
         ItalianLayout.desc,
         UKLayout.desc,
         USLayout.desc,
-        SpanishLayout.desc };
+        SpanishLayout.desc,
+        FrenchLayout.desc };
     return NAMES;
   }
   static char const * * shortNames() {
@@ -129,7 +132,8 @@ struct SupportedLayouts {
         ItalianLayout.name,
         UKLayout.name,
         USLayout.name,
-        SpanishLayout.name };
+        SpanishLayout.name,
+        FrenchLayout.name };
     return SNAMES;
   }
   static const KeyboardLayout * * layouts() {
@@ -138,7 +142,8 @@ struct SupportedLayouts {
         &ItalianLayout,
         &UKLayout,
         &USLayout,
-        &SpanishLayout };
+        &SpanishLayout,
+        &FrenchLayout };
     return LAYOUTS;
   }
 };
