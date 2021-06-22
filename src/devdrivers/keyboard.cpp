@@ -439,6 +439,12 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
     case VK_SCROLLLOCK:
       return m_SCROLLLOCK ? ASCII_XOFF : ASCII_XON;
 
+    case VK_SQUARE:
+      return 0xfd; // '²'
+
+    case VK_MU:
+      return 0xe6; // 'µ'
+
     // spanish and catalan symbols
 
     case VK_CEDILLA_C:

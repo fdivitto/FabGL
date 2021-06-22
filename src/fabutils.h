@@ -1199,8 +1199,6 @@ enum VirtualKey {
   VK_UMLAUT_o,        /**< Umlaut 'o': ö */
   VK_UMLAUT_a,        /**< Umlaut 'a': ä */
  
-  // For spanish keyboard layout
-  
   VK_CEDILLA_C,       /**< Cedilla 'C': Ç */
   
   VK_TILDE_n,		      /**< Lower case letter: 'ñ' */
@@ -1249,6 +1247,10 @@ enum VirtualKey {
   VK_CARET_I,		      /**< Caret 'I': Î */
   VK_CARET_O,		      /**< Caret 'O': Ô */
   VK_CARET_U,		      /**< Caret 'U': Û */
+
+  VK_SQUARE,          /**< Square   : '²' */
+  VK_CURRENCY,        /**< Currency : '¤' */
+  VK_MU,              /**< Mu       : 'µ' */
 
   VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
   
