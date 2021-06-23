@@ -133,12 +133,13 @@ def savefontFixed_h(f, file, fname):
   file.write("  .weight    = {},\n".format(f.weight))
   file.write("  .charset   = {},\n".format(f.charset))
   file.write("  .data      = FONT_{}_DATA,\n".format(fname))
-  file.write("  .chptr     = NULL,\n");
+  file.write("  .chptr     = NULL,\n")
+  file.write("  .codepage  = 437,\n")
   file.write("};\n\n")
   file.write("#else\n\n")
   file.write("extern const FontInfo FONT_{};\n\n".format(fname))
   file.write("#endif\n\n")
-  file.write("}\n");
+  file.write("}\n")
 
 
 def savefontVar_h(f, file, fname):
@@ -199,9 +200,10 @@ def savefontVar_h(f, file, fname):
   file.write("  .weight    = {},\n".format(f.weight))
   file.write("  .charset   = {},\n".format(f.charset))
   file.write("  .data      = FONT_{}_DATA,\n".format(fname))
-  file.write("  .chptr     = FONT_{}_CHPTR,\n".format(fname));
-  file.write("};\n\n");
-  file.write("}\n");
+  file.write("  .chptr     = FONT_{}_CHPTR,\n".format(fname))
+  file.write("  .codepage  = 1252,\n")
+  file.write("};\n\n")
+  file.write("}\n")
 
 
 

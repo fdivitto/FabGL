@@ -277,6 +277,7 @@ extern const FontInfo FONT_BIGSERIF_8x14 = {
   .charset   = 255,
   .data      = FONT_BIGSERIF_8x14_DATA,
   .chptr     = nullptr,
+  .codepage  = 1252,
 };
 
 #else

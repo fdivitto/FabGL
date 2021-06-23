@@ -277,6 +277,7 @@ extern const FontInfo FONT_SANSERIF_8x16 = {
   .charset   = 255,
   .data      = FONT_SANSERIF_8x16_DATA,
   .chptr     = nullptr,
+  .codepage  = 1252,
 };
 
 #else

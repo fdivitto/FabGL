@@ -277,6 +277,7 @@ extern const FontInfo FONT_4x6 = {
   .charset   = 255,
   .data      = FONT_4x6_DATA,
   .chptr     = nullptr,
+  .codepage  = 437,
 };
 
 #else

@@ -277,6 +277,7 @@ extern const FontInfo FONT_9x18 = {
   .charset   = 44,
   .data      = FONT_9x18_DATA,
   .chptr     = NULL,
+  .codepage  = 1252,
 };
 
 #else

@@ -299,6 +299,7 @@ extern const FontInfo FONT_std_16 = {
   .charset   = 0,
   .data      = FONT_std_16_DATA,
   .chptr     = FONT_std_16_CHPTR,
+  .codepage  = 1252,
 };
 
 #else

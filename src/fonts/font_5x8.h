@@ -277,6 +277,7 @@ extern const FontInfo FONT_5x8 = {
   .charset   = 44,
   .data      = FONT_5x8_DATA,
   .chptr     = NULL,
+  .codepage  = 1252,
 };
 
 #else

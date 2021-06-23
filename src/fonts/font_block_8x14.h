@@ -277,6 +277,7 @@ extern const FontInfo FONT_BLOCK_8x14 = {
   .charset   = 255,
   .data      = FONT_BLOCK_8x14_DATA,
   .chptr     = nullptr,
+  .codepage  = 1252,
 };
 
 #else

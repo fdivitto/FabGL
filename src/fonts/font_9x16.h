@@ -277,6 +277,7 @@ const FontInfo FONT_9x16 = {
   .charset   = 255,
   .data      = FONT_9x16_DATA,
   .chptr     = NULL,
+  .codepage  = 437,
 };
 
 #else

@@ -298,6 +298,7 @@ struct FontInfo {
   //   character width. "chptr" is filled with an array of pointers to the single characters.
   uint8_t const *  data;
   uint32_t const * chptr;  // used only for variable width fonts (FONTINFOFLAGS_VARWIDTH = 1)
+  uint16_t codepage;
 };
 
 
