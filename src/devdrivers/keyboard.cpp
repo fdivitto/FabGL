@@ -238,13 +238,31 @@ char const * Keyboard::virtualKeyToString(VirtualKey virtualKey)
 // -1 = virtual key cannot be translated to ASCII
 int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
 {
-  switch (virtualKey) {
+  VirtualKeyItem item;
+  item.vk         = virtualKey;
+  item.down       = true;
+  item.CTRL       = m_CTRL;
+  item.LALT       = m_LALT;
+  item.RALT       = m_RALT;
+  item.SHIFT      = m_SHIFT;
+  item.GUI        = m_GUI;
+  item.CAPSLOCK   = m_CAPSLOCK;
+  item.NUMLOCK    = m_NUMLOCK;
+  item.SCROLLLOCK = m_SCROLLLOCK;
+  return virtualKeyToASCII(item);
+}
+
+
+// -1 = virtual key cannot be translated to ASCII
+int Keyboard::virtualKeyToASCII(VirtualKeyItem const & item)
+{
+  switch (item.vk) {
     case VK_SPACE:
-      return m_CTRL ? ASCII_NUL : ASCII_SPC;   // CTRL SPACE = NUL, otherwise 0x20
+      return item.CTRL ? ASCII_NUL : ASCII_SPC;   // CTRL SPACE = NUL, otherwise 0x20
 
     case VK_0 ... VK_9:
-      if (m_CTRL) {
-        switch (virtualKey) {
+      if (item.CTRL) {
+        switch (item.vk) {
           case VK_2:
             return ASCII_NUL;  // CTRL + 2 = NUL
           case VK_6:
@@ -254,16 +272,16 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
         }
       }
       // otherwise digits
-      return virtualKey - VK_0 + '0';
+      return item.vk - VK_0 + '0';
 
     case VK_KP_0 ... VK_KP_9:
-      return virtualKey - VK_KP_0 + '0';
+      return item.vk - VK_KP_0 + '0';
 
     case VK_a ... VK_z:
-      return virtualKey - VK_a + (m_CTRL ? ASCII_SOH : 'a');  // CTRL + letter = SOH (a) ...SUB (z), otherwise the lower letter
+      return item.vk - VK_a + (item.CTRL ? ASCII_SOH : 'a');  // CTRL + letter = SOH (a) ...SUB (z), otherwise the lower letter
 
     case VK_A ... VK_Z:
-      return virtualKey - VK_A + (m_CTRL ? ASCII_SOH : 'A');  // CTRL + letter = SOH (A) ...SUB (Z), otherwise the lower letter
+      return item.vk - VK_A + (item.CTRL ? ASCII_SOH : 'A');  // CTRL + letter = SOH (A) ...SUB (Z), otherwise the lower letter
 
     case VK_GRAVE_a:
       return 0xE0;  // à
@@ -314,7 +332,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '=';
 
     case VK_MINUS:
-      return m_CTRL ? ASCII_US : '-'; // CTRL - = US, otherwise '-'
+      return item.CTRL ? ASCII_US : '-'; // CTRL - = US, otherwise '-'
 
     case VK_KP_MINUS:
       return '-';
@@ -328,7 +346,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '*';
 
     case VK_BACKSLASH:
-      return m_CTRL ? ASCII_FS : '\\';  // CTRL \ = FS, otherwise '\'
+      return item.CTRL ? ASCII_FS : '\\';  // CTRL \ = FS, otherwise '\'
 
     case VK_KP_DIVIDE:
     case VK_SLASH:
@@ -378,7 +396,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '!';
 
     case VK_QUESTION:
-      return m_CTRL ? ASCII_US : '?'; // CTRL ? = US, otherwise '?'
+      return item.CTRL ? ASCII_US : '?'; // CTRL ? = US, otherwise '?'
 
     case VK_LEFTBRACE:
       return '{';
@@ -387,10 +405,10 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return '}';
 
     case VK_LEFTBRACKET:
-      return m_CTRL ? ASCII_ESC : '['; // CTRL [ = ESC, otherwise '['
+      return item.CTRL ? ASCII_ESC : '['; // CTRL [ = ESC, otherwise '['
 
     case VK_RIGHTBRACKET:
-      return m_CTRL ? ASCII_GS : ']';  // CTRL ] = GS, otherwise ']'
+      return item.CTRL ? ASCII_GS : ']';  // CTRL ] = GS, otherwise ']'
 
     case VK_LEFTPAREN:
       return '(';
@@ -414,13 +432,13 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
       return 0xA7;  // "§"
 
     case VK_TILDE:
-      return m_CTRL ? ASCII_RS : '~';   // CTRL ~ = RS, otherwise "~"
+      return item.CTRL ? ASCII_RS : '~';   // CTRL ~ = RS, otherwise "~"
 
     case VK_NEGATION:
       return 0xAA;  // "¬"
 
     case VK_BACKSPACE:
-      return m_CTRL ? ASCII_DEL : ASCII_BS;  // CTRL BACKSPACE = DEL, otherwise BS
+      return item.CTRL ? ASCII_DEL : ASCII_BS;  // CTRL BACKSPACE = DEL, otherwise BS
 
     case VK_DELETE:
     case VK_KP_DELETE:
@@ -428,16 +446,16 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
 
     case VK_RETURN:
     case VK_KP_ENTER:
-      return m_CTRL ? ASCII_LF : ASCII_CR;  // CTRL ENTER = LF, otherwise CR
+      return item.CTRL ? ASCII_LF : ASCII_CR;  // CTRL ENTER = LF, otherwise CR
 
     case VK_TAB:
-      return m_CTRL || m_SHIFT ? -1 : ASCII_HT;
+      return item.CTRL || item.SHIFT ? -1 : ASCII_HT;
 
     case VK_ESCAPE:
       return ASCII_ESC;
 
     case VK_SCROLLLOCK:
-      return m_SCROLLLOCK ? ASCII_XOFF : ASCII_XON;
+      return item.SCROLLLOCK ? ASCII_XOFF : ASCII_XON;
 
     case VK_SQUARE:
       return 0xfd; // '²'
@@ -692,15 +710,16 @@ VirtualKey Keyboard::VKtoAlternateVK(VirtualKey in_vk, bool down, KeyboardLayout
 
 bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
 {
-  item->vk       = VK_NONE;
-  item->down     = true;
-  item->CTRL     = m_CTRL;
-  item->LALT     = m_LALT;
-  item->RALT     = m_RALT;
-  item->SHIFT    = m_SHIFT;
-  item->GUI      = m_GUI;
-  item->CAPSLOCK = m_CAPSLOCK;
-  item->NUMLOCK  = m_NUMLOCK;
+  item->vk         = VK_NONE;
+  item->down       = true;
+  item->CTRL       = m_CTRL;
+  item->LALT       = m_LALT;
+  item->RALT       = m_RALT;
+  item->SHIFT      = m_SHIFT;
+  item->GUI        = m_GUI;
+  item->CAPSLOCK   = m_CAPSLOCK;
+  item->NUMLOCK    = m_NUMLOCK;
+  item->SCROLLLOCK = m_SCROLLLOCK;
 
   uint8_t * scode = item->scancode;
 
@@ -812,7 +831,7 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
     *(++scode) = 0;
 
   // fill ASCII field
-  int ascii = virtualKeyToASCII(item->vk);
+  int ascii = virtualKeyToASCII(*item);
   item->ASCII = ascii > -1 ? ascii : 0;
 
   return item->vk != VK_NONE;
@@ -852,6 +871,7 @@ void Keyboard::injectVirtualKey(VirtualKey virtualKey, bool keyDown, bool insert
   item.GUI         = m_GUI;
   item.CAPSLOCK    = m_CAPSLOCK;
   item.NUMLOCK     = m_NUMLOCK;
+  item.SCROLLLOCK  = m_SCROLLLOCK;
   injectVirtualKey(item, insert);
 }
 
