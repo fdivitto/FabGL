@@ -1260,6 +1260,26 @@ enum VirtualKey {
 };
 
 
+/**
+ * @brief A struct which contains a virtual key, key state and associated scan code
+ */
+struct VirtualKeyItem {
+  VirtualKey vk;              /**< Virtual key */
+  uint8_t    down;            /**< 0 = up, 1 = down */
+  uint8_t    scancode[8];     /**< Keyboard scancode. Ends with zero if length is <8, otherwise gets the entire length (like PAUSE, which is 8 bytes) */
+  uint8_t    ASCII;           /**< ASCII value (0 = if it isn't possible to translate from virtual key) */
+  uint8_t    CTRL       : 1;  /**< CTRL key state at the time of this virtual key event */
+  uint8_t    LALT       : 1;  /**< LEFT ALT key state at the time of this virtual key event */
+  uint8_t    RALT       : 1;  /**< RIGHT ALT key state at the time of this virtual key event */
+  uint8_t    SHIFT      : 1;  /**< SHIFT key state at the time of this virtual key event */
+  uint8_t    GUI        : 1;  /**< GUI key state at the time of this virtual key event */
+  uint8_t    CAPSLOCK   : 1;  /**< CAPSLOCK key state at the time of this virtual key event */
+  uint8_t    NUMLOCK    : 1;  /**< NUMLOCK key state at the time of this virtual key event */
+  uint8_t    SCROLLLOCK : 1;  /**< SCROLLLOCK key state at the time of this virtual key event */
+};
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 // Virtual keys helpers
 
@@ -1285,6 +1305,22 @@ inline bool isGUI(VirtualKey value)
 {
   return value == VK_LGUI || value == VK_RGUI;  
 }
+
+
+/**
+ * @brief Converts virtual key item to ASCII.
+ *
+ * This method converts the specified virtual key to ASCII, if possible.<br>
+ * For example VK_A is converted to 'A' (ASCII 0x41), CTRL  + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces
+ * ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces
+ * ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D),
+ * CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.
+ *
+ * @param virtualKey The virtual key to convert.
+ *
+ * @return The ASCII code of virtual key or -1 if virtual key cannot be translated to ASCII.
+ */
+int virtualKeyToASCII(VirtualKeyItem const & item);
 
 
 

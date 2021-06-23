@@ -1428,5 +1428,346 @@ int CoreUsage::s_busiestCore = FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE;
 ///////////////////////////////////////////////////////////////////////////////////
 
 
+
+///////////////////////////////////////////////////////////////////////////////////
+// virtualKeyToASCII
+
+
+// -1 = virtual key cannot be translated to ASCII
+int virtualKeyToASCII(VirtualKeyItem const & item)
+{
+  switch (item.vk) {
+    case VK_SPACE:
+      return item.CTRL ? ASCII_NUL : ASCII_SPC;   // CTRL SPACE = NUL, otherwise 0x20
+
+    case VK_0 ... VK_9:
+      if (item.CTRL) {
+        switch (item.vk) {
+          case VK_2:
+            return ASCII_NUL;  // CTRL + 2 = NUL
+          case VK_6:
+            return ASCII_RS;   // CTRL + 6 = RS
+          default:
+            return -1;
+        }
+      }
+      // otherwise digits
+      return item.vk - VK_0 + '0';
+
+    case VK_KP_0 ... VK_KP_9:
+      return item.vk - VK_KP_0 + '0';
+
+    case VK_a ... VK_z:
+      return item.vk - VK_a + (item.CTRL ? ASCII_SOH : 'a');  // CTRL + letter = SOH (a) ...SUB (z), otherwise the lower letter
+
+    case VK_A ... VK_Z:
+      return item.vk - VK_A + (item.CTRL ? ASCII_SOH : 'A');  // CTRL + letter = SOH (A) ...SUB (Z), otherwise the lower letter
+
+    case VK_GRAVE_a:
+      return 0xE0;  // à
+
+    case VK_GRAVE_e:
+      return 0xE8;  // è
+
+    case VK_ACUTE_e:
+      return 0xE9;  // é
+
+    case VK_GRAVE_i:
+      return 0xEC;  // ì
+
+    case VK_GRAVE_o:
+      return 0xF2;  // ò
+
+    case VK_GRAVE_u:
+      return 0xF9;  // ù
+
+    case VK_CEDILLA_c:
+      return 0x87;  // ç
+
+    case VK_ESZETT:
+      return 0xDF;  // ß
+
+    case VK_UMLAUT_u:
+      return 0xFC;  // ü
+
+    case VK_UMLAUT_o:
+      return 0xF6;  // ö
+
+    case VK_UMLAUT_a:
+      return 0xE4;  // ä
+
+    case VK_GRAVEACCENT:
+      return 0x60;  // "`"
+
+    case VK_ACUTEACCENT:
+      return '\'';  // 0xB4
+
+    case VK_QUOTE:
+      return '\'';  // "'"
+
+    case VK_QUOTEDBL:
+      return '"';
+
+    case VK_EQUALS:
+      return '=';
+
+    case VK_MINUS:
+      return item.CTRL ? ASCII_US : '-'; // CTRL - = US, otherwise '-'
+
+    case VK_KP_MINUS:
+      return '-';
+
+    case VK_PLUS:
+    case VK_KP_PLUS:
+      return '+';
+
+    case VK_KP_MULTIPLY:
+    case VK_ASTERISK:
+      return '*';
+
+    case VK_BACKSLASH:
+      return item.CTRL ? ASCII_FS : '\\';  // CTRL \ = FS, otherwise '\'
+
+    case VK_KP_DIVIDE:
+    case VK_SLASH:
+      return '/';
+
+    case VK_KP_PERIOD:
+    case VK_PERIOD:
+      return '.';
+
+    case VK_COLON:
+      return ':';
+
+    case VK_COMMA:
+      return ',';
+
+    case VK_SEMICOLON:
+      return ';';
+
+    case VK_AMPERSAND:
+      return '&';
+
+    case VK_VERTICALBAR:
+      return '|';
+
+    case VK_HASH:
+      return '#';
+
+    case VK_AT:
+      return '@';
+
+    case VK_CARET:
+      return '^';
+
+    case VK_DOLLAR:
+      return '$';
+
+    case VK_POUND:
+      return 0xA3;  // '£'
+
+    case VK_EURO:
+      return 0xEE;  // '€' - non 8 bit ascii
+
+    case VK_PERCENT:
+      return '%';
+
+    case VK_EXCLAIM:
+      return '!';
+
+    case VK_QUESTION:
+      return item.CTRL ? ASCII_US : '?'; // CTRL ? = US, otherwise '?'
+
+    case VK_LEFTBRACE:
+      return '{';
+
+    case VK_RIGHTBRACE:
+      return '}';
+
+    case VK_LEFTBRACKET:
+      return item.CTRL ? ASCII_ESC : '['; // CTRL [ = ESC, otherwise '['
+
+    case VK_RIGHTBRACKET:
+      return item.CTRL ? ASCII_GS : ']';  // CTRL ] = GS, otherwise ']'
+
+    case VK_LEFTPAREN:
+      return '(';
+
+    case VK_RIGHTPAREN:
+      return ')';
+
+    case VK_LESS:
+      return '<';
+
+    case VK_GREATER:
+      return '>';
+
+    case VK_UNDERSCORE:
+      return '_';
+
+    case VK_DEGREE:
+      return 0xf8;  // in  ISO/IEC 8859 it should 0xB0, but in code page 437 it is 0xF8
+
+    case VK_SECTION:
+      return 0xA7;  // "§"
+
+    case VK_TILDE:
+      return item.CTRL ? ASCII_RS : '~';   // CTRL ~ = RS, otherwise "~"
+
+    case VK_NEGATION:
+      return 0xAA;  // "¬"
+
+    case VK_BACKSPACE:
+      return item.CTRL ? ASCII_DEL : ASCII_BS;  // CTRL BACKSPACE = DEL, otherwise BS
+
+    case VK_DELETE:
+    case VK_KP_DELETE:
+      return ASCII_DEL;
+
+    case VK_RETURN:
+    case VK_KP_ENTER:
+      return item.CTRL ? ASCII_LF : ASCII_CR;  // CTRL ENTER = LF, otherwise CR
+
+    case VK_TAB:
+      return item.CTRL || item.SHIFT ? -1 : ASCII_HT;
+
+    case VK_ESCAPE:
+      return ASCII_ESC;
+
+    case VK_SCROLLLOCK:
+      return item.SCROLLLOCK ? ASCII_XOFF : ASCII_XON;
+
+    case VK_SQUARE:
+      return 0xfd; // '²'
+
+    case VK_MU:
+      return 0xe6; // 'µ'
+
+    // spanish and catalan symbols
+
+    case VK_CEDILLA_C:
+      return 0x80; // 'Ç'
+
+    case VK_TILDE_n:
+      return 0xA4; // 'ñ'
+
+    case VK_TILDE_N:
+      return 0xA5; // 'Ñ'
+
+    case VK_UPPER_a:
+      return 0xA6; // 'ª'
+
+    case VK_ACUTE_a:
+      return 0xA0; // 'á'
+
+    case VK_ACUTE_o:
+      return 0xA2; // 'ó'
+
+    case VK_ACUTE_u:
+      return 0xA3; // 'ú'
+
+    case VK_UMLAUT_i:
+      return 0x8B; // 'ï'
+
+    case VK_EXCLAIM_INV:
+      return 0xAD; // '¡'
+
+    case VK_QUESTION_INV:
+      return 0xA8; // '¿'
+
+    case VK_ACUTE_A:
+      return 0xB5; // 'Á'
+
+    case VK_ACUTE_E:
+      return 0x90; // 'É'
+
+    case VK_ACUTE_I:
+      return 0xD6; // 'Í'
+
+    case VK_ACUTE_O:
+      return 0xE0; // 'Ó'
+
+    case VK_ACUTE_U:
+      return 0xE9; // 'Ú'
+
+    case VK_GRAVE_A:
+      return 0xB7; // 'À'
+
+    case VK_GRAVE_E:
+      return 0xD4; // 'È'
+
+    case VK_GRAVE_I:
+      return 0xDE; // 'Ì'
+
+    case VK_GRAVE_O:
+      return 0xE3; // 'Ò'
+
+    case VK_GRAVE_U:
+      return 0xEB; // 'Ù'
+
+    case VK_INTERPUNCT:
+      return 0xFA; // '·'
+
+    case VK_DIAERESIS: // '¨'
+      return '"';
+
+    case VK_UMLAUT_e:  // 'ë'
+      return 0xEB;
+
+    case VK_UMLAUT_A:  // 'Ä'
+      return 0XC4;
+
+    case VK_UMLAUT_E:  // 'Ë'
+      return 0XCB;
+
+    case VK_UMLAUT_I:  // 'Ï'
+      return 0XCF;
+
+    case VK_UMLAUT_O:  // 'Ö'
+      return 0XD6;
+
+    case VK_UMLAUT_U:  // 'Ü'
+      return 0XDC;
+
+    case VK_CARET_a:   // 'â'
+      return 0XE2;
+
+    case VK_CARET_e:   // 'ê'
+      return 0XEA;
+
+    case VK_CARET_i:   // 'î'
+      return 0XEE;
+
+    case VK_CARET_o:   // 'ô'
+      return 0xF6;
+
+    case VK_CARET_u:   // 'û'
+      return 0xFC;
+
+    case VK_CARET_A:   // 'Â'
+      return 0XC2;
+
+    case VK_CARET_E:   // 'Ê'
+      return 0XCA;
+
+    case VK_CARET_I:   // 'Î'
+      return 0XCE;
+
+    case VK_CARET_O:   // 'Ô'
+      return 0XD4;
+
+    case VK_CARET_U:   // 'Û'
+      return 0XDB;
+
+    default:
+      return -1;
+  }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
 }
 
