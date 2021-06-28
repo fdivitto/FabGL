@@ -98,6 +98,18 @@ const VirtualKeyToASCII VK2ASCII437[] = {
   { VK_CARET_I,      0x49 },    // Î -> I  (not in cp437)
   { VK_CARET_O,      0x4f },    // Ô -> O  (not in cp437)
   { VK_CARET_U,      0x55 },    // Û -> U  (not in cp437)
+  { VK_TILDE_a,      0x61 },    // ã -> a  (not in cp437)
+  { VK_TILDE_A,      0x41 },    // Ã -> A  (not in cp437)
+  { VK_TILDE_o,      0x6f },    // õ -> o  (not in cp437)
+  { VK_TILDE_O,      0x4f },    // Õ -> O  (not in cp437)
+  { VK_GRAVE_y,      0x79 },    // ỳ -> y  (not in cp437)
+  { VK_GRAVE_Y,      0x59 },    // Ỳ -> Y  (not in cp437)
+  { VK_ACUTE_y,      0x79 },    // ý -> y  (not in cp437)
+  { VK_ACUTE_Y,      0x59 },    // Ý -> Y  (not in cp437)
+  { VK_CARET_y,      0x79 },    // ŷ -> y  (not in cp437)
+  { VK_CARET_Y,      0x59 },    // Ŷ -> Y  (not in cp437)
+  { VK_UMLAUT_y,     0x98 },    // ÿ
+  { VK_UMLAUT_Y,     0x59 },    // Ÿ -> Y  (not in cp437)
 
   { VK_NONE,         0x00 },    // end of table
 };
@@ -170,6 +182,18 @@ const VirtualKeyToASCII VK2ASCII1252[] = {
   { VK_CARET_I,      0xce },    // Î
   { VK_CARET_O,      0xd4 },    // Ô
   { VK_CARET_U,      0xdb },    // Û
+  { VK_TILDE_a,      0xe3 },    // ã
+  { VK_TILDE_A,      0xc3 },    // Ã
+  { VK_TILDE_o,      0xf5 },    // õ
+  { VK_TILDE_O,      0xd5 },    // Õ
+  { VK_GRAVE_y,      0x79 },    // ỳ -> y  (not in cp1252)
+  { VK_GRAVE_Y,      0x59 },    // Ỳ -> Y  (not in cp1252)
+  { VK_ACUTE_y,      0xfd },    // ý
+  { VK_ACUTE_Y,      0xdd },    // Ý
+  { VK_CARET_y,      0x79 },    // ŷ -> y  (not in cp1252)
+  { VK_CARET_Y,      0x59 },    // Ŷ -> Y  (not in cp1252)
+  { VK_UMLAUT_y,     0xff },    // ÿ
+  { VK_UMLAUT_Y,     0x9f },    // Ÿ
 
   { VK_NONE,         0x00 },    // end of table
 };
