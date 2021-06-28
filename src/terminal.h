@@ -874,7 +874,7 @@ struct Stream : public Print{
  *
  * Implements most of common ANSI, VT52, VT100, VT200, VT300, VT420 and VT500 escape codes, like non-CSI codes (RIS, IND, DECID, DECDHL, etc..),<br>
  * like CSI codes (private modes, CUP, TBC, etc..), like CSI-SGR codes (bold, italic, blinking, etc...) and like DCS codes (DECRQSS, etc..).<br>
- * Supports convertion from PS/2 keyboard virtual keys to ANSI or VT codes (keypad, cursor keys, function keys, etc..).<br>
+ * Supports conversion from PS/2 keyboard virtual keys to ANSI or VT codes (keypad, cursor keys, function keys, etc..).<br>
  *
  * Terminal can receive codes to display from Serial Port or it can be controlled directly from the application. In the same way
  * Terminal can send keyboard codes to a Serial Port or directly to the application.<br>

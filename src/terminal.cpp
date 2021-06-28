@@ -749,6 +749,8 @@ void Terminal::loadFont(FontInfo const * font)
   log("loadFont()\n");
   #endif
 
+  int codepage = 0;
+
   if (m_bitmappedDisplayController) {
 
     // bitmapped display controller
@@ -771,13 +773,23 @@ void Terminal::loadFont(FontInfo const * font)
     m_glyphsBuffer.glyphsHeight = m_font.height;
     m_glyphsBuffer.glyphsData   = m_font.data;
 
+    codepage = m_font.codepage;
+
   } else {
 
     // textual display controller
 
-    m_columns = static_cast<TextualDisplayController*>(m_displayController)->getColumns();
-    m_rows    = static_cast<TextualDisplayController*>(m_displayController)->getRows();
+    auto txtctrl = static_cast<TextualDisplayController*>(m_displayController);
 
+    m_columns = txtctrl->getColumns();
+    m_rows    = txtctrl->getRows();
+    codepage  = txtctrl->getFont()->codepage;
+
+  }
+
+  if (m_keyboard) {
+    m_keyboard->setCodePage(CodePages::get(codepage));
+    //Serial.printf("set codepage %d\n", codepage);
   }
 
   // check maximum columns and rows
