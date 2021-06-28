@@ -60,7 +60,7 @@ namespace fabgl {
  * The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br>
  * <br>
  * It is possible to specify an international keyboard layout. The default is US-layout.<br>
- * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian), ES (Spanish) and FR (French). Other layout can be added
+ * There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian), ES (Spanish), FR (French) and BE (Belgian). Other layout can be added
  * inheriting from US or from any other layout.
  *
  * Applications do not need to create an instance of Keyboard because an instance named Keyboard is created automatically.
@@ -158,7 +158,7 @@ public:
    * @brief Sets keyboard layout.
    *
    * It is possible to specify an international keyboard layout. The default is US-layout.<br>
-   * There are following predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian), ES (Spanish) and FR (French). Other layout can be added
+   * There are following predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian), ES (Spanish), FR (French) and BE (Belgian). Other layout can be added
    * inheriting from US or from any other layout.
    *
    * @param layout A pointer to the layout structure.

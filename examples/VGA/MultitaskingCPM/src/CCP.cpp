@@ -1238,7 +1238,7 @@ bool CCP::cmd_KEYB(uint16_t paramsAddr)
   if (paramsAddr == 0 || m_HAL->strLen(paramsAddr) <= 1) {
     // no, fail
     consoleOut("Usage:\r\n");
-    consoleOutFmt("  KEYB US, UK, DE, IT, ES, FR : Set keyboard layout. Example: KEYB DE\r\n");
+    consoleOutFmt("  KEYB US, UK, DE, IT, ES, FR, BE : Set keyboard layout. Example: KEYB DE\r\n");
     return true;
   }
 
@@ -1263,6 +1263,8 @@ bool CCP::cmd_KEYB(uint16_t paramsAddr)
     layout = &fabgl::SpanishLayout;
   else if (strcasecmp(param, "FR") == 0)
     layout = &fabgl::FrenchLayout;
+  else if (strcasecmp(param, "BE") == 0)
+    layout = &fabgl::BelgianLayout;
   else {
     consoleOut("Invalid keyboard layout\r\n");
     return true;
