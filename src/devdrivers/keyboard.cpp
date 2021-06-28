@@ -53,7 +53,8 @@ int Keyboard::scancodeToVirtualKeyTaskStackSize = FABGLIB_DEFAULT_SCODETOVK_TASK
 Keyboard::Keyboard()
   : m_keyboardAvailable(false),
     m_scancodeSet(2),
-    m_lastDeadKey(VK_NONE)
+    m_lastDeadKey(VK_NONE),
+    m_codepage(nullptr)
 {
 }
 
@@ -249,7 +250,7 @@ int Keyboard::virtualKeyToASCII(VirtualKey virtualKey)
   item.CAPSLOCK   = m_CAPSLOCK;
   item.NUMLOCK    = m_NUMLOCK;
   item.SCROLLLOCK = m_SCROLLLOCK;
-  return fabgl::virtualKeyToASCII(item);
+  return fabgl::virtualKeyToASCII(item, m_codepage);
 }
 
 
@@ -499,7 +500,7 @@ bool Keyboard::blockingGetVirtualKey(VirtualKeyItem * item)
     *(++scode) = 0;
 
   // fill ASCII field
-  int ascii = fabgl::virtualKeyToASCII(*item);
+  int ascii = fabgl::virtualKeyToASCII(*item, m_codepage);
   item->ASCII = ascii > -1 ? ascii : 0;
 
   return item->vk != VK_NONE;

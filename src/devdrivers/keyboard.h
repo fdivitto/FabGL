@@ -44,6 +44,7 @@
 #include "comdrivers/ps2device.h"
 #include "fabui.h"
 #include "kbdlayouts.h"
+#include "codepages.h"
 
 
 namespace fabgl {
@@ -165,7 +166,7 @@ public:
    * Example:
    *
    *     // Set German layout
-   *     setLayout(&fabgl::GermanLayout);
+   *     Keyboard.setLayout(&fabgl::GermanLayout);
    */
   void setLayout(KeyboardLayout const * layout);
 
@@ -250,16 +251,31 @@ public:
    * @brief Converts virtual key to ASCII.
    *
    * This method converts the specified virtual key to ASCII, if possible.<br>
-   * For example VK_A is converted to 'A' (ASCII 0x41), CTRL  + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces
+   * <br>For example VK_A is converted to 'A' (ASCII 0x41), CTRL  + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces
    * ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces
    * ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D),
-   * CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.
+   * CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.<br>
+   * <br>This method uses current codepage set using Keyboard.setCodePage()<br>
    *
    * @param virtualKey The virtual key to convert.
    *
    * @return The ASCII code of virtual key or -1 if virtual key cannot be translated to ASCII.
    */
   int virtualKeyToASCII(VirtualKey virtualKey);
+
+  /**
+   * @brief Sets font codepage for virtual key to ASCII conversion
+   *
+   * Sets current codepage for virtualkey to ASCII conversions. This method is called automatically by Terminal and UI interface.
+   *
+   * @param codepage Codepage to use
+   *
+   * Example:
+   *
+   *     // Set codepage 437
+   *     Keyboard.setCodePage(CodePages::get(437));
+   */
+  void setCodePage(CodePage const * codepage)                      { m_codepage = codepage; }
 
   /**
    * @brief Gets the number of scancodes available in the queue.
@@ -420,6 +436,8 @@ private:
   bool                      m_numLockLED;
   bool                      m_capsLockLED;
   bool                      m_scrollLockLED;
+
+  CodePage const *          m_codepage;
 
 };
 

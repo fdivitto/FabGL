@@ -1307,22 +1307,6 @@ inline bool isGUI(VirtualKey value)
 }
 
 
-/**
- * @brief Converts virtual key item to ASCII.
- *
- * This method converts the specified virtual key to ASCII, if possible.<br>
- * For example VK_A is converted to 'A' (ASCII 0x41), CTRL  + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces
- * ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces
- * ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D),
- * CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.
- *
- * @param virtualKey The virtual key to convert.
- *
- * @return The ASCII code of virtual key or -1 if virtual key cannot be translated to ASCII.
- */
-int virtualKeyToASCII(VirtualKeyItem const & item);
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////
 // ASCII control characters
