@@ -175,6 +175,7 @@ public:
   void setCursorForeground(Color value);
   void setCursorBackground(Color value);
 
+  FontInfo const * getFont()               { return &FONT_8x14; }
 
 private:
 

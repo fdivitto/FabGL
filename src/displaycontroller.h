@@ -722,6 +722,7 @@ public:
     virtual void setCursorPos(int row, int col) = 0;      // row and col starts from 0
     virtual void setCursorForeground(Color value) = 0;
     virtual void setCursorBackground(Color value) = 0;
+    virtual FontInfo const * getFont() = 0;
 };
 
 
