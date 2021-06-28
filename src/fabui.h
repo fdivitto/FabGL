@@ -52,6 +52,7 @@
 #include "displaycontroller.h"
 #include "canvas.h"
 #include "fabfonts.h"
+#include "codepages.h"
 
 
 
@@ -1401,33 +1402,36 @@ private:
   void updateCaret();
   void moveCursor(int col, int selCol);
   int getColFromMouseX(int mouseX);
-  void handleKeyDown(uiKeyEventInfo key);
+  void handleKeyDown(uiKeyEventInfo const & key);
   void checkAllocatedSpace(int requiredLength);
   void insert(char c);
   void removeSel();
   int getWordPosAtLeft();
   int getWordPosAtRight();
   void selectWordAt(int mouseX);
+  int keyToASCII(uiKeyEventInfo const & key);
 
 
   uiTextEditStyle m_textEditStyle;
   uiTextEditProps m_textEditProps;
 
-  char *          m_text;
-  int             m_textLength; // text length NOT including ending zero
-  int             m_textSpace;  // actual space allocated including ending zero
+  char *           m_text;
+  int              m_textLength; // text length NOT including ending zero
+  int              m_textSpace;  // actual space allocated including ending zero
 
   // rectangle where text will be painted (this is also the text clipping rect)
-  Rect            m_contentRect;  // updated on painting
+  Rect             m_contentRect;  // updated on painting
 
   // where text starts to be painted. Values less than m_contentRect.X1 are used to show characters which do not fit in m_contentRect
-  int             m_viewX;
+  int              m_viewX;
 
   // character index of cursor position (0 = at first char)
-  int             m_cursorCol;
+  int              m_cursorCol;
 
   // character index at start of selection (not included if < m_cursorCol, included if > m_cursorCol)
-  int             m_selCursorCol;
+  int              m_selCursorCol;
+
+  CodePage const * m_codepage;
 
 };
 
