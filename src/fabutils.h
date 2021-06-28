@@ -1186,75 +1186,84 @@ enum VirtualKey {
   VK_F11,             /**< F11 function key */
   VK_F12,             /**< F12 function key */
   
-  VK_GRAVE_a,         /**< Grave 'a': à */
-  VK_GRAVE_e,         /**< Grave 'e': è */
-  VK_ACUTE_e,         /**< Acute 'e': é */
-  VK_GRAVE_i,         /**< Grave 'i': ì */
-  VK_GRAVE_o,         /**< Grave 'o': ò */
-  VK_GRAVE_u,         /**< Grave 'u': ù */
+  VK_GRAVE_a,         /**< Grave a: à */
+  VK_GRAVE_e,         /**< Grave e: è */
+  VK_GRAVE_i,         /**< Grave i: ì */
+  VK_GRAVE_o,         /**< Grave o: ò */
+  VK_GRAVE_u,         /**< Grave u: ù */
+  VK_GRAVE_y,         /**< Grave y: ỳ */
+
+  VK_ACUTE_a,         /**< Acute a: á */
+  VK_ACUTE_e,         /**< Acute e: é */
+  VK_ACUTE_i,         /**< Acute i: í */
+  VK_ACUTE_o,         /**< Acute o: ó */
+  VK_ACUTE_u,         /**< Acute u: ú */
+  VK_ACUTE_y,         /**< Acute y: ý */
+
+  VK_GRAVE_A,		      /**< Grave A: À */
+  VK_GRAVE_E,		      /**< Grave E: È */
+  VK_GRAVE_I,		      /**< Grave I: Ì */
+  VK_GRAVE_O,		      /**< Grave O: Ò */
+  VK_GRAVE_U,		      /**< Grave U: Ù */
+  VK_GRAVE_Y,         /**< Grave Y: Ỳ */
+
+  VK_ACUTE_A,		      /**< Acute A: Á */
+  VK_ACUTE_E,		      /**< Acute E: É */
+  VK_ACUTE_I,		      /**< Acute I: Í */
+  VK_ACUTE_O,		      /**< Acute O: Ó */
+  VK_ACUTE_U,		      /**< Acute U: Ú */
+  VK_ACUTE_Y,         /**< Acute Y: Ý */
+
+  VK_UMLAUT_a,        /**< Diaeresis a: ä */
+  VK_UMLAUT_e,        /**< Diaeresis e: ë */
+  VK_UMLAUT_i,        /**< Diaeresis i: ï */
+  VK_UMLAUT_o,        /**< Diaeresis o: ö */
+  VK_UMLAUT_u,        /**< Diaeresis u: ü */
+  VK_UMLAUT_y,        /**< Diaeresis y: ÿ */
+
+  VK_UMLAUT_A,        /**< Diaeresis A: Ä */
+  VK_UMLAUT_E,        /**< Diaeresis E: Ë */
+  VK_UMLAUT_I,        /**< Diaeresis I: Ï */
+  VK_UMLAUT_O,        /**< Diaeresis O: Ö */
+  VK_UMLAUT_U,        /**< Diaeresis U: Ü */
+  VK_UMLAUT_Y,        /**< Diaeresis Y: Ÿ */
+
+  VK_CARET_a,		      /**< Caret a: â */
+  VK_CARET_e,		      /**< Caret e: ê */
+  VK_CARET_i,		      /**< Caret i: î */
+  VK_CARET_o,		      /**< Caret o: ô */
+  VK_CARET_u,		      /**< Caret u: û */
+  VK_CARET_y,         /**< Caret y: ŷ */
+
+  VK_CARET_A,		      /**< Caret A: Â */
+  VK_CARET_E,		      /**< Caret E: Ê */
+  VK_CARET_I,		      /**< Caret I: Î */
+  VK_CARET_O,		      /**< Caret O: Ô */
+  VK_CARET_U,		      /**< Caret U: Û */
+  VK_CARET_Y,         /**< Caret Y: Ŷ */
+
+  VK_CEDILLA_c,       /**< Cedilla c: ç */
+  VK_CEDILLA_C,       /**< Cedilla C: Ç */
   
-  VK_CEDILLA_c,       /**< Cedilla 'c': ç */
-   
+  VK_TILDE_a,         /**< Lower case tilde a: ã */
+  VK_TILDE_o,         /**< Lower case tilde o: õ */
+  VK_TILDE_n,		      /**< Lower case tilde n: ñ */
+
+  VK_TILDE_A,         /**< Upper case tilde A: Ã */
+  VK_TILDE_O,         /**< Upper case tilde O: Õ */
+  VK_TILDE_N,		      /**< Upper case tilde N: Ñ */
+
+  VK_UPPER_a,		      /**< primera: a */
   VK_ESZETT,          /**< Eszett: ß */
-  VK_UMLAUT_u,        /**< Umlaut 'u': ü */
-  VK_UMLAUT_o,        /**< Umlaut 'o': ö */
-  VK_UMLAUT_a,        /**< Umlaut 'a': ä */
- 
-  VK_CEDILLA_C,       /**< Cedilla 'C': Ç */
-  
-  VK_TILDE_n,		      /**< Lower case letter: 'ñ' */
-  VK_TILDE_N,		      /**< Upper case letter: 'Ñ' */
-  VK_UPPER_a,		      /**< primera: 'a' */
-  
-  VK_ACUTE_a,         /**< Acute 'á': á */
-  VK_ACUTE_i,         /**< Acute 'i': í */
-  VK_ACUTE_o,         /**< Acute 'o': ó */
-  VK_ACUTE_u,         /**< Acute 'u': ú */  
-      
-  VK_UMLAUT_i,        /**< Diaeresis 'i': ï */  
-  
   VK_EXCLAIM_INV,     /**< Inverted exclamation mark: ! */
-  VK_QUESTION_INV,    /**< Inverted question mark: ? */
-
-  VK_ACUTE_A,		      /**< Acute 'Á': Á */
-  VK_ACUTE_E,		      /**< Acute 'É': É */
-  VK_ACUTE_I,		      /**< Acute 'Í': Í */
-  VK_ACUTE_O,		      /**< Acute 'Ó': Ó */
-  VK_ACUTE_U,		      /**< Acute 'Ú': Ú */
-  
-  VK_GRAVE_A,		      /**< Grave 'À': À */
-  VK_GRAVE_E,		      /**< Grave 'È': È */
-  VK_GRAVE_I,		      /**< Grave 'Ì': Ì */
-  VK_GRAVE_O,		      /**< Grave 'Ò': Ò */
-  VK_GRAVE_U,		      /**< Grave 'Ù': Ù */
-  
-  VK_INTERPUNCT,	    /**< '·': · */
-  VK_DIAERESIS,	  	  /**< Diaeresis '"': " */
-  
-  VK_UMLAUT_e,        /**< Diaeresis 'e': ë */  
-  VK_UMLAUT_A,        /**< Diaeresis 'Ä': Ä */
-  VK_UMLAUT_E,        /**< Diaeresis 'Ë': Ë */
-  VK_UMLAUT_I,        /**< Diaeresis 'Ï': Ï */
-  VK_UMLAUT_O,        /**< Diaeresis 'Ö': Ö */
-  VK_UMLAUT_U,        /**< Diaeresis 'Ü': Ü */
-  
-  VK_CARET_a,		      /**< Caret 'a': â */
-  VK_CARET_e,		      /**< Caret 'e': ê */
-  VK_CARET_i,		      /**< Caret 'i': î */
-  VK_CARET_o,		      /**< Caret 'o': ô */
-  VK_CARET_u,		      /**< Caret 'u': û */
-  VK_CARET_A,		      /**< Caret 'A': Â */
-  VK_CARET_E,		      /**< Caret 'E': Ê */
-  VK_CARET_I,		      /**< Caret 'I': Î */
-  VK_CARET_O,		      /**< Caret 'O': Ô */
-  VK_CARET_U,		      /**< Caret 'U': Û */
-
-  VK_SQUARE,          /**< Square   : '²' */
-  VK_CURRENCY,        /**< Currency : '¤' */
-  VK_MU,              /**< Mu       : 'µ' */
+  VK_QUESTION_INV,    /**< Inverted question mark : ? */
+  VK_INTERPUNCT,	    /**< Interpunct : · */
+  VK_DIAERESIS,	  	  /**< Diaeresis  : ¨ */
+  VK_SQUARE,          /**< Square     : ² */
+  VK_CURRENCY,        /**< Currency   : ¤ */
+  VK_MU,              /**< Mu         : µ */
 
   VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
-  
   VK_LAST,            // marks the last virtual key
 
 };
