@@ -60,8 +60,18 @@ fabgl::Terminal                     Terminal;
 #define UART_SRX 34
 #define UART_STX 2
 
-
+/* prev conf
 #define RESET_PIN 12
+#define RESET_PIN_ACTIVE 1
+#define USERESETPIN 1
+//*/
+///*
+#define RESET_PIN 39
+#define RESET_PIN_ACTIVE 0
+#define USERESETPIN 0
+//*/
+
+
 
 
 #include "confdialog.h"
@@ -80,9 +90,11 @@ void setup()
 
   ConfDialogApp::checkVersion();
 
+  #if USERESETPIN
   pinMode(RESET_PIN, INPUT);
-  if (digitalRead(RESET_PIN) == 1)
+  if (digitalRead(RESET_PIN) == RESET_PIN_ACTIVE)
     preferences.clear();
+  #endif
 
   // because mouse is optional, don't re-try if it is not found (to speed-up boot)
   fabgl::Mouse::quickCheckHardware();
