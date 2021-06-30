@@ -170,6 +170,18 @@ T moveItems(T dest, T src, size_t n)
 void rgb222_to_hsv(int R, int G, int B, double * h, double * s, double * v);
 
 
+inline uint16_t changeEndiannesWord(uint16_t value)
+{
+  return ((value & 0xff00) >> 8) | ((value & 0x00ff) << 8);
+}
+
+
+inline uint32_t changeEndiannesDWord(uint32_t value)
+{
+  return ((value & 0xff) << 24) | ((value & 0xff00) << 8) | ((value & 0xff0000) >> 8) | ((value & 0xff000000) >> 24);
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
