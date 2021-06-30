@@ -327,6 +327,8 @@ public:
    *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
    */
   void setRawPixel(int x, int y, uint8_t rgb)    { VGA_PIXEL(x, y) = rgb; }
+  uint8_t createBlankRawPixel()                  { return m_HVSync; }
+
 
 
 protected:
