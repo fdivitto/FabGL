@@ -116,6 +116,8 @@ public:
    */
   void setPaletteItem(int index, RGB888 const & color);
 
+  void directSetPixel(int x, int y, int value);
+
 
 protected:
 

@@ -405,6 +405,12 @@ void VGA8Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const *
 }
 
 
+void VGA8Controller::directSetPixel(int x, int y, int value)
+{
+  VGA8_SETPIXEL(x, y, value);
+}
+
+
 void IRAM_ATTR VGA8Controller::ISRHandler(void * arg)
 {
   #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
