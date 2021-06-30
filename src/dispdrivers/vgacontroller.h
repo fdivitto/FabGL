@@ -179,6 +179,22 @@ public:
    */
   void writeScreen(Rect const & rect, RGB222 * srcBuf);
 
+  /**
+   * @brief Sets a raw pixel prepared using VGAController.createRawPixel.
+   *
+   * A raw pixel (or raw color) is a byte (uint8_t) that contains color information and synchronization signals.
+   *
+   * @param x Horizontal pixel position
+   * @param y Vertical pixel position
+   * @param rgb Raw pixel color
+   *
+   * Example:
+   *
+   *     // Set color of pixel at 100, 100
+   *     VGAController.setRawPixel(100, 100, VGAController.createRawPixel(RGB222(3, 0, 0));
+   */
+  void setRawPixel(int x, int y, uint8_t rgb)    { VGA_PIXEL(x, y) = rgb; }
+
 
 private:
 
