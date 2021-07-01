@@ -709,6 +709,8 @@ namespace fabgl {
 enum class FlowControl {
   None,              /**< No flow control */
   Software,          /**< Software flow control. Use XON and XOFF control characters */
+  Hardware,          /**< Hardware flow control. Use RTS and CTS signals */
+  Hardsoft,          /**< Hardware/software flow control. Use XON/XOFF and RTS/CTS */
 };
 
 
@@ -1021,15 +1023,17 @@ public:
    * @param config Defines word length, parity and stop bits. Example: SERIAL_8N1.
    * @param rxPin UART RX pin GPIO number.
    * @param txPin UART TX pin GPIO number.
-   * @param flowControl Flow control. When set to FlowControl::Software, XON and XOFF characters are automatically sent.
+   * @param flowControl Flow control.
    * @param inverted If true RX and TX signals are inverted.
+   * @param rtsPin RTS signal GPIO number (-1 = not used)
+   * @param ctsPin CTS signal GPIO number (-1 = not used)
    *
    * Example:
    *
    *     Terminal.begin(&DisplayController);
    *     Terminal.connectSerialPort(115200, SERIAL_8N1, 34, 2, FlowControl::Software);
    */
-  void connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted = false);
+  void connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
 
   /**
    * @brief Pools the serial port for incoming data.
@@ -1612,6 +1616,10 @@ private:
 
   uint32_t makeGlyphItem(uint8_t c, GlyphOptions * glyphOptions, Color * newForegroundColor);
 
+  void flowControl(bool enableRX);
+  bool flowControl();
+
+
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
 
@@ -1707,8 +1715,13 @@ private:
   // a reset has been requested
   bool                      m_resetRequested;
 
-  volatile bool             m_autoXONOFF;
-  volatile bool             m_XOFF;       // true = XOFF sent
+  volatile FlowControl      m_flowControl;
+  volatile bool             m_sentXOFF;       // true if XOFF has been sent or RTS is disabled (high)
+  volatile bool             m_recvXOFF;       // true if XOFF has been received
+
+  // hardware flow pins
+  gpio_num_t                m_rtsPin;
+  gpio_num_t                m_ctsPin;
 
   // used to implement m_emuState.keyAutorepeat
   VirtualKey                m_lastPressedKey;

@@ -356,8 +356,9 @@ bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, 
   m_alternateScreenBuffer = false;
   m_alternateMap = nullptr;
 
-  m_autoXONOFF = false;
-  m_XOFF = false;
+  m_flowControl = FlowControl::None;
+  m_sentXOFF = false;
+  m_recvXOFF = false;
 
   m_lastWrittenChar = 0;
 
@@ -445,7 +446,7 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
   if (m_serialPort)
     vTaskDelete(m_keyboardReaderTaskHandle);
   m_serialPort = &serialPort;
-  m_autoXONOFF = autoXONXOFF;
+  m_flowControl = autoXONXOFF ? FlowControl::Software : FlowControl::None;
 
   m_serialPort->setRxBufferSize(Terminal::inputQueueSize);
 
@@ -453,7 +454,7 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
     xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 
   // just in case a reset occurred after an XOFF
-  if (m_autoXONOFF)
+  if (autoXONXOFF)
     send(ASCII_XON);
 }
 #endif
@@ -488,21 +489,52 @@ static void uartFlushRXFIFO()
 // look into input queue (m_inputQueue): if there is space for new incoming bytes send XON and reenable uart RX interrupts
 void Terminal::uartCheckInputQueueForFlowControl()
 {
-  if (m_autoXONOFF) {
+  if (m_flowControl != FlowControl::None) {
     uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     if (uxQueueMessagesWaiting(m_inputQueue) == 0 && uart->int_ena.rxfifo_full == 0) {
-      if (m_XOFF) {
-        m_XOFF = false;
-        uart->flow_conf.send_xon = 1; // send XON
-      }
+      if (m_sentXOFF)
+        flowControl(true);  // enable RX
       uart->int_ena.rxfifo_full = 1;
     }
   }
 }
 
 
+// enable/disable RX sending XON/XOFF and/or setting RTS
+void Terminal::flowControl(bool enableRX)
+{
+  //Serial.printf("flowControl(%d)\n", enableRX);
+  uart_dev_t * uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
+  if (enableRX) {
+    if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
+      uart->flow_conf.send_xon = 1;  // send XON
+    if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
+      gpio_set_level(m_rtsPin, 0);   // RTS = LOW (active)
+    m_sentXOFF = false;
+  } else {
+    if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
+      uart->flow_conf.send_xoff = 1; // send XOFF
+    if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
+      gpio_set_level(m_rtsPin, 1);   // RTS = HIGH (not active)
+    m_sentXOFF = true;
+  }
+}
+
+
+// check if TX is enabled looking for XOFF received or reading CTS
+bool Terminal::flowControl()
+{
+  //Serial.printf("flowControl\n");
+  if ((m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft) && m_recvXOFF)
+    return false; // TX disabled (received XOFF)
+  if ((m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft) && gpio_get_level(m_ctsPin))
+    return false; // TX disabled (CTS=high, not active)
+  return true;  // TX enabled
+}
+
+
 // connect to UART2
-void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted)
+void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
 {
   uart_dev_t * uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
 
@@ -528,6 +560,19 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     configureGPIO(int2gpio(rxPin), GPIO_MODE_INPUT);
     configureGPIO(int2gpio(txPin), GPIO_MODE_OUTPUT);
 
+    // RTS
+    m_rtsPin = int2gpio(rtsPin);
+    if (m_rtsPin != GPIO_UNUSED) {
+      configureGPIO(m_rtsPin, GPIO_MODE_OUTPUT);
+      gpio_set_level(m_rtsPin, 0);
+    }
+
+    // CTS
+    m_ctsPin = int2gpio(ctsPin);
+    if (m_ctsPin != GPIO_UNUSED) {
+      configureGPIO(m_ctsPin, GPIO_MODE_INPUT);
+    }
+
     // RX interrupt
     uart->conf1.rxfifo_full_thrhd = 1;  // an interrupt for each character received
     uart->conf1.rx_tout_thrhd = 2;      // actually not used
@@ -548,7 +593,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
       xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
   }
 
-  m_autoXONOFF = (flowControl == FlowControl::Software);
+  m_flowControl = flowControl;
 
   // set baud rate
   uint32_t clk_div = (getApbFrequency() << 4) / baud;
@@ -569,7 +614,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
   // Flow Control
   uart->flow_conf.sw_flow_con_en = 0;
   uart->flow_conf.xonoff_del     = 0;
-  if (flowControl == FlowControl::Software) {
+  if (flowControl != FlowControl::None) {
     // we actually use manual software control, using send_xon/send_xoff bits to send control characters
     // because we have to check both RX-FIFO and input queue
     uart->swfc_conf.xon_threshold  = 0;
@@ -578,7 +623,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     uart->swfc_conf.xoff_char = ASCII_XOFF;
     if (initialSetup) {
       // send an XON right now
-      m_XOFF = true;
+      m_sentXOFF = true;
       uart->flow_conf.send_xon = 1;
     }
   }
@@ -787,10 +832,8 @@ void Terminal::loadFont(FontInfo const * font)
 
   }
 
-  if (m_keyboard) {
+  if (m_keyboard)
     m_keyboard->setCodePage(CodePages::get(codepage));
-    //Serial.printf("set codepage %d\n", codepage);
-  }
 
   // check maximum columns and rows
   if (m_maxColumns > 0 && m_maxColumns < m_columns)
@@ -1690,18 +1733,18 @@ void Terminal::pollSerialPort()
   while (true) {
     int avail = m_serialPort->available();
 
-    if (m_autoXONOFF) {
-      if (m_XOFF) {
+    if (m_flowControl == FlowControl::Software) {
+      if (m_sentXOFF) {
         // XOFF already sent, need to send XON?
         if (avail < FABGLIB_TERMINAL_XON_THRESHOLD) {
           send(ASCII_XON);
-          m_XOFF = false;
+          m_sentXOFF = false;
         }
       } else {
         // XOFF not sent, need to send XOFF?
         if (avail >= FABGLIB_TERMINAL_XOFF_THRESHOLD) {
           send(ASCII_XOFF);
-          m_XOFF = true;
+          m_sentXOFF = true;
         }
       }
     }
@@ -1733,27 +1776,22 @@ void IRAM_ATTR Terminal::uart_isr(void *arg)
     return;
   }
 
-  // software flow control?
-  if (term->m_autoXONOFF) {
-    // send XOFF/XON looking at RX FIFO occupation
+  // flow control?
+  if (term->m_flowControl != FlowControl::None) {
+    // send XOFF/XON or set RTS looking at RX FIFO occupation
     int count = uartGetRXFIFOCount();
-    if (count > 300 && !term->m_XOFF) {
-      uart->flow_conf.send_xoff = 1; // send XOFF
-      term->m_XOFF = true;
-    } else if (count < 20 && term->m_XOFF) {
-      uart->flow_conf.send_xon = 1;  // send XON
-      term->m_XOFF = false;
-    }
+    if (count > FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MAX_THRESHOLD && !term->m_sentXOFF)
+      term->flowControl(false); // disable RX
+    else if (count < FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MIN_THRESHOLD && term->m_sentXOFF)
+      term->flowControl(true);  // enable RX
   }
 
   // main receive loop
   while (uartGetRXFIFOCount() != 0 || uart->mem_rx_status.wr_addr != uart->mem_rx_status.rd_addr) {
     // look for enough room in input queue
-    if (term->m_autoXONOFF && xQueueIsQueueFullFromISR(term->m_inputQueue)) {
-      if (!term->m_XOFF) {
-        uart->flow_conf.send_xoff = 1;  // send XOFF
-        term->m_XOFF = true;
-      }
+    if (term->m_flowControl != FlowControl::None && xQueueIsQueueFullFromISR(term->m_inputQueue)) {
+      if (!term->m_sentXOFF)
+        term->flowControl(false);  // disable RX
       // block further interrupts
       uart->int_ena.rxfifo_full = 0;
       break;
@@ -1785,6 +1823,8 @@ void Terminal::send(uint8_t c)
   #endif
 
   if (m_uart) {
+    //while (!flowControl())
+    //  vTaskDelay(1);
     uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     while (uart->status.txfifo_cnt == 0x7F)
       ;
@@ -1817,6 +1857,8 @@ void Terminal::send(char const * str)
   if (m_uart) {
     uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     while (*str) {
+      //while (!flowControl())
+      //  vTaskDelay(1);
       while (uart->status.txfifo_cnt == 0x7F)
         ;
       uart->fifo.rw_byte = *str++;
@@ -2417,6 +2459,18 @@ void Terminal::execCtrlCode(uint8_t c)
     // BELL
     case ASCII_BEL:
       sound('1', 800, 250, 100);  // square wave, 800 Hz, 250ms, volume 100
+      break;
+
+    // XOFF
+    case ASCII_XOFF:
+      //Serial.printf("recv XOFF\n");
+      m_recvXOFF = true;
+      break;
+
+    // XON
+    case ASCII_XON:
+      //Serial.printf("recv XON\n");
+      m_recvXOFF = false;
       break;
 
     default:
@@ -4518,7 +4572,7 @@ void Terminal::keyboardReaderTask(void * pvParameters)
     VirtualKeyItem item;
     if (term->m_keyboard->getNextVirtualKey(&item)) {
 
-      if (term->isActive()) {
+      if (term->isActive() && term->flowControl()) {
 
         term->onVirtualKey(&item.vk, item.down);
         term->onVirtualKeyItem(&item);
