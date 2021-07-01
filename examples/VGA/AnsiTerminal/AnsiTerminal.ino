@@ -60,6 +60,10 @@ fabgl::Terminal                     Terminal;
 #define UART_SRX 34
 #define UART_STX 2
 
+// RTS/CTS hardware flow gpios
+#define RTS      13
+#define CTS      35
+
 /* prev conf
 #define RESET_PIN 12
 #define RESET_PIN_ACTIVE 1
@@ -80,6 +84,10 @@ fabgl::Terminal                     Terminal;
 void setup()
 {
   //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
+
+  disableCore0WDT();
+  delay(100); // experienced crashes without this delay!
+  disableCore1WDT();
 
   // more stack is required for the UI (used inside Terminal.onVirtualKey)
   Terminal.keyboardReaderTaskStackSize = 3000;

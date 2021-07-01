@@ -51,7 +51,7 @@ constexpr int       BAUDRATES_COUNT = sizeof(BAUDRATES_INT) / sizeof(int);
 static const char * DATALENS_STR[]  = { "5 bits", "6 bits", "7 bits", "8 bits" };
 static const char * PARITY_STR[]    = { "None", "Even", "Odd" };
 static const char * STOPBITS_STR[]  = { "1 bit", "1.5 bits", "2 bits" };
-static const char * FLOWCTRL_STR[]  = { "None", "Software" };
+static const char * FLOWCTRL_STR[]  = { "None", "XON/XOFF", "RTS/CTS", "Combi" };
 
 constexpr int RESOLUTION_DEFAULT           = 5;
 static const char * RESOLUTIONS_STR[]      = { "1280x768, B&W",           // 0
@@ -238,7 +238,7 @@ struct ConfDialogApp : public uiApp {
     // flow control
     new uiLabel(frame, "Flow Control", Point(300,  y), Size(0, 0), true, STYLE_LABEL);
     flowCtrlComboBox = new uiComboBox(frame, Point(300, y + 12), Size(65, 20), 35, true, STYLE_COMBOBOX);
-    flowCtrlComboBox->items().append(FLOWCTRL_STR, 2);
+    flowCtrlComboBox->items().append(FLOWCTRL_STR, 4);
     flowCtrlComboBox->selectItem((int)getFlowCtrl());
 
 
@@ -423,11 +423,12 @@ struct ConfDialogApp : public uiApp {
   }
 
   static char const * getSerParamStr() {
-    static char outstr[13];
-    snprintf(outstr, sizeof(outstr), "%s,%c%c%c", BAUDRATES_STR[getBaudRateIndex()],
+    static char outstr[32];
+    snprintf(outstr, sizeof(outstr), "%s,%c%c%c flow=%s", BAUDRATES_STR[getBaudRateIndex()],
                                                   DATALENS_STR[getDataLenIndex()][0],
                                                   PARITY_STR[getParityIndex()][0],
-                                                  STOPBITS_STR[getStopBitsIndex() - 1][0]);
+                                                  STOPBITS_STR[getStopBitsIndex() - 1][0],
+                                                  FLOWCTRL_STR[(int)getFlowCtrl()]);
     return outstr;
   }
   
@@ -492,7 +493,7 @@ struct ConfDialogApp : public uiApp {
     bool serctl = (getSerCtl() == SERCTL_ENABLED);
     auto rxPin = serctl ? UART_URX : UART_SRX;
     auto txPin = serctl ? UART_UTX : UART_STX;
-    Terminal.connectSerialPort(BAUDRATES_INT[getBaudRateIndex()], fabgl::UARTConf(getParityIndex(), getDataLenIndex(), getStopBitsIndex()), rxPin, txPin, getFlowCtrl());
+    Terminal.connectSerialPort(BAUDRATES_INT[getBaudRateIndex()], fabgl::UARTConf(getParityIndex(), getDataLenIndex(), getStopBitsIndex()), rxPin, txPin, getFlowCtrl(), false, RTS, CTS);
   }
 
 };
