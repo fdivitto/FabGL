@@ -3043,17 +3043,16 @@ void uiLabel::paintLabel()
   canvas()->setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
   canvas()->setPenColor(m_labelStyle.textColor);
 
-  int x;
+  int x = r.X1; // default left align
 
   switch (m_labelStyle.textAlign) {
-    case uiHAlign::Left:
-      x = r.X1;
-      break;
     case uiHAlign::Right:
       x = r.X2 - canvas()->textExtent(m_labelStyle.textFont, m_text);
       break;
     case uiHAlign::Center:
       x = r.X1 + (r.width() - canvas()->textExtent(m_labelStyle.textFont, m_text)) / 2;
+      break;
+    default:
       break;
   }
 
