@@ -1423,6 +1423,50 @@ public:
    */
   SoundGenerator * soundGenerator();
 
+  /**
+   * @brief Reports whether TX is active
+   *
+   * @return True if XOFF has been sent or RTS is not asserted
+   */
+  bool XOFFStatus()                    { return m_sentXOFF; }
+
+  /**
+   * @brief Reports current RTS signal status
+   *
+   * @return True if RTS is asserted (low voltage, terminal is ready to receive data)
+   */
+  bool RTSStatus()                     { return m_RTSStatus; }
+
+  /**
+   * @brief Sets RTS signal status
+   *
+   * RTS signal is handled automatically when flow control has been setup
+   *
+   * @param value True to assert RTS (low voltage)
+   */
+  void setRTSStatus(bool value);
+
+  /**
+   * @brief Reports current CTS signal status
+   *
+   * @return True if RTS is asserted (low voltage, host is ready to receive data)
+   */
+  bool CTSStatus()                     { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : false; }
+
+  /**
+   * @brief Allows/disallows host to send data
+   *
+   * @param enableRX If True host can send data (sent XON and/or RTS asserted)
+   */
+  void flowControl(bool enableRX);
+
+  /**
+   * @brief Checks whether host can receive data
+   *
+   * @return True if host can receive data. False if host sent XOFF or CTS is not asserted.
+   */
+  bool flowControl();
+
 
   //// Delegates ////
 
@@ -1616,10 +1660,6 @@ private:
 
   uint32_t makeGlyphItem(uint8_t c, GlyphOptions * glyphOptions, Color * newForegroundColor);
 
-  void flowControl(bool enableRX);
-  bool flowControl();
-
-
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
 
@@ -1722,6 +1762,7 @@ private:
   // hardware flow pins
   gpio_num_t                m_rtsPin;
   gpio_num_t                m_ctsPin;
+  bool                      m_RTSStatus;      // true = asserted (low)
 
   // used to implement m_emuState.keyAutorepeat
   VirtualKey                m_lastPressedKey;

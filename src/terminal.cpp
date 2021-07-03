@@ -500,6 +500,15 @@ void Terminal::uartCheckInputQueueForFlowControl()
 }
 
 
+void Terminal::setRTSStatus(bool value)
+{
+  if (m_rtsPin != GPIO_UNUSED) {
+    m_RTSStatus = value;
+    gpio_set_level(m_rtsPin, !value); // low = asserted
+  }
+}
+
+
 // enable/disable RX sending XON/XOFF and/or setting RTS
 void Terminal::flowControl(bool enableRX)
 {
@@ -509,13 +518,13 @@ void Terminal::flowControl(bool enableRX)
     if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
       uart->flow_conf.send_xon = 1;  // send XON
     if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
-      gpio_set_level(m_rtsPin, 0);   // RTS = LOW (active)
+      setRTSStatus(true);            // assert RTS
     m_sentXOFF = false;
   } else {
     if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
       uart->flow_conf.send_xoff = 1; // send XOFF
     if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
-      gpio_set_level(m_rtsPin, 1);   // RTS = HIGH (not active)
+      setRTSStatus(false);           // disable RTS
     m_sentXOFF = true;
   }
 }
@@ -527,7 +536,7 @@ bool Terminal::flowControl()
   //Serial.printf("flowControl\n");
   if ((m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft) && m_recvXOFF)
     return false; // TX disabled (received XOFF)
-  if ((m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft) && gpio_get_level(m_ctsPin))
+  if ((m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft) && CTSStatus() == false)
     return false; // TX disabled (CTS=high, not active)
   return true;  // TX enabled
 }
@@ -564,7 +573,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     m_rtsPin = int2gpio(rtsPin);
     if (m_rtsPin != GPIO_UNUSED) {
       configureGPIO(m_rtsPin, GPIO_MODE_OUTPUT);
-      gpio_set_level(m_rtsPin, 0);
+      setRTSStatus(true); // assert RTS
     }
 
     // CTS
