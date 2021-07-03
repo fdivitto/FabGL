@@ -3042,7 +3042,21 @@ void uiLabel::paintLabel()
   canvas()->fillRectangle(r);
   canvas()->setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
   canvas()->setPenColor(m_labelStyle.textColor);
-  int x = r.X1;
+
+  int x;
+
+  switch (m_labelStyle.textAlign) {
+    case uiHAlign::Left:
+      x = r.X1;
+      break;
+    case uiHAlign::Right:
+      x = r.X2 - canvas()->textExtent(m_labelStyle.textFont, m_text);
+      break;
+    case uiHAlign::Center:
+      x = r.X1 + (r.width() - canvas()->textExtent(m_labelStyle.textFont, m_text)) / 2;
+      break;
+  }
+
   int y = r.Y1 + (r.height() - m_labelStyle.textFont->height) / 2;
   canvas()->drawText(m_labelStyle.textFont, x, y, m_text);
 }

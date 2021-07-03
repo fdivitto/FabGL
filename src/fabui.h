@@ -222,6 +222,16 @@ enum class uiOrientation {
 };
 
 
+/** \ingroup Enumerations
+ * @brief Text horizontal alignment
+ */
+enum class uiHAlign {
+  Left,             /**< Left align */
+  Right,            /**< Right align */
+  Center,           /**< Center align */
+};
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // uiObject
@@ -1446,6 +1456,7 @@ struct uiLabelStyle {
   FontInfo const * textFont                 = &FONT_std_14;              /**< Text font */
   RGB888           backgroundColor          = RGB888(255, 255, 255);     /**< Background color */
   RGB888           textColor                = RGB888(0, 0, 0);           /**< Text color */
+  uiHAlign         textAlign                = uiHAlign::Left;            /**< Text horizontal alignment */
 };
 
 

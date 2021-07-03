@@ -374,6 +374,7 @@ using fabgl::uiScrollableControlStyle;
 using fabgl::uiButtonStyle;
 using fabgl::uiTextEditStyle;
 using fabgl::uiLabelStyle;
+using fabgl::uiHAlign;
 using fabgl::uiImageStyle;
 using fabgl::uiPanelStyle;
 using fabgl::uiPaintBoxStyle;
