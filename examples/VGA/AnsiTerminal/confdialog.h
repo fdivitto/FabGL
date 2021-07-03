@@ -131,6 +131,7 @@ struct ConfDialogApp : public uiApp {
 
   Rect              frameRect;
   int               progToInstall;
+  bool              lastCTSStatus;
 
   uiFrame *         frame;
   uiComboBox *      termComboBox;
@@ -148,6 +149,8 @@ struct ConfDialogApp : public uiApp {
   uiComboBox *      rowsComboBox;
   uiCheckBox *      infoCheckBox;
   uiCheckBox *      serctlCheckBox;
+  uiLabel *         RTSStatus;
+  uiLabel *         CTSStatus;
 
   void init() {
 
@@ -299,7 +302,7 @@ struct ConfDialogApp : public uiApp {
     };
 
     // install a program
-    auto installButton = new uiButton(frame, "Install Programs", Point(278, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
+    auto installButton = new uiButton(frame, "Install Programs", Point(276, y), Size(90, 20), uiButtonKind::Button, true, STYLE_BUTTON);
     installButton->onClick = [&]() {
       progToInstall = -1;
       auto progsDialog = new ProgsDialog(rootWindow());
@@ -310,10 +313,45 @@ struct ConfDialogApp : public uiApp {
       destroyWindow(progsDialog);
     };
 
+    // RTS Status (clickable)
+    RTSStatus = new uiLabel(frame, "RTS", Point(300, 210), Size(30, 15), true, STYLE_LABELBUTTON);
+    setRTSStatus(Terminal.RTSStatus());
+    RTSStatus->onClick = [&]() {
+      bool newval = !Terminal.RTSStatus();
+      Terminal.setRTSStatus(newval);
+      setRTSStatus(newval);
+    };
+
+    // CTS Status
+    CTSStatus = new uiLabel(frame, "CTS", Point(335, 210), Size(30, 15), true, STYLE_LABELBUTTON);
+    lastCTSStatus = Terminal.CTSStatus();
+    setCTSStatus(lastCTSStatus);
+
+    // timer
+    frame->onTimer = [&](uiTimerHandle) {
+      // monitor CTS status
+      if (Terminal.CTSStatus() != lastCTSStatus) {
+        lastCTSStatus = !lastCTSStatus;
+        setCTSStatus(lastCTSStatus);
+      }
+    };
+    setTimer(frame, 100);
+
 
     setActiveWindow(frame);
     setFocusedWindow(exitNoSaveButton);
 
+  }
+
+
+  void setRTSStatus(bool status) {
+    RTSStatus->labelStyle().backgroundColor = status ? RGB888(0, 128, 0) : RGB888(128, 128, 128);
+    RTSStatus->repaint();
+  }
+
+  void setCTSStatus(bool status) {
+    CTSStatus->labelStyle().backgroundColor = status ? RGB888(128, 0, 0) : RGB888(128, 128, 128);
+    CTSStatus->repaint();
   }
 
 
