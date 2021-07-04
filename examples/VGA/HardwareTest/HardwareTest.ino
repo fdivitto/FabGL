@@ -29,8 +29,11 @@
 
 #include "fabgl.h"
 #include "fabui.h"
+#include "devdrivers/MCP23S17.h"
 
 #include <WiFi.h>
+#include "esp_wifi.h"
+#include "esp_event.h"
 
 
 
@@ -56,8 +59,13 @@ struct TestApp : public uiApp {
   uiTimerHandle    gpioTimer;
   uiButton *       wifiButton;
   uiLabel *        wifiResultLabel;
+  uiLabel *        extgpioLabel[16];
+  uiButton *       extgpioPlay;
 
   int              gpioIn, gpioOut;
+  bool             gpioInPrevState;
+
+  fabgl::MCP23S17  mcp;
 
 
   ~TestApp() {
@@ -67,8 +75,8 @@ struct TestApp : public uiApp {
 
   void init() {
 
-    rootWindow()->frameStyle().backgroundColor = Color::Black;
-    frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 350));
+    rootWindow()->frameStyle().backgroundColor = Color::Cyan;
+    frame = new uiFrame(rootWindow(), "Hardware test", UIWINDOW_PARENTCENTER, Size(600, 420));
 
     int y = 20;
 
@@ -121,7 +129,7 @@ struct TestApp : public uiApp {
 
     y += 44;
 
-    // GPIO test
+    // internal GPIOs test
     static const int GPIOS_IN[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18, 34, 35, 36, 39 };
     static const int GPIOS_OUT[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18 };
     new uiLabel(frame, "GPIO TEST:", Point(10, y));
@@ -139,9 +147,10 @@ struct TestApp : public uiApp {
     gpioInComboBox->selectItem(10);
     new uiLabel(frame, "State", Point(162, y - 18));
     gpioInState = new uiButton(frame, "", Point(162, y - 3), Size(25, 22), uiButtonKind::Switch);
+    gpioInPrevState = 0;
 
-    new uiLabel(frame, "Out", Point(250, y - 18));
-    gpioOutComboBox = new uiComboBox(frame, Point(250, y - 3), Size(34, 22), 60);
+    new uiLabel(frame, "Out", Point(220, y - 18));
+    gpioOutComboBox = new uiComboBox(frame, Point(220, y - 3), Size(34, 22), 60);
     for (int i = 0; i < sizeof(GPIOS_OUT) / sizeof(int); ++i)
       gpioOutComboBox->items().appendFmt("%d", GPIOS_OUT[i]);
     gpioOutComboBox->onChange = [&]() {
@@ -152,8 +161,8 @@ struct TestApp : public uiApp {
     gpioOut = GPIOS_OUT[2];
     pinMode(gpioOut, OUTPUT);
     gpioOutComboBox->selectItem(2);
-    new uiLabel(frame, "State", Point(292, y - 18));
-    gpioOutState = new uiButton(frame, "", Point(292, y - 3), Size(25, 22), uiButtonKind::Switch);
+    new uiLabel(frame, "State", Point(262, y - 18));
+    gpioOutState = new uiButton(frame, "", Point(262, y - 3), Size(25, 22), uiButtonKind::Switch);
     gpioOutState->setDown(false);
     gpioOutState->onChange = [&]() {
       updateGPIOOutState();
@@ -162,7 +171,45 @@ struct TestApp : public uiApp {
 
     gpioTimer = setTimer(frame, 100);
 
-    y += 40;
+    y += 44;
+
+
+    // external GPIOs test
+
+    if (initMCP()) {
+      new uiLabel(frame, "EXT GPIO TEST:", Point(10, y));
+      new uiLabel(frame, "Outputs", Point(120, y - 13));
+      new uiLabel(frame, "Inputs", Point(365, y - 13));
+      for (int i = 0; i < 16; ++i) {
+        constexpr int w = 20;
+        constexpr int h = 22;
+        extgpioLabel[i] = new uiLabel(frame, "", Point(120 + i * (w + 2), y + 3), Size(w, h));
+        extgpioLabel[i]->labelStyle().textAlign = uiHAlign::Center;
+        extgpioLabel[i]->setTextFmt("%c%d", i < 8 ? 'A' : 'B', i & 7);
+        if (i >= MCP_B3) {
+          // configure as IN
+          mcp.configureGPIO(i, fabgl::MCPDir::Input);
+          extgpioLabel[i]->labelStyle().backgroundColor = RGB888(64, 0, 0);
+          // generate a flag/interrupt whenever input changes
+          mcp.enableInterrupt(i, fabgl::MCPIntTrigger::PreviousChange);
+        } else {
+          // configure as OUT
+          mcp.configureGPIO(i, fabgl::MCPDir::Output);
+          extgpioLabel[i]->labelStyle().backgroundColor = RGB888(0, 64, 0);
+          auto pmcp = &mcp;
+          extgpioLabel[i]->onClick = [=]() {
+            extGPIOSet(i, !pmcp->readGPIO(i));
+          };
+        }
+      }
+
+      // play button
+      extgpioPlay = new uiButton(frame, "Play", Point(490, y + 3), Size(42, 22));
+      extgpioPlay->onClick = [&]() { playExtGPIOS(); };
+
+      y += 50;
+    }
+
 
     // wifi
     new uiLabel(frame, "WIFI TEST:", Point(10, y));
@@ -175,17 +222,20 @@ struct TestApp : public uiApp {
 
     // timer
     frame->onTimer = [&](uiTimerHandle h) {
+      // sound test
       if (h == soundTimer) {
         soundGenerator->playSound(SineWaveformGenerator(), random(100, 3000), 230, 100);
       }
+      // internal and external GPIOs
       if (h == gpioTimer) {
         updateGPIOInState();
       }
     };
 
 
-    new uiLabel(frame, "FabGL - Copyright 2019-2021 by Fabrizio Di Vittorio", Point(175, 313));
-    new uiLabel(frame, "WWW.FABGL.COM", Point(260, 330));
+    y = frame->size().height - 40;
+    new uiLabel(frame, "FabGL - Copyright 2019-2021 by Fabrizio Di Vittorio", Point(175, y));
+    new uiLabel(frame, "WWW.FABGL.COM", Point(260, y + 17));
 
   }
 
@@ -201,20 +251,85 @@ struct TestApp : public uiApp {
   }
 
   void updateGPIOInState() {
-    if (digitalRead(gpioIn) == HIGH) {
-      gpioInState->setText("1");
-    } else {
-      gpioInState->setText("0");
+    // read internal GPIOs
+    if (gpioInPrevState != digitalRead(gpioIn)) {
+      gpioInPrevState = !gpioInPrevState;
+      gpioInState->setText(gpioInPrevState ? "1" : "0");
+      gpioInState->repaint();
     }
-    gpioInState->repaint();
+    // read external GPIOs
+    if (mcp.available() && mcp.getPortIntFlags(MCP_PORTB)) {
+      // read B3...B7 GPIOs
+      for (int i = MCP_B3; i <= MCP_B7; ++i) {
+        extgpioLabel[i]->labelStyle().backgroundColor = mcp.readGPIO(i) ? RGB888(255, 0, 0) : RGB888(64, 0, 0);
+        extgpioLabel[i]->repaint();
+      }
+    }
   }
 
+  bool initMCP() {
+    return mcp.begin();
+  }
+
+  void extGPIOSet(int gpio, bool value) {
+    mcp.writeGPIO(gpio, value);
+    extgpioLabel[gpio]->labelStyle().backgroundColor = value ? RGB888(0, 255, 0) : RGB888(0, 64, 0);
+    extgpioLabel[gpio]->repaint();
+  }
+
+  void playExtGPIOS() {
+    showWindow(extgpioPlay, false);
+    // single left<->right
+    for (int j = 0; j < 4; ++j) {
+      for (int i = MCP_A0; i <= MCP_B2; ++i) {
+        extGPIOSet(i, true);
+        if (i > MCP_A0)
+          extGPIOSet(i - 1, false);
+        processEvents();
+        delay(80);
+      }
+      for (int i = MCP_B2; i >= MCP_A0; --i) {
+        extGPIOSet(i, true);
+        if (i < MCP_B2)
+          extGPIOSet(i + 1, false);
+        processEvents();
+        delay(80);
+      }
+    }
+    // all together
+    for (int j = 0; j < 4; ++j) {
+      for (int i = MCP_A0; i <= MCP_B2; ++i) {
+        extGPIOSet(i, true);
+        processEvents();
+        delay(80);
+      }
+      for (int i = MCP_A0; i <= MCP_B2; ++i) {
+        extGPIOSet(i, false);
+        processEvents();
+        delay(80);
+      }
+    }
+    // flashing
+    for (int j = 0; j < 10; ++j) {
+      for (int i = MCP_A0; i <= MCP_B2; ++i)
+        extGPIOSet(i, true);
+      processEvents();
+      delay(120);
+      for (int i = MCP_A0; i <= MCP_B2; ++i)
+        extGPIOSet(i, false);
+      processEvents();
+      delay(120);
+    }
+    showWindow(extgpioPlay, true);
+  }
 
   void testSD() {
+    // disable MCP (just because SD should be initialized before MCP)
+    mcp.end();
     // mount test
     FileBrowser fb;
     fb.unmountSDCard();
-    bool r = fb.mountSDCard(false, "/SD");
+    bool r = fb.mountSDCard(false, "/SD", 1);
     if (!r) {
       sdResultLabel->labelStyle().textColor = Color::BrightRed;
       sdResultLabel->setText("Mount Failed!");
@@ -251,6 +366,8 @@ struct TestApp : public uiApp {
       fclose(f);
     }
     free(fname);
+    fb.unmountSDCard();
+    initMCP();
     if (!f || !ok) {
       sdResultLabel->labelStyle().textColor = Color::BrightRed;
       sdResultLabel->setText("Read Failed!");
@@ -262,18 +379,33 @@ struct TestApp : public uiApp {
   }
 
   void testWifi() {
-    auto r = WiFi.scanNetworks(false, true);
-    if (r == WIFI_SCAN_FAILED) {
+    // use API directly to be able to call esp_wifi_deinit() and free necessary memory to mount sd card
+    esp_event_loop_create_default();
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    esp_wifi_init(&cfg);
+    uint16_t number = 8;
+    wifi_ap_record_t ap_info[number];
+    uint16_t ap_count = 0;
+    memset(ap_info, 0, sizeof(ap_info));
+    esp_wifi_set_mode(WIFI_MODE_STA);
+    esp_wifi_start();
+    auto r = esp_wifi_scan_start(NULL, true);
+    esp_wifi_scan_get_ap_records(&number, ap_info);
+    esp_wifi_scan_get_ap_num(&ap_count);
+    esp_wifi_stop();
+    esp_wifi_deinit();
+    esp_event_loop_delete_default();
+
+    if (r != ESP_OK) {
       wifiResultLabel->labelStyle().textColor = Color::BrightRed;
       wifiResultLabel->setText("Wifi Scan Failed!");
-    } else if (r == 0) {
+    } else if (ap_count == 0) {
       wifiResultLabel->labelStyle().textColor = Color::Yellow;
       wifiResultLabel->setText("Ok, No Network Found!");
     } else {
       wifiResultLabel->labelStyle().textColor = Color::Green;
-      wifiResultLabel->setTextFmt("Ok, Found %d Networks", r);
+      wifiResultLabel->setTextFmt("Ok, Found %d Networks", ap_count);
     }
-    WiFi.scanDelete();
   }
 
 } app;
@@ -288,7 +420,7 @@ void setup()
 
   DisplayController.queueSize = 350;  // trade UI speed using less RAM and allow both WiFi and SD Card FS
   DisplayController.begin();
-  DisplayController.setResolution(VESA_640x480_75Hz, 640, 360);
+  DisplayController.setResolution(VESA_640x480_75Hz);
 }
 
 
