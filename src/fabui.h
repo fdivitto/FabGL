@@ -95,7 +95,7 @@ namespace fabgl {
 
 
 // increase in case of garbage between windows!
-#define FABGLIB_UI_EVENTS_QUEUE_SIZE 256
+#define FABGLIB_UI_EVENTS_QUEUE_SIZE 300
 
 
 using std::list;
