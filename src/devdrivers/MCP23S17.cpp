@@ -92,8 +92,12 @@ bool MCP23S17::begin(int MISO, int MOSI, int CLK, int CS, int CSActiveState, int
   if (r) {
     // disable sequential mode
     // select bank 0
-    writeReg(MCP_IOCON, MCP_IOCON_SEQOP);
+    m_IOCON[0] = MCP_IOCON_SEQOP;
+    writeReg(MCP_IOCON, m_IOCON[0]);
+    r = readReg(MCP_IOCON) == m_IOCON[0];
   }
+  if (!r)
+    end();
   return r;
 }
 
@@ -103,7 +107,8 @@ bool MCP23S17::begin(int MISO, int MOSI, int CLK, int CS, int CSActiveState, int
 // - enable hardware address
 void MCP23S17::initDevice(uint8_t hwAddr)
 {
-  writeReg(MCP_IOCON, MCP_IOCON_SEQOP | MCP_IOCON_HAEN);
+  if (hwAddr < MCP_MAXDEVICES)
+    writeReg(MCP_IOCON, MCP_IOCON_SEQOP | MCP_IOCON_HAEN);
 }
 
 
@@ -130,7 +135,10 @@ bool MCP23S17::SPIBegin(int CSActiveState)
     devconf.spics_io_num   = m_CS;
     devconf.flags          = (CSActiveState == 1 ? SPI_DEVICE_POSITIVE_CS : 0);
     devconf.queue_size     = 1;
-    return spi_bus_add_device(m_SPIHost, &devconf, &m_SPIDevHandle) == ESP_OK;
+    r = spi_bus_add_device(m_SPIHost, &devconf, &m_SPIDevHandle);
+    if (r != ESP_OK)
+      spi_bus_free(m_SPIHost);
+    return r == ESP_OK;
   }
   return false;
 }
@@ -226,22 +234,19 @@ uint16_t MCP23S17::readReg16(uint8_t addr, uint8_t hwAddr)
 
 void MCP23S17::enableINTMirroring(bool value, uint8_t hwAddr)
 {
-  int iocon = readReg(MCP_IOCON, hwAddr);
-  writeReg(MCP_IOCON, value ? iocon | MCP_IOCON_MIRROR : iocon & ~MCP_IOCON_MIRROR, hwAddr);
+  writeReg(MCP_IOCON, value ? m_IOCON[hwAddr] | MCP_IOCON_MIRROR : m_IOCON[hwAddr] & ~MCP_IOCON_MIRROR, hwAddr);
 }
 
 
 void MCP23S17::enableINTOpenDrain(bool value, uint8_t hwAddr)
 {
-  int iocon = readReg(MCP_IOCON, hwAddr);
-  writeReg(MCP_IOCON, value ? iocon | MCP_IOCON_ODR : iocon & ~MCP_IOCON_ODR, hwAddr);
+  writeReg(MCP_IOCON, value ? m_IOCON[hwAddr] | MCP_IOCON_ODR : m_IOCON[hwAddr] & ~MCP_IOCON_ODR, hwAddr);
 }
 
 
 void MCP23S17::setINTActiveHigh(bool value, uint8_t hwAddr)
 {
-  int iocon = readReg(MCP_IOCON, hwAddr);
-  writeReg(MCP_IOCON, value ? iocon | MCP_IOCON_INTPOL : iocon & ~MCP_IOCON_INTPOL, hwAddr);
+  writeReg(MCP_IOCON, value ? m_IOCON[hwAddr] | MCP_IOCON_INTPOL : m_IOCON[hwAddr] & ~MCP_IOCON_INTPOL, hwAddr);
 }
 
 
@@ -303,8 +308,7 @@ void MCP23S17::writePort(int port, void const * buffer, size_t length, uint8_t h
 {
   // - disable sequential mode
   // - select bank 1 (to avoid switching between A and B registers)
-  uint8_t iocon = readReg(MCP_IOCON, hwAddr);
-  writeReg(MCP_IOCON, iocon | MCP_IOCON_SEQOP | MCP_IOCON_BANK);
+  writeReg(MCP_IOCON, m_IOCON[hwAddr] | MCP_IOCON_SEQOP | MCP_IOCON_BANK);
 
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
@@ -323,7 +327,7 @@ void MCP23S17::writePort(int port, void const * buffer, size_t length, uint8_t h
   spi_device_release_bus(m_SPIDevHandle);
 
   // restore IOCON
-  writeReg(MCP_BNK1_IOCON, iocon);
+  writeReg(MCP_BNK1_IOCON, m_IOCON[hwAddr]);
 }
 
 
@@ -331,8 +335,7 @@ void MCP23S17::readPort(int port, void * buffer, size_t length, uint8_t hwAddr)
 {
   // - disable sequential mode
   // - select bank 1 (to avoid switching between A and B registers)
-  uint8_t iocon = readReg(MCP_IOCON, hwAddr);
-  writeReg(MCP_IOCON, iocon | MCP_IOCON_SEQOP | MCP_IOCON_BANK);
+  writeReg(MCP_IOCON, m_IOCON[hwAddr] | MCP_IOCON_SEQOP | MCP_IOCON_BANK);
 
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
@@ -351,7 +354,7 @@ void MCP23S17::readPort(int port, void * buffer, size_t length, uint8_t hwAddr)
   spi_device_release_bus(m_SPIDevHandle);
 
   // restore IOCON
-  writeReg(MCP_BNK1_IOCON, iocon);
+  writeReg(MCP_BNK1_IOCON, m_IOCON[hwAddr]);
 }
 
 
