@@ -137,7 +137,7 @@ void setup()
 
     Terminal.write("\r\nPress F12 to change terminal configuration and CTRL-ALT-F12 to reset settings\r\n\n");
   } else if (ConfDialogApp::getBootInfo() == BOOTINFO_TEMPDISABLED) {
-    preferences.putInt("BootInfo", BOOTINFO_ENABLED);
+    preferences.putInt(PREF_BOOTINFO, BOOTINFO_ENABLED);
   }
 
   // onVirtualKey is triggered whenever a key is pressed or released
@@ -173,9 +173,9 @@ void setup()
     for (int i = 0; i < RESOLUTIONS_COUNT; ++i)
       if (strcmp(RESOLUTIONS_CMDSTR[i], seq) == 0) {
         // found resolution string
-        preferences.putInt("TempResolution", i);
+        preferences.putInt(PREF_TEMPRESOLUTION, i);
         if (ConfDialogApp::getBootInfo() == BOOTINFO_ENABLED)
-          preferences.putInt("BootInfo", BOOTINFO_TEMPDISABLED);
+          preferences.putInt(PREF_BOOTINFO, BOOTINFO_TEMPDISABLED);
         ESP.restart();
       }
   };
