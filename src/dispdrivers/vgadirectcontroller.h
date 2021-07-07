@@ -141,6 +141,8 @@ public:
    */
   static bool VSync()                        { return s_VSync; }
 
+  void setRepeatTwice(bool repeatTwice);
+
 private:
 
   void init();
@@ -216,6 +218,7 @@ private:
 
   int32_t                      m_linesCount;
   uint8_t *  *                 m_lines;
+  int m_repeatTwice = 1;
 
   // here we use callbacks in place of virtual methods because vtables are stored in Flash and
   // so it would not have been possible to put ISR into IRAM.
