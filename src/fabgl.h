@@ -117,49 +117,49 @@
  *
  * - - -
  * <CENTER> Installation Tutorial </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/8OTaPQlSTas?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/PCEmulator/PCEmulator.ino IBM PC Emulator Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3I1U2nEoxIQ?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3I1U2nEoxIQ?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/SpaceInvaders/SpaceInvaders.ino Space Invaders Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/LL8J7tjxeXA?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/GraphicalUserInterface/GraphicalUserInterface.ino Graphical User Interface - GUI Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/84ytGdiOih0?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/Audio/Audio.ino Audio output demo @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/RQtKFgU7OYI?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/AnsiTerminal/AnsiTerminal.ino Serial terminal connected to MBC2 Z80 board @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Ww_pH_ZOLqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Ww_pH_ZOLqU?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/SimpleTerminalOut/SimpleTerminalOut.ino Simple Terminal Out Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/AmXN0SIRqqU?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/Altair8800/Altair8800.ino Altair 8800 Emulator @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/y0opVifEyS8?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/VIC20/VIC20.ino Commodore VIC20 Emulator @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/ZW427HVWYys?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/NetworkTerminal/NetworkTerminal.ino Network Terminal Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/n5c27-y5tm4?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/ModelineStudio/ModelineStudio.ino Modeline Studio Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/Urp0rPukjzE?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/LoopbackTerminal/LoopbackTerminal.ino Loopback Terminal Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/hQhU5hgWdcU?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/DoubleBuffer/DoubleBuffer.ino Double Buffering Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/TRQcIiWQCJw?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/CollisionDetection/CollisionDetection.ino Collision Detection Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/q3OPSq4HhDE?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  * <CENTER> @link VGA/MultitaskingCPM/MultitaskingCPM.ino Multitasking CP/M Plus Example @endlink </CENTER>
- * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3UevsxMQZ5w?rel=0&loop=1&autoplay=1&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
+ * @htmlonly <div align="center"> <iframe width="560" height="349" src="http://www.youtube.com/embed/3UevsxMQZ5w?rel=0&loop=1&autoplay=0&modestbranding=1" frameborder="0" allowfullscreen align="middle"> </iframe> </div> @endhtmlonly
  * - - -
  *
  *
