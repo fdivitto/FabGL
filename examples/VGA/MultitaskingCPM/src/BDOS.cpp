@@ -2014,7 +2014,8 @@ void BDOS::BDOS_openFile()
     m_HAL->writeByte(FCBaddr + FCB_RC, fabgl::tmin<size_t>((size + 127) / 128, 128));
 
     // reset position to 0
-    m_HAL->writeByte(FCBaddr + FCB_EX, 0);
+    // note: EX (FCB_EX) is not reset, it should be done by the application
+    //       should it be done for S2 and CR also?
     m_HAL->writeByte(FCBaddr + FCB_S2, 0);
     m_HAL->writeByte(FCBaddr + FCB_CR, 0);
 
