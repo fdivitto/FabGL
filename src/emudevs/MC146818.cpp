@@ -253,7 +253,7 @@ void MC146818::enableTimers()
     if (divider == 2) {
       // we just support 32768Hz time base
       static const int RATE2US[16] = { 0, 3906, 7812, 122, 244, 488, 976, 1953, 3906, 7812, 15625, 31250, 62500, 125000, 250000, 500000 };
-      esp_timer_create_args_t args = { 0 };
+      esp_timer_create_args_t args = { };
       args.callback = periodIntTimerFunc;
       args.arg = this;
       args.dispatch_method = ESP_TIMER_TASK;
@@ -267,7 +267,7 @@ void MC146818::enableTimers()
 
   // Setup Alarm and End of Update timer
   if (!m_endUpdateIntTimerHandle) {
-    esp_timer_create_args_t args = { 0 };
+    esp_timer_create_args_t args = { };
     args.callback = endUpdateIntTimerFunc;
     args.arg = this;
     args.dispatch_method = ESP_TIMER_TASK;

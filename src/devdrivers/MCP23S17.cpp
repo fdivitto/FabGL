@@ -300,7 +300,7 @@ void MCP23S17::enableInterrupt(int gpio, MCPIntTrigger trigger, bool defaultValu
 void MCP23S17::disableInterrupt(int gpio, uint8_t hwAddr)
 {
   uint8_t reg = MCP_GPIO2REG(MCP_GPINTEN, gpio);
-  writeReg(reg, readReg(reg, hwAddr) & !MCP_GPIO2MASK(gpio), hwAddr);
+  writeReg(reg, readReg(reg, hwAddr) & ~MCP_GPIO2MASK(gpio), hwAddr);
 }
 
 
@@ -312,7 +312,7 @@ void MCP23S17::writePort(int port, void const * buffer, size_t length, uint8_t h
 
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
-  spi_transaction_ext_t ta = { 0 };
+  spi_transaction_ext_t ta = { };
   ta.command_bits    = 8;
   ta.address_bits    = 8;
   ta.base.cmd        = 0b01000000 | (hwAddr << 1);  // write
@@ -339,7 +339,7 @@ void MCP23S17::readPort(int port, void * buffer, size_t length, uint8_t hwAddr)
 
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
-  spi_transaction_ext_t ta = { 0 };
+  spi_transaction_ext_t ta = { };
   ta.command_bits    = 8;
   ta.address_bits    = 8;
   ta.base.cmd        = 0b01000001 | (hwAddr << 1);  // read

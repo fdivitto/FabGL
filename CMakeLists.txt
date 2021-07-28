@@ -16,4 +16,5 @@ idf_component_register(SRC_DIRS src
                                 spiffs
                                 esp_adc_cal
                                 ulp
+                                nvs_flash
                                 soc)

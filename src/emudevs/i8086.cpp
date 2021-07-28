@@ -103,7 +103,7 @@ namespace fabgl {
 
 
 // Global variable definitions
-static uint8_t    regs[46];
+static uint8_t    regs[48];
 static uint8_t    flags[10];
 static int32_t    regs_offset;
 static uint8_t    * regs8, i_mod_size, i_d, i_w, raw_opcode_id, xlat_opcode_id, extra, rep_mode, seg_override_en, rep_override_en, trap_flag;
@@ -735,7 +735,7 @@ void i8086::reset()
   regs8  = (uint8_t *)(s_memory + regs_offset);
   regs16 = (uint16_t *)(s_memory + regs_offset);
 
-  memset(regs8, 0, 48);
+  memset(regs8, 0, sizeof(regs));
   set_flags(0);
 
   // Initialise CPU state variables
