@@ -18,12 +18,9 @@ Copyright (c) 2019-2021 Fabrizio Di Vittorio.
 
 All rights reserved.
 
-This library and related software is available under GPL v3 or commercial license. 
+This library and related software is available under GPL v3. Feel free to use FabGL in free software and hardware.
 
-It is always free for students, hobbyists, professors and researchers.
-
-It is not-free if embedded as firmware in commercial boards.
-
+Please contact fdivitto2013@gmail.com if you need a commercial license.
 
 =================================================================================
 
