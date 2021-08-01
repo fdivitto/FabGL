@@ -82,7 +82,7 @@ struct CodePages {
  * ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D),
  * CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.
  *
- * @param virtualKey The virtual key to convert.
+ * @param item The virtual key to convert.
  * @param codepage Codepage used to convert language specific characters.
  *
  * @return The ASCII code of virtual key or -1 if virtual key cannot be translated to ASCII.
