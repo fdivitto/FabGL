@@ -24,7 +24,7 @@ var classfabgl_1_1_v_g_a_controller =
     [ "setMouseCursor", "classfabgl_1_1_v_g_a_controller.html#a94fd39f8c9245ed51545f9dd6ce7f6ee", null ],
     [ "setMouseCursor", "classfabgl_1_1_v_g_a_controller.html#a43a95ed39cce3e065407d1e7a30b2f4f", null ],
     [ "setMouseCursorPos", "classfabgl_1_1_v_g_a_controller.html#ae0897f2355f7462b5ab003083418e3b4", null ],
-    [ "setRawPixel", "classfabgl_1_1_v_g_a_controller.html#a6922854f04ed5c95f625becd5ef59df2", null ],
+    [ "setRawPixel", "classfabgl_1_1_v_g_a_controller_a6922854f04ed5c95f625becd5ef59df2.html#a6922854f04ed5c95f625becd5ef59df2", null ],
     [ "setResolution", "classfabgl_1_1_v_g_a_controller.html#a2ac60f74ade23bfba42ef0985635589d", null ],
     [ "setSprites", "classfabgl_1_1_v_g_a_controller.html#a75ba732cc6ae90f53757b588f6c75d7e", null ],
     [ "shrinkScreen", "classfabgl_1_1_v_g_a_controller.html#a770ea50d044c8c792185fbcb5b766736", null ],

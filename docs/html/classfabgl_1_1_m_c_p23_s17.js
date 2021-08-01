@@ -1,5 +1,6 @@
 var classfabgl_1_1_m_c_p23_s17 =
 [
+    [ "available", "classfabgl_1_1_m_c_p23_s17_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a", null ],
     [ "begin", "classfabgl_1_1_m_c_p23_s17_ab205baa284c3197865fef390a0304355.html#ab205baa284c3197865fef390a0304355", null ],
     [ "configureGPIO", "classfabgl_1_1_m_c_p23_s17_a0f75f7eae543df606255fb17aaff4fcd.html#a0f75f7eae543df606255fb17aaff4fcd", null ],
     [ "disableInterrupt", "classfabgl_1_1_m_c_p23_s17_af8a4b526fa1bbd378c9a65410795159c.html#af8a4b526fa1bbd378c9a65410795159c", null ],
@@ -7,6 +8,7 @@ var classfabgl_1_1_m_c_p23_s17 =
     [ "enableINTMirroring", "classfabgl_1_1_m_c_p23_s17_a193701415e90c6513fa98fd5303ad8c8.html#a193701415e90c6513fa98fd5303ad8c8", null ],
     [ "enableINTOpenDrain", "classfabgl_1_1_m_c_p23_s17_abab6c21e5930b8616afec12a6b0778ca.html#abab6c21e5930b8616afec12a6b0778ca", null ],
     [ "enablePortPullUp", "classfabgl_1_1_m_c_p23_s17_ad87ef9d4b57ebfecc575f6f2147f162a.html#ad87ef9d4b57ebfecc575f6f2147f162a", null ],
+    [ "end", "classfabgl_1_1_m_c_p23_s17_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087", null ],
     [ "getPortDir", "classfabgl_1_1_m_c_p23_s17_abb39053b2749aab18f6457ea2bfcfd5f.html#abb39053b2749aab18f6457ea2bfcfd5f", null ],
     [ "getPortIntCaptured", "classfabgl_1_1_m_c_p23_s17_a51f318b3a55f21c122f9090d60549306.html#a51f318b3a55f21c122f9090d60549306", null ],
     [ "getPortIntFlags", "classfabgl_1_1_m_c_p23_s17_a34e4bc492e58778c7d864db2cf4ec57d.html#a34e4bc492e58778c7d864db2cf4ec57d", null ],

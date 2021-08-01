@@ -4,6 +4,8 @@ var files_dup =
     [ "canvas.h", "canvas_8h.html", [
       [ "Canvas", "classfabgl_1_1_canvas.html", "classfabgl_1_1_canvas" ]
     ] ],
+    [ "codepages.cpp", "codepages_8cpp_source.html", null ],
+    [ "codepages.h", "codepages_8h.html", "codepages_8h" ],
     [ "collisiondetector.cpp", "collisiondetector_8cpp_source.html", null ],
     [ "collisiondetector.h", "collisiondetector_8h.html", "collisiondetector_8h" ],
     [ "displaycontroller.cpp", "displaycontroller_8cpp_source.html", null ],
@@ -45,8 +47,7 @@ var files_dup =
     ] ],
     [ "keyboard.cpp", "keyboard_8cpp_source.html", null ],
     [ "keyboard.h", "keyboard_8h.html", [
-      [ "Keyboard", "classfabgl_1_1_keyboard.html", "classfabgl_1_1_keyboard" ],
-      [ "VirtualKeyItem", "structfabgl_1_1_virtual_key_item.html", "structfabgl_1_1_virtual_key_item" ]
+      [ "Keyboard", "classfabgl_1_1_keyboard.html", "classfabgl_1_1_keyboard" ]
     ] ],
     [ "MC146818.cpp", "_m_c146818_8cpp_source.html", null ],
     [ "MC146818.h", "_m_c146818_8h_source.html", null ],

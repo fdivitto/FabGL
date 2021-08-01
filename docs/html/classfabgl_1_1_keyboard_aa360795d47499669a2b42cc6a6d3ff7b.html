@@ -105,7 +105,11 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_keyboard_aa360795d47499
 
 <p>Converts virtual key to ASCII. </p>
 <p>This method converts the specified virtual key to ASCII, if possible.<br />
- For example VK_A is converted to 'A' (ASCII 0x41), CTRL + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D), CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.</p>
+ <br />
+For example VK_A is converted to 'A' (ASCII 0x41), CTRL + VK_SPACE produces ASCII NUL (0x00), CTRL + letter produces ASCII control codes from SOH (0x01) to SUB (0x1A), CTRL + VK_BACKSLASH produces ASCII FS (0x1C), CTRL + VK_QUESTION produces ASCII US (0x1F), CTRL + VK_LEFTBRACKET produces ASCII ESC (0x1B), CTRL + VK_RIGHTBRACKET produces ASCII GS (0x1D), CTRL + VK_TILDE produces ASCII RS (0x1E) and VK_SCROLLLOCK produces XON or XOFF.<br />
+ <br />
+This method uses current codepage set using <a class="el" href="classfabgl_1_1_keyboard_ac1d99a6ef63ceea2bdf227fd7dc1c1af.html#ac1d99a6ef63ceea2bdf227fd7dc1c1af" title="Sets font codepage for virtual key to ASCII conversion. ">Keyboard.setCodePage()</a><br />
+</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">virtualKey</td><td>The virtual key to convert.</td></tr>
@@ -114,7 +118,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_keyboard_aa360795d47499
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ASCII code of virtual key or -1 if virtual key cannot be translated to ASCII. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="keyboard_8cpp_source.html#l00232">232</a> of file <a class="el" href="keyboard_8cpp_source.html">keyboard.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8cpp_source.html#l00237">237</a> of file <a class="el" href="keyboard_8cpp_source.html">keyboard.cpp</a>.</p>
 
 </div>
 </div>
@@ -124,7 +128,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_keyboard_aa360795d47499
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a></li>
-    <li class="footer">Generated on Sun May 23 2021 23:04:35 for FabGL by
+    <li class="footer">Generated on Sun Aug 1 2021 08:18:39 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

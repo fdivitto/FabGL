@@ -58,6 +58,11 @@ var fabui_8h =
       [ "CheckBox", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9a7ea0f1332ade5b23b34502a3bfe715a2", null ],
       [ "RadioButton", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9accf0503df958552a245a3593e1063cd8", null ]
     ] ],
+    [ "uiHAlign", "fabui_8h.html#ga878ce849208099631ecb3f931c2d0e11", [
+      [ "Left", "fabui_8h.html#gga878ce849208099631ecb3f931c2d0e11a945d5e233cf7d6240f6b783b36a374ff", null ],
+      [ "Right", "fabui_8h.html#gga878ce849208099631ecb3f931c2d0e11a92b09c7c48c520c3c55e497875da437c", null ],
+      [ "Center", "fabui_8h.html#gga878ce849208099631ecb3f931c2d0e11a4f1f6016fc9f3f2353c0cc7c67b292bd", null ]
+    ] ],
     [ "uiMessageBoxIcon", "fabui_8h.html#gaae85628862e3db5a13e7c21a90589c1d", [
       [ "None", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1da6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Question", "fabui_8h.html#ggaae85628862e3db5a13e7c21a90589c1daa97ea56b0e00b2379736ae60869ff66a", null ],

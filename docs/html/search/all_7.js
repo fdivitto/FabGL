@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['hardsoft',['Hardsoft',['../group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7aa1e74360bdc370e9471d00cedfdeecbe',1,'fabgl']]],
+  ['hardware',['Hardware',['../group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a3c02a379965ab0dfcd77b1c484450433',1,'fabgl']]],
   ['hascaret',['hasCaret',['../structfabgl_1_1ui_text_edit_props_a84898156730ce3318a26a7cf6c97fbb1.html#a84898156730ce3318a26a7cf6c97fbb1',1,'fabgl::uiTextEditProps']]],
   ['haschildren',['hasChildren',['../classfabgl_1_1ui_window_a1e1bd91469c7a0d321a3d63e59a7c63c.html#a1e1bd91469c7a0d321a3d63e59a7c63c',1,'fabgl::uiWindow']]],
   ['hasclosebutton',['hasCloseButton',['../structfabgl_1_1ui_frame_props_abd46fbb6409e64da394e03d52ebef0b6.html#abd46fbb6409e64da394e03d52ebef0b6',1,'fabgl::uiFrameProps']]],

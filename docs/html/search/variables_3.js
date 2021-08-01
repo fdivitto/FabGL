@@ -4,7 +4,7 @@ var searchData=
   ['dataallocated',['dataAllocated',['../structfabgl_1_1_bitmap_a655d553e67e161e0952ce91663de4cd1.html#a655d553e67e161e0952ce91663de4cd1',1,'fabgl::Bitmap']]],
   ['dayofmonth',['dayOfMonth',['../structfabgl_1_1_date_time_a5f0b5de23fa9acb3542c09b4d8e338e6.html#a5f0b5de23fa9acb3542c09b4d8e338e6',1,'fabgl::DateTime']]],
   ['dayofweek',['dayOfWeek',['../structfabgl_1_1_date_time_acb1264377521faab9e0ede2a086ba956.html#acb1264377521faab9e0ede2a086ba956',1,'fabgl::DateTime']]],
-  ['deadkeystovk',['deadkeysToVK',['../structfabgl_1_1_keyboard_layout_afeb30afd42398a705008b72fae0531db.html#afeb30afd42398a705008b72fae0531db',1,'fabgl::KeyboardLayout']]],
+  ['deadkeystovk',['deadkeysToVK',['../structfabgl_1_1_keyboard_layout_a7b29be47bb8d5f9fcd21087b2154f3e5.html#a7b29be47bb8d5f9fcd21087b2154f3e5',1,'fabgl::KeyboardLayout']]],
   ['deadkeysvk',['deadKeysVK',['../structfabgl_1_1_keyboard_layout_ad0d829bcf251d4905509f2bd5001c770.html#ad0d829bcf251d4905509f2bd5001c770',1,'fabgl::KeyboardLayout']]],
   ['defaultcursor',['defaultCursor',['../structfabgl_1_1ui_window_style_a0195b95c6a40056ec20ca1924bfd827a.html#a0195b95c6a40056ec20ca1924bfd827a',1,'fabgl::uiWindowStyle']]],
   ['deltax',['deltaX',['../structfabgl_1_1_mouse_delta_aa619bed5b36c23065f6b3c1faf8ac31d.html#aa619bed5b36c23065f6b3c1faf8ac31d',1,'fabgl::MouseDelta']]],

@@ -1,7 +1,7 @@
 var structfabgl_1_1_keyboard_layout =
 [
     [ "alternateVK", "structfabgl_1_1_keyboard_layout_af2eba0d1062cfe5619aad3e91b1f71f9.html#af2eba0d1062cfe5619aad3e91b1f71f9", null ],
-    [ "deadkeysToVK", "structfabgl_1_1_keyboard_layout_afeb30afd42398a705008b72fae0531db.html#afeb30afd42398a705008b72fae0531db", null ],
+    [ "deadkeysToVK", "structfabgl_1_1_keyboard_layout_a7b29be47bb8d5f9fcd21087b2154f3e5.html#a7b29be47bb8d5f9fcd21087b2154f3e5", null ],
     [ "deadKeysVK", "structfabgl_1_1_keyboard_layout_ad0d829bcf251d4905509f2bd5001c770.html#ad0d829bcf251d4905509f2bd5001c770", null ],
     [ "desc", "structfabgl_1_1_keyboard_layout_a710bce51374aba96ab04912897666c35.html#a710bce51374aba96ab04912897666c35", null ],
     [ "exScancodeToVK", "structfabgl_1_1_keyboard_layout_a4b8244ad0fb0897a6f8e92da84e405ef.html#a4b8244ad0fb0897a6f8e92da84e405ef", null ],

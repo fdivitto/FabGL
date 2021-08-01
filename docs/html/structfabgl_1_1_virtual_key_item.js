@@ -9,6 +9,7 @@ var structfabgl_1_1_virtual_key_item =
     [ "NUMLOCK", "structfabgl_1_1_virtual_key_item_ab880df189daa4861c309307b2dae58fb.html#ab880df189daa4861c309307b2dae58fb", null ],
     [ "RALT", "structfabgl_1_1_virtual_key_item_adf86cca43c0ae4c9b5314428299761e3.html#adf86cca43c0ae4c9b5314428299761e3", null ],
     [ "scancode", "structfabgl_1_1_virtual_key_item_af27aa5d4d3c43e9252865c52b467eedf.html#af27aa5d4d3c43e9252865c52b467eedf", null ],
+    [ "SCROLLLOCK", "structfabgl_1_1_virtual_key_item_af058a43c145593ed0ae5bdb3b05faf31.html#af058a43c145593ed0ae5bdb3b05faf31", null ],
     [ "SHIFT", "structfabgl_1_1_virtual_key_item_a3e74b78f4b0569939656e461c8b03350.html#a3e74b78f4b0569939656e461c8b03350", null ],
     [ "vk", "structfabgl_1_1_virtual_key_item_a03e7e670247d1beb39c1263ebddf6a6e.html#a03e7e670247d1beb39c1263ebddf6a6e", null ]
 ];

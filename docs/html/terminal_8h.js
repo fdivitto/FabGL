@@ -14,7 +14,9 @@ var terminal_8h =
     ] ],
     [ "FlowControl", "terminal_8h.html#gae88006c219f95bae663fe0f2a2561dd7", [
       [ "None", "terminal_8h.html#ggae88006c219f95bae663fe0f2a2561dd7a6adf97f83acf6453d4a6a4b1070f3754", null ],
-      [ "Software", "terminal_8h.html#ggae88006c219f95bae663fe0f2a2561dd7a719d067b229178f03bcfa1da4ac4dede", null ]
+      [ "Software", "terminal_8h.html#ggae88006c219f95bae663fe0f2a2561dd7a719d067b229178f03bcfa1da4ac4dede", null ],
+      [ "Hardware", "terminal_8h.html#ggae88006c219f95bae663fe0f2a2561dd7a3c02a379965ab0dfcd77b1c484450433", null ],
+      [ "Hardsoft", "terminal_8h.html#ggae88006c219f95bae663fe0f2a2561dd7aa1e74360bdc370e9471d00cedfdeecbe", null ]
     ] ],
     [ "LineEditorSpecialChar", "terminal_8h.html#gab18ae5ee717bbc4b0722f7c3f5cffbf6", [
       [ "CursorUp", "terminal_8h.html#ggab18ae5ee717bbc4b0722f7c3f5cffbf6a49176da75a1269d7cda14dd52331c7da", null ],

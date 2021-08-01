@@ -20,6 +20,7 @@ var classfabgl_1_1_keyboard =
     [ "scancodeSet", "classfabgl_1_1_keyboard_aac6f6dc99df5db0ee8bb96b4917022b6.html#aac6f6dc99df5db0ee8bb96b4917022b6", null ],
     [ "sendCommand", "classfabgl_1_1_keyboard.html#a2cca4ba4bef3e1e010b7614be84323e3", null ],
     [ "sendCommand", "classfabgl_1_1_keyboard.html#a069efe90366fe5ca0c22eaf17a0e30fc", null ],
+    [ "setCodePage", "classfabgl_1_1_keyboard_ac1d99a6ef63ceea2bdf227fd7dc1c1af.html#ac1d99a6ef63ceea2bdf227fd7dc1c1af", null ],
     [ "setLayout", "classfabgl_1_1_keyboard_aca97a7179d5358ec795485e15618b243.html#aca97a7179d5358ec795485e15618b243", null ],
     [ "setLEDs", "classfabgl_1_1_keyboard_a99a84478b09fbb13863c3ec64f7ca872.html#a99a84478b09fbb13863c3ec64f7ca872", null ],
     [ "setScancodeSet", "classfabgl_1_1_keyboard_a600e8df9a742233bd074a2510be71cce.html#a600e8df9a742233bd074a2510be71cce", null ],

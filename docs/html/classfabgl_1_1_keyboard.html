@@ -172,6 +172,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_p_s2_device_a069efe90366fe5ca0c22eaf17a0e30fc.html#a069efe90366fe5ca0c22eaf17a0e30fc">sendCommand</a> (uint8_t cmd)</td></tr>
 <tr class="memdesc:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a raw command to the PS/2 device.  <a href="classfabgl_1_1_p_s2_device_a069efe90366fe5ca0c22eaf17a0e30fc.html#a069efe90366fe5ca0c22eaf17a0e30fc">More...</a><br /></td></tr>
 <tr class="separator:a069efe90366fe5ca0c22eaf17a0e30fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1d99a6ef63ceea2bdf227fd7dc1c1af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_ac1d99a6ef63ceea2bdf227fd7dc1c1af.html#ac1d99a6ef63ceea2bdf227fd7dc1c1af">setCodePage</a> (CodePage const *codepage)</td></tr>
+<tr class="memdesc:ac1d99a6ef63ceea2bdf227fd7dc1c1af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets font codepage for virtual key to ASCII conversion.  <a href="classfabgl_1_1_keyboard_ac1d99a6ef63ceea2bdf227fd7dc1c1af.html#ac1d99a6ef63ceea2bdf227fd7dc1c1af">More...</a><br /></td></tr>
+<tr class="separator:ac1d99a6ef63ceea2bdf227fd7dc1c1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca97a7179d5358ec795485e15618b243"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_keyboard_aca97a7179d5358ec795485e15618b243.html#aca97a7179d5358ec795485e15618b243">setLayout</a> (<a class="el" href="structfabgl_1_1_keyboard_layout.html">KeyboardLayout</a> const *layout)</td></tr>
 <tr class="memdesc:aca97a7179d5358ec795485e15618b243"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets keyboard layout.  <a href="classfabgl_1_1_keyboard_aca97a7179d5358ec795485e15618b243.html#aca97a7179d5358ec795485e15618b243">More...</a><br /></td></tr>
 <tr class="separator:aca97a7179d5358ec795485e15618b243"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,7 +222,7 @@ Static Public Attributes</h2></td></tr>
  The PS2 controller uses ULP coprocessor and RTC slow memory to communicate with the PS2 device.<br />
  <br />
  It is possible to specify an international keyboard layout. The default is US-layout.<br />
- There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian) and ES (Spanish). Other layout can be added inheriting from US or from any other layout.</p>
+ There are three predefined kayboard layouts: US (USA), UK (United Kingdom), DE (German), IT (Italian), ES (Spanish), FR (French) and BE (Belgian). Other layout can be added inheriting from US or from any other layout.</p>
 <p>Applications do not need to create an instance of <a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">Keyboard</a> because an instance named <a class="el" href="classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. ">Keyboard</a> is created automatically.</p>
 <p>Example: </p><pre class="fragment">fabgl::Keyboard Keyboard;
 
@@ -229,7 +232,7 @@ Keyboard.begin(GPIO_NUM_33, GPIO_NUM_32);  // clk, dat
 // Prints name of received virtual keys
 while (true)
   Serial.printf("VirtualKey = %s\n", Keyboard.virtualKeyToString(Keyboard.getNextVirtualKey()));</pre> 
-<p class="definition">Definition at line <a class="el" href="keyboard_8h_source.html#l00092">92</a> of file <a class="el" href="keyboard_8h_source.html">keyboard.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="keyboard_8h_source.html#l00077">77</a> of file <a class="el" href="keyboard_8h_source.html">keyboard.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="keyboard_8h_source.html">keyboard.h</a></li>
 <li><a class="el" href="keyboard_8cpp_source.html">keyboard.cpp</a></li>
@@ -240,7 +243,7 @@ while (true)
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_keyboard.html">Keyboard</a></li>
-    <li class="footer">Generated on Sun May 23 2021 23:04:35 for FabGL by
+    <li class="footer">Generated on Sun Aug 1 2021 08:18:39 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

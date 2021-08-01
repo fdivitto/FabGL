@@ -43,13 +43,14 @@ var searchData=
   ['rgb888',['RGB888',['../structfabgl_1_1_r_g_b888.html',1,'fabgl']]],
   ['rgba2222',['RGBA2222',['../structfabgl_1_1_r_g_b_a2222.html',1,'RGBA2222'],['../group___enumerations_gafe919d7a7aeba256337f0fc494cf7221.html#ggafe919d7a7aeba256337f0fc494cf7221ab24d28cf12130dc2957866674bc65ff7',1,'fabgl::RGBA2222()']]],
   ['rgba8888',['RGBA8888',['../structfabgl_1_1_r_g_b_a8888.html',1,'RGBA8888'],['../group___enumerations_gafe919d7a7aeba256337f0fc494cf7221.html#ggafe919d7a7aeba256337f0fc494cf7221a165f06116e7b8d9b2481dfc805db4619',1,'fabgl::RGBA8888()']]],
-  ['right',['right',['../structfabgl_1_1ui_anchors_a61938d8fca0e953d39df2d9e06f55b10.html#a61938d8fca0e953d39df2d9e06f55b10',1,'fabgl::uiAnchors::right()'],['../structfabgl_1_1_mouse_buttons_a61938d8fca0e953d39df2d9e06f55b10.html#a61938d8fca0e953d39df2d9e06f55b10',1,'fabgl::MouseButtons::right()']]],
+  ['right',['right',['../structfabgl_1_1ui_anchors_a61938d8fca0e953d39df2d9e06f55b10.html#a61938d8fca0e953d39df2d9e06f55b10',1,'fabgl::uiAnchors::right()'],['../structfabgl_1_1_mouse_buttons_a61938d8fca0e953d39df2d9e06f55b10.html#a61938d8fca0e953d39df2d9e06f55b10',1,'fabgl::MouseButtons::right()'],['../group___enumerations_ga878ce849208099631ecb3f931c2d0e11.html#gga878ce849208099631ecb3f931c2d0e11a92b09c7c48c520c3c55e497875da437c',1,'fabgl::Right()']]],
   ['righttoleft',['RightToLeft',['../group___enumerations_ga1743e3458e6f97a06488133ec83ba679.html#gga1743e3458e6f97a06488133ec83ba679ab7b0ea3028791689ea070674776855e2',1,'fabgl']]],
   ['rootwindow',['rootWindow',['../classfabgl_1_1ui_app_a3d2fb84052499f76e83d002ceaf34a71.html#a3d2fb84052499f76e83d002ceaf34a71',1,'fabgl::uiApp']]],
   ['rotate0',['Rotate0',['../group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da291b44223b90e70be1fade1eff8a55e0',1,'fabgl']]],
   ['rotate180',['Rotate180',['../group___enumerations_ga56be86abe812065345408e6741aa1e37.html#gga56be86abe812065345408e6741aa1e37a371980c5d153a94cf022d6b4daa4d34c',1,'fabgl::Rotate180()'],['../group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da371980c5d153a94cf022d6b4daa4d34c',1,'fabgl::Rotate180()']]],
   ['rotate270',['Rotate270',['../group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da59c609399b2fb3956ecac7df34a76c2f',1,'fabgl']]],
   ['rotate90',['Rotate90',['../group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da1d20b3969ea74725dd1a5b7669d60a98',1,'fabgl']]],
+  ['rtsstatus',['RTSStatus',['../classfabgl_1_1_terminal_a5bcaf5e465dc0194b83c47053744140f.html#a5bcaf5e465dc0194b83c47053744140f',1,'fabgl::Terminal']]],
   ['run',['run',['../classfabgl_1_1ui_app_a07dcf556fc74c9216516270bf081e06e.html#a07dcf556fc74c9216516270bf081e06e',1,'fabgl::uiApp::run()'],['../classfabgl_1_1_v_g_a_direct_controller_a13a43e6d814de94978c515cb084873b1.html#a13a43e6d814de94978c515cb084873b1',1,'fabgl::VGADirectController::run()']]],
   ['runasync',['runAsync',['../classfabgl_1_1ui_app_ab68dc957dd0c4c21df1d6e2d690c0f68.html#ab68dc957dd0c4c21df1d6e2d690c0f68',1,'fabgl::uiApp']]]
 ];
