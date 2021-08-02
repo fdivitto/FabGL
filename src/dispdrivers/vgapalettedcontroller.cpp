@@ -7,7 +7,7 @@
 * Please contact fdivitto2013@gmail.com if you need a commercial license.
 
 
-* This library and related software is available under GPL v3. Feel free to use FabGL in free software and hardware:
+* This library and related software is available under GPL v3.
 
   FabGL is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

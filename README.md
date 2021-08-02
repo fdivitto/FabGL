@@ -18,7 +18,7 @@ Copyright (c) 2019-2021 Fabrizio Di Vittorio.
 
 All rights reserved.
 
-This library and related software is available under GPL v3. Feel free to use FabGL in free software and hardware.
+This library and related software is available under GPL v3.
 
 Please contact fdivitto2013@gmail.com if you need a commercial license.
 

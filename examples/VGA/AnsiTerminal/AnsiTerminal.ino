@@ -7,7 +7,7 @@
 * Please contact fdivitto2013@gmail.com if you need a commercial license.
 
 
-* This library and related software is available under GPL v3. Feel free to use FabGL in free software and hardware:
+* This library and related software is available under GPL v3.
 
   FabGL is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -61,12 +61,12 @@ fabgl::Terminal                     Terminal;
 #define RTS      13
 #define CTS      35
 
-/* prev conf
+///* prev conf
 #define RESET_PIN 12
 #define RESET_PIN_ACTIVE 1
 #define USERESETPIN 1
 //*/
-///*
+/*
 #define RESET_PIN 39
 #define RESET_PIN_ACTIVE 0
 #define USERESETPIN 0
