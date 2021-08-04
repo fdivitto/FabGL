@@ -24,6 +24,17 @@
  */
 
 
+ /*
+
+  MCP23S17 pins:
+    MISO = 35   (2 on TTGO VGA32)
+    MOSI = 12
+    CLK  = 14
+    CS   = none (13 on FabGL development board, shared and inverted with MicroSD)
+    INT  = 36 (interrupt pin connected to INTA of MCP23S17)
+ */
+
+
 #include "fabgl.h"
 #include "fabui.h"
 #include "devdrivers/MCP23S17.h"
@@ -38,7 +49,7 @@ fabgl::VGA16Controller DisplayController;
 fabgl::PS2Controller   PS2Controller;
 
 
-
+#define MCP_INT 36
 
 
 struct TestApp : public uiApp {
@@ -58,9 +69,11 @@ struct TestApp : public uiApp {
   uiLabel *        wifiResultLabel;
   uiLabel *        extgpioLabel[16];
   uiButton *       extgpioPlay;
+  uiLabel *        extIntLabel;
 
   int              gpioIn, gpioOut;
   bool             gpioInPrevState;
+  int              intOffDelay;
 
   fabgl::MCP23S17  mcp;
 
@@ -177,9 +190,9 @@ struct TestApp : public uiApp {
       new uiLabel(frame, "EXT GPIO TEST:", Point(10, y));
       new uiLabel(frame, "Outputs", Point(120, y - 13));
       new uiLabel(frame, "Inputs", Point(365, y - 13));
+      constexpr int w = 20;
+      constexpr int h = 22;
       for (int i = 0; i < 16; ++i) {
-        constexpr int w = 20;
-        constexpr int h = 22;
         extgpioLabel[i] = new uiLabel(frame, "", Point(120 + i * (w + 2), y + 3), Size(w, h));
         extgpioLabel[i]->labelStyle().textAlign = uiHAlign::Center;
         extgpioLabel[i]->setTextFmt("%c%d", i < 8 ? 'A' : 'B', i & 7);
@@ -200,8 +213,15 @@ struct TestApp : public uiApp {
         }
       }
 
+      // MCP_INT pin
+      extIntLabel = new uiLabel(frame, "INT", Point(472, y + 3), Size(25, h));
+      extIntLabel->labelStyle().textAlign = uiHAlign::Center;
+      extIntLabel->labelStyle().backgroundColor = RGB888(64, 64, 0);
+      mcp.enableINTMirroring(true); // INTA = INTB
+      pinMode(MCP_INT, INPUT);
+
       // play button
-      extgpioPlay = new uiButton(frame, "Play", Point(490, y + 3), Size(42, 22));
+      extgpioPlay = new uiButton(frame, "Play", Point(510, y + 3), Size(42, 22));
       extgpioPlay->onClick = [&]() { playExtGPIOS(); };
 
       y += 50;
@@ -255,11 +275,22 @@ struct TestApp : public uiApp {
       gpioInState->repaint();
     }
     // read external GPIOs
-    if (mcp.available() && mcp.getPortIntFlags(MCP_PORTB)) {
-      // read B3...B7 GPIOs
-      for (int i = MCP_B3; i <= MCP_B7; ++i) {
-        extgpioLabel[i]->labelStyle().backgroundColor = mcp.readGPIO(i) ? RGB888(255, 0, 0) : RGB888(64, 0, 0);
-        extgpioLabel[i]->repaint();
+    if (mcp.available()) {
+      // check MCP_INT has been triggered correctly
+      if (digitalRead(MCP_INT) == LOW) {
+        extIntLabel->labelStyle().backgroundColor = RGB888(255, 255, 0);
+        extIntLabel->repaint();
+        intOffDelay = 2;
+      } else if (--intOffDelay == 0) {
+        extIntLabel->labelStyle().backgroundColor = RGB888(64, 64, 0);
+        extIntLabel->repaint();
+      }
+      if (mcp.getPortIntFlags(MCP_PORTB)) {
+        // read B3...B7 GPIOs
+        for (int i = MCP_B3; i <= MCP_B7; ++i) {
+          extgpioLabel[i]->labelStyle().backgroundColor = mcp.readGPIO(i) ? RGB888(255, 0, 0) : RGB888(64, 0, 0);
+          extgpioLabel[i]->repaint();
+        }
       }
     }
   }
@@ -408,10 +439,9 @@ struct TestApp : public uiApp {
 } app;
 
 
-
 void setup()
 {
-  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
