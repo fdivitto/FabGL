@@ -284,6 +284,15 @@ public:
    */
   void setINTActiveHigh(bool value, uint8_t hwAddr = 0);
 
+  /**
+   * @brief Gets the polarity of the INT pins
+   *
+   * @param hwAddr Optional hardware device address
+   *
+   * @return true if INT is high on interrupt
+   */
+  bool getINTActiveHigh(uint8_t hwAddr = 0)                              { return readReg(MCP_IOCON, hwAddr) & MCP_IOCON_INTPOL; }
+
 
   //// port setup, read, write (8 bit granularity) ////
 
@@ -334,6 +343,16 @@ public:
    *     io.enablePortPullUp(MCP_PORTA, 0b10000000);
    */
   void enablePortPullUp(int port, uint8_t value, uint8_t hwAddr = 0)     { writeReg(MCP_GPPU + port, value, hwAddr); }
+
+  /**
+   * @brief Gets port pull-ups
+   *
+   * @param port Port to set pull-ups (MCP_PORTA or MCP_PORTB)
+   * @param hwAddr Optional hardware device address
+   *
+   * @return Pull-ups mask (1 = pull-up enabled)
+   */
+  uint8_t getPortPullUp(int port, uint8_t hwAddr = 0)                    { return readReg(MCP_GPPU + port, hwAddr); }
 
   /**
    * @brief Sets status of output pins of specified port
