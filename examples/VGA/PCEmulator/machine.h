@@ -34,6 +34,7 @@
 #include "emudevs/PIT8253.h"
 #include "emudevs/i8042.h"
 #include "emudevs/MC146818.h"
+#include "devdrivers/MCP23S17.h"
 
 #include "bios.h"
 
@@ -53,6 +54,7 @@ using fabgl::PIC8259;
 using fabgl::PIT8253;
 using fabgl::i8042;
 using fabgl::MC146818;
+using fabgl::MCP23S17;
 
 
 class Machine {
@@ -165,6 +167,10 @@ private:
 
   // CMOS & RTC
   MC146818                 m_MC146818;
+
+  // extended I/O (MCP23S17)
+  MCP23S17                 m_MCP23S17;
+  uint8_t                  m_MCP23S17Sel;
 
 };
 

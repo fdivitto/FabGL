@@ -63,6 +63,25 @@
 #define HGC_CONFSWITCH_ALLOWPAGE1         0x02   // 0 = prevents access to page 1, 1 = allows access to page 1
 
 
+// I/O expander (based on MCP23S17) ports
+
+#define EXTIO_CONFIG                    0x00e0   // configuration port (see EXTIO_CONFIG_.... flags)
+// whole 8 bit ports handling
+#define EXTIO_DIRA                      0x00e1   // port A direction (0 = input, 1 = output)
+#define EXTIO_DIRB                      0x00e2   // port B direction (0 = input, 1 = output)
+#define EXTIO_PULLUPA                   0x00e3   // port A pullup enable (0 = disabled, 1 = enabled)
+#define EXTIO_PULLUPB                   0x00e4   // port B pullup enable (0 = disabled, 1 = enabled)
+#define EXTIO_PORTA                     0x00e5   // port A read/write
+#define EXTIO_PORTB                     0x00e6   // port B read/write
+// single GPIO handling
+#define EXTIO_GPIOSEL                   0x00e7   // GPIO selection (0..7 = PA0..PA7, 8..15 = PB0..PB8)
+#define EXTIO_GPIOCONF                  0x00e8   // selected GPIO direction and pullup (0 = input, 1 = output, 2 = input with pullup)
+#define EXTIO_GPIO                      0x00e9   // selected GPIO read or write (0 = low, 1 = high)
+
+// I/O expander configuration bits
+#define EXTIO_CONFIG_AVAILABLE            0x01   // 1 = external IO available, 0 = not available
+#define EXTIO_CONFIG_INT_POLARITY         0x02   // 1 = positive polarity, 0 = negative polarity (default)
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +148,9 @@ void Machine::init()
   m_MC146818.init("PCEmulator");
   m_MC146818.setCallbacks(this, MC146818Interrupt);
   m_MC146818.reset();
+
+  m_MCP23S17.begin();
+  m_MCP23S17Sel = 0;
 
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
@@ -434,6 +456,43 @@ void Machine::writePort(void * context, int address, uint8_t value)
       m->setHGCMode();
       break;
 
+    // I/O expander - Configuration
+    case EXTIO_CONFIG:
+      m->m_MCP23S17.setINTActiveHigh(value & EXTIO_CONFIG_INT_POLARITY);
+      break;
+
+    // I/O expander - Port A/B Direction
+    case EXTIO_DIRA ... EXTIO_DIRB:
+      m->m_MCP23S17.setPortDir(address - EXTIO_DIRA + MCP_PORTA, ~value);
+      printf("dir %d = %02X\n", address - EXTIO_DIRA + MCP_PORTA, ~value);
+      break;
+
+    // I/O expander - Port A/B pullup
+    case EXTIO_PULLUPA ... EXTIO_PULLUPB:
+      m->m_MCP23S17.enablePortPullUp(address - EXTIO_PULLUPA + MCP_PORTA, value);
+      break;
+
+    // I/O expander - Port A/B write
+    case EXTIO_PORTA ... EXTIO_PORTB:
+      m->m_MCP23S17.writePort(address - EXTIO_PORTA + MCP_PORTA, value);
+      printf("set %d = %02X\n", address - EXTIO_PORTA + MCP_PORTA, value);
+      break;
+
+    // I/O expander - GPIO selection
+    case EXTIO_GPIOSEL:
+      m->m_MCP23S17Sel = value & 0xf;
+      break;
+
+    // I/O expander - GPIO direction and pullup
+    case EXTIO_GPIOCONF:
+      m->m_MCP23S17.configureGPIO(m->m_MCP23S17Sel, value & 1 ? fabgl::MCPDir::Output : fabgl::MCPDir::Input, value & 2);
+      break;
+
+    // I/O expander - GPIO write
+    case EXTIO_GPIO:
+      m->m_MCP23S17.writeGPIO(m->m_MCP23S17Sel, value);
+      break;
+
     default:
       //printf("OUT %04x=%02x\n", address, value);
       break;
@@ -523,6 +582,31 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x3ba:
       m->m_HGCVSyncQuery += 1;
       return (m->m_HGCVSyncQuery & 0x7) != 0 ? 0x00 : 0x80; // "not VSync" (0x80) every 7 queries
+
+    // I/O expander - Configuration
+    case EXTIO_CONFIG:
+      return (m->m_MCP23S17.available()        ? EXTIO_CONFIG_AVAILABLE    : 0) |
+             (m->m_MCP23S17.getINTActiveHigh() ? EXTIO_CONFIG_INT_POLARITY : 0);
+
+    // I/O expander - Port A/B Direction
+    case EXTIO_DIRA ... EXTIO_DIRB:
+      return m->m_MCP23S17.getPortDir(address - EXTIO_DIRA + MCP_PORTA);
+
+    // I/O expander - Port A/B pullup
+    case EXTIO_PULLUPA ... EXTIO_PULLUPB:
+      return m->m_MCP23S17.getPortPullUp(address - EXTIO_PULLUPA + MCP_PORTA);
+
+    // I/O expander - Port A/B read
+    case EXTIO_PORTA ... EXTIO_PORTB:
+      return m->m_MCP23S17.readPort(address - EXTIO_PORTA + MCP_PORTA);
+
+    // I/O expander - GPIO selection
+    case EXTIO_GPIOSEL:
+      return m->m_MCP23S17Sel;
+
+    // I/O expander - GPIO read
+    case EXTIO_GPIO:
+      return m->m_MCP23S17.readGPIO(m->m_MCP23S17Sel);
 
   }
 
