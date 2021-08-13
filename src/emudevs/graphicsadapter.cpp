@@ -88,11 +88,12 @@ static const RGB222 CGAGraphics4ColorsPalette[4][4] = {
   },
 };
 
+// Used to store the most recent background color value
+static uint8_t BackgroundPixelValue = 0;
 
-
-
-GraphicsAdapter::GraphicsAdapter()
-  : m_VGADCtrl(false),
+GraphicsAdapter::GraphicsAdapter(bool enableHDMICompatibility)
+  : m_hdmiCompatMode(enableHDMICompatibility),
+    m_VGADCtrl(false),
     m_emulation(Emulation::None),
     m_videoBuffer(nullptr),
     m_rawLUT(nullptr),
@@ -129,6 +130,10 @@ void GraphicsAdapter::setEmulation(Emulation emulation)
     m_VGADCtrl.end();
     freeLUT();
 
+    int viewPortWidth;
+    int viewPortHeight;
+    VGATimings timings;
+
     switch (m_emulation) {
 
       case Emulation::None:
@@ -137,48 +142,86 @@ void GraphicsAdapter::setEmulation(Emulation emulation)
 
       case Emulation::PC_Text_40x25_16Colors:
         //printf("Emulation::PC_Text_40x25_16Colors\n");
-        setFont(&FONT_8x8);
-        setCursorShape(5, 7);
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_40x25_16Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(4);
-        m_VGADCtrl.setResolution(VGA_320x200_70Hz); // VGA_320x200_60HzD as alternative?
-        m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
-        m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
+        if (!m_hdmiCompatMode)
+        {
+          setFont(&FONT_8x8);
+          setCursorShape(5, 7);
+          m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_40x25_16Colors, this);
+          m_VGADCtrl.setScanlinesPerCallBack(4);
+          m_VGADCtrl.setResolution(VGA_320x200_70Hz); // VGA_320x200_60HzD as alternative?
+          m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
+          m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
+        }
+        else
+        {
+          // In HDMI compat mode resolution is set to 640x480 and as such we bump up the font
+          setFont(&FONT_8x16);
+          setCursorShape(13, 15);
+          m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors_HDMICompat, this);
+          m_VGADCtrl.setScanlinesPerCallBack(8);
+          m_VGADCtrl.setResolution(VGA_640x480_60Hz);
+          m_VGADCtrl.convertModelineToTimings(VGA_320x200_70Hz, &timings);
+
+          viewPortWidth  = ~3 & timings.HVisibleArea; // view port width must be 32 bit aligned
+          viewPortHeight = timings.VVisibleArea;
+
+          m_columns = viewPortWidth / m_font.width;
+          m_rows    = viewPortHeight / m_font.height;
+        }
         break;
 
       case Emulation::PC_Text_80x25_16Colors:
         //printf("Emulation::PC_Text_80x25_16Colors\n");
         setFont(&FONT_8x16);
         setCursorShape(13, 15);
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(8);
-        m_VGADCtrl.setResolution(VGA_640x400_70Hz); // VGA_640x400_60Hz as alternative?
-        m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
-        m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
+        if (!m_hdmiCompatMode)
+        {
+          m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors, this);
+          m_VGADCtrl.setScanlinesPerCallBack(8);
+          m_VGADCtrl.setResolution(VGA_640x400_70Hz); // VGA_640x400_60Hz as alternative?
+          m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
+          m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
+        }
+        else
+        {
+          m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors_HDMICompat, this);
+          m_VGADCtrl.setScanlinesPerCallBack(8);
+          m_VGADCtrl.setResolution(VGA_640x480_60Hz);
+          m_VGADCtrl.convertModelineToTimings(VGA_320x200_70Hz, &timings);
+
+          viewPortWidth  = ~3 & timings.HVisibleArea; // view port width must be 32 bit aligned
+          viewPortHeight = timings.VVisibleArea;
+
+          m_columns = viewPortWidth / m_font.width;
+          m_rows    = viewPortHeight / m_font.height;
+        }
         break;
 
       case Emulation::PC_Graphics_320x200_4Colors:
         //printf("Emulation::PC_Graphics_320x200_4Colors\n");
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_320x200_4Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(VGA_320x200_70Hz);   // VGA_320x200_60HzD as alternative?
+        m_VGADCtrl.setDrawScanlineCallback(m_hdmiCompatMode ? drawScanline_PC_Graphics_320x200_4Colors_HDMICompat : drawScanline_PC_Graphics_320x200_4Colors, this);
+        m_VGADCtrl.setScanlinesPerCallBack(m_hdmiCompatMode ? 2 : 1);
+        m_VGADCtrl.setResolution(m_hdmiCompatMode ? VGA_640x480_60Hz : VGA_320x200_70Hz);   // VGA_320x200_60HzD as alternative?
         break;
 
       case Emulation::PC_Graphics_640x200_2Colors:
         //printf("Emulation::PC_Graphics_640x200_2Colors\n");
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_640x200_2Colors, this);
         m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(VGA_640x200_70Hz); // VGA_640x200_60HzD as alternative?
+        m_VGADCtrl.setResolution(m_hdmiCompatMode ? VGA_640x480_60Hz : VGA_640x200_70Hz); // VGA_640x200_60HzD as alternative?
         break;
 
       case Emulation::PC_Graphics_HGC_720x348:
         //printf("Emulation::PC_Graphics_HGC_720x348\n");
+        // m_hdmiCompatMode is not currently supported here
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_HGC_720x348, this);
         m_VGADCtrl.setScanlinesPerCallBack(2);
         m_VGADCtrl.setResolution(VGA_720x348_73Hz);  // VGA_720x348_50HzD as alternative?
         break;
 
     }
+
+    BackgroundPixelValue = m_VGADCtrl.createBlankRawPixel();
 
     if (m_emulation != Emulation::None) {
       setupLUT();
@@ -531,6 +574,24 @@ void IRAM_ATTR GraphicsAdapter::drawScanline_PC_Text_80x25_16Colors(void * arg, 
   }
 }
 
+// Wrapper around drawScanline_PC_Text_80x25_16Colors that paints the bottom 5 rows black to avoid display corruption
+void IRAM_ATTR GraphicsAdapter::drawScanline_PC_Text_80x25_16Colors_HDMICompat(void * arg, uint8_t * dest, int scanLine)
+{
+  constexpr int SCREENWIDTH      = 640;
+
+  if (scanLine >= 400)
+  {
+    // setScanlinesPerCallBack is set to 8 and we want to erase all the scan lines
+    for (int x = 0; x < SCREENWIDTH * 8; ++x) {
+        auto destptr = dest + x; 
+        *destptr = BackgroundPixelValue; // black
+    }
+  }
+  else
+  {
+    drawScanline_PC_Text_80x25_16Colors(arg, dest, scanLine);
+  }
+}
 
 // offset 0x0000 for even scan lines (bit 0 = 0), lines 0, 2, 4...
 // offset 0x2000 for odd scan lines  (bit 0 = 1), lines 1, 3, 5...
@@ -553,6 +614,74 @@ void IRAM_ATTR GraphicsAdapter::drawScanline_PC_Graphics_320x200_4Colors(void * 
   }
 }
 
+void IRAM_ATTR GraphicsAdapter::drawScanline_PC_Graphics_320x200_4Colors_HDMICompat(void * arg, uint8_t * dest, int scanLine)
+{
+  // If this function is called we are rendering at a real resolution of 640x480 but have an internal resolution of 320x200
+  // This function is going to get called 240 times as setScanlinesPerCallBack is set to 2. This is done so that we can easily
+  // double the input lines to fill the screen
+
+  constexpr int LOGICAL_WIDTH         = 320;
+  constexpr int LOGICAL_HEIGHT        = 200;
+  constexpr int LOGICAL_PIXELSPERBYTE = 4;
+  constexpr int LOGICAL_WIDTHINBYTES  = LOGICAL_WIDTH / LOGICAL_PIXELSPERBYTE;
+
+  constexpr int SCREENWIDTH            = 640;
+
+  if (scanLine >= 400)
+  {
+    // nothing over 400 is doubled so just paint it black
+    // we double the screen width to paint two lines
+    for (int x = 0; x < SCREENWIDTH * 2; ++x) {
+        auto destptr = dest + x; 
+        *destptr = BackgroundPixelValue; // black
+    }
+    return;
+  }
+
+  // only do ptr arithmetic when we are actually 'on screen'
+  auto ga = (GraphicsAdapter*) arg;
+  auto LUT32 = (uint32_t*) ga->m_rawLUT;
+  auto logicalScanLine = scanLine / 2;
+  auto srcLine = logicalScanLine >= 200 ? nullptr : ga->m_videoBuffer + ((logicalScanLine & 1) << 13) + LOGICAL_WIDTHINBYTES * (logicalScanLine >> 1);
+
+  auto dest32A = (uint32_t*) dest;
+  auto dest32B = (uint32_t*) (dest + SCREENWIDTH); // skip a full line
+
+  // go through every pixel in the logical buffer skipping 4 at a time
+  for (int x = 0; x < LOGICAL_WIDTH; x += LOGICAL_PIXELSPERBYTE) 
+  {
+    // each uint32_t in srcLine has 4 pixels stuffed into it, we need to take those out
+    // and reformat them to double the horizonal resolution
+
+    // lookup actual pixel value we want to draw
+    uint32_t pixel = LUT32[*srcLine++];
+
+    // convert into a uin8_t so we can access the individual 4 values
+    auto pixelBase = (uint8_t*)&pixel;
+    auto p1 = *(pixelBase+0);
+    auto p2 = *(pixelBase+1);
+    auto p3 = *(pixelBase+2);
+    auto p4 = *(pixelBase+3);
+
+    // We want to double the horizontal resolution so
+    // 0xAABBCCDD becomes 0xAAAABBBBCCCCDDDD
+
+    *(dest32A+1) = (p1 << 24) + (p1 << 16) + (p2 << 8) + p2;
+    *(dest32A+0) = (p3 << 24) + (p3 << 16) + (p4 << 8) + p4;
+
+    // We want to double the vertical resolution as well so copy the pixel to the next row
+    *(dest32B+1) = *(dest32A+1);
+    *(dest32B+0) = *(dest32A+0);
+
+    // increment both pointers to skip the pixels we've just written
+    *dest32A++;
+    *dest32A++;
+
+    *dest32B++;
+    *dest32B++;
+  }
+}
+
 
 // offset 0x0000 for even scan lines (bit 0 = 0), lines 0, 2, 4...
 // offset 0x2000 for odd scan lines  (bit 0 = 1), lines 1, 3, 5...
@@ -561,6 +690,17 @@ void IRAM_ATTR GraphicsAdapter::drawScanline_PC_Graphics_640x200_2Colors(void * 
   constexpr int WIDTH         = 640;
   constexpr int PIXELSPERBYTE = 8;
   constexpr int WIDTHINBYTES  = WIDTH / PIXELSPERBYTE;
+
+  if (scanLine >= 200)
+  {
+    // in hdmi compat mode this function will be called for more than 200 scanlines
+    // in this situation just paint in black
+    for (int x = 0; x < WIDTH; ++x) {
+        auto destptr = dest + x; 
+        *destptr = BackgroundPixelValue; // black
+    }
+    return;
+  }
 
   auto ga = (GraphicsAdapter*) arg;
 

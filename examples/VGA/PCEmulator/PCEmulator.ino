@@ -259,8 +259,18 @@ void setup()
   // uncomment to clear preferences
   //preferences.clear();
 
-  ibox.begin(VGA_640x400_70Hz, 400, 300); // VGA_640x400_60Hz as alternative?
+  ibox.begin(VGA_640x480_60Hz, 400, 300); // Using VGA_640x480_60Hz as it's very compatible and allows many VGA to HDMI adapters to display the UI
   ibox.setBackgroundColor(RGB888(0, 0, 0));
+
+  // ask if a HDMI adapter is connected, if it is then the GraphicsAdapter will need to run in HDMICompat mode
+  const unsigned int INVALIDVAL = 3;
+  unsigned int hdmiAdapterInUse = preferences.getUInt("hdmiAdapter", INVALIDVAL);
+  if (hdmiAdapterInUse == INVALIDVAL)
+  {
+    // value is unset, ask user
+    hdmiAdapterInUse = ibox.message("Display configuration", "Are you using a VGA to HDMI converter?", "Yes", "No") == InputResult::Enter ? 0 : 1;
+    preferences.putUInt("hdmiAdapter", hdmiAdapterInUse);
+  }
 
   // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env
   #ifdef BOARD_HAS_PSRAM
@@ -333,7 +343,7 @@ void setup()
   ibox.end();
 
 
-  machine = new Machine;
+  machine = new Machine(hdmiAdapterInUse);
   machine->setDriveA(filenameDiskA);
   machine->setDriveC(filenameDiskC);
   machine->run();

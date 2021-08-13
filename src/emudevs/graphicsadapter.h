@@ -57,8 +57,14 @@ public:
     PC_Graphics_HGC_720x348,      // Hercules 720x348 Graphics Black/White
   };
 
-
-  GraphicsAdapter();
+  /**
+   * @brief Construct a new GraphicsAdapter
+   *
+   *
+   * @param enableHDMICompatibility If true then text, 320x200 and 640x200 modes are rescaled to 640x480x60hz to enable compatibility with many VGA to HDMI adapters
+   *
+   */
+  GraphicsAdapter(bool enableHDMICompatibility);
   ~GraphicsAdapter();
 
   void setEmulation(Emulation emulation);
@@ -97,10 +103,13 @@ private:
 
   static void drawScanline_PC_Text_80x25_16Colors(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Text_40x25_16Colors(void * arg, uint8_t * dest, int scanLine);
+  static void drawScanline_PC_Text_80x25_16Colors_HDMICompat(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Graphics_320x200_4Colors(void * arg, uint8_t * dest, int scanLine);
+  static void drawScanline_PC_Graphics_320x200_4Colors_HDMICompat(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Graphics_640x200_2Colors(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Graphics_HGC_720x348(void * arg, uint8_t * dest, int scanLine);
 
+  bool                m_hdmiCompatMode;
 
   VGADirectController m_VGADCtrl;
   Emulation           m_emulation;

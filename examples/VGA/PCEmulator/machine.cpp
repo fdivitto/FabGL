@@ -95,7 +95,8 @@ uint8_t *         Machine::s_memory;
 uint8_t *         Machine::s_videoMemory;
 
 
-Machine::Machine()
+Machine::Machine(bool hdmiAdapterInUse)
+: m_graphicsAdapter(hdmiAdapterInUse)
 {
 }
 

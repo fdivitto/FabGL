@@ -60,7 +60,7 @@ using fabgl::MCP23S17;
 class Machine {
 
 public:
-  Machine();
+  Machine(bool hdmiAdapterInUse);
   ~Machine();
 
   void setDriveA(char const * filename) { m_diskImageFile[1] = filename; }
