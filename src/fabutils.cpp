@@ -26,13 +26,13 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <math.h>
 
 #include "ff.h"
 #include "diskio.h"
+#include "vfs_api.h"
 #include "esp_vfs_fat.h"
 #include "esp_task_wdt.h"
 #include "driver/sdspi_host.h"
