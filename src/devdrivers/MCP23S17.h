@@ -194,6 +194,8 @@ public:
    *
    * @param hwAddr Hardware address of additional device
    *
+   * @return True if MCP23S17 is available and correctly initialized
+   *
    * Example:
    *
    *     MCP23S17 io;
@@ -203,7 +205,7 @@ public:
    *     io.configureGPIO(MCP_A0, MCPDir::Output, false, 0);  // set A0 of device 0 as output
    *     io.configureGPIO(MCP_A0, MCPDir::Input, false, 1);   // set A0 of device 1 as input
    */
-  void initDevice(uint8_t hwAddr);
+  bool initDevice(uint8_t hwAddr);
 
 
   //// registers read/write ////
