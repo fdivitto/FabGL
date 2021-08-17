@@ -256,7 +256,7 @@ bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimin
     timings->VSyncLogic     = '-';
     timings->scanCount      = 1;
     timings->multiScanBlack = 0;
-    timings->HStartingBlock = VGAScanStart::FrontPorch;
+    timings->HStartingBlock = VGAScanStart::VisibleArea;
 
     // get (+HSync | -HSync) (+VSync | -VSync)
     char const * pc = modeline + pos;
