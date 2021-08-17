@@ -152,7 +152,7 @@ void GraphicsAdapter::setEmulation(Emulation emulation)
         setCursorShape(13, 15);
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors, this);
         m_VGADCtrl.setScanlinesPerCallBack(8);
-        m_VGADCtrl.setResolution(VGA_640x400_70Hz); // VGA_640x400_60Hz as alternative?
+        m_VGADCtrl.setResolution(VGA_640x480_60Hz, 640, 400);
         m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
         m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
         break;
