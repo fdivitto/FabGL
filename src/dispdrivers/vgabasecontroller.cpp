@@ -231,7 +231,7 @@ bool VGABaseController::setDMABuffersCount(int buffersCount)
 
 
 // modeline syntax:
-//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal (+HSync | -HSync) (+VSync | -VSync) [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
+//   "label" clock_mhz hdisp hsyncstart hsyncend htotal vdisp vsyncstart vsyncend vtotal [(+HSync | -HSync) (+VSync | -VSync)] [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
 bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimings * timings)
 {
   float freq;
@@ -258,7 +258,7 @@ bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimin
     timings->multiScanBlack = 0;
     timings->HStartingBlock = VGAScanStart::VisibleArea;
 
-    // get (+HSync | -HSync) (+VSync | -VSync)
+    // get [(+HSync | -HSync) (+VSync | -VSync)]
     char const * pc = modeline + pos;
     for (; *pc; ++pc) {
       if (*pc == '+' || *pc == '-') {
@@ -270,7 +270,8 @@ bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimin
             ++pc;
           break;
         }
-      }
+      } else if (*pc != ' ')
+        break;
     }
 
     // get [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
