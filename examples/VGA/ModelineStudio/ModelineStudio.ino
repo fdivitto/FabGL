@@ -98,15 +98,15 @@ void printHelp()
   Serial.printf("Resolutions:\n");
   Serial.printf("  + = Next resolution  - = Prev resolution   x = Restore modeline\n");
   Serial.printf("Modeline change:\n");
-  Serial.printf("  ! = Insert modline. Example: !\"640x350@70Hz\" 25.175 640 656 752 800 350 366 462 510 -HSync -VSync\n");
-  /*
+  Serial.printf("  Just insert a modline. Example: \"640x350@70Hz\" 25.175 640 656 752 800 350 366 462 510 -HSync -VSync\n");
+  ///*
   Serial.printf("  e = Decrease horiz. Front Porch   E = Increase horiz. Front Porch\n");
   Serial.printf("  r = Decrease horiz. Sync Pulse    R = Increase horiz. Sync Pulse\n");
   Serial.printf("  t = Decrease horiz. Bach Porch    T = Increase horiz. Back Porch\n");
   Serial.printf("  y = Decrease vert. Front Porch    Y = Increase vert. Front Porch\n");
   Serial.printf("  u = Decrease vert. Sync Pulse     U = Increase vert. Sync Pulse\n");
   Serial.printf("  i = Decrease vert. Bach Porch     I = Increase vert. Back Porch\n");
-  */
+  //*/
   Serial.printf("  o = Decrease frequency by 5KHz    O = Increase frequency by 5KHz\n");
   Serial.printf("  . = Change horiz. signals order\n");
   Serial.printf("Various:\n");
@@ -236,17 +236,18 @@ void loop()
         updateScreen();
         printInfo();
         break;
-      case '!':
+      case '"':
         moveX = moveY = shrinkX = shrinkY = 0;
-        VGAController.setResolution( Serial.readStringUntil('\n').c_str() );
+        VGAController.setResolution( (String("\"") + Serial.readStringUntil('\n')).c_str() );
         updateScreen();
         printInfo();
         break;
-      /*
+      ///*
       case 'e':
       case 'E':
         t = *VGAController.getResolutionTimings();
         t.HFrontPorch = (c == 'e' ? t.HFrontPorch - 1 : t.HFrontPorch + 1);
+        t.HBackPorch = (c == 'e' ? t.HBackPorch + 1 : t.HBackPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
@@ -255,6 +256,7 @@ void loop()
       case 'R':
         t = *VGAController.getResolutionTimings();
         t.HSyncPulse = (c == 'r' ? t.HSyncPulse - 1 : t.HSyncPulse + 1);
+        t.HBackPorch = (c == 'r' ? t.HBackPorch + 1 : t.HBackPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
@@ -263,6 +265,7 @@ void loop()
       case 'T':
         t = *VGAController.getResolutionTimings();
         t.HBackPorch = (c == 't' ? t.HBackPorch - 1 : t.HBackPorch + 1);
+        t.HFrontPorch = (c == 't' ? t.HFrontPorch + 1 : t.HFrontPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
@@ -271,6 +274,7 @@ void loop()
       case 'Y':
         t = *VGAController.getResolutionTimings();
         t.VFrontPorch = (c == 'y' ? t.VFrontPorch - 1 : t.VFrontPorch + 1);
+        t.VBackPorch = (c == 'y' ? t.VBackPorch + 1 : t.VBackPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
@@ -279,6 +283,7 @@ void loop()
       case 'U':
         t = *VGAController.getResolutionTimings();
         t.VSyncPulse = (c == 'u' ? t.VSyncPulse - 1 : t.VSyncPulse + 1);
+        t.VBackPorch = (c == 'u' ? t.VBackPorch + 1 : t.VBackPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
@@ -287,11 +292,12 @@ void loop()
       case 'I':
         t = *VGAController.getResolutionTimings();
         t.VBackPorch = (c == 'i' ? t.VBackPorch - 1 : t.VBackPorch + 1);
+        t.VFrontPorch = (c == 'i' ? t.VFrontPorch + 1 : t.VFrontPorch - 1);
         VGAController.setResolution(t);
         updateScreen();
         printInfo();
         break;
-      */
+      //*/
       case 'o':
       case 'O':
         t = *VGAController.getResolutionTimings();
