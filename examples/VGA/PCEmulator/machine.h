@@ -64,6 +64,7 @@ public:
   ~Machine();
 
   void setDriveA(char const * filename) { m_diskImageFile[1] = filename; }
+  void setDriveB(char const * filename) { } // @TODO, not implemented
   void setDriveC(char const * filename) { m_diskImageFile[0] = filename; }
 
   void run();

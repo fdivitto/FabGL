@@ -49,30 +49,31 @@ extern "C" {
 
 #include "fabgl.h"
 
+#include "mconf.h"
 #include "machine.h"
+
+
+
+#define MACHINE_CONF_FILENAME "mconfs.txt"
+
+#define NL "\r\n"
+
+
+static const char DefaultConfFile[] =
+  "desc \"FreeDOS (A:)\"                               dska http://www.fabglib.org/downloads/A_freedos.img" NL
+  "desc \"FreeDOS (A:) + DOS Programming Tools (C:)\"  dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosdev.img" NL
+  "desc \"FreeDOS (A:) + Windows 3.0 Hercules (C:)\"   dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_winherc.img" NL
+  "desc \"FreeDOS (A:) + DOS Programs and Games (C:)\" dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosprog.img" NL
+  "desc \"MS-DOS 3.31 (A:)\"                           dska http://www.fabglib.org/downloads/A_MSDOS331.img" NL
+  "desc \"Linux ELKS 0.4.0\"                           dska http://www.fabglib.org/downloads/A_ELK040.img" NL
+  "desc \"CP/M 86 + Turbo Pascal 3\"                   dska http://www.fabglib.org/downloads/A_CPM86.img" NL;
+
 
 
 using fabgl::StringList;
 using fabgl::imin;
 using fabgl::imax;
 
-
-
-struct DiskConf {
-  char const * desc;
-  char const * diskA_URL;
-  char const * diskC_URL;
-};
-
-static const DiskConf diskConfs[] = {
-  { "FreeDOS (A:)",                               "http://www.fabglib.org/downloads/A_freedos.img",  nullptr },
-  { "FreeDOS (A:) + DOS Programming Tools (C:)",  "http://www.fabglib.org/downloads/A_freedos.img",  "http://www.fabglib.org/downloads/C_dosdev.img" },
-  { "FreeDOS (A:) + Windows 3.0 Hercules (C:)",   "http://www.fabglib.org/downloads/A_freedos.img",  "http://www.fabglib.org/downloads/C_winherc.img" },
-  { "FreeDOS (A:) + DOS Programs and Games (C:)", "http://www.fabglib.org/downloads/A_freedos.img",  "http://www.fabglib.org/downloads/C_dosprog.img" },
-  { "MS-DOS 3.31 (A:)",                           "http://www.fabglib.org/downloads/A_MSDOS331.img", nullptr },
-  { "Linux ELKS 0.4.0",                           "http://www.fabglib.org/downloads/A_ELK040.img",   nullptr },
-  { "CP/M 86 + Turbo Pascal 3",                   "http://www.fabglib.org/downloads/A_CPM86.img",    nullptr },
-};
 
 
 Preferences preferences;
@@ -245,6 +246,53 @@ bool downloadURL(char const * URL, FILE * file)
 }
 
 
+void loadMachineConfiguration(MachineConf * mconf)
+{
+  FileBrowser fb("/SD");
+
+  // saves a default configuration file if necessary
+  if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
+    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+    fwrite(DefaultConfFile, 1, sizeof(DefaultConfFile), confFile);
+    fclose(confFile);
+  }
+
+  // load
+  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "rb");
+  mconf->loadFromFile(confFile);
+  fclose(confFile);
+}
+
+
+// return filename if successfully download or already exist
+char const * getDisk(char const * url)
+{
+  FileBrowser fb("/SD");
+
+  char const * filename = nullptr;
+  if (url) {
+    if (strncmp("://", url + 4, 3) == 0) {
+      // this is actually an URL
+      filename = strrchr(url, '/') + 1;
+      if (filename && !fb.exists(filename, false)) {
+        // disk doesn't exist, try to download
+        auto file = fb.openFile(filename, "wb");
+        bool success = downloadURL(url, file);
+        fclose(file);
+        if (!success) {
+          fb.remove(filename);
+          return nullptr;
+        }
+      }
+    } else {
+      // this is just a file
+      if (fb.exists(url, false))
+        filename = url;
+    }
+  }
+  return filename;
+}
+
 
 void setup()
 {
@@ -284,57 +332,36 @@ void setup()
 
   updateDateTime();
 
-  // show a list of disks configurations
+  // machine configurations
+  MachineConf mconf;
+  loadMachineConfiguration(&mconf);
+
+  // show a list of machine configurations
   StringList dconfs;
-  for (int i = 0; i < sizeof(diskConfs) / sizeof(DiskConf); ++i)
-    dconfs.append(diskConfs[i].desc);
+  for (auto conf = mconf.getFirstItem(); conf; conf = conf->next)
+    dconfs.append(conf->desc);
   dconfs.select(preferences.getInt("dconf", 0), true);
-  ibox.select("Disks Configurations", "Please select a disk configuration", &dconfs, nullptr, "OK", 8);
+  ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "OK", 8);
   int idx = imax(dconfs.getFirstSelected(), 0);
   preferences.putInt("dconf", idx);
 
-  // load selected configuration
-  FileBrowser fb;
-  fb.setDirectory("/SD");
-  bool disksExist = true;
-  char const * filenameDiskA = nullptr;
-  char const * filenameDiskC = nullptr;
-  if (diskConfs[idx].diskA_URL) {
-    filenameDiskA = strrchr(diskConfs[idx].diskA_URL, '/') + 1;
-    disksExist = fb.exists(filenameDiskA, false);
-    if (!disksExist) {
-      // disk A doesn't exist, download
-      auto file = fb.openFile(filenameDiskA, "wb");
-      disksExist = downloadURL(diskConfs[idx].diskA_URL, file);
-      fclose(file);
-      if (!disksExist)
-        fb.remove(filenameDiskA);
-    }
-  }
-  if (diskConfs[idx].diskC_URL) {
-    filenameDiskC = strrchr(diskConfs[idx].diskC_URL, '/') + 1;
-    disksExist = disksExist && fb.exists(filenameDiskC, false);
-    if (!disksExist) {
-      // disk C doesn't exist, download
-      auto file = fb.openFile(filenameDiskC, "wb");
-      disksExist = downloadURL(diskConfs[idx].diskC_URL, file);
-      fclose(file);
-      if (!disksExist)
-        fb.remove(filenameDiskC);
-    }
-  }
+  // setup selected configuration
+  auto conf = mconf.getItem(idx);
+  auto filenameDiskA = getDisk(conf->dska);
+  auto filenameDiskB = getDisk(conf->dskb);
+  auto filenameDiskC = getDisk(conf->dskc);
 
-  if (!disksExist) {
-    // unable to get disks
+  if (!filenameDiskA && !filenameDiskC) {
+    // unable to get boot disks
     ibox.message("Error!", "Unable to get system disks!");
     esp_restart();
   }
 
   ibox.end();
 
-
   machine = new Machine;
   machine->setDriveA(filenameDiskA);
+  machine->setDriveB(filenameDiskB);
   machine->setDriveC(filenameDiskC);
   machine->run();
 }
