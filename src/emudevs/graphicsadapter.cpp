@@ -141,7 +141,7 @@ void GraphicsAdapter::setEmulation(Emulation emulation)
         setCursorShape(5, 7);
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_40x25_16Colors, this);
         m_VGADCtrl.setScanlinesPerCallBack(4);
-        m_VGADCtrl.setResolution(VGA_320x200_70Hz); // VGA_320x200_60HzD as alternative?
+        m_VGADCtrl.setResolution(QVGA_320x240_60Hz, 320, 200);
         m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
         m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
         break;
@@ -161,21 +161,21 @@ void GraphicsAdapter::setEmulation(Emulation emulation)
         //printf("Emulation::PC_Graphics_320x200_4Colors\n");
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_320x200_4Colors, this);
         m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(VGA_320x200_70Hz);   // VGA_320x200_60HzD as alternative?
+        m_VGADCtrl.setResolution(QVGA_320x240_60Hz, 320, 200);
         break;
 
       case Emulation::PC_Graphics_640x200_2Colors:
         //printf("Emulation::PC_Graphics_640x200_2Colors\n");
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_640x200_2Colors, this);
         m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(VGA_640x200_70Hz); // VGA_640x200_60HzD as alternative?
+        m_VGADCtrl.setResolution(VGA_640x240_60Hz, 640, 200);
         break;
 
       case Emulation::PC_Graphics_HGC_720x348:
         //printf("Emulation::PC_Graphics_HGC_720x348\n");
         m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_HGC_720x348, this);
         m_VGADCtrl.setScanlinesPerCallBack(2);
-        m_VGADCtrl.setResolution(VGA_720x348_73Hz);  // VGA_720x348_50HzD as alternative?
+        m_VGADCtrl.setResolution(VGA_720x348_59HzD);
         break;
 
     }

@@ -260,6 +260,9 @@
 /** Modeline for 720x348@50Hz doublescan resolution */
 #define VGA_720x348_50HzD "\"720x348@50HzD\" 30.84 720 752 808 840 348 355 358 366 -hsync -vsync doublescan"
 
+/** Modeline for 720x348@59Hz doublescan resolution */
+#define VGA_720x348_59HzD "\"720x348@59d\" 38.87 720 788 852 896 348 350 359 366 -HSync -VSync DoubleScan"
+
 /** Modeline for 720x348@73Hz resolution */
 #define VGA_720x348_73Hz "\"720x348@73Hz\" 27 720 736 799 872 348 379 381 433 -HSync -VSync"
 
