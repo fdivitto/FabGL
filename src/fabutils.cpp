@@ -636,6 +636,13 @@ FileBrowser::FileBrowser()
 }
 
 
+FileBrowser::FileBrowser(char const * path)
+  : FileBrowser()
+{
+  setDirectory(path);
+}
+
+
 FileBrowser::~FileBrowser()
 {
   clear();

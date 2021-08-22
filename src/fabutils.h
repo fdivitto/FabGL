@@ -532,6 +532,9 @@ class FileBrowser {
 public:
 
   FileBrowser();
+
+  FileBrowser(char const * path);
+
   ~FileBrowser();
 
   /**
