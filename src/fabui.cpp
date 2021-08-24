@@ -2545,9 +2545,14 @@ uiTextEdit::~uiTextEdit()
 
 void uiTextEdit::setText(char const * value)
 {
-  m_textLength = strlen(value);
-  checkAllocatedSpace(m_textLength);
-  strcpy(m_text, value);
+  if (value) {
+    m_textLength = strlen(value);
+    checkAllocatedSpace(m_textLength);
+    strcpy(m_text, value);
+  } else {
+    m_text = strdup("");
+    m_textLength = 0;
+  }
 }
 
 
