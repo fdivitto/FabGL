@@ -54,9 +54,11 @@ namespace fabgl {
  * @brief Result of InputBox dialogs helper class
  */
 enum class InputResult {
-  None,         /**<  Still running */
-  Cancel,       /**<  Button CANCEL or ESC key pressed */
-  Enter,        /**<  Button OK, ENTER or RETURN pressed */
+  None        = 0,       /**< Still running */
+  Cancel      = 1,       /**< Button CANCEL or ESC key pressed */
+  ButtonLeft  = 1,       /**< Left button (cancel) or ESC key pressed */
+  Enter       = 2,       /**< Button OK, ENTER or RETURN pressed */
+  ButtonRight = 2,       /**< Right button (OK), ENTER or RETURN pressed */
 };
 
 
@@ -208,6 +210,13 @@ public:
   void begin(BitmappedDisplayController * displayController);
 
   /**
+   * @brief Gets created or assigned display controller
+   *
+   * @return Display controller object
+   */
+  BitmappedDisplayController * getDisplayController()                        { return m_dispCtrl; }
+
+  /**
    * @brief Cleanup resources and eventually disable VGA output
    */
   void end();
@@ -218,6 +227,8 @@ public:
    * @param value Background color
    */
   void setBackgroundColor(RGB888 const & value)   { m_backgroundColor = value; }
+
+  RGB888 backgroundColor()                        { return m_backgroundColor; }
 
   /**
    * @brief Shows a dialog with a label and a text edit box
