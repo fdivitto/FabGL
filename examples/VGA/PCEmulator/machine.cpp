@@ -116,6 +116,40 @@ void Machine::init()
 
   memset(s_memory, 0, RAM_SIZE);
 
+  m_soundGen.play(true);
+  m_soundGen.attach(&m_sinWaveGen);
+
+  m_i8042.init();
+  m_i8042.setCallbacks(this, keyboardInterrupt, mouseInterrupt, resetMachine, sysReq);
+
+  m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
+  m_PIT8253.reset();
+  m_PIT8253.runAutoTick(PIT_TICK_FREQ, PIT_UPDATES_PER_SEC);
+
+  m_MC146818.init("PCEmulator");
+  m_MC146818.setCallbacks(this, MC146818Interrupt);
+
+  m_MCP23S17.begin();
+  m_MCP23S17Sel = 0;
+
+  m_BIOS.init(this);
+
+  i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, readVideoMemory8, readVideoMemory16, interrupt);
+  i8086::setMemory(s_memory);
+
+  FileBrowser fb;
+  fb.setDirectory("/SD");
+  m_disk[0] = m_diskImageFile[0] ? fb.openFile(m_diskImageFile[0], "r+b") : nullptr; // drive C
+  m_disk[1] = m_diskImageFile[1] ? fb.openFile(m_diskImageFile[1], "r+b") : nullptr; // drive A
+
+  m_reset = true;
+}
+
+
+void Machine::reset()
+{
+  m_reset = false;
+
   m_ticksCounter = 0;
 
   m_CGAMemoryOffset = 0;
@@ -130,41 +164,21 @@ void Machine::init()
 
   m_speakerDataEnable = false;
 
-  m_soundGen.play(true);
-  m_soundGen.attach(&m_sinWaveGen);
-
-  m_i8042.init();
-  m_i8042.setCallbacks(this, keyboardInterrupt, mouseInterrupt);
+  m_i8042.reset();
 
   m_PIC8259A.reset();
   m_PIC8259B.reset();
 
-  m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
   m_PIT8253.reset();
-  m_PIT8253.runAutoTick(PIT_TICK_FREQ, PIT_UPDATES_PER_SEC);
   m_PIT8253.setGate(0, true);
   m_PIT8253.setGate(1, true);
 
-  m_MC146818.init("PCEmulator");
-  m_MC146818.setCallbacks(this, MC146818Interrupt);
   m_MC146818.reset();
-
-  m_MCP23S17.begin();
-  m_MCP23S17Sel = 0;
 
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
 
-  m_BIOS.init(this);
-
-  i8086::setCallbacks(this, readPort, writePort, writeVideoMemory8, writeVideoMemory16, readVideoMemory8, readVideoMemory16, interrupt);
-  i8086::setMemory(s_memory);
   i8086::reset();
-
-  FileBrowser fb;
-  fb.setDirectory("/SD");
-  m_disk[0] = m_diskImageFile[0] ? fb.openFile(m_diskImageFile[0], "r+b") : nullptr; // drive C
-  m_disk[1] = m_diskImageFile[1] ? fb.openFile(m_diskImageFile[1], "r+b") : nullptr; // drive A
 
 	// Set CX:AX equal to the hard disk image size, if present
   if (m_disk[0]) {
@@ -193,6 +207,9 @@ void IRAM_ATTR Machine::runTask(void * pvParameters)
 
 	while (true) {
 
+    if (m->m_reset)
+      m->reset();
+
     i8086::step();
 		m->tick();
 
@@ -208,6 +225,7 @@ void Machine::tick()
     m_PIC8259A.ackPendingInterrupt();
   if (m_PIC8259B.pendingInterrupt() && i8086::IRQ(m_PIC8259B.pendingInterruptNum()))
     m_PIC8259B.ackPendingInterrupt();
+
 }
 
 
@@ -624,6 +642,21 @@ void Machine::PITChangeOut(void * context, int timerIndex)
     // yes, report 8259A-IR0 (IRQ0, INT 08h)
     m->m_PIC8259A.signalInterrupt(0);
   }
+}
+
+
+// reset from 8042
+bool Machine::resetMachine(void * context)
+{
+  auto m = (Machine*)context;
+  m->trigReset();
+  return true;
+}
+
+// ESP32 reset using SYSREQ (ALT + PRINTSCREEN)
+bool Machine::sysReq(void * context)
+{
+  esp_restart();
 }
 
 

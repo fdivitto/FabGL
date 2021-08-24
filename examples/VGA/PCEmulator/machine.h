@@ -69,6 +69,8 @@ public:
 
   void run();
 
+  void trigReset()           { m_reset = true; }
+
   uint32_t ticksCounter()    { return m_ticksCounter; }
 
   i8042 * getI8042()         { return &m_i8042; }
@@ -83,6 +85,7 @@ private:
   static void runTask(void * pvParameters);
 
   void init();
+  void reset();
 
   void tick();
 
@@ -109,10 +112,13 @@ private:
 
   static bool keyboardInterrupt(void * context);
   static bool mouseInterrupt(void * context);
+  static bool resetMachine(void * context);
+  static bool sysReq(void * context);
 
   void speakerSetFreq();
   void speakerEnableDisable();
 
+  bool                     m_reset;
 
   GraphicsAdapter          m_graphicsAdapter;
 
