@@ -262,6 +262,7 @@ struct ConfigDialog : public uiApp {
     new uiLabel(mainFrame, "Disk A", Point(x, y + oy));
     editDiskA = new uiTextEdit(mainFrame, item->dska, Point(50, y), Size(290, hh));
     browseAButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+    browseAButton->onClick = [&]() { browseFilename(editDiskA); };
 
 
     y += dy;
@@ -270,6 +271,7 @@ struct ConfigDialog : public uiApp {
     new uiLabel(mainFrame, "Disk B", Point(x, y + oy));
     editDiskB = new uiTextEdit(mainFrame, item->dskb, Point(50, y), Size(290, hh));
     browseBButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+    browseBButton->onClick = [&]() { browseFilename(editDiskB); };
 
     y += dy;
 
@@ -277,6 +279,7 @@ struct ConfigDialog : public uiApp {
     new uiLabel(mainFrame, "Disk C", Point(x, y + oy));
     editDiskC = new uiTextEdit(mainFrame, item->dskc, Point(50, y), Size(290, hh));
     browseCButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+    browseCButton->onClick = [&]() { browseFilename(editDiskC); };
 
     y += dy * 2;
 
@@ -294,6 +297,20 @@ struct ConfigDialog : public uiApp {
 
 
     setActiveWindow(mainFrame);
+  }
+
+  // @TODO: support files stored in subfolders!!
+  void browseFilename(uiTextEdit * edit) {
+    char * dir = (char*) malloc(MAXVALUELENGTH + 1);
+    char * filename = (char*) malloc(MAXVALUELENGTH + 1);
+    strcpy(dir, "/SD");
+    strcpy(filename, edit->text());
+    if (fileDialog("Select drive image", dir, MAXVALUELENGTH, filename, MAXVALUELENGTH, "OK", "Cancel") == uiMessageBoxResult::ButtonOK) {
+      edit->setText(filename);
+      edit->repaint();
+    }
+    free(filename);
+    free(dir);
   }
 
   void saveAndQuit() {
