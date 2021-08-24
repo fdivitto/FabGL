@@ -463,6 +463,11 @@ void SelectApp::addControls()
       retval = InputResult::Enter;
       finalize();
     };
+  } else {
+    listBox->onDblClick = [&]() {
+      retval = InputResult::Enter;
+      finalize();
+    };
   }
 
   mainFrame->onShow = [&]() { setFocusedWindow(listBox); };
