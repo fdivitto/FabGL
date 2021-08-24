@@ -24,8 +24,6 @@
  */
 
 
- #pragma once
-
 
 /*
 
@@ -50,11 +48,35 @@ desc "Floppy Only" dska TESTBOOT.IMG
 */
 
 
+#pragma once
+
+
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
+
+
+#define MACHINE_CONF_FILENAME "mconfs.txt"
+
+#define NL "\r\n"
+
+
+static const char DefaultConfFile[] =
+  "desc \"FreeDOS (A:)\"                               dska http://www.fabglib.org/downloads/A_freedos.img" NL
+  "desc \"FreeDOS (A:) + DOS Programming Tools (C:)\"  dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosdev.img" NL
+  "desc \"FreeDOS (A:) + Windows 3.0 Hercules (C:)\"   dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_winherc.img" NL
+  "desc \"FreeDOS (A:) + DOS Programs and Games (C:)\" dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosprog.img" NL
+  "desc \"MS-DOS 3.31 (A:)\"                           dska http://www.fabglib.org/downloads/A_MSDOS331.img" NL
+  "desc \"Linux ELKS 0.4.0\"                           dska http://www.fabglib.org/downloads/A_ELK040.img" NL
+  "desc \"CP/M 86 + Turbo Pascal 3\"                   dska http://www.fabglib.org/downloads/A_CPM86.img" NL;
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MachineConf
 
 
 struct MachineConfItem {
@@ -65,16 +87,11 @@ struct MachineConfItem {
   char            * dskc;
 
   MachineConfItem()
-    : MachineConfItem(nullptr, nullptr, nullptr, nullptr)
-  {
-  }
-
-  MachineConfItem(char * desc_, char * dska_, char * dskb_, char * dskc_)
     : next(nullptr),
-      desc(desc_),
-      dska(dska_),
-      dskb(dskb_),
-      dskc(dskc_)
+      desc(nullptr),
+      dska(nullptr),
+      dskb(nullptr),
+      dskc(nullptr)
   {
   }
 
@@ -86,7 +103,12 @@ struct MachineConfItem {
     free(dskc);
   }
 
-  bool isValid()                                      { return desc != nullptr; }
+  bool isValid()         { return desc != nullptr; }
+
+  void setDesc(char const * value) { free(desc); desc = strdup(value); }
+  void setDska(char const * value) { free(dska); dska = strdup(value); }
+  void setDskb(char const * value) { free(dskb); dskb = strdup(value); }
+  void setDskc(char const * value) { free(dskc); dskc = strdup(value); }
 
 };
 
@@ -113,4 +135,15 @@ private:
   MachineConfItem * m_itemsList;
 
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// helpers
+
+
+void loadMachineConfiguration(MachineConf * mconf);
+
+void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
  

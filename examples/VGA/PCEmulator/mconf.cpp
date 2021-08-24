@@ -24,8 +24,18 @@
  */
 
 
+#include "fabgl.h"
+#include "fabui.h"
+#include "fabutils.h"
+
 
 #include "mconf.h"
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MachineConf
 
 
 #define MAXTAGLENGTH     6
@@ -134,14 +144,14 @@ void MachineConf::loadFromFile(FILE * file)
     }
     value[ipos] = 0;
     // assign tag
-    if (!item->desc && strcmp("desc", tag) == 0)
-      item->desc = strdup(value);
-    else if (!item->dska && strcmp("dska", tag) == 0)
-      item->dska = strdup(value);
-    else if (!item->dskb && strcmp("dskb", tag) == 0)
-      item->dskb = strdup(value);
-    else if (!item->dskc && strcmp("dskc", tag) == 0)
-      item->dskc = strdup(value);
+    if (strcmp("desc", tag) == 0)
+      item->setDesc(value);
+    else if (strcmp("dska", tag) == 0)
+      item->setDska(value);
+    else if (strcmp("dskb", tag) == 0)
+      item->setDskb(value);
+    else if (strcmp("dskc", tag) == 0)
+      item->setDskc(value);
   }
   addItem(item);
   free(value);
@@ -169,4 +179,153 @@ void MachineConf::saveToFile(FILE * file)
       saveTag(file, "dskc", item->dskc);
     fputs("\r\n", file);
   }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// loadMachineConfiguration
+
+
+void loadMachineConfiguration(MachineConf * mconf)
+{
+  FileBrowser fb("/SD");
+
+  // saves a default configuration file if necessary
+  if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
+    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+    fwrite(DefaultConfFile, 1, sizeof(DefaultConfFile), confFile);
+    fclose(confFile);
+  }
+
+  // load
+  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "rb");
+  mconf->loadFromFile(confFile);
+  fclose(confFile);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ConfigDialog
+
+
+struct ConfigDialog : public uiApp {
+
+  MachineConf     * mconf;
+  MachineConfItem * item;
+
+  RGB888            backgroundColor;
+
+  uiFrame         * mainFrame;
+  uiButton        * buttonSave;
+  uiButton        * buttonCancel;
+  uiTextEdit      * editDesc;
+  uiTextEdit      * editDiskA;
+  uiTextEdit      * editDiskB;
+  uiTextEdit      * editDiskC;
+  uiButton        * browseAButton;
+  uiButton        * browseBButton;
+  uiButton        * browseCButton;
+
+  void init() {
+    rootWindow()->frameStyle().backgroundColor = backgroundColor;
+
+    mainFrame = new uiFrame(rootWindow(), "Machine Configuration", UIWINDOW_PARENTCENTER, Size(372, 200));
+    mainFrame->frameProps().resizeable        = false;
+    mainFrame->frameProps().hasMaximizeButton = false;
+    mainFrame->frameProps().hasMinimizeButton = false;
+    mainFrame->frameProps().hasCloseButton    = false;
+    mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+      if (key.VK == VirtualKey::VK_RETURN || key.VK == VirtualKey::VK_KP_ENTER) {
+        saveAndQuit();
+      } else if (key.VK == VirtualKey::VK_ESCAPE) {
+        quit(0);
+      }
+    };
+
+    int x = 6;
+    int y = 24;
+    constexpr int oy = 3;
+    constexpr int hh = 20;
+    constexpr int dy = hh + 9;
+
+    // description
+    new uiLabel(mainFrame, "Description", Point(x, y + oy));
+    editDesc = new uiTextEdit(mainFrame, item->desc, Point(70, y), Size(270, hh));
+
+    y += dy;
+
+    // disk A
+    new uiLabel(mainFrame, "Disk A", Point(x, y + oy));
+    editDiskA = new uiTextEdit(mainFrame, item->dska, Point(50, y), Size(290, hh));
+    browseAButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+
+
+    y += dy;
+
+    // disk B
+    new uiLabel(mainFrame, "Disk B", Point(x, y + oy));
+    editDiskB = new uiTextEdit(mainFrame, item->dskb, Point(50, y), Size(290, hh));
+    browseBButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+
+    y += dy;
+
+    // disk C
+    new uiLabel(mainFrame, "Disk C", Point(x, y + oy));
+    editDiskC = new uiTextEdit(mainFrame, item->dskc, Point(50, y), Size(290, hh));
+    browseCButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
+
+    y += dy * 2;
+
+    // Save Button
+    buttonSave = new uiButton(mainFrame, "Save", Point(mainFrame->clientSize().width - 75, mainFrame->clientSize().height - 8), Size(70, hh));
+    buttonSave->onClick = [&]() {
+      saveAndQuit();
+    };
+
+    // Cancel Button
+    buttonCancel = new uiButton(mainFrame, "Cancel", Point(mainFrame->clientSize().width - 155, mainFrame->clientSize().height - 8), Size(70, hh));
+    buttonCancel->onClick = [&]() {
+      quit(0);
+    };
+
+
+    setActiveWindow(mainFrame);
+  }
+
+  void saveAndQuit() {
+    // get fields
+    item->setDesc(editDesc->text());
+    item->setDska(editDiskA->text());
+    item->setDskb(editDiskB->text());
+    item->setDskc(editDiskC->text());
+
+    // save to file
+    FileBrowser fb("/SD");
+    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+    mconf->saveToFile(confFile);
+    fclose(confFile);
+
+    // quit
+    quit(0);
+  }
+
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// editConfigDialog
+
+
+void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
+{
+  ConfigDialog app;
+  app.mconf           = mconf;
+  app.item            = mconf->getItem(idx);
+  app.backgroundColor = ibox->backgroundColor();
+  app.run(ibox->getDisplayController());
 }

@@ -54,30 +54,14 @@ extern "C" {
 
 
 
-#define MACHINE_CONF_FILENAME "mconfs.txt"
-
-#define NL "\r\n"
-
-
-static const char DefaultConfFile[] =
-  "desc \"FreeDOS (A:)\"                               dska http://www.fabglib.org/downloads/A_freedos.img" NL
-  "desc \"FreeDOS (A:) + DOS Programming Tools (C:)\"  dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosdev.img" NL
-  "desc \"FreeDOS (A:) + Windows 3.0 Hercules (C:)\"   dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_winherc.img" NL
-  "desc \"FreeDOS (A:) + DOS Programs and Games (C:)\" dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosprog.img" NL
-  "desc \"MS-DOS 3.31 (A:)\"                           dska http://www.fabglib.org/downloads/A_MSDOS331.img" NL
-  "desc \"Linux ELKS 0.4.0\"                           dska http://www.fabglib.org/downloads/A_ELK040.img" NL
-  "desc \"CP/M 86 + Turbo Pascal 3\"                   dska http://www.fabglib.org/downloads/A_CPM86.img" NL;
-
-
-
 using fabgl::StringList;
 using fabgl::imin;
 using fabgl::imax;
 
 
 
-Preferences preferences;
-InputBox    ibox;
+Preferences   preferences;
+InputBox      ibox;
 Machine     * machine;
 
 
@@ -246,24 +230,6 @@ bool downloadURL(char const * URL, FILE * file)
 }
 
 
-void loadMachineConfiguration(MachineConf * mconf)
-{
-  FileBrowser fb("/SD");
-
-  // saves a default configuration file if necessary
-  if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
-    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
-    fwrite(DefaultConfFile, 1, sizeof(DefaultConfFile), confFile);
-    fclose(confFile);
-  }
-
-  // load
-  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "rb");
-  mconf->loadFromFile(confFile);
-  fclose(confFile);
-}
-
-
 // return filename if successfully download or already exist
 char const * getDisk(char const * url)
 {
@@ -334,16 +300,25 @@ void setup()
 
   // machine configurations
   MachineConf mconf;
-  loadMachineConfiguration(&mconf);
 
-  // show a list of machine configurations
-  StringList dconfs;
-  for (auto conf = mconf.getFirstItem(); conf; conf = conf->next)
-    dconfs.append(conf->desc);
-  dconfs.select(preferences.getInt("dconf", 0), true);
-  ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "OK", 8);
-  int idx = imax(dconfs.getFirstSelected(), 0);
-  preferences.putInt("dconf", idx);
+  int idx;
+  bool editItem = false;
+  do {
+    loadMachineConfiguration(&mconf);
+
+    // show a list of machine configurations
+    StringList dconfs;
+    for (auto conf = mconf.getFirstItem(); conf; conf = conf->next)
+      dconfs.append(conf->desc);
+    dconfs.select(preferences.getInt("dconf", 0), true);
+    editItem = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, "Edit...", "OK", editItem ? 0 : 8) == InputResult::ButtonLeft;
+    idx = imax(dconfs.getFirstSelected(), 0);
+    preferences.putInt("dconf", idx);
+
+    // modify selected item?
+    if (editItem)
+      editConfigDialog(&ibox, &mconf, idx);
+  } while (editItem);
 
   // setup selected configuration
   auto conf = mconf.getItem(idx);
