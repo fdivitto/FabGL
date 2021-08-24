@@ -1178,6 +1178,82 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
 }
 
 
+uiMessageBoxResult uiApp::fileDialog(char const * title, char * inOutDirectory, int maxDirNameSize, char * inOutFilename, int maxFileNameSize, char const * buttonOKText, char const * buttonCancelText, int frameWidth, int frameHeight)
+{
+  auto mainFrame = new uiFrame(m_rootWindow, title, UIWINDOW_PARENTCENTER, Size(frameWidth, frameHeight), false);
+  mainFrame->frameProps().resizeable        = false;
+  mainFrame->frameProps().hasMaximizeButton = false;
+  mainFrame->frameProps().hasMinimizeButton = false;
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+    if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER)
+      mainFrame->exitModal(1);
+    else if (key.VK == VK_ESCAPE)
+      mainFrame->exitModal(0);
+  };
+
+  int y = 25;
+  constexpr int x = 8;
+  constexpr int hh = 20;
+  constexpr int dy = hh + 8;
+  constexpr int lbloy = 3;
+
+  constexpr int fnBorder = 20;
+  new uiLabel(mainFrame, "Filename", Point(x + fnBorder, y + lbloy));
+  auto filenameEdit = new uiTextEdit(mainFrame, inOutFilename, Point(x + 50 + fnBorder, y), Size(frameWidth - x - 58 - fnBorder * 2, hh));
+
+  y += dy;
+
+  auto browser = new uiFileBrowser(mainFrame, Point(x, y), Size(frameWidth - x * 2, frameHeight - y - 35));
+  browser->setDirectory(inOutDirectory);
+  browser->onChange = [&]() {
+    if (!browser->isDirectory()) {
+      filenameEdit->setText(browser->filename());
+      filenameEdit->repaint();
+    }
+  };
+  browser->onDblClick = [&]() {
+    if (!browser->isDirectory())
+      mainFrame->exitModal(1);
+  };
+
+  y += browser->clientSize().height + (dy - hh);
+
+  auto buttonCancelLen = m_canvas->textExtent(uiButtonStyle().textFont, buttonCancelText) + 10;
+  auto buttonOKLen     = m_canvas->textExtent(uiButtonStyle().textFont, buttonOKText) + 10;
+
+  auto buttonCancel = new uiButton(mainFrame, buttonCancelText, Point(frameWidth - buttonCancelLen - buttonOKLen - 20, y), Size(buttonCancelLen, hh));
+  auto buttonOK     = new uiButton(mainFrame, buttonOKText, Point(frameWidth - buttonOKLen - 8, y), Size(buttonOKLen, hh));
+
+  buttonCancel->onClick = [&]() { mainFrame->exitModal(0); };
+  buttonOK->onClick     = [&]() { mainFrame->exitModal(1); };
+
+  // focus on edit
+  mainFrame->onShow = [&]() {
+    setFocusedWindow(filenameEdit);
+  };
+
+  int modalResult = showModalWindow(mainFrame);
+  destroyWindow(mainFrame);
+
+  switch (modalResult) {
+    case 1:
+    {
+      int len = imin(maxDirNameSize, strlen(browser->directory()));
+      memcpy(inOutDirectory, browser->directory(), len);
+      inOutDirectory[len] = 0;
+
+      len = imin(maxFileNameSize, strlen(filenameEdit->text()));
+      memcpy(inOutFilename, filenameEdit->text(), len);
+      inOutFilename[len] = 0;
+
+      return uiMessageBoxResult::ButtonOK;
+    }
+    default:
+      return uiMessageBoxResult::Cancel;
+  }
+}
+
+
 void uiApp::enableKeyboardAndMouseEvents(bool value)
 {
   if (value) {

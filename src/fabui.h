@@ -2659,10 +2659,11 @@ struct uiAppProps {
  * @brief Return values from uiApp.messageBox() method
  */
 enum class uiMessageBoxResult {
-  Cancel,    /**< Messagebox has been canceled */
-  Button1,   /**< Button1 has been pressed */
-  Button2,   /**< Button2 has been pressed */
-  Button3,   /**< Button3 has been pressed */
+  Cancel   = 0,   /**< Messagebox has been canceled */
+  Button1  = 1,   /**< Button1 has been pressed */
+  ButtonOK = 1,   /**< OK Button (button1) has been pressed */
+  Button2  = 2,   /**< Button2 has been pressed */
+  Button3  = 3,   /**< Button3 has been pressed */
 };
 
 
@@ -3038,7 +3039,7 @@ public:
   /**
    * @brief Displays a modal dialog box with an icon, text and some buttons
    *
-   * @param title The dialog box title. If nullptr the messaebox has no title bar
+   * @param title The dialog box title. If nullptr the messagebox has no title bar
    * @param text The message to be displayed
    * @param button1Text Left button text
    * @param button2Text Middle button text (may be nullptr, if not present)
@@ -3055,7 +3056,7 @@ public:
    * Pressing ENTER (RETURN) equals to press first button.
    * Pressing ESC cancels the dialog box.
    *
-   * @param title The dialog box title. If nullptr the messaebox has no title bar
+   * @param title The dialog box title. If nullptr the messagebox has no title bar
    * @param text The message to be displayed
    * @param inOutString Initial string of the text edit
    * @param maxLength Maximum length of inOutString buffer (ending zero not included)
@@ -3065,6 +3066,23 @@ public:
    * @return Message box result
    */
   uiMessageBoxResult inputBox(char const * title, char const * text, char * inOutString, int maxLength, char const * button1Text, char const * button2Text = nullptr);
+
+  /**
+   * @brief Displays a modal open/save dialog box
+   *
+   * @param title The dialog box title. If nullptr the messagebox has no title bar
+   * @param inOutDirectory Input and output selected directory
+   * @param maxDirNameSize Maximum number of characters allowed for the directory (ending zero not included)
+   * @param inOutFilename Input and output selected filename
+   * @param maxFileNameSize Maximum number of characters allowed for the filename (ending zero not included)
+   * @param buttonOKText OK button text
+   * @param buttonCancelText Cancel button text
+   * @param frameWidth Dialog box width in pixels
+   * @param frameHeight Dialog box height in pixels
+   *
+   * @return Message box result. uiMessageBoxResult::ButtonOK when a file has been selected. uiMessageBoxResult::Cancel on cancel.
+   */
+  uiMessageBoxResult fileDialog(char const * title, char * inOutDirectory, int maxDirNameSize, char * inOutFilename, int maxFileNameSize, char const * buttonOKText, char const * buttonCancelText, int frameWidth = 200, int frameHeight = 250);
 
   /**
    * @brief Method to inherit to implement an application
