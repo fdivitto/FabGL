@@ -155,8 +155,7 @@ Preferences preferences;
 // copies embedded programs into SPIFFS/SDCard
 void copyEmbeddedPrograms()
 {
-  auto dir = FileBrowser();
-  dir.setDirectory(basepath);
+  FileBrowser dir(basepath);
   if (!dir.exists(EMBDIR, false)) {
     // there isn't a EMBDIR folder, create and populate it
     dir.makeDirectory(EMBDIR);
