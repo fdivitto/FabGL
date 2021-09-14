@@ -114,6 +114,7 @@ GraphicsAdapter::GraphicsAdapter()
 
 GraphicsAdapter::~GraphicsAdapter()
 {
+  m_VGADCtrl.end();
   cleanupFont();
   freeLUT();
   if (m_cursorGlyph)
