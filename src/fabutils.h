@@ -41,6 +41,7 @@
 
 #include <driver/adc.h>
 #include <esp_system.h>
+#include "sdmmc_cmd.h"
 
 
 namespace fabgl {
@@ -84,7 +85,7 @@ namespace fabgl {
 #endif
 
 // ESP32 PSRAM bug workaround (use when the library is NOT compiled with PSRAM hack enabled)
-// Plase between a write and a read PSRAM operation (write->ASM_MEMW->read), not viceversa
+// Place between a write and a read PSRAM operation (write->ASM_MEMW->read), not viceversa
 #define ASM_MEMW asm(" MEMW");
 
 
@@ -781,6 +782,8 @@ public:
    */
   static bool remountSDCard();
 
+  static bool mountedSDCard() { return s_SDCardMounted; }
+
   /**
    * @brief Unmounts filesystem on SD Card
    */
@@ -844,19 +847,20 @@ private:
   int countDirEntries(int * namesLength);
 
   // SPIFFS static infos
-  static bool         s_SPIFFSMounted;
-  static char const * s_SPIFFSMountPath;
-  static size_t       s_SPIFFSMaxFiles;
+  static bool           s_SPIFFSMounted;
+  static char const *   s_SPIFFSMountPath;
+  static size_t         s_SPIFFSMaxFiles;
 
   // SD Card static infos
-  static bool         s_SDCardMounted;
-  static char const * s_SDCardMountPath;
-  static size_t       s_SDCardMaxFiles;
-  static int          s_SDCardAllocationUnitSize;
-  static int8_t       s_SDCardMISO;
-  static int8_t       s_SDCardMOSI;
-  static int8_t       s_SDCardCLK;
-  static int8_t       s_SDCardCS;
+  static bool           s_SDCardMounted;
+  static char const *   s_SDCardMountPath;
+  static size_t         s_SDCardMaxFiles;
+  static int            s_SDCardAllocationUnitSize;
+  static int8_t         s_SDCardMISO;
+  static int8_t         s_SDCardMOSI;
+  static int8_t         s_SDCardCLK;
+  static int8_t         s_SDCardCS;
+  static sdmmc_card_t * s_SDCard;
 
   char *    m_dir;
   int       m_count;
