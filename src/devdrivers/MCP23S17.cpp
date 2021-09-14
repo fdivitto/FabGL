@@ -134,7 +134,7 @@ bool MCP23S17::SPIBegin(int CSActiveState)
     devconf.flags          = (CSActiveState == 1 ? SPI_DEVICE_POSITIVE_CS : 0);
     devconf.queue_size     = 1;
     r = spi_bus_add_device(m_SPIHost, &devconf, &m_SPIDevHandle);
-    if (r != ESP_OK)
+    if (r != ESP_OK && !FileBrowser::mountedSDCard())
       spi_bus_free(m_SPIHost);
     return r == ESP_OK;
   }
@@ -147,7 +147,8 @@ void MCP23S17::SPIEnd()
   if (m_SPIDevHandle) {
     spi_bus_remove_device(m_SPIDevHandle);
     m_SPIDevHandle = nullptr;
-    spi_bus_free(m_SPIHost);  // this will not free bus if there is a device still connected (ie sdcard)
+    if (!FileBrowser::mountedSDCard())
+      spi_bus_free(m_SPIHost);
   }
 }
 
