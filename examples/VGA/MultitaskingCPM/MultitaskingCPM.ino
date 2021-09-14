@@ -47,7 +47,7 @@
 #define FORMAT_ON_FAIL     true
 #define SPIFFS_MOUNT_PATH  "/flash"
 #define SDCARD_MOUNT_PATH  "/SD"
-#define MAXFILES           6     // SDCARD: each file takes about 4K of RAM!
+#define MAXFILES           6     // SDCARD: each file takes about 4K of RAM! On ESP32 2.0.0 this may fail without PSRAM, so set to "4"
 
 
 
