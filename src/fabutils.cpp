@@ -1192,6 +1192,8 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   s_SDCardMounted            = false;
 
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+  host.max_freq_khz = 19000;
+  host.slot = HSPI_HOST;
 
   #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 5)
 
@@ -1200,10 +1202,12 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   slot_config.gpio_mosi = int2gpio(MOSI);
   slot_config.gpio_sck  = int2gpio(CLK);
   slot_config.gpio_cs   = int2gpio(CS);
+
   esp_vfs_fat_sdmmc_mount_config_t mount_config;
   mount_config.format_if_mount_failed = formatOnFail;
-  mount_config.max_files = maxFiles;
-  mount_config.allocation_unit_size = allocationUnitSize;
+  mount_config.max_files              = maxFiles;
+  mount_config.allocation_unit_size   = allocationUnitSize;
+
   s_SDCardMounted = (esp_vfs_fat_sdmmc_mount(mountPath, &host, &slot_config, &mount_config, &s_SDCard) == ESP_OK);
 
   #else
@@ -1223,7 +1227,7 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
     slot_config.gpio_cs = int2gpio(CS);
     slot_config.host_id = (spi_host_device_t) host.slot;
 
-    esp_vfs_fat_sdmmc_mount_config_t mount_config = { };
+    esp_vfs_fat_sdmmc_mount_config_t mount_config;
     mount_config.format_if_mount_failed = formatOnFail;
     mount_config.max_files              = maxFiles;
     mount_config.allocation_unit_size   = allocationUnitSize;
@@ -1234,9 +1238,6 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   }
 
   #endif
-
-  if (!s_SDCardMounted)
-    printf("SD Card not mounted\n");
 
   return s_SDCardMounted;
 }
