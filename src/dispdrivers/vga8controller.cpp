@@ -88,6 +88,8 @@ static inline __attribute__((always_inline)) void VGA8_SETPIXEL(int x, int y, in
 #define VGA8_INVERT_PIXEL(x, y)             VGA8_INVERTPIXELINROW((uint8_t*)VGA8Controller::s_viewPort[(y)], (x))
 
 
+#define VGA8_COLUMNSQUANTUM 16
+
 
 
 /*************************************************************************************/
@@ -100,7 +102,7 @@ VGA8Controller * VGA8Controller::s_instance = nullptr;
 
 
 VGA8Controller::VGA8Controller()
-  : VGAPalettedController(VGA8_LinesCount, NativePixelFormat::PALETTE8, 8, 3, ISRHandler)
+  : VGAPalettedController(VGA8_LinesCount, VGA8_COLUMNSQUANTUM, NativePixelFormat::PALETTE8, 8, 3, ISRHandler)
 {
   s_instance = this;
   m_packedPaletteIndexPair_to_signals = (uint16_t *) heap_caps_malloc(256 * sizeof(uint16_t), MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);

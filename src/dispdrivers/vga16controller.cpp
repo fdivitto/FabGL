@@ -79,6 +79,7 @@ static inline __attribute__((always_inline)) void VGA16_SETPIXEL(int x, int y, i
 #define VGA16_INVERT_PIXEL(x, y)             VGA16_INVERTPIXELINROW((uint8_t*)VGA16Controller::s_viewPort[(y)], (x))
 
 
+#define VGA16_COLUMNSQUANTUM 16
 
 
 /*************************************************************************************/
@@ -90,7 +91,7 @@ VGA16Controller * VGA16Controller::s_instance = nullptr;
 
 
 VGA16Controller::VGA16Controller()
-  : VGAPalettedController(VGA16_LinesCount, NativePixelFormat::PALETTE16, 2, 1, ISRHandler)
+  : VGAPalettedController(VGA16_LinesCount, VGA16_COLUMNSQUANTUM, NativePixelFormat::PALETTE16, 2, 1, ISRHandler)
 {
   s_instance = this;
 }

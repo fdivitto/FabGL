@@ -78,6 +78,8 @@ static inline __attribute__((always_inline)) void VGA2_SETPIXEL(int x, int y, in
 #define VGA2_INVERT_PIXEL(x, y)             VGA2_INVERTPIXELINROW((uint8_t*)VGA2Controller::s_viewPort[(y)], (x))
 
 
+#define VGA2_COLUMNSQUANTUM 16
+
 
 
 /*************************************************************************************/
@@ -89,7 +91,7 @@ VGA2Controller * VGA2Controller::s_instance = nullptr;
 
 
 VGA2Controller::VGA2Controller()
-  : VGAPalettedController(VGA2_LinesCount, NativePixelFormat::PALETTE2, 8, 1, ISRHandler)
+  : VGAPalettedController(VGA2_LinesCount, VGA2_COLUMNSQUANTUM, NativePixelFormat::PALETTE2, 8, 1, ISRHandler)
 {
   s_instance = this;
   m_packedPaletteIndexOctet_to_signals = (uint64_t *) heap_caps_malloc(256 * sizeof(uint64_t), MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
