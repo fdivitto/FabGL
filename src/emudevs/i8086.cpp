@@ -830,158 +830,159 @@ void i8086::reset()
 
 void IRAM_ATTR i8086::step()
 {
-  uint8_t const * opcode_stream = s_memory + 16 * regs16[REG_CS] + reg_ip;
+  do {
+    uint8_t const * opcode_stream = s_memory + 16 * regs16[REG_CS] + reg_ip;
 
-  //printf("step %04X:%04X (%05X) op = %02X\n", regs16[REG_CS], reg_ip, 16 * regs16[REG_CS] + reg_ip, *opcode_stream);
-
-  #if I8086_SHOW_OPCODE_STATS
-  static uint32_t opcodeStats[256] = {0};
-  static int      opcodeStatsCount = 0;
-  static uint64_t opcodeStatsT0 = esp_timer_get_time();
-  opcodeStats[*opcode_stream] += 1;
-  ++opcodeStatsCount;
-  if ((opcodeStatsCount % 1000000) == 0) {
-    opcodeStatsCount = 0;
-    if (Serial.available()) {
-      Serial.read();
-      printf("\ntime delta = %llu uS\n\n", esp_timer_get_time() - opcodeStatsT0);
-      opcodeStatsT0 = esp_timer_get_time();
-      for (int i = 0; i < 256; ++i) {
-        if (opcodeStats[i] > 0)
-          printf("%d, %02X\n", opcodeStats[i], i);
-        opcodeStats[i] = 0;
+    #if I8086_SHOW_OPCODE_STATS
+    static uint32_t opcodeStats[256] = {0};
+    static int      opcodeStatsCount = 0;
+    static uint64_t opcodeStatsT0 = esp_timer_get_time();
+    opcodeStats[*opcode_stream] += 1;
+    ++opcodeStatsCount;
+    if ((opcodeStatsCount % 1000000) == 0) {
+      opcodeStatsCount = 0;
+      if (Serial.available()) {
+        Serial.read();
+        printf("\ntime delta = %llu uS\n\n", esp_timer_get_time() - opcodeStatsT0);
+        opcodeStatsT0 = esp_timer_get_time();
+        for (int i = 0; i < 256; ++i) {
+          if (opcodeStats[i] > 0)
+            printf("%d, %02X\n", opcodeStats[i], i);
+          opcodeStats[i] = 0;
+        }
+        printf("\n");
       }
-      printf("\n");
     }
-  }
-  #endif
+    #endif
 
-  // seg_override_en and rep_override_en contain number of instructions to hold segment override and REP prefix respectively
-  if (seg_override_en)
-    seg_override_en--;
-  if (rep_override_en)
-    rep_override_en--;
+    // seg_override_en and rep_override_en contain number of instructions to hold segment override and REP prefix respectively
+    if (seg_override_en)
+      seg_override_en--;
+    if (rep_override_en)
+      rep_override_en--;
 
-  // quick and dirty processing of the most common instructions (statistically measured)
-  switch (*opcode_stream) {
+    // quick and dirty processing of the most common instructions (statistically measured)
+    switch (*opcode_stream) {
 
-    // SEG ES
-    // SEG CS
-    // SEG SS
-    // SEG DS
-    case 0x26:
-    case 0x2e:
-    case 0x36:
-    case 0x3e:
-      seg_override_en = 2;
-      seg_override    = ex_data[*opcode_stream];
-      rep_override_en && rep_override_en++;
-      ++reg_ip;
-      break;
+      // SEG ES
+      // SEG CS
+      // SEG SS
+      // SEG DS
+      case 0x26:
+      case 0x2e:
+      case 0x36:
+      case 0x3e:
+        seg_override_en = 2;
+        seg_override    = ex_data[*opcode_stream];
+        rep_override_en && rep_override_en++;
+        ++reg_ip;
+        break;
 
-    // JO
-    // JNO
-    // JB/JNAE/JC
-    // JAE/JNB/JNC
-    // JE/JZ
-    // JNE/JNZ
-    // JBE/JNA
-    // JA/JNBE
-    // JS
-    // JNS
-    // JP/JPE
-    // JNP/JPO
-    // JL/JNGE
-    // JGE/JNL
-    // JLE/JNG
-    // JG/JNLE
-    case 0x70 ... 0x7f:
-    {
-      int inv = *opcode_stream & 1; // inv is the invert flag, e.g. i_w == 1 means JNAE, whereas i_w == 0 means JAE
-      int idx = (*opcode_stream >> 1) & 7;
-      reg_ip += 2 + (int8_t)opcode_stream[1] * (inv ^ (flags[jxx_dec_a[idx]] || flags[jxx_dec_b[idx]] || flags[jxx_dec_c[idx]] ^ flags[jxx_dec_d[idx]]));
-      break;
+      // JO
+      // JNO
+      // JB/JNAE/JC
+      // JAE/JNB/JNC
+      // JE/JZ
+      // JNE/JNZ
+      // JBE/JNA
+      // JA/JNBE
+      // JS
+      // JNS
+      // JP/JPE
+      // JNP/JPO
+      // JL/JNGE
+      // JGE/JNL
+      // JLE/JNG
+      // JG/JNLE
+      case 0x70 ... 0x7f:
+      {
+        int inv = *opcode_stream & 1; // inv is the invert flag, e.g. i_w == 1 means JNAE, whereas i_w == 0 means JAE
+        int idx = (*opcode_stream >> 1) & 7;
+        reg_ip += 2 + (int8_t)opcode_stream[1] * (inv ^ (flags[jxx_dec_a[idx]] || flags[jxx_dec_b[idx]] || flags[jxx_dec_c[idx]] ^ flags[jxx_dec_d[idx]]));
+        break;
+      }
+
+      // JMP disp8
+      case 0xeb:
+        reg_ip += 2 + (int8_t)opcode_stream[1];
+        break;
+
+      // CLC|STC|CLI|STI|CLD|STD
+      case 0xf8 ... 0xfd:
+      {
+        static const int FADDR[3] = { CF_ADDR, IF_ADDR, DF_ADDR };
+        flags[FADDR[(*opcode_stream >> 1) & 3]] = *opcode_stream & 1;
+        ++reg_ip;
+        break;
+      }
+
+      // JCXZ
+      case 0xe3:
+        reg_ip += 2 + !regs16[REG_CX] * (int8_t)opcode_stream[1];
+        break;
+
+      // CALL disp16
+      case 0xe8:
+        regs16[REG_SP] -= 2;
+        MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip + 3;
+        #ifndef TESTING_CPU
+        ASM_MEMW
+        #endif
+        reg_ip += 3 + *(uint16_t*)(opcode_stream + 1);
+        break;
+
+      // RET (intrasegment)
+      case 0xc3:
+        reg_ip = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+        regs16[REG_SP] += 2;
+        break;
+
+      // POP reg
+      case 0x58 ... 0x5f:
+        regs16[REG_SP] += 2;  // SP may be read from stack, so we have to increment here
+        regs16[*opcode_stream & 7] = MEM16(16 * regs16[REG_SS] + (uint16_t)(regs16[REG_SP] - 2));
+        ++reg_ip;
+        break;
+
+      // PUSH reg
+      case 0x50 ... 0x57:
+        regs16[REG_SP] -= 2;
+        MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[*opcode_stream & 7];
+        ++reg_ip;
+        break;
+
+      // MOV reg8, data8
+      case 0xb0 ... 0xb7:
+        regs8[((*opcode_stream >> 2) & 1) + (*opcode_stream & 3) * 2] = *(opcode_stream + 1);
+        reg_ip += 2;
+        break;
+
+      // MOV reg16, data16
+      case 0xb8 ... 0xbf:
+        regs16[*opcode_stream & 0x7] = *(uint16_t*)(opcode_stream + 1);
+        reg_ip += 3;
+        break;
+
+      // POP ES
+      // POP CS (actually undefined on 8086)
+      // POP SS
+      // POP DS
+      case 0x07:
+      case 0x0f:
+      case 0x17:
+      case 0x1f:
+        regs16[REG_ES + (*opcode_stream >> 3)] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+        regs16[REG_SP] += 2;
+        ++reg_ip;
+        break;
+
+      default:
+        stepEx(opcode_stream);
+        break;
+
     }
 
-    // JMP disp8
-    case 0xeb:
-      reg_ip += 2 + (int8_t)opcode_stream[1];
-      break;
-
-    // CLC|STC|CLI|STI|CLD|STD
-    case 0xf8 ... 0xfd:
-    {
-      static const int FADDR[3] = { CF_ADDR, IF_ADDR, DF_ADDR };
-      flags[FADDR[(*opcode_stream >> 1) & 3]] = *opcode_stream & 1;
-      ++reg_ip;
-      break;
-    }
-
-    // JCXZ
-    case 0xe3:
-      reg_ip += 2 + !regs16[REG_CX] * (int8_t)opcode_stream[1];
-      break;
-
-    // CALL disp16
-    case 0xe8:
-      regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip + 3;
-      #ifndef TESTING_CPU
-      asm(" MEMW");
-      #endif
-      reg_ip += 3 + *(uint16_t*)(opcode_stream + 1);
-      break;
-
-    // RET (intrasegment)
-    case 0xc3:
-      reg_ip = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
-      regs16[REG_SP] += 2;
-      break;
-
-    // POP reg
-    case 0x58 ... 0x5f:
-      regs16[REG_SP] += 2;  // SP may be read from stack, so we have to increment here
-      regs16[*opcode_stream & 7] = MEM16(16 * regs16[REG_SS] + (uint16_t)(regs16[REG_SP] - 2));
-      ++reg_ip;
-      break;
-
-    // PUSH reg
-    case 0x50 ... 0x57:
-      regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[*opcode_stream & 7];
-      ++reg_ip;
-      break;
-
-    // MOV reg8, data8
-    case 0xb0 ... 0xb7:
-      regs8[((*opcode_stream >> 2) & 1) + (*opcode_stream & 3) * 2] = *(opcode_stream + 1);
-      reg_ip += 2;
-      break;
-
-    // MOV reg16, data16
-    case 0xb8 ... 0xbf:
-      regs16[*opcode_stream & 0x7] = *(uint16_t*)(opcode_stream + 1);
-      reg_ip += 3;
-      break;
-
-    // POP ES
-    // POP CS (actually undefined on 8086)
-    // POP SS
-    // POP DS
-    case 0x07:
-    case 0x0f:
-    case 0x17:
-    case 0x1f:
-      regs16[REG_ES + (*opcode_stream >> 3)] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
-      regs16[REG_SP] += 2;
-      ++reg_ip;
-      break;
-
-    default:
-      stepEx(opcode_stream);
-      break;
-
-  }
+  } while (seg_override_en > 1 || rep_override_en > 1);
 
   // Application has set trap flag, so fire INT 1
   if (trap_flag) {
@@ -991,7 +992,7 @@ void IRAM_ATTR i8086::step()
   trap_flag = FLAG_TF;
 
   // Check for interrupts triggered by system interfaces
-  if (!seg_override_en && !rep_override_en && FLAG_IF && !FLAG_TF && s_pendingIRQ) {
+  if (FLAG_IF && !FLAG_TF && s_pendingIRQ) {
     pc_interrupt(s_pendingIRQIndex);
     s_pendingIRQ = false;
   }
