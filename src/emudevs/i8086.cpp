@@ -358,6 +358,18 @@ uint8_t i8086::BH()
 }
 
 
+void i8086::setCL(uint8_t value)
+{
+  regs8[REG_CL] = value;
+}
+
+
+void i8086::setCH(uint8_t value)
+{
+  regs8[REG_CH] = value;
+}
+
+
 uint8_t i8086::CL()
 {
   return regs8[REG_CL];
@@ -367,6 +379,30 @@ uint8_t i8086::CL()
 uint8_t i8086::CH()
 {
   return regs8[REG_CH];
+}
+
+
+void i8086::setDL(uint8_t value)
+{
+  regs8[REG_DL] = value;
+}
+
+
+void i8086::setDH(uint8_t value)
+{
+  regs8[REG_DH] = value;
+}
+
+
+uint8_t i8086::DL()
+{
+  return regs8[REG_DL];
+}
+
+
+uint8_t i8086::DH()
+{
+  return regs8[REG_DH];
 }
 
 
@@ -394,6 +430,12 @@ void i8086::setDX(uint16_t value)
 }
 
 
+void i8086::setDI(uint16_t value)
+{
+  regs16[REG_DI] = value;
+}
+
+
 void i8086::setCS(uint16_t value)
 {
   regs16[REG_CS] = value;
@@ -412,9 +454,21 @@ void i8086::setSS(uint16_t value)
 }
 
 
+void i8086::setES(uint16_t value)
+{
+  regs16[REG_ES] = value;
+}
+
+
 void i8086::setIP(uint16_t value)
 {
   reg_ip = value;
+}
+
+
+uint16_t i8086::IP()
+{
+  return reg_ip;
 }
 
 
@@ -517,6 +571,31 @@ bool i8086::flagCF()
 bool i8086::flagZF()
 {
   return FLAG_ZF;
+}
+
+bool i8086::flagOF()
+{
+  return FLAG_OF;
+}
+
+bool i8086::flagDF()
+{
+  return FLAG_DF;
+}
+
+bool i8086::flagSF()
+{
+  return FLAG_SF;
+}
+
+bool i8086::flagAF()
+{
+  return FLAG_AF;
+}
+
+bool i8086::flagPF()
+{
+  return FLAG_PF;
 }
 
 void i8086::setFlagZF(bool value)

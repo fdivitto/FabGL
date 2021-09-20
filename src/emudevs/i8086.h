@@ -52,6 +52,10 @@ public:
   static void setAH(uint8_t value);
   static void setBL(uint8_t value);
   static void setBH(uint8_t value);
+  static void setCL(uint8_t value);
+  static void setCH(uint8_t value);
+  static void setDL(uint8_t value);
+  static void setDH(uint8_t value);
 
   static uint8_t AL();
   static uint8_t AH();
@@ -59,14 +63,18 @@ public:
   static uint8_t BH();
   static uint8_t CL();
   static uint8_t CH();
+  static uint8_t DL();
+  static uint8_t DH();
 
   static void setAX(uint16_t value);
   static void setBX(uint16_t value);
   static void setCX(uint16_t value);
   static void setDX(uint16_t value);
+  static void setDI(uint16_t value);
   static void setCS(uint16_t value);
   static void setDS(uint16_t value);
   static void setSS(uint16_t value);
+  static void setES(uint16_t value);
   static void setIP(uint16_t value);
   static void setSP(uint16_t value);
 
@@ -88,9 +96,16 @@ public:
   static bool flagTF();
   static bool flagCF();
   static bool flagZF();
+  static bool flagOF();
+  static bool flagDF();
+  static bool flagSF();
+  static bool flagAF();
+  static bool flagPF();
 
   static void setFlagZF(bool value);
   static void setFlagCF(bool value);
+
+  static uint16_t IP();
 
   static bool halted()                                    { return s_halted; }
 
