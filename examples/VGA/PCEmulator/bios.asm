@@ -39,6 +39,7 @@
 ;   - INT8, implemented 24H rollover
 ;   - rewritten INT1A from scratch, now fully implemented
 ;   - INT15, implemented 0x80, 0x81, 0x82, 0x83, 0x85, 0x86 functions
+;   - int10_write_char_tty, checed page num for old MSDOS versions
 ;
 ;
 ;
@@ -1666,6 +1667,12 @@ int10_write_char_tty:
   mov    ds, ax
   pop    ax
 
+  ; reset page if >7. Some MSDOS versions write wrong values in BH (page)
+  cmp    bh, 8
+  jl     int10_write_char_tty_1
+  mov    bh, 0
+
+int10_write_char_tty_1:
   cmp    byte [vid_mode-bios_data], 0x00
   je     int10_write_char_tty_t40
   cmp    byte [vid_mode-bios_data], 0x01
