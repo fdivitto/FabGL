@@ -32,6 +32,14 @@
 #include "emudevs/MC146818.h"
 
 
+
+// 0 = floppy 0 (fd0, A:)
+// 1 = floppy 1 (fd1, B:)
+// 2 = hard disk 0 (hd0, C: or D:, depends by partitions)
+// 3 = hard disk 1 (hd1)
+constexpr int DISKCOUNT = 4;
+
+
 #define BIOS_SEG             0xF000
 #define BIOS_OFF             0x0100
 #define BIOS_ADDR            (BIOS_SEG * 16 + BIOS_OFF)
@@ -48,9 +56,14 @@
 #define BIOS_KBDBUFHEAD        0x1a     // pointer to next character in keyboard buffer
 #define BIOS_KBDBUFTAIL        0x1c     // pointer to first available spot in keyboard buffer
 #define BIOS_KBDBUF            0x1e     // keyboard buffer (32 bytes, 16 keys, but actually 15)
+#define BIOS_DISKLASTSTATUS    0x41     // diskette status return code
 #define BIOS_SYSTICKS          0x6c     // system ticks (dword)
 #define BIOS_CLKROLLOVER       0x70     // system tick rollover flag (24h)
 #define BIOS_CTRLBREAKFLAG     0x71     // Ctrl-Break flag
+#define BIOS_HDLASTSTATUS      0x74     // HD status return code
+#define BIOS_NUMHD             0x75     // number of fixed disk drives
+#define BIOS_DRIVE0MEDIATYPE   0x90     // media type of drive 0
+#define BIOS_DRIVE1MEDIATYPE   0x91     // media type of drive 1
 #define BIOS_KBDMODE           0x96     // keyboard mode and other shift flags
 #define BIOS_KBDLEDS           0x97     // keyboard LEDs
 #define BIOS_PRINTSCREENFLAG   0x100    // PRINTSCREEN flag
@@ -77,6 +90,20 @@ using fabgl::i8042;
 using fabgl::MC146818;
 
 
+enum MediaType {
+  mediaUnknown,
+  floppy160KB,
+  floppy180KB,
+  floppy320KB,
+  floppy360KB,
+  floppy720KB,
+  floppy1M2K,
+  floppy1M44K,
+  floppy2M88K,
+
+  HDD,
+};
+
 class Machine;
 
 
@@ -84,9 +111,16 @@ class BIOS {
 
 public:
 
+  BIOS();
+
   void init(Machine * machine);
+  void reset();
 
   void helpersEntry();
+
+  void diskHandlerEntry();
+
+  void setDriveMediaType(int drive, MediaType media);
 
 private:
 
@@ -104,6 +138,16 @@ private:
 
   void syncTicksWithRTC();
 
+  void diskHandler_floppy();
+  bool diskHandler_calcAbsAddr(int drive, uint32_t * pos, uint32_t * dest, uint32_t * count);
+  void diskHandler_floppyExit(uint8_t err, bool setErrStat);
+  void diskHandler_HD();
+  void diskHandler_HDExit(uint8_t err, bool setErrStat);
+
+  bool checkDriveMediaType(int drive);
+  uint32_t getDriveMediaTableAddr(int drive);
+
+
   Machine *       m_machine;
   uint8_t *       m_memory;
   Keyboard *      m_keyboard;
@@ -115,6 +159,16 @@ private:
   // 0 = none
   //    pause (0xe1 0x1d 0x45 0xe1 0x9d 0xc5): 1 = 0x1d, 2 = 0x45, 3 = 0x9d
   uint8_t         m_kbdScancodeComp;
+
+  // address of bios.asm:media_drive_parameters (0, 1)
+  // address of int41 (2), int46 (3)
+  //uint32_t        m_mediaDriveParametersAddr[4];
+
+  // original int 1e address (may be changed by O.S.)
+  uint32_t        m_origInt1EAddr;
+
+  // media type for floppy (0,1) and HD (>=2)
+  MediaType       m_mediaType[DISKCOUNT];
 
 
 };

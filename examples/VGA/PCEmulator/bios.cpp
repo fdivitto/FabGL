@@ -39,6 +39,12 @@ static const uint8_t biosrom[] = {
 };
 
 
+BIOS::BIOS()
+  : m_memory(nullptr)
+{
+}
+
+
 void BIOS::init(Machine * machine)
 {
   m_machine   = machine;
@@ -58,8 +64,132 @@ void BIOS::init(Machine * machine)
   m_memory[0xffff2] = BIOS_OFF >> 8;
   m_memory[0xffff3] = BIOS_SEG & 0xff;
   m_memory[0xffff4] = BIOS_SEG >> 8;
+}
 
+
+void BIOS::reset()
+{
   m_kbdScancodeComp = 0;
+  m_memory[BIOS_DATAAREA_ADDR + BIOS_NUMHD] = (m_machine->disk(2) ? 1 : 0) + (m_machine->disk(3) ? 1 : 0);
+}
+
+
+// drive:
+//   0 = floppy 0 (get address from INT 1E)
+//   1 = floppy 1 (get address from INT 1E)
+//   2 = HD 0     (get address from INT 41)
+//   3 = HD 1     (get address from INT 46)
+uint32_t BIOS::getDriveMediaTableAddr(int drive)
+{
+  int intNum = drive < 2 ? 0x1e : (drive == 2 ? 0x41 : 0x46);
+  uint16_t * intAddr = (uint16_t*)(m_memory + intNum * 4);
+  return intAddr[0] + intAddr[1] * 16;
+}
+
+
+bool BIOS::checkDriveMediaType(int drive)
+{
+  if (drive < 2) {
+    // FDD
+    if (m_mediaType[drive] == mediaUnknown) {
+      MediaType mt = mediaUnknown;
+      int h = m_machine->diskHeads(drive);
+      int t = m_machine->diskCylinders(drive);
+      int s = m_machine->diskSectors(drive);
+      if (h == 1 && t == 40 && s == 8)
+        mt = floppy160KB;
+      else if (h == 1 && t == 40 && s == 9)
+        mt = floppy180KB;
+      else if (h == 2 && t == 40 && s == 8)
+        mt = floppy320KB;
+      else if (h == 2 && t == 40 && s == 9)
+        mt = floppy360KB;
+      else if (h == 2 && t == 80 && s == 9)
+        mt = floppy720KB;
+      else if (h == 2 && t == 80 && s == 15)
+        mt = floppy1M2K;
+      else if (h == 2 && t == 80 && s == 18)
+        mt = floppy1M44K;
+      else if (h == 2 && t == 80 && s == 36)
+        mt = floppy2M88K;
+      setDriveMediaType(drive, mt);
+    }
+  } else {
+    // HDD
+    if (m_machine->disk(drive))
+      setDriveMediaType(drive, HDD);
+  }
+  return m_mediaType[drive] != mediaUnknown;
+}
+
+
+void BIOS::setDriveMediaType(int drive, MediaType media)
+{
+  m_mediaType[drive] = media;
+
+  if (drive < 2) {
+    // FDD
+
+    // updates BIOS data area
+    uint8_t knownMedia     = 0x10;        // default set bit 4 (known media)
+    uint8_t doubleStepping = 0x00;        // reset bit 5 (double stepping)
+    uint8_t dataRate       = 0x00;
+    uint8_t defs           = 0x00;
+    switch (media) {
+      case floppy160KB:
+      case floppy180KB:
+      case floppy320KB:
+      case floppy360KB:
+        doubleStepping     = 0x20;        // set bit 5 (double stepping)
+        dataRate           = 0b01000000;  // 300 KBS
+        defs               = 0b00000100;  // Known 360K media in 1.2MB drive
+        break;
+      case floppy720KB:
+        dataRate           = 0b10000000;  // 250 KBS
+        defs               = 0b00000111;  // 720K media in 720K drive or 1.44MB media in 1.44MB drive
+        break;
+      case floppy1M2K:
+        dataRate           = 0b00000000;  // 500 KBS
+        defs               = 0b00000101;  // Known 1.2MB media in 1.2MB drive
+        break;
+      case floppy1M44K:
+        dataRate           = 0b00000000;  // 500 KBS
+        defs               = 0b00000111;  // 720K media in 720K drive or 1.44MB media in 1.44MB drive
+        break;
+      case floppy2M88K:
+        dataRate           = 0b11000000;  // 1 MBS
+        defs               = 0b00000111;  // right?
+        break;
+      case mediaUnknown:
+      default:
+        knownMedia         = 0x00;        // reset bit 4 (known media)
+        break;
+    }
+    if (m_memory && drive < 2) {
+      // BIOS data area
+      m_memory[BIOS_DATAAREA_ADDR + BIOS_DRIVE0MEDIATYPE + drive] = knownMedia | doubleStepping | dataRate | defs;
+      //printf("%05X = %02X\n", BIOS_DATAAREA_ADDR + BIOS_DRIVE0MEDIATYPE + drive, m_memory[BIOS_DATAAREA_ADDR + BIOS_DRIVE0MEDIATYPE + drive]);
+
+      // INT 1E
+      uint32_t maddr = getDriveMediaTableAddr(drive);
+      m_memory[maddr + 0x04] = m_machine->diskSectors(drive);
+
+      // original INT 1E (returned in ES:DI, int 13h, serv 08h)
+      m_memory[m_origInt1EAddr + 0x04] = m_machine->diskSectors(drive);
+      m_memory[m_origInt1EAddr + 0x0b] = m_machine->diskCylinders(drive) - 1;
+    }
+
+  } else if (media == HDD) {
+
+    // HDD
+
+    // fill tables pointed by INT 41h or 46h
+    uint32_t mtableAddr = getDriveMediaTableAddr(drive);
+    *(uint16_t*)(m_memory + mtableAddr + 0x00) = m_machine->diskCylinders(drive);
+    *(uint8_t*)(m_memory + mtableAddr + 0x02)  = m_machine->diskHeads(drive);
+    *(uint8_t*)(m_memory + mtableAddr + 0x0e)  = m_machine->diskSectors(drive);
+
+  }
 }
 
 
@@ -101,6 +231,15 @@ void BIOS::helpersEntry()
     // AH = 0x07, synchronize system ticks with RTC
     case 0x07:
       syncTicksWithRTC();
+      break;
+
+    // AH = 0x08, set media drive parameters tables address
+    //   ES:BX = int 1Eh address (in bios.asm) for floppy drivers
+    case 0x08:
+      m_origInt1EAddr = i8086::ES() * 16 + i8086::BX();
+      // set initial media
+      for (int i = 0; i < DISKCOUNT; ++i)
+        setDriveMediaType(i, mediaUnknown);
       break;
 
     default:
@@ -690,6 +829,7 @@ static uint8_t BCDtoByte(uint8_t v)
   return (v & 0x0F) + (v >> 4) * 10;
 }
 
+
 // synchronize system ticks with RTC
 void BIOS::syncTicksWithRTC()
 {
@@ -699,5 +839,412 @@ void BIOS::syncTicksWithRTC()
   int hh = BCDtoByte(m_MC146818->reg(0x04));
   int totSecs = ss + mm * 60 + hh * 3600 + 1000;
   int64_t pitTicks = (int64_t)totSecs * PIT_TICK_FREQ;
-  *(uint32_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_SYSTICKS) = pitTicks / 65536;
+  *(uint32_t*)(m_memory + BIOS_DATAAREA_ADDR + BIOS_SYSTICKS) = (uint32_t) (pitTicks / 65536);
+}
+
+
+// INT 13 services
+void BIOS::diskHandlerEntry()
+{
+  if (i8086::DL() < 2)
+    diskHandler_floppy();
+  else
+    diskHandler_HD();
+}
+
+
+void BIOS::diskHandler_floppy()
+{
+  int drive   = i8086::DL();
+  int service = i8086::AH();
+
+  //printf("INT 13h, FDD (%d), service %02X\n", drive, service);
+
+  if (m_machine->disk(drive) == nullptr) {
+    // invalid drive
+    diskHandler_floppyExit(0x80, true);
+    return;
+  }
+
+  switch (service) {
+
+    // Reset Diskette System
+    case 0x00:
+      diskHandler_floppyExit(m_mediaType[drive] == mediaUnknown ? 0x06 : 0x00, true);
+      return;
+
+    // Read Diskette Status
+    case 0x01:
+      diskHandler_floppyExit(m_memory[BIOS_DATAAREA_ADDR + BIOS_DISKLASTSTATUS], false);
+      m_memory[BIOS_DATAAREA_ADDR + BIOS_DISKLASTSTATUS] = 0; // this function resets BIOS_DISKLASTSTATUS
+      return;
+
+    // Read Diskette Sectors
+    case 0x02:
+    // Write Diskette Sectors
+    case 0x03:
+    // Verify Diskette Sectors
+    case 0x04:
+    {
+      if (!checkDriveMediaType(drive)) {
+        diskHandler_floppyExit(6, true);
+        return;
+      }
+      uint32_t pos, dest, count;
+      if (!diskHandler_calcAbsAddr(drive, &pos, &dest, &count)) {
+        diskHandler_floppyExit(4, true);  // sector not found
+        return;
+      }
+      fseek(m_machine->disk(drive), pos, 0);
+      size_t sects = i8086::AL();
+      if (service != 0x04) {
+        sects = service == 0x02 ?
+                  fread(m_memory + dest, 1, count, m_machine->disk(drive)) :
+                  fwrite(m_memory + dest, 1, count, m_machine->disk(drive));
+        sects /= 512;
+      }
+      i8086::setAL(sects);
+      diskHandler_floppyExit(sects == 0 ? 4 : 0, true);
+      return;
+    }
+
+    // Format Diskette Track
+    case 0x05:
+    {
+      int sectsCountToFormat = i8086::AL();
+      int track              = i8086::CH();
+      int head               = i8086::DH();
+      uint32_t tableAddr     = i8086::ES() * 16 + i8086::BX();
+
+      int SPT = m_machine->diskSectors(drive);
+      int tracksCount = m_machine->diskCylinders(drive);
+
+      uint8_t fillByte = m_memory[getDriveMediaTableAddr(drive) + 8];
+
+      uint8_t * buf = (uint8_t*) malloc(512);
+      memset(buf, fillByte, 512);
+
+      for (int i = 0; i < sectsCountToFormat; ++i) {
+        int ttrack  = m_memory[tableAddr++];
+        int thead   = m_memory[tableAddr++];
+        int tsect   = m_memory[tableAddr++];
+        int tsectSz = 128 << m_memory[tableAddr++];
+        if (ttrack != track || thead > 1 || tsect > SPT || tsectSz != 512 || track >= tracksCount) {
+          // error
+          free(buf);
+          diskHandler_floppyExit(0x04, true);
+          return;
+        }
+        fseek(m_machine->disk(drive), 512 * ((track * 2 + head) * SPT + (tsect - 1)), 0);
+        fwrite(buf, 1, 512, m_machine->disk(drive));
+        //printf("  track=%d head=%d sect=%d pos=%d fill=%02X\n", track, head, tsect, 512 * ((track * 2 + head) * SPT + (tsect - 1)), fillByte);
+      }
+      free(buf);
+      diskHandler_floppyExit(0x00, true);
+      return;
+    }
+
+    // Read Drive Parameters
+    case 0x08:
+      i8086::setAX(0x0000);
+      i8086::setBH(0x00);
+      if (!checkDriveMediaType(drive)) {
+        i8086::setCX(0x0000);
+        i8086::setDX(0x0000);
+        i8086::setES(0x0000);
+        i8086::setDI(0x0000);
+        diskHandler_floppyExit(6, true);
+        return;
+      }
+      switch (m_mediaType[drive]) {
+        case floppy160KB:
+        case floppy180KB:
+        case floppy320KB:
+          // @TODO: check this
+          i8086::setBL(0x01);
+          break;
+        case floppy360KB:
+          i8086::setBL(0x01);
+          break;
+        case floppy720KB:
+          i8086::setBL(0x03);
+          break;
+        case floppy1M2K:
+          i8086::setBL(0x02);
+          break;
+        case floppy1M44K:
+          i8086::setBL(0x04);
+          break;
+        case floppy2M88K:
+          i8086::setBL(0x05);
+          break;
+        case mediaUnknown:
+        default:
+          // not possible here
+          break;
+      }
+      i8086::setCH(m_machine->diskCylinders(drive) - 1);  // max usable track number
+      i8086::setCL(m_machine->diskSectors(drive));        // max usable sector number
+      i8086::setDH(m_machine->diskHeads(drive) - 1);      // max usable head number
+      i8086::setDL((m_machine->disk(0) ? 1 : 0) + (m_machine->disk(1) ? 1 : 0));  // number of diskette installed
+      // Pointer to Diskette Parameters table for the maximum media type supported on the specified drive
+      i8086::setES(BIOS_SEG);
+      i8086::setDI(m_origInt1EAddr - BIOS_SEG * 16);
+      diskHandler_floppyExit(0, true);
+      //printf("  INT 13h, FDD, 08h: BL=%d, CH=%d, CL=%d, DL=%d\n", i8086::BL(), i8086::CH(), i8086::CL(), i8086::DL());
+      return;
+
+    // Read Drive Type
+    case 0x15:
+      diskHandler_floppyExit(0, true);
+      i8086::setAH(m_machine->disk(drive) ? 0x02 : 0x00);
+      return;
+
+    // Detect Media Change
+    case 0x16:
+      diskHandler_floppyExit(m_mediaType[drive] == mediaUnknown ? 0x06 : 0x00, true);
+      return;
+
+    // Set Diskette Type
+    case 0x17:
+      switch (i8086::AL()) {
+
+        // 320K/360K
+        case 0x01:
+          diskHandler_floppyExit(m_mediaType[drive] != floppy360KB &&
+                                 m_mediaType[drive] != floppy320KB &&
+                                 m_mediaType[drive] != floppy180KB &&
+                                 m_mediaType[drive] != floppy160KB, true);
+          break;
+
+        // 360K
+        case 0x02:
+          diskHandler_floppyExit(m_mediaType[drive] != floppy360KB, true);
+          break;
+
+        // 1.2MB
+        case 0x03:
+          diskHandler_floppyExit(m_mediaType[drive] != floppy1M2K, true);
+          break;
+
+        // 720KB
+        case 0x04:
+          diskHandler_floppyExit(m_mediaType[drive] != floppy720KB, true);
+          break;
+
+        // error
+        default:
+          diskHandler_floppyExit(1, true);
+          break;
+
+      }
+      return;
+
+    // Set Media Type for Format
+    case 0x18:
+    {
+      // check if proposed media type matches with current
+      int propTracks = i8086::CH();
+      int propSPT    = i8086::CL();
+      int tracks     = m_machine->diskCylinders(drive) - 1;
+      int SPT        = m_machine->diskSectors(drive);
+      if (propTracks == tracks && propSPT == SPT) {
+        // match ok
+        diskHandler_floppyExit(0x00, true);
+        i8086::setES(BIOS_SEG);
+        i8086::setDI(m_origInt1EAddr - BIOS_SEG * 16);
+      } else {
+        // not supported
+        diskHandler_floppyExit(0x0c, true);
+        printf("  INT 13h, FDD, 18h: unsupported media type, t=%d (%d), s=%d (%d)\n", propTracks, tracks, propSPT, SPT);
+      }
+      return;
+    }
+
+    default:
+      // invalid function
+      diskHandler_floppyExit(1, true);
+      printf("  INT 13h, FDD, invalid service %02X\n", service);
+      return;
+
+  }
+}
+
+
+// CH       : low 8 bits of track number
+// CL 6...7 : high 2 bits of track number
+// CL 0...5 : sector number
+// DH       : head number
+// AL       : number of sectors to read
+// ES:BX    : destination address
+bool BIOS::diskHandler_calcAbsAddr(int drive, uint32_t * pos, uint32_t * dest, uint32_t * count)
+{
+  int sectorsPerTrack = m_machine->diskSectors(drive);
+  int heads           = m_machine->diskHeads(drive);
+  int track  = i8086::CH() | (((uint16_t)i8086::CL() & 0xc0) << 2);
+  int sector = i8086::CL() & 0x3f;
+  int head   = i8086::DH();
+  if (sector > sectorsPerTrack)
+    return false;
+  *pos   = 512 * ((track * heads + head) * sectorsPerTrack + (sector - 1));
+  *dest  = i8086::ES() * 16 + i8086::BX();
+  *count = i8086::AL() * 512;
+  return true;
+}
+
+
+void BIOS::diskHandler_floppyExit(uint8_t err, bool setErrStat)
+{
+  i8086::setAH(err);
+  i8086::setFlagCF(err ? 1 : 0);
+  if (setErrStat)
+    m_memory[BIOS_DATAAREA_ADDR + BIOS_DISKLASTSTATUS] = err;
+
+  /*
+  if (err > 0)
+    printf("  err = %d\n", err);
+    */
+}
+
+
+void BIOS::diskHandler_HD()
+{
+  int drive   = (i8086::DL() & 1) + 2;  // 2 = HD0, 3 = HD1
+  int service = i8086::AH();
+
+  //printf("INT 13h, HDD (%d), service %02X\n", drive, service);
+
+  if (m_machine->disk(drive) == nullptr) {
+    // invalid drive
+    diskHandler_HDExit(0x80, true);
+    return;
+  }
+
+  switch (service) {
+
+    // Reset Fixed Disk System
+    case 0x00:
+      diskHandler_HDExit(checkDriveMediaType(drive) ? 0x00 : 0x80, true);
+      return;
+
+    // Read Disk Status
+    case 0x01:
+      diskHandler_HDExit(m_memory[BIOS_DATAAREA_ADDR + BIOS_HDLASTSTATUS], false);
+      m_memory[BIOS_DATAAREA_ADDR + BIOS_HDLASTSTATUS] = 0; // this function resets BIOS_HDLASTSTATUS
+      return;
+
+    // Read Fixed Disk Sectors
+    case 0x02:
+    // Write Fixed Disk Sectors
+    case 0x03:
+    // Verify Fixed Disk Sectors
+    case 0x04:
+    {
+      if (!checkDriveMediaType(drive)) {
+        diskHandler_HDExit(0x80, true);
+        return;
+      }
+      uint32_t pos, dest, count;
+      if (!diskHandler_calcAbsAddr(drive, &pos, &dest, &count)) {
+        diskHandler_HDExit(4, true);  // sector not found
+        return;
+      }
+      fseek(m_machine->disk(drive), pos, 0);
+      size_t sects = i8086::AL();
+      if (service != 0x04) {
+        sects = service == 0x02 ?
+                  fread(m_memory + dest, 1, count, m_machine->disk(drive)) :
+                  fwrite(m_memory + dest, 1, count, m_machine->disk(drive));
+        sects /= 512;
+      }
+      i8086::setAL(sects);
+      diskHandler_HDExit(sects == 0 ? 4 : 0, true);
+      return;
+    }
+
+    // Format Disk Cylinder
+    case 0x05:
+      diskHandler_HDExit(0x00, true);
+      return;
+
+    // Read Drive Parameters
+    case 0x08:
+      i8086::setAL(0x00);
+      if (checkDriveMediaType(drive)) {
+        uint16_t maxUsableCylNum  = m_machine->diskCylinders(drive) - 1;
+        uint8_t  maxUsableSecNum  = m_machine->diskSectors(drive);
+        uint8_t  maxUsableHeadNum = m_machine->diskHeads(drive) - 1;
+        i8086::setCH(maxUsableCylNum & 0xff);                                       // Maximum usable cylinder number (low 8 bits)
+        i8086::setCL(((maxUsableCylNum >> 2) & 0xc0) |                              // Bits 7-6 = Maximum usable cylinder number (high 2 bits)
+                     (maxUsableSecNum & 0x3f));                                     // Bits 5-0 = Maximum usable sector number
+        i8086::setDH(maxUsableHeadNum);                                             // Maximum usable head number
+        i8086::setDL((m_machine->disk(2) ? 1 : 0) + (m_machine->disk(3) ? 1 : 0));  // Number of drives (@TODO: correct? Docs not clear)
+        // Address of Fixed Disk Parameters table
+        // *** note: some texts tell ES:DI should return a pointer to parameters table. IBM docs don't. Actually
+        //           returning ES:DI may crash old MSDOS versions!
+        //i8086::setES(BIOS_SEG);
+        //i8086::setDI(getDriveMediaTableAddr(drive) - BIOS_SEG * 16);
+/*
+        printf("CH = %02X CL = %02X DH = %02X DL = %02X\n", i8086::CH(), i8086::CL(), i8086::DH(), i8086::DL());
+        printf("ES = %04X  DI = %04X\n", i8086::ES(), i8086::DI());
+        printf("ES:DI [00-01] = %d\n", (int) *(uint16_t*)(m_memory + i8086::ES() * 16 + i8086::DI() + 0x00));
+        printf("ES:DI    [02] = %d\n", (int) *(uint8_t*)(m_memory + i8086::ES() * 16 + i8086::DI() + 0x02));
+        printf("ES:DI    [0e] = %d\n", (int) *(uint8_t*)(m_memory + i8086::ES() * 16 + i8086::DI() + 0x0e));
+*/
+        diskHandler_HDExit(0x00, true);
+      } else {
+        i8086::setCX(0x0000);
+        i8086::setDX(0x0000);
+        diskHandler_HDExit(0x80, true);
+      }
+      return;
+
+    // Initialize Drive Parameters
+    case 0x09:
+    // Seek to Cylinder
+    case 0x0c:
+    // Recalibrate Drive
+    case 0x11:
+    // Controller Internal Diagnostic
+    case 0x14:
+      diskHandler_HDExit(checkDriveMediaType(drive) ? 0x00 : 0x80, true);
+      return;
+
+    // Test for Drive Ready
+    case 0x10:
+      diskHandler_HDExit(checkDriveMediaType(drive) ? 0x00 : 0xAA, true);
+      return;
+
+    // Read Disk Type
+    case 0x15:
+      if (checkDriveMediaType(drive)) {
+        diskHandler_HDExit(0x00, true);
+        i8086::setAH(0x03);// drive present
+        auto sectors = m_machine->diskSize(drive) / 512;
+        i8086::setDX(sectors & 0xffff);
+        i8086::setCX(sectors >> 16);
+      } else {
+        i8086::setAX(0x0000);
+        i8086::setCX(0x0000);
+        i8086::setDX(0x0000);
+        diskHandler_HDExit(0x00, true); // yes, it is 0x00!
+      }
+      return;
+
+    default:
+      // invalid function
+      printf("INT 13h, HDD, invalid service %02X\n", service);
+      diskHandler_HDExit(1, true);
+      return;
+
+  }
+}
+
+
+void BIOS::diskHandler_HDExit(uint8_t err, bool setErrStat)
+{
+  i8086::setAH(err);
+  i8086::setFlagCF(err ? 1 : 0);
+  if (setErrStat)
+    m_memory[BIOS_DATAAREA_ADDR + BIOS_HDLASTSTATUS] = err;
 }

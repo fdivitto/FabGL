@@ -57,27 +57,47 @@ using fabgl::MC146818;
 using fabgl::MCP23S17;
 
 
+#ifdef FABGL_EMULATED
+typedef void (*StepCallback)(void *);
+#endif
+
+
 class Machine {
 
 public:
   Machine();
   ~Machine();
 
-  void setDriveA(char const * filename) { m_diskImageFile[1] = filename; }
-  void setDriveB(char const * filename) { } // @TODO, not implemented
-  void setDriveC(char const * filename) { m_diskImageFile[0] = filename; }
+  void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
+
+  void setBootDrive(int drive)      { m_bootDrive = drive; }
 
   void run();
 
-  void trigReset()           { m_reset = true; }
+  void trigReset()                  { m_reset = true; }
 
-  uint32_t ticksCounter()    { return m_ticksCounter; }
+  uint32_t ticksCounter()           { return m_ticksCounter; }
 
-  i8042 * getI8042()         { return &m_i8042; }
+  i8042 * getI8042()                { return &m_i8042; }
 
-  MC146818 * getMC146818()   { return &m_MC146818; }
+  MC146818 * getMC146818()          { return &m_MC146818; }
 
-  uint8_t * memory()         { return s_memory; }
+  uint8_t * memory()                { return s_memory; }
+
+  FILE * disk(int index)            { return m_disk[index]; }
+  uint64_t diskSize(int index)      { return m_diskSize[index]; }
+  uint16_t diskCylinders(int index) { return m_diskCylinders[index]; }
+  uint8_t diskHeads(int index)      { return m_diskHeads[index]; }
+  uint8_t diskSectors(int index)    { return m_diskSectors[index]; }
+
+  static void dumpMemory(char const * filename);
+  static void dumpInfo(char const * filename);
+
+  static bool createEmptyDisk(int diskType, char const * filename);
+
+  #ifdef FABGL_EMULATED
+  void setStepCallback(StepCallback value)  { m_stepCallback = value; }
+  #endif
 
 private:
 
@@ -118,14 +138,22 @@ private:
   void speakerSetFreq();
   void speakerEnableDisable();
 
+  void autoDetectDriveGeometry(int drive);
+
+
   bool                     m_reset;
 
   GraphicsAdapter          m_graphicsAdapter;
 
   BIOS                     m_BIOS;
 
-  FILE *                   m_disk[2];
-  char const *             m_diskImageFile[2];
+  // 0, 1 = floppy
+  // >= 2 = hard disk
+  FILE *                   m_disk[DISKCOUNT];
+  uint64_t                 m_diskSize[DISKCOUNT];
+  uint16_t                 m_diskCylinders[DISKCOUNT];
+  uint8_t                  m_diskHeads[DISKCOUNT];
+  uint8_t                  m_diskSectors[DISKCOUNT];
 
   static uint8_t *         s_memory;
   static uint8_t *         s_videoMemory;
@@ -178,6 +206,12 @@ private:
   // extended I/O (MCP23S17)
   MCP23S17                 m_MCP23S17;
   uint8_t                  m_MCP23S17Sel;
+
+  #ifdef FABGL_EMULATED
+  StepCallback             m_stepCallback;
+  #endif
+
+  uint8_t                  m_bootDrive;
 
 };
 

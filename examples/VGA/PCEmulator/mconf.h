@@ -35,15 +35,16 @@ an URL or a local path.
 Allowed tags:
 
 "desc" : Textual description of the configuration
-"dska" : Floppy drive A location
-"dskb" : Floppy drive B location
-"dskc" : Hard disk drive C location
+"fd0" : Floppy drive 0 (A) location
+"fd1" : Floppy drive 1 (B) location
+"hd0" : Hard disk drive 0 location
+"hd1" : Hard disk drive 1 location
 
 Example:
 
-desc "FreeDOS (A:) + DOS Programming Tools (C:)"  -dska "http://www.fabglib.org/downloads/A_freedos.img"  dskc "http://www.fabglib.org/downloads/C_dosdev.img"
-desc "My Own MSDOS" dska BOOT.IMG -dskc HDD.IMG
-desc "Floppy Only" dska TESTBOOT.IMG
+desc "FreeDOS (A:) + DOS Programming Tools (C:)"  -fd0 "http://www.fabglib.org/downloads/A_freedos.img"  hd0 "http://www.fabglib.org/downloads/C_dosdev.img"
+desc "My Own MSDOS" fd0 BOOT.IMG -hd0 HDD.IMG
+desc "Floppy Only" fd0 TESTBOOT.IMG
 
 */
 
@@ -56,6 +57,8 @@ desc "Floppy Only" dska TESTBOOT.IMG
 #include <stdlib.h>
 #include <string.h>
 
+#include "bios.h"
+
 
 
 #define MACHINE_CONF_FILENAME "mconfs.txt"
@@ -64,13 +67,13 @@ desc "Floppy Only" dska TESTBOOT.IMG
 
 
 static const char DefaultConfFile[] =
-  "desc \"FreeDOS (A:)\"                               dska http://www.fabglib.org/downloads/A_freedos.img" NL
-  "desc \"FreeDOS (A:) + DOS Programming Tools (C:)\"  dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosdev.img" NL
-  "desc \"FreeDOS (A:) + Windows 3.0 Hercules (C:)\"   dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_winherc.img" NL
-  "desc \"FreeDOS (A:) + DOS Programs and Games (C:)\" dska http://www.fabglib.org/downloads/A_freedos.img dskc http://www.fabglib.org/downloads/C_dosprog.img" NL
-  "desc \"MS-DOS 3.31 (A:)\"                           dska http://www.fabglib.org/downloads/A_MSDOS331.img" NL
-  "desc \"Linux ELKS 0.4.0\"                           dska http://www.fabglib.org/downloads/A_ELK040.img" NL
-  "desc \"CP/M 86 + Turbo Pascal 3\"                   dska http://www.fabglib.org/downloads/A_CPM86.img" NL;
+  "desc \"FreeDOS (A:)\"                               fd0 http://www.fabglib.org/downloads/A_freedos.img" NL
+  "desc \"FreeDOS (A:) + DOS Programming Tools (C:)\"  fd0 http://www.fabglib.org/downloads/A_freedos.img hd0 http://www.fabglib.org/downloads/C_dosdev.img" NL
+  "desc \"FreeDOS (A:) + Windows 3.0 Hercules (C:)\"   fd0 http://www.fabglib.org/downloads/A_freedos.img hd0 http://www.fabglib.org/downloads/C_winherc.img" NL
+  "desc \"FreeDOS (A:) + DOS Programs and Games (C:)\" fd0 http://www.fabglib.org/downloads/A_freedos.img hd0 http://www.fabglib.org/downloads/C_dosprog.img" NL
+  "desc \"MS-DOS 3.31 (A:)\"                           fd0 http://www.fabglib.org/downloads/A_MSDOS331.img" NL
+  "desc \"Linux ELKS 0.4.0\"                           fd0 http://www.fabglib.org/downloads/A_ELK040.img" NL
+  "desc \"CP/M 86 + Turbo Pascal 3\"                   fd0 http://www.fabglib.org/downloads/A_CPM86.img" NL;
 
 
 
@@ -82,34 +85,26 @@ static const char DefaultConfFile[] =
 struct MachineConfItem {
   MachineConfItem * next;
   char            * desc;
-  char            * dska;
-  char            * dskb;
-  char            * dskc;
+  char            * disk[DISKCOUNT];
 
   MachineConfItem()
     : next(nullptr),
       desc(nullptr),
-      dska(nullptr),
-      dskb(nullptr),
-      dskc(nullptr)
+      disk()  // this zeroes disk[] items
   {
   }
 
   ~MachineConfItem()
   {
     free(desc);
-    free(dska);
-    free(dskb);
-    free(dskc);
+    for (int i = 0; i < DISKCOUNT; ++i)
+      free(disk[i]);
   }
 
-  bool isValid()         { return desc != nullptr; }
+  bool isValid()                                { return desc != nullptr; }
 
-  void setDesc(char const * value) { free(desc); desc = strdup(value); }
-  void setDska(char const * value) { free(dska); dska = strdup(value); }
-  void setDskb(char const * value) { free(dskb); dskb = strdup(value); }
-  void setDskc(char const * value) { free(dskc); dskc = strdup(value); }
-
+  void setDesc(char const * value)              { free(desc); desc = strdup(value); }
+  void setDisk(int index, char const * value)   { free(disk[index]); disk[index] = strdup(value); }
 };
 
 

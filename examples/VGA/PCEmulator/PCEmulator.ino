@@ -376,9 +376,17 @@ void setup()
   ibox.end();
 
   machine = new Machine;
-  machine->setDriveA(filenameDiskA);
-  machine->setDriveB(filenameDiskB);
-  machine->setDriveC(filenameDiskC);
+  for (int i = 0; i < DISKCOUNT; ++i)
+    machine->setDriveImage(i, diskFilename[i]);
+
+  /*
+  printf("MALLOC_CAP_32BIT : %d bytes (largest %d bytes)\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT), heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));
+  printf("MALLOC_CAP_8BIT  : %d bytes (largest %d bytes)\r\n", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
+  printf("MALLOC_CAP_DMA   : %d bytes (largest %d bytes)\r\n\n", heap_caps_get_free_size(MALLOC_CAP_DMA), heap_caps_get_largest_free_block(MALLOC_CAP_DMA));
+
+  heap_caps_dump_all();
+  */
+
   machine->run();
 }
 

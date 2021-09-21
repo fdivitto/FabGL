@@ -39,7 +39,7 @@
 
 
 #define MAXTAGLENGTH     6
-#define MAXVALUELENGTH 128
+#define MAXVALUELENGTH 256
 
 
 MachineConf::MachineConf()
@@ -108,8 +108,8 @@ void MachineConf::loadFromFile(FILE * file)
 {
   cleanUp();
   auto item = new MachineConfItem;
-  char tag[MAXTAGLENGTH + 1];
-  char * value = (char*) malloc(MAXVALUELENGTH + 1);
+  char * value = (char*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
+  char * tag   = (char*) SOC_EXTRAM_DATA_LOW + MAXVALUELENGTH + 1;
   int ipos;
   char c = fgetc(file);
   while (!feof(file)) {
@@ -146,15 +146,16 @@ void MachineConf::loadFromFile(FILE * file)
     // assign tag
     if (strcmp("desc", tag) == 0)
       item->setDesc(value);
-    else if (strcmp("dska", tag) == 0)
-      item->setDska(value);
-    else if (strcmp("dskb", tag) == 0)
-      item->setDskb(value);
-    else if (strcmp("dskc", tag) == 0)
-      item->setDskc(value);
+    else if (strcmp("dska", tag) == 0 || strcmp("fd0", tag) == 0)
+      item->setDisk(0, value);
+    else if (strcmp("dskb", tag) == 0 || strcmp("fd1", tag) == 0)
+      item->setDisk(1, value);
+    else if (strcmp("dskc", tag) == 0 || strcmp("hd0", tag) == 0)
+      item->setDisk(2, value);
+    else if (strcmp("dskd", tag) == 0 || strcmp("hd1", tag) == 0)
+      item->setDisk(3, value);
   }
   addItem(item);
-  free(value);
 }
 
 
@@ -171,12 +172,14 @@ void MachineConf::saveToFile(FILE * file)
 {
   for (auto item = m_itemsList; item; item = item->next) {
     saveTag(file, "desc", item->desc);
-    if (item->dska)
-      saveTag(file, "dska", item->dska);
-    if (item->dskb)
-      saveTag(file, "dskb", item->dskb);
-    if (item->dskc)
-      saveTag(file, "dskc", item->dskc);
+    if (item->disk[0])
+      saveTag(file, "fd0", item->disk[0]);
+    if (item->disk[1])
+      saveTag(file, "fd1", item->disk[1]);
+    if (item->disk[2])
+      saveTag(file, "hd0", item->disk[2]);
+    if (item->disk[3])
+      saveTag(file, "hd1", item->disk[3]);
     fputs("\r\n", file);
   }
 }
@@ -223,9 +226,9 @@ struct ConfigDialog : public uiApp {
   uiButton        * buttonSave;
   uiButton        * buttonCancel;
   uiTextEdit      * editDesc;
-  uiTextEdit      * editDiskA;
-  uiTextEdit      * editDiskB;
-  uiTextEdit      * editDiskC;
+  uiTextEdit      * editFD0;
+  uiTextEdit      * editFD1;
+  uiTextEdit      * editHD0;
   uiButton        * browseAButton;
   uiButton        * browseBButton;
   uiButton        * browseCButton;
@@ -258,28 +261,28 @@ struct ConfigDialog : public uiApp {
 
     y += dy;
 
-    // disk A
-    new uiLabel(mainFrame, "Disk A", Point(x, y + oy));
-    editDiskA = new uiTextEdit(mainFrame, item->dska, Point(50, y), Size(290, hh));
+    // floppy 0
+    new uiLabel(mainFrame, "Floppy 0", Point(x, y + oy));
+    editFD0 = new uiTextEdit(mainFrame, item->disk[0], Point(60, y), Size(280, hh));
     browseAButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseAButton->onClick = [&]() { browseFilename(editDiskA); };
+    browseAButton->onClick = [&]() { browseFilename(editFD0); };
 
 
     y += dy;
 
-    // disk B
-    new uiLabel(mainFrame, "Disk B", Point(x, y + oy));
-    editDiskB = new uiTextEdit(mainFrame, item->dskb, Point(50, y), Size(290, hh));
+    // floppy 1
+    new uiLabel(mainFrame, "Floppy 1", Point(x, y + oy));
+    editFD1 = new uiTextEdit(mainFrame, item->disk[1], Point(60, y), Size(280, hh));
     browseBButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseBButton->onClick = [&]() { browseFilename(editDiskB); };
+    browseBButton->onClick = [&]() { browseFilename(editFD1); };
 
     y += dy;
 
-    // disk C
-    new uiLabel(mainFrame, "Disk C", Point(x, y + oy));
-    editDiskC = new uiTextEdit(mainFrame, item->dskc, Point(50, y), Size(290, hh));
+    // HDD 0
+    new uiLabel(mainFrame, "Hard Disk", Point(x, y + oy));
+    editHD0 = new uiTextEdit(mainFrame, item->disk[2], Point(60, y), Size(280, hh));
     browseCButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseCButton->onClick = [&]() { browseFilename(editDiskC); };
+    browseCButton->onClick = [&]() { browseFilename(editHD0); };
 
     y += dy * 2;
 
@@ -316,9 +319,9 @@ struct ConfigDialog : public uiApp {
   void saveAndQuit() {
     // get fields
     item->setDesc(editDesc->text());
-    item->setDska(editDiskA->text());
-    item->setDskb(editDiskB->text());
-    item->setDskc(editDiskC->text());
+    item->setDisk(0, editFD0->text());
+    item->setDisk(1, editFD1->text());
+    item->setDisk(2, editHD0->text());
 
     // save to file
     FileBrowser fb("/SD");
