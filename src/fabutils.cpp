@@ -1192,7 +1192,6 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   s_SDCardMounted            = false;
 
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-  host.max_freq_khz = 19000;
   host.slot = HSPI_HOST;
 
   #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 5)
@@ -1211,6 +1210,10 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   s_SDCardMounted = (esp_vfs_fat_sdmmc_mount(mountPath, &host, &slot_config, &mount_config, &s_SDCard) == ESP_OK);
 
   #else
+
+  // slow down SD card. Using ESP32 core 2.0.0 may crash SD subsystem, having VGA output and WiFi enabled
+  // @TODO: check again
+  host.max_freq_khz = 19000;
 
   spi_bus_config_t bus_cfg = {
         .mosi_io_num = int2gpio(MOSI),
