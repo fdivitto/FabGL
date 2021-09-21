@@ -26,7 +26,7 @@
 
  /* Instructions:
 
-    - to run this application you need an ESP32 with PSRAM installed and an SD-CARD slot (ie TTGO VGA32 v1.4)
+    - to run this application you need an ESP32 with PSRAM installed and an SD-CARD slot (ie TTGO VGA32 v1.4 or FabGL Development Board with WROVER)
     - open this with Arduino and make sure PSRAM is DISABLED
     - partition scheme must be: Huge App
     - compile and upload the sketch
@@ -65,6 +65,14 @@ InputBox      ibox;
 Machine     * machine;
 
 
+// noinit!
+__NOINIT_ATTR static timeval savedTimeValue;
+
+
+static bool wifiConnected = false;
+static bool downloadOK = false;
+
+
 // try to connected using saved parameters
 bool tryToConnect()
 {
@@ -97,8 +105,8 @@ bool tryToConnect()
 
 bool checkWiFi()
 {
-  bool connected = tryToConnect();
-  if (!connected) {
+  wifiConnected = tryToConnect();
+  if (!wifiConnected) {
 
     // configure WiFi?
     if (ibox.message("WiFi Configuration", "Configure WiFi?", "No", "Yes") == InputResult::Enter) {
@@ -130,9 +138,9 @@ bool checkWiFi()
               // user pressed OK, connect to WiFi...
               preferences.putString("SSID", WiFi.SSID(s).c_str());
               preferences.putString("WiFiPsw", psw);
-              connected = tryToConnect();
+              wifiConnected = tryToConnect();
               // show to user the connection state
-              if (connected)
+              if (wifiConnected)
                 ibox.message("", "Connection succeeded!");
             } else
               break;
@@ -145,13 +153,21 @@ bool checkWiFi()
         }
         WiFi.scanDelete();
 
-      } while (!connected);
+      } while (!wifiConnected);
 
     }
 
   }
 
-  return connected;
+  return wifiConnected;
+}
+
+
+// handle soft restart
+void shutdownHandler()
+{
+  // save current datetime into Preferences
+  gettimeofday(&savedTimeValue, nullptr);
 }
 
 
@@ -160,6 +176,16 @@ void updateDateTime()
   // Set timezone
   setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1);
   tzset();
+
+  // get datetime from savedTimeValue? (noinit section)
+  if (esp_reset_reason() == ESP_RST_SW) {
+    // adjust time taking account elapsed time since ESP32 started
+    savedTimeValue.tv_usec += (int) esp_timer_get_time();
+    savedTimeValue.tv_sec  += savedTimeValue.tv_usec / 1000000;
+    savedTimeValue.tv_usec %= 1000000;
+    settimeofday(&savedTimeValue, nullptr);
+    return;
+  }
 
   if (checkWiFi()) {
 
@@ -173,12 +199,12 @@ void updateDateTime()
         delay(500);
       }
       sntp_stop();
+      esp_restart();
     });
 
   } else {
 
     // set default time
-    //printf("Setting default date/time\n");
     auto tm = (struct tm){ .tm_sec  = 0, .tm_min  = 0, .tm_hour = 8, .tm_mday = 14, .tm_mon  = 7, .tm_year = 84 };
     auto now = (timeval){ .tv_sec = mktime(&tm) };
     settimeofday(&now, nullptr);
@@ -190,7 +216,7 @@ void updateDateTime()
 // download specified filename from URL
 bool downloadURL(char const * URL, FILE * file)
 {
-  bool success = false;
+  downloadOK = false;
 
   char const * filename = strrchr(URL, '/') + 1;
 
@@ -202,35 +228,37 @@ bool downloadURL(char const * URL, FILE * file)
     if (httpCode == HTTP_CODE_OK) {
       if (file) {
         int tlen = http.getSize();
-        int tlenK = tlen / 1024;
         int len = tlen;
-        constexpr int BUFSIZE = 6000;
-        uint8_t * buf = (uint8_t*) malloc(BUFSIZE);
+        uint8_t * buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
         WiFiClient * stream = http.getStreamPtr();
         int dsize = 0;
         while (http.connected() && (len > 0 || len == -1)) {
           size_t size = stream->available();
           if (size) {
-            int c = stream->readBytes(buf, imin(BUFSIZE, size));
-            fwrite(buf, c, 1, file);
+            int c = stream->readBytes(buf, size);
+            auto wr = fwrite(buf, 1, c, file);
+            if (wr != c) {
+              dsize = 0;
+              break;  // writing failure!
+            }
             dsize += c;
             if (len > 0)
               len -= c;
-            if (!app->update(dsize / 1024 * 100 / tlenK, "Downloading %s (%.2f / %d MB)", filename, (double)dsize / 1048576.0, tlenK / 1024))
+            if (!app->update((int64_t)dsize * 100 / tlen, "Downloading %s (%.2f / %.2f MB)", filename, (double)dsize / 1048576.0, tlen / 1048576.0))
               break;
           }
         }
-        free(buf);
-        success = (len == 0 || (len == -1 && dsize > 0));
+        downloadOK = (len == 0 || (len == -1 && dsize > 0));
       }
     }
+    http.end();
   });
 
-  return success;
+  return downloadOK;
 }
 
 
-// return filename if successfully download or already exist
+// return filename if successfully downloaded or already exist
 char const * getDisk(char const * url)
 {
   FileBrowser fb("/SD");
@@ -242,6 +270,8 @@ char const * getDisk(char const * url)
       filename = strrchr(url, '/') + 1;
       if (filename && !fb.exists(filename, false)) {
         // disk doesn't exist, try to download
+        if (!checkWiFi())
+          return nullptr;
         auto file = fb.openFile(filename, "wb");
         bool success = downloadURL(url, file);
         fclose(file);
@@ -264,6 +294,7 @@ void setup()
 {
   Serial.begin(115200); delay(500); printf("\n\n\nReset\n\n");// DEBUG ONLY
 
+
   disableCore0WDT();
   delay(100); // experienced crashes without this delay!
   disableCore1WDT();
@@ -273,7 +304,7 @@ void setup()
   // uncomment to clear preferences
   //preferences.clear();
 
-  ibox.begin(VGA_640x480_60Hz, 400, 300);
+  ibox.begin(VGA_640x480_60Hz, 384, 250);
   ibox.setBackgroundColor(RGB888(0, 0, 0));
 
   // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env
@@ -290,11 +321,13 @@ void setup()
   esp_spiram_init_cache();
   #endif
 
-  if (!FileBrowser::mountSDCard(false, "/SD", 8))
+  if (!FileBrowser::mountSDCard(false, "/SD", 8))   // @TODO: reduce to 4?
     ibox.message("Error!", "This app requires a SD-CARD!", nullptr, nullptr);
 
   // uncomment to format SD!
   //FileBrowser::format(fabgl::DriveType::SDCard, 0);
+
+  esp_register_shutdown_handler(shutdownHandler);
 
   updateDateTime();
 
@@ -322,13 +355,21 @@ void setup()
 
   // setup selected configuration
   auto conf = mconf.getItem(idx);
-  auto filenameDiskA = getDisk(conf->dska);
-  auto filenameDiskB = getDisk(conf->dskb);
-  auto filenameDiskC = getDisk(conf->dskc);
 
-  if (!filenameDiskA && !filenameDiskC) {
+  char const * diskFilename[DISKCOUNT];
+  downloadOK = true;
+  for (int i = 0; i < DISKCOUNT && downloadOK; ++i)
+    diskFilename[i] = getDisk(conf->disk[i]);
+
+  if (!downloadOK || (!diskFilename[0] && !diskFilename[2])) {
     // unable to get boot disks
     ibox.message("Error!", "Unable to get system disks!");
+    esp_restart();
+  }
+
+  if (wifiConnected) {
+    // disk downloaded from the Internet, need to reboot to fully disable wifi
+    ibox.message("", "Disks downloaded. Reboot required.");
     esp_restart();
   }
 
