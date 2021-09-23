@@ -3110,9 +3110,9 @@ void uiLabel::setTextFmt(const char *format, ...)
   if (size > 0) {
     va_end(ap);
     va_start(ap, format);
-    char buf[size + 1];
-    vsnprintf(buf, size, format, ap);
-    setText(buf);
+    m_text = (char*) realloc(m_text, size + 1);
+    vsnprintf(m_text, size, format, ap);
+    update();
   }
   va_end(ap);
 }
