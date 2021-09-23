@@ -794,7 +794,7 @@ bool uiApp::processModalWindowEvents(ModalWindowState * state, int timeout)
       // becomes modal when first message arrives
       m_modalWindow = state->window;
     }
-    if (event.id == UIEVT_EXITMODAL) {
+    if (event.id == UIEVT_EXITMODAL && event.dest == state->window) {
       // clean exit using exitModal() method
       state->modalResult = event.params.modalResult;
       return false;
