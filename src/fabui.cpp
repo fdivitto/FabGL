@@ -60,58 +60,58 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
                                   "UIEVT_QUIT", "UIEVT_CREATE", "UIEVT_CHILDSETFOCUS", "UIEVT_CHILDKILLFOCUS"
                                 };
-  Serial.printf("#%d ", idx++);
-  Serial.write(TOSTR[event->id]);
+  printf("#%d ", idx++);
+  printf(TOSTR[event->id]);
   if (event->dest && event->dest->objectType().uiFrame)
-    Serial.printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
+    printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
   else
-    Serial.printf(" dst=%p ", event->dest);
+    printf(" dst=%p ", event->dest);
   switch (event->id) {
     case UIEVT_DEBUGMSG:
-      Serial.write(event->params.debugMsg);
+      printf(event->params.debugMsg);
       break;
     case UIEVT_MOUSEMOVE:
-      Serial.printf("X=%d Y=%d", event->params.mouse.status.X, event->params.mouse.status.Y);
+      printf("X=%d Y=%d", event->params.mouse.status.X, event->params.mouse.status.Y);
       break;
     case UIEVT_MOUSEWHEEL:
-      Serial.printf("delta=%d", event->params.mouse.status.wheelDelta);
+      printf("delta=%d", event->params.mouse.status.wheelDelta);
       break;
     case UIEVT_MOUSEBUTTONDOWN:
     case UIEVT_MOUSEBUTTONUP:
     case UIEVT_DBLCLICK:
-      Serial.printf("btn=%d", event->params.mouse.changedButton);
+      printf("btn=%d", event->params.mouse.changedButton);
       break;
     case UIEVT_PAINT:
     case UIEVT_GENPAINTEVENTS:
     case UIEVT_RESHAPEWINDOW:
-      Serial.printf("rect=%d,%d,%d,%d", event->params.rect.X1, event->params.rect.Y1, event->params.rect.X2, event->params.rect.Y2);
+      printf("rect=%d,%d,%d,%d", event->params.rect.X1, event->params.rect.Y1, event->params.rect.X2, event->params.rect.Y2);
       break;
     case UIEVT_SETPOS:
-      Serial.printf("pos=%d,%d", event->params.pos.X, event->params.pos.Y);
+      printf("pos=%d,%d", event->params.pos.X, event->params.pos.Y);
       break;
     case UIEVT_SETSIZE:
-      Serial.printf("size=%d,%d", event->params.size.width, event->params.size.height);
+      printf("size=%d,%d", event->params.size.width, event->params.size.height);
       break;
     case UIEVT_KEYDOWN:
     case UIEVT_KEYUP:
       #ifdef FABGLIB_HAS_VirtualKeyO_STRING
-      Serial.printf("VK=%s ", Keyboard::virtualKeyToString(event->params.key.VK));
-      if (event->params.key.LALT) Serial.write(" +LALT");
-      if (event->params.key.RALT) Serial.write(" +RALT");
-      if (event->params.key.CTRL) Serial.write(" +CTRL");
-      if (event->params.key.SHIFT) Serial.write(" +SHIFT");
-      if (event->params.key.GUI) Serial.write(" +GUI");
+      printf("VK=%s ", Keyboard::virtualKeyToString(event->params.key.VK));
+      if (event->params.key.LALT) printf(" +LALT");
+      if (event->params.key.RALT) printf(" +RALT");
+      if (event->params.key.CTRL) printf(" +CTRL");
+      if (event->params.key.SHIFT) printf(" +SHIFT");
+      if (event->params.key.GUI) printf(" +GUI");
       #endif
       break;
     case UIEVT_TIMER:
-      Serial.printf("handle=%p", event->params.timerHandle);
+      printf("handle=%p", event->params.timerHandle);
       break;
     default:
       break;
   }
-  Serial.write("\n");
+  printf("\n");
 }
-*/
+//*/
 
 
 
@@ -306,20 +306,34 @@ void uiApp::asyncRunTask(void * arg)
 {
   auto app = (uiApp*)arg;
   app->run(app->m_displayController, app->m_keyboard, app->m_mouse);
+  if (app->m_asyncRunWait)
+    xSemaphoreGive(app->m_asyncRunWait);
   vTaskDelete(NULL);
 }
 
 
-void uiApp::runAsync(BitmappedDisplayController * displayController, int taskStack, Keyboard * keyboard, Mouse * mouse)
+uiApp & uiApp::runAsync(BitmappedDisplayController * displayController, int taskStack, Keyboard * keyboard, Mouse * mouse)
 {
   m_displayController = displayController;
   m_keyboard          = keyboard;
   m_mouse             = mouse;
+  m_asyncRunWait      = nullptr;
 
   if (CoreUsage::busiestCore() == -1)
     xTaskCreate(&asyncRunTask, "", taskStack, this, 5, nullptr);
   else
     xTaskCreatePinnedToCore(&asyncRunTask, "", taskStack, this, 5, nullptr, CoreUsage::quietCore());
+
+  return *this;
+}
+
+
+void uiApp::joinAsyncRun()
+{
+  m_asyncRunWait = xSemaphoreCreateBinary();
+  xSemaphoreTake(m_asyncRunWait, portMAX_DELAY);
+  vSemaphoreDelete(m_asyncRunWait);
+  m_asyncRunWait = nullptr;
 }
 
 

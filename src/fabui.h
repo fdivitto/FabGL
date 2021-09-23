@@ -2730,7 +2730,12 @@ public:
    *
    * @return exitCode specified calling uiApp.quit().
    */
-  void runAsync(BitmappedDisplayController * displayController, int taskStack = 3000, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+  uiApp & runAsync(BitmappedDisplayController * displayController, int taskStack = 3000, Keyboard * keyboard = nullptr, Mouse * mouse = nullptr);
+
+  /**
+   * @brief Waits for runAsync termination
+   */
+  void joinAsyncRun();
 
   /**
    * @brief Terminates application and free resources
@@ -3191,6 +3196,9 @@ private:
 
   // associates event handler with FreeRTOS timer
   list<uiTimerAssoc> m_timers;
+
+  // used to wait for asyncRunTask to terminate
+  SemaphoreHandle_t m_asyncRunWait;
 };
 
 
