@@ -11,14 +11,22 @@ struct TestTimerFrame : public uiFrame {
   TestTimerFrame(uiFrame * parent)
     : uiFrame(parent, "Clock", Point(470, 10), Size(150, 140), false) {
 
+    timer = nullptr;
+
     paintBox = new uiPaintBox(this, clientPos(), clientSize());
     paintBox->paintBoxStyle().backgroundColor = Color::Yellow;
     paintBox->anchors().right = true;
     paintBox->anchors().bottom = true;
     paintBox->onPaint = [&](Rect const & r) { onPaintPaintBox(r); };
 
-    this->onShow = [&]() { timer = app()->setTimer(this, 1000); };
-    this->onHide = [&]() { app()->killTimer(timer); };
+    this->onShow = [&]() {
+      timer = app()->setTimer(this, 1000);
+    };
+    this->onHide = [&]() {
+      if (timer)
+        app()->killTimer(timer);
+      timer = nullptr;
+    };
     this->onTimer = [&](uiTimerHandle tHandle) { paintBox->repaint(); };
   }
 

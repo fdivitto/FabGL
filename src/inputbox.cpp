@@ -39,9 +39,11 @@ namespace fabgl {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // InputBox
 
-InputBox::InputBox()
+InputBox::InputBox(uiApp * app)
   : m_vga16Ctrl(nullptr),
-    m_backgroundColor(RGB888(64, 64, 64))
+    m_backgroundColor(RGB888(64, 64, 64)),
+    m_existingApp(app),
+    m_autoOK(0)
 {
 }
 
@@ -82,38 +84,52 @@ void InputBox::end()
 }
 
 
+void InputBox::exec(InputForm * form)
+{
+  if (m_existingApp) {
+    form->init(m_existingApp, true);
+    m_existingApp->showModalWindow(form->mainFrame);
+    m_existingApp->destroyWindow(form->mainFrame);
+  } else {
+    // run in standalone mode
+    InputApp app(form);
+    app.run(m_dispCtrl);
+  }
+}
+
+
 InputResult InputBox::textInput(char const * titleText, char const * labelText, char * inOutString, int maxLength, char const * buttonCancelText, char const * buttonOKText, bool passwordMode)
 {
-  TextInputApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.labelText        = labelText;
-  app.inOutString      = inOutString;
-  app.maxLength        = maxLength;
-  app.buttonCancelText = buttonCancelText;
-  app.buttonOKText     = buttonOKText;
-  app.passwordMode     = passwordMode;
-  app.autoOK           = 0;
+  TextInputForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.labelText        = labelText;
+  form.inOutString      = inOutString;
+  form.maxLength        = maxLength;
+  form.buttonCancelText = buttonCancelText;
+  form.buttonOKText     = buttonOKText;
+  form.passwordMode     = passwordMode;
+  form.autoOK           = m_autoOK;
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.retval;
+  return form.retval;
 }
 
 
 InputResult InputBox::message(char const * titleText, char const * messageText, char const * buttonCancelText, char const * buttonOKText)
 {
-  MessageApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.messageText      = messageText;
-  app.buttonCancelText = buttonCancelText;
-  app.buttonOKText     = buttonOKText;
-  app.autoOK           = 0;
+  MessageForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.messageText      = messageText;
+  form.buttonCancelText = buttonCancelText;
+  form.buttonOKText     = buttonOKText;
+  form.autoOK           = m_autoOK;
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.retval;
+  return form.retval;
 }
 
 
@@ -135,118 +151,123 @@ InputResult InputBox::messageFmt(char const * titleText, char const * buttonCanc
 }
 
 
-int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText, int OKAfter)
+int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText)
 {
-  SelectApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.messageText      = messageText;
-  app.items            = itemsText;
-  app.separator        = separator;
-  app.itemsList        = nullptr;
-  app.buttonCancelText = buttonCancelText;
-  app.buttonOKText     = buttonOKText;
-  app.menuMode         = false;
-  app.autoOK           = OKAfter;
+  SelectForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.messageText      = messageText;
+  form.items            = itemsText;
+  form.separator        = separator;
+  form.itemsList        = nullptr;
+  form.buttonCancelText = buttonCancelText;
+  form.buttonOKText     = buttonOKText;
+  form.menuMode         = false;
+  form.autoOK           = m_autoOK;
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.outSelected;
+  return form.outSelected;
 }
 
 
-InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText, int OKAfter)
+InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText)
 {
-  SelectApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.messageText      = messageText;
-  app.items            = nullptr;
-  app.separator        = 0;
-  app.itemsList        = items;
-  app.buttonCancelText = buttonCancelText;
-  app.buttonOKText     = buttonOKText;
-  app.menuMode         = false;
-  app.autoOK           = OKAfter;
+  SelectForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.messageText      = messageText;
+  form.items            = nullptr;
+  form.separator        = 0;
+  form.itemsList        = items;
+  form.buttonCancelText = buttonCancelText;
+  form.buttonOKText     = buttonOKText;
+  form.menuMode         = false;
+  form.autoOK           = m_autoOK;
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.retval;
+  return form.retval;
 }
 
 
 int InputBox::menu(char const * titleText, char const * messageText, char const * itemsText, char separator)
 {
-  SelectApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.messageText      = messageText;
-  app.items            = itemsText;
-  app.separator        = separator;
-  app.itemsList        = nullptr;
-  app.buttonCancelText = nullptr;
-  app.buttonOKText     = nullptr;
-  app.menuMode         = true;
-  app.autoOK           = 0;
+  SelectForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.messageText      = messageText;
+  form.items            = itemsText;
+  form.separator        = separator;
+  form.itemsList        = nullptr;
+  form.buttonCancelText = nullptr;
+  form.buttonOKText     = nullptr;
+  form.menuMode         = true;
+  form.autoOK           = 0;  // no timeout supported here
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.outSelected;
+  return form.outSelected;
 }
 
 
 int InputBox::menu(char const * titleText, char const * messageText, StringList * items)
 {
-  SelectApp app;
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.messageText      = messageText;
-  app.items            = nullptr;
-  app.separator        = 0;
-  app.itemsList        = items;
-  app.buttonCancelText = nullptr;
-  app.buttonOKText     = nullptr;
-  app.menuMode         = true;
-  app.autoOK           = 0;
+  SelectForm form;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.messageText      = messageText;
+  form.items            = nullptr;
+  form.separator        = 0;
+  form.itemsList        = items;
+  form.buttonCancelText = nullptr;
+  form.buttonOKText     = nullptr;
+  form.menuMode         = true;
+  form.autoOK           = 0;  // no timeout supported here
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
   return items->getFirstSelected();
 }
 
 
-InputResult InputBox::progressBoxImpl(ProgressApp & app, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width)
+InputResult InputBox::progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width)
 {
-  app.backgroundColor  = m_backgroundColor;
-  app.titleText        = titleText;
-  app.buttonCancelText = buttonCancelText;
-  app.buttonOKText     = nullptr;
-  app.hasProgressBar   = hasProgressBar;
-  app.width            = width;
-  app.autoOK           = 0;
+  form.backgroundColor  = m_backgroundColor;
+  form.titleText        = titleText;
+  form.buttonCancelText = buttonCancelText;
+  form.buttonOKText     = nullptr;
+  form.hasProgressBar   = hasProgressBar;
+  form.width            = width;
+  form.autoOK           = 0;  // no timeout supported here
 
-  app.run(m_dispCtrl);
+  exec(&form);
 
-  return app.retval;
+  return form.retval;
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// InputApp
+// InputForm
 
 
-void InputApp::init()
+void InputForm::init(uiApp * app_, bool modalDialog_)
 {
   retval = InputResult::None;
 
-  rootWindow()->frameStyle().backgroundColor = backgroundColor;
+  app         = app_;
+  modalDialog = modalDialog_;
+
+  if (!modalDialog)
+    app->rootWindow()->frameStyle().backgroundColor = backgroundColor;
+
   font = &FONT_std_14;
 
   const int titleHeight        = titleText && strlen(titleText) ? font->height : 0;
   const bool buttonsExist      = buttonCancelText || buttonOKText;
-  const int buttonCancelExtent = buttonCancelText ? canvas()->textExtent(font, buttonCancelText) + 10 : 0;
-  const int buttonOKExtent     = buttonOKText ? canvas()->textExtent(font, buttonOKText) + 10 : 0;
+  const int buttonCancelExtent = buttonCancelText ? app->canvas()->textExtent(font, buttonCancelText) + 10 : 0;
+  const int buttonOKExtent     = buttonOKText ? app->canvas()->textExtent(font, buttonOKText) + 10 : 0;
   const int buttonsWidth       = imax(imax(buttonCancelExtent, buttonOKExtent), 40);
   const int totButtons         = (buttonCancelExtent ? 1 : 0) + (buttonOKExtent ? 1 : 0);
   const int buttonsHeight      = buttonsExist ? font->height + 6 : 0;
@@ -257,9 +278,11 @@ void InputApp::init()
 
   calcRequiredSize();
 
-  requiredWidth  = imin(requiredWidth, canvas()->getWidth());
+  requiredWidth  = imin(requiredWidth, app->canvas()->getWidth());
 
-  mainFrame = new uiFrame(rootWindow(), titleText, UIWINDOW_PARENTCENTER, Size(requiredWidth, requiredHeight), false);
+  controlToFocus = nullptr;
+
+  mainFrame = new uiFrame(app->rootWindow(), titleText, UIWINDOW_PARENTCENTER, Size(requiredWidth, requiredHeight), false);
   mainFrame->frameProps().resizeable        = false;
   mainFrame->frameProps().hasMaximizeButton = false;
   mainFrame->frameProps().hasMinimizeButton = false;
@@ -273,10 +296,13 @@ void InputApp::init()
       finalize();
     }
   };
+  mainFrame->onShow = [&]() {
+    if (controlToFocus)
+      app->setFocusedWindow(controlToFocus);
+    show();
+  };
 
   autoOKLabel = nullptr;
-
-  uiWindow * controlToFocus = nullptr;
 
   if (buttonsExist) {
 
@@ -314,22 +340,22 @@ void InputApp::init()
     if (autoOK > 0) {
       autoOKLabel = new uiLabel(panel, "", Point(4, y + 2));
 
-      onTimer = [&](uiTimerHandle t) {
+      mainFrame->onTimer = [&](uiTimerHandle t) {
         int now = esp_timer_get_time() / 1000;
-        if (lastUserActionTime() + 900 > now) {
-          killTimer(t);
-          destroyWindow(autoOKLabel);
+        if (app->lastUserActionTime() + 900 > now) {
+          app->killTimer(t);
+          app->destroyWindow(autoOKLabel);
           return;
         }
         if (autoOK <= 0) {
-          killTimer(t);
+          app->killTimer(t);
           retval = InputResult::Enter;
           finalize();
         }
         --autoOK;
         autoOKLabel->setTextFmt("%d", autoOK);
       };
-      setTimer(this, 1000);
+      app->setTimer(mainFrame, 1000);
 
     }
 
@@ -339,28 +365,37 @@ void InputApp::init()
 
   addControls();
 
-  showWindow(mainFrame, true);
-  setActiveWindow(mainFrame);
-  if (controlToFocus)
-    setFocusedWindow(controlToFocus);
+  if (!modalDialog) {
+    app->showWindow(mainFrame, true);
+    app->setActiveWindow(mainFrame);
+  }
+}
+
+
+void InputForm::doExit(int value)
+{
+  if (modalDialog)
+    mainFrame->exitModal(value);
+  else
+    app->quit(value);
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// TextInputApp
+// TextInputForm
 
 
-void TextInputApp::calcRequiredSize()
+void TextInputForm::calcRequiredSize()
 {
-  labelExtent     = canvas()->textExtent(font, labelText);
-  editExtent      = imin(maxLength * canvas()->textExtent(font, "M"), rootWindow()->clientSize().width / 2 - labelExtent);
+  labelExtent     = app->canvas()->textExtent(font, labelText);
+  editExtent      = imin(maxLength * app->canvas()->textExtent(font, "M"), app->rootWindow()->clientSize().width / 2 - labelExtent);
   requiredWidth   = imax(requiredWidth, editExtent + labelExtent + 10);
   requiredHeight += font->height;
 }
 
 
-void TextInputApp::addControls()
+void TextInputForm::addControls()
 {
   const Point clientPos = mainFrame->clientPos();
 
@@ -372,35 +407,35 @@ void TextInputApp::addControls()
   edit = new uiTextEdit(mainFrame, inOutString, Point(x + labelExtent + 5, y - 4), Size(editExtent - 15, font->height + 6));
   edit->textEditProps().passwordMode = passwordMode;
 
-  mainFrame->onShow = [&]() { setFocusedWindow(edit); };
+  controlToFocus = edit;
 }
 
 
-void TextInputApp::finalize()
+void TextInputForm::finalize()
 {
   if (retval == InputResult::Enter) {
     int len = imin(maxLength, strlen(edit->text()));
     memcpy(inOutString, edit->text(), len);
     inOutString[len] = 0;
   }
-  quit(0);
+  doExit(0);
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// MessageApp
+// MessageForm
 
 
-void MessageApp::calcRequiredSize()
+void MessageForm::calcRequiredSize()
 {
-  messageExtent   = canvas()->textExtent(font, messageText);
+  messageExtent   = app->canvas()->textExtent(font, messageText);
   requiredWidth   = imax(requiredWidth, messageExtent + 20);
   requiredHeight += font->height;
 }
 
 
-void MessageApp::addControls()
+void MessageForm::addControls()
 {
   int x = mainFrame->clientPos().X + (mainFrame->clientSize().width - messageExtent) / 2;
   int y = mainFrame->clientPos().Y + 6;
@@ -409,20 +444,20 @@ void MessageApp::addControls()
 }
 
 
-void MessageApp::finalize()
+void MessageForm::finalize()
 {
-  quit(0);
+  doExit(0);
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// SelectApp
+// SelectForm
 
 
-void SelectApp::calcRequiredSize()
+void SelectForm::calcRequiredSize()
 {
-  auto messageExtent = canvas()->textExtent(font, messageText);
+  auto messageExtent = app->canvas()->textExtent(font, messageText);
   requiredWidth      = imax(requiredWidth, messageExtent + 20);
 
   // calc space for message
@@ -433,14 +468,14 @@ void SelectApp::calcRequiredSize()
   auto itemsCount         = countItems(&maxLength);
   listBoxHeight           = (font->height + 4) * itemsCount;
   int requiredHeightUnCut = requiredHeight + listBoxHeight;
-  requiredHeight          = imin(requiredHeightUnCut, canvas()->getHeight());
-  requiredWidth           = imax(requiredWidth, maxLength * canvas()->textExtent(font, "M"));
+  requiredHeight          = imin(requiredHeightUnCut, app->canvas()->getHeight());
+  requiredWidth           = imax(requiredWidth, maxLength * app->canvas()->textExtent(font, "M"));
   if (requiredHeightUnCut > requiredHeight)
     listBoxHeight -= requiredHeightUnCut - requiredHeight;
 }
 
 
-void SelectApp::addControls()
+void SelectForm::addControls()
 {
   int x = mainFrame->clientPos().X + 4;
   int y = mainFrame->clientPos().Y + 6;
@@ -470,22 +505,22 @@ void SelectApp::addControls()
     };
   }
 
-  mainFrame->onShow = [&]() { setFocusedWindow(listBox); };
+  controlToFocus = listBox;
 }
 
 
-void SelectApp::finalize()
+void SelectForm::finalize()
 {
   if (items) {
     outSelected = (retval == InputResult::Enter ? listBox->firstSelectedItem() : -1);
   } else {
     itemsList->copySelectionMapFrom(listBox->items());
   }
-  quit(0);
+  doExit(0);
 }
 
 
-int SelectApp::countItems(size_t * maxLength)
+int SelectForm::countItems(size_t * maxLength)
 {
   *maxLength = 0;
   int count = 0;
@@ -511,17 +546,17 @@ int SelectApp::countItems(size_t * maxLength)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// ProgressApp
+// ProgressForm
 
 
-void ProgressApp::calcRequiredSize()
+void ProgressForm::calcRequiredSize()
 {
   requiredWidth   = imax(requiredWidth, width);
   requiredHeight += font->height + (hasProgressBar ? progressBarHeight : 0);
 }
 
 
-void ProgressApp::addControls()
+void ProgressForm::addControls()
 {
   int x = mainFrame->clientPos().X + 4;
   int y = mainFrame->clientPos().Y + 6;
@@ -533,23 +568,20 @@ void ProgressApp::addControls()
 
     progressBar = new uiProgressBar(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - 8, font->height));
   }
-
-  mainFrame->onShow = [&]() {
-    execFunc(this);
-    if (retval != InputResult::Cancel)
-      retval = InputResult::Enter;
-    quit(0);
-  };
 }
 
 
-void ProgressApp::finalize()
+void ProgressForm::show()
 {
+  execFunc(this);
+  if (retval != InputResult::Cancel)
+    retval = InputResult::Enter;
+  doExit(0);
 }
 
 
 // return True if not Abort
-bool ProgressApp::update(int percentage, char const * format, ...)
+bool ProgressForm::update(int percentage, char const * format, ...)
 {
   if (hasProgressBar)
     progressBar->setPercentage(percentage);
@@ -566,7 +598,7 @@ bool ProgressApp::update(int percentage, char const * format, ...)
   }
   va_end(ap);
 
-  processEvents();
+  app->processEvents();
   return retval == InputResult::None;
 }
 

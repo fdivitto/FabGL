@@ -81,10 +81,10 @@ bool tryToConnect()
     char SSID[32] = "";
     char psw[32]  = "";
     if (preferences.getString("SSID", SSID, sizeof(SSID)) && preferences.getString("WiFiPsw", psw, sizeof(psw))) {
-      ibox.progressBox("", "Abort", true, 200, [&](fabgl::ProgressApp * app) {
+      ibox.progressBox("", "Abort", true, 200, [&](fabgl::ProgressForm * form) {
         WiFi.begin(SSID, psw);
         for (int i = 0; i < 32 && WiFi.status() != WL_CONNECTED; ++i) {
-          if (!app->update(i * 100 / 32, "Connecting to %s...", SSID))
+          if (!form->update(i * 100 / 32, "Connecting to %s...", SSID))
             break;
           delay(500);
           if (i == 16)
@@ -116,8 +116,8 @@ bool checkWiFi()
 
         // yes, scan for networks showing a progress dialog box
         int networksCount = 0;
-        ibox.progressBox("", nullptr, false, 200, [&](fabgl::ProgressApp * app) {
-          app->update(0, "Scanning WiFi networks...");
+        ibox.progressBox("", nullptr, false, 200, [&](fabgl::ProgressForm * form) {
+          form->update(0, "Scanning WiFi networks...");
           networksCount = WiFi.scanNetworks();
         });
 
@@ -190,12 +190,12 @@ void updateDateTime()
   if (checkWiFi()) {
 
     // we need time right now
-    ibox.progressBox("", nullptr, true, 200, [&](fabgl::ProgressApp * app) {
+    ibox.progressBox("", nullptr, true, 200, [&](fabgl::ProgressForm * form) {
       sntp_setoperatingmode(SNTP_OPMODE_POLL);
       sntp_setservername(0, (char*)"pool.ntp.org");
       sntp_init();
       for (int i = 0; i < 12 && sntp_get_sync_status() != SNTP_SYNC_STATUS_COMPLETED; ++i) {
-        app->update(i * 100 / 12, "Getting date-time from SNTP...");
+        form->update(i * 100 / 12, "Getting date-time from SNTP...");
         delay(500);
       }
       sntp_stop();
@@ -220,8 +220,8 @@ bool downloadURL(char const * URL, FILE * file)
 
   char const * filename = strrchr(URL, '/') + 1;
 
-  ibox.progressBox("", "Abort", true, 380, [&](fabgl::ProgressApp * app) {
-    app->update(0, "Preparing to download %s", filename);
+  ibox.progressBox("", "Abort", true, 380, [&](fabgl::ProgressForm * form) {
+    form->update(0, "Preparing to download %s", filename);
     HTTPClient http;
     http.begin(URL);
     int httpCode = http.GET();
@@ -244,7 +244,7 @@ bool downloadURL(char const * URL, FILE * file)
             dsize += c;
             if (len > 0)
               len -= c;
-            if (!app->update((int64_t)dsize * 100 / tlen, "Downloading %s (%.2f / %.2f MB)", filename, (double)dsize / 1048576.0, tlen / 1048576.0))
+            if (!form->update((int64_t)dsize * 100 / tlen, "Downloading %s (%.2f / %.2f MB)", filename, (double)dsize / 1048576.0, tlen / 1048576.0))
               break;
           }
         }
@@ -344,7 +344,8 @@ void setup()
     for (auto conf = mconf.getFirstItem(); conf; conf = conf->next)
       dconfs.append(conf->desc);
     dconfs.select(preferences.getInt("dconf", 0), true);
-    editItem = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, "Edit...", "OK", editItem ? 0 : 8) == InputResult::ButtonLeft;
+    ibox.setAutoOK(editItem ? 0 : 8);
+    editItem = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, "Edit...", "OK") == InputResult::ButtonLeft;
     idx = imax(dconfs.getFirstSelected(), 0);
     preferences.putInt("dconf", idx);
 

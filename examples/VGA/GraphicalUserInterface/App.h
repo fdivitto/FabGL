@@ -10,7 +10,7 @@ class MyApp : public uiApp {
 
   uiFrame * testsFrame;
   uiButton * createFrameButton, * destroyFrameButton, * testModalDialogButton, * msgBoxButton;
-  uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton;
+  uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton, * testInputBoxButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
   uiLabel * freeMemLabel, * authorLabel;
@@ -28,18 +28,20 @@ class MyApp : public uiApp {
     onTimer = [&](uiTimerHandle tHandle) { showFreeMemory(); };
 
     // author label
-    authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(376, 324));
-    authorLabel->labelStyle().backgroundColor = RGB888(255, 255, 0);
+    authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(130, 10));
+    authorLabel->labelStyle().backgroundColor = rootWindow()->frameStyle().backgroundColor ;
     authorLabel->labelStyle().textFont = &fabgl::FONT_std_17;
+    authorLabel->labelStyle().textColor = RGB888(255, 255, 255);
     authorLabel->update();
 
     // frame where to put test buttons
-    testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(115, 330));
+    testsFrame = new uiFrame(rootWindow(), "", Point(10, 10), Size(115, 460));
     testsFrame->frameStyle().backgroundColor = RGB888(255, 255, 0);
     testsFrame->windowStyle().borderSize     = 0;
 
     // label where to show free memory
-    freeMemLabel = new uiLabel(testsFrame, "", Point(2, 312));
+    freeMemLabel = new uiLabel(testsFrame, "", Point(2, 440));
+    freeMemLabel->labelStyle().backgroundColor = testsFrame->frameStyle().backgroundColor ;
     freeMemLabel->labelStyle().textFont = &fabgl::FONT_std_12;
 
     // button to show TestControlsFrame
@@ -79,12 +81,16 @@ class MyApp : public uiApp {
     testTimerButton = new uiButton(testsFrame, "Test Timer", Point(5, 170), Size(105, 20));
     testTimerButton->onClick = [&]() { showWindow(testTimerFrame, true); };
 
+    // inputbox test
+    testInputBoxButton = new uiButton(testsFrame, "Test InputBox", Point(5, 195), Size(105, 20));
+    testInputBoxButton->onClick = [&]() { onTestInputBox(); };
+
     setActiveWindow(testsFrame);
 
   }
 
   void showFreeMemory() {
-    freeMemLabel->setTextFmt("Std: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
+    freeMemLabel->setTextFmt("8bit: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
     freeMemLabel->repaint();
   }
 
@@ -106,6 +112,28 @@ class MyApp : public uiApp {
     auto testModalDialog = new TestModalDialog(rootWindow());
     showModalWindow(testModalDialog);
     destroyWindow(testModalDialog);
+  }
+
+  void onTestInputBox() {
+    InputBox ib(this);
+    ib.setAutoOK(5);
+    //// simple message box
+    ib.message("InputBox", "This is a message box using InputBox object");
+    //// progress bar
+    ib.progressBox("Example of Progress Bar", "Abort", true, 200, [&](fabgl::ProgressForm * form) {
+      for (int i = 0; i <= 100; ++i) {
+        if (!form->update(i, "Index is %d/100", i))
+          break;
+        delay(40);
+      }
+      delay(400);
+    });
+    //// menu
+    int s = ib.menu("Example of simple Menu", "Click on one item", "Item number zero;Item number one;Item number two;Item number three");
+    ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
+    //// options selection box with OK button (items from separated strings) and autoOK of 5 seconds
+    s = ib.select("Example of Menu with timeout", "Click on one item", "Item number zero;Item number one;Item number two;Item number three", ';', "Cancel", "OK");
+    ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
   }
 
 };

@@ -64,20 +64,26 @@ enum class InputResult {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// InputApp
+// InputForm
 
 
-struct InputApp : public uiApp {
-  virtual void init();
+struct InputForm {
+  void init(uiApp * app_, bool modalDialog_);
+
   virtual void addControls()      = 0;
   virtual void calcRequiredSize() = 0;
-  virtual void finalize()         = 0;
+  virtual void finalize()         { }
+  virtual void show()             { }
+
+  void doExit(int value);
+
+  uiApp *          app;
 
   RGB888           backgroundColor;
+
   char const *     titleText;
   char const *     buttonCancelText;
   char const *     buttonOKText;
-  InputResult      retval;
   int              autoOK;
 
   FontInfo const * font;
@@ -87,15 +93,35 @@ struct InputApp : public uiApp {
   uiFrame *        mainFrame;
   uiPanel *        panel;
   uiLabel *        autoOKLabel;
+
+  InputResult      retval;
+
+  uiWindow *       controlToFocus;
+
+  bool             modalDialog;
 };
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// TextInputApp
+// InputApp
 
 
-struct TextInputApp : public InputApp {
+struct InputApp : public uiApp {
+  InputApp(InputForm * form_)      { form = form_; }
+  virtual void init()              { form->init(this, false); }
+
+  InputForm * form;
+};
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// TextInputForm
+
+
+struct TextInputForm : public InputForm {
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -114,10 +140,10 @@ struct TextInputApp : public InputApp {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// MessageApp
+// MessageForm
 
 
-struct MessageApp : public InputApp {
+struct MessageForm : public InputForm {
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -130,10 +156,10 @@ struct MessageApp : public InputApp {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// SelectApp
+// SelectForm
 
 
-struct SelectApp : public InputApp {
+struct SelectForm : public InputForm {
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -155,24 +181,24 @@ struct SelectApp : public InputApp {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// ProgressApp
+// ProgressForm
 
 
-struct ProgressApp : public InputApp {
+struct ProgressForm : public InputForm {
   void addControls();
   void calcRequiredSize();
-  void finalize();
+  void show();
 
   bool update(int percentage, char const * format, ...);
 
-  static const int       progressBarHeight = 16;
+  static const int        progressBarHeight = 16;
 
-  bool                   hasProgressBar;
-  Delegate<ProgressApp*> execFunc;
-  int                    width;
+  bool                    hasProgressBar;
+  Delegate<ProgressForm*> execFunc;
+  int                     width;
 
-  uiLabel *              label;
-  uiProgressBar *        progressBar;
+  uiLabel *               label;
+  uiProgressBar *         progressBar;
 };
 
 
@@ -188,8 +214,10 @@ public:
 
   /**
    * @brief Creates a new InputBox instance
+   *
+   * @param app Optional existing uiApp object. If specified applications can use InputBox helpers inside an uiApp object.
    */
-  InputBox();
+  InputBox(uiApp * app = nullptr);
 
   ~InputBox();
 
@@ -229,6 +257,11 @@ public:
   void setBackgroundColor(RGB888 const & value)   { m_backgroundColor = value; }
 
   RGB888 backgroundColor()                        { return m_backgroundColor; }
+
+  /**
+   * @brief If >0, OK is automatically trigged after specified number of seconds
+   */
+  void setAutoOK(int timeout)                     { m_autoOK = timeout; }
 
   /**
    * @brief Shows a dialog with a label and a text edit box
@@ -312,7 +345,6 @@ public:
    * @param separator Optional items separator. Default is ';'
    * @param buttonCancelText Optional text for CANCEL button (nullptr = hasn't CANCEL button). Default is "Cancel".
    * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "OK".
-   * @param OKAfter If >0, OK is automatically trigged after specified number of seconds
    *
    * @return Index of the selected item or -1 if dialog has been canceled
    *
@@ -324,7 +356,7 @@ public:
    *     ib.messageFmt("", nullptr, "OK", "You have selected %d", s);
    *     ib.end();
    */
-  int select(char const * titleText, char const * messageText, char const * itemsText, char separator = ';', char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK", int OKAfter = 0);
+  int select(char const * titleText, char const * messageText, char const * itemsText, char separator = ';', char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK");
 
   /**
    * @brief Shows a dialog with a label and a list box
@@ -334,7 +366,6 @@ public:
    * @param items StringList object containing the items to show into the listbox. This parameter contains items selected before and after the dialog
    * @param buttonCancelText Optional text for CANCEL button (nullptr = hasn't CANCEL button). Default is "Cancel".
    * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "OK".
-   * @param OKAfter If >0, OK is automatically trigged after specified number of seconds
    *
    * @return Dialog box result (Cancel or Enter)
    *
@@ -355,7 +386,7 @@ public:
    *     }
    *     ib.end();
    */
-  InputResult select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK", int OKAfter = 0);
+  InputResult select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK");
 
   /**
    * @brief Shows a dialog with a label and a list box. The dialog exits when an item is selected, just like a menu
@@ -416,9 +447,9 @@ public:
    *
    *     InputBox ib;
    *     ib.begin();
-   *     auto r = ib.progressBox("This is the title", "Abort", true, 200, [&](fabgl::ProgressApp * app) {
+   *     auto r = ib.progressBox("This is the title", "Abort", true, 200, [&](fabgl::ProgressForm * form) {
    *       for (int i = 0; i <= 100; ++i) {
-   *         if (!app->update(i, "Index is %d/100", i))
+   *         if (!form->update(i, "Index is %d/100", i))
    *           break;
    *         delay(100);
    *       }
@@ -428,18 +459,22 @@ public:
    *     ib.end();
    */
   template <typename Func> InputResult progressBox(char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width, Func execFunc) {
-    ProgressApp app;
-    app.execFunc = execFunc;
-    return progressBoxImpl(app, titleText, buttonCancelText, hasProgressBar, width);
+    ProgressForm form;
+    form.execFunc = execFunc;
+    return progressBoxImpl(form, titleText, buttonCancelText, hasProgressBar, width);
   }
 
 private:
 
-  InputResult progressBoxImpl(ProgressApp & app, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width);
+  InputResult progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width);
+
+  void exec(InputForm * form);
 
   BitmappedDisplayController * m_dispCtrl;
   VGA16Controller            * m_vga16Ctrl;
   RGB888                       m_backgroundColor;
+  uiApp *                      m_existingApp; // uiApp in case of running on existing app
+  uint16_t                     m_autoOK;    // auto ok in seconds
 };
 
 

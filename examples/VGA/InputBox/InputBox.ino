@@ -40,16 +40,19 @@ void loop()
 {
   // initializes input box
   InputBox ib;
-  ib.begin();
+  ib.begin(VGA_640x480_60Hz, 640, 350);
+  ib.setBackgroundColor(RGB888(0, 0, 0));
+
+  // setup automatic OK after 10 seconds
+  ib.setAutoOK(10);
 
   ib.message("Welcome!", "Welcome to FabGL InputBox demo!");
 
-
   ////////////////////////////////////////////////////
   // Example of progress bar
-  InputResult r = ib.progressBox("Example of Progress Bar", "Abort", true, 200, [&](fabgl::ProgressApp * app) {
+  InputResult r = ib.progressBox("Example of Progress Bar", "Abort", true, 200, [&](fabgl::ProgressForm * form) {
     for (int i = 0; i <= 100; ++i) {
-      if (!app->update(i, "Index is %d/100", i))
+      if (!form->update(i, "Index is %d/100", i))
         break;
       delay(40);
     }
@@ -78,8 +81,8 @@ void loop()
 
 
   ////////////////////////////////////////////////////
-  // Example of options selection box with OK button (items from separated strings) and autoOK of 5 seconds
-  s = ib.select("Download Boot Disk", "Select boot disk to download", "FreeDOS;Minix 2.0;MS-DOS 5", ';', "Cancel", "OK", 5);
+  // Example of options selection box with OK button (items from separated strings)
+  s = ib.select("Download Boot Disk", "Select boot disk to download", "FreeDOS;Minix 2.0;MS-DOS 5", ';', "Cancel", "OK");
   ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
 
 
@@ -108,8 +111,8 @@ void loop()
 
     // yes, scan for networks showing a progress dialog box
     int networksCount = 0;
-    ib.progressBox("", nullptr, false, 200, [&](fabgl::ProgressApp * app) {
-      app->update(0, "Scanning WiFi networks...");
+    ib.progressBox("", nullptr, false, 200, [&](fabgl::ProgressForm * form) {
+      form->update(0, "Scanning WiFi networks...");
       networksCount = WiFi.scanNetworks();
     });
 
@@ -133,10 +136,10 @@ void loop()
           char SSID[50];
           strcpy(SSID, WiFi.SSID(s).c_str());
           bool connected = false;
-          ib.progressBox("", nullptr, true, 200, [&](fabgl::ProgressApp * app) {
+          ib.progressBox("", nullptr, true, 200, [&](fabgl::ProgressForm * form) {
             WiFi.begin(SSID, psw);
             for (int i = 0; i < 32 && WiFi.status() != WL_CONNECTED; ++i) {
-              if (!app->update(i * 100 / 32, "Connecting to %s...", SSID))
+              if (!form->update(i * 100 / 32, "Connecting to %s...", SSID))
                 break;
               delay(500);
               if (i == 16)
@@ -156,6 +159,8 @@ void loop()
     }
     WiFi.scanDelete();
   }
+
+  ib.message("Restart", "Ok, press OK to restart!");
 
 
   // finalizes input box
