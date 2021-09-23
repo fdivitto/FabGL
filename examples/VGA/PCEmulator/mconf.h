@@ -29,22 +29,21 @@
 
 ** Disks configuration text format **
 
-Each line contains a configuration, which includes description and disks location. Location can be
-an URL or a local path.
+Each line contains a machine configuration, which includes description and disks images location. Location can be a URL or a local path.
 
 Allowed tags:
 
 "desc" : Textual description of the configuration
-"fd0" : Floppy drive 0 (A) location
-"fd1" : Floppy drive 1 (B) location
-"hd0" : Hard disk drive 0 location
-"hd1" : Hard disk drive 1 location
+"fd0" : Floppy drive 0 (A) filename or URL
+"fd1" : Floppy drive 1 (B) filename or URL
+"hd0" : Hard disk drive 0 filename or URL
+"hd1" : Hard disk drive 1 filename or URL
 
 Example:
 
-desc "FreeDOS (A:) + DOS Programming Tools (C:)"  -fd0 "http://www.fabglib.org/downloads/A_freedos.img"  hd0 "http://www.fabglib.org/downloads/C_dosdev.img"
-desc "My Own MSDOS" fd0 BOOT.IMG -hd0 HDD.IMG
-desc "Floppy Only" fd0 TESTBOOT.IMG
+desc "FreeDOS (A:) + DOS Programming Tools (C:)"  fd0 "http://www.fabglib.org/downloads/A_freedos.img"  hd0 "http://www.fabglib.org/downloads/C_dosdev.img"
+desc "My Own MSDOS"  fd0 BOOT.IMG  hd0 HDD.IMG
+desc "Floppy Only"  fd0 TESTBOOT.IMG
 
 */
 
