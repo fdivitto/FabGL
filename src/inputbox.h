@@ -55,9 +55,9 @@ namespace fabgl {
  */
 enum class InputResult {
   None        = 0,       /**< Still running */
-  ButtonExt1  = 1,       /**< Button Ext 1 pressed */
-  ButtonExt2  = 2,       /**< Button Ext 2 pressed */
-  ButtonExt3  = 3,       /**< Button Ext 3 pressed */
+  ButtonExt0  = 1,       /**< Button Ext 0 pressed */
+  ButtonExt1  = 2,       /**< Button Ext 1 pressed */
+  ButtonExt2  = 3,       /**< Button Ext 3 pressed */
   Cancel      = 4,       /**< Button CANCEL or ESC key pressed */
   ButtonLeft  = 4,       /**< Left button (cancel) or ESC key pressed */
   Enter       = 5,       /**< Button OK, ENTER or RETURN pressed */

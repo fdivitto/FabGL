@@ -92,14 +92,14 @@ void loop()
     if (r == InputResult::Enter || r == InputResult::Cancel) {
       ib.messageFmt("", nullptr, "OK", "You have selected item %d", list.getFirstSelected());
       break;
-    } else if (r == InputResult::ButtonExt1) {
+    } else if (r == InputResult::ButtonExt0) {
       // add new item
       char value[32] = "";
       if (ib.textInput("New Item", "Please enter item value", value, 31) == InputResult::Enter) {
         list.takeStrings();
         list.append(value);
       }
-    } else if (r == InputResult::ButtonExt2) {
+    } else if (r == InputResult::ButtonExt1) {
       // remove item
       if (list.getFirstSelected() > -1 && ib.message("Please confirm", "Remove Item?", "No", "Yes") == InputResult::Enter)
         list.remove(list.getFirstSelected());
