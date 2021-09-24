@@ -55,10 +55,13 @@ namespace fabgl {
  */
 enum class InputResult {
   None        = 0,       /**< Still running */
-  Cancel      = 1,       /**< Button CANCEL or ESC key pressed */
-  ButtonLeft  = 1,       /**< Left button (cancel) or ESC key pressed */
-  Enter       = 2,       /**< Button OK, ENTER or RETURN pressed */
-  ButtonRight = 2,       /**< Right button (OK), ENTER or RETURN pressed */
+  ButtonExt1  = 1,       /**< Button Ext 1 pressed */
+  ButtonExt2  = 2,       /**< Button Ext 2 pressed */
+  ButtonExt3  = 3,       /**< Button Ext 3 pressed */
+  Cancel      = 4,       /**< Button CANCEL or ESC key pressed */
+  ButtonLeft  = 4,       /**< Left button (cancel) or ESC key pressed */
+  Enter       = 5,       /**< Button OK, ENTER or RETURN pressed */
+  ButtonRight = 5,       /**< Right button (OK), ENTER or RETURN pressed */
 };
 
 
@@ -77,13 +80,17 @@ struct InputForm {
 
   void doExit(int value);
 
+  void setExtButtons(char const * values[]);
+
+
+  static constexpr int BUTTONS  = 5;
+
   uiApp *          app;
 
   RGB888           backgroundColor;
 
   char const *     titleText;
-  char const *     buttonCancelText;
-  char const *     buttonOKText;
+  char const *     buttonText[BUTTONS] = { };
   int              autoOK;
 
   FontInfo const * font;
@@ -259,9 +266,30 @@ public:
   RGB888 backgroundColor()                        { return m_backgroundColor; }
 
   /**
-   * @brief If >0, OK is automatically trigged after specified number of seconds
+   * @brief Specifies a timeout for the dialog
+   *
+   * The timeout countdown stops if user moves mouse are type keyboard.
+   *
+   * @param timeout If >0, OK is automatically trigged after specified number of seconds
    */
   void setAutoOK(int timeout)                     { m_autoOK = timeout; }
+
+  /**
+   * @brief Sets extended buttons text
+   *
+   * Extended button texts are reset to empty values after every dialog
+   *
+   * @param extButton A value from 0 to 2. 0 = leftmost button ... 2 = rightmost button
+   * @param value Button text
+   */
+  void setExtButton(int extButton, char const * value) { m_extButtonText[extButton] = value; }
+
+  /**
+   * @brief Gets last dialog result
+   *
+   * @return Last result
+   */
+  InputResult getLastResult()                          { return m_lastResult; }
 
   /**
    * @brief Shows a dialog with a label and a text edit box
@@ -475,6 +503,8 @@ private:
   RGB888                       m_backgroundColor;
   uiApp *                      m_existingApp; // uiApp in case of running on existing app
   uint16_t                     m_autoOK;    // auto ok in seconds
+  char const *                 m_extButtonText[InputForm::BUTTONS - 2] = { };
+  InputResult                  m_lastResult = InputResult::None;
 };
 
 

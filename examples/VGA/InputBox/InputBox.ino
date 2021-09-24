@@ -79,11 +79,32 @@ void loop()
   s = ib.menu("Menu", "Click on an item", &list);
   ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
 
-
   ////////////////////////////////////////////////////
   // Example of options selection box with OK button (items from separated strings)
-  s = ib.select("Download Boot Disk", "Select boot disk to download", "FreeDOS;Minix 2.0;MS-DOS 5", ';', "Cancel", "OK");
-  ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
+  list.clear();
+  list.append("FreeDOS");
+  list.append("Minix 2.0");
+  list.append("MS-DOS 5");
+  while (true) {
+    ib.setExtButton(0, "Add");
+    ib.setExtButton(1, "Remove");
+    auto r = ib.select("Download Boot Disk", "Select boot disk to download", &list, "Cancel", "OK");
+    if (r == InputResult::Enter || r == InputResult::Cancel) {
+      ib.messageFmt("", nullptr, "OK", "You have selected item %d", list.getFirstSelected());
+      break;
+    } else if (r == InputResult::ButtonExt1) {
+      // add new item
+      char value[32] = "";
+      if (ib.textInput("New Item", "Please enter item value", value, 31) == InputResult::Enter) {
+        list.takeStrings();
+        list.append(value);
+      }
+    } else if (r == InputResult::ButtonExt2) {
+      // remove item
+      if (list.getFirstSelected() > -1 && ib.message("Please confirm", "Remove Item?", "No", "Yes") == InputResult::Enter)
+        list.remove(list.getFirstSelected());
+    }
+  }
 
 
   ////////////////////////////////////////////////////

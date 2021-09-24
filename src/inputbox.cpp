@@ -35,6 +35,11 @@
 namespace fabgl {
 
 
+// well known InputForm::buttonText[] indexes
+#define B_CANCEL ((int)(InputResult::Cancel) - 1)
+#define B_OK     ((int)(InputResult::Enter) - 1)
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // InputBox
@@ -101,18 +106,21 @@ void InputBox::exec(InputForm * form)
 InputResult InputBox::textInput(char const * titleText, char const * labelText, char * inOutString, int maxLength, char const * buttonCancelText, char const * buttonOKText, bool passwordMode)
 {
   TextInputForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.labelText        = labelText;
-  form.inOutString      = inOutString;
-  form.maxLength        = maxLength;
-  form.buttonCancelText = buttonCancelText;
-  form.buttonOKText     = buttonOKText;
-  form.passwordMode     = passwordMode;
-  form.autoOK           = m_autoOK;
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.labelText            = labelText;
+  form.inOutString          = inOutString;
+  form.maxLength            = maxLength;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.passwordMode         = passwordMode;
+  form.autoOK               = m_autoOK;
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -120,15 +128,18 @@ InputResult InputBox::textInput(char const * titleText, char const * labelText, 
 InputResult InputBox::message(char const * titleText, char const * messageText, char const * buttonCancelText, char const * buttonOKText)
 {
   MessageForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.messageText      = messageText;
-  form.buttonCancelText = buttonCancelText;
-  form.buttonOKText     = buttonOKText;
-  form.autoOK           = m_autoOK;
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.messageText          = messageText;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.autoOK               = m_autoOK;
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -154,19 +165,22 @@ InputResult InputBox::messageFmt(char const * titleText, char const * buttonCanc
 int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText)
 {
   SelectForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.messageText      = messageText;
-  form.items            = itemsText;
-  form.separator        = separator;
-  form.itemsList        = nullptr;
-  form.buttonCancelText = buttonCancelText;
-  form.buttonOKText     = buttonOKText;
-  form.menuMode         = false;
-  form.autoOK           = m_autoOK;
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.messageText          = messageText;
+  form.items                = itemsText;
+  form.separator            = separator;
+  form.itemsList            = nullptr;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.menuMode             = false;
+  form.autoOK               = m_autoOK;
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.outSelected;
 }
 
@@ -174,19 +188,22 @@ int InputBox::select(char const * titleText, char const * messageText, char cons
 InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText)
 {
   SelectForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.messageText      = messageText;
-  form.items            = nullptr;
-  form.separator        = 0;
-  form.itemsList        = items;
-  form.buttonCancelText = buttonCancelText;
-  form.buttonOKText     = buttonOKText;
-  form.menuMode         = false;
-  form.autoOK           = m_autoOK;
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.messageText          = messageText;
+  form.items                = nullptr;
+  form.separator            = 0;
+  form.itemsList            = items;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.menuMode             = false;
+  form.autoOK               = m_autoOK;
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -194,19 +211,20 @@ InputResult InputBox::select(char const * titleText, char const * messageText, S
 int InputBox::menu(char const * titleText, char const * messageText, char const * itemsText, char separator)
 {
   SelectForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.messageText      = messageText;
-  form.items            = itemsText;
-  form.separator        = separator;
-  form.itemsList        = nullptr;
-  form.buttonCancelText = nullptr;
-  form.buttonOKText     = nullptr;
-  form.menuMode         = true;
-  form.autoOK           = 0;  // no timeout supported here
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.messageText          = messageText;
+  form.items                = itemsText;
+  form.separator            = separator;
+  form.itemsList            = nullptr;
+  form.buttonText[B_CANCEL] = nullptr;
+  form.buttonText[B_OK]     = nullptr;
+  form.menuMode             = true;
+  form.autoOK               = 0;  // no timeout supported here
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.outSelected;
 }
 
@@ -214,35 +232,39 @@ int InputBox::menu(char const * titleText, char const * messageText, char const 
 int InputBox::menu(char const * titleText, char const * messageText, StringList * items)
 {
   SelectForm form;
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.messageText      = messageText;
-  form.items            = nullptr;
-  form.separator        = 0;
-  form.itemsList        = items;
-  form.buttonCancelText = nullptr;
-  form.buttonOKText     = nullptr;
-  form.menuMode         = true;
-  form.autoOK           = 0;  // no timeout supported here
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.messageText          = messageText;
+  form.items                = nullptr;
+  form.separator            = 0;
+  form.itemsList            = items;
+  form.buttonText[B_CANCEL] = nullptr;
+  form.buttonText[B_OK]     = nullptr;
+  form.menuMode             = true;
+  form.autoOK               = 0;  // no timeout supported here
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return items->getFirstSelected();
 }
 
 
 InputResult InputBox::progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width)
 {
-  form.backgroundColor  = m_backgroundColor;
-  form.titleText        = titleText;
-  form.buttonCancelText = buttonCancelText;
-  form.buttonOKText     = nullptr;
-  form.hasProgressBar   = hasProgressBar;
-  form.width            = width;
-  form.autoOK           = 0;  // no timeout supported here
+  form.backgroundColor      = m_backgroundColor;
+  form.titleText            = titleText;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = nullptr;
+  form.hasProgressBar       = hasProgressBar;
+  form.width                = width;
+  form.autoOK               = 0;  // no timeout supported here
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
+  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -264,14 +286,22 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 
   font = &FONT_std_14;
 
-  const int titleHeight        = titleText && strlen(titleText) ? font->height : 0;
-  const bool buttonsExist      = buttonCancelText || buttonOKText;
-  const int buttonCancelExtent = buttonCancelText ? app->canvas()->textExtent(font, buttonCancelText) + 10 : 0;
-  const int buttonOKExtent     = buttonOKText ? app->canvas()->textExtent(font, buttonOKText) + 10 : 0;
-  const int buttonsWidth       = imax(imax(buttonCancelExtent, buttonOKExtent), 40);
-  const int totButtons         = (buttonCancelExtent ? 1 : 0) + (buttonOKExtent ? 1 : 0);
-  const int buttonsHeight      = buttonsExist ? font->height + 6 : 0;
-  constexpr int buttonsSpace   = 10;
+  const int titleHeight = titleText && strlen(titleText) ? font->height : 0;
+
+  constexpr int buttonsSpace    = 10;
+  constexpr int minButtonsWidth = 40;
+
+  int buttonsWidth = minButtonsWidth;
+  int totButtons   = 0;
+
+  for (auto btext : buttonText)
+    if (btext) {
+      int buttonExtent = app->canvas()->textExtent(font, btext) + 10;
+      buttonsWidth     = imax(buttonsWidth, buttonExtent);
+      ++totButtons;
+    }
+
+  const int buttonsHeight = totButtons ? font->height + 6 : 0;
 
   requiredWidth  = buttonsWidth * totButtons + (2 * buttonsSpace) * totButtons;
   requiredHeight = buttonsHeight + titleHeight + font->height * 2 + 5;
@@ -304,7 +334,7 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 
   autoOKLabel = nullptr;
 
-  if (buttonsExist) {
+  if (totButtons) {
 
     // setup panel (where buttons are positioned)
 
@@ -318,24 +348,16 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
     int y = (panelHeight - buttonsHeight) / 2;
     int x = panel->clientSize().width - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
 
-    if (buttonCancelText) {
-      auto buttonCancel = new uiButton(panel, buttonCancelText, Point(x, y), Size(buttonsWidth, buttonsHeight));
-      buttonCancel->onClick = [&]() {
-        retval = InputResult::Cancel;
-        finalize();
-      };
-      x += buttonsWidth + buttonsSpace;
-      controlToFocus = buttonCancel;
-    }
-
-    if (buttonOKText) {
-      auto buttonOK = new uiButton(panel, buttonOKText, Point(x, y), Size(buttonsWidth, buttonsHeight));
-      buttonOK->onClick = [&]() {
-        retval = InputResult::Enter;
-        finalize();
-      };
-      controlToFocus = buttonOK;
-    }
+    for (int i = 0; i < BUTTONS; ++i)
+      if (buttonText[i]) {
+        auto button = new uiButton(panel, buttonText[i], Point(x, y), Size(buttonsWidth, buttonsHeight));
+        button->onClick = [&, i]() {
+          retval = (InputResult)(i + 1);
+          finalize();
+        };
+        x += buttonsWidth + buttonsSpace;
+        controlToFocus = button;
+      }
 
     if (autoOK > 0) {
       autoOKLabel = new uiLabel(panel, "", Point(4, y + 2));
@@ -378,6 +400,15 @@ void InputForm::doExit(int value)
     mainFrame->exitModal(value);
   else
     app->quit(value);
+}
+
+
+void InputForm::setExtButtons(char const * values[])
+{
+  for (int i = 0; i < BUTTONS - 2; ++i) {
+    buttonText[i] = values[i];
+    values[i] = nullptr;
+  }
 }
 
 
