@@ -675,6 +675,13 @@ public:
   virtual DisplayControllerType controllerType() = 0;
 
   /**
+   * @brief Determines number of colors this display can provide
+   *
+   * @return Number of colors.
+   */
+  virtual int colorsCount() = 0;
+
+  /**
    * @brief Determines the screen width in pixels.
    *
    * @return Screen width in pixels.

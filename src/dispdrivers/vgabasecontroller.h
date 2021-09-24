@@ -280,6 +280,8 @@ public:
    */
   uint8_t getBitsPerChannel()                     { return m_bitsPerChannel; }
 
+  virtual int colorsCount()                       { return 1 << (3 * m_bitsPerChannel); }
+
   /**
    * @brief Gets a raw scanline pointer.
    *

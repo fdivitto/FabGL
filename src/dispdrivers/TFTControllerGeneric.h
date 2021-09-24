@@ -205,6 +205,8 @@ public:
   // abstract method of BitmappedDisplayController
   NativePixelFormat nativePixelFormat() { return NativePixelFormat::RGB565BE; }
 
+  virtual int colorsCount()             { return 1 << 16; }
+
   // abstract method of BitmappedDisplayController
   int getViewPortWidth()  { return m_viewPortWidth; }
 

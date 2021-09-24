@@ -86,6 +86,8 @@ public:
 
   int getPaletteSize();
 
+  virtual int colorsCount()      { return getPaletteSize(); }
+
   /**
    * @brief Determines the maximum time allowed to process primitives
    *
