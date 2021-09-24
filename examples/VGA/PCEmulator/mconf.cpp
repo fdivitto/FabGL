@@ -104,6 +104,24 @@ void MachineConf::addItem(MachineConfItem * item)
 }
 
 
+// insertingPoint = -1, append
+// insertingPoint = 0, insert before first
+// insertingPoint > 0, insert before insertingPoint
+void MachineConf::insertItem(int insertingPoint, MachineConfItem * item)
+{
+  if (insertingPoint == 0) {
+    item->next = m_itemsList;
+    m_itemsList = item;
+  } else if (insertingPoint < 0) {
+    addItem(item);
+  } else {
+    auto prev = getItem(insertingPoint - 1);
+    item->next = prev->next;
+    prev->next = item;
+  }
+}
+
+
 void MachineConf::loadFromFile(FILE * file)
 {
   cleanUp();
@@ -182,30 +200,6 @@ void MachineConf::saveToFile(FILE * file)
       saveTag(file, "hd1", item->disk[3]);
     fputs("\r\n", file);
   }
-}
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// loadMachineConfiguration
-
-
-void loadMachineConfiguration(MachineConf * mconf)
-{
-  FileBrowser fb("/SD");
-
-  // saves a default configuration file if necessary
-  if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
-    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
-    fwrite(DefaultConfFile, 1, sizeof(DefaultConfFile), confFile);
-    fclose(confFile);
-  }
-
-  // load
-  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "rb");
-  mconf->loadFromFile(confFile);
-  fclose(confFile);
 }
 
 
@@ -324,10 +318,7 @@ struct ConfigDialog : public uiApp {
     item->setDisk(2, editHD0->text());
 
     // save to file
-    FileBrowser fb("/SD");
-    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
-    mconf->saveToFile(confFile);
-    fclose(confFile);
+    saveMachineConfiguration(mconf);
 
     // quit
     quit(0);
@@ -336,9 +327,38 @@ struct ConfigDialog : public uiApp {
 };
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// editConfigDialog
+// helpers
+
+
+void loadMachineConfiguration(MachineConf * mconf)
+{
+  FileBrowser fb("/SD");
+
+  // saves a default configuration file if necessary
+  if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
+    auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+    fwrite(DefaultConfFile, 1, sizeof(DefaultConfFile), confFile);
+    fclose(confFile);
+  }
+
+  // load
+  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "rb");
+  mconf->loadFromFile(confFile);
+  fclose(confFile);
+}
+
+
+void saveMachineConfiguration(MachineConf * mconf)
+{
+  FileBrowser fb("/SD");
+
+  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+  mconf->saveToFile(confFile);
+  fclose(confFile);
+}
 
 
 void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
@@ -348,4 +368,27 @@ void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
   app.item            = mconf->getItem(idx);
   app.backgroundColor = ibox->backgroundColor();
   app.run(ibox->getDisplayController());
+}
+
+
+void newConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
+{
+  auto newItem = new MachineConfItem;
+  newItem->setDesc("New Configuration");
+  mconf->insertItem(idx, newItem);
+
+  ConfigDialog app;
+  app.mconf           = mconf;
+  app.item            = newItem;
+  app.backgroundColor = ibox->backgroundColor();
+  app.run(ibox->getDisplayController());
+}
+
+
+void delConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
+{
+  if (idx > -1 && ibox->message("Please confirm", "Remove Configuration?", "No", "Yes") == InputResult::Enter) {
+    mconf->deleteItem(idx);
+    saveMachineConfiguration(mconf);
+  }
 }

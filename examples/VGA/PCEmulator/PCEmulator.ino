@@ -334,25 +334,52 @@ void setup()
   // machine configurations
   MachineConf mconf;
 
-  int idx;
-  bool editItem = false;
-  do {
+  // show a list of machine configurations allowing edit
+
+  ibox.setAutoOK(8);
+  int idx = preferences.getInt("dconf", 0);
+
+  for (bool showDialog = true; showDialog; ) {
+
     loadMachineConfiguration(&mconf);
 
-    // show a list of machine configurations
     StringList dconfs;
     for (auto conf = mconf.getFirstItem(); conf; conf = conf->next)
       dconfs.append(conf->desc);
-    dconfs.select(preferences.getInt("dconf", 0), true);
-    ibox.setAutoOK(editItem ? 0 : 8);
-    editItem = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, "Edit...", "OK") == InputResult::ButtonLeft;
-    idx = imax(dconfs.getFirstSelected(), 0);
-    preferences.putInt("dconf", idx);
+    dconfs.select(idx, true);
 
-    // modify selected item?
-    if (editItem)
-      editConfigDialog(&ibox, &mconf, idx);
-  } while (editItem);
+    ibox.setExtButton(0, "Edit");
+    ibox.setExtButton(1, "Remove");
+    ibox.setExtButton(2, "New");
+    auto r = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "Run");
+
+    idx = dconfs.getFirstSelected();
+
+    switch (r) {
+      case InputResult::ButtonExt0:
+        // Edit
+        editConfigDialog(&ibox, &mconf, idx);
+        break;
+      case InputResult::ButtonExt1:
+        // Remove
+        delConfigDialog(&ibox, &mconf, idx);
+        break;
+      case InputResult::ButtonExt2:
+        // New
+        newConfigDialog(&ibox, &mconf, idx);
+        break;
+      case InputResult::Enter:
+        // Run
+        showDialog = false;
+        break;
+    }
+
+    // next selection will not have timeout
+    ibox.setAutoOK(0);
+  }
+
+  idx = imax(idx, 0);
+  preferences.putInt("dconf", idx);
 
   // setup selected configuration
   auto conf = mconf.getItem(idx);

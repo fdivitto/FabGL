@@ -117,13 +117,15 @@ public:
 
   bool deleteItem(int index);
 
+  void addItem(MachineConfItem * item);
+  void insertItem(int insertingPoint, MachineConfItem * item);
+
   MachineConfItem * getFirstItem()     { return m_itemsList; }
   MachineConfItem * getItem(int index);
 
 private:
 
   void cleanUp();
-  void addItem(MachineConfItem * item);
   void saveTag(FILE * file, char const * tag, char const * value);
 
   MachineConfItem * m_itemsList;
@@ -139,5 +141,11 @@ private:
 
 void loadMachineConfiguration(MachineConf * mconf);
 
+void saveMachineConfiguration(MachineConf * mconf);
+
 void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
+
+void newConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
+
+void delConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
  
