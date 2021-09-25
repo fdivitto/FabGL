@@ -41,7 +41,7 @@
 #include "fabglconf.h"
 #include "fabui.h"
 #include "fabutils.h"
-#include "dispdrivers/vga16controller.h"
+#include "dispdrivers/vgapalettedcontroller.h"
 #include "comdrivers/ps2controller.h"
 
 
@@ -232,10 +232,11 @@ public:
    * @brief Initializes InputBox from VGA modeline, using a VGA16Controller
    *
    * @param modeline Optional modeline (uses 640x480 resolution if not specified)
-   * @param viewPortWidth
-   * @param viewPortHeight
+   * @param viewPortWidth Viewport width (-1 = automatic)
+   * @param viewPortHeight Viewport height (-1 = automatic)
+   * @param displayColors Number of colors for the display (2, 4, 8 or 16)
    */
-  void begin(char const * modeline = nullptr, int viewPortWidth = -1, int viewPortHeight = -1);
+  void begin(char const * modeline = nullptr, int viewPortWidth = -1, int viewPortHeight = -1, int displayColors = 16);
 
   /**
    * @brief Initializes InputBox from already initialized display controller
@@ -499,7 +500,7 @@ private:
   void exec(InputForm * form);
 
   BitmappedDisplayController * m_dispCtrl;
-  VGA16Controller            * m_vga16Ctrl;
+  VGAPalettedController      * m_vgaCtrl;
   RGB888                       m_backgroundColor;
   uiApp *                      m_existingApp; // uiApp in case of running on existing app
   uint16_t                     m_autoOK;    // auto ok in seconds

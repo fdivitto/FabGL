@@ -26,6 +26,11 @@
 
 #include <string.h>
 
+#include "dispdrivers/vga2controller.h"
+#include "dispdrivers/vga4controller.h"
+#include "dispdrivers/vga8controller.h"
+#include "dispdrivers/vga16controller.h"
+
 #include "inputbox.h"
 
 
@@ -45,7 +50,7 @@ namespace fabgl {
 // InputBox
 
 InputBox::InputBox(uiApp * app)
-  : m_vga16Ctrl(nullptr),
+  : m_vgaCtrl(nullptr),
     m_backgroundColor(RGB888(64, 64, 64)),
     m_existingApp(app),
     m_autoOK(0)
@@ -59,13 +64,20 @@ InputBox::~InputBox()
 }
 
 
-void InputBox::begin(char const * modeline, int viewPortWidth, int viewPortHeight)
+void InputBox::begin(char const * modeline, int viewPortWidth, int viewPortHeight, int displayColors)
 {
   // setup display controller
-  m_vga16Ctrl = new VGA16Controller;
-  m_dispCtrl = m_vga16Ctrl;
-  m_vga16Ctrl->begin();
-  m_vga16Ctrl->setResolution(modeline ? modeline : VESA_640x480_75Hz, viewPortWidth, viewPortHeight);
+  if (displayColors <= 2)
+    m_vgaCtrl = new VGA2Controller;
+  else if (displayColors <= 4)
+    m_vgaCtrl = new VGA4Controller;
+  else if (displayColors <= 8)
+    m_vgaCtrl = new VGA8Controller;
+  else
+    m_vgaCtrl = new VGA16Controller;
+  m_dispCtrl = m_vgaCtrl;
+  m_vgaCtrl->begin();
+  m_vgaCtrl->setResolution(modeline ? modeline : VESA_640x480_75Hz, viewPortWidth, viewPortHeight);
 
   // setup keyboard and mouse
   if (!PS2Controller::initialized())
@@ -81,10 +93,10 @@ void InputBox::begin(BitmappedDisplayController * displayController)
 
 void InputBox::end()
 {
-  if (m_vga16Ctrl) {
-    m_vga16Ctrl->end();
-    delete m_vga16Ctrl;
-    m_vga16Ctrl = nullptr;
+  if (m_vgaCtrl) {
+    m_vgaCtrl->end();
+    delete m_vgaCtrl;
+    m_vgaCtrl = nullptr;
   }
 }
 
