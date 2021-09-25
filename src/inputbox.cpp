@@ -117,8 +117,7 @@ void InputBox::exec(InputForm * form)
 
 InputResult InputBox::textInput(char const * titleText, char const * labelText, char * inOutString, int maxLength, char const * buttonCancelText, char const * buttonOKText, bool passwordMode)
 {
-  TextInputForm form;
-  form.backgroundColor      = m_backgroundColor;
+  TextInputForm form(this);
   form.titleText            = titleText;
   form.labelText            = labelText;
   form.inOutString          = inOutString;
@@ -139,8 +138,7 @@ InputResult InputBox::textInput(char const * titleText, char const * labelText, 
 
 InputResult InputBox::message(char const * titleText, char const * messageText, char const * buttonCancelText, char const * buttonOKText)
 {
-  MessageForm form;
-  form.backgroundColor      = m_backgroundColor;
+  MessageForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.buttonText[B_CANCEL] = buttonCancelText;
@@ -176,8 +174,7 @@ InputResult InputBox::messageFmt(char const * titleText, char const * buttonCanc
 
 int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText)
 {
-  SelectForm form;
-  form.backgroundColor      = m_backgroundColor;
+  SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = itemsText;
@@ -199,8 +196,7 @@ int InputBox::select(char const * titleText, char const * messageText, char cons
 
 InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText)
 {
-  SelectForm form;
-  form.backgroundColor      = m_backgroundColor;
+  SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = nullptr;
@@ -222,8 +218,7 @@ InputResult InputBox::select(char const * titleText, char const * messageText, S
 
 int InputBox::menu(char const * titleText, char const * messageText, char const * itemsText, char separator)
 {
-  SelectForm form;
-  form.backgroundColor      = m_backgroundColor;
+  SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = itemsText;
@@ -243,8 +238,7 @@ int InputBox::menu(char const * titleText, char const * messageText, char const 
 
 int InputBox::menu(char const * titleText, char const * messageText, StringList * items)
 {
-  SelectForm form;
-  form.backgroundColor      = m_backgroundColor;
+  SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = nullptr;
@@ -264,7 +258,6 @@ int InputBox::menu(char const * titleText, char const * messageText, StringList 
 
 InputResult InputBox::progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width)
 {
-  form.backgroundColor      = m_backgroundColor;
   form.titleText            = titleText;
   form.buttonText[B_CANCEL] = buttonCancelText;
   form.buttonText[B_OK]     = nullptr;
@@ -293,8 +286,12 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
   app         = app_;
   modalDialog = modalDialog_;
 
-  if (!modalDialog)
-    app->rootWindow()->frameStyle().backgroundColor = backgroundColor;
+  if (!modalDialog) {
+    app->rootWindow()->frameStyle().backgroundColor = inputBox->backgroundColor();
+    app->rootWindow()->onPaint = [&]() {
+      inputBox->onPaint(app->canvas());
+    };
+  }
 
   font = &FONT_std_14;
 
@@ -408,6 +405,7 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 
 void InputForm::doExit(int value)
 {
+  app->rootWindow()->frameProps().fillBackground = false;
   if (modalDialog)
     mainFrame->exitModal(value);
   else

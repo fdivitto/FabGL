@@ -70,7 +70,15 @@ enum class InputResult {
 // InputForm
 
 
+class InputBox;
+
+
 struct InputForm {
+  InputForm(InputBox * inputBox_)
+    : inputBox(inputBox_)
+  {
+  }
+
   void init(uiApp * app_, bool modalDialog_);
 
   virtual void addControls()      = 0;
@@ -85,9 +93,9 @@ struct InputForm {
 
   static constexpr int BUTTONS  = 5;
 
-  uiApp *          app;
+  InputBox *       inputBox;
 
-  RGB888           backgroundColor;
+  uiApp *          app;
 
   char const *     titleText;
   char const *     buttonText[BUTTONS] = { };
@@ -129,6 +137,11 @@ struct InputApp : public uiApp {
 
 
 struct TextInputForm : public InputForm {
+  TextInputForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -151,6 +164,11 @@ struct TextInputForm : public InputForm {
 
 
 struct MessageForm : public InputForm {
+  MessageForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -167,6 +185,11 @@ struct MessageForm : public InputForm {
 
 
 struct SelectForm : public InputForm {
+  SelectForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
   void addControls();
   void calcRequiredSize();
   void finalize();
@@ -192,6 +215,11 @@ struct SelectForm : public InputForm {
 
 
 struct ProgressForm : public InputForm {
+  ProgressForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
   void addControls();
   void calcRequiredSize();
   void show();
@@ -487,11 +515,22 @@ public:
    *       ib.message("", "Operation Aborted");
    *     ib.end();
    */
-  template <typename Func> InputResult progressBox(char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width, Func execFunc) {
-    ProgressForm form;
+  template <typename Func>
+  InputResult progressBox(char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width, Func execFunc) {
+    ProgressForm form(this);
     form.execFunc = execFunc;
     return progressBoxImpl(form, titleText, buttonCancelText, hasProgressBar, width);
   }
+
+
+  // delegates
+
+  /**
+   * @brief Paint event delegate
+   */
+  Delegate<Canvas *> onPaint;
+  
+
 
 private:
 

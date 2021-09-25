@@ -28,6 +28,7 @@
 
 #include "fabgl.h"
 #include "inputbox.h"
+#include "fonts/font_sanserif_8x16.h"
 
 
 void setup()
@@ -42,6 +43,12 @@ void loop()
   InputBox ib;
   ib.begin(VGA_640x480_60Hz, 640, 350);
   ib.setBackgroundColor(RGB888(0, 0, 0));
+
+  ib.onPaint = [&](Canvas * canvas) {
+    canvas->selectFont(&fabgl::FONT_SANSERIF_8x16);
+    canvas->setPenColor(RGB888(255, 255, 0));
+    canvas->drawText(85, 5, "InputBox Demo - www.fabgl.com - by Fabrizio Di Vittorio");
+  };
 
   // setup automatic OK after 10 seconds
   ib.setAutoOK(10);
