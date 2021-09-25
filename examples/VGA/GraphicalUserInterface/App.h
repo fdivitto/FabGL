@@ -13,7 +13,7 @@ class MyApp : public uiApp {
   uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton, * testInputBoxButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
-  uiLabel * freeMemLabel, * authorLabel;
+  uiLabel * freeMemLabel1, * freeMemLabel2, * authorLabel;
   TestControlsFrame * testControlsFrame;
 
   fabgl::Stack<uiFrame*> dynamicFrames;
@@ -29,7 +29,7 @@ class MyApp : public uiApp {
 
     // author label
     authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(130, 10));
-    authorLabel->labelStyle().backgroundColor = rootWindow()->frameStyle().backgroundColor ;
+    authorLabel->labelStyle().backgroundColor = rootWindow()->frameStyle().backgroundColor;
     authorLabel->labelStyle().textFont = &fabgl::FONT_std_17;
     authorLabel->labelStyle().textColor = RGB888(255, 255, 255);
     authorLabel->update();
@@ -40,9 +40,10 @@ class MyApp : public uiApp {
     testsFrame->windowStyle().borderSize     = 0;
 
     // label where to show free memory
-    freeMemLabel = new uiLabel(testsFrame, "", Point(2, 440));
-    freeMemLabel->labelStyle().backgroundColor = testsFrame->frameStyle().backgroundColor ;
-    freeMemLabel->labelStyle().textFont = &fabgl::FONT_std_12;
+    freeMemLabel1 = new uiLabel(testsFrame, "", Point(2, 420));
+    freeMemLabel2 = new uiLabel(testsFrame, "", Point(2, 435));
+    freeMemLabel1->labelStyle().backgroundColor = freeMemLabel2->labelStyle().backgroundColor = testsFrame->frameStyle().backgroundColor;
+    freeMemLabel1->labelStyle().textFont        = freeMemLabel2->labelStyle().textFont        = &fabgl::FONT_std_12;
 
     // button to show TestControlsFrame
     testControlsFrame = new TestControlsFrame(rootWindow());
@@ -90,8 +91,10 @@ class MyApp : public uiApp {
   }
 
   void showFreeMemory() {
-    freeMemLabel->setTextFmt("8bit: %d * 32bit: %d", heap_caps_get_free_size(MALLOC_CAP_8BIT), heap_caps_get_free_size(MALLOC_CAP_32BIT));
-    freeMemLabel->repaint();
+    freeMemLabel1->setTextFmt("Free 8bit: %d KiB", heap_caps_get_free_size(MALLOC_CAP_8BIT) / 1024);
+    freeMemLabel2->setTextFmt("Free 32bit: %d KiB", heap_caps_get_free_size(MALLOC_CAP_32BIT) / 1024);
+    freeMemLabel1->repaint();
+    freeMemLabel2->repaint();
   }
 
   void onCreateFrameButtonClick() {
