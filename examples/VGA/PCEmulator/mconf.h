@@ -148,4 +148,6 @@ void editConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
 void newConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
 
 void delConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
+
+void drawInfo(Canvas * canvas);
  

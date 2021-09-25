@@ -199,6 +199,8 @@ void updateDateTime()
         delay(500);
       }
       sntp_stop();
+      ibox.setAutoOK(3);
+      ibox.message("", "Date and Time updated. Restarting...");
       esp_restart();
     });
 
@@ -304,8 +306,10 @@ void setup()
   // uncomment to clear preferences
   //preferences.clear();
 
-  ibox.begin(VGA_640x480_60Hz, 384, 250);
+  ibox.begin(VGA_640x480_60Hz, 500, 400, 4);
   ibox.setBackgroundColor(RGB888(0, 0, 0));
+
+  ibox.onPaint = [&](Canvas * canvas) { drawInfo(canvas); };
 
   // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env
   #ifdef BOARD_HAS_PSRAM
@@ -397,7 +401,8 @@ void setup()
 
   if (wifiConnected) {
     // disk downloaded from the Internet, need to reboot to fully disable wifi
-    ibox.message("", "Disks downloaded. Reboot required.");
+    ibox.setAutoOK(3);
+    ibox.message("", "Disks downloaded. Restarting...");
     esp_restart();
   }
 

@@ -230,6 +230,8 @@ struct ConfigDialog : public uiApp {
   void init() {
     rootWindow()->frameStyle().backgroundColor = backgroundColor;
 
+    rootWindow()->onPaint = [&]() { drawInfo(canvas()); };
+
     mainFrame = new uiFrame(rootWindow(), "Machine Configuration", UIWINDOW_PARENTCENTER, Size(372, 200));
     mainFrame->frameProps().resizeable        = false;
     mainFrame->frameProps().hasMaximizeButton = false;
@@ -239,7 +241,7 @@ struct ConfigDialog : public uiApp {
       if (key.VK == VirtualKey::VK_RETURN || key.VK == VirtualKey::VK_KP_ENTER) {
         saveAndQuit();
       } else if (key.VK == VirtualKey::VK_ESCAPE) {
-        quit(0);
+        justQuit();
       }
     };
 
@@ -289,7 +291,7 @@ struct ConfigDialog : public uiApp {
     // Cancel Button
     buttonCancel = new uiButton(mainFrame, "Cancel", Point(mainFrame->clientSize().width - 155, mainFrame->clientSize().height - 8), Size(70, hh));
     buttonCancel->onClick = [&]() {
-      quit(0);
+      justQuit();
     };
 
 
@@ -320,7 +322,11 @@ struct ConfigDialog : public uiApp {
     // save to file
     saveMachineConfiguration(mconf);
 
-    // quit
+    justQuit();
+  }
+
+  void justQuit() {
+    rootWindow()->frameProps().fillBackground = false;
     quit(0);
   }
 
@@ -391,4 +397,12 @@ void delConfigDialog(InputBox * ibox, MachineConf * mconf, int idx)
     mconf->deleteItem(idx);
     saveMachineConfiguration(mconf);
   }
+}
+
+
+void drawInfo(Canvas * canvas)
+{
+  canvas->setPenColor(RGB888(0, 255, 0));
+  canvas->drawText(120, 5, "E S P 3 2   P C   E M U L A T O R");
+  canvas->drawText(93, 25, "www.fabgl.com - by Fabrizio Di Vittorio");
 }
