@@ -366,6 +366,16 @@ struct uiWindowStyle {
   RGB888        focusedBorderColor = RGB888(0, 0, 255);                       /**< Border color when focused */
   uint8_t       borderSize         = 3;                                       /**< Border size in pixels. This determines also the resize grips area. */
   uint8_t       focusedBorderSize  = 1;                                       /**< Border size when focused */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      borderColor        = RGB888(0, 0, 0);
+      activeBorderColor  = RGB888(0, 0, 0);
+      focusedBorderColor = RGB888(0, 0, 0);
+    } else if (displayColors < 16) {
+      borderColor = RGB888(0, 0, 0);
+    }
+  }
 };
 
 
@@ -758,6 +768,24 @@ struct uiFrameStyle {
   RGB888              activeButtonColor              = RGB888(255, 255, 255);  /**< Color used to draw Close, Maximize and Minimize buttons */
   RGB888              mouseOverBackgroundButtonColor = RGB888(0, 0, 255);      /**< Color used for background of Close, Maximize and Minimize buttons when mouse is over them */
   RGB888              mouseOverButtonColor           = RGB888(255, 255, 255);  /**< Color used for pen of Close, Maximize and Minimize buttons when mouse is over them */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      titleBackgroundColor           = RGB888(255, 255, 255);
+      titleColor                     = RGB888(0, 0, 0);
+      buttonColor                    = RGB888(0, 0, 0);
+      activeTitleBackgroundColor     = RGB888(0, 0, 0);
+      activeTitleColor               = RGB888(255, 255, 255);
+      activeButtonColor              = RGB888(255, 255, 255);
+      mouseOverButtonColor           = RGB888(0, 0, 0);
+      mouseOverBackgroundButtonColor = RGB888(255, 255, 255);
+    } else if (displayColors < 16) {
+      titleBackgroundColor = RGB888(0, 0, 0);
+      titleColor           = RGB888(255, 255, 255);
+      buttonColor          = RGB888(255, 255, 255);
+      activeButtonColor    = RGB888(0, 0, 0);
+    }
+  }
 };
 
 
@@ -998,6 +1026,12 @@ struct uiScrollableControlStyle {
   RGB888  scrollBarForegroundColor          = RGB888(128, 128, 128);  /**< Foreground color of the scrollbar */
   RGB888  mouseOverScrollBarForegroundColor = RGB888(255, 255, 255);  /**< Foreground color of the scrollbar when mouse is over it */
   uint8_t scrollBarSize                     = 11;                     /**< Width of vertical scrollbar, height of vertical scroll bar */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+      mouseOverScrollBarForegroundColor = RGB888(0, 0, 255);
+    }
+  }
 };
 
 
@@ -1180,14 +1214,33 @@ private:
 /** @brief Contains the button style */
 struct uiButtonStyle {
   RGB888           backgroundColor          = RGB888(128, 128, 128); /**< Background color */
-  RGB888           downBackgroundColor      = RGB888(255, 255, 255); /**< Background color when button is down */
+  RGB888           downBackgroundColor      = RGB888(0, 255, 0);     /**< Background color when button is down */
   RGB888           mouseOverBackgroundColor = RGB888(255, 255, 255); /**< Background color when mouse is over */
   RGB888           mouseDownBackgroundColor = RGB888(128, 128, 255); /**< Background color when mouse is down */
+  RGB888           mouseOverTextColor       = RGB888(0, 0, 0);       /**< Text color when mouse is over */
   RGB888           textColor                = RGB888(0, 0, 0);       /**< Text color */
+  RGB888           downTextColor            = RGB888(0, 0, 0);       /**< Down text color */
   FontInfo const * textFont                 = &FONT_std_14;          /**< Text font */
   uint8_t          bitmapTextSpace          = 4;                     /**< Spaces between image and text */
   Bitmap const *   bitmap                   = nullptr;               /**< Bitmap to display */
   Bitmap const *   downBitmap               = nullptr;               /**< Bitmap to display when button is down */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      mouseOverBackgroundColor = RGB888(0, 0, 0);
+      mouseOverTextColor       = RGB888(255, 255, 255);
+      downTextColor            = RGB888(255, 255, 255);
+      downBackgroundColor      = RGB888(0, 0, 0);
+    } else if (displayColors < 16) {
+      mouseOverBackgroundColor = RGB888(255, 255, 255);
+      mouseDownBackgroundColor = RGB888(255, 255, 255);
+      backgroundColor          = RGB888(0, 0, 255);
+      downBackgroundColor      = RGB888(0, 128, 0);
+      downTextColor            = displayColors < 8 ? RGB888(0, 0, 0) : RGB888(255, 255, 255);
+      textColor                = RGB888(255, 255, 255);
+      mouseOverTextColor       = RGB888(0, 0, 0);
+    }
+  }
 };
 
 
@@ -1311,6 +1364,11 @@ struct uiTextEditStyle {
   RGB888           focusedBackgroundColor     = RGB888(255, 255, 255);     /**< Background color when focused */
   RGB888           textColor                  = RGB888(0, 0, 0);           /**< Text color */
   FontInfo const * textFont                   = &FONT_std_14;              /**< Text font */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -1454,6 +1512,11 @@ struct uiLabelStyle {
   RGB888           backgroundColor          = RGB888(255, 255, 255);     /**< Background color */
   RGB888           textColor                = RGB888(0, 0, 0);           /**< Text color */
   uiHAlign         textAlign                = uiHAlign::Left;            /**< Text horizontal alignment */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -1542,6 +1605,11 @@ private:
 /** @brief Contains the image style */
 struct uiImageStyle {
   RGB888 backgroundColor = RGB888(255, 255, 255);   /**< Background color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -1612,6 +1680,11 @@ private:
 /** @brief Contains the panel style */
 struct uiPanelStyle {
   RGB888 backgroundColor = RGB888(128, 128, 128);    /**< Panel background color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -1660,6 +1733,11 @@ private:
 /** @brief Contains the paintbox style */
 struct uiPaintBoxStyle {
   RGB888 backgroundColor = RGB888(128, 128, 128);   /**< Paintbox background color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -1774,6 +1852,14 @@ struct uiListBoxStyle {
   FontInfo const * textFont                       = &FONT_std_14;            /**< Text font */
   RGB888           textColor                      = RGB888(0, 0, 0);         /**< Text foreground color */
   RGB888           selectedTextColor              = RGB888(255, 255, 255);   /**< Text foreground color when selected */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      selectedBackgroundColor        = RGB888(0, 0, 0);
+      focusedSelectedBackgroundColor = RGB888(0, 0, 0);
+      selectedTextColor              = RGB888(255, 255, 255);
+    }
+  }
 };
 
 
@@ -2097,6 +2183,11 @@ private:
 struct uiComboBoxStyle {
   RGB888 buttonBackgroundColor = RGB888(64, 64, 64);     /**< Background color of open/close button */
   RGB888 buttonColor           = RGB888(128, 128, 128);  /**< Foreground color of open/close button */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
 };
 
 
@@ -2345,7 +2436,15 @@ struct uiCheckBoxStyle {
   RGB888              backgroundColor          = RGB888(128, 128, 128);  /**< Background color */
   RGB888              checkedBackgroundColor   = RGB888(128, 128, 128);  /**< Background color when checked */
   RGB888              mouseOverBackgroundColor = RGB888(128, 128, 255);  /**< Background color when mouse is over */
+  RGB888              mouseOverForegroundColor = RGB888(0, 0, 0);        /**< Foreground color when mouse is over */
   RGB888              foregroundColor          = RGB888(0, 0, 0);        /**< Foreground color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+    } else if (displayColors < 16) {
+      mouseOverForegroundColor = RGB888(255, 255, 255);
+    }
+  }
 };
 
 
@@ -2454,11 +2553,24 @@ private:
 
 /** @brief Contains the slider style */
 struct uiSliderStyle {
-  RGB888 backgroundColor = RGB888(255, 255, 255);    /**< Slider background color */
-  RGB888 slideColor      = RGB888(0, 128, 128);      /**< Color of internal slide */
-  RGB888 rangeColor      = RGB888(0, 128, 255);      /**< Color of slide before the grip */
-  RGB888 gripColor       = RGB888(0, 0, 255);        /**< Color of slider grip */
-  RGB888 ticksColor      = RGB888(255, 255, 255);    /**> Ticks color */
+  RGB888 backgroundColor    = RGB888(255, 255, 255);    /**< Slider background color */
+  RGB888 slideColor         = RGB888(0, 128, 128);      /**< Color of internal slide */
+  RGB888 rangeColor         = RGB888(0, 128, 255);      /**< Color of slide before the grip */
+  RGB888 gripColor          = RGB888(0, 0, 255);        /**< Color of slider grip */
+  RGB888 ticksColor         = RGB888(255, 255, 255);    /**> Ticks color */
+  RGB888 mouseOverGripColor = RGB888(255, 255, 255);        /**< Color of slider grip when mouse is over */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      slideColor         = RGB888(0, 0, 0);
+      rangeColor         = RGB888(0, 0, 0);
+      gripColor          = RGB888(0, 0, 0);
+      mouseOverGripColor = RGB888(255, 255, 255);
+    } else if (displayColors < 16) {
+      slideColor         = RGB888(0, 0, 0);
+      mouseOverGripColor = RGB888(255, 255, 255);
+    }
+  }
 };
 
 
@@ -2565,6 +2677,14 @@ struct uiProgressBarStyle {
   RGB888           foregroundColor = RGB888(64, 128, 64);     /**< Progress bar foreground color */
   FontInfo const * textFont        = &FONT_std_14;            /**< Text font */
   RGB888           textColor       = RGB888(255, 255, 255);   /**< Text color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 4) {
+      foregroundColor = RGB888(0, 0, 0);
+    } else if (displayColors < 8) {
+      textColor       = RGB888(0, 0, 0);
+    }
+  }
 };
 
 
@@ -3114,6 +3234,8 @@ public:
 
   BitmappedDisplayController * displayController() { return m_displayController; }
 
+  int displayColors()                              { return m_displayColors; }
+
   Canvas * canvas()                                { return m_canvas; }
 
   /**
@@ -3157,6 +3279,8 @@ private:
 
 
   BitmappedDisplayController * m_displayController;
+
+  int                          m_displayColors;
 
   Canvas *        m_canvas;
 
