@@ -666,6 +666,11 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x3d5:
       return m->m_CGA6845SelectRegister >= 14 && m->m_CGA6845SelectRegister < 16 ? m->m_CGA6845[m->m_CGA6845SelectRegister] : 0x00;
 
+    // CGA - Color Select register
+    // note: this register should be write-only, but some games do not work if it isn't readable
+    case 0x3d9:
+      return m->m_CGAColorReg;
+
     // CGA - Status Register
     // real vertical sync is too fast for our slowly emulated 8086, so
     // here it is just a fake, just to allow programs that check it to keep going anyway.
