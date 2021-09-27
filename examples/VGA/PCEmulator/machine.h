@@ -42,11 +42,6 @@
 #define RAM_SIZE             1048576    // must correspond to bios MEMSIZE
 #define VIDEOMEMSIZE         65536
 
-// PIT (timers) frequency in Hertz
-#define PIT_TICK_FREQ        1193182
-
-// number of times PIT is updated every second
-#define PIT_UPDATES_PER_SEC  500
 
 
 using fabgl::GraphicsAdapter;
@@ -126,7 +121,6 @@ private:
   static bool interrupt(void * context, int num);
 
   static void PITChangeOut(void * context, int timerIndex);
-  static void PITTick(void * context, int timerIndex);
 
   static bool MC146818Interrupt(void * context);
 

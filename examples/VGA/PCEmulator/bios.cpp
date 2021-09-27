@@ -70,7 +70,7 @@ void BIOS::init(Machine * machine)
 void BIOS::reset()
 {
   m_kbdScancodeComp = 0;
-  m_memory[BIOS_DATAAREA_ADDR + BIOS_NUMHD] = (m_machine->disk(2) ? 1 : 0) + (m_machine->disk(3) ? 1 : 0);
+  m_memory[BIOS_DATAAREA_ADDR + BIOS_NUMHD] = (bool)(m_machine->disk(2)) + (bool)(m_machine->disk(3));
 }
 
 
@@ -983,10 +983,10 @@ void BIOS::diskHandler_floppy()
           // not possible here
           break;
       }
-      i8086::setCH(m_machine->diskCylinders(drive) - 1);  // max usable track number
-      i8086::setCL(m_machine->diskSectors(drive));        // max usable sector number
-      i8086::setDH(m_machine->diskHeads(drive) - 1);      // max usable head number
-      i8086::setDL((m_machine->disk(0) ? 1 : 0) + (m_machine->disk(1) ? 1 : 0));  // number of diskette installed
+      i8086::setCH(m_machine->diskCylinders(drive) - 1);                      // max usable track number
+      i8086::setCL(m_machine->diskSectors(drive));                            // max usable sector number
+      i8086::setDH(m_machine->diskHeads(drive) - 1);                          // max usable head number
+      i8086::setDL((bool)(m_machine->disk(0)) + (bool)(m_machine->disk(1)));  // number of diskette installed
       // Pointer to Diskette Parameters table for the maximum media type supported on the specified drive
       i8086::setES(BIOS_SEG);
       i8086::setDI(m_origInt1EAddr - BIOS_SEG * 16);
@@ -1178,7 +1178,7 @@ void BIOS::diskHandler_HD()
         i8086::setCL(((maxUsableCylNum >> 2) & 0xc0) |                              // Bits 7-6 = Maximum usable cylinder number (high 2 bits)
                      (maxUsableSecNum & 0x3f));                                     // Bits 5-0 = Maximum usable sector number
         i8086::setDH(maxUsableHeadNum);                                             // Maximum usable head number
-        i8086::setDL((m_machine->disk(2) ? 1 : 0) + (m_machine->disk(3) ? 1 : 0));  // Number of drives (@TODO: correct? Docs not clear)
+        i8086::setDL((bool)(m_machine->disk(2)) + (bool)(m_machine->disk(3)));      // Number of drives (@TODO: correct? Docs not clear)
         // Address of Fixed Disk Parameters table
         // *** note: some texts tell ES:DI should return a pointer to parameters table. IBM docs don't. Actually
         //           returning ES:DI may crash old MSDOS versions!

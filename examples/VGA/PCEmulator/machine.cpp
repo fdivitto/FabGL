@@ -98,6 +98,9 @@ uint8_t *         Machine::s_videoMemory;
 Machine::Machine()
   : m_disk(),
     m_bootDrive(0)
+    #ifdef FABGL_EMULATED
+    ,m_stepCallback(nullptr)
+    #endif
 {
 }
 
@@ -127,9 +130,8 @@ void Machine::init()
   m_i8042.init();
   m_i8042.setCallbacks(this, keyboardInterrupt, mouseInterrupt, resetMachine, sysReq);
 
-  m_PIT8253.setCallbacks(this, PITChangeOut, PITTick);
+  m_PIT8253.setCallbacks(this, PITChangeOut);
   m_PIT8253.reset();
-  m_PIT8253.runAutoTick(PIT_TICK_FREQ, PIT_UPDATES_PER_SEC);
 
   m_MC146818.init("PCEmulator");
   m_MC146818.setCallbacks(this, MC146818Interrupt);
@@ -251,7 +253,7 @@ void Machine::reset()
 
   m_PIT8253.reset();
   m_PIT8253.setGate(0, true);
-  m_PIT8253.setGate(1, true);
+  //m_PIT8253.setGate(1, true); // @TODO: timer 1 used for DRAM refresh, required to run?
 
   m_MC146818.reset();
 
@@ -285,7 +287,6 @@ void IRAM_ATTR Machine::runTask(void * pvParameters)
       m->reset();
 
     #ifdef FABGL_EMULATED
-    usleep(0);  // just to make simulation a bit slòwer
     if (m->m_stepCallback)
       m->m_stepCallback(m);
     #endif
@@ -300,6 +301,12 @@ void IRAM_ATTR Machine::runTask(void * pvParameters)
 void Machine::tick()
 {
   ++m_ticksCounter;
+
+  if ((m_ticksCounter & 0xfff) == 0xfff) {
+    m_PIT8253.tick();
+    // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
+    m_i8042.tick();
+  }
 
   if (m_PIC8259A.pendingInterrupt() && i8086::IRQ(m_PIC8259A.pendingInterruptNum()))
     m_PIC8259A.ackPendingInterrupt();
@@ -762,14 +769,6 @@ bool Machine::MC146818Interrupt(void * context)
 {
   auto m = (Machine*)context;
   return m->m_PIC8259B.signalInterrupt(0);
-}
-
-
-void Machine::PITTick(void * context, int timerIndex)
-{
-  auto m = (Machine*)context;
-  // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
-  m->m_i8042.tick();
 }
 
 

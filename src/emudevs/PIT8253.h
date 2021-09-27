@@ -33,6 +33,11 @@ namespace fabgl {
 
 
 
+// PIT (timers) frequency in Hertz
+#define PIT_TICK_FREQ        1193182
+
+
+
 // PIT 8253 (Programmable Interval Timers)
 
 class PIT8253 {
@@ -40,7 +45,6 @@ class PIT8253 {
 public:
 
   typedef void (*ChangeOut)(void * context, int timerIndex);
-  typedef void (*Tick)(void * context, int ticks);
 
   struct TimerInfo {
     bool    BCD;          // BCD mode
@@ -54,22 +58,20 @@ public:
     bool    out;          // out state
     bool    gate;         // date (1 = timer running)
     bool    running;      // counting down in course
+    bool    ctrlSet;      // control word set
   };
 
   PIT8253();
   ~PIT8253();
 
-  void setCallbacks(void * context, ChangeOut changeOut, Tick tick) {
+  void setCallbacks(void * context, ChangeOut changeOut) {
     m_context   = context;
     m_changeOut = changeOut;
-    m_tick      = tick;
   }
-
-  void runAutoTick(int freq, int updatesPerSec);
 
   void reset();
 
-  void tick(int ticks);
+  void tick();
 
   void write(int reg, uint8_t value);
   uint8_t read(int reg);
@@ -84,26 +86,15 @@ public:
 
 private:
 
-
-  static void autoTickTask(void * pvParameters);
-
   void changeOut(int timer, bool value);
 
-  void unsafeTick(int ticks);
 
   TimerInfo         m_timer[3];
-
-  SemaphoreHandle_t m_mutex;
 
   // callbacks
   void *            m_context;
   ChangeOut         m_changeOut;
-  Tick              m_tick;
-
-  // autotick support
-  TaskHandle_t      m_taskHandle;
-  int32_t           m_autoTickFreq;
-  int32_t           m_updatesPerSec;
+  uint64_t          m_lastTickTime;
 
 };
 

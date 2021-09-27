@@ -79,13 +79,11 @@ namespace fabgl {
 
 i8042::i8042()
 {
-  m_mutex = xSemaphoreCreateMutex();
 }
 
 
 i8042::~i8042()
 {
-  vSemaphoreDelete(m_mutex);
 }
 
 
@@ -121,7 +119,6 @@ void i8042::reset()
 
 uint8_t i8042::read(int address)
 {
-  AutoSemaphore autoSemaphore(m_mutex);
   switch (address) {
 
     // 0 = read 8042 output register (DBBOUT) and set OBF = 0 and AOBF = 0
@@ -146,8 +143,6 @@ uint8_t i8042::read(int address)
 
 void i8042::write(int address, uint8_t value)
 {
-  AutoSemaphore autoSemaphore(m_mutex);
-
   switch (address) {
 
     // 0 = write 8042 input register (DBBIN), set STATUS_CMD = 0 and STATUS_IBF = 1
@@ -172,8 +167,6 @@ void i8042::write(int address, uint8_t value)
 
 void i8042::tick()
 {
-  AutoSemaphore autoSemaphore(m_mutex);
-
   // something to receive from keyboard?
   if ((m_STATUS & STATUS_OBF) == 0 && m_keyboard->scancodeAvailable()) {
     if (m_commandByte & CMDBYTE_STD_SCAN_CONVERSION) {
@@ -309,7 +302,6 @@ void i8042::execCommand()
 
 void i8042::enableMouse(bool value)
 {
-  AutoSemaphore autoSemaphore(m_mutex);
   updateCommandByte(value ? (m_commandByte & ~CMDBYTE_DISABLE_MOUSE) : (m_commandByte | CMDBYTE_DISABLE_MOUSE));
 }
 
