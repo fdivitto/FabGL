@@ -1248,3 +1248,53 @@ void BIOS::diskHandler_HDExit(uint8_t err, bool setErrStat)
   if (setErrStat)
     m_memory[BIOS_DATAAREA_ADDR + BIOS_HDLASTSTATUS] = err;
 }
+
+
+void BIOS::videoHandlerEntry()
+{
+  auto ga = m_machine->graphicsAdapter();
+  auto fb = m_machine->frameBuffer();
+
+  switch (i8086::AH()) {
+
+    // Write Pixel
+    case 0x0c:
+      switch (ga->emulation()) {
+
+        case GraphicsAdapter::Emulation::PC_Graphics_320x200_4Colors:
+        {
+          constexpr uint32_t rowlen = 320 / 4;
+          const uint8_t  value      = i8086::AL() & 0b11;
+          const bool     xored      = i8086::AL() & 0x80;
+          const uint32_t col        = i8086::CX();
+          const uint32_t row        = i8086::DX();
+          const uint32_t addr       = (row >> 1) * rowlen + (col >> 2) + (row & 1) * 0x2000;
+          const uint32_t shift      = 6 - (col & 3) * 2;
+          if (xored)
+            fb[addr] ^= value << shift;
+          else
+            fb[addr]  = (fb[addr] & ~(0b11 << shift)) | (value << shift);
+          break;
+        }
+
+        case GraphicsAdapter::Emulation::PC_Graphics_640x200_2Colors:
+          printf("INT 10h, write pixel, unsupported 640x200x2 resolution\n");
+          break;
+
+        case GraphicsAdapter::Emulation::PC_Graphics_HGC_720x348:
+          printf("INT 10h, write pixel, unsupported 720x348x2 resolution\n");
+          break;
+
+        default:
+          printf("INT 10h, write pixel, unsupported resolution\n");
+          break;
+
+      }
+      break;
+
+    default:
+      printf("unsupported INT 10h, AX = %04X\n", i8086::AX());
+      break;
+
+  }
+}

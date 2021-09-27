@@ -40,7 +40,8 @@
 ;   - rewritten INT1A from scratch, now fully implemented
 ;   - INT15, implemented 0x80, 0x81, 0x82, 0x83, 0x85, 0x86 functions
 ;   - INT13, reiplemented using emulated helpers
-;   - int10_write_char_tty, checed page num for old MSDOS versions
+;   - int10_write_char_tty, checked page num for old MSDOS versions
+;   - int10, implemented service 0c, write pixel
 ;    
 ;
 ;
@@ -87,44 +88,48 @@ BIOSREV  equ 0x00
 ; The INTs aren't managed as normal INTs in the 8086 emulator. For example
 ; The helper code is executed immediately without using stack to preserve flags/CS/IP.
 
-%macro  emu_read_disk 0
+%macro emu_read_disk 0
   int 0xf1
 %endmacro
 
-%macro  emu_write_disk 0
+%macro emu_write_disk 0
   int 0xf2
 %endmacro
 
-%macro  emu_putchar_al 0
+%macro emu_putchar_al 0
   int 0xf4
 %endmacro
 
-%macro  emu_helper 0
+%macro emu_helper 0
   int 0xf5
 %endmacro
 
-%macro  emu_iret_replace_CF 0
+%macro emu_iret_replace_CF 0
   int 0xf6
 %endmacro
 
-%macro  emu_iret_replace_ZF 0
+%macro emu_iret_replace_ZF 0
   int 0xf7
 %endmacro
 
-%macro  emu_iret_replace_IF 0
+%macro emu_iret_replace_IF 0
   int 0xf8
 %endmacro
 
-%macro  emu_testP0 0
+%macro emu_testP0 0
   int 0xf9
 %endmacro
 
-%macro  emu_testP1 0
+%macro emu_testP1 0
   int 0xfa
 %endmacro
 
-%macro  emu_disk_handler 0
+%macro emu_disk_handler 0
   int 0xfb
+%endmacro
+
+%macro emu_video_handler 0
+  int 0xfc
 %endmacro
 
 
@@ -574,54 +579,9 @@ int10:
   cmp  ah, 0x1b
   je   int10_get_state_info
 
-
-  ; debug code for unsupported int 10h calls
-
-  push  ax
-  push  bx
-  mov   bx, ax
-  mov   al, 'I'
-  emu_putchar_al
-  mov   al, 'N'
-  emu_putchar_al
-  mov   al, 'T'
-  emu_putchar_al
-  mov   al, '1'
-  emu_putchar_al
-  mov   al, '0'
-  emu_putchar_al
-  mov   al, ' '
-  emu_putchar_al
-  mov   al, bh
-  call  puts_hex_al
-  mov   al, bl
-  call  puts_hex_al
-  mov   al, ' '
-  emu_putchar_al
-  pop   bx
-  mov   al, bh
-  call  puts_hex_al
-  mov   al, bl
-  call  puts_hex_al
-  mov   al, ' '
-  emu_putchar_al
-  mov   al, ch
-  call  puts_hex_al
-  mov   al, cl
-  call  puts_hex_al
-  mov   al, ' '
-  emu_putchar_al
-  mov   al, dh
-  call  puts_hex_al
-  mov   al, dl
-  call  puts_hex_al
-  mov   al, 0x0a
-  emu_putchar_al
-  mov   al, 0x0d
-  emu_putchar_al
-  pop   ax
-
+  emu_video_handler
   iret
+
 
 int10_set_vm:
 

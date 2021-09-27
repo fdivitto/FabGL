@@ -65,25 +65,31 @@ public:
 
   void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
 
-  void setBootDrive(int drive)      { m_bootDrive = drive; }
+  void setBootDrive(int drive)        { m_bootDrive = drive; }
 
   void run();
 
-  void trigReset()                  { m_reset = true; }
+  void trigReset()                    { m_reset = true; }
 
-  uint32_t ticksCounter()           { return m_ticksCounter; }
+  uint32_t ticksCounter()             { return m_ticksCounter; }
 
-  i8042 * getI8042()                { return &m_i8042; }
+  i8042 * getI8042()                  { return &m_i8042; }
 
-  MC146818 * getMC146818()          { return &m_MC146818; }
+  MC146818 * getMC146818()            { return &m_MC146818; }
 
-  uint8_t * memory()                { return s_memory; }
+  uint8_t * memory()                  { return s_memory; }
 
-  FILE * disk(int index)            { return m_disk[index]; }
-  uint64_t diskSize(int index)      { return m_diskSize[index]; }
-  uint16_t diskCylinders(int index) { return m_diskCylinders[index]; }
-  uint8_t diskHeads(int index)      { return m_diskHeads[index]; }
-  uint8_t diskSectors(int index)    { return m_diskSectors[index]; }
+  uint8_t * videoMemory()             { return s_videoMemory; }
+
+  uint8_t * frameBuffer()             { return m_frameBuffer; }
+
+  GraphicsAdapter * graphicsAdapter() { return &m_graphicsAdapter; }
+
+  FILE * disk(int index)              { return m_disk[index]; }
+  uint64_t diskSize(int index)        { return m_diskSize[index]; }
+  uint16_t diskCylinders(int index)   { return m_diskCylinders[index]; }
+  uint8_t diskHeads(int index)        { return m_diskHeads[index]; }
+  uint8_t diskSectors(int index)      { return m_diskSectors[index]; }
 
   static void dumpMemory(char const * filename);
   static void dumpInfo(char const * filename);
@@ -151,6 +157,7 @@ private:
 
   static uint8_t *         s_memory;
   static uint8_t *         s_videoMemory;
+  uint8_t *                m_frameBuffer;
 
   // 8259 Programmable Interrupt Controllers
   PIC8259                  m_PIC8259A;  // master

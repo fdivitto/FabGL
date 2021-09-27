@@ -120,6 +120,8 @@ public:
 
   void diskHandlerEntry();
 
+  void videoHandlerEntry();
+
   void setDriveMediaType(int drive, MediaType media);
 
 private:

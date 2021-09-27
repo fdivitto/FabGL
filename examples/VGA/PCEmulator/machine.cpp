@@ -97,7 +97,8 @@ uint8_t *         Machine::s_videoMemory;
 
 Machine::Machine()
   : m_disk(),
-    m_bootDrive(0)
+    m_bootDrive(0),
+    m_frameBuffer(nullptr)
     #ifdef FABGL_EMULATED
     ,m_stepCallback(nullptr)
     #endif
@@ -357,41 +358,49 @@ void Machine::setCGAMode()
 
     // video disabled
     //printf("CGA, video disabled\n");
-    m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::None);
+    m_graphicsAdapter.enableVideo(false);
 
   } else if ((m_CGAModeReg & CGA_MODECONTROLREG_TEXT80) == 0 && (m_CGAModeReg & CGA_MODECONTROLREG_GRAPHICS) == 0) {
 
     // 40 column text mode
     //printf("CGA, 40 columns text mode\n");
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + 0x8000 + m_CGAMemoryOffset);
+    m_frameBuffer = s_videoMemory + 0x8000 + m_CGAMemoryOffset;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Text_40x25_16Colors);
     m_graphicsAdapter.setBit7Blink(m_CGAModeReg & CGA_MODECONTROLREG_BIT7BLINK);
+    m_graphicsAdapter.enableVideo(true);
 
   } else if ((m_CGAModeReg & CGA_MODECONTROLREG_TEXT80) && (m_CGAModeReg & CGA_MODECONTROLREG_GRAPHICS) == 0) {
 
     // 80 column text mode
     //printf("CGA, 80 columns text mode\n");
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + 0x8000 + m_CGAMemoryOffset);
+    m_frameBuffer = s_videoMemory + 0x8000 + m_CGAMemoryOffset;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Text_80x25_16Colors);
     m_graphicsAdapter.setBit7Blink(m_CGAModeReg & CGA_MODECONTROLREG_BIT7BLINK);
+    m_graphicsAdapter.enableVideo(true);
 
   } else if ((m_CGAModeReg & CGA_MODECONTROLREG_GRAPHICS) && (m_CGAModeReg & CGA_MODECONTROLREG_GRAPH640) == 0) {
 
     // 320x200 graphics
     //printf("CGA, 320x200 graphics mode\n");
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + 0x8000 + m_CGAMemoryOffset);
+    m_frameBuffer = s_videoMemory + 0x8000 + m_CGAMemoryOffset;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Graphics_320x200_4Colors);
     int paletteIndex = (bool)(m_CGAColorReg & CGA_COLORCONTROLREG_PALETTESEL) * 2 + (bool)(m_CGAColorReg & CGA_COLORCONTROLREG_HIGHINTENSITY);
     m_graphicsAdapter.setPCGraphicsPaletteInUse(paletteIndex);
     m_graphicsAdapter.setPCGraphicsBackgroundColorIndex(m_CGAColorReg & CGA_COLORCONTROLREG_BACKCOLR_MASK);
+    m_graphicsAdapter.enableVideo(true);
 
   } else if ((m_CGAModeReg & CGA_MODECONTROLREG_GRAPHICS) && (m_CGAModeReg & CGA_MODECONTROLREG_GRAPH640)) {
 
     // 640x200 graphics
     //printf("CGA, 640x200 graphics mode\n");
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + 0x8000 + m_CGAMemoryOffset);
+    m_frameBuffer = s_videoMemory + 0x8000 + m_CGAMemoryOffset;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Graphics_640x200_2Colors);
     m_graphicsAdapter.setPCGraphicsForegroundColorIndex(m_CGAColorReg & CGA_COLORCONTROLREG_BACKCOLR_MASK);
+    m_graphicsAdapter.enableVideo(true);
 
   }
 }
@@ -445,7 +454,8 @@ void Machine::setHGCMode()
 
     // text mode
     //printf("Hercules, text mode\n");
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + HGC_OFFSET_PAGE0);
+    m_frameBuffer = s_videoMemory + HGC_OFFSET_PAGE0;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Text_80x25_16Colors);
     m_graphicsAdapter.setBit7Blink(m_HGCModeReg & HGC_MODECONTROLREG_BIT7BLINK);
 
@@ -454,7 +464,8 @@ void Machine::setHGCMode()
     // graphics mode
     //printf("Hercules, graphics mode\n");
     int offset = (m_HGCModeReg & HGC_MODECONTROLREG_GRAPHICSPAGE) && (m_HGCSwitchReg & HGC_CONFSWITCH_ALLOWPAGE1) ? HGC_OFFSET_PAGE1 : HGC_OFFSET_PAGE0;
-    m_graphicsAdapter.setVideoBuffer(s_videoMemory + offset);
+    m_frameBuffer = s_videoMemory + offset;
+    m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Graphics_HGC_720x348);
 
   }
@@ -465,8 +476,6 @@ void Machine::setHGCMode()
 void Machine::writePort(void * context, int address, uint8_t value)
 {
   auto m = (Machine*)context;
-
-  //printf("OUT %04x=%02x\n", address, value);
 
   switch (address) {
 
@@ -608,8 +617,6 @@ void Machine::writePort(void * context, int address, uint8_t value)
 uint8_t Machine::readPort(void * context, int address)
 {
   auto m = (Machine*)context;
-
-  //printf("IN %04X\n", address);
 
   switch (address) {
 
@@ -820,36 +827,6 @@ bool Machine::interrupt(void * context, int num)
   if (i8086::CS() == BIOS_SEG) {
     switch (num) {
 
-      /*
-      // Disk read
-      case 0xf1:
-      {
-        int diskIndex  = i8086::DX() & 0xff;
-        uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
-        uint32_t dest  = i8086::ES() * 16 + i8086::BX();
-        uint32_t count = i8086::AX();
-        fseek(m->m_disk[diskIndex], pos, 0);
-        auto r = fread(s_memory + dest, 1, count, m->m_disk[diskIndex]);
-        i8086::setAL(r & 0xff);
-        //printf("read(0x%05X, %d, %d) => %d\n", dest, count, diskIndex, r);
-        return true;
-      }
-
-      // Disk write
-      case 0xf2:
-      {
-        int diskIndex  = i8086::DX() & 0xff;
-        uint32_t pos   = (i8086::BP() | (i8086::SI() << 16)) << 9;
-        uint32_t src   = i8086::ES() * 16 + i8086::BX();
-        uint32_t count = i8086::AX();
-        fseek(m->m_disk[diskIndex], pos, 0);
-        auto r = fwrite(s_memory + src, 1, count, m->m_disk[diskIndex]);
-        i8086::setAL(r & 0xff);
-        //printf("write(0x%05X, %d, %d) => %d\n", src, count, diskIndex, r);
-        return true;
-      }
-      */
-
       // Put Char for debug (AL)
       case 0xf4:
         printf("%c", i8086::AX() & 0xff);
@@ -894,9 +871,14 @@ bool Machine::interrupt(void * context, int num)
         printf("P1 AX=%04X BX=%04X CX=%04X DX=%04X DS=%04X\n", i8086::AX(), i8086::BX(), i8086::CX(), i8086::DX(), i8086::DS());
         return true;
 
-      // disk handler
+      // BIOS disk handler (INT 13h)
       case 0xfb:
         m->m_BIOS.diskHandlerEntry();
+        return true;
+
+      // BIOS video handler (INT 10h)
+      case 0xfc:
+        m->m_BIOS.videoHandlerEntry();
         return true;
 
     }

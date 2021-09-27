@@ -64,6 +64,8 @@ public:
   void setEmulation(Emulation emulation);
   Emulation emulation()                                    { return m_emulation; }
 
+  void enableVideo(bool value);
+
   void setVideoBuffer(void const * videoBuffer);
 
   // text modes methods

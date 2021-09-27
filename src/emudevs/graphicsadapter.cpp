@@ -122,6 +122,12 @@ GraphicsAdapter::~GraphicsAdapter()
 }
 
 
+void GraphicsAdapter::enableVideo(bool value)
+{
+  // @TODO: not implemented
+}
+
+
 void GraphicsAdapter::setEmulation(Emulation emulation)
 {
   if (m_emulation != emulation) {
