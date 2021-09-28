@@ -43,12 +43,16 @@
 #pragma GCC optimize ("O2")
 
 
+
+#define DUMPEVENTS 0
+
+
 namespace fabgl {
 
 
 
 // debug only!
-/*
+#if DUMPEVENTS
 void dumpEvent(uiEvent * event)
 {
   static int idx = 0;
@@ -111,7 +115,7 @@ void dumpEvent(uiEvent * event)
   }
   printf("\n");
 }
-//*/
+#endif
 
 
 
@@ -259,8 +263,10 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
     uiEvent event;
     if (getEvent(&event, -1)) {
 
-      // debug
-      //dumpEvent(&event);
+      #if DUMPEVENTS
+      printf("run(): ");
+      dumpEvent(&event);
+      #endif
 
       preprocessEvent(&event);
 
@@ -342,6 +348,11 @@ void uiApp::processEvents()
 {
   uiEvent event;
   while (getEvent(&event, 0)) {
+
+    #if DUMPEVENTS
+    printf("processEvents(): ");
+    dumpEvent(&event);
+    #endif
 
     preprocessEvent(&event);
 
@@ -790,6 +801,11 @@ bool uiApp::processModalWindowEvents(ModalWindowState * state, int timeout)
   // a new inner event loop...
   uiEvent event;
   while (getEvent(&event, timeout)) {
+
+    #if DUMPEVENTS
+    printf("processModalWindowEvents(): ");
+    dumpEvent(&event);
+    #endif
 
     if (m_modalWindow != state->window && event.dest == state->window) {
       // becomes modal when first message arrives
