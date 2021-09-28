@@ -1112,9 +1112,9 @@ void BIOS::diskHandler_HD()
   int drive   = (i8086::DL() & 1) + 2;  // 2 = HD0, 3 = HD1
   int service = i8086::AH();
 
-  //printf("INT 13h, HDD (%d), service %02X\n", drive, service);
+  //printf("INT 13h, HDD (%d), service %02X [AH=%02X DL=%02X]\n", drive, service, i8086::AH(), i8086::DL());
 
-  if (m_machine->disk(drive) == nullptr) {
+  if (m_machine->disk(drive) == nullptr || i8086::DL() > 0x81) {
     // invalid drive
     diskHandler_HDExit(0x80, true);
     return;
