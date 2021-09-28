@@ -94,8 +94,6 @@ public:
   static void dumpMemory(char const * filename);
   static void dumpInfo(char const * filename);
 
-  static bool createEmptyDisk(int diskType, char const * filename);
-
   #ifdef FABGL_EMULATED
   void setStepCallback(StepCallback value)  { m_stepCallback = value; }
   #endif

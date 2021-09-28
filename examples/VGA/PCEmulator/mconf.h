@@ -151,3 +151,4 @@ void delConfigDialog(InputBox * ibox, MachineConf * mconf, int idx);
 
 void drawInfo(Canvas * canvas);
  
+bool createEmptyDiskImage(InputBox * ibox, int diskType, char const * filename);
