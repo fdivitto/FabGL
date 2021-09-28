@@ -405,11 +405,13 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 
 void InputForm::doExit(int value)
 {
-  app->rootWindow()->frameProps().fillBackground = false;
   if (modalDialog)
     mainFrame->exitModal(value);
-  else
+  else {
     app->quit(value);
+    // this avoids flickering of content painted in onPaint
+    app->rootWindow()->frameProps().fillBackground = false;
+  }
 }
 
 
@@ -430,7 +432,7 @@ void InputForm::setExtButtons(char const * values[])
 void TextInputForm::calcRequiredSize()
 {
   labelExtent     = app->canvas()->textExtent(font, labelText);
-  editExtent      = imin(maxLength * app->canvas()->textExtent(font, "M"), app->rootWindow()->clientSize().width / 2 - labelExtent);
+  editExtent      = imin(maxLength * app->canvas()->textExtent(font, "M") + 15, app->rootWindow()->clientSize().width - labelExtent);
   requiredWidth   = imax(requiredWidth, editExtent + labelExtent + 10);
   requiredHeight += font->height;
 }
