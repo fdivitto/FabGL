@@ -209,22 +209,26 @@ void Machine::autoDetectDriveGeometry(int drive)
     }
   }
 
-  // maybe an hard disk, try to calculate geometry
-  int t = 1, h = 1, s;
-  int diskSectors = (int)(m_diskSize[drive] / 512);
-  if (diskSectors > 63) {
-    t = diskSectors / 63;
-    s = 63;
-  } else
-    s = diskSectors;
-  if (t > 1024) {
-    h = t / 1024;
-    t = 1024;
+  // maybe an hard disk, try to calculate geometry (max 528MB, common lower end for BIOS and MSDOS: https://tldp.org/HOWTO/Large-Disk-HOWTO-4.html)
+  constexpr int MAXCYLINDERS = 1024;  // Cylinders : 1...1024
+  constexpr int MAXHEADS     = 16;    // Heads     : 1...16 (actual limit is 256)
+  constexpr int MAXSECTORS   = 63;    // Sectors   : 1...63
+  int c = 1, h = 1;
+  int s = (int)(m_diskSize[drive] / 512);
+  if (s > MAXSECTORS) {
+    h = s / MAXSECTORS;
+    s = MAXSECTORS;
   }
-  m_diskCylinders[drive] = t;
+  if (h > MAXHEADS) {
+    c = h / MAXHEADS;
+    h = MAXHEADS;
+  }
+  if (c > MAXCYLINDERS)
+    c = MAXCYLINDERS;
+  m_diskCylinders[drive] = c;
   m_diskHeads[drive]     = h;
   m_diskSectors[drive]   = s;
-  //printf("autoDetectDriveGeometry, found HD: t=%d s=%d h=%d\n", t, s, h);
+  //printf("autoDetectDriveGeometry, found HD: c=%d h=%d s=%d (tot=%d filesz=%d)\n", m_diskCylinders[drive], m_diskHeads[drive], m_diskSectors[drive], 512 * m_diskCylinders[drive] * m_diskHeads[drive] * m_diskSectors[drive], (int)m_diskSize[drive]);
 
 }
 
