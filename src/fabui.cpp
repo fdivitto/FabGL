@@ -2677,6 +2677,22 @@ void uiTextEdit::setText(char const * value)
 }
 
 
+void uiTextEdit::setTextFmt(const char *format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  int size = vsnprintf(nullptr, 0, format, ap) + 1;
+  if (size > 0) {
+    va_end(ap);
+    va_start(ap, format);
+    checkAllocatedSpace(size + 1);
+    vsnprintf(m_text, size, format, ap);
+    m_textLength = strlen(m_text);
+  }
+  va_end(ap);
+}
+
+
 void uiTextEdit::processEvent(uiEvent * event)
 {
   uiControl::processEvent(event);

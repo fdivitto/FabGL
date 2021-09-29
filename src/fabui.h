@@ -1438,6 +1438,15 @@ public:
   void setText(char const * value);
 
   /**
+   * @brief Replaces current text
+   *
+   * Text edit needs to be repainted in order to display changed text.
+   *
+   * @param format Format specifier like printf.
+   */
+  void setTextFmt(const char *format, ...);
+
+  /**
    * @brief Gets current content of the text edit
    *
    * @return Text edit content
