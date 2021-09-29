@@ -58,10 +58,11 @@ enum class InputResult {
   ButtonExt0  = 1,       /**< Button Ext 0 pressed */
   ButtonExt1  = 2,       /**< Button Ext 1 pressed */
   ButtonExt2  = 3,       /**< Button Ext 3 pressed */
-  Cancel      = 4,       /**< Button CANCEL or ESC key pressed */
-  ButtonLeft  = 4,       /**< Left button (cancel) or ESC key pressed */
-  Enter       = 5,       /**< Button OK, ENTER or RETURN pressed */
-  ButtonRight = 5,       /**< Right button (OK), ENTER or RETURN pressed */
+  ButtonExt3  = 4,       /**< Button Ext 4 pressed */
+  Cancel      = 5,       /**< Button CANCEL or ESC key pressed */
+  ButtonLeft  = 5,       /**< Left button (cancel) or ESC key pressed */
+  Enter       = 6,       /**< Button OK, ENTER or RETURN pressed */
+  ButtonRight = 6,       /**< Right button (OK), ENTER or RETURN pressed */
 };
 
 
@@ -91,7 +92,7 @@ struct InputForm {
   void setExtButtons(char const * values[]);
 
 
-  static constexpr int BUTTONS  = 5;
+  static constexpr int BUTTONS  = 6;
 
   InputBox *       inputBox;
 
@@ -308,7 +309,7 @@ public:
    *
    * Extended button texts are reset to empty values after every dialog
    *
-   * @param extButton A value from 0 to 2. 0 = leftmost button ... 2 = rightmost button
+   * @param extButton A value from 0 to 3. 0 = leftmost button ... 3 = rightmost button
    * @param value Button text
    */
   void setExtButton(int extButton, char const * value) { m_extButtonText[extButton] = value; }
