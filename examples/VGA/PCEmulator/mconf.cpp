@@ -24,12 +24,19 @@
  */
 
 
+#include <memory>
+
 #include "fabgl.h"
 #include "fabui.h"
 #include "fabutils.h"
 
 
 #include "mconf.h"
+
+
+using std::unique_ptr;
+using fabgl::imin;
+
 
 
 
@@ -172,32 +179,35 @@ void MachineConf::loadFromFile(FILE * file)
       item->setDisk(2, value);
     else if (strcmp("dskd", tag) == 0 || strcmp("hd1", tag) == 0)
       item->setDisk(3, value);
+    else if (strcmp("chs0", tag) == 0)
+      item->setCHS(2, value);
+    else if (strcmp("chs1", tag) == 0)
+      item->setCHS(3, value);
+    else if (strcmp("boot", tag) == 0)
+      item->setBootDrive(value);
   }
   addItem(item);
-}
-
-
-void MachineConf::saveTag(FILE * file, char const * tag, char const * value)
-{
-  fputs(tag, file);
-  fputs(" \"", file);
-  fputs(value, file);
-  fputs("\" ", file);
 }
 
 
 void MachineConf::saveToFile(FILE * file)
 {
   for (auto item = m_itemsList; item; item = item->next) {
-    saveTag(file, "desc", item->desc);
-    if (item->disk[0])
-      saveTag(file, "fd0", item->disk[0]);
-    if (item->disk[1])
-      saveTag(file, "fd1", item->disk[1]);
-    if (item->disk[2])
-      saveTag(file, "hd0", item->disk[2]);
-    if (item->disk[3])
-      saveTag(file, "hd1", item->disk[3]);
+    fputs("desc \"", file);
+    fputs(item->desc, file);
+    fputs("\" ", file);
+    for (int d = 0; d < DISKCOUNT; ++d)
+      if (item->disk[d] && strlen(item->disk[d]) > 0) {
+        fputs(MachineConfItem::driveIndexToStr(d), file);
+        fputs(" \"", file);
+        fputs(item->disk[d], file);
+        fputs("\" ", file);
+      }
+    for (int hd = 2; hd < 4; ++hd)
+      if (item->cylinders[hd] > 0 && item->heads[hd] > 0 && item->sectors[hd] > 0)
+        fprintf(file, "chs%d %hu,%hu,%hu ", hd - 2, item->cylinders[hd], item->heads[hd], item->sectors[hd]);
+    if (item->bootDrive > 0)
+      fprintf(file, "boot %s ", MachineConfItem::driveIndexToStr(item->bootDrive));
     fputs("\r\n", file);
   }
 }
@@ -217,22 +227,27 @@ struct ConfigDialog : public uiApp {
   RGB888            backgroundColor;
 
   uiFrame         * mainFrame;
-  uiButton        * buttonSave;
-  uiButton        * buttonCancel;
-  uiTextEdit      * editDesc;
-  uiTextEdit      * editFD0;
-  uiTextEdit      * editFD1;
-  uiTextEdit      * editHD0;
-  uiButton        * browseAButton;
-  uiButton        * browseBButton;
-  uiButton        * browseCButton;
+  uiButton        * saveButton;
+  uiButton        * cancelButton;
+  uiButton        * createImageButton;
+  uiTextEdit      * descEdit;
+  uiTextEdit      * FD0PathEdit;
+  uiTextEdit      * FD1PathEdit;
+  uiTextEdit      * HD0PathEdit, * HD0CylEdit, * HD0HdsEdit, * HD0SecEdit;
+  uiTextEdit      * HD1PathEdit, * HD1CylEdit, * HD1HdsEdit, * HD1SecEdit;
+  uiButton        * browseFD0Button;
+  uiButton        * browseFD1Button;
+  uiButton        * browseHD0Button;
+  uiButton        * browseHD1Button;
+  uiComboBox      * bootDriveComboBox;
+
 
   void init() {
     rootWindow()->frameStyle().backgroundColor = backgroundColor;
 
     rootWindow()->onPaint = [&]() { drawInfo(canvas()); };
 
-    mainFrame = new uiFrame(rootWindow(), "Machine Configuration", UIWINDOW_PARENTCENTER, Size(372, 200));
+    mainFrame = new uiFrame(rootWindow(), "Machine Configuration", UIWINDOW_PARENTCENTER, Size(460, 250));
     mainFrame->frameProps().resizeable        = false;
     mainFrame->frameProps().hasMaximizeButton = false;
     mainFrame->frameProps().hasMinimizeButton = false;
@@ -253,71 +268,119 @@ struct ConfigDialog : public uiApp {
 
     // description
     new uiLabel(mainFrame, "Description", Point(x, y + oy));
-    editDesc = new uiTextEdit(mainFrame, item->desc, Point(70, y), Size(270, hh));
+    descEdit = new uiTextEdit(mainFrame, item->desc, Point(70, y), Size(270, hh));
 
     y += dy;
 
     // floppy 0
     new uiLabel(mainFrame, "Floppy 0", Point(x, y + oy));
-    editFD0 = new uiTextEdit(mainFrame, item->disk[0], Point(60, y), Size(280, hh));
-    browseAButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseAButton->onClick = [&]() { browseFilename(editFD0); };
+    FD0PathEdit = new uiTextEdit(mainFrame, item->disk[0], Point(60, y), Size(260, hh));
+    browseFD0Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
+    browseFD0Button->onClick = [&]() { browseFilename(FD0PathEdit); };
 
 
     y += dy;
 
     // floppy 1
     new uiLabel(mainFrame, "Floppy 1", Point(x, y + oy));
-    editFD1 = new uiTextEdit(mainFrame, item->disk[1], Point(60, y), Size(280, hh));
-    browseBButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseBButton->onClick = [&]() { browseFilename(editFD1); };
+    FD1PathEdit = new uiTextEdit(mainFrame, item->disk[1], Point(60, y), Size(260, hh));
+    browseFD1Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
+    browseFD1Button->onClick = [&]() { browseFilename(FD1PathEdit); };
 
     y += dy;
 
     // HDD 0
-    new uiLabel(mainFrame, "Hard Disk", Point(x, y + oy));
-    editHD0 = new uiTextEdit(mainFrame, item->disk[2], Point(60, y), Size(280, hh));
-    browseCButton = new uiButton(mainFrame, "...", Point(345, y), Size(20, hh));
-    browseCButton->onClick = [&]() { browseFilename(editHD0); };
+    new uiLabel(mainFrame, "HDD 0", Point(x, y + oy));
+    HD0PathEdit = new uiTextEdit(mainFrame, item->disk[2], Point(60, y), Size(260, hh));
+    browseHD0Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
+    browseHD0Button->onClick = [&]() { browseFilename(HD0PathEdit); };
+    new uiLabel(mainFrame, "Cyls", Point(350, y - 13));
+    HD0CylEdit  = new uiTextEdit(mainFrame, "", Point(350, y), Size(34, hh));
+    HD0CylEdit->setTextFmt("%hu", item->cylinders[2]);
+    new uiLabel(mainFrame, "Head", Point(385, y - 13));
+    HD0HdsEdit  = new uiTextEdit(mainFrame, "", Point(385, y), Size(34, hh));
+    HD0HdsEdit->setTextFmt("%hu", item->heads[2]);
+    new uiLabel(mainFrame, "Sect", Point(420, y - 13));
+    HD0SecEdit  = new uiTextEdit(mainFrame, "", Point(420, y), Size(34, hh));
+    HD0SecEdit->setTextFmt("%hu", item->sectors[2]);
 
-    y += dy * 2;
+    y += dy;
+
+    // HDD 1
+    new uiLabel(mainFrame, "HDD 1", Point(x, y + oy));
+    HD1PathEdit = new uiTextEdit(mainFrame, item->disk[3], Point(60, y), Size(260, hh));
+    browseHD1Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
+    browseHD1Button->onClick = [&]() { browseFilename(HD1PathEdit); };
+    HD1CylEdit  = new uiTextEdit(mainFrame, "", Point(350, y), Size(34, hh));
+    HD1CylEdit->setTextFmt("%hu", item->cylinders[3]);
+    HD1HdsEdit  = new uiTextEdit(mainFrame, "", Point(385, y), Size(34, hh));
+    HD1HdsEdit->setTextFmt("%hu", item->heads[3]);
+    HD1SecEdit  = new uiTextEdit(mainFrame, "", Point(420, y), Size(34, hh));
+    HD1SecEdit->setTextFmt("%hu", item->sectors[3]);
+
+    y += dy;
+
+    // boot drive selection
+    new uiLabel(mainFrame, "Boot Drive", Point(x, y + oy));
+    bootDriveComboBox = new uiComboBox(mainFrame, Point(60, y), Size(60, hh), 50);
+    bootDriveComboBox->items().append("Floppy 0");
+    bootDriveComboBox->items().append("Floppy 1");
+    bootDriveComboBox->items().append("HDD 0");
+    bootDriveComboBox->items().append("HDD 1");
+    bootDriveComboBox->selectItem(item->bootDrive);
+
+    // bottom buttons
+
+    y = mainFrame->clientSize().height - 8;
 
     // Save Button
-    buttonSave = new uiButton(mainFrame, "Save", Point(mainFrame->clientSize().width - 75, mainFrame->clientSize().height - 8), Size(70, hh));
-    buttonSave->onClick = [&]() {
+    saveButton = new uiButton(mainFrame, "Save", Point(mainFrame->clientSize().width - 75, y), Size(70, hh));
+    saveButton->onClick = [&]() {
       saveAndQuit();
     };
 
     // Cancel Button
-    buttonCancel = new uiButton(mainFrame, "Cancel", Point(mainFrame->clientSize().width - 155, mainFrame->clientSize().height - 8), Size(70, hh));
-    buttonCancel->onClick = [&]() {
+    cancelButton = new uiButton(mainFrame, "Cancel", Point(mainFrame->clientSize().width - 155, y), Size(70, hh));
+    cancelButton->onClick = [&]() {
       justQuit();
     };
 
+    // Create Disk Image Button
+    createImageButton = new uiButton(mainFrame, "Create Disk", Point(10, y), Size(90, hh));
+    createImageButton->onClick = [&]() {
+      createDiskImage();
+    };
 
     setActiveWindow(mainFrame);
   }
 
+
   // @TODO: support files stored in subfolders!!
   void browseFilename(uiTextEdit * edit) {
-    char * dir = (char*) malloc(MAXVALUELENGTH + 1);
-    char * filename = (char*) malloc(MAXVALUELENGTH + 1);
-    strcpy(dir, "/SD");
-    strcpy(filename, edit->text());
-    if (fileDialog("Select drive image", dir, MAXVALUELENGTH, filename, MAXVALUELENGTH, "OK", "Cancel") == uiMessageBoxResult::ButtonOK) {
-      edit->setText(filename);
+    unique_ptr<char[]> dir(new char[MAXVALUELENGTH + 1] { '/', 'S', 'D', 0 } );
+    unique_ptr<char[]> filename(new char[MAXVALUELENGTH + 1]);
+    strcpy(filename.get(), edit->text());
+    if (fileDialog("Select drive image", dir.get(), MAXVALUELENGTH, filename.get(), MAXVALUELENGTH, "OK", "Cancel") == uiMessageBoxResult::ButtonOK) {
+      edit->setText(filename.get());
       edit->repaint();
     }
-    free(filename);
-    free(dir);
   }
+
 
   void saveAndQuit() {
     // get fields
-    item->setDesc(editDesc->text());
-    item->setDisk(0, editFD0->text());
-    item->setDisk(1, editFD1->text());
-    item->setDisk(2, editHD0->text());
+    item->setDesc(descEdit->text());
+    item->setDisk(0, FD0PathEdit->text());
+    item->setDisk(1, FD1PathEdit->text());
+    item->setDisk(2, HD0PathEdit->text());
+    item->setDisk(3, HD1PathEdit->text());
+    item->cylinders[2] = atoi(HD0CylEdit->text());
+    item->heads[2]     = atoi(HD0HdsEdit->text());
+    item->sectors[2]   = atoi(HD0SecEdit->text());
+    item->cylinders[3] = atoi(HD1CylEdit->text());
+    item->heads[3]     = atoi(HD1HdsEdit->text());
+    item->sectors[3]   = atoi(HD1SecEdit->text());
+    item->bootDrive    = bootDriveComboBox->selectedItem();
 
     // save to file
     saveMachineConfiguration(mconf);
@@ -325,9 +388,66 @@ struct ConfigDialog : public uiApp {
     justQuit();
   }
 
+
   void justQuit() {
     rootWindow()->frameProps().fillBackground = false;
     quit(0);
+  }
+
+
+  void createDiskImage() {
+    InputBox ib(this);
+
+    int s = ib.menu("Create Disk Image", "Select Disk Size", "Floppy 320K (FAT12);"         // 0
+                                                             "Floppy 360K (FAT12);"         // 1
+                                                             "Floppy 720K (FAT12);"         // 2
+                                                             "Floppy 1.2M (FAT12);"         // 3
+                                                             "Floppy 1.44M (FAT12);"        // 4
+                                                             "Floppy 2.88M (FAT12);"        // 5
+                                                             "Hard Disk (Unformatted)");    // 6
+    int hdSize = 0;
+    if (s == 6) {
+      // set hard disk size
+      char str[4] = "10";
+      if (ib.textInput("Hard Disk Size", "Specify Hard Disk size in Megabytes", str, 3) == InputResult::Enter)
+        hdSize = atoi(str);
+      else
+        return;
+      if (hdSize <= 0 || hdSize > 512) {
+        ib.message("Error", "Invalid Hard Disk Size!");
+        return;
+      }
+    } else if (s < 0 || s > 6)
+      return;
+
+    // set filename
+    unique_ptr<char[]> dir(new char[MAXVALUELENGTH + 1]      { '/', 'S', 'D', 0 } );
+    unique_ptr<char[]> filename(new char[MAXVALUELENGTH + 1] { 'n', 'e', 'w', 'i', 'm', 'a', 'g', 'e', '.', 'i', 'm', 'g', 0 });
+    if (fileDialog("Image Filename", dir.get(), MAXVALUELENGTH, filename.get(), MAXVALUELENGTH, "OK", "Cancel") != uiMessageBoxResult::ButtonOK)
+      return;
+
+    // create the image
+    if (s == 6) {
+      // Hard Disk
+      ib.progressBox("", "Abort", true, 380, [&](fabgl::ProgressForm * form) {
+        auto buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
+        constexpr int BUFSIZE = 4096;
+        memset(buf, 0, BUFSIZE);
+        FileBrowser fb("/SD");
+        auto file = fb.openFile(filename.get(), "wb");
+        const int totSize = hdSize * 1048576;
+        for (int sz = totSize; sz > 0; ) {
+          sz -= fwrite(buf, 1, imin(BUFSIZE, sz), file);
+          if (!form->update((int)((double)(totSize - sz) / totSize * 100), "Writing %s (%d / %d bytes)", filename.get(), (totSize - sz), totSize))
+            break;
+        }
+        fclose(file);
+      });
+    } else {
+      // Floppy Disk
+      createEmptyDiskImage(&ib, s, filename.get());
+    }
+
   }
 
 };

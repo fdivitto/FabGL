@@ -139,6 +139,10 @@ private:
   void autoDetectDriveGeometry(int drive);
 
 
+  #ifdef FABGL_EMULATED
+  StepCallback             m_stepCallback;
+  #endif
+
   bool                     m_reset;
 
   GraphicsAdapter          m_graphicsAdapter;
@@ -205,10 +209,6 @@ private:
   // extended I/O (MCP23S17)
   MCP23S17                 m_MCP23S17;
   uint8_t                  m_MCP23S17Sel;
-
-  #ifdef FABGL_EMULATED
-  StepCallback             m_stepCallback;
-  #endif
 
   uint8_t                  m_bootDrive;
 

@@ -231,7 +231,7 @@ bool downloadURL(char const * URL, FILE * file)
       if (file) {
         int tlen = http.getSize();
         int len = tlen;
-        uint8_t * buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
+        auto buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
         WiFiClient * stream = http.getStreamPtr();
         int dsize = 0;
         while (http.connected() && (len > 0 || len == -1)) {
@@ -376,6 +376,8 @@ void setup()
         // Run
         showDialog = false;
         break;
+      default:
+        break;
     }
 
     // next selection will not have timeout
@@ -410,7 +412,9 @@ void setup()
 
   machine = new Machine;
   for (int i = 0; i < DISKCOUNT; ++i)
-    machine->setDriveImage(i, diskFilename[i]);
+    machine->setDriveImage(i, diskFilename[i], conf->cylinders[i], conf->heads[i], conf->sectors[i]);
+
+  machine->setBootDrive(conf->bootDrive);
 
   /*
   printf("MALLOC_CAP_32BIT : %d bytes (largest %d bytes)\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT), heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));

@@ -95,13 +95,13 @@ uint8_t *         Machine::s_memory;
 uint8_t *         Machine::s_videoMemory;
 
 
-Machine::Machine()
-  : m_disk(),
-    m_bootDrive(0),
-    m_frameBuffer(nullptr)
+Machine::Machine() :
     #ifdef FABGL_EMULATED
-    ,m_stepCallback(nullptr)
+    m_stepCallback(nullptr),
     #endif
+    m_disk(),
+    m_frameBuffer(nullptr),
+    m_bootDrive(0)
 {
 }
 
