@@ -134,6 +134,19 @@ void loop()
 
 
   ////////////////////////////////////////////////////
+  // File Browser
+  char const * path = nullptr;
+  if (FileBrowser::mountSDCard(false, "/SD"))
+    path = "/SD";
+  else if (FileBrowser::mountSPIFFS(true, "/Flash"))
+    path = "/Flash";
+  if (path) {
+    ib.folderBrowser("Folder Browser", path);
+    FileBrowser::unmountSDCard();
+    FileBrowser::unmountSPIFFS();
+  }
+
+  ////////////////////////////////////////////////////
   // Example WiFi connection wizard
   if (ib.message("WiFi Configuration", "Configure WiFi?", "No", "Yes") == InputResult::Enter) {
 

@@ -67,7 +67,7 @@ typedef void (*DrawScanlineCallback)(void * arg, uint8_t * dest, int scanLine);
 
 
 /**
- * @brief Represents an base abstract class for direct draw VGA controller
+ * @brief Represents a base abstract class for direct draw VGA controller
  *
  * A direct draw VGA controller draws paint the screen in real time, for each scanline. Every two scanlines an interrupt is generated.
  * Put your drawing code inside a callback and call setDrawScanlineCallback() to assign it.

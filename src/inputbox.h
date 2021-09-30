@@ -240,6 +240,37 @@ struct ProgressForm : public InputForm {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// FileBrowserForm
+
+
+struct FileBrowserForm : public InputForm {
+  static constexpr int SIDE_BUTTONS_WIDTH  = 65;
+  static constexpr int SIDE_BUTTONS_HEIGHT = 18;
+  static constexpr int CTRLS_DIST          = 4;
+  static constexpr int BROWSER_WIDTH       = 150;
+  static constexpr int BROWSER_HEIGHT      = 242;
+  static constexpr int MAXNAME             = 32;
+
+  FileBrowserForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
+  void addControls();
+  void calcRequiredSize();
+  void finalize();
+
+  char const *    directory;
+
+  uiFileBrowser * fileBrowser;
+  uiButton *      newFolderButton;
+  uiButton *      renameButton;
+  uiButton *      deleteButton;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // InputBox
 
 
@@ -522,6 +553,25 @@ public:
     form.execFunc = execFunc;
     return progressBoxImpl(form, titleText, buttonCancelText, hasProgressBar, width);
   }
+
+  /**
+   * @brief Shows a dialog with files and folders and buttons to create new folders, delete and rename folders and files
+   *
+   * @param titleText Optional title of the dialog (nullptr = the dialogs hasn't a title)
+   * @param directory Initial directory. At least one file system must be mounted
+   * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "Close".
+   *
+   * @return Dialog box result (Cancel or Enter)
+   *
+   * Example:
+   *
+   *     InputBox ib;
+   *     ib.begin();
+   *     if (FileBrowser::mountSDCard(false, "/SD"))
+   *       ib.fileBrowser("File Browser", "/SD");
+   *     ib.end();
+   */
+  InputResult folderBrowser(char const * titleText, char const * directory = "/", char const * buttonOKText = "Close");
 
 
   // delegates

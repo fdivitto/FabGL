@@ -25,6 +25,7 @@
 
 
 #include <string.h>
+#include <memory>
 
 #include "dispdrivers/vga2controller.h"
 #include "dispdrivers/vga4controller.h"
@@ -35,6 +36,9 @@
 
 
 #pragma GCC optimize ("O2")
+
+
+using std::unique_ptr;
 
 
 namespace fabgl {
@@ -266,6 +270,22 @@ InputResult InputBox::progressBoxImpl(ProgressForm & form, char const * titleTex
   form.autoOK               = 0;  // no timeout supported here
 
   form.setExtButtons(m_extButtonText);
+
+  exec(&form);
+
+  m_lastResult = form.retval;
+  return form.retval;
+}
+
+
+InputResult InputBox::folderBrowser(char const * titleText, char const * directory, char const * buttonOKText)
+{
+  FileBrowserForm form(this);
+  form.titleText            = titleText;
+  form.buttonText[B_CANCEL] = nullptr;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.autoOK               = 0;  // no timeout supported here
+  form.directory            = directory;
 
   exec(&form);
 
@@ -658,6 +678,84 @@ bool ProgressForm::update(int percentage, char const * format, ...)
   app->processEvents();
   return retval == InputResult::None;
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// FileBrowserForm
+
+
+void FileBrowserForm::calcRequiredSize()
+{
+  requiredWidth  = imax(requiredWidth, BROWSER_WIDTH + CTRLS_DIST + SIDE_BUTTONS_WIDTH);
+  requiredHeight = imax(requiredHeight, BROWSER_HEIGHT);
+}
+
+
+void FileBrowserForm::addControls()
+{
+  mainFrame->frameProps().resizeable        = true;
+  mainFrame->frameProps().hasMaximizeButton = true;
+
+  int x = mainFrame->clientPos().X + CTRLS_DIST;
+  int y = mainFrame->clientPos().Y + CTRLS_DIST;
+
+  fileBrowser = new uiFileBrowser(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - x - CTRLS_DIST - SIDE_BUTTONS_WIDTH, mainFrame->clientSize().height - panel->size().height - CTRLS_DIST * 2));
+  fileBrowser->anchors().right  = true;
+  fileBrowser->anchors().bottom = true;
+  fileBrowser->setDirectory(directory);
+
+  x += fileBrowser->size().width + CTRLS_DIST;
+
+  newFolderButton = new uiButton(mainFrame, "New Folder", Point(x, y), Size(SIDE_BUTTONS_WIDTH, SIDE_BUTTONS_HEIGHT));
+  newFolderButton->anchors().left  = false;
+  newFolderButton->anchors().right = true;
+  newFolderButton->onClick = [&]() {
+    unique_ptr<char[]> dirname(new char[MAXNAME + 1] { 0 } );
+    if (app->inputBox("Create Folder", "Name", dirname.get(), MAXNAME, "Create", "Cancel") == uiMessageBoxResult::Button1) {
+      fileBrowser->content().makeDirectory(dirname.get());
+      fileBrowser->update();
+    }
+  };
+
+  y += SIDE_BUTTONS_HEIGHT + CTRLS_DIST;
+
+  renameButton = new uiButton(mainFrame, "Rename", Point(x, y), Size(SIDE_BUTTONS_WIDTH, SIDE_BUTTONS_HEIGHT));
+  renameButton->anchors().left  = false;
+  renameButton->anchors().right = true;
+  renameButton->onClick = [&]() {
+    if (strcmp(fileBrowser->filename(), "..") != 0) {
+      int maxlen = fabgl::imax(MAXNAME, strlen(fileBrowser->filename()));
+      unique_ptr<char[]> filename(new char[MAXNAME + 1] { 0 } );
+      strcpy(filename.get(), fileBrowser->filename());
+      if (app->inputBox("Rename File", "New name", filename.get(), maxlen, "Rename", "Cancel") == uiMessageBoxResult::Button1) {
+        fileBrowser->content().rename(fileBrowser->filename(), filename.get());
+        fileBrowser->update();
+      }
+    }
+  };
+
+  y += SIDE_BUTTONS_HEIGHT + CTRLS_DIST;
+
+  deleteButton = new uiButton(mainFrame, "Delete", Point(x, y), Size(SIDE_BUTTONS_WIDTH, SIDE_BUTTONS_HEIGHT));
+  deleteButton->anchors().left  = false;
+  deleteButton->anchors().right = true;
+  deleteButton->onClick = [&]() {
+    if (strcmp(fileBrowser->filename(), "..") != 0) {
+      if (app->messageBox("Delete file/directory", "Are you sure?", "Yes", "Cancel") == uiMessageBoxResult::Button1) {
+        fileBrowser->content().remove( fileBrowser->filename() );
+        fileBrowser->update();
+      }
+    }
+  };
+}
+
+
+void FileBrowserForm::finalize()
+{
+  doExit(0);
+}
+
 
 
 }   // namespace fabgl
