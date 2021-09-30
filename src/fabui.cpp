@@ -2310,7 +2310,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
   }
 
   // reshape to newRect or draw the reshaping box)
-  if (mouseIsDown == false || app()->appProps().realtimeReshaping) {
+  if (mouseIsDown == false || (app()->appProps().realtimeReshaping && m_mouseDownFrameItem != uiFrameItem::MoveArea) || (app()->appProps().realtimeMoving && m_mouseDownFrameItem == uiFrameItem::MoveArea)) {
     m_lastReshapingBox = Rect();
     app()->reshapeWindow(this, newRect);
   } else

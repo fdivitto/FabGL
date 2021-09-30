@@ -2780,7 +2780,8 @@ struct uiStyle {
 struct uiAppProps {
   uint16_t caretBlinkingTime = 500;   /**< Caret blinking time (MS) */
   uint16_t doubleClickTime   = 250;   /**< Maximum delay required for two consecutive clicks to become double click (MS) */
-  bool     realtimeReshaping = false; /**< If true moving/resizing a window always repaints it, otherwise the moved/resized window is represented by an inverted rectangle */
+  bool     realtimeReshaping = false; /**< If true resizing a window always repaints it, otherwise the resized window is represented by an inverted rectangle */
+  bool     realtimeMoving    = false; /**< If true moving a window always repaints it, otherwise the moved window is represented by an inverted rectangle */
 };
 
 
