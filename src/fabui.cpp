@@ -1807,18 +1807,8 @@ void uiWindow::reshape(Rect const & r)
           newChildRect.Y2 += dy;
       }
       if (newChildRect != childRect) {
-        //app()->reshapeWindow(child, newChildRect);
-        child->m_pos.X = newChildRect.X1;
-        child->m_pos.Y = newChildRect.Y1;
-        child->m_size.width  = newChildRect.width();
-        child->m_size.height = newChildRect.height();
-        // generate set position event
-        uiEvent evt = uiEvent(child, UIEVT_SETPOS);
-        evt.params.pos = child->pos();
-        app()->postEvent(&evt);
-        // generate set size event
-        evt = uiEvent(child, UIEVT_SETSIZE);
-        evt.params.size = child->size();
+        uiEvent evt = uiEvent(child, UIEVT_RESHAPEWINDOW);
+        evt.params.rect = newChildRect;
         app()->postEvent(&evt);
       }
     }
