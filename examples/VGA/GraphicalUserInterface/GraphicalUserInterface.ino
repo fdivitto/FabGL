@@ -47,7 +47,7 @@ void setup()
 
 void loop()
 {
-  MyApp().runAsync(&DisplayController, 3000).joinAsyncRun();  // why this? Just to use a larger stack!
+  MyApp().runAsync(&DisplayController, 3500).joinAsyncRun();  // why this? Just to use a larger stack!
 }
 
 
