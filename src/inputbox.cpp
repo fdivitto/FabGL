@@ -351,15 +351,20 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
     panel = new uiPanel(mainFrame, Point(mainFrame->clientPos().X - 1, mainFrame->clientPos().Y + mainFrame->clientSize().height - panelHeight), Size(mainFrame->clientSize().width + 2, panelHeight));
     panel->windowStyle().borderColor    = RGB888(128, 128, 128);
     panel->panelStyle().backgroundColor = mainFrame->frameStyle().backgroundColor;
+    panel->anchors().top    = false;
+    panel->anchors().bottom = true;
+    panel->anchors().right  = true;
 
     // setup buttons
 
     int y = (panelHeight - buttonsHeight) / 2;
-    int x = panel->clientSize().width - buttonsWidth * totButtons - buttonsSpace * totButtons;  // right aligned
+    int x = panel->clientSize().width - buttonsWidth * totButtons - buttonsSpace * (totButtons - 1) - buttonsSpace / 2;  // right aligned
 
     for (int i = 0; i < BUTTONS; ++i)
       if (buttonText[i]) {
         auto button = new uiButton(panel, buttonText[i], Point(x, y), Size(buttonsWidth, buttonsHeight));
+        button->anchors().left  = false;
+        button->anchors().right = true;
         button->onClick = [&, i]() {
           retval = (InputResult)(i + 1);
           finalize();
@@ -440,6 +445,9 @@ void TextInputForm::calcRequiredSize()
 
 void TextInputForm::addControls()
 {
+  mainFrame->frameProps().resizeable        = true;
+  mainFrame->frameProps().hasMaximizeButton = true;
+
   const Point clientPos = mainFrame->clientPos();
 
   int x = clientPos.X + 4;
@@ -448,6 +456,7 @@ void TextInputForm::addControls()
   new uiLabel(mainFrame, labelText, Point(x, y));
 
   edit = new uiTextEdit(mainFrame, inOutString, Point(x + labelExtent + 5, y - 4), Size(editExtent - 15, font->height + 6));
+  edit->anchors().right = true;
   edit->textEditProps().passwordMode = passwordMode;
 
   controlToFocus = edit;
@@ -520,6 +529,9 @@ void SelectForm::calcRequiredSize()
 
 void SelectForm::addControls()
 {
+  mainFrame->frameProps().resizeable        = true;
+  mainFrame->frameProps().hasMaximizeButton = true;
+
   int x = mainFrame->clientPos().X + 4;
   int y = mainFrame->clientPos().Y + 6;
 
@@ -528,6 +540,8 @@ void SelectForm::addControls()
   y += font->height + 6;
 
   listBox = new uiListBox(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - 10, listBoxHeight));
+  listBox->anchors().right = true;
+  listBox->anchors().bottom = true;
   if (items) {
     listBox->items().appendSepList(items, separator);
   } else {
