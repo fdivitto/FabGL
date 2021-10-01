@@ -93,7 +93,10 @@ void i8042::init()
   Mouse::quickCheckHardware();
 
   // keyboard configured on port 0, and optionally mouse on port 1
-  m_PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::NoVirtualKeys);
+  if (!PS2Controller::initialized())
+    m_PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::NoVirtualKeys);
+  else
+    m_PS2Controller.keyboard()->enableVirtualKeys(false, false);
   m_keyboard = m_PS2Controller.keyboard();
   m_mouse    = m_PS2Controller.mouse();
 
@@ -114,6 +117,8 @@ void i8042::reset()
 
   m_mouseIntTrigs = 0;
   m_keybIntTrigs  = 0;
+
+  m_sysReqTriggered = false;
 }
 
 
@@ -343,11 +348,17 @@ bool i8042::trigMouseInterrupt()
 }
 
 
-// check if SysReq (ALT + PRINT SCREEN) has been pressed
+// check if SysReq (ALT + PRINT SCREEN) has been released
 void i8042::checkSysReq(int scode2)
 {
-  if (scode2 == 0x84)
-    m_sysReq(m_context);
+  if (m_DBBOUT == 0xf0) {
+    if (scode2 == 0x84) { // SysReq released?
+      m_sysReqTriggered = true;
+    } else if (m_sysReqTriggered && scode2 == 0x11) { // ALT released?
+      m_sysReqTriggered = false;
+      m_sysReq(m_context);
+    }
+  }
 }
 
 

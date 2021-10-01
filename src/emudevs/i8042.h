@@ -100,6 +100,8 @@ private:
   int               m_mouseIntTrigs;
   int               m_keybIntTrigs;
 
+  bool              m_sysReqTriggered;
+
 };
 
 
