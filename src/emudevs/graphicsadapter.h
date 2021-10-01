@@ -41,7 +41,9 @@
 #include "fabgl.h"
 
 
+
 namespace fabgl {
+
 
 
 class GraphicsAdapter {
@@ -50,8 +52,8 @@ public:
 
   enum class Emulation {
     None,
-    PC_Text_80x25_16Colors,       // CGA Color Text Mode (PC BIOS 02h/03h) - not visually because use 640x400 screen with 8x16 fonts, while should be 640x200 with 8x8 fonts
     PC_Text_40x25_16Colors,       // CGA Color Text Mode (PC BIOS 00h/01h)
+    PC_Text_80x25_16Colors,       // CGA Color Text Mode (PC BIOS 02h/03h) - not visually because use 640x400 screen with 8x16 fonts, while should be 640x200 with 8x8 fonts
     PC_Graphics_320x200_4Colors,  // CGA 320x200, 4 Colors Graphics Mode (PC BIOS 04h/05h)
     PC_Graphics_640x200_2Colors,  // CGA 640x200, 2 Colors Graphics Mode (PC BIOS 06h)
     PC_Graphics_HGC_720x348,      // Hercules 720x348 Graphics Black/White
@@ -64,7 +66,7 @@ public:
   void setEmulation(Emulation emulation);
   Emulation emulation()                                    { return m_emulation; }
 
-  void enableVideo(bool value);
+  bool enableVideo(bool value);
 
   void setVideoBuffer(void const * videoBuffer);
 
@@ -97,6 +99,8 @@ private:
 
   void createCursorGlyph(int width, int height, int start, int end);
 
+  void setupEmulation(Emulation emulation);
+
   static void drawScanline_PC_Text_80x25_16Colors(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Text_40x25_16Colors(void * arg, uint8_t * dest, int scanLine);
   static void drawScanline_PC_Graphics_320x200_4Colors(void * arg, uint8_t * dest, int scanLine);
@@ -128,6 +132,8 @@ private:
   int8_t              m_PCGraphicsBackgroundColorIndex; // used as background color index on 320x200
   int8_t              m_PCGraphicsForegroundColorIndex; // used as foreground color index on 640x200
   int8_t              m_PCGraphicsPaletteInUse;         // 0 = palette 0 low intensity, 1 = palette 0 high intensity, 2 = palette 1 low intensity, 3 = palette 2 high intensity
+
+  bool                m_videoEnabled;
 
 };
 

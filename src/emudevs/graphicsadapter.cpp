@@ -89,6 +89,52 @@ static const RGB222 CGAGraphics4ColorsPalette[4][4] = {
 };
 
 
+void GraphicsAdapter::setupEmulation(Emulation emulation)
+{
+  static const struct {
+    bool                 text;
+    FontInfo const *     font;                 // valid when text = true
+    uint8_t              cursorStart;          // valid when text = true
+    uint8_t              cursorEnd;            // valid when text = true
+    uint8_t              scanlinesPerCallback;
+    DrawScanlineCallback scanlineCallback;
+    char const *         modeline;
+    int16_t              viewportWidth;
+    int16_t              viewportHeight;
+  } emulationInfo[] = {
+
+    // Emulation::PC_Text_40x25_16Colors (CGA, Text Mode, 40x25x16)
+    {  true,  &FONT_8x8,  5,  7, 4,      drawScanline_PC_Text_40x25_16Colors, QVGA_320x240_60Hz, 320, 200 },
+
+    // Emulation::PC_Text_80x25_16Colors (CGA, Text Mode, 80x25x16)
+    {  true, &FONT_8x16, 13, 15, 8,      drawScanline_PC_Text_80x25_16Colors,  VGA_640x480_60Hz, 640, 400 },
+
+    // Emulation::PC_Graphics_320x200_4Colors (CGA, Graphics Mode, 320x200x4)
+    { false,    nullptr,  0,  0, 1, drawScanline_PC_Graphics_320x200_4Colors, QVGA_320x240_60Hz, 320, 200 },
+
+    // Emulation::PC_Graphics_640x200_2Colors (CGA, Graphics Mode, 640x200x2)
+    { false,    nullptr,  0,  0, 1, drawScanline_PC_Graphics_640x200_2Colors, VGA_640x240_60Hz,  640, 200 },
+
+    // Emulation::PC_Graphics_HGC_720x348 (Hercules, Graphics Mode, 720x348x2)
+    { false,    nullptr,  0,  0, 2,     drawScanline_PC_Graphics_HGC_720x348, VGA_720x348_59HzD,  -1,  -1 },
+
+  };
+
+  if (emulation != Emulation::None) {
+    auto info = emulationInfo + (int)emulation - 1;
+
+    m_VGADCtrl.setDrawScanlineCallback(info->scanlineCallback, this);
+    m_VGADCtrl.setScanlinesPerCallBack(info->scanlinesPerCallback);
+    m_VGADCtrl.setResolution(info->modeline, info->viewportWidth, info->viewportHeight);
+
+    if (info->text) {
+      setFont(info->font);
+      setCursorShape(info->cursorStart, info->cursorEnd);
+      m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
+      m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
+    }
+  }
+}
 
 
 GraphicsAdapter::GraphicsAdapter()
@@ -105,7 +151,8 @@ GraphicsAdapter::GraphicsAdapter()
     m_bit7blink(true),
     m_PCGraphicsBackgroundColorIndex(0),
     m_PCGraphicsForegroundColorIndex(15),
-    m_PCGraphicsPaletteInUse(0)
+    m_PCGraphicsPaletteInUse(0),
+    m_videoEnabled(true)
 {
   m_font.data = nullptr;
   m_VGADCtrl.begin();
@@ -114,7 +161,7 @@ GraphicsAdapter::GraphicsAdapter()
 
 GraphicsAdapter::~GraphicsAdapter()
 {
-  m_VGADCtrl.end();
+  enableVideo(false);
   cleanupFont();
   freeLUT();
   if (m_cursorGlyph)
@@ -122,74 +169,36 @@ GraphicsAdapter::~GraphicsAdapter()
 }
 
 
-void GraphicsAdapter::enableVideo(bool value)
+bool GraphicsAdapter::enableVideo(bool value)
 {
-  // @TODO: not implemented
+  if (value == m_videoEnabled)
+    return m_videoEnabled;
+
+  m_videoEnabled = value;
+
+  if (m_videoEnabled) {
+    setupEmulation(m_emulation);
+    m_VGADCtrl.run();
+  } else {
+    m_VGADCtrl.end();
+  }
+
+  return !m_videoEnabled;
 }
 
 
 void GraphicsAdapter::setEmulation(Emulation emulation)
 {
   if (m_emulation != emulation) {
-    m_emulation = emulation;
 
-    m_VGADCtrl.end();
+    bool videoWasEnabled = enableVideo(false);
     freeLUT();
 
-    switch (m_emulation) {
-
-      case Emulation::None:
-        //printf("Emulation::None\n");
-        break;
-
-      case Emulation::PC_Text_40x25_16Colors:
-        //printf("Emulation::PC_Text_40x25_16Colors\n");
-        setFont(&FONT_8x8);
-        setCursorShape(5, 7);
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_40x25_16Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(4);
-        m_VGADCtrl.setResolution(QVGA_320x240_60Hz, 320, 200);
-        m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
-        m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
-        break;
-
-      case Emulation::PC_Text_80x25_16Colors:
-        //printf("Emulation::PC_Text_80x25_16Colors\n");
-        setFont(&FONT_8x16);
-        setCursorShape(13, 15);
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Text_80x25_16Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(8);
-        m_VGADCtrl.setResolution(VGA_640x480_60Hz, 640, 400);
-        m_columns = m_VGADCtrl.getViewPortWidth() / m_font.width;
-        m_rows    = m_VGADCtrl.getViewPortHeight() / m_font.height;
-        break;
-
-      case Emulation::PC_Graphics_320x200_4Colors:
-        //printf("Emulation::PC_Graphics_320x200_4Colors\n");
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_320x200_4Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(QVGA_320x240_60Hz, 320, 200);
-        break;
-
-      case Emulation::PC_Graphics_640x200_2Colors:
-        //printf("Emulation::PC_Graphics_640x200_2Colors\n");
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_640x200_2Colors, this);
-        m_VGADCtrl.setScanlinesPerCallBack(1);
-        m_VGADCtrl.setResolution(VGA_640x240_60Hz, 640, 200);
-        break;
-
-      case Emulation::PC_Graphics_HGC_720x348:
-        //printf("Emulation::PC_Graphics_HGC_720x348\n");
-        m_VGADCtrl.setDrawScanlineCallback(drawScanline_PC_Graphics_HGC_720x348, this);
-        m_VGADCtrl.setScanlinesPerCallBack(2);
-        m_VGADCtrl.setResolution(VGA_720x348_59HzD);
-        break;
-
-    }
-
+    m_emulation = emulation;
     if (m_emulation != Emulation::None) {
+      setupEmulation(emulation);
       setupLUT();
-      m_VGADCtrl.run();
+      enableVideo(videoWasEnabled);
     }
   }
 }
