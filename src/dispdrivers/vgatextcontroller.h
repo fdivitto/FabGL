@@ -165,6 +165,7 @@ public:
 
   int getColumns()                         { return VGATextController_COLUMNS; }
   int getRows()                            { return VGATextController_ROWS; }
+  int colorsCount()                        { return 16; }
 
   void enableCursor(bool value)            { m_cursorEnabled = value; }
   void setCursorPos(int row, int col)      { m_cursorRow = row; m_cursorCol = col; m_cursorCounter = 0; }
