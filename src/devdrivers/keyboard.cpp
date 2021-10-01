@@ -49,6 +49,8 @@ int Keyboard::scancodeToVirtualKeyTaskStackSize = FABGLIB_DEFAULT_SCODETOVK_TASK
 
 Keyboard::Keyboard()
   : m_keyboardAvailable(false),
+    m_SCodeToVKConverterTask(nullptr),
+    m_virtualKeyQueue(nullptr),
     m_scancodeSet(2),
     m_lastDeadKey(VK_NONE),
     m_codepage(nullptr)
@@ -58,11 +60,7 @@ Keyboard::Keyboard()
 
 Keyboard::~Keyboard()
 {
-  PS2DeviceLock lock(this);
-  if (m_SCodeToVKConverterTask)
-    vTaskDelete(m_SCodeToVKConverterTask);
-  if (m_virtualKeyQueue)
-    vQueueDelete(m_virtualKeyQueue);
+  enableVirtualKeys(false, false);
 }
 
 
@@ -83,18 +81,11 @@ void Keyboard::begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port)
   m_capsLockLED    = false;
   m_scrollLockLED  = false;
 
-  m_SCodeToVKConverterTask = nullptr;
-  m_virtualKeyQueue        = nullptr;
-
   m_uiApp = nullptr;
 
   reset();
 
-  if (generateVirtualKeys || createVKQueue) {
-    if (createVKQueue)
-      m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(VirtualKeyItem));
-    xTaskCreate(&SCodeToVKConverterTask, "", Keyboard::scancodeToVirtualKeyTaskStackSize, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
-  }
+  enableVirtualKeys(generateVirtualKeys, createVKQueue);
 }
 
 
@@ -103,6 +94,35 @@ void Keyboard::begin(gpio_num_t clkGPIO, gpio_num_t dataGPIO, bool generateVirtu
   PS2Controller::begin(clkGPIO, dataGPIO);
   PS2Controller::setKeyboard(this);
   begin(generateVirtualKeys, createVKQueue, 0);
+}
+
+
+void Keyboard::enableVirtualKeys(bool generateVirtualKeys, bool createVKQueue)
+{
+  PS2DeviceLock lock(this);
+
+  if (createVKQueue)
+    generateVirtualKeys = true;
+
+  // create task and queue?
+
+  if (!m_virtualKeyQueue && createVKQueue)
+    m_virtualKeyQueue = xQueueCreate(FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE, sizeof(VirtualKeyItem));
+
+  if (!m_SCodeToVKConverterTask && generateVirtualKeys)
+    xTaskCreate(&SCodeToVKConverterTask, "", Keyboard::scancodeToVirtualKeyTaskStackSize, this, FABGLIB_SCODETOVK_TASK_PRIORITY, &m_SCodeToVKConverterTask);
+
+  // destroy in reverse order
+
+  if (m_SCodeToVKConverterTask && !generateVirtualKeys) {
+    vTaskDelete(m_SCodeToVKConverterTask);
+    m_SCodeToVKConverterTask = nullptr;
+  }
+
+  if (m_virtualKeyQueue && !createVKQueue) {
+    vQueueDelete(m_virtualKeyQueue);
+    m_virtualKeyQueue = nullptr;
+  }
 }
 
 

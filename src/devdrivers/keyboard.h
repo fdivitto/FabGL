@@ -127,6 +127,19 @@ public:
   void begin(bool generateVirtualKeys, bool createVKQueue, int PS2Port);
 
   /**
+   * @brief Dynamically enables or disables Virtual Keys generation
+   *
+   * This method can be called after begin().
+   *
+   * @param generateVirtualKeys If true creates a task which consumes scancodes and produces virtual keys,
+   *                            so you can call Keyboard.isVKDown(). If False destroys the task.
+   * @param createVKQueue If true creates a task which consunes scancodes to produce virtual keys
+   *                      and put them in a queue, so you can call Keyboard.isVKDown(), Keyboard.virtualKeyAvailable()
+   *                      and Keyboard.getNextVirtualKey(). I False destroys the queue.
+   */
+  void enableVirtualKeys(bool generateVirtualKeys, bool createVKQueue);
+
+  /**
    * @brief Sets current UI app
    *
    * To use this generateVirtualKeys must be true in begin().
@@ -403,7 +416,6 @@ private:
 
   bool                      m_keyboardAvailable;  // self test passed and support for scancode set 2
 
-  // these are valid after a call to generateVirtualKeys(true)
   TaskHandle_t              m_SCodeToVKConverterTask; // Task that converts scancodes to virtual key and populates m_virtualKeyQueue
   QueueHandle_t             m_virtualKeyQueue;
 
