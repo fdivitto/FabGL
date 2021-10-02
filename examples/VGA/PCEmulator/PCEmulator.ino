@@ -37,6 +37,8 @@
 #pragma message "This sketch requires Tools->Partition Scheme = Huge APP"
 
 
+#include <memory>
+
 #include "esp32-hal-psram.h"
 extern "C" {
 #include "esp_spiram.h"
@@ -53,6 +55,8 @@ extern "C" {
 #include "machine.h"
 
 
+
+using std::unique_ptr;
 
 using fabgl::StringList;
 using fabgl::imin;
@@ -292,6 +296,49 @@ char const * getDisk(char const * url)
 }
 
 
+void sysReqCallback()
+{
+  //printf("Free Memory : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+  machine->graphicsAdapter()->enableVideo(false);
+  ibox.begin(VGA_640x480_60Hz, 500, 400, 4);
+  //ibox.setBackgroundColor(RGB888(0, 0, 0));
+
+  int s = ibox.menu("", "Select a command", "Restart;Continue;Mount Disk");
+  switch (s) {
+
+    // Restart
+    case 0:
+      esp_restart();
+      break;
+
+    // Mount Disk
+    case 2:
+    {
+      int s = ibox.select("", "Select Drive", "Floppy A (fd0);Floppy B (fd1)");
+      if (s > -1) {
+        constexpr int MAXNAMELEN = 256;
+        unique_ptr<char[]> dir(new char[MAXNAMELEN + 1] { '/', 'S', 'D', 0 } );
+        unique_ptr<char[]> filename(new char[MAXNAMELEN + 1] { 0 } );
+        if (machine->diskFilename(s))
+          strcpy(filename.get(), machine->diskFilename(s));
+        if (ibox.fileSelector("Select Disk Image", "Image Filename", dir.get(), MAXNAMELEN, filename.get(), MAXNAMELEN) == InputResult::Enter) {
+          machine->setDriveImage(s, filename.get());
+        }
+      }
+      break;
+    }
+
+    // Continue
+    default:
+      break;
+  }
+
+  ibox.end();
+  PS2Controller::keyboard()->enableVirtualKeys(false, false); // don't use virtual keys
+  machine->graphicsAdapter()->enableVideo(true);
+}
+
+
 void setup()
 {
   Serial.begin(115200); delay(500); printf("\n\n\nReset\n\n");// DEBUG ONLY
@@ -428,6 +475,8 @@ void setup()
 
   heap_caps_dump_all();
   */
+
+  machine->setSysReqCallback(sysReqCallback);
 
   machine->run();
 }

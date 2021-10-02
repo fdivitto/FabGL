@@ -99,15 +99,22 @@ Machine::Machine() :
     #ifdef FABGL_EMULATED
     m_stepCallback(nullptr),
     #endif
+    m_diskFilename(),
     m_disk(),
     m_frameBuffer(nullptr),
-    m_bootDrive(0)
+    m_bootDrive(0),
+    m_sysReqCallback(nullptr)
 {
 }
 
 
 Machine::~Machine()
 {
+  for (int i = 0; i < DISKCOUNT; ++i) {
+    free(m_diskFilename[i]);
+    if (m_disk[i])
+      fclose(m_disk[i]);
+  }
   vTaskDelete(m_taskHandle);
   free(s_videoMemory);
 }
@@ -156,6 +163,11 @@ void Machine::setDriveImage(int drive, char const * filename, int cylinders, int
     m_disk[drive] = nullptr;
   }
 
+  if (m_diskFilename[drive]) {
+    free(m_diskFilename[drive]);
+    m_diskFilename[drive] = nullptr;
+  }
+
   m_BIOS.setDriveMediaType(drive, mediaUnknown);
 
   m_diskCylinders[drive] = cylinders;
@@ -163,6 +175,7 @@ void Machine::setDriveImage(int drive, char const * filename, int cylinders, int
   m_diskSectors[drive]   = sectors;
 
   if (filename) {
+    m_diskFilename[drive] = strdup(filename);
     FileBrowser fb;
     fb.setDirectory("/SD");
     m_disk[drive] = fb.openFile(filename, "r+b");
@@ -452,7 +465,7 @@ void Machine::setHGCMode()
 
     // video disabled
     //printf("Hercules, video disabled\n");
-    m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::None);
+    m_graphicsAdapter.enableVideo(false);
 
   } else if ((m_HGCModeReg & HGC_MODECONTROLREG_GRAPHICS) == 0 || (m_HGCSwitchReg & HGC_CONFSWITCH_ALLOWGRAPHICSMODE) == 0) {
 
@@ -462,6 +475,7 @@ void Machine::setHGCMode()
     m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Text_80x25_16Colors);
     m_graphicsAdapter.setBit7Blink(m_HGCModeReg & HGC_MODECONTROLREG_BIT7BLINK);
+    m_graphicsAdapter.enableVideo(true);
 
   } else if ((m_HGCModeReg &HGC_MODECONTROLREG_GRAPHICS)) {
 
@@ -471,6 +485,7 @@ void Machine::setHGCMode()
     m_frameBuffer = s_videoMemory + offset;
     m_graphicsAdapter.setVideoBuffer(m_frameBuffer);
     m_graphicsAdapter.setEmulation(GraphicsAdapter::Emulation::PC_Graphics_HGC_720x348);
+    m_graphicsAdapter.enableVideo(true);
 
   }
 
@@ -756,10 +771,12 @@ bool Machine::resetMachine(void * context)
   return true;
 }
 
-// ESP32 reset using SYSREQ (ALT + PRINTSCREEN)
+// SYSREQ (ALT + PRINTSCREEN)
 bool Machine::sysReq(void * context)
 {
-  esp_restart();
+  auto m = (Machine*)context;
+  if (m->m_sysReqCallback)
+    m->m_sysReqCallback();
   return true;
 }
 

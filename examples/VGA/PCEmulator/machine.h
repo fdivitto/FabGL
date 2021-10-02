@@ -57,6 +57,10 @@ typedef void (*StepCallback)(void *);
 #endif
 
 
+typedef void (*SysReqCallback)();
+
+
+
 class Machine {
 
 public:
@@ -65,31 +69,34 @@ public:
 
   void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
 
-  void setBootDrive(int drive)        { m_bootDrive = drive; }
+  void setBootDrive(int drive)         { m_bootDrive = drive; }
+
+  void setSysReqCallback(SysReqCallback value) { m_sysReqCallback = value; }
 
   void run();
 
-  void trigReset()                    { m_reset = true; }
+  void trigReset()                     { m_reset = true; }
 
-  uint32_t ticksCounter()             { return m_ticksCounter; }
+  uint32_t ticksCounter()              { return m_ticksCounter; }
 
-  i8042 * getI8042()                  { return &m_i8042; }
+  i8042 * getI8042()                   { return &m_i8042; }
 
-  MC146818 * getMC146818()            { return &m_MC146818; }
+  MC146818 * getMC146818()             { return &m_MC146818; }
 
-  uint8_t * memory()                  { return s_memory; }
+  uint8_t * memory()                   { return s_memory; }
 
-  uint8_t * videoMemory()             { return s_videoMemory; }
+  uint8_t * videoMemory()              { return s_videoMemory; }
 
-  uint8_t * frameBuffer()             { return m_frameBuffer; }
+  uint8_t * frameBuffer()              { return m_frameBuffer; }
 
-  GraphicsAdapter * graphicsAdapter() { return &m_graphicsAdapter; }
+  GraphicsAdapter * graphicsAdapter()  { return &m_graphicsAdapter; }
 
-  FILE * disk(int index)              { return m_disk[index]; }
-  uint64_t diskSize(int index)        { return m_diskSize[index]; }
-  uint16_t diskCylinders(int index)   { return m_diskCylinders[index]; }
-  uint8_t diskHeads(int index)        { return m_diskHeads[index]; }
-  uint8_t diskSectors(int index)      { return m_diskSectors[index]; }
+  FILE * disk(int index)               { return m_disk[index]; }
+  char const * diskFilename(int index) { return m_diskFilename[index]; }
+  uint64_t diskSize(int index)         { return m_diskSize[index]; }
+  uint16_t diskCylinders(int index)    { return m_diskCylinders[index]; }
+  uint8_t diskHeads(int index)         { return m_diskHeads[index]; }
+  uint8_t diskSectors(int index)       { return m_diskSectors[index]; }
 
   static void dumpMemory(char const * filename);
   static void dumpInfo(char const * filename);
@@ -151,6 +158,7 @@ private:
 
   // 0, 1 = floppy
   // >= 2 = hard disk
+  char *                   m_diskFilename[DISKCOUNT];
   FILE *                   m_disk[DISKCOUNT];
   uint64_t                 m_diskSize[DISKCOUNT];
   uint16_t                 m_diskCylinders[DISKCOUNT];
@@ -211,6 +219,8 @@ private:
   uint8_t                  m_MCP23S17Sel;
 
   uint8_t                  m_bootDrive;
+
+  SysReqCallback           m_sysReqCallback;
 
 };
 
