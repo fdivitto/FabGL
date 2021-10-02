@@ -275,7 +275,9 @@ struct FileBrowserForm : public InputForm {
 
 struct FileSelectorForm : public InputForm {
   static constexpr int CTRLS_DIST          = 4;
-  static constexpr int BROWSER_HEIGHT      = 242;
+  static constexpr int BROWSER_WIDTH       = 180;
+  static constexpr int BROWSER_HEIGHT      = 150;
+  static constexpr int MINIMUM_EDIT_WIDTH  = 64;
 
   FileSelectorForm(InputBox * inputBox_)
     : InputForm(inputBox_)
@@ -619,7 +621,7 @@ public:
    * @return Dialog box result (Cancel or Enter)
    *
    * Example:
-   * 
+   *
    *     InputBox ib;
    *     ib.begin();
    *     if (FileBrowser::mountSDCard(false, "/SD")) {

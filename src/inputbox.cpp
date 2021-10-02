@@ -791,7 +791,7 @@ void FileSelectorForm::calcRequiredSize()
 {
   labelExtent     = app->canvas()->textExtent(font, labelText);
   editExtent      = imin(maxFilenameLength * app->canvas()->textExtent(font, "M") + 15, app->rootWindow()->clientSize().width - labelExtent);
-  requiredWidth   = imax(requiredWidth, editExtent + labelExtent + CTRLS_DIST);
+  requiredWidth   = imax(requiredWidth, imax(BROWSER_WIDTH, labelExtent + CTRLS_DIST + MINIMUM_EDIT_WIDTH) + CTRLS_DIST);
   requiredHeight += font->height + CTRLS_DIST + BROWSER_HEIGHT;
 }
 
