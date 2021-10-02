@@ -271,6 +271,37 @@ struct FileBrowserForm : public InputForm {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// FileSelectorForm
+
+struct FileSelectorForm : public InputForm {
+  static constexpr int CTRLS_DIST          = 4;
+  static constexpr int BROWSER_HEIGHT      = 242;
+
+  FileSelectorForm(InputBox * inputBox_)
+    : InputForm(inputBox_)
+  {
+  }
+
+  void addControls();
+  void calcRequiredSize();
+  void finalize();
+
+  char const *     labelText;
+  char *           inOutDirectory;
+  int              maxDirectoryLength;
+  char *           inOutFilename;
+  int              maxFilenameLength;
+
+  int              editExtent;
+  int              labelExtent;
+
+  uiTextEdit *     edit;
+  uiFileBrowser *  fileBrowser;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // InputBox
 
 
@@ -572,6 +603,34 @@ public:
    *     ib.end();
    */
   InputResult folderBrowser(char const * titleText, char const * directory = "/", char const * buttonOKText = "Close");
+
+  /**
+   * @brief Selects a file and directory starting from the specified path
+   *
+   * @param titleText Optional title of the dialog (nullptr = the dialogs hasn't a title)
+   * @param messageText Message to show
+   * @param inOutDirectory Starting directory as input, selected directory as output
+   * @param maxDirectoryLength Maximum length of directory buffer (not including ending zero)
+   * @param inOutFilename Initial filename as input, selected filename as output
+   * @param maxFilenameLength Maximum length of filename buffer (not including ending zero)
+   * @param buttonCancelText Optional text for CANCEL button (nullptr = hasn't CANCEL button). Default is "Cancel".
+   * @param buttonOKText Optional text for OK button (nullptr = hasn't OK button). Default is "OK".
+   *
+   * @return Dialog box result (Cancel or Enter)
+   *
+   * Example:
+   * 
+   *     InputBox ib;
+   *     ib.begin();
+   *     if (FileBrowser::mountSDCard(false, "/SD")) {
+   *       char filename[16] = "";
+   *       char directory[32] = "/SD"
+   *       if (ib.fileSelector("File Select", "Filename: ", directory, sizeof(directory) - 1, filename, sizeof(filename) - 1) == InputResult::Enter)
+   *         ib.messageFmt("", nullptr, "OK", "Folder = %s, File = %s", directory, filename);
+   *     }
+   *     ib.end();
+   */
+  InputResult fileSelector(char const * titleText, char const * messageText, char * inOutDirectory, int maxDirectoryLength, char * inOutFilename, int maxFilenameLength, char const * buttonCancelText = "Cancel", char const * buttonOKText = "OK");
 
 
   // delegates

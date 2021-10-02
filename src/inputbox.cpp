@@ -32,6 +32,7 @@
 #include "dispdrivers/vga8controller.h"
 #include "dispdrivers/vga16controller.h"
 
+#include "devdrivers/keyboard.h"
 #include "inputbox.h"
 
 
@@ -86,6 +87,8 @@ void InputBox::begin(char const * modeline, int viewPortWidth, int viewPortHeigh
   // setup keyboard and mouse
   if (!PS2Controller::initialized())
     PS2Controller::begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
+  else
+    PS2Controller::keyboard()->enableVirtualKeys(true, true);
 }
 
 
@@ -286,6 +289,28 @@ InputResult InputBox::folderBrowser(char const * titleText, char const * directo
   form.buttonText[B_OK]     = buttonOKText;
   form.autoOK               = 0;  // no timeout supported here
   form.directory            = directory;
+
+  exec(&form);
+
+  m_lastResult = form.retval;
+  return form.retval;
+}
+
+
+InputResult InputBox::fileSelector(char const * titleText, char const * messageText, char * inOutDirectory, int maxDirectoryLength, char * inOutFilename, int maxFilenameLength, char const * buttonCancelText, char const * buttonOKText)
+{
+  FileSelectorForm form(this);
+  form.titleText            = titleText;
+  form.labelText            = messageText;
+  form.inOutDirectory       = inOutDirectory;
+  form.maxDirectoryLength   = maxDirectoryLength;
+  form.inOutFilename        = inOutFilename;
+  form.maxFilenameLength    = maxFilenameLength;
+  form.buttonText[B_CANCEL] = buttonCancelText;
+  form.buttonText[B_OK]     = buttonOKText;
+  form.autoOK               = 0;  // no timeout supported here
+
+  form.setExtButtons(m_extButtonText);
 
   exec(&form);
 
@@ -753,6 +778,72 @@ void FileBrowserForm::addControls()
 
 void FileBrowserForm::finalize()
 {
+  doExit(0);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// FileSelectorForm
+
+
+void FileSelectorForm::calcRequiredSize()
+{
+  labelExtent     = app->canvas()->textExtent(font, labelText);
+  editExtent      = imin(maxFilenameLength * app->canvas()->textExtent(font, "M") + 15, app->rootWindow()->clientSize().width - labelExtent);
+  requiredWidth   = imax(requiredWidth, editExtent + labelExtent + CTRLS_DIST);
+  requiredHeight += font->height + CTRLS_DIST + BROWSER_HEIGHT;
+}
+
+
+void FileSelectorForm::addControls()
+{
+  mainFrame->frameProps().resizeable        = true;
+  mainFrame->frameProps().hasMaximizeButton = true;
+
+  int x = mainFrame->clientPos().X + CTRLS_DIST;
+  int y = mainFrame->clientPos().Y + CTRLS_DIST;
+
+  new uiLabel(mainFrame, labelText, Point(x, y + 4));
+
+  edit = new uiTextEdit(mainFrame, inOutFilename, Point(x + labelExtent + CTRLS_DIST, y), Size(mainFrame->clientSize().width - labelExtent - x - CTRLS_DIST - 1, font->height + 6));
+  edit->anchors().right = true;
+
+  y += edit->size().height + CTRLS_DIST;
+
+  fileBrowser = new uiFileBrowser(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - x - 1, mainFrame->clientSize().height - panel->size().height - y + CTRLS_DIST * 2 ));
+  fileBrowser->anchors().right  = true;
+  fileBrowser->anchors().bottom = true;
+  fileBrowser->setDirectory(inOutDirectory);
+  fileBrowser->onChange = [&]() {
+    if (!fileBrowser->isDirectory()) {
+      edit->setText(fileBrowser->filename());
+      edit->repaint();
+    }
+  };
+  fileBrowser->onDblClick = [&]() {
+    if (!fileBrowser->isDirectory()) {
+      retval = InputResult::Enter;
+      finalize();
+    }
+  };
+
+  controlToFocus = edit;
+}
+
+
+void FileSelectorForm::finalize()
+{
+  if (retval == InputResult::Enter) {
+    // filename
+    int len = imin(maxFilenameLength, strlen(edit->text()));
+    memcpy(inOutFilename, edit->text(), len);
+    inOutFilename[len] = 0;
+    // directory
+    len = imin(maxDirectoryLength, strlen(fileBrowser->directory()));
+    memcpy(inOutDirectory, fileBrowser->directory(), len);
+    inOutDirectory[len] = 0;
+  }
   doExit(0);
 }
 
