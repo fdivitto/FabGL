@@ -203,7 +203,7 @@ void updateDateTime()
         delay(500);
       }
       sntp_stop();
-      ibox.setAutoOK(3);
+      ibox.setAutoOK(2);
       ibox.message("", "Date and Time updated. Restarting...");
       esp_restart();
     });
@@ -288,7 +288,7 @@ char const * getDisk(char const * url)
       }
     } else {
       // this is just a file
-      if (fb.exists(url, false))
+      if (fb.filePathExists(url))
         filename = url;
     }
   }
@@ -385,7 +385,7 @@ void setup()
 
   // show a list of machine configurations allowing edit
 
-  ibox.setAutoOK(8);
+  ibox.setAutoOK(6);
   int idx = preferences.getInt("dconf", 0);
 
   for (bool showDialog = true; showDialog; ) {
@@ -453,7 +453,7 @@ void setup()
 
   if (wifiConnected) {
     // disk downloaded from the Internet, need to reboot to fully disable wifi
-    ibox.setAutoOK(3);
+    ibox.setAutoOK(2);
     ibox.message("", "Disks downloaded. Restarting...");
     esp_restart();
   }

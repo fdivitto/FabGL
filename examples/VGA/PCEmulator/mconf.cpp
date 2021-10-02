@@ -355,13 +355,22 @@ struct ConfigDialog : public uiApp {
   }
 
 
-  // @TODO: support files stored in subfolders!!
   void browseFilename(uiTextEdit * edit) {
     unique_ptr<char[]> dir(new char[MAXVALUELENGTH + 1] { '/', 'S', 'D', 0 } );
     unique_ptr<char[]> filename(new char[MAXVALUELENGTH + 1]);
     strcpy(filename.get(), edit->text());
+    // does filename contain a path?
+    auto p = strrchr(filename.get(), '/');
+    if (p) {
+      // yes, move it into "dir"
+      strncat(dir.get(), filename.get(), p - filename.get());
+      memmove(filename.get(), p + 1, strlen(p + 1) + 1);
+    }
     if (fileDialog("Select drive image", dir.get(), MAXVALUELENGTH, filename.get(), MAXVALUELENGTH, "OK", "Cancel") == uiMessageBoxResult::ButtonOK) {
-      edit->setText(filename.get());
+      if (strlen(dir.get()) > 4)
+        edit->setTextFmt("%s/%s", dir.get() + 4, filename.get()); // bypass "/SD/"
+      else
+        edit->setText(filename.get());
       edit->repaint();
     }
   }
@@ -433,7 +442,7 @@ struct ConfigDialog : public uiApp {
         auto buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
         constexpr int BUFSIZE = 4096;
         memset(buf, 0, BUFSIZE);
-        FileBrowser fb("/SD");
+        FileBrowser fb(dir.get());
         auto file = fb.openFile(filename.get(), "wb");
         const int totSize = hdSize * 1048576;
         for (int sz = totSize; sz > 0; ) {
@@ -444,8 +453,8 @@ struct ConfigDialog : public uiApp {
         fclose(file);
       });
     } else {
-      // Floppy Disk
-      createEmptyDiskImage(&ib, s, filename.get());
+      // FAT Formatted Floppy Disk
+      createFATFloppyImage(&ib, s, dir.get(), filename.get());
     }
 
   }
@@ -528,6 +537,7 @@ void drawInfo(Canvas * canvas)
 }
 
 
+// Create FAT formatted floppy image
 // diskType:
 //   0 = 320
 //   1 = 360
@@ -535,7 +545,8 @@ void drawInfo(Canvas * canvas)
 //   3 = 1200
 //   4 = 1440
 //   5 = 2880
-bool createEmptyDiskImage(InputBox * ibox, int diskType, char const * filename)
+// directory: absolute path (includes mounting point, ie "/SD/..."
+bool createFATFloppyImage(InputBox * ibox, int diskType, char const * directory, char const * filename)
 {
   // boot sector for: 320K, 360K, 720K, 1440K, 2880K
   static const uint8_t BOOTSECTOR_WIN[512] = {
@@ -630,8 +641,7 @@ bool createEmptyDiskImage(InputBox * ibox, int diskType, char const * filename)
     { 0xf0, 9, 24 },   // 2880K
   };
 
-  FileBrowser fb;
-  fb.setDirectory("/SD");
+  FileBrowser fb(directory);
   auto file = fb.openFile(filename, "wb");
 
   if (file) {
