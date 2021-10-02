@@ -142,9 +142,22 @@ void loop()
     path = "/Flash";
   if (path) {
     ib.folderBrowser("Folder Browser", path);
+  }
+
+
+  ////////////////////////////////////////////////////
+  // File Select
+  if (path) {
+    char filename[16] = "";
+    char directory[32];
+    strcpy(directory, path);
+    if (ib.fileSelector("File Select", "Filename: ", directory, sizeof(directory) - 1, filename, sizeof(filename) - 1) == InputResult::Enter) {
+      ib.messageFmt("", nullptr, "OK", "Folder = %s, File = %s", directory, filename);
+    }
     FileBrowser::unmountSDCard();
     FileBrowser::unmountSPIFFS();
   }
+
 
   ////////////////////////////////////////////////////
   // Example WiFi connection wizard
