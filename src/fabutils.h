@@ -587,12 +587,25 @@ public:
   /**
    * @brief Determines if a file or directory exists
    *
+   * This method compare the specified filename with names of current directory.
+   *
    * @param name Relative file or directory name
    * @param caseSensitive If true (default) comparison is case sensitive
    *
    * @return True if the file exists
    */
   bool exists(char const * name, bool caseSensitive = true);
+
+  /**
+   * @brief Determines if a file exists
+   *
+   * This method tries to open the specified file and return true on success.
+   *
+   * @param filepath File path (directory + filename) to test for existence
+   *
+   * @return True if the file exists
+   */
+  bool filePathExists(char const * filepath);
 
   /**
    * @brief Determines file size

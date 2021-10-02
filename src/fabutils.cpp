@@ -757,6 +757,15 @@ bool FileBrowser::exists(char const * name, bool caseSensitive)
 }
 
 
+bool FileBrowser::filePathExists(char const * filepath)
+{
+  auto f = openFile(filepath, "rb");
+  if (f)
+    fclose(f);
+  return f != nullptr;
+}
+
+
 size_t FileBrowser::fileSize(char const * name)
 {
   size_t size = 0;
