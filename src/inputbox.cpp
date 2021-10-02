@@ -773,6 +773,22 @@ void FileBrowserForm::addControls()
       }
     }
   };
+
+  y += SIDE_BUTTONS_HEIGHT + CTRLS_DIST;
+
+  copyButton = new uiButton(mainFrame, "Copy", Point(x, y), Size(SIDE_BUTTONS_WIDTH, SIDE_BUTTONS_HEIGHT));
+  copyButton->anchors().left  = false;
+  copyButton->anchors().right = true;
+  copyButton->onClick = [&]() { doCopy(); };
+
+  y += SIDE_BUTTONS_HEIGHT + CTRLS_DIST;
+
+  pasteButton = new uiButton(mainFrame, "Paste", Point(x, y), Size(SIDE_BUTTONS_WIDTH, SIDE_BUTTONS_HEIGHT));
+  pasteButton->anchors().left  = false;
+  pasteButton->anchors().right = true;
+  pasteButton->onClick = [&]() { doPaste(); };
+  app->showWindow(pasteButton, false);
+
 }
 
 
@@ -780,6 +796,67 @@ void FileBrowserForm::finalize()
 {
   doExit(0);
 }
+
+
+void FileBrowserForm::doCopy()
+{
+  if (!fileBrowser->isDirectory()) {
+    if (srcDirectory)
+      free(srcDirectory);
+    if (srcFilename)
+      free(srcFilename);
+    srcDirectory = strdup(fileBrowser->directory());
+    srcFilename  = strdup(fileBrowser->filename());
+    app->showWindow(pasteButton, true);
+  }
+}
+
+
+void FileBrowserForm::doPaste()
+{
+  if (strcmp(srcDirectory, fileBrowser->content().directory()) == 0) {
+    app->messageBox("", "Please select a different folder", "OK",  nullptr, nullptr, uiMessageBoxIcon::Error);
+    return;
+  }
+  FileBrowser fb_src(srcDirectory);
+  auto fileSize = fb_src.fileSize(srcFilename);
+  auto src = fb_src.openFile(srcFilename, "rb");
+  if (!src) {
+    app->messageBox("", "Unable to find source file", "OK",  nullptr, nullptr, uiMessageBoxIcon::Error);
+    return;
+  }
+  if (fileBrowser->content().exists(srcFilename, false)) {
+    if (app->messageBox("", "Overwrite file?", "Yes", "No", nullptr, uiMessageBoxIcon::Question) != uiMessageBoxResult::ButtonOK)
+      return;
+  }
+  auto dst = fileBrowser->content().openFile(srcFilename, "wb");
+
+  auto bytesToCopy = fileSize;
+
+  InputBox ib(app);
+  ib.progressBox("Copying", "Abort", true, app->canvas()->getWidth() * 2 / 3, [&](fabgl::ProgressForm * form) {
+    constexpr int BUFLEN = 4096;
+    unique_ptr<uint8_t[]> buf(new uint8_t[BUFLEN]);
+    while (bytesToCopy > 0) {
+      auto r = fread(buf.get(), 1, imin(BUFLEN, bytesToCopy), src);
+      fwrite(buf.get(), 1, r, dst);
+      bytesToCopy -= r;
+      if (r == 0)
+        break;
+      if (!form->update((int)((double)(fileSize - bytesToCopy) / fileSize * 100), "Writing %s (%d / %d bytes)", srcFilename, (fileSize - bytesToCopy), fileSize))
+        break;
+    }
+  });
+
+  fclose(dst);
+  fclose(src);
+  if (bytesToCopy > 0) {
+    fileBrowser->content().remove(srcFilename);
+    app->messageBox("", "File not copied", "OK",  nullptr, nullptr, uiMessageBoxIcon::Error);
+  }
+  fileBrowser->update();
+}
+
 
 
 

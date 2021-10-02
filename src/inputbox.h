@@ -255,6 +255,12 @@ struct FileBrowserForm : public InputForm {
     : InputForm(inputBox_)
   {
   }
+  ~FileBrowserForm() {
+    free(srcDirectory);
+    free(srcFilename);
+  }
+  void doCopy();
+  void doPaste();
 
   void addControls();
   void calcRequiredSize();
@@ -262,10 +268,15 @@ struct FileBrowserForm : public InputForm {
 
   char const *    directory;
 
+  char *          srcDirectory = nullptr;
+  char *          srcFilename  = nullptr;
+
   uiFileBrowser * fileBrowser;
   uiButton *      newFolderButton;
   uiButton *      renameButton;
   uiButton *      deleteButton;
+  uiButton *      copyButton;
+  uiButton *      pasteButton;
 };
 
 
