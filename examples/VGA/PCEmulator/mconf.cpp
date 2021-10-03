@@ -363,6 +363,7 @@ struct ConfigDialog : public uiApp {
     auto p = strrchr(filename.get(), '/');
     if (p) {
       // yes, move it into "dir"
+      strcat(dir.get(), "/");
       strncat(dir.get(), filename.get(), p - filename.get());
       memmove(filename.get(), p + 1, strlen(p + 1) + 1);
     }
