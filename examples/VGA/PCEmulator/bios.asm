@@ -1551,10 +1551,7 @@ int10_write_char_tty:
   mov    ds, ax
   pop    ax
 
-  ; reset page if >7. Some MSDOS versions write wrong values in BH (page)
-  cmp    bh, 8
-  jl     int10_write_char_tty_1
-  mov    bh, 0
+  mov    bh, [disp_page-bios_data]
 
 int10_write_char_tty_1:
   cmp    byte [vid_mode-bios_data], 0x00
