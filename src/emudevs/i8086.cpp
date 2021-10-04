@@ -1784,40 +1784,100 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       //printf("CPU HALT, IP = %04X:%04X, AX = %04X, BX = %04X, CX = %04X, DX = %04X\n", regs16[REG_CS], reg_ip, regs16[REG_AX], regs16[REG_BX], regs16[REG_CX], regs16[REG_DX]);
       s_halted = true;
       return; // no calc ip, no flags
-    /*
     case 51: // 80186, NEC V20: ENTER
-      printf("80186, NEC V20: ENTER\n");
+    {
+      //printf("80186, NEC V20: ENTER\n");
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_BP];
+      uint16_t framePtr = regs16[REG_SP];
+      int16_t level = i_data2 & 31;
+      if (level > 0) {
+        while (--level) {
+          regs16[REG_BP] -= 2;
+          regs16[REG_SP] -= 2;
+          MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = MEM16(16 * regs16[REG_SS] + regs16[REG_BP]);
+        }
+        regs16[REG_SP] -= 2;
+        MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = framePtr;
+      }
+      regs16[REG_BP]  = framePtr;
+      regs16[REG_SP] -= i_data0;
       break;
+    }
     case 52: // 80186, NEC V20: LEAVE
-      printf("80186, NEC V20: LEAVE\n");
+      //printf("80186, NEC V20: LEAVE\n");
+      regs16[REG_SP] = regs16[REG_BP];
+      regs16[REG_BP] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
       break;
     case 53: // 80186, NEC V20: PUSHA
-      printf("80186, NEC V20: PUSHA\n");
+    {
+      //printf("80186, NEC V20: PUSHA\n");
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_AX];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_CX];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_DX];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_BX];
+      uint16_t sp = regs16[REG_SP];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = sp;
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_BP];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_SI];
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_DI];
       break;
+    }
     case 54: // 80186, NEC V20: POPA
-      printf("80186, NEC V20: POPA\n");
+    {
+      //printf("80186, NEC V20: POPA\n");
+      regs16[REG_DI] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_SI] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_BP] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_SP] += 2;  // SP
+      regs16[REG_BX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_DX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_CX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
+      regs16[REG_AX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      regs16[REG_SP] += 2;
       break;
+    }
     case 55: // 80186: BOUND
-      printf("80186: BOUND\n");
+      printf("80186: BOUND - not implemented!\n");
       break;
     case 56: // 80186, NEC V20: PUSH imm16
-      printf("80186, NEC V20: PUSH imm16\n");
+      //printf("80186, NEC V20: PUSH imm16\n");
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = i_data0;
       break;
     case 57: // 80186, NEC V20: PUSH imm8
-      printf("80186, NEC V20: PUSH imm8\n");
+      //printf("80186, NEC V20: PUSH imm8\n");
+      regs16[REG_SP] -= 2;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = i_data0 & 0xff;
       break;
     case 58: // 80186 IMUL
-      printf("80186 IMUL\n");
+      printf("80186 IMUL - not implemented!\n");
       break;
     case 59: // 80186: INSB INSW
-      printf("80186: INSB INSW\n");
+      printf("80186: INSB INSW - not implemented!\n");
       break;
     case 60: // 80186: OUTSB OUTSW
-      printf("80186: OUTSB OUTSW\n");
+      printf("80186: OUTSB OUTSW - not implemented!\n");
       break;
     case 69: // 8087 MATH Coprocessor
-      printf("8087 MATH Coprocessor %02X %02X %02X %02X\n", opcode_stream[0], opcode_stream[1], opcode_stream[2], opcode_stream[3]);
+      printf("8087 MATH Coprocessor %02X %02X %02X %02X - not implemented!\n", opcode_stream[0], opcode_stream[1], opcode_stream[2], opcode_stream[3]);
       break;
+    /*
     case 70: // 80286+
       printf("80286+\n");
       break;
