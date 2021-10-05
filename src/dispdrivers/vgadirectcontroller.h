@@ -132,6 +132,31 @@ public:
   void setScanlinesPerCallBack(int value)    { m_linesCount = value * 2; }
 
   /**
+   * @brief Sets a scanline buffer
+   *
+   * @param scanline Scanline index (0 up to screen height minus one)
+   * @param lineBuffer Scanline buffer (must be DMA memory)
+   */
+  void setScanlineBuffer(int scanline, uint8_t volatile * lineBuffer);
+
+  /**
+   * @brief Gets current scanline buffer
+   *
+   * @param scanline Scanline index (0 up to screen height minus one)
+   */
+  uint8_t volatile * getScanlineBuffer(int scanline);
+
+  /**
+   * @brief Gets default scanline buffer
+   *
+   * VGADirectController automatically alocates a number of scanline buffers. The number
+   * of scanline buffers allocated is determined by setScanlinesPerCallBack() multipled by 2. The default is 2.
+   *
+   * @param scanline Scanline index (0 up to screen height minus one)
+   */
+  uint8_t volatile * getDefaultScanlineBuffer(int scanline);
+
+  /**
    * @brief Determines if retracing is in progress
    *
    * @return True when retracing (vertical sync) is active
@@ -210,6 +235,7 @@ private:
   static volatile int          s_scanLine;
   static lldesc_t volatile *   s_frameResetDesc;
   static bool                  s_VSync;
+  static lldesc_t volatile * * s_DMALines;
 
   int32_t                      m_linesCount;
   uint8_t *  *                 m_lines;

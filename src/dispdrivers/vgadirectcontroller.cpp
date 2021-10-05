@@ -63,6 +63,7 @@ VGADirectController *    VGADirectController::s_instance = nullptr;
 volatile int             VGADirectController::s_scanLine;
 lldesc_t volatile *      VGADirectController::s_frameResetDesc;
 bool                     VGADirectController::s_VSync;
+lldesc_t volatile * *    VGADirectController::s_DMALines = nullptr;
 
 
 
@@ -89,6 +90,7 @@ void VGADirectController::allocateViewPort()
   m_lines[0] = (uint8_t*) heap_caps_malloc(m_viewPortWidth * m_linesCount, MALLOC_CAP_DMA);
   for (int i = 1; i < m_linesCount; ++i)
     m_lines[i] = m_lines[0] + i * m_viewPortWidth;
+  s_DMALines = new lldesc_t volatile *[m_viewPortHeight];
 }
 
 
@@ -99,6 +101,7 @@ void VGADirectController::freeViewPort()
   heap_caps_free((void*)m_lines[0]);
   heap_caps_free((void*)m_lines);
   m_lines = nullptr;
+  delete s_DMALines;
 }
 
 
@@ -135,6 +138,8 @@ void VGADirectController::run()
 void VGADirectController::onSetupDMABuffer(lldesc_t volatile * buffer, bool isStartOfVertFrontPorch, int scan, bool isVisible, int visibleRow)
 {
   if (isVisible) {
+    s_DMALines[visibleRow] = buffer;
+
     buffer->buf = (uint8_t *) m_lines[visibleRow % m_linesCount];
 
     // generate interrupt every half m_linesCount
@@ -144,6 +149,24 @@ void VGADirectController::onSetupDMABuffer(lldesc_t volatile * buffer, bool isSt
       buffer->eof = 1;
     }
   }
+}
+
+
+void VGADirectController::setScanlineBuffer(int scanline, uint8_t volatile * lineBuffer)
+{
+  s_DMALines[scanline]->buf = lineBuffer;
+}
+
+
+uint8_t volatile * VGADirectController::getScanlineBuffer(int scanline)
+{
+  return s_DMALines[scanline]->buf;
+}
+
+
+uint8_t volatile * VGADirectController::getDefaultScanlineBuffer(int scanline)
+{
+  return m_lines[scanline % m_linesCount];
 }
 
 
