@@ -30,14 +30,16 @@
 fabgl::VGADirectController DisplayController;
 
 
-volatile double      objX    = 300;
-volatile double      objY    = 200;
-static double        objDir  = 0.3;
-static double        objVel  =  10;
-static constexpr int objSize =  25;
+volatile double      objX                 = 300;
+volatile double      objY                 = 200;
+static double        objDir               = 0.3;
+static double        objVel               =  10;
+static constexpr int objSize              =  25;
+static uint32_t      bgParkMillerState    = 1;
+static constexpr int borderSize           = 20;
+constexpr int        scanlinesPerCallback = 2;  // screen height should be divisible by this value
+
 static TaskHandle_t  mainTaskHandle;
-static uint32_t      bgParkMillerState = 1;
-static constexpr int borderSize = 20;
 
 
 // just to avoid floating point calculations inside MyDirectDrawVGAController::drawScanline()
@@ -57,25 +59,35 @@ void IRAM_ATTR drawScanline(void * arg, uint8_t * dest, int scanLine)
   auto fgcolor = DisplayController.createRawPixel(RGB222(3, 0, 0)); // red
   auto bgcolor = DisplayController.createRawPixel(RGB222(0, 0, 2)); // blue
 
-  // fill upper and lower border with random background color
-  if (scanLine < borderSize || scanLine > DisplayController.getScreenHeight() - borderSize)
-    bgcolor = DisplayController.createRawPixel(RGB222(fastRandom(), fastRandom(), fastRandom()));
+  auto width  = DisplayController.getScreenWidth();
+  auto height = DisplayController.getScreenHeight();
 
-  auto width = DisplayController.getScreenWidth();
+  // draws "scanlinesPerCallback" scanlines every time drawScanline() is called
+  for (int i = 0; i < scanlinesPerCallback; ++i) {
 
-  // fill line with background color
-  memset(dest, bgcolor, width);
+    // fill upper and lower border with random background color
+    if (scanLine < borderSize || scanLine > height - borderSize)
+      bgcolor = DisplayController.createRawPixel(RGB222(fastRandom(), fastRandom(), fastRandom()));
 
-  // fill object with foreground color
-  if (scanLine >= objIntY - objSize / 2 && scanLine <= objIntY + objSize / 2) {
-    for (int col = objIntX - objSize / 2; col < objIntX + objSize / 2; ++col) {
-      if (col >= 0 && col < width) {
-        VGA_PIXELINROW(dest, col) = fgcolor;
+    // fill line with background color
+    memset(dest, bgcolor, width);
+
+    // fill object with foreground color
+    if (scanLine >= objIntY - objSize / 2 && scanLine <= objIntY + objSize / 2) {
+      for (int col = objIntX - objSize / 2; col < objIntX + objSize / 2; ++col) {
+        if (col >= 0 && col < width) {
+          VGA_PIXELINROW(dest, col) = fgcolor;
+        }
       }
     }
+
+    // go to next scanline
+    ++scanLine;
+    dest += width;
+
   }
 
-  if (scanLine == DisplayController.getScreenHeight() - 1) {
+  if (scanLine == height) {
     // signal end of screen
     vTaskNotifyGiveFromISR(mainTaskHandle, NULL);
   }
@@ -89,6 +101,7 @@ void setup()
   mainTaskHandle = xTaskGetCurrentTaskHandle();
 
   DisplayController.begin();
+  DisplayController.setScanlinesPerCallBack(scanlinesPerCallback);
   DisplayController.setDrawScanlineCallback(drawScanline);
   DisplayController.setResolution(VGA_640x480_60Hz);
 }
