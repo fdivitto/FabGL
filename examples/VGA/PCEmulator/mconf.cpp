@@ -443,8 +443,7 @@ struct ConfigDialog : public uiApp {
         auto buf = (uint8_t*) SOC_EXTRAM_DATA_LOW; // use PSRAM as buffer
         constexpr int BUFSIZE = 4096;
         memset(buf, 0, BUFSIZE);
-        FileBrowser fb(dir.get());
-        auto file = fb.openFile(filename.get(), "wb");
+        auto file = FileBrowser(dir.get()).openFile(filename.get(), "wb");
         const int totSize = hdSize * 1048576;
         for (int sz = totSize; sz > 0; ) {
           sz -= fwrite(buf, 1, imin(BUFSIZE, sz), file);
@@ -471,7 +470,7 @@ struct ConfigDialog : public uiApp {
 
 void loadMachineConfiguration(MachineConf * mconf)
 {
-  FileBrowser fb("/SD");
+  FileBrowser fb(SD_MOUNT_PATH);
 
   // saves a default configuration file if necessary
   if (!fb.exists(MACHINE_CONF_FILENAME, false)) {
@@ -489,9 +488,7 @@ void loadMachineConfiguration(MachineConf * mconf)
 
 void saveMachineConfiguration(MachineConf * mconf)
 {
-  FileBrowser fb("/SD");
-
-  auto confFile = fb.openFile(MACHINE_CONF_FILENAME, "wb");
+  auto confFile = FileBrowser(SD_MOUNT_PATH).openFile(MACHINE_CONF_FILENAME, "wb");
   mconf->saveToFile(confFile);
   fclose(confFile);
 }
@@ -642,8 +639,7 @@ bool createFATFloppyImage(InputBox * ibox, int diskType, char const * directory,
     { 0xf0, 9, 24 },   // 2880K
   };
 
-  FileBrowser fb(directory);
-  auto file = fb.openFile(filename, "wb");
+  auto file = FileBrowser(directory).openFile(filename, "wb");
 
   if (file) {
 

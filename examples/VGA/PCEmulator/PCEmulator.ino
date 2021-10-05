@@ -69,12 +69,12 @@ InputBox      ibox;
 Machine     * machine;
 
 
-// noinit!
+// noinit! Used to maintain datetime between reboots
 __NOINIT_ATTR static timeval savedTimeValue;
 
 
 static bool wifiConnected = false;
-static bool downloadOK = false;
+static bool downloadOK    = false;
 
 
 // try to connected using saved parameters
@@ -267,7 +267,7 @@ bool downloadURL(char const * URL, FILE * file)
 // return filename if successfully downloaded or already exist
 char const * getDisk(char const * url)
 {
-  FileBrowser fb("/SD");
+  FileBrowser fb(SD_MOUNT_PATH);
 
   char const * filename = nullptr;
   if (url) {
@@ -296,6 +296,7 @@ char const * getDisk(char const * url)
 }
 
 
+// user pressed SYSREQ (ALT + PRINTSCREEN)
 void sysReqCallback()
 {
   machine->graphicsAdapter()->enableVideo(false);
@@ -370,7 +371,7 @@ void setup()
   esp_spiram_init_cache();
   #endif
 
-  if (!FileBrowser::mountSDCard(false, "/SD", 8))   // @TODO: reduce to 4?
+  if (!FileBrowser::mountSDCard(false, SD_MOUNT_PATH, 8))   // @TODO: reduce to 4?
     ibox.message("Error!", "This app requires a SD-CARD!", nullptr, nullptr);
 
   // uncomment to format SD!
@@ -383,7 +384,7 @@ void setup()
   // machine configurations
   MachineConf mconf;
 
-  // show a list of machine configurations allowing edit
+  // show a list of machine configurations
 
   ibox.setAutoOK(6);
   int idx = preferences.getInt("dconf", 0);
@@ -408,7 +409,7 @@ void setup()
     switch (r) {
       case InputResult::ButtonExt0:
         // Browse Files
-        ibox.folderBrowser("Browse Files", "/SD");
+        ibox.folderBrowser("Browse Files", SD_MOUNT_PATH);
         break;
       case InputResult::ButtonExt1:
         // Edit
@@ -461,6 +462,8 @@ void setup()
   ibox.end();
 
   machine = new Machine;
+
+  machine->setBaseDirectory(SD_MOUNT_PATH);
   for (int i = 0; i < DISKCOUNT; ++i)
     machine->setDriveImage(i, diskFilename[i], conf->cylinders[i], conf->heads[i], conf->sectors[i]);
 

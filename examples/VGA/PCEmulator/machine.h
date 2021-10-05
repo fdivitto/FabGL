@@ -67,9 +67,11 @@ public:
   Machine();
   ~Machine();
 
+  void setBaseDirectory(char const * value)    { m_baseDir = value; }
+
   void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
 
-  void setBootDrive(int drive)         { m_bootDrive = drive; }
+  void setBootDrive(int drive)                 { m_bootDrive = drive; }
 
   void setSysReqCallback(SysReqCallback value) { m_sysReqCallback = value; }
 
@@ -98,8 +100,8 @@ public:
   uint8_t diskHeads(int index)         { return m_diskHeads[index]; }
   uint8_t diskSectors(int index)       { return m_diskSectors[index]; }
 
-  static void dumpMemory(char const * filename);
-  static void dumpInfo(char const * filename);
+  void dumpMemory(char const * filename);
+  void dumpInfo(char const * filename);
 
   #ifdef FABGL_EMULATED
   void setStepCallback(StepCallback value)  { m_stepCallback = value; }
@@ -221,6 +223,8 @@ private:
   uint8_t                  m_bootDrive;
 
   SysReqCallback           m_sysReqCallback;
+
+  char const *             m_baseDir;
 
 };
 

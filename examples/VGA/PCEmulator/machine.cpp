@@ -103,7 +103,8 @@ Machine::Machine() :
     m_disk(),
     m_frameBuffer(nullptr),
     m_bootDrive(0),
-    m_sysReqCallback(nullptr)
+    m_sysReqCallback(nullptr),
+    m_baseDir(nullptr)
 {
 }
 
@@ -176,9 +177,7 @@ void Machine::setDriveImage(int drive, char const * filename, int cylinders, int
 
   if (filename) {
     m_diskFilename[drive] = strdup(filename);
-    FileBrowser fb;
-    fb.setDirectory("/SD");
-    m_disk[drive] = fb.openFile(filename, "r+b");
+    m_disk[drive] = FileBrowser(m_baseDir).openFile(filename, "r+b");
     if (m_disk[drive]) {
 
       // get image file size
@@ -938,9 +937,7 @@ void Machine::speakerEnableDisable()
 void Machine::dumpMemory(char const * filename)
 {
   constexpr int BLOCKLEN = 1024;
-  FileBrowser fb;
-  fb.setDirectory("/SD");
-  auto file = fb.openFile(filename, "wb");
+  auto file = FileBrowser(m_baseDir).openFile(filename, "wb");
   if (file) {
     for (int i = 0; i < 1048576; i += BLOCKLEN)
       fwrite(s_memory + i, 1, BLOCKLEN, file);
@@ -951,9 +948,7 @@ void Machine::dumpMemory(char const * filename)
 
 void Machine::dumpInfo(char const * filename)
 {
-  FileBrowser fb;
-  fb.setDirectory("/SD");
-  auto file = fb.openFile(filename, "wb");
+  auto file = FileBrowser(m_baseDir).openFile(filename, "wb");
   if (file) {
     // CPU state
     fprintf(file, " CS   DS   ES   SS\n");

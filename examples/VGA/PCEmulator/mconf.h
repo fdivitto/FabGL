@@ -42,7 +42,7 @@ Allowed tags:
 "chs1" : Hard disk 1 geometry (Cylinders,Heads,Sectors)
 "boot" : Boot drive. Values: fd0, fd1, hd0, hd1. Default is fd0
 
-A filename may contain a path, relative to the "/SD" mounting path. For example, if "disks/disk1.img" is specified, then it loads "/SD/disks/disk1.img".
+A filename may contain a path, relative to SD_MOUNT_PATH mounting path. For example, if "disks/disk1.img" is specified and SD_MOUNT_PATH="/SD", then it loads "/SD/disks/disk1.img".
 
 
 Examples:
@@ -73,17 +73,18 @@ Boot from disk1.img located inside "msdos3" folder:
 #include "bios.h"
 
 
+#define SD_MOUNT_PATH         "/SD"
 
 #define MACHINE_CONF_FILENAME "mconfs.txt"
 
-#define NL "\r\n"
+#define NL                    "\r\n"
 
 
 static const char DefaultConfFile[] =
-  "desc \"FreeDOS (floppy 1.44MB)\"                    fd0 http://www.fabglib.org/downloads/floppy_FREEDOS.img" NL
-  "desc \"MS-DOS 3.31 (floppy 1.44MB)\"                fd0 http://www.fabglib.org/downloads/floppy_MSDOS331.img" NL
-  "desc \"CP/M 86 + Turbo Pascal 3 (floppy 1.44MB)\"   fd0 http://www.fabglib.org/downloads/floppy_CPM86.img" NL
-  "desc \"Linux ELKS 0.4.0 (floppy 1.44MB)\"           fd0 http://www.fabglib.org/downloads/floppy_ELK040.img" NL
+  "desc \"FreeDOS (floppy 1.44MB)\"                    fd0 http://www.fabglib.org/downloads/floppy_FREEDOS.img"           NL
+  "desc \"MS-DOS 3.31 (floppy 1.44MB)\"                fd0 http://www.fabglib.org/downloads/floppy_MSDOS331.img"          NL
+  "desc \"CP/M 86 + Turbo Pascal 3 (floppy 1.44MB)\"   fd0 http://www.fabglib.org/downloads/floppy_CPM86.img"             NL
+  "desc \"Linux ELKS 0.4.0 (floppy 1.44MB)\"           fd0 http://www.fabglib.org/downloads/floppy_ELK040.img"            NL
   "desc \"FreeDOS (HDD 8MB)\"                          hd0 http://www.fabglib.org/downloads/hd8_FREEDOS.img     boot hd0" NL
   "desc \"DOS Programs and Games (HDD 20MB)\"          hd0 http://www.fabglib.org/downloads/hd20_DOSPROG.img    boot hd0" NL
   "desc \"DOS Programming Tools (HDD 20MB)\"           hd0 http://www.fabglib.org/downloads/hd20_DOSDEV.img     boot hd0" NL
