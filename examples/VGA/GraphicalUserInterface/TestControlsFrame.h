@@ -10,6 +10,7 @@ struct TestControlsFrame : public uiFrame {
   uiCheckBox * radio1, * radio2, * radio3;
   uiSlider * slider1, * slider2;
   uiLabel * sliderLabel1, * sliderLabel2;
+  uiSplitButton * splitButton1;
 
   TestControlsFrame(uiFrame * parent)
     : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 270), false) {
@@ -23,6 +24,9 @@ struct TestControlsFrame : public uiFrame {
 
     switchButton = new uiButton(this, "Switch Button OFF", Point(120, 60), Size(100, 20), uiButtonKind::Switch);
     switchButton->onChange = [&]() { switchButton->setText( switchButton->down() ? "Switch Button ON" : "Switch Button OFF" ); };
+
+    splitButton1 = new uiSplitButton(this, "Split Button", Point(250, 60), Size(80, 20), 80, "Option 1;Option 2;Option 3;Option 4;Option 5;Option 6");
+    splitButton1->onSelect = [&](int index) { InputBox(app()).messageFmt(nullptr, nullptr, "OK", "Selected item %d (%s)", index, splitButton1->items().get(index)); };
 
     listBox = new uiListBox(this, Point(10, 90), Size(150, 80));
     listBox->anchors().right = true;
@@ -95,7 +99,6 @@ struct TestControlsFrame : public uiFrame {
     slider2->onChange = [&]() {
       sliderLabel2->setTextFmt("%d", slider2->position());
     };
-
 
   }
 };
