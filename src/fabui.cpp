@@ -1906,9 +1906,15 @@ uiFrame::~uiFrame()
 
 void uiFrame::setTitle(char const * value)
 {
-  m_titleLength = strlen(value);
-  m_title = (char*) realloc(m_title, m_titleLength + 1);
-  strcpy(m_title, value);
+  if (value) {
+    m_titleLength = strlen(value);
+    m_title = (char*) realloc(m_title, m_titleLength + 1);
+    strcpy(m_title, value);
+  } else {
+    free(m_title);
+    m_title = nullptr;
+    m_titleLength = 0;
+  }
 }
 
 
