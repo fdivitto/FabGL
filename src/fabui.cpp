@@ -4366,7 +4366,7 @@ void uiCustomComboBox::processEvent(uiEvent * event)
 
     case UIEVT_PAINT:
       beginPaint(event, uiControl::clientRect(uiOrigin::Window));
-      paintComboBox();
+      paintButton();
       break;
 
     case UIEVT_MOUSEBUTTONDOWN:
@@ -4467,7 +4467,7 @@ Rect uiCustomComboBox::getButtonRect()
 }
 
 
-void uiCustomComboBox::paintComboBox()
+void uiCustomComboBox::paintButton()
 {
   Rect btnRect = getButtonRect();
 
@@ -4565,7 +4565,7 @@ void uiColorComboBox::updateEditControl()
 }
 
 
-// uiComboBox
+// uiColorComboBox
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -5028,6 +5028,142 @@ void uiProgressBar::setPercentage(int value)
 
 
 // uiProgressBar
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSimpleMenu
+
+
+uiSimpleMenu::uiSimpleMenu(uiWindow * parent, const Point & pos, const Size & size, bool visible, uint32_t styleClassID)
+  : uiCustomListBox(parent, pos, size, visible, 0)
+{
+  objectType().uiSimpleMenu = true;
+
+  listBoxProps().allowMultiSelect  = false;
+  listBoxProps().selectOnMouseOver = true;
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+}
+
+
+void uiSimpleMenu::processEvent(uiEvent * event)
+{
+  uiCustomListBox::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_MOUSEBUTTONUP:
+      if (event->params.mouse.changedButton == 1) {
+        int idx = getItemAtMousePos(event->params.mouse.status.X, event->params.mouse.status.Y);
+        if (idx >= 0)
+          onSelect(idx);
+      }
+      break;
+
+    case UIEVT_KEYUP:
+      if (event->params.key.VK == VK_RETURN || event->params.key.VK == VK_KP_ENTER || event->params.key.VK == VK_SPACE) {
+        int idx = firstSelectedItem();
+        if (idx >= 0)
+          onSelect(idx);
+      }
+      break;
+
+    default:
+      break;
+
+  }
+}
+
+
+void uiSimpleMenu::items_draw(int index, const Rect & itemRect)
+{
+  int x = itemRect.X1 + 1;
+  int y = itemRect.Y1 + (itemRect.height() - listBoxStyle().textFont->height) / 2;
+  canvas()->drawText(listBoxStyle().textFont, x, y, m_items.get(index));
+}
+
+
+// uiSimpleMenu
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSplitButton
+
+
+uiSplitButton::uiSplitButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, int listHeight, char const * itemsText, char separator, bool visible, uint32_t styleClassID)
+  : uiCustomComboBox(parent, pos, size, listHeight, visible, 0),
+    m_button(nullptr),
+    m_menu(nullptr)
+{
+  objectType().uiSplitButton = true;
+
+  comboBoxProps().openOnFocus = false;
+
+  m_button  = new uiButton(this, text, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), uiButtonKind::Button, true, 0);
+  m_button->onMouseDown = [&](uiMouseEventInfo const & ev) {
+    if (!listbox()->state().visible)
+      openListBox();
+  };
+
+  m_menu = new uiSimpleMenu(this, Point(0, 0), Size(0, 0), false, 0);
+  m_menu->items().appendSepList(itemsText, separator);
+  m_menu->onSelect = [&](int idx) {
+    closeListBox();
+    app()->setFocusedWindow(this);
+    onSelect(idx);
+  };
+
+  if (app()->style() && styleClassID)
+    app()->style()->setStyle(this, styleClassID);
+}
+
+
+uiSplitButton::~uiSplitButton()
+{
+}
+
+
+void uiSplitButton::openListBox()
+{
+  m_menu->deselectAll();
+  uiCustomComboBox::openListBox();
+}
+
+
+void uiSplitButton::updateEditControl()
+{
+}
+
+
+void uiSplitButton::paintButton()
+{
+  Rect btnRect = getButtonRect();
+
+  // button background
+  canvas()->setBrushColor(comboBoxStyle().buttonBackgroundColor);
+  canvas()->fillRectangle(btnRect);
+
+  // button glyph
+  Rect arrowRect = btnRect.hShrink(btnRect.width() / 4).vShrink(btnRect.height() / 4);
+  if ((arrowRect.X1 + arrowRect.X2) & 1)
+    --arrowRect.X1;
+  bool up = listbox()->state().visible;
+  Point points[3] = { { arrowRect.X1, up ? arrowRect.Y2 : arrowRect.Y1 },
+                      { arrowRect.X2, up ? arrowRect.Y2 : arrowRect.Y1 },
+                      { (arrowRect.X1 + arrowRect.X2) / 2, up ? arrowRect.Y1 : arrowRect.Y2 } };
+  canvas()->setBrushColor(comboBoxStyle().buttonColor);
+  canvas()->setPenColor(comboBoxStyle().buttonColor);
+  canvas()->fillPath(points, 3);
+  canvas()->drawPath(points, 3);
+}
+
+
+// uiSplitButton
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

@@ -72,11 +72,13 @@
                 *uiListBox
                 *uiColorListBox
                 *uiFileBrowser
+                *uiSimpleMenu
             uiMemoEdit
           *uiCheckBox
           *uiCustomComboBox
             *uiComboBox
             *uiColorComboBox
+            *uiSplitButton
           uiMenu
           uiGauge
           *uiSlider
@@ -259,10 +261,13 @@ struct uiObjectType {
   uint32_t uiColorBox          : 1;
   uint32_t uiColorComboBox     : 1;
   uint32_t uiProgressBar       : 1;
+  uint32_t uiSplitButton       : 1;
+  uint32_t uiSimpleMenu        : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
                    uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
-                   uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0), uiColorBox(0), uiColorComboBox(0), uiProgressBar(0)
+                   uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0), uiColorBox(0), uiColorComboBox(0), uiProgressBar(0),
+                   uiSplitButton(0), uiSimpleMenu(0)
     { }
 };
 
@@ -1987,6 +1992,7 @@ public:
 protected:
 
   void setScrollBar(uiOrientation orientation, int position, int visible, int range, bool repaintScrollbar);
+  int getItemAtMousePos(int mouseX, int mouseY);
 
   // must be implemented by inherited class
   virtual int items_getCount()                              = 0;
@@ -1998,7 +2004,6 @@ protected:
 private:
 
   void paintListBox();
-  int getItemAtMousePos(int mouseX, int mouseY);
   void mouseDownSelect(int mouseX, int mouseY);
   void mouseMoveSelect(int mouseX, int mouseY);
   void handleKeyDown(uiKeyEventInfo key);
@@ -2301,13 +2306,15 @@ protected:
 
   Size getEditControlSize();
 
+  virtual void openListBox();
+  virtual void closeListBox();
+  void switchListBox();
+
+  virtual void paintButton();
+  Rect getButtonRect();
+
 private:
 
-  void paintComboBox();
-  Rect getButtonRect();
-  void openListBox();
-  void closeListBox();
-  void switchListBox();
   int buttonWidth();
 
 
@@ -2773,6 +2780,124 @@ private:
   uiProgressBarProps   m_progressBarProps;
 
   int                  m_percentage;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSimpleMenu
+
+
+/** @brief Shows a list of selectable string items. Selection is done clicking or pressing ENTER or SPACE key. */
+class uiSimpleMenu : public uiCustomListBox {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A simplemenu must always have a parent window
+   * @param pos Top-left coordinates of the simplemenu relative to the parent
+   * @param size The simplemenu size
+   * @param visible If true the simplemenu is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiSimpleMenu(uiWindow * parent, const Point & pos, const Size & size, bool visible = true, uint32_t styleClassID = 0);
+
+  /**
+   * @brief A list of strings representing the simplemenu content
+   *
+   * Other than actual strings, StringList indicates which item is selected.
+   * Repainting is required when the string list changes.
+   *
+   * @return L-value representing simplemenu items
+   */
+  StringList & items()                              { return m_items; }
+
+  virtual void processEvent(uiEvent * event);
+
+
+  // Delegates
+
+  /**
+   * @brief Item select event
+   *
+   * This delegate is called whenever user click on an item or press ENTER or SPACE on the selected item.
+   */
+  Delegate<int> onSelect;
+
+protected:
+
+  virtual int items_getCount()                      { return m_items.count(); }
+  virtual void items_deselectAll()                  { m_items.deselectAll(); }
+  virtual void items_select(int index, bool select) { m_items.select(index, select); }
+  virtual bool items_selected(int index)            { return m_items.selected(index); }
+  virtual void items_draw(int index, const Rect & itemRect);
+
+
+private:
+
+  StringList     m_items;
+};
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiSplitButton
+
+
+/** @brief This is a combination of a button and a simple menu */
+class uiSplitButton : public uiCustomComboBox
+{
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A splitbutton must always have a parent window
+   * @param text The text of the splitbutton
+   * @param pos Top-left coordinates of the splitbutton relative to the parent
+   * @param size The splitbutton size
+   * @param listHeight Height in pixels of the open menu
+   * @param visible If true the splitbutton is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiSplitButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, int listHeight, char const * itemsText, char separator = ';', bool visible = true, uint32_t styleClassID = 0);
+
+  ~uiSplitButton();
+
+  /**
+   * @brief A list of strings representing the menu content
+   *
+   * @return L-value representing menu items
+   */
+  StringList & items()         { return m_menu->items(); }
+
+
+  // Delegates
+
+  /**
+   * @brief Item select event
+   *
+   * This delegate is called whenever user click on an item or press ENTER or SPACE on the selected item.
+   */
+  Delegate<int> onSelect;
+
+
+protected:
+
+  uiCustomListBox * listbox()  { return m_menu; }
+  uiControl * editcontrol()    { return m_button; }
+  void updateEditControl();
+  virtual void openListBox();
+  virtual void paintButton();
+
+private:
+  uiButton *     m_button;
+  uiSimpleMenu * m_menu;
+
 };
 
 
@@ -3353,6 +3478,53 @@ private:
 
 
 } // end of namespace
+
+
+// get out of namespace frequently used names
+using fabgl::uiObject;
+using fabgl::uiButtonKind;
+using fabgl::uiTimerHandle;
+using fabgl::uiTextEdit;
+using fabgl::uiApp;
+using fabgl::uiFrame;
+using fabgl::uiButton;
+using fabgl::uiLabel;
+using fabgl::uiImage;
+using fabgl::uiPanel;
+using fabgl::uiMessageBoxIcon;
+using fabgl::uiPaintBox;
+using fabgl::uiOrientation;
+using fabgl::uiListBox;
+using fabgl::uiComboBox;
+using fabgl::uiCheckBox;
+using fabgl::uiCheckBoxKind;
+using fabgl::uiSlider;
+using fabgl::uiStyle;
+using fabgl::uiWindowStyle;
+using fabgl::uiFrameStyle;
+using fabgl::uiScrollableControlStyle;
+using fabgl::uiButtonStyle;
+using fabgl::uiTextEditStyle;
+using fabgl::uiLabelStyle;
+using fabgl::uiHAlign;
+using fabgl::uiImageStyle;
+using fabgl::uiPanelStyle;
+using fabgl::uiPaintBoxStyle;
+using fabgl::uiListBoxStyle;
+using fabgl::uiComboBoxStyle;
+using fabgl::uiCheckBoxStyle;
+using fabgl::uiSliderStyle;
+using fabgl::uiColorListBox;
+using fabgl::uiColorBox;
+using fabgl::uiColorComboBox;
+using fabgl::uiProgressBar;
+using fabgl::uiMessageBoxResult;
+using fabgl::uiKeyEventInfo;
+using fabgl::uiCustomListBox;
+using fabgl::uiFileBrowser;
+using fabgl::uiSplitButton;
+using fabgl::uiSimpleMenu;
+
 
 
 
