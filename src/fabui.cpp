@@ -1601,6 +1601,7 @@ void uiWindow::processEvent(uiEvent * event)
         // capture mouse
         app()->captureMouse(this);
       }
+      onMouseDown(event->params.mouse);
       break;
 
     case UIEVT_MOUSEBUTTONUP:
@@ -1614,6 +1615,7 @@ void uiWindow::processEvent(uiEvent * event)
           app()->postEvent(&evt);
         }
       }
+      onMouseUp(event->params.mouse);
       break;
 
     case UIEVT_CLICK:

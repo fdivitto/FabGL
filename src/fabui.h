@@ -679,6 +679,20 @@ public:
    */
   Delegate<> onDblClick;
 
+  /**
+   * @brief Mouse down event delegate
+   *
+   * This delegate is called when the mouse button is pressed
+   */
+  Delegate<uiMouseEventInfo const&> onMouseDown;
+
+  /**
+   * @brief Mouse up event delegate
+   *
+   * This delegate is called when the mouse button is released
+   */
+  Delegate<uiMouseEventInfo const&> onMouseUp;
+
 
 protected:
 
