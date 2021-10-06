@@ -4380,7 +4380,7 @@ void uiCustomComboBox::processEvent(uiEvent * event)
       if (event->params.focusInfo.oldFocused != listbox() && event->params.focusInfo.oldFocused != editcontrol()) {
         if (m_comboBoxProps.openOnFocus) {
           openListBox();
-        } else {
+        } else if (!listbox()->state().visible) {
           app()->setFocusedWindow(editcontrol());
         }
       } else if (event->params.focusInfo.oldFocused == listbox()) {
