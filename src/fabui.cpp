@@ -70,6 +70,36 @@ void dumpEvent(uiEvent * event)
     printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
   else
     printf(" dst=%p ", event->dest);
+  if (event->dest) {
+    auto ot = event->dest->objectType();
+    printf("[");
+    if (ot.uiApp) printf("uiApp ");
+    if (ot.uiEvtHandler) printf("uiEvtHandler ");
+    if (ot.uiWindow) printf("uiWindow ");
+    if (ot.uiFrame) printf("uiFrame ");
+    if (ot.uiControl) printf("uiControl ");
+    if (ot.uiScrollableControl) printf("uiScrollableControl ");
+    if (ot.uiButton) printf("uiButton ");
+    if (ot.uiTextEdit) printf("uiTextEdit ");
+    if (ot.uiLabel) printf("uiLabel ");
+    if (ot.uiImage) printf("uiImage ");
+    if (ot.uiPanel) printf("uiPanel ");
+    if (ot.uiPaintBox) printf("uiPaintBox ");
+    if (ot.uiCustomListBox) printf("uiCustomListBox ");
+    if (ot.uiListBox) printf("uiListBox ");
+    if (ot.uiFileBrowser) printf("uiFileBrowser ");
+    if (ot.uiComboBox) printf("uiComboBox ");
+    if (ot.uiCheckBox) printf("uiCheckBox ");
+    if (ot.uiSlider) printf("uiSlider ");
+    if (ot.uiColorListBox) printf("uiColorListBox ");
+    if (ot.uiCustomComboBox) printf("uiCustomComboBox ");
+    if (ot.uiColorBox) printf("uiColorBox ");
+    if (ot.uiColorComboBox) printf("uiColorComboBox ");
+    if (ot.uiProgressBar) printf("uiProgressBar ");
+    if (ot.uiSplitButton) printf("uiSplitButton ");
+    if (ot.uiSimpleMenu) printf("uiSimpleMenu ");
+    printf("] ");
+  }
   switch (event->id) {
     case UIEVT_DEBUGMSG:
       printf(event->params.debugMsg);
