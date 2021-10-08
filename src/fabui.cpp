@@ -2806,6 +2806,10 @@ void uiTextEdit::processEvent(uiEvent * event)
       handleKeyDown(event->params.key);
       break;
 
+    case UIEVT_KEYTYPE:
+      onKeyType(event->params.key);
+      break;
+
     case UIEVT_DBLCLICK:
       selectWordAt(event->params.mouse.status.X);
       break;

@@ -1488,6 +1488,12 @@ public:
    */
   Delegate<> onChange;
 
+  /**
+   * @brief Key-type event delegate
+   */
+  Delegate<uiKeyEventInfo> onKeyType;
+  
+
 
 protected:
 
