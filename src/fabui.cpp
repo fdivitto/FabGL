@@ -5138,6 +5138,8 @@ void uiSimpleMenu::processEvent(uiEvent * event)
         int idx = firstSelectedItem();
         if (idx >= 0)
           onSelect(idx);
+      } else if (event->params.key.VK == VK_ESCAPE) {
+        onSelect(-1);
       }
       break;
 
