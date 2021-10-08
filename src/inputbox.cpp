@@ -58,7 +58,8 @@ InputBox::InputBox(uiApp * app)
   : m_vgaCtrl(nullptr),
     m_backgroundColor(RGB888(64, 64, 64)),
     m_existingApp(app),
-    m_autoOK(0)
+    m_autoOK(0),
+    m_minButtonsWidth(40)
 {
 }
 
@@ -108,6 +109,23 @@ void InputBox::end()
 }
 
 
+void InputBox::setupButton(int index, char const * text, char const * subItems, int subItemsHeight)
+{
+  m_buttonText[index]           = text;
+  m_buttonSubItems[index]       = subItems;
+  m_buttonSubItemsHeight[index] = subItemsHeight;
+}
+
+
+void InputBox::resetButtons()
+{
+  for (int i = 0; i < InputForm::BUTTONS; ++i) {
+    m_buttonText[i]     = nullptr;
+    m_buttonSubItems[i] = nullptr;
+  }
+}
+
+
 void InputBox::exec(InputForm * form)
 {
   if (m_existingApp) {
@@ -119,44 +137,41 @@ void InputBox::exec(InputForm * form)
     InputApp app(form);
     app.run(m_dispCtrl);
   }
+  resetButtons();
+  m_buttonSubItem = form->buttonSubItem;
+  m_lastResult    = form->retval;
 }
 
 
 InputResult InputBox::textInput(char const * titleText, char const * labelText, char * inOutString, int maxLength, char const * buttonCancelText, char const * buttonOKText, bool passwordMode)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+  setupButton(B_OK, buttonOKText);
+
   TextInputForm form(this);
   form.titleText            = titleText;
   form.labelText            = labelText;
   form.inOutString          = inOutString;
   form.maxLength            = maxLength;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = buttonOKText;
   form.passwordMode         = passwordMode;
   form.autoOK               = m_autoOK;
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
 
 InputResult InputBox::message(char const * titleText, char const * messageText, char const * buttonCancelText, char const * buttonOKText)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+  setupButton(B_OK, buttonOKText);
+
   MessageForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = buttonOKText;
   form.autoOK               = m_autoOK;
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -181,44 +196,38 @@ InputResult InputBox::messageFmt(char const * titleText, char const * buttonCanc
 
 int InputBox::select(char const * titleText, char const * messageText, char const * itemsText, char separator, char const * buttonCancelText, char const * buttonOKText)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+  setupButton(B_OK, buttonOKText);
+
   SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = itemsText;
   form.separator            = separator;
   form.itemsList            = nullptr;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = buttonOKText;
   form.menuMode             = false;
   form.autoOK               = m_autoOK;
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.outSelected;
 }
 
 
 InputResult InputBox::select(char const * titleText, char const * messageText, StringList * items, char const * buttonCancelText, char const * buttonOKText)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+  setupButton(B_OK, buttonOKText);
+
   SelectForm form(this);
   form.titleText            = titleText;
   form.messageText          = messageText;
   form.items                = nullptr;
   form.separator            = 0;
   form.itemsList            = items;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = buttonOKText;
   form.menuMode             = false;
   form.autoOK               = m_autoOK;
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -231,14 +240,10 @@ int InputBox::menu(char const * titleText, char const * messageText, char const 
   form.items                = itemsText;
   form.separator            = separator;
   form.itemsList            = nullptr;
-  form.buttonText[B_CANCEL] = nullptr;
-  form.buttonText[B_OK]     = nullptr;
   form.menuMode             = true;
   form.autoOK               = 0;  // no timeout supported here
 
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.outSelected;
 }
 
@@ -251,54 +256,47 @@ int InputBox::menu(char const * titleText, char const * messageText, StringList 
   form.items                = nullptr;
   form.separator            = 0;
   form.itemsList            = items;
-  form.buttonText[B_CANCEL] = nullptr;
-  form.buttonText[B_OK]     = nullptr;
   form.menuMode             = true;
   form.autoOK               = 0;  // no timeout supported here
 
   exec(&form);
-
-  m_lastResult = form.retval;
   return items->getFirstSelected();
 }
 
 
 InputResult InputBox::progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+
   form.titleText            = titleText;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = nullptr;
   form.hasProgressBar       = hasProgressBar;
   form.width                = width;
   form.autoOK               = 0;  // no timeout supported here
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
 
 InputResult InputBox::folderBrowser(char const * titleText, char const * directory, char const * buttonOKText)
 {
+  setupButton(B_OK, buttonOKText);
+
   FileBrowserForm form(this);
   form.titleText            = titleText;
-  form.buttonText[B_CANCEL] = nullptr;
-  form.buttonText[B_OK]     = buttonOKText;
   form.autoOK               = 0;  // no timeout supported here
   form.directory            = directory;
 
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
 
 InputResult InputBox::fileSelector(char const * titleText, char const * messageText, char * inOutDirectory, int maxDirectoryLength, char * inOutFilename, int maxFilenameLength, char const * buttonCancelText, char const * buttonOKText)
 {
+  setupButton(B_CANCEL, buttonCancelText);
+  setupButton(B_OK, buttonOKText);
+
   FileSelectorForm form(this);
   form.titleText            = titleText;
   form.labelText            = messageText;
@@ -306,15 +304,9 @@ InputResult InputBox::fileSelector(char const * titleText, char const * messageT
   form.maxDirectoryLength   = maxDirectoryLength;
   form.inOutFilename        = inOutFilename;
   form.maxFilenameLength    = maxFilenameLength;
-  form.buttonText[B_CANCEL] = buttonCancelText;
-  form.buttonText[B_OK]     = buttonOKText;
   form.autoOK               = 0;  // no timeout supported here
 
-  form.setExtButtons(m_extButtonText);
-
   exec(&form);
-
-  m_lastResult = form.retval;
   return form.retval;
 }
 
@@ -342,18 +334,19 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 
   const int titleHeight = titleText && strlen(titleText) ? font->height : 0;
 
-  constexpr int buttonsSpace    = 10;
-  constexpr int minButtonsWidth = 40;
+  constexpr int buttonsSpace = 10;
 
-  int buttonsWidth = minButtonsWidth;
+  int buttonsWidth = inputBox->minButtonsWidth();
   int totButtons   = 0;
 
-  for (auto btext : buttonText)
+  for (int i = 0; i < BUTTONS; ++i) {
+    auto btext = inputBox->buttonText(i);
     if (btext) {
       int buttonExtent = app->canvas()->textExtent(font, btext) + 10;
       buttonsWidth     = imax(buttonsWidth, buttonExtent);
       ++totButtons;
     }
+  }
 
   const int buttonsHeight = totButtons ? font->height + 6 : 0;
 
@@ -371,15 +364,6 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
   mainFrame->frameProps().hasMaximizeButton = false;
   mainFrame->frameProps().hasMinimizeButton = false;
   mainFrame->frameProps().hasCloseButton    = false;
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
-    if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER) {
-      retval = InputResult::Enter;
-      finalize();
-    } else if (key.VK == VK_ESCAPE) {
-      retval = InputResult::Cancel;
-      finalize();
-    }
-  };
   mainFrame->onShow = [&]() {
     if (controlToFocus)
       app->setFocusedWindow(controlToFocus);
@@ -406,16 +390,28 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
     int x = panel->clientSize().width - buttonsWidth * totButtons - buttonsSpace * (totButtons - 1) - buttonsSpace / 2;  // right aligned
 
     for (int i = 0; i < BUTTONS; ++i)
-      if (buttonText[i]) {
-        auto button = new uiButton(panel, buttonText[i], Point(x, y), Size(buttonsWidth, buttonsHeight));
-        button->anchors().left  = false;
-        button->anchors().right = true;
-        button->onClick = [&, i]() {
-          retval = (InputResult)(i + 1);
-          finalize();
-        };
+      if (inputBox->buttonText(i)) {
+        uiWindow * ctrl;
+        if (inputBox->buttonSubItems(i)) {
+          auto splitButton = new uiSplitButton(panel, inputBox->buttonText(i), Point(x, y), Size(buttonsWidth, buttonsHeight), inputBox->buttonsSubItemsHeight(i), inputBox->buttonSubItems(i));
+          splitButton->onSelect = [&, i](int idx) {
+            buttonSubItem = idx;
+            retval = (InputResult)(i + 1);
+            finalize();
+          };
+          ctrl = splitButton;
+        } else {
+          auto button = new uiButton(panel, inputBox->buttonText(i), Point(x, y), Size(buttonsWidth, buttonsHeight));
+          button->onClick = [&, i]() {
+            retval = (InputResult)(i + 1);
+            finalize();
+          };
+          ctrl = button;
+        }
+        ctrl->anchors().left  = false;
+        ctrl->anchors().right = true;
         x += buttonsWidth + buttonsSpace;
-        controlToFocus = button;
+        controlToFocus = ctrl;
       }
 
     if (autoOK > 0) {
@@ -453,6 +449,24 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
 }
 
 
+void InputForm::defaultEnterHandler(uiKeyEventInfo const & key)
+{
+  if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER) {
+    retval = InputResult::Enter;
+    finalize();
+  }
+}
+
+
+void InputForm::defaultEscapeHandler(uiKeyEventInfo const & key)
+{
+  if (key.VK == VK_ESCAPE) {
+    retval = InputResult::Cancel;
+    finalize();
+  }
+}
+
+
 void InputForm::doExit(int value)
 {
   if (modalDialog)
@@ -463,16 +477,6 @@ void InputForm::doExit(int value)
     app->rootWindow()->frameProps().fillBackground = false;
   }
 }
-
-
-void InputForm::setExtButtons(char const * values[])
-{
-  for (int i = 0; i < BUTTONS - 2; ++i) {
-    buttonText[i] = values[i];
-    values[i] = nullptr;
-  }
-}
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -503,6 +507,7 @@ void TextInputForm::addControls()
   edit = new uiTextEdit(mainFrame, inOutString, Point(x + labelExtent + 5, y - 4), Size(editExtent - 15, font->height + 6));
   edit->anchors().right = true;
   edit->textEditProps().passwordMode = passwordMode;
+  edit->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = edit;
 }
@@ -538,6 +543,8 @@ void MessageForm::addControls()
   int y = mainFrame->clientPos().Y + 6;
 
   new uiLabel(mainFrame, messageText, Point(x, y));
+
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 }
 
 
@@ -606,6 +613,7 @@ void SelectForm::addControls()
       finalize();
     };
   }
+  listBox->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = listBox;
 }
@@ -616,7 +624,10 @@ void SelectForm::finalize()
   if (items) {
     outSelected = (retval == InputResult::Enter ? listBox->firstSelectedItem() : -1);
   } else {
-    itemsList->copySelectionMapFrom(listBox->items());
+    if (retval == InputResult::Cancel)
+      itemsList->deselectAll();
+    else
+      itemsList->copySelectionMapFrom(listBox->items());
   }
   doExit(0);
 }
@@ -667,9 +678,10 @@ void ProgressForm::addControls()
 
   if (hasProgressBar) {
     y += font->height + 4;
-
     progressBar = new uiProgressBar(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - 8, font->height));
   }
+
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
 }
 
 
@@ -721,6 +733,8 @@ void FileBrowserForm::addControls()
 {
   mainFrame->frameProps().resizeable        = true;
   mainFrame->frameProps().hasMaximizeButton = true;
+
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
 
   int x = mainFrame->clientPos().X + CTRLS_DIST;
   int y = mainFrame->clientPos().Y + CTRLS_DIST;
@@ -878,6 +892,8 @@ void FileSelectorForm::addControls()
   mainFrame->frameProps().resizeable        = true;
   mainFrame->frameProps().hasMaximizeButton = true;
 
+  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
+
   int x = mainFrame->clientPos().X + CTRLS_DIST;
   int y = mainFrame->clientPos().Y + CTRLS_DIST;
 
@@ -904,6 +920,7 @@ void FileSelectorForm::addControls()
       finalize();
     }
   };
+  fileBrowser->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = edit;
 }

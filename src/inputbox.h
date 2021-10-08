@@ -88,8 +88,8 @@ struct InputForm {
   virtual void show()             { }
 
   void doExit(int value);
-
-  void setExtButtons(char const * values[]);
+  void defaultEnterHandler(uiKeyEventInfo const & key);
+  void defaultEscapeHandler(uiKeyEventInfo const & key);
 
 
   static constexpr int BUTTONS  = 6;
@@ -99,7 +99,6 @@ struct InputForm {
   uiApp *          app;
 
   char const *     titleText;
-  char const *     buttonText[BUTTONS] = { };
   int              autoOK;
 
   FontInfo const * font;
@@ -111,6 +110,7 @@ struct InputForm {
   uiLabel *        autoOKLabel;
 
   InputResult      retval;
+  int              buttonSubItem;    // in case of button with subitems, specifies the selected subitem
 
   uiWindow *       controlToFocus;
 
@@ -380,14 +380,31 @@ public:
   void setAutoOK(int timeout)                     { m_autoOK = timeout; }
 
   /**
-   * @brief Sets extended buttons text
+   * @brief Setups extended button or split-button
    *
-   * Extended button texts are reset to empty values after every dialog
+   * Extended button texts are reset to empty values after every dialog.
    *
-   * @param extButton A value from 0 to 3. 0 = leftmost button ... 3 = rightmost button
-   * @param value Button text
+   * @param index A value from 0 to 3. 0 = leftmost button ... 3 = rightmost button
+   * @param text Button text
+   * @param subItems If specified a Split Button is created. subItems contains a semicolon separated list of menu items
+   * @param subItemsHeight Determines split button sub items height in pixels
    */
-  void setExtButton(int extButton, char const * value) { m_extButtonText[extButton] = value; }
+  void setupButton(int index, char const * text, char const * subItems = nullptr, int subItemsHeight = 80);
+
+  /**
+   * @brief Sets minimum buttons size
+   *
+   * @param value Minimum button size in pixels
+   */
+  void setMinButtonsWidth(int value)                   { m_minButtonsWidth = value; }
+
+  int minButtonsWidth()                                { return m_minButtonsWidth; }
+
+  char const * buttonText(int index)                   { return m_buttonText[index]; }
+
+  char const * buttonSubItems(int index)               { return m_buttonSubItems[index]; }
+
+  int buttonsSubItemsHeight(int index)                 { return m_buttonSubItemsHeight[index]; }
 
   /**
    * @brief Gets last dialog result
@@ -395,6 +412,13 @@ public:
    * @return Last result
    */
   InputResult getLastResult()                          { return m_lastResult; }
+
+  /**
+   * @brief Gets the selected item on a multichoice button
+   *
+   * return Selected sub item
+   */
+  int selectedSubItem()                                { return m_buttonSubItem; }
 
   /**
    * @brief Shows a dialog with a label and a text edit box
@@ -660,14 +684,19 @@ private:
   InputResult progressBoxImpl(ProgressForm & form, char const * titleText, char const * buttonCancelText, bool hasProgressBar, int width);
 
   void exec(InputForm * form);
+  void resetButtons();
 
   BitmappedDisplayController * m_dispCtrl;
   VGAPalettedController      * m_vgaCtrl;
   RGB888                       m_backgroundColor;
-  uiApp *                      m_existingApp; // uiApp in case of running on existing app
-  uint16_t                     m_autoOK;    // auto ok in seconds
-  char const *                 m_extButtonText[InputForm::BUTTONS - 2] = { };
+  uiApp *                      m_existingApp;                               // uiApp in case of running on existing app
+  uint16_t                     m_autoOK;                                    // auto ok in seconds
+  int16_t                      m_buttonSubItem;                             // in case of button with subitems, specifies the selected subitem                     //
+  char const *                 m_buttonText[InputForm::BUTTONS]     = { };
+  char const *                 m_buttonSubItems[InputForm::BUTTONS] = { };  // ext button is uiButton is nullptr, uiSplitButton otherwise
+  uint16_t                     m_buttonSubItemsHeight[InputForm::BUTTONS] = { };
   InputResult                  m_lastResult = InputResult::None;
+  int16_t                      m_minButtonsWidth;
 };
 
 
