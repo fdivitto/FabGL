@@ -2326,6 +2326,10 @@ protected:
   virtual void paintButton();
   Rect getButtonRect();
 
+  uiWindow * getListBoxParent() { return m_listBoxParent; }
+
+  bool isListBoxOpen()          { return m_listBoxParent->state().visible; }
+
 private:
 
   int buttonWidth();
@@ -2334,6 +2338,7 @@ private:
   int               m_listHeight;
   uiComboBoxStyle   m_comboBoxStyle;
   uiComboBoxProps   m_comboBoxProps;
+  uiWindow *        m_listBoxParent;
 };
 
 
@@ -2888,6 +2893,8 @@ public:
    */
   StringList & items()         { return m_menu->items(); }
 
+  void processEvent(uiEvent * event);
+
 
   // Delegates
 
@@ -2910,6 +2917,7 @@ protected:
 private:
   uiButton *     m_button;
   uiSimpleMenu * m_menu;
+  int            m_selectedItem;
 
 };
 

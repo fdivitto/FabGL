@@ -4371,7 +4371,8 @@ void uiFileBrowser::processEvent(uiEvent * event)
 
 uiCustomComboBox::uiCustomComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
   : uiControl(parent, pos, size, visible, 0),
-    m_listHeight(listHeight)
+    m_listHeight(listHeight),
+    m_listBoxParent(nullptr)
 {
   objectType().uiCustomComboBox = true;
 
@@ -4383,7 +4384,12 @@ uiCustomComboBox::uiCustomComboBox(uiWindow * parent, const Point & pos, const S
     m_comboBoxStyle.adaptToDisplayColors(app()->displayColors());
     if (app()->style() && styleClassID)
       app()->style()->setStyle(this, styleClassID);
+
+    m_listBoxParent = new uiWindow(app()->rootWindow(), Point(0, 0), Size(0, 0), false, 0);
+    m_listBoxParent->windowStyle().borderSize        = 0;
+    m_listBoxParent->windowStyle().focusedBorderSize = 0;
   }
+
 }
 
 
@@ -4417,11 +4423,9 @@ void uiCustomComboBox::processEvent(uiEvent * event)
         updateEditControl();
         onChange();
       };
-      listbox()->onKeyUp = [&](uiKeyEventInfo key) {
-        if (key.VK == VK_RETURN) {
+      listbox()->onKeyType = [&](uiKeyEventInfo key) {
+        if (key.VK == VK_TAB || key.VK == VK_RETURN)
           closeListBox();
-          app()->setFocusedWindow(this);
-        }
       };
       editcontrol()->setParentProcessKbdEvents(true); // we want keyboard events also here
       break;
@@ -4448,17 +4452,11 @@ void uiCustomComboBox::processEvent(uiEvent * event)
       if (event->params.focusInfo.oldFocused != listbox() && event->params.focusInfo.oldFocused != editcontrol()) {
         if (m_comboBoxProps.openOnFocus) {
           openListBox();
-        } else if (!listbox()->state().visible) {
+        } else if (!isListBoxOpen()) {
           app()->setFocusedWindow(editcontrol());
         }
       } else if (event->params.focusInfo.oldFocused == listbox()) {
         app()->setFocusedWindow(editcontrol());
-      }
-      break;
-
-    case UIEVT_KILLFOCUS:
-      if (event->params.focusInfo.newFocused != listbox()) {
-        closeListBox();
       }
       break;
 
@@ -4472,6 +4470,10 @@ void uiCustomComboBox::processEvent(uiEvent * event)
         switchListBox();
       break;
 
+    case UIEVT_DESTROY:
+      app()->destroyWindow(m_listBoxParent);
+      break;
+
     default:
       break;
   }
@@ -4480,25 +4482,31 @@ void uiCustomComboBox::processEvent(uiEvent * event)
 
 void uiCustomComboBox::openListBox()
 {
-  Rect r = rect(uiOrigin::Parent);
+  Rect r = rect(uiOrigin::Screen);
   r.Y1 = r.Y2 + 1;
   r.Y2 = r.Y1 + m_listHeight;
-  listbox()->bringOnTop();
-  app()->reshapeWindow(listbox(), r);
-  app()->showWindow(listbox(), true);
+  m_listBoxParent->bringOnTop();
+  app()->reshapeWindow(m_listBoxParent, r);
+  app()->showWindow(m_listBoxParent, true);
+  app()->setActiveWindow(m_listBoxParent);
+  app()->reshapeWindow(listbox(), r.translate(-r.X1, -r.Y1));
   app()->setFocusedWindow(listbox());
 }
 
 
 void uiCustomComboBox::closeListBox()
 {
-  app()->showWindow(listbox(), false);
+  app()->showWindow(m_listBoxParent, false);
+  if (app()->focusedWindow() == nullptr || app()->focusedWindow() == listbox()) {
+    app()->setActiveWindow(parent());
+    app()->setFocusedWindow(this);
+  }
 }
 
 
 void uiCustomComboBox::switchListBox()
 {
-  if (listbox()->state().visible) {
+  if (isListBoxOpen()) {
     closeListBox();
     app()->setFocusedWindow(editcontrol());
   } else {
@@ -4570,7 +4578,7 @@ uiComboBox::uiComboBox(uiWindow * parent, const Point & pos, const Size & size, 
   m_textEdit->textEditProps().hasCaret  = false;
   m_textEdit->textEditProps().allowEdit = false;
 
-  m_listBox = new uiListBox(parent, Point(0, 0), Size(0, 0), false, 0);
+  m_listBox = new uiListBox(getListBoxParent(), Point(0, 0), Size(0, 0), true, 0);
 
   if (app()->style() && styleClassID)
     app()->style()->setStyle(this, styleClassID);
@@ -4608,7 +4616,7 @@ uiColorComboBox::uiColorComboBox(uiWindow * parent, const Point & pos, const Siz
   objectType().uiColorComboBox = true;
 
   m_colorBox     = new uiColorBox(this, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), Color::BrightWhite, true, 0);
-  m_colorListBox = new uiColorListBox(parent, Point(0, 0), Size(0, 0), false, 0);
+  m_colorListBox = new uiColorListBox(getListBoxParent(), Point(0, 0), Size(0, 0), true, 0);
 
   if (app()->style() && styleClassID)
     app()->style()->setStyle(this, styleClassID);
@@ -5160,7 +5168,8 @@ void uiSimpleMenu::items_draw(int index, const Rect & itemRect)
 uiSplitButton::uiSplitButton(uiWindow * parent, char const * text, const Point & pos, const Size & size, int listHeight, char const * itemsText, char separator, bool visible, uint32_t styleClassID)
   : uiCustomComboBox(parent, pos, size, listHeight, visible, 0),
     m_button(nullptr),
-    m_menu(nullptr)
+    m_menu(nullptr),
+    m_selectedItem(-1)
 {
   objectType().uiSplitButton = true;
 
@@ -5168,16 +5177,16 @@ uiSplitButton::uiSplitButton(uiWindow * parent, char const * text, const Point &
 
   m_button  = new uiButton(this, text, Point(windowStyle().borderSize, windowStyle().borderSize), getEditControlSize(), uiButtonKind::Button, true, 0);
   m_button->onMouseDown = [&](uiMouseEventInfo const & ev) {
-    if (!listbox()->state().visible)
+    if (!isListBoxOpen())
       openListBox();
   };
 
-  m_menu = new uiSimpleMenu(this, Point(0, 0), Size(0, 0), false, 0);
+  m_menu = new uiSimpleMenu(getListBoxParent(), Point(0, 0), Size(0, 0), true, 0);
   m_menu->items().appendSepList(itemsText, separator);
   m_menu->onSelect = [&](int idx) {
     closeListBox();
     app()->setFocusedWindow(this);
-    onSelect(idx);
+    m_selectedItem = idx;
   };
 
   if (app()->style() && styleClassID)
@@ -5187,6 +5196,25 @@ uiSplitButton::uiSplitButton(uiWindow * parent, char const * text, const Point &
 
 uiSplitButton::~uiSplitButton()
 {
+}
+
+
+void uiSplitButton::processEvent(uiEvent * event)
+{
+  uiCustomComboBox::processEvent(event);
+
+  switch (event->id) {
+
+    case UIEVT_SETFOCUS:
+      if (m_selectedItem > -1) {
+        onSelect(m_selectedItem);
+        m_selectedItem = -1;
+      }
+      break;
+
+    default:
+      break;
+  };
 }
 
 
@@ -5214,7 +5242,7 @@ void uiSplitButton::paintButton()
   Rect arrowRect = btnRect.hShrink(btnRect.width() / 4).vShrink(btnRect.height() / 4);
   if ((arrowRect.X1 + arrowRect.X2) & 1)
     --arrowRect.X1;
-  bool up = listbox()->state().visible;
+  bool up = isListBoxOpen();
   Point points[3] = { { arrowRect.X1, up ? arrowRect.Y2 : arrowRect.Y1 },
                       { arrowRect.X2, up ? arrowRect.Y2 : arrowRect.Y1 },
                       { (arrowRect.X1 + arrowRect.X2) / 2, up ? arrowRect.Y1 : arrowRect.Y2 } };
