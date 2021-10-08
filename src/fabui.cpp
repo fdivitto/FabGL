@@ -1868,6 +1868,12 @@ void uiWindow::exitModal(int modalResult)
 }
 
 
+bool uiWindow::isActiveWindow()
+{
+  return app()->activeWindow() == this;
+}
+
+
 bool uiWindow::hasFocus()
 {
   return app()->focusedWindow() == this;

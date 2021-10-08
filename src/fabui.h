@@ -620,6 +620,13 @@ public:
   bool hasFocus();
 
   /**
+   * @brief Determines wheter this window is the active window
+   *
+   * @return True if this window is the active window
+   */
+  bool isActiveWindow();
+
+  /**
    * @brief Allows to switch on or off anchors
    *
    * @return An L-value used to switch on or off anchors
