@@ -295,12 +295,12 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
     uiEvent event;
     if (getEvent(&event, -1)) {
 
+      preprocessEvent(&event);
+
       #if DUMPEVENTS
       printf("run(): ");
       dumpEvent(&event);
       #endif
-
-      preprocessEvent(&event);
 
       if (event.dest)
         event.dest->processEvent(&event);
@@ -381,12 +381,12 @@ void uiApp::processEvents()
   uiEvent event;
   while (getEvent(&event, 0)) {
 
+    preprocessEvent(&event);
+
     #if DUMPEVENTS
     printf("processEvents(): ");
     dumpEvent(&event);
     #endif
-
-    preprocessEvent(&event);
 
     if (event.dest)
       event.dest->processEvent(&event);
@@ -842,15 +842,18 @@ bool uiApp::processModalWindowEvents(ModalWindowState * state, int timeout)
   uiEvent event;
   while (getEvent(&event, timeout)) {
 
+    if (m_modalWindow != state->window && event.dest == state->window) {
+      // becomes modal when first message arrives
+      m_modalWindow = state->window;
+    }
+
+    preprocessEvent(&event);
+
     #if DUMPEVENTS
     printf("processModalWindowEvents(): ");
     dumpEvent(&event);
     #endif
 
-    if (m_modalWindow != state->window && event.dest == state->window) {
-      // becomes modal when first message arrives
-      m_modalWindow = state->window;
-    }
     if (event.id == UIEVT_EXITMODAL && event.dest == state->window) {
       // clean exit using exitModal() method
       state->modalResult = event.params.modalResult;
@@ -859,8 +862,6 @@ bool uiApp::processModalWindowEvents(ModalWindowState * state, int timeout)
       // exit using Close button (default return value remains -1)
       return false;
     }
-
-    preprocessEvent(&event);
 
     if (event.dest)
       event.dest->processEvent(&event);
