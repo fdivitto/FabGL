@@ -3460,6 +3460,8 @@ private:
 
   uiWindow *      m_focusedWindow;       // window that captures keyboard events (other than active window)
 
+  uiWindow *      m_lastFocusedWindow;   // previous focused window
+
   uiWindow *      m_capturedMouseWindow; // window that has captured mouse
 
   uiWindow *      m_freeMouseWindow;     // window where mouse is over

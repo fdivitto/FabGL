@@ -212,6 +212,7 @@ uiApp::uiApp()
     m_rootWindow(nullptr),
     m_activeWindow(nullptr),
     m_focusedWindow(nullptr),
+    m_lastFocusedWindow(nullptr),
     m_capturedMouseWindow(nullptr),
     m_freeMouseWindow(nullptr),
     m_modalWindow(nullptr),
@@ -711,14 +712,19 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
   if (m_focusedWindow != value) {
 
     if (prev) {
+
+      // assign m_lastFocusedWindow here because it is necessary it is not null
+      // that is the case when a change of active window occurs, or "value" pointed window is not focusable
+      m_lastFocusedWindow = prev;
+
       uiEvent evt = uiEvent(prev, UIEVT_KILLFOCUS);
-      evt.params.focusInfo.oldFocused = prev;
+      evt.params.focusInfo.oldFocused = m_lastFocusedWindow;
       evt.params.focusInfo.newFocused = value;
       postEvent(&evt);
       if (prev->parent()) {
         // send UIEVT_CHILDKILLFOCUS to its parent
         evt = uiEvent(prev->parent(), UIEVT_CHILDKILLFOCUS);
-        evt.params.focusInfo.oldFocused = prev;
+        evt.params.focusInfo.oldFocused = m_lastFocusedWindow;
         evt.params.focusInfo.newFocused = value;
         postEvent(&evt);
       }
@@ -731,13 +737,13 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 
     if (m_focusedWindow) {
       uiEvent evt = uiEvent(m_focusedWindow, UIEVT_SETFOCUS);
-      evt.params.focusInfo.oldFocused = prev;
+      evt.params.focusInfo.oldFocused = m_lastFocusedWindow;
       evt.params.focusInfo.newFocused = m_focusedWindow;
       postEvent(&evt);
       if (m_focusedWindow->parent()) {
         // send UIEVT_CHILDSETFOCUS to its parent
         evt = uiEvent(m_focusedWindow->parent(), UIEVT_CHILDSETFOCUS);
-        evt.params.focusInfo.oldFocused = prev;
+        evt.params.focusInfo.oldFocused = m_lastFocusedWindow;
         evt.params.focusInfo.newFocused = m_focusedWindow;
         postEvent(&evt);
       }
