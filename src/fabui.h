@@ -1992,6 +1992,11 @@ public:
   Delegate<> onKillFocus;
 
   /**
+   * @brief Key-type event delegate
+   */
+  Delegate<uiKeyEventInfo> onKeyType;
+
+  /**
    * @brief Key-up event delegate
    */
   Delegate<uiKeyEventInfo> onKeyUp;

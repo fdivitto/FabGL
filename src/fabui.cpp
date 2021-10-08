@@ -3930,6 +3930,10 @@ void uiCustomListBox::processEvent(uiEvent * event)
       onKeyUp(event->params.key);
       break;
 
+    case UIEVT_KEYTYPE:
+      onKeyType(event->params.key);
+      break;
+
     case UIEVT_KILLFOCUS:
       onKillFocus();
       break;
