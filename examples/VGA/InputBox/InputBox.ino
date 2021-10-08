@@ -53,7 +53,9 @@ void loop()
   // setup automatic OK after 10 seconds
   ib.setAutoOK(10);
 
+
   ib.message("Welcome!", "Welcome to FabGL InputBox demo!");
+
 
   ////////////////////////////////////////////////////
   // Example of progress bar
@@ -71,7 +73,7 @@ void loop()
 
   ////////////////////////////////////////////////////
   // Example of simple menu (items from separated strings)
-  int s = ib.menu("Example of simple Menu", "Click on one item", "Item number zero;Item number one;Item number two;Item number three");
+  int s = ib.menu("Simple Menu", "Click on one item", "Item number zero;Item number one;Item number two;Item number three");
   ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
 
 
@@ -86,34 +88,63 @@ void loop()
   s = ib.menu("Menu", "Click on an item", &list);
   ib.messageFmt("", nullptr, "OK", "You have selected item %d", s);
 
+
   ////////////////////////////////////////////////////
   // Example of options selection box with OK button (items from separated strings)
   list.clear();
-  list.append("FreeDOS");
-  list.append("Minix 2.0");
-  list.append("MS-DOS 5");
+  list.append("Item 0");
+  list.append("Item 1");
+  list.append("Item 2");
   while (true) {
-    ib.setExtButton(0, "Add");
-    ib.setExtButton(1, "Remove");
-    auto r = ib.select("Download Boot Disk", "Select boot disk to download", &list, "Cancel", "OK");
-    if (r == InputResult::Enter || r == InputResult::Cancel) {
-      ib.messageFmt("", nullptr, "OK", "You have selected item %d", list.getFirstSelected());
-      break;
-    } else if (r == InputResult::ButtonExt0) {
-      // add new item
-      char value[32] = "";
-      if (ib.textInput("New Item", "Please enter item value", value, 31) == InputResult::Enter) {
-        list.takeStrings();
-        list.append(value);
+    ib.setupButton(0, "Add");
+    ib.setupButton(1, "Remove");
+    ib.setupButton(2, "Options", "Edit;Restore;Advanced", 50);
+    ib.setMinButtonsWidth(60);
+    auto r = ib.select("Items selection", "Select an item", &list, "Cancel", "OK");
+    switch (r) {
+      // OK button
+      case InputResult::Enter:
+        ib.messageFmt(nullptr, nullptr, "OK", "You have selected item %d", list.getFirstSelected());
+        break;
+      // add new item button
+      case InputResult::ButtonExt0:
+      {
+        char value[32] = "";
+        if (ib.textInput("New Item", "Please enter item value", value, 31) == InputResult::Enter) {
+          list.takeStrings();
+          list.append(value);
+        }
+        break;
       }
-    } else if (r == InputResult::ButtonExt1) {
-      // remove item
-      if (list.getFirstSelected() > -1 && ib.message("Please confirm", "Remove Item?", "No", "Yes") == InputResult::Enter)
-        list.remove(list.getFirstSelected());
+      // remove item button
+      case InputResult::ButtonExt1:
+        if (list.getFirstSelected() > -1 && ib.message("Please confirm", "Remove Item?", "No", "Yes") == InputResult::Enter)
+          list.remove(list.getFirstSelected());
+        break;
+      // button with subitems (Edit / Restore / Advanced)
+      case InputResult::ButtonExt2:
+        switch (ib.selectedSubItem()) {
+          // Edit sub-button
+          case 0:
+            ib.message(nullptr, "Edit - not implented!");
+            break;
+          // Restore
+          case 1:
+            ib.message(nullptr, "Restore - not implented!");
+            break;
+          // Advanced
+          case 2:
+            ib.message(nullptr, "Advanced - not implented!");
+            break;
+        }
+        break;
+      // cancel
+      default:
+        break;
     }
   }
 
-
+/*
   ////////////////////////////////////////////////////
   // Example of options selection box with OK button (items from StringList)
   fabgl::StringList quiz;
@@ -213,7 +244,7 @@ void loop()
     }
     WiFi.scanDelete();
   }
-
+*/
   ib.message("Restart", "Ok, press OK to restart!");
 
 
