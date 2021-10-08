@@ -507,6 +507,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
         postEvent(&evt);
         m_freeMouseWindow = oldFreeMouseWindow = nullptr;
       }
+      captureMouse(nullptr);
     }
   } else {
     m_freeMouseWindow = screenToWindow(winMousePos);  // translates winMousePos
@@ -1653,7 +1654,6 @@ void uiWindow::processEvent(uiEvent * event)
     case UIEVT_MOUSEBUTTONUP:
       // end capture mouse if left button is up
       if (event->params.mouse.changedButton == 1) {
-        app()->captureMouse(nullptr);
         // generate UIEVT_CLICK. The check is required to avoid onclick event when mouse is captured and moved out of button area
         if (rect(uiOrigin::Window).contains(event->params.mouse.status.X, event->params.mouse.status.Y)) {
           uiEvent evt = *event;
