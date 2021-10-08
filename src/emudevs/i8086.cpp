@@ -1863,7 +1863,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
     case 57: // 80186, NEC V20: PUSH imm8
       //printf("80186, NEC V20: PUSH imm8\n");
       regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = i_data0 & 0xff;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = (i_data0 & 0xff) | (i_data0 & 0x80 ? 0xff00 : 0); // 8->16 bit with sign extension
       break;
     case 58: // 80186 IMUL
       printf("80186 IMUL - not implemented!\n");
