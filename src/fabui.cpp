@@ -446,7 +446,12 @@ void uiApp::preprocessEvent(uiEvent * event)
 // decide if an event with destination to non-modal windows can pass when a modal window is active
 void uiApp::filterModalEvent(uiEvent * event)
 {
-  if (event->dest != nullptr && event->dest->objectType().uiWindow && event->dest != m_modalWindow && !m_modalWindow->isChild((uiWindow*)event->dest)) {
+  if (event->dest != nullptr &&
+      event->dest->objectType().uiWindow &&
+      event->dest != m_modalWindow &&
+      event->dest != m_activeWindow &&
+      event->dest != m_focusedWindow &&
+      !m_modalWindow->isChild((uiWindow*)event->dest)) {
     switch (event->id) {
       case UIEVT_MOUSEMOVE:
       case UIEVT_MOUSEWHEEL:
