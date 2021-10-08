@@ -398,10 +398,8 @@ void setup()
       dconfs.append(conf->desc);
     dconfs.select(idx, true);
 
-    ibox.setExtButton(0, "Browse Files");
-    ibox.setExtButton(1, "Edit");
-    ibox.setExtButton(2, "Remove");
-    ibox.setExtButton(3, "New");
+    ibox.setupButton(0, "Browse Files");
+    ibox.setupButton(1, "Options", "Edit;New;Remove", 70);
     auto r = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "Run");
 
     idx = dconfs.getFirstSelected();
@@ -412,16 +410,21 @@ void setup()
         ibox.folderBrowser("Browse Files", SD_MOUNT_PATH);
         break;
       case InputResult::ButtonExt1:
-        // Edit
-        editConfigDialog(&ibox, &mconf, idx);
-        break;
-      case InputResult::ButtonExt2:
-        // Remove
-        delConfigDialog(&ibox, &mconf, idx);
-        break;
-      case InputResult::ButtonExt3:
-        // New
-        newConfigDialog(&ibox, &mconf, idx);
+        // Options
+        switch (ibox.selectedSubItem()) {
+          // Edit
+          case 0:
+            editConfigDialog(&ibox, &mconf, idx);
+            break;
+          // New
+          case 1:
+            newConfigDialog(&ibox, &mconf, idx);
+            break;
+          // Remove
+          case 2:
+            delConfigDialog(&ibox, &mconf, idx);
+            break;
+        };
         break;
       case InputResult::Enter:
         // Run
