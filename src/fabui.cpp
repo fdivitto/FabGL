@@ -60,13 +60,13 @@ void dumpEvent(uiEvent * event)
                                   "UIEVT_DEACTIVATE", "UIEVT_MOUSEMOVE", "UIEVT_MOUSEWHEEL", "UIEVT_MOUSEBUTTONDOWN",
                                   "UIEVT_MOUSEBUTTONUP", "UIEVT_SETPOS", "UIEVT_SETSIZE", "UIEVT_RESHAPEWINDOW",
                                   "UIEVT_MOUSEENTER", "UIEVT_MOUSELEAVE", "UIEVT_MAXIMIZE", "UIEVT_MINIMIZE", "UIEVT_RESTORE",
-                                  "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP",
-                                  "UIEVT_TIMER", "UIEVT_DBLCLICK", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
+                                  "UIEVT_SHOW", "UIEVT_HIDE", "UIEVT_SETFOCUS", "UIEVT_KILLFOCUS", "UIEVT_KEYDOWN", "UIEVT_KEYUP", "UIEVT_KEYTYPE",
+                                  "UIEVT_TIMER", "UIEVT_CLICK", "UIEVT_DBLCLICK", "UIEVT_EXITMODAL", "UIEVT_DESTROY", "UIEVT_CLOSE",
                                   "UIEVT_QUIT", "UIEVT_CREATE", "UIEVT_CHILDSETFOCUS", "UIEVT_CHILDKILLFOCUS"
                                 };
   printf("#%d ", idx++);
   printf(TOSTR[event->id]);
-  if (event->dest && event->dest->objectType().uiFrame)
+  if (event->dest && event->dest->objectType().uiFrame && ((uiFrame*)(event->dest))->title())
     printf(" dst=\"%s\"(%p) ", ((uiFrame*)(event->dest))->title(), event->dest);
   else
     printf(" dst=%p ", event->dest);
@@ -128,6 +128,7 @@ void dumpEvent(uiEvent * event)
       break;
     case UIEVT_KEYDOWN:
     case UIEVT_KEYUP:
+    case UIEVT_KEYTYPE:
       #ifdef FABGLIB_HAS_VirtualKeyO_STRING
       printf("VK=%s ", Keyboard::virtualKeyToString(event->params.key.VK));
       if (event->params.key.LALT) printf(" +LALT");
@@ -215,6 +216,7 @@ uiApp::uiApp()
     m_freeMouseWindow(nullptr),
     m_modalWindow(nullptr),
     m_combineMouseMoveEvents(false),
+    m_keyDownHandler(nullptr),
     m_caretWindow(nullptr),
     m_caretTimer(nullptr),
     m_caretInvertState(-1),
@@ -548,6 +550,14 @@ void uiApp::preprocessKeyboardEvent(uiEvent * event)
     uiEvent evt = *event;
     evt.dest = m_activeWindow;
     insertEvent(&evt);
+  }
+  // eventually produce UIEVT_KEYTYPE if keydown and keyup delivered to the same window
+  if (event->id == UIEVT_KEYDOWN)
+    m_keyDownHandler = event->dest;
+  else if (event->id == UIEVT_KEYUP && m_keyDownHandler == event->dest) {
+    uiEvent evt = uiEvent(event->dest, UIEVT_KEYTYPE);
+    evt.params.key = event->params.key;
+    postEvent(&evt);
   }
 }
 

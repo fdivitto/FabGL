@@ -130,6 +130,7 @@ enum uiEventID {
   UIEVT_KILLFOCUS,
   UIEVT_KEYDOWN,
   UIEVT_KEYUP,
+  UIEVT_KEYTYPE,
   UIEVT_TIMER,
   UIEVT_CLICK,
   UIEVT_DBLCLICK,
@@ -3454,6 +3455,8 @@ private:
   uiWindow *      m_modalWindow;         // current modal window
 
   bool            m_combineMouseMoveEvents;
+
+  uiEvtHandler *  m_keyDownHandler;      // used to produce UIEVT_KEYTYPE
 
   uiWindow *      m_caretWindow;         // nullptr = caret is not visible
   Rect            m_caretRect;           // caret rect relative to m_caretWindow
