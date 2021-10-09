@@ -359,13 +359,16 @@ struct ConfigDialog : public uiApp {
     unique_ptr<char[]> dir(new char[MAXVALUELENGTH + 1] { '/', 'S', 'D', 0 } );
     unique_ptr<char[]> filename(new char[MAXVALUELENGTH + 1]);
     strcpy(filename.get(), edit->text());
-    // does filename contain a path?
-    auto p = strrchr(filename.get(), '/');
-    if (p) {
-      // yes, move it into "dir"
-      strcat(dir.get(), "/");
-      strncat(dir.get(), filename.get(), p - filename.get());
-      memmove(filename.get(), p + 1, strlen(p + 1) + 1);
+    // is URL?
+    if (strncmp("://", filename.get() + 4, 3)) {
+      // no, does filename contain a path?
+      auto p = strrchr(filename.get(), '/');
+      if (p) {
+        // yes, move it into "dir"
+        strcat(dir.get(), "/");
+        strncat(dir.get(), filename.get(), p - filename.get());
+        memmove(filename.get(), p + 1, strlen(p + 1) + 1);
+      }
     }
     if (fileDialog("Select drive image", dir.get(), MAXVALUELENGTH, filename.get(), MAXVALUELENGTH, "OK", "Cancel") == uiMessageBoxResult::ButtonOK) {
       if (strlen(dir.get()) > 4)
