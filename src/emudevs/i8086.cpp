@@ -1813,6 +1813,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
     case 53: // 80186, NEC V20: PUSHA
     {
       //printf("80186, NEC V20: PUSHA\n");
+      uint16_t temp = regs16[REG_SP];
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_AX];
       regs16[REG_SP] -= 2;
@@ -1821,9 +1822,8 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_DX];
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_BX];
-      uint16_t sp = regs16[REG_SP];
       regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = sp;
+      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = temp;
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_BP];
       regs16[REG_SP] -= 2;
@@ -1841,7 +1841,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       regs16[REG_SP] += 2;
       regs16[REG_BP] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
       regs16[REG_SP] += 2;
-      regs16[REG_SP] += 2;  // SP
+      regs16[REG_SP] += 2;  // SP ignored
       regs16[REG_BX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
       regs16[REG_SP] += 2;
       regs16[REG_DX] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
