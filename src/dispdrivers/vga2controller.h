@@ -110,7 +110,7 @@ public:
    * Example:
    *
    *     // Color item 0 is pure Red
-   *     displayController.setPaletteItem(0, RGB(255, 0, 0));
+   *     displayController.setPaletteItem(0, RGB888(255, 0, 0));
    */
   void setPaletteItem(int index, RGB888 const & color);
 
