@@ -905,16 +905,16 @@ int uiApp::showModalWindow(uiWindow * window)
 }
 
 
-void uiApp::maximizeWindow(uiWindow * window, bool value)
+void uiApp::maximizeFrame(uiFrame * frame, bool value)
 {
-  uiEvent evt = uiEvent(window, value ? UIEVT_MAXIMIZE : UIEVT_RESTORE);
+  uiEvent evt = uiEvent(frame, value ? UIEVT_MAXIMIZE : UIEVT_RESTORE);
   postEvent(&evt);
 }
 
 
-void uiApp::minimizeWindow(uiWindow * window, bool value)
+void uiApp::minimizeFrame(uiFrame * frame, bool value)
 {
-  uiEvent evt = uiEvent(window, value ? UIEVT_MINIMIZE : UIEVT_RESTORE);
+  uiEvent evt = uiEvent(frame, value ? UIEVT_MINIMIZE : UIEVT_RESTORE);
   postEvent(&evt);
 }
 
@@ -1383,8 +1383,6 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
   objectType().uiWindow = true;
 
   m_state.visible   = false;
-  m_state.maximized = false;
-  m_state.minimized = false;
   m_state.active    = false;
 
   if (app()) {
@@ -1642,8 +1640,6 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
-        m_posAtMouseDown  = m_pos;
-        m_sizeAtMouseDown = m_size;
         // activate window? setActiveWindow() will activate the right window (maybe a parent)
         if (!m_state.active)
           app()->setActiveWindow(this);
@@ -1672,28 +1668,6 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_HIDE:
       repaint();
-      break;
-
-    case UIEVT_MAXIMIZE:
-      if (!m_state.minimized)
-        m_savedScreenRect = rect(uiOrigin::Parent);
-      m_state.maximized = true;
-      m_state.minimized = false;
-      app()->reshapeWindow(this, m_parent->clientRect(uiOrigin::Window));
-      break;
-
-    case UIEVT_MINIMIZE:
-      if (!m_state.maximized)
-        m_savedScreenRect = rect(uiOrigin::Parent);
-      m_state.maximized = false;
-      m_state.minimized = true;
-      app()->resizeWindow(this, minWindowSize());
-      break;
-
-    case UIEVT_RESTORE:
-      m_state.maximized = false;
-      m_state.minimized = false;
-      app()->reshapeWindow(this, m_savedScreenRect);
       break;
 
     case UIEVT_RESHAPEWINDOW:
@@ -1936,6 +1910,10 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
     m_mouseDownPos(Point(-1, -1))
 {
   objectType().uiFrame = true;
+
+  m_frameState.maximized = false;
+  m_frameState.minimized = false;
+
   if (app()) {
     m_frameStyle.adaptToDisplayColors(app()->displayColors());
     if (app()->style() && styleClassID)
@@ -2010,7 +1988,7 @@ Rect uiFrame::clientRect(uiOrigin origin)
 Size uiFrame::minWindowSize()
 {
   Size r = Size(0, 0);
-  if (m_frameProps.resizeable && !state().minimized && m_titleLength == 0) {
+  if (m_frameProps.resizeable && !m_frameState.minimized && m_titleLength == 0) {
     r.width  += CORNERSENSE * 2;
     r.height += CORNERSENSE * 2;
   }
@@ -2063,7 +2041,7 @@ void uiFrame::paintFrame()
     bkgRect.Y1 += barHeight;
   }
   // background
-  if (m_frameProps.fillBackground && !state().minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
+  if (m_frameProps.fillBackground && !m_frameState.minimized && bkgRect.width() > 0 && bkgRect.height() > 0) {
     canvas()->setBrushColor(m_frameStyle.backgroundColor);
     canvas()->fillRectangle(bkgRect);
   }
@@ -2099,7 +2077,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
     } else
       canvas()->setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
-    if (state().maximized || state().minimized) {
+    if (m_frameState.maximized || m_frameState.minimized) {
       // draw restore (from maximize or minimize) button
       r = r.shrink(1).translate(-1, +1);
       canvas()->drawRectangle(r);
@@ -2112,7 +2090,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
     } else
       canvas()->drawRectangle(r);
   }
-  if (m_frameProps.hasMinimizeButton && !state().minimized) {
+  if (m_frameProps.hasMinimizeButton && !m_frameState.minimized) {
     // minimize button
     Rect r = getBtnRect(2);
     buttonsX = r.X1;
@@ -2146,6 +2124,7 @@ void uiFrame::processEvent(uiEvent * event)
       if (event->params.mouse.changedButton == 1) {
         m_mouseDownPos       = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
         m_mouseDownFrameItem = getFrameItemAt(event->params.mouse.status.X, event->params.mouse.status.Y);
+        m_sizeAtMouseDown    = size();
         app()->combineMouseMoveEvents(true);
       }
       break;
@@ -2197,6 +2176,28 @@ void uiFrame::processEvent(uiEvent * event)
       onHide();
       break;
 
+    case UIEVT_MAXIMIZE:
+      if (!m_frameState.minimized)
+        m_savedScreenRect = rect(uiOrigin::Parent);
+      m_frameState.maximized = true;
+      m_frameState.minimized = false;
+      app()->reshapeWindow(this, parent()->clientRect(uiOrigin::Window));
+      break;
+
+    case UIEVT_MINIMIZE:
+      if (!m_frameState.maximized)
+        m_savedScreenRect = rect(uiOrigin::Parent);
+      m_frameState.maximized = false;
+      m_frameState.minimized = true;
+      app()->resizeWindow(this, minWindowSize());
+      break;
+
+    case UIEVT_RESTORE:
+      m_frameState.maximized = false;
+      m_frameState.minimized = false;
+      app()->reshapeWindow(this, m_savedScreenRect);
+      break;
+
     case UIEVT_SETSIZE:
       onResize();
       break;
@@ -2237,11 +2238,11 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
     if (m_frameProps.hasMaximizeButton && getBtnRect(1).contains(p))
       return uiFrameItem::MaximizeButton; // on maximize button area
 
-    if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(p))
+    if (m_frameProps.hasMinimizeButton && !m_frameState.minimized && getBtnRect(2).contains(p))
       return uiFrameItem::MinimizeButton; // on minimize button area
   }
 
-  if (m_frameProps.resizeable && !state().maximized && !state().minimized) {
+  if (m_frameProps.resizeable && !m_frameState.maximized && !m_frameState.minimized) {
 
     int w = size().width;
     int h = size().height;
@@ -2281,7 +2282,7 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
   }
 
   // on title bar, moving area
-  if (m_titleLength > 0 && m_frameProps.moveable && !state().maximized && titleBarRect().contains(p))
+  if (m_titleLength > 0 && m_frameProps.moveable && !m_frameState.maximized && titleBarRect().contains(p))
     return uiFrameItem::MoveArea;
 
   return uiFrameItem::None;
@@ -2304,7 +2305,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
       break;
 
     case uiFrameItem::CenterRightResize:
-      newRect = newRect.resize(imax(sizeAtMouseDown().width + dx, minSize.width), newRect.height());
+      newRect = newRect.resize(imax(m_sizeAtMouseDown.width + dx, minSize.width), newRect.height());
       break;
 
     case uiFrameItem::CenterLeftResize:
@@ -2336,7 +2337,7 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
     case uiFrameItem::TopRightResize:
       {
         Rect r = newRect;
-        r.X2 = pos().X + sizeAtMouseDown().width + dx;
+        r.X2 = pos().X + m_sizeAtMouseDown.width + dx;
         newRect.X2 = r.X2 + imax(0, minSize.width - r.size().width);
         r.Y1 = pos().Y + dy;
         newRect.Y1 = r.Y1 - imax(0, minSize.height - r.size().height);
@@ -2348,17 +2349,17 @@ void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
         Rect r = newRect;
         r.X1 = pos().X + dx;
         newRect.X1 = r.X1 - imax(0, minSize.width - r.size().width);
-        r.Y2 = pos().Y + sizeAtMouseDown().height + dy;
+        r.Y2 = pos().Y + m_sizeAtMouseDown.height + dy;
         newRect.Y2 = r.Y2 + imax(0, minSize.height - r.size().height);
         break;
       }
 
     case uiFrameItem::BottomCenterResize:
-      newRect = newRect.resize(newRect.width(), imax(sizeAtMouseDown().height + dy, minSize.height));
+      newRect = newRect.resize(newRect.width(), imax(m_sizeAtMouseDown.height + dy, minSize.height));
       break;
 
     case uiFrameItem::BottomRightResize:
-      newRect = newRect.resize(imax(sizeAtMouseDown().width + dx, minSize.width), imax(sizeAtMouseDown().height + dy, minSize.height));
+      newRect = newRect.resize(imax(m_sizeAtMouseDown.width + dx, minSize.width), imax(m_sizeAtMouseDown.height + dy, minSize.height));
       break;
 
     default:
@@ -2468,9 +2469,9 @@ void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
       // maximimize or restore on:
       //   - click on maximize/restore button
       //   - double click on the title bar
-      app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-    } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(m_mouseDownPos)) {
-      app()->minimizeWindow(this, !state().minimized);
+      app()->maximizeFrame(this, !m_frameState.maximized && !m_frameState.minimized);  // used also for "restore" from minimized
+    } else if (m_frameProps.hasMinimizeButton && !m_frameState.minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(m_mouseDownPos)) {
+      app()->minimizeFrame(this, !m_frameState.minimized);
     } else
       return;
     // this avoids the button remains selected (background colored) when window change size

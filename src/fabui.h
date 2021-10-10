@@ -346,8 +346,6 @@ enum class uiOrigin {
 /** @brief Specifies current window state */
 struct uiWindowState {
   uint8_t visible   : 1;  /**< 0 = hidden,   1 = visible   */
-  uint8_t maximized : 1;  /**< 0 = normal,   1 = maximized */
-  uint8_t minimized : 1;  /**< 0 = normal,   1 = minimized */
   uint8_t active    : 1;  /**< 0 = inactive, 1 = active    */
 };
 
@@ -529,7 +527,7 @@ public:
   /**
    * @brief Determines the window state
    *
-   * To set window state (hidden, visible, maximized, minimized) use uiApp.showWindow(), uiApp.maximizeWindow(), uiApp.minimizeWindow().
+   * To set window state (hidden, visible) use uiApp.showWindow().
    *
    * @return Current window state
    */
@@ -678,9 +676,6 @@ protected:
   void moveAfter(uiWindow * child, uiWindow * underlyingChild);
   bool isChild(uiWindow * window);
 
-  Size sizeAtMouseDown()              { return m_sizeAtMouseDown; }
-  Point posAtMouseDown()              { return m_posAtMouseDown; }
-
   virtual Size minWindowSize()        { return Size(0, 0); }
 
   void beginPaint(uiEvent * paintEvent, Rect const & clippingRect);
@@ -704,17 +699,11 @@ private:
   Point         m_pos;
   Size          m_size;
 
-  // saved screen rect before Maximize or Minimize
-  Rect          m_savedScreenRect;
-
   uiWindowState m_state;
 
   uiWindowProps m_windowProps;
 
   uiWindowStyle m_windowStyle;
-
-  Point         m_posAtMouseDown;  // used to resize
-  Size          m_sizeAtMouseDown; // used to resize
 
   bool          m_isMouseOver;     // true after mouse entered, false after mouse left
 
@@ -794,6 +783,13 @@ struct uiFrameProps {
     hasMinimizeButton(true),
     fillBackground(true)
   { }
+};
+
+
+/** @brief Specifies current frame state */
+struct uiFrameState {
+  uint8_t maximized : 1;  /**< 0 = normal,   1 = maximized */
+  uint8_t minimized : 1;  /**< 0 = normal,   1 = minimized */
 };
 
 
@@ -885,6 +881,16 @@ public:
 
   int getNextFreeFocusIndex() { return m_nextFreeFocusIndex++; }
 
+  /**
+   * @brief Determines the frame state
+   *
+   * To set frame state (maximized, minimized) use uiApp.maximizeFrame() or uiApp.minimizeFrame().
+   *
+   * @return Current window state
+   */
+  uiFrameState frameState() { return m_frameState; }
+
+
 
   // Delegates
 
@@ -969,8 +975,13 @@ private:
 
   int                m_nextFreeFocusIndex;
 
-  Point              m_mouseDownPos;    // mouse position when mouse down event has been received
+  Point              m_mouseDownPos;        // mouse position when mouse down event has been received
 
+  Rect               m_savedScreenRect;     // saved screen rect before Maximize or Minimize
+
+  Size               m_sizeAtMouseDown;     // used to resize
+
+  uiFrameState       m_frameState;
 };
 
 
@@ -3277,20 +3288,20 @@ public:
   int endModalWindow(ModalWindowState * state);
 
   /**
-   * @brief Maximizes or restores a window
+   * @brief Maximizes or restores a frame
    *
-   * @param window Window to be maximized or restored
-   * @param value True maximizes the window, False restores it from maximized state
+   * @param frame Frame to be maximized or restored
+   * @param value True maximizes the frame, False restores it from maximized state
    */
-  void maximizeWindow(uiWindow * window, bool value);
+  void maximizeFrame(uiFrame * frame, bool value);
 
   /**
-   * @brief Minimizes or restores a window
+   * @brief Minimizes or restores a frame
    *
-   * @param window Window to be minimized or restored
-   * @param value True minimizes the window, False restores it from minimized state
+   * @param frame Frame to be minimized or restored
+   * @param value True minimizes the frame, False restores it from minimized state
    */
-  void minimizeWindow(uiWindow * window, bool value);
+  void minimizeFrame(uiFrame * frame, bool value);
 
   void combineMouseMoveEvents(bool value) { m_combineMouseMoveEvents = value; }
 
