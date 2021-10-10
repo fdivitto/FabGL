@@ -564,13 +564,6 @@ public:
   uiWindow * parentFrame();
 
   /**
-   * @brief Determines mouse position when left button was down
-   *
-   * @return Mouse position
-   */
-  Point mouseDownPos() { return m_mouseDownPos; }
-
-  /**
    * @brief Transforms rectangle origins from current window to another one
    *
    * @param rect Rectangle to transform
@@ -719,8 +712,6 @@ private:
   uiWindowProps m_windowProps;
 
   uiWindowStyle m_windowStyle;
-
-  Point         m_mouseDownPos;    // mouse position when mouse down event has been received
 
   Point         m_posAtMouseDown;  // used to resize
   Size          m_sizeAtMouseDown; // used to resize
@@ -978,6 +969,8 @@ private:
 
   int                m_nextFreeFocusIndex;
 
+  Point              m_mouseDownPos;    // mouse position when mouse down event has been received
+
 };
 
 
@@ -1198,6 +1191,8 @@ private:
 
   // a timer is active while mouse is down and the mouse is over a button
   uiTimerHandle   m_scrollTimer;
+
+  Point           m_mouseDownPos;    // mouse position when mouse down event has been received
 };
 
 

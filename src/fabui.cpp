@@ -1372,7 +1372,6 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_parent(parent),
     m_pos(pos),
     m_size(size),
-    m_mouseDownPos(Point(-1, -1)),
     m_isMouseOver(false),
     m_styleClassID(styleClassID),
     m_next(nullptr),
@@ -1643,7 +1642,6 @@ void uiWindow::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
-        m_mouseDownPos    = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
         m_posAtMouseDown  = m_pos;
         m_sizeAtMouseDown = m_size;
         // activate window? setActiveWindow() will activate the right window (maybe a parent)
@@ -1934,7 +1932,8 @@ uiFrame::uiFrame(uiWindow * parent, char const * title, const Point & pos, const
     m_mouseDownFrameItem(uiFrameItem::None),
     m_mouseMoveFrameItem(uiFrameItem::None),
     m_lastReshapingBox(Rect(0, 0, 0, 0)),
-    m_nextFreeFocusIndex(0)
+    m_nextFreeFocusIndex(0),
+    m_mouseDownPos(Point(-1, -1))
 {
   objectType().uiFrame = true;
   if (app()) {
@@ -2145,6 +2144,7 @@ void uiFrame::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
+        m_mouseDownPos       = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
         m_mouseDownFrameItem = getFrameItemAt(event->params.mouse.status.X, event->params.mouse.status.Y);
         app()->combineMouseMoveEvents(true);
       }
@@ -2290,8 +2290,8 @@ uiFrameItem uiFrame::getFrameItemAt(int x, int y)
 
 void uiFrame::movingCapturedMouse(int mouseX, int mouseY, bool mouseIsDown)
 {
-  int dx = mouseX - mouseDownPos().X;
-  int dy = mouseY - mouseDownPos().Y;
+  int dx = mouseX - m_mouseDownPos.X;
+  int dy = mouseY - m_mouseDownPos.Y;
 
   Size minSize = minWindowSize();
 
@@ -2459,17 +2459,17 @@ void uiFrame::movingFreeMouse(int mouseX, int mouseY)
 void uiFrame::handleButtonsClick(int x, int y, bool doubleClick)
 {
   if (m_titleLength > 0) {
-    if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(mouseDownPos())) {
+    if (m_frameProps.hasCloseButton && getBtnRect(0).contains(x, y) && getBtnRect(0).contains(m_mouseDownPos)) {
       // generate UIEVT_CLOSE event
       uiEvent evt = uiEvent(this, UIEVT_CLOSE);
       app()->postEvent(&evt);
-    } else if (m_frameProps.hasMaximizeButton && ((getBtnRect(1).contains(x, y) && getBtnRect(1).contains(mouseDownPos())) ||
+    } else if (m_frameProps.hasMaximizeButton && ((getBtnRect(1).contains(x, y) && getBtnRect(1).contains(m_mouseDownPos)) ||
                                                   (doubleClick && titleBarRect().contains(x, y)))) {
       // maximimize or restore on:
       //   - click on maximize/restore button
       //   - double click on the title bar
       app()->maximizeWindow(this, !state().maximized && !state().minimized);  // used also for "restore" from minimized
-    } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(mouseDownPos())) {
+    } else if (m_frameProps.hasMinimizeButton && !state().minimized && getBtnRect(2).contains(x, y) && getBtnRect(2).contains(m_mouseDownPos)) {
       app()->minimizeWindow(this, !state().minimized);
     } else
       return;
@@ -3553,7 +3553,8 @@ uiScrollableControl::uiScrollableControl(uiWindow * parent, const Point & pos, c
     m_VScrollBarVisible(0),
     m_VScrollBarRange(0),
     m_mouseOverItem(uiScrollBarItem::None),
-    m_scrollTimer(nullptr)
+    m_scrollTimer(nullptr),
+    m_mouseDownPos(Point(-1, -1))
 {
   objectType().uiScrollableControl = true;
 
@@ -3630,6 +3631,7 @@ void uiScrollableControl::processEvent(uiEvent * event)
 
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1) {
+        m_mouseDownPos                = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
         m_mouseDownHScrollBarPosition = m_HScrollBarPosition;
         m_mouseDownVScrollBarPosition = m_VScrollBarPosition;
         if (m_mouseOverItem == uiScrollBarItem::LeftButton || m_mouseOverItem == uiScrollBarItem::RightButton ||
@@ -3736,12 +3738,12 @@ void uiScrollableControl::handleCapturedMouseMove(int mouseX, int mouseY)
 {
   if (m_mouseOverItem == uiScrollBarItem::HBar) {
     // dragging horizontal bar
-    int offset = mouseX - mouseDownPos().X;
+    int offset = mouseX - m_mouseDownPos.X;
     int newPos = m_mouseDownHScrollBarPosition + offset * m_HScrollBarRange / m_HBarArea;
     setScrollBar(uiOrientation::Horizontal, newPos, m_HScrollBarVisible, m_HScrollBarRange);
   } else if (m_mouseOverItem == uiScrollBarItem::VBar) {
     // dragging vertical bar
-    int offset = mouseY - mouseDownPos().Y;
+    int offset = mouseY - m_mouseDownPos.Y;
     int newPos = m_mouseDownVScrollBarPosition + offset * m_VScrollBarRange / m_VBarArea;
     setScrollBar(uiOrientation::Vertical, newPos, m_VScrollBarVisible, m_VScrollBarRange);
   }
