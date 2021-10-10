@@ -4444,10 +4444,17 @@ void uiCustomComboBox::processEvent(uiEvent * event)
         onChange();
       };
       listbox()->onKeyType = [&](uiKeyEventInfo const & key) {
-        if (key.VK == VK_TAB || key.VK == VK_RETURN)
+        if (key.VK == VK_TAB || key.VK == VK_RETURN) {
           closeListBox();
-        if (key.VK == VK_TAB)
-          m_loseFocusBy = key.SHIFT ? -1 : 2;
+          if (key.VK == VK_TAB)
+            m_loseFocusBy = key.SHIFT ? -1 : 2;
+        } else {
+          uiEvent evt = uiEvent(parentFrame(), UIEVT_KEYDOWN);
+          evt.params.key = key;
+          app()->postEvent(&evt);
+          evt.id = UIEVT_KEYUP;
+          app()->postEvent(&evt);
+        }
       };
       editcontrol()->setParentProcessKbdEvents(true); // we want keyboard events also here
       break;
