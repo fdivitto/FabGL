@@ -647,14 +647,14 @@ public:
    *
    * @param value Style class identifier
    */
-  void setStyleClassID(uint32_t value) { m_styleClassID = value; }
+  void setStyleClassID(uint16_t value)   { m_styleClassID = value; }
 
   /**
    * @brief Determines current style class for this UI element
    *
    * @return Style class ID
    */
-  uint32_t styleClassID()                { return m_styleClassID; }
+  uint16_t styleClassID()                { return m_styleClassID; }
 
   /**
    * @brief Enables a child window to send keyboard events to its parent
