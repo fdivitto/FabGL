@@ -759,23 +759,27 @@ uiWindow * uiApp::setFocusedWindow(uiWindow * value)
 // delta = -1, go previous focused index
 uiWindow * uiApp::moveFocus(int delta)
 {
-  uiWindow * parent = m_focusedWindow ? m_focusedWindow->parentFrame() : m_activeWindow;
-  int startingIndex = m_focusedWindow ? m_focusedWindow->focusIndex() + delta : 0;
-  int newIndex = startingIndex;
-  do {
-    int maxIndex = -1;
-    uiWindow * newFocusedCtrl = parent->findChildWithFocusIndex(newIndex, &maxIndex);
-    if (maxIndex == -1)
-      return m_focusedWindow; // no change
-    if (newFocusedCtrl) {
-      setFocusedWindow(newFocusedCtrl);
-      return newFocusedCtrl;
-    }
-    if (delta > 0)
-      newIndex = (newIndex >= maxIndex ? 0 : newIndex + delta);
-    else
-      newIndex = (newIndex <= 0 ? maxIndex : newIndex + delta);
-  } while (newIndex != startingIndex);
+  if (delta) {
+    uiWindow * parent = m_focusedWindow ? m_focusedWindow->parentFrame() : m_activeWindow;
+    int startingIndex = m_focusedWindow ? m_focusedWindow->focusIndex() + delta : 0;
+    delta /= abs(delta); // from here delta must be in -1...+1 range
+    int newIndex = startingIndex;
+    do {
+      int maxIndex = -1;
+      uiWindow * newFocusedCtrl = parent->findChildWithFocusIndex(newIndex, &maxIndex);
+      if (maxIndex == -1) {
+        return m_focusedWindow; // no change
+      }
+      if (newFocusedCtrl) {
+        setFocusedWindow(newFocusedCtrl);
+        return newFocusedCtrl;
+      }
+      if (delta > 0)
+        newIndex = (newIndex >= maxIndex ? 0 : newIndex + delta);
+      else
+        newIndex = (newIndex <= 0 ? maxIndex : newIndex + delta);
+    } while (newIndex != startingIndex);
+  }
   return m_focusedWindow; // no change
 }
 
