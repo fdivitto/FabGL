@@ -352,12 +352,14 @@ struct uiWindowState {
 
 /** @brief Contains some window options */
 struct uiWindowProps {
-  uint8_t activable : 1;  /**< The window is activable (default for windows)  */
-  uint8_t focusable : 1;  /**< The window is focusable (default for controls) */
+  uint8_t activable  : 1;  /**< The window is activable (default for windows)  */
+  uint8_t focusable  : 1;  /**< The window is focusable (default for controls) */
+  uint8_t activeLook : 1;  /**< Maintain active style even when not active */
 
   uiWindowProps() :
     activable(true),
-    focusable(false)
+    focusable(false),
+    activeLook(false)
   { }
 };
 

@@ -1722,7 +1722,7 @@ void uiWindow::paintWindow()
   // border
   int bSize = hasFocus() ? m_windowStyle.focusedBorderSize : m_windowStyle.borderSize;
   if (bSize > 0) {
-    canvas()->setPenColor(hasFocus() ? m_windowStyle.focusedBorderColor : (state().active ? m_windowStyle.activeBorderColor : m_windowStyle.borderColor));
+    canvas()->setPenColor(hasFocus() ? m_windowStyle.focusedBorderColor : (state().active || windowProps().activeLook ? m_windowStyle.activeBorderColor : m_windowStyle.borderColor));
     for (int i = 0; i < bSize; ++i)
       canvas()->drawRectangle(i, i, m_size.width - 1 - i, m_size.height - 1 - i);
   }
@@ -2032,13 +2032,13 @@ void uiFrame::paintFrame()
   if (m_titleLength > 0) {
     int barHeight = titleBarHeight();
     // title bar background
-    RGB888 titleBarBrushColor = state().active ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
+    RGB888 titleBarBrushColor = state().active || windowProps().activeLook ? m_frameStyle.activeTitleBackgroundColor : m_frameStyle.titleBackgroundColor;
     canvas()->setBrushColor(titleBarBrushColor);
     canvas()->fillRectangle(titleBarRect());
     // close, maximize and minimze buttons
     int btnX = paintButtons(bkgRect);
     // title
-    canvas()->setPenColor(state().active ? m_frameStyle.activeTitleColor : m_frameStyle.titleColor);
+    canvas()->setPenColor(state().active || windowProps().activeLook ? m_frameStyle.activeTitleColor : m_frameStyle.titleColor);
     canvas()->setGlyphOptions(GlyphOptions().FillBackground(false).DoubleWidth(0).Bold(false).Italic(false).Underline(false).Invert(0));
     canvas()->drawTextWithEllipsis(m_frameStyle.titleFont, 1 + bkgRect.X1, 1 + bkgRect.Y1, m_title, btnX);
     // adjust background rect
@@ -2065,7 +2065,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       canvas()->fillRectangle(r);
       canvas()->setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      canvas()->setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
+      canvas()->setPenColor(state().active || windowProps().activeLook ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     canvas()->drawLine(r.X1, r.Y1, r.X2, r.Y2);
     canvas()->drawLine(r.X2, r.Y1, r.X1, r.Y2);
@@ -2079,7 +2079,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       canvas()->fillRectangle(r);
       canvas()->setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      canvas()->setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
+      canvas()->setPenColor(state().active || windowProps().activeLook ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     if (m_frameState.maximized || m_frameState.minimized) {
       // draw restore (from maximize or minimize) button
@@ -2103,7 +2103,7 @@ int uiFrame::paintButtons(Rect const & bkgRect)
       canvas()->fillRectangle(r);
       canvas()->setPenColor(m_frameStyle.mouseOverButtonColor);
     } else
-      canvas()->setPenColor(state().active ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
+      canvas()->setPenColor(state().active || windowProps().activeLook  ? m_frameStyle.activeButtonColor : m_frameStyle.buttonColor);
     r = r.shrink(4);
     int h = (r.Y2 - r.Y1 + 1) / 2;
     canvas()->drawLine(r.X1, r.Y1 + h, r.X2, r.Y1 + h);
@@ -4518,6 +4518,7 @@ void uiCustomComboBox::openListBox()
   app()->setActiveWindow(m_listBoxParent);
   app()->reshapeWindow(listbox(), r.translate(-r.X1, -r.Y1));
   app()->setFocusedWindow(listbox());
+  parentFrame()->windowProps().activeLook = true;
 }
 
 
@@ -4528,6 +4529,7 @@ void uiCustomComboBox::closeListBox()
     app()->setActiveWindow(parent());
     app()->setFocusedWindow(this);
   }
+  parentFrame()->windowProps().activeLook = false;
 }
 
 
