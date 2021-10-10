@@ -190,7 +190,7 @@ struct ConfDialogApp : public uiApp {
     // ESC        : exit without save
     // CTRL + ESC : reboot
     // F10        : save and exit
-    frame->onKeyUp = [&](uiKeyEventInfo key) {
+    frame->onKeyUp = [&](uiKeyEventInfo const & key) {
       if (key.VK == VirtualKey::VK_ESCAPE) {
         if (key.CTRL)
           performReboot();  // no return from here!

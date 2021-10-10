@@ -507,7 +507,7 @@ void TextInputForm::addControls()
   edit = new uiTextEdit(mainFrame, inOutString, Point(x + labelExtent + 5, y - 4), Size(editExtent - 15, font->height + 6));
   edit->anchors().right = true;
   edit->textEditProps().passwordMode = passwordMode;
-  edit->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
+  edit->onKeyType = [&](uiKeyEventInfo const & key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = edit;
 }
@@ -544,7 +544,7 @@ void MessageForm::addControls()
 
   new uiLabel(mainFrame, messageText, Point(x, y));
 
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 }
 
 
@@ -613,7 +613,7 @@ void SelectForm::addControls()
       finalize();
     };
   }
-  listBox->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
+  listBox->onKeyType = [&](uiKeyEventInfo const & key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = listBox;
 }
@@ -681,7 +681,7 @@ void ProgressForm::addControls()
     progressBar = new uiProgressBar(mainFrame, Point(x, y), Size(mainFrame->clientSize().width - 8, font->height));
   }
 
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) { defaultEscapeHandler(key); };
 }
 
 
@@ -734,7 +734,7 @@ void FileBrowserForm::addControls()
   mainFrame->frameProps().resizeable        = true;
   mainFrame->frameProps().hasMaximizeButton = true;
 
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) { defaultEscapeHandler(key); };
 
   int x = mainFrame->clientPos().X + CTRLS_DIST;
   int y = mainFrame->clientPos().Y + CTRLS_DIST;
@@ -892,7 +892,7 @@ void FileSelectorForm::addControls()
   mainFrame->frameProps().resizeable        = true;
   mainFrame->frameProps().hasMaximizeButton = true;
 
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) { defaultEscapeHandler(key); };
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) { defaultEscapeHandler(key); };
 
   int x = mainFrame->clientPos().X + CTRLS_DIST;
   int y = mainFrame->clientPos().Y + CTRLS_DIST;
@@ -920,7 +920,7 @@ void FileSelectorForm::addControls()
       finalize();
     }
   };
-  fileBrowser->onKeyType = [&](uiKeyEventInfo key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
+  fileBrowser->onKeyType = [&](uiKeyEventInfo const & key) { defaultEnterHandler(key); defaultEscapeHandler(key); };
 
   controlToFocus = edit;
 }

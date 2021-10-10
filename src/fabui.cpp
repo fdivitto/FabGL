@@ -1199,7 +1199,7 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
   mainFrame->frameProps().resizeable        = false;
   mainFrame->frameProps().hasMaximizeButton = false;
   mainFrame->frameProps().hasMinimizeButton = false;
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) {
     if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER)
       mainFrame->exitModal(1);
     else if (key.VK == VK_ESCAPE)
@@ -1268,7 +1268,7 @@ uiMessageBoxResult uiApp::fileDialog(char const * title, char * inOutDirectory, 
   mainFrame->frameProps().resizeable        = false;
   mainFrame->frameProps().hasMaximizeButton = false;
   mainFrame->frameProps().hasMinimizeButton = false;
-  mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+  mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) {
     if (key.VK == VK_RETURN || key.VK == VK_KP_ENTER)
       mainFrame->exitModal(1);
     else if (key.VK == VK_ESCAPE)
@@ -1374,11 +1374,11 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_size(size),
     m_mouseDownPos(Point(-1, -1)),
     m_isMouseOver(false),
+    m_styleClassID(styleClassID),
     m_next(nullptr),
     m_prev(nullptr),
     m_firstChild(nullptr),
     m_lastChild(nullptr),
-    m_styleClassID(styleClassID),
     m_parentProcessKbdEvents(false)
 {
   objectType().uiWindow = true;
@@ -1654,7 +1654,6 @@ void uiWindow::processEvent(uiEvent * event)
         // capture mouse
         app()->captureMouse(this);
       }
-      onMouseDown(event->params.mouse);
       break;
 
     case UIEVT_MOUSEBUTTONUP:
@@ -1667,15 +1666,6 @@ void uiWindow::processEvent(uiEvent * event)
           app()->postEvent(&evt);
         }
       }
-      onMouseUp(event->params.mouse);
-      break;
-
-    case UIEVT_CLICK:
-      onClick();
-      break;
-
-    case UIEVT_DBLCLICK:
-      onDblClick();
       break;
 
     case UIEVT_SHOW:
@@ -2627,6 +2617,7 @@ void uiButton::processEvent(uiEvent * event)
 
     case UIEVT_CLICK:
       trigger();
+      onClick();
       break;
 
     case UIEVT_MOUSEENTER:
@@ -2636,6 +2627,11 @@ void uiButton::processEvent(uiEvent * event)
     case UIEVT_MOUSEBUTTONDOWN:
       if (event->params.mouse.changedButton == 1)
         repaint();
+      onMouseDown(event->params.mouse);
+      break;
+
+    case UIEVT_MOUSEBUTTONUP:
+      onMouseUp(event->params.mouse);
       break;
 
     case UIEVT_MOUSELEAVE:
@@ -3272,6 +3268,10 @@ void uiLabel::processEvent(uiEvent * event)
     case UIEVT_PAINT:
       beginPaint(event, uiControl::clientRect(uiOrigin::Window));
       paintLabel();
+      break;
+
+    case UIEVT_CLICK:
+      onClick();
       break;
 
     default:
@@ -3958,6 +3958,14 @@ void uiCustomListBox::processEvent(uiEvent * event)
       makeItemVisible(firstSelectedItem());
       break;
 
+    case UIEVT_CLICK:
+      onClick();
+      break;
+
+    case UIEVT_DBLCLICK:
+      onDblClick();
+      break;      
+
     default:
       break;
   }
@@ -4427,7 +4435,7 @@ void uiCustomComboBox::processEvent(uiEvent * event)
         updateEditControl();
         onChange();
       };
-      listbox()->onKeyType = [&](uiKeyEventInfo key) {
+      listbox()->onKeyType = [&](uiKeyEventInfo const & key) {
         if (key.VK == VK_TAB || key.VK == VK_RETURN)
           closeListBox();
       };
@@ -4715,6 +4723,7 @@ void uiCheckBox::processEvent(uiEvent * event)
 
     case UIEVT_CLICK:
       trigger();
+      onClick();
       break;
 
     case UIEVT_MOUSEENTER:

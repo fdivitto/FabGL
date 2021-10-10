@@ -675,38 +675,6 @@ public:
   void setParentProcessKbdEvents(bool value) { m_parentProcessKbdEvents = value; }
 
 
-  // Delegates
-
-  /**
-   * @brief Mouse click event delegate
-   *
-   * This delegate is called when the mouse button is pressed and released on the same position.
-   */
-  Delegate<> onClick;
-
-  /**
-   * @brief Mouse double click event delegate
-   *
-   * This delegate is called when the mouse button is double pressed and released on the same position.
-   * To change double click time use uiAppProps.doubleClickTime of uiApp.appProps().
-   */
-  Delegate<> onDblClick;
-
-  /**
-   * @brief Mouse down event delegate
-   *
-   * This delegate is called when the mouse button is pressed
-   */
-  Delegate<uiMouseEventInfo const&> onMouseDown;
-
-  /**
-   * @brief Mouse up event delegate
-   *
-   * This delegate is called when the mouse button is released
-   */
-  Delegate<uiMouseEventInfo const&> onMouseUp;
-
-
 protected:
 
   void addChild(uiWindow * child);
@@ -763,13 +731,13 @@ private:
 
   int16_t       m_focusIndex;      // -1 = doesn't partecipate to focus trip
 
+  uint16_t      m_styleClassID;
+
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow *    m_next;
   uiWindow *    m_prev;
   uiWindow *    m_firstChild;
   uiWindow *    m_lastChild;
-
-  uint32_t      m_styleClassID;
 
   // if true parent processes keyboard events
   bool          m_parentProcessKbdEvents;
@@ -961,12 +929,12 @@ public:
   /**
    * @brief Key-down event delegate
    */
-  Delegate<uiKeyEventInfo> onKeyDown;
+  Delegate<uiKeyEventInfo const &> onKeyDown;
 
   /**
    * @brief Key-up event delegate
    */
-  Delegate<uiKeyEventInfo> onKeyUp;
+  Delegate<uiKeyEventInfo const &> onKeyUp;
 
   /**
    * @brief Paint event delegate
@@ -1353,6 +1321,27 @@ public:
    */
   Delegate<> onChange;
 
+  /**
+   * @brief Mouse click event delegate
+   *
+   * This delegate is called when the mouse button is pressed and released on the same position.
+   */
+  Delegate<> onClick;
+
+  /**
+   * @brief Mouse down event delegate
+   *
+   * This delegate is called when the mouse button is pressed
+   */
+  Delegate<uiMouseEventInfo const&> onMouseDown;
+
+  /**
+   * @brief Mouse up event delegate
+   *
+   * This delegate is called when the mouse button is released
+   */
+  Delegate<uiMouseEventInfo const&> onMouseUp;
+
 
 private:
 
@@ -1491,7 +1480,7 @@ public:
   /**
    * @brief Key-type event delegate
    */
-  Delegate<uiKeyEventInfo> onKeyType;
+  Delegate<uiKeyEventInfo const &> onKeyType;
   
 
 
@@ -1621,6 +1610,13 @@ public:
    * Call this method whenever text or font changes.
    */
   void update();
+
+  /**
+   * @brief Mouse click event delegate
+   *
+   * This delegate is called when the mouse button is pressed and released on the same position.
+   */
+  Delegate<> onClick;
 
 
 private:
@@ -1819,7 +1815,7 @@ public:
    *
    * Applications use this delegate to perform custom drawings.
    */
-  Delegate<Rect> onPaint;
+  Delegate<Rect const &> onPaint;
 
 
 private:
@@ -2000,12 +1996,28 @@ public:
   /**
    * @brief Key-type event delegate
    */
-  Delegate<uiKeyEventInfo> onKeyType;
+  Delegate<uiKeyEventInfo const &> onKeyType;
 
   /**
    * @brief Key-up event delegate
    */
-  Delegate<uiKeyEventInfo> onKeyUp;
+  Delegate<uiKeyEventInfo const &> onKeyUp;
+
+  /**
+   * @brief Mouse click event delegate
+   *
+   * This delegate is called when the mouse button is pressed and released on the same position.
+   */
+  Delegate<> onClick;
+
+  /**
+   * @brief Mouse double click event delegate
+   *
+   * This delegate is called when the mouse button is double pressed and released on the same position.
+   * To change double click time use uiAppProps.doubleClickTime of uiApp.appProps().
+   */
+  Delegate<> onDblClick;
+
 
 
 protected:
@@ -2583,6 +2595,13 @@ public:
    * This delegate is called whenever checkbox or radiobutton is checked or unchecked.
    */
   Delegate<> onChange;
+
+  /**
+   * @brief Mouse click event delegate
+   *
+   * This delegate is called when the mouse button is pressed and released on the same position.
+   */
+  Delegate<> onClick;
 
 
 private:

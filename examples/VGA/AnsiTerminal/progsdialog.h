@@ -47,7 +47,7 @@
     frameProps().hasMaximizeButton = false;
     frameProps().hasMinimizeButton = false;
 
-    onKeyUp = [&](uiKeyEventInfo key) {
+    onKeyUp = [&](uiKeyEventInfo const & key) {
       if (key.VK == VirtualKey::VK_ESCAPE)
         exitModal(0);
     };

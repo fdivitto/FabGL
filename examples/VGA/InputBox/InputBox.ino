@@ -95,7 +95,7 @@ void loop()
   list.append("Item 0");
   list.append("Item 1");
   list.append("Item 2");
-  while (true) {
+  for (bool loop = true; loop; ) {
     ib.setupButton(0, "Add");
     ib.setupButton(1, "Remove");
     ib.setupButton(2, "Options", "Edit;Restore;Advanced", 50);
@@ -105,6 +105,7 @@ void loop()
       // OK button
       case InputResult::Enter:
         ib.messageFmt(nullptr, nullptr, "OK", "You have selected item %d", list.getFirstSelected());
+        loop = false;
         break;
       // add new item button
       case InputResult::ButtonExt0:
@@ -140,11 +141,11 @@ void loop()
         break;
       // cancel
       default:
+        loop = false;
         break;
     }
   }
 
-/*
   ////////////////////////////////////////////////////
   // Example of options selection box with OK button (items from StringList)
   fabgl::StringList quiz;
@@ -244,7 +245,7 @@ void loop()
     }
     WiFi.scanDelete();
   }
-*/
+
   ib.message("Restart", "Ok, press OK to restart!");
 
 

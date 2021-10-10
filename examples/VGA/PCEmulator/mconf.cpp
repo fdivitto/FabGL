@@ -252,7 +252,7 @@ struct ConfigDialog : public uiApp {
     mainFrame->frameProps().hasMaximizeButton = false;
     mainFrame->frameProps().hasMinimizeButton = false;
     mainFrame->frameProps().hasCloseButton    = false;
-    mainFrame->onKeyUp = [&](uiKeyEventInfo key) {
+    mainFrame->onKeyUp = [&](uiKeyEventInfo const & key) {
       if (key.VK == VirtualKey::VK_RETURN || key.VK == VirtualKey::VK_KP_ENTER) {
         saveAndQuit();
       } else if (key.VK == VirtualKey::VK_ESCAPE) {

@@ -339,7 +339,7 @@ class Menu : public uiApp {
     // handles following keys:
     //  F1         ->  show help
     //  ESC or F12 ->  run the emulator
-    rootWindow()->onKeyUp = [&](uiKeyEventInfo key) {
+    rootWindow()->onKeyUp = [&](uiKeyEventInfo const & key) {
       switch (key.VK) {
         // F1
         case VirtualKey::VK_F1:
@@ -359,7 +359,7 @@ class Menu : public uiApp {
     // handles following keys in filebrowser:
     //   RETURN -> load selected program and return to vic
     //   DELETE -> remove selected dir or file
-    fileBrowser->onKeyUp = [&](uiKeyEventInfo key) {
+    fileBrowser->onKeyUp = [&](uiKeyEventInfo const & key) {
       switch (key.VK) {
         // RETURN
         case VirtualKey::VK_RETURN:
