@@ -2359,7 +2359,8 @@ private:
   int buttonWidth();
 
 
-  int               m_listHeight;
+  int16_t           m_listHeight;
+  int16_t           m_loseFocusBy;
   uiComboBoxStyle   m_comboBoxStyle;
   uiComboBoxProps   m_comboBoxProps;
   uiWindow *        m_listBoxParent;

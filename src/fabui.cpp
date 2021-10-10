@@ -4387,6 +4387,7 @@ void uiFileBrowser::processEvent(uiEvent * event)
 uiCustomComboBox::uiCustomComboBox(uiWindow * parent, const Point & pos, const Size & size, int listHeight, bool visible, uint32_t styleClassID)
   : uiControl(parent, pos, size, visible, 0),
     m_listHeight(listHeight),
+    m_loseFocusBy(0),
     m_listBoxParent(nullptr)
 {
   objectType().uiCustomComboBox = true;
@@ -4441,6 +4442,8 @@ void uiCustomComboBox::processEvent(uiEvent * event)
       listbox()->onKeyType = [&](uiKeyEventInfo const & key) {
         if (key.VK == VK_TAB || key.VK == VK_RETURN)
           closeListBox();
+        if (key.VK == VK_TAB)
+          m_loseFocusBy = key.SHIFT ? -1 : 2;
       };
       editcontrol()->setParentProcessKbdEvents(true); // we want keyboard events also here
       break;
@@ -4464,14 +4467,19 @@ void uiCustomComboBox::processEvent(uiEvent * event)
       break;
 
     case UIEVT_SETFOCUS:
-      if (event->params.focusInfo.oldFocused != listbox() && event->params.focusInfo.oldFocused != editcontrol()) {
-        if (m_comboBoxProps.openOnFocus) {
-          openListBox();
-        } else if (!isListBoxOpen()) {
+      if (m_loseFocusBy) {
+        app()->moveFocus(m_loseFocusBy);
+        m_loseFocusBy = 0;
+      } else {
+        if (event->params.focusInfo.oldFocused != listbox() && event->params.focusInfo.oldFocused != editcontrol()) {
+          if (m_comboBoxProps.openOnFocus) {
+            openListBox();
+          } else if (!isListBoxOpen()) {
+            app()->setFocusedWindow(editcontrol());
+          }
+        } else if (event->params.focusInfo.oldFocused == listbox()) {
           app()->setFocusedWindow(editcontrol());
         }
-      } else if (event->params.focusInfo.oldFocused == listbox()) {
-        app()->setFocusedWindow(editcontrol());
       }
       break;
 
