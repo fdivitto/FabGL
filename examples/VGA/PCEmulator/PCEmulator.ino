@@ -302,7 +302,7 @@ void sysReqCallback()
   machine->graphicsAdapter()->enableVideo(false);
   ibox.begin(VGA_640x480_60Hz, 500, 400, 4);
 
-  int s = ibox.menu("", "Select a command", "Restart;Continue;Mount Disk");
+  int s = ibox.menu("", "Select a command", "Restart (Boot Menu);Continue;Mount Disk");
   switch (s) {
 
     // Restart
@@ -399,7 +399,7 @@ void setup()
     dconfs.select(idx, true);
 
     ibox.setupButton(0, "Browse Files");
-    ibox.setupButton(1, "Options", "Edit;New;Remove", 70);
+    ibox.setupButton(1, "Options", "Edit;New;Remove", 52);
     auto r = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "Run");
 
     idx = dconfs.getFirstSelected();
