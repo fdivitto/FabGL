@@ -1244,6 +1244,8 @@ void Machine::VIA2PortIn(void * context, VIA6522 * via, VIA6522Port port)
       via->setPB(m->m_colStatus);
       if (m->m_JOY[JoyRight])
         via->setBitPB(7, 0);
+      else
+        via->openBitPB(7);
       break;
 
     case VIA6522Port::PA:

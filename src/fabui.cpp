@@ -1348,14 +1348,14 @@ void uiApp::enableKeyboardAndMouseEvents(bool value)
     if (m_keyboard)
       m_keyboard->setUIApp(this);
     if (m_mouse && m_mouse->isMouseAvailable()) {
-      m_mouse->setUIApp(this);
+      m_mouse->setupAbsolutePositioner(m_canvas->getWidth(), m_canvas->getHeight(), false, m_displayController, this);
       m_displayController->setMouseCursor(m_rootWindow->windowStyle().defaultCursor);
     }
   } else {
     if (m_keyboard)
       m_keyboard->setUIApp(nullptr);
     if (m_mouse && m_mouse->isMouseAvailable()) {
-      m_mouse->setUIApp(nullptr);
+      m_mouse->terminateAbsolutePositioner();
       m_displayController->setMouseCursor(nullptr);
     }
   }
