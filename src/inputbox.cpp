@@ -570,7 +570,7 @@ void SelectForm::calcRequiredSize()
   // calc space for list box
   size_t maxLength;
   auto itemsCount         = countItems(&maxLength);
-  listBoxHeight           = (font->height + 4) * itemsCount;
+  listBoxHeight           = 16 * itemsCount + 2;
   int requiredHeightUnCut = requiredHeight + listBoxHeight;
   requiredHeight          = imin(requiredHeightUnCut, app->canvas()->getHeight());
   requiredWidth           = imax(requiredWidth, maxLength * app->canvas()->textExtent(font, "M"));
