@@ -4517,10 +4517,18 @@ void uiCustomComboBox::processEvent(uiEvent * event)
 void uiCustomComboBox::openListBox()
 {
   Rect r = rect(uiOrigin::Screen);
-  r.Y1 = r.Y2 + 1;
-  r.Y2 = r.Y1 + m_listHeight;
-  m_listBoxParent->bringOnTop();
+  if (r.Y2 + m_listHeight + 1 >= app()->rootWindow()->size().height) {
+    // open upwards
+    r.Y2 = r.Y1 - 1;
+    r.Y1 = r.Y2 - m_listHeight;
+  } else {
+    // open downwards
+    r.Y1 = r.Y2 + 1;
+    r.Y2 = r.Y1 + m_listHeight;
+  }
   app()->reshapeWindow(m_listBoxParent, r);
+
+  m_listBoxParent->bringOnTop();
   app()->showWindow(m_listBoxParent, true);
   app()->setActiveWindow(m_listBoxParent);
   app()->reshapeWindow(listbox(), r.translate(-r.X1, -r.Y1));
