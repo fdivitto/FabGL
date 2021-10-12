@@ -43,20 +43,13 @@
 #include "fabutils.h"
 #include "devdrivers/swgenerator.h"
 #include "dispdrivers/vgacontroller.h"
-#include "fonts/font_8x14.h"
 
 
 namespace fabgl {
 
 
-#define VGATextController_CHARWIDTH      8    // max 8
-#define VGATextController_CHARWIDTHBYTES ((VGATextController_CHARWIDTH + 7) / 8)
-#define VGATextController_CHARHEIGHT     14
-#define VGATextController_COLUMNS        80
-#define VGATextController_ROWS           34
 #define VGATextController_WIDTH          640
 #define VGATextController_HEIGHT         480
-
 #define VGATextController_MODELINE       VGA_640x480_60Hz
 
 
@@ -68,7 +61,7 @@ namespace fabgl {
 * @brief Represents the VGA text-only controller
 *
 * The text only VGA controller allows only text, but requires less than 50K of RAM.
-* Resolution is fixed at 640x480, with 80 columns by 34 rows, 16 colors.
+* Resolution is fixed at 640x480, with 80 columns by a selectable number of rows, 16 colors.
 *
 * Text only output is very CPU intensive process and consumes up to 30% of one CPU core. Anyway this allows to have
 * more than 290K free for your application.
@@ -156,15 +149,15 @@ public:
   void setTextMap(uint32_t const * map, int rows);
 
   /**
-   * @brief Adjust columns and rows to the controller limits
+   * @brief Adjusts columns and rows to the controller limits
    *
    * @param columns If > 0 then it is set to 80.
-   * @param rows If > 0 then it is limited to 1..34 range.
+   * @param rows If > 0 then it is limited to screen height divided by font height.
    */
   void adjustMapSize(int * columns, int * rows);
 
-  int getColumns()                         { return VGATextController_COLUMNS; }
-  int getRows()                            { return VGATextController_ROWS; }
+  int getColumns()                         { return s_columns; }
+  int getRows()                            { return s_rows; }
   int colorsCount()                        { return 16; }
 
   void enableCursor(bool value)            { m_cursorEnabled = value; }
@@ -173,7 +166,25 @@ public:
   void setCursorForeground(Color value);
   void setCursorBackground(Color value);
 
-  FontInfo const * getFont()               { return &FONT_8x14; }
+  /**
+   * @brief Sets font
+   *
+   * Only fonts large 8 pixels (width) are supported (ie 8x8, 8x9, 8x13, 8x14, 8x16, 8x19).
+   * This method must be called before SetResolution().
+   *
+   * @param value Font info
+   *
+   * Example:
+   *
+   *     // Setup 80x25 text mode. Remember to add: #include "fonts/font_8x19.h"
+   *     fabgl::VGATextController VGAController;
+   *     VGAController.begin();
+   *     VGAController.setFont(&fabgl::FONT_8x19);
+   *     VGAController.setResolution();
+   */
+  void setFont(FontInfo const * value);
+
+  FontInfo const * getFont()               { return m_font; }
 
 private:
 
@@ -197,6 +208,10 @@ private:
   static int                 s_textRow;
   static bool                s_upperRow;
   static lldesc_t volatile * s_frameResetDesc;
+  static int16_t             s_charWidthInBytes;
+  static int16_t             s_charHeight;
+  static int16_t             s_columns;
+  static int16_t             s_rows;
 
   VGATimings                 m_timings;
 
@@ -228,6 +243,7 @@ private:
   int                        m_cursorCol;
   uint8_t                    m_cursorForeground;
   uint8_t                    m_cursorBackground;
+  FontInfo const *           m_font;
 
 };
 

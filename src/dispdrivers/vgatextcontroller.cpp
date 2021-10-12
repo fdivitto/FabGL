@@ -11,10 +11,11 @@
 #include "fabutils.h"
 #include "vgatextcontroller.h"
 #include "devdrivers/swgenerator.h"
+#include "fonts/font_8x14.h"
 
 
 
-#pragma GCC optimize ("O2")
+#pragma GCC optimize ("O3")
 
 
 namespace fabgl {
@@ -28,6 +29,11 @@ uint32_t *          VGATextController::s_fgbgPattern = nullptr;
 int                 VGATextController::s_textRow;
 bool                VGATextController::s_upperRow;
 lldesc_t volatile * VGATextController::s_frameResetDesc;
+int16_t             VGATextController::s_charWidthInBytes;
+int16_t             VGATextController::s_columns;
+int16_t             VGATextController::s_rows;
+int16_t             VGATextController::s_charHeight;
+
 
 #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
   volatile uint64_t s_vgatxtcycles = 0;
@@ -46,8 +52,10 @@ VGATextController::VGATextController()
     m_cursorRow(0),
     m_cursorCol(0),
     m_cursorForeground(0),
-    m_cursorBackground(15)
+    m_cursorBackground(15),
+    m_font(nullptr)
 {
+  setFont(&FONT_8x14);
 }
 
 
@@ -70,24 +78,24 @@ void VGATextController::setTextMap(uint32_t const * map, int rows)
 void VGATextController::adjustMapSize(int * columns, int * rows)
 {
   if (*columns > 0)
-    *columns = VGATextController_COLUMNS;
-  if (*rows > VGATextController_ROWS)
-    *rows = VGATextController_ROWS;
+    *columns = s_columns;
+  if (*rows > s_rows)
+    *rows = s_rows;
+}
 
+
+void VGATextController::setFont(FontInfo const * value)
+{
+  m_font = value;
+  if (m_font->width != 8)
+    printf("VGATextController: Unsupported font width\n");
 }
 
 
 void VGATextController::init(gpio_num_t VSyncGPIO)
 {
   m_DMABuffers = nullptr;
-
   m_GPIOStream.begin();
-
-  // load font into RAM
-  auto font = getFont();
-  int charDataSize = 256 * font->height * ((font->width + 7) / 8);
-  m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
-  memcpy(m_charData, font->data, charDataSize);
 }
 
 
@@ -172,13 +180,26 @@ void VGATextController::setResolution(VGATimings const& timings)
   // inform base class about screen size
   setScreenSize(m_timings.HVisibleArea, m_timings.VVisibleArea);
 
+  // font info
+  s_charWidthInBytes = (m_font->width + 7) / 8;
+  s_charHeight       = m_font->height;
+  s_columns          = VGATextController_WIDTH / m_font->width;
+  s_rows             = VGATextController_HEIGHT / m_font->height;
+
+  // load font into RAM
+  if (m_charData)
+    heap_caps_free(m_charData);
+  int charDataSize = 256 * m_font->height * ((m_font->width + 7) / 8);
+  m_charData = (uint8_t*) heap_caps_malloc(charDataSize, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+  memcpy(m_charData, m_font->data, charDataSize);
+
   m_HVSync = packHVSync(false, false);
 
   m_DMABuffersCount = 2 * m_timings.VVisibleArea + m_timings.VFrontPorch + m_timings.VSyncPulse + m_timings.VBackPorch;
 
   m_DMABuffers = (lldesc_t*) heap_caps_malloc(m_DMABuffersCount * sizeof(lldesc_t), MALLOC_CAP_DMA);
 
-  m_lines = (uint32_t*) heap_caps_malloc(VGATextController_CHARHEIGHT * VGATextController_WIDTH, MALLOC_CAP_DMA);
+  m_lines = (uint32_t*) heap_caps_malloc(s_charHeight * VGATextController_WIDTH, MALLOC_CAP_DMA);
 
   int rawLineWidth = m_timings.HFrontPorch + m_timings.HSyncPulse + m_timings.HBackPorch + m_timings.HVisibleArea;
   m_blankLine = (uint8_t*) heap_caps_malloc(rawLineWidth, MALLOC_CAP_DMA);
@@ -196,7 +217,7 @@ void VGATextController::setResolution(VGATimings const& timings)
     if (i < m_timings.VVisibleArea * 2) {
 
       // first part is the same of a blank line
-      m_DMABuffers[i].eof          = (visLine == 0 || visLine == VGATextController_CHARHEIGHT / 2 ? 1 : 0);
+      m_DMABuffers[i].eof          = (visLine == 0 || visLine == s_charHeight / 2 ? 1 : 0);
       m_DMABuffers[i].sosf         = 0;
       m_DMABuffers[i].offset       = 0;
       m_DMABuffers[i].owner        = 1;
@@ -218,7 +239,7 @@ void VGATextController::setResolution(VGATimings const& timings)
       m_DMABuffers[i].buf          = (uint8_t*)(m_lines) + visLine * VGATextController_WIDTH;
 
       ++visLine;
-      if (visLine == VGATextController_CHARHEIGHT)
+      if (visLine == s_charHeight)
         visLine = 0;
 
     } else {
@@ -267,7 +288,6 @@ void VGATextController::setResolution(VGATimings const& timings)
                                                      (i & 0b0001 ? (fg_pat << 8) : (bg_pat << 8));
         }
   }
-
 
   // ESP_INTR_FLAG_LEVEL1: should be less than PS2Controller interrupt level, necessary when running on the same core
   CoreUsage::setBusiestCore(FABGLIB_VIDEO_CPUINTENSIVE_TASKS_CORE);
@@ -323,7 +343,7 @@ void VGATextController::fillDMABuffers()
   for (int rx = 0; x < rawLineWidth; ++x, ++rx) {
     VGA_PIXELINROW(m_blankLine, x) = preparePixelWithSync((RGB222){0, 0, 0}, false, false);
     VGA_PIXELINROW(m_syncLine, x)  = preparePixelWithSync((RGB222){0, 0, 0}, false, true);
-    for (int i = 0; i < VGATextController_CHARHEIGHT; ++i)
+    for (int i = 0; i < s_charHeight; ++i)
       VGA_PIXELINROW( ((uint8_t*)(m_lines) + i * VGATextController_WIDTH), rx)  = preparePixelWithSync((RGB222){0, 0, 0}, false, false);
   }
 }
@@ -372,9 +392,11 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
 
     int scanLine = s_scanLine;
 
-    const int lineIndex = scanLine % VGATextController_CHARHEIGHT;
+    const int lineIndex = scanLine % s_charHeight;
 
     auto lines = ctrl->m_lines;
+
+    const int8_t downAdd = s_upperRow ? 0 : (s_charHeight & 1);
 
     if (s_textRow < ctrl->m_rows) {
 
@@ -386,10 +408,10 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
         cursorFGBG = (ctrl->m_cursorForeground << 4) | (ctrl->m_cursorBackground << 8);
       }
 
-      const auto charData = ctrl->m_charData + (s_upperRow ? 0 : VGATextController_CHARHEIGHT / 2);
-      auto mapItemPtr = ctrl->m_map + s_textRow * VGATextController_COLUMNS;
+      const auto charData = ctrl->m_charData + (s_upperRow ? 0 : s_charHeight / 2);
+      auto mapItemPtr = ctrl->m_map + s_textRow * s_columns;
 
-      for (int col = 0; col < VGATextController_COLUMNS; ++col, ++mapItemPtr) {
+      for (int col = 0; col < s_columns; ++col, ++mapItemPtr) {
 
         const auto mapItem = *mapItemPtr;
 
@@ -405,12 +427,12 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
         if (cursorVisible && col == cursorCol)
           fgbg = cursorFGBG;
 
-        uint32_t * dest = lines + lineIndex * VGATextController_WIDTH / sizeof(uint32_t) + col * VGATextController_CHARWIDTHBYTES * 2;
+        uint32_t * dest = lines + lineIndex * VGATextController_WIDTH / sizeof(uint32_t) + col * s_charWidthInBytes * 2;
 
         // blank?
         if (options.blank) {
 
-          for (int rowInChar = 0; rowInChar < VGATextController_CHARHEIGHT / 2; ++rowInChar) {
+          for (int rowInChar = 0; rowInChar < s_charHeight / 2 + downAdd; ++rowInChar) {
             int v = s_fgbgPattern[fgbg];
             *dest       = v;
             *(dest + 1) = v;
@@ -422,9 +444,9 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
           const bool underline = (s_upperRow == false && options.underline);
           const bool bold      = options.bold;
 
-          auto charRowPtr = charData + glyphMapItem_getIndex(mapItem) * VGATextController_CHARHEIGHT * VGATextController_CHARWIDTHBYTES;
+          auto charRowPtr = charData + glyphMapItem_getIndex(mapItem) * s_charHeight * s_charWidthInBytes;
 
-          for (int rowInChar = 0; rowInChar < VGATextController_CHARHEIGHT / 2; ++rowInChar) {
+          for (int rowInChar = 0; rowInChar < s_charHeight / 2 + downAdd; ++rowInChar) {
             auto charRowData = *charRowPtr;
 
             // bold?
@@ -435,7 +457,7 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
             *(dest + 1) = s_fgbgPattern[(charRowData & 0xF) | fgbg];
 
             dest += VGATextController_WIDTH / sizeof(uint32_t);
-            charRowPtr += VGATextController_CHARWIDTHBYTES;
+            charRowPtr += s_charWidthInBytes;
           }
 
           // underline?
@@ -458,16 +480,16 @@ void IRAM_ATTR VGATextController::ISRHandler(void * arg)
       }
 
     } else {
-      for (int i = 0; i < VGATextController_CHARHEIGHT / 2; ++i) {
-        auto dest = lines + ((scanLine + i) % VGATextController_CHARHEIGHT) * VGATextController_WIDTH / sizeof(uint32_t);
-        for (int i = 0; i < VGATextController_COLUMNS; ++i) {
+      for (int i = 0; i < s_charHeight / 2 + downAdd; ++i) {
+        auto dest = lines + ((scanLine + i) % s_charHeight) * VGATextController_WIDTH / sizeof(uint32_t);
+        for (int i = 0; i < s_columns; ++i) {
           *dest++ = s_blankPatternDWord;
           *dest++ = s_blankPatternDWord;
         }
       }
     }
 
-    scanLine += VGATextController_CHARHEIGHT / 2;
+    scanLine += s_charHeight / 2 + downAdd;
 
     s_scanLine = scanLine;
 
