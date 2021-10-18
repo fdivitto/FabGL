@@ -699,10 +699,10 @@ class Menu : public uiApp {
         return false;
     }
     WiFi.begin(SSID, psw);
-    for (int i = 0; i < 2 && WiFi.status() != WL_CONNECTED; ++i) {
-      for (int j = 0; j < 16 && WiFi.status() != WL_CONNECTED; ++j)
-        delay(1000);
-      WiFi.reconnect();
+    for (int i = 0; i < 32 && WiFi.status() != WL_CONNECTED; ++i) {
+      delay(500);
+      if (i == 16)
+        WiFi.reconnect();
     }
     bool connected = (WiFi.status() == WL_CONNECTED);
     if (!connected) {
