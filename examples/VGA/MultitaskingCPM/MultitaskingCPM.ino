@@ -53,8 +53,8 @@
 
 // globals
 
-fabgl::VGA16Controller   DisplayController;
-//fabgl::VGATextController DisplayController;
+//fabgl::VGA16Controller   DisplayController; // unsupported on ESP32 core 2.0.0!!
+fabgl::VGATextController DisplayController;
 fabgl::PS2Controller     PS2Controller;
 
 Supervisor supervisor(&DisplayController);
