@@ -88,6 +88,11 @@ namespace fabgl {
 // Place between a write and a read PSRAM operation (write->ASM_MEMW->read), not viceversa
 #define ASM_MEMW asm(" MEMW");
 
+#define ASM_NOP asm(" NOP");
+
+#define PSRAM_WORKAROUND1 asm(" nop;nop;nop;nop");
+#define PSRAM_WORKAROUND2 asm(" memw");
+
 
 
 

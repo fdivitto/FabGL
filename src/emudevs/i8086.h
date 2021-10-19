@@ -121,15 +121,10 @@ private:
   static uint8_t RMEM8(int addr);
   static uint16_t RMEM16(int addr);
 
-  //static uint8_t & MEM8(int addr);
-  //static uint16_t & MEM16(int addr);
-
   static uint16_t make_flags();
   static void set_flags(int new_flags);
 
-  static void set_opcode(uint8_t opcode);
-
-  static uint8_t pc_interrupt(uint8_t interrupt_num);
+  static void pc_interrupt(uint8_t interrupt_num);
 
   static int AAA_AAS(int8_t which_operation);
 
