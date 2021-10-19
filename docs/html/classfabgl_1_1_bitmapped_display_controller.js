@@ -1,5 +1,6 @@
 var classfabgl_1_1_bitmapped_display_controller =
 [
+    [ "colorsCount", "classfabgl_1_1_bitmapped_display_controller.html#a332051b311781945a020928d50825adc", null ],
     [ "controllerType", "classfabgl_1_1_bitmapped_display_controller_a2337a67770ebd18e0ced22ba40d79d24.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_bitmapped_display_controller_abd0898e61591117a7b8dce2fa4b4c4d4.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],
     [ "enableBackgroundPrimitiveTimeout", "classfabgl_1_1_bitmapped_display_controller_a1a03e74ed2fb8e2af22e7fd0454ae828.html#a1a03e74ed2fb8e2af22e7fd0454ae828", null ],

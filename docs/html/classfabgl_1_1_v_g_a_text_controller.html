@@ -112,7 +112,7 @@ Inheritance diagram for VGATextController:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a93fe2c22583c485ebf4f60081f535cf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_a93fe2c22583c485ebf4f60081f535cf8.html#a93fe2c22583c485ebf4f60081f535cf8">adjustMapSize</a> (int *columns, int *rows)</td></tr>
-<tr class="memdesc:a93fe2c22583c485ebf4f60081f535cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust columns and rows to the controller limits.  <a href="classfabgl_1_1_v_g_a_text_controller_a93fe2c22583c485ebf4f60081f535cf8.html#a93fe2c22583c485ebf4f60081f535cf8">More...</a><br /></td></tr>
+<tr class="memdesc:a93fe2c22583c485ebf4f60081f535cf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusts columns and rows to the controller limits.  <a href="classfabgl_1_1_v_g_a_text_controller_a93fe2c22583c485ebf4f60081f535cf8.html#a93fe2c22583c485ebf4f60081f535cf8">More...</a><br /></td></tr>
 <tr class="separator:a93fe2c22583c485ebf4f60081f535cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a406a206bc0e13ee2a48591fcfdae6e22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_a406a206bc0e13ee2a48591fcfdae6e22.html#a406a206bc0e13ee2a48591fcfdae6e22">begin</a> (gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
 <tr class="memdesc:a406a206bc0e13ee2a48591fcfdae6e22"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 8 colors (5 GPIOs) initializer.  <a href="classfabgl_1_1_v_g_a_text_controller_a406a206bc0e13ee2a48591fcfdae6e22.html#a406a206bc0e13ee2a48591fcfdae6e22">More...</a><br /></td></tr>
@@ -123,6 +123,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2">begin</a> ()</td></tr>
 <tr class="memdesc:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 64 colors (8 GPIOs) initializer using default pinout.  <a href="classfabgl_1_1_v_g_a_text_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2">More...</a><br /></td></tr>
 <tr class="separator:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fe93a7b8c83c1fc72de32c202dc381a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_a4fe93a7b8c83c1fc72de32c202dc381a.html#a4fe93a7b8c83c1fc72de32c202dc381a">colorsCount</a> ()</td></tr>
+<tr class="memdesc:a4fe93a7b8c83c1fc72de32c202dc381a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines number of colors this display can provide.  <a href="classfabgl_1_1_v_g_a_text_controller_a4fe93a7b8c83c1fc72de32c202dc381a.html#a4fe93a7b8c83c1fc72de32c202dc381a">More...</a><br /></td></tr>
+<tr class="separator:a4fe93a7b8c83c1fc72de32c202dc381a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2337a67770ebd18e0ced22ba40d79d24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations_gadb8147abda8588ce7306a700532148e1.html#gadb8147abda8588ce7306a700532148e1">DisplayControllerType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_textual_display_controller_a2337a67770ebd18e0ced22ba40d79d24.html#a2337a67770ebd18e0ced22ba40d79d24">controllerType</a> ()</td></tr>
 <tr class="memdesc:a2337a67770ebd18e0ced22ba40d79d24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the display controller type.  <a href="classfabgl_1_1_textual_display_controller_a2337a67770ebd18e0ced22ba40d79d24.html#a2337a67770ebd18e0ced22ba40d79d24">More...</a><br /></td></tr>
 <tr class="separator:a2337a67770ebd18e0ced22ba40d79d24"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,6 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a749df909b39fd096bf6e2813f2f5324c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_base_display_controller_a749df909b39fd096bf6e2813f2f5324c.html#a749df909b39fd096bf6e2813f2f5324c">getScreenWidth</a> ()</td></tr>
 <tr class="memdesc:a749df909b39fd096bf6e2813f2f5324c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the screen width in pixels.  <a href="classfabgl_1_1_base_display_controller_a749df909b39fd096bf6e2813f2f5324c.html#a749df909b39fd096bf6e2813f2f5324c">More...</a><br /></td></tr>
 <tr class="separator:a749df909b39fd096bf6e2813f2f5324c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ea5f9decd46d4b507c65a65f9188b0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_a8ea5f9decd46d4b507c65a65f9188b0b.html#a8ea5f9decd46d4b507c65a65f9188b0b">setFont</a> (FontInfo const *value)</td></tr>
+<tr class="memdesc:a8ea5f9decd46d4b507c65a65f9188b0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets font.  <a href="classfabgl_1_1_v_g_a_text_controller_a8ea5f9decd46d4b507c65a65f9188b0b.html#a8ea5f9decd46d4b507c65a65f9188b0b">More...</a><br /></td></tr>
+<tr class="separator:a8ea5f9decd46d4b507c65a65f9188b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4583a73c34544a3ab09802f045c16664"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_text_controller_a4583a73c34544a3ab09802f045c16664.html#a4583a73c34544a3ab09802f045c16664">setResolution</a> (char const *modeline=nullptr, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</td></tr>
 <tr class="memdesc:a4583a73c34544a3ab09802f045c16664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets fixed resolution.  <a href="classfabgl_1_1_v_g_a_text_controller_a4583a73c34544a3ab09802f045c16664.html#a4583a73c34544a3ab09802f045c16664">More...</a><br /></td></tr>
 <tr class="separator:a4583a73c34544a3ab09802f045c16664"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,15 +147,15 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the VGA text-only controller. </p>
-<p>The text only VGA controller allows only text, but requires less than 50K of RAM. Resolution is fixed at 640x480, with 80 columns by 34 rows, 16 colors.</p>
+<p>The text only VGA controller allows only text, but requires less than 50K of RAM. Resolution is fixed at 640x480, with 80 columns by a selectable number of rows, 16 colors.</p>
 <p>Text only output is very CPU intensive process and consumes up to 30% of one CPU core. Anyway this allows to have more than 290K free for your application.</p>
 <p>Graphics (<a class="el" href="classfabgl_1_1_canvas.html" title="A class with a set of drawing methods. ">Canvas</a>) aren't possible. Also, some character styles aren't also possible (double size, 132 columns, italic).</p>
 <p>This example initializes VGA Text Controller with 64 colors (16 usable): </p><pre class="fragment">fabgl::VGATextController VGAController;
 // the default assigns GPIO22 and GPIO21 to Red, GPIO19 and GPIO18 to Green, GPIO5 and GPIO4 to Blue, GPIO23 to HSync and GPIO15 to VSync
 VGAController.begin();
-VGAController.setResolution();</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_others_2_keyboard_scan_codes_2_keyboard_scan_codes_8ino-example.html#_a0">Others/KeyboardScanCodes/KeyboardScanCodes.ino</a>, <a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#_a6">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html#_a0">VGA/LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_v_g_a_2_network_terminal_2_network_terminal_8ino-example.html#_a0">VGA/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_v_g_a_2_simple_text_terminal_out_2_simple_text_terminal_out_8ino-example.html#_a0">VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino</a>.</dd>
+VGAController.setResolution();</pre> <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_others_2_keyboard_scan_codes_2_keyboard_scan_codes_8ino-example.html#_a0">Others/KeyboardScanCodes/KeyboardScanCodes.ino</a>, <a class="el" href="_v_g_a_2_altair8800_2_altair8800_8ino-example.html#_a6">VGA/Altair8800/Altair8800.ino</a>, <a class="el" href="_v_g_a_2_loopback_terminal_2_loopback_terminal_8ino-example.html#_a0">VGA/LoopbackTerminal/LoopbackTerminal.ino</a>, <a class="el" href="_v_g_a_2_multitasking_c_p_m_2_multitasking_c_p_m_8ino-example.html#_a0">VGA/MultitaskingCPM/MultitaskingCPM.ino</a>, <a class="el" href="_v_g_a_2_network_terminal_2_network_terminal_8ino-example.html#_a0">VGA/NetworkTerminal/NetworkTerminal.ino</a>, and <a class="el" href="_v_g_a_2_simple_text_terminal_out_2_simple_text_terminal_out_8ino-example.html#_a0">VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino</a>.</dd>
 </dl>
-<p class="definition">Definition at line <a class="el" href="vgatextcontroller_8h_source.html#l00086">86</a> of file <a class="el" href="vgatextcontroller_8h_source.html">vgatextcontroller.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="vgatextcontroller_8h_source.html#l00079">79</a> of file <a class="el" href="vgatextcontroller_8h_source.html">vgatextcontroller.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="vgatextcontroller_8h_source.html">vgatextcontroller.h</a></li>
 <li><a class="el" href="vgatextcontroller_8cpp_source.html">vgatextcontroller.cpp</a></li>
@@ -160,7 +166,7 @@ VGAController.setResolution();</pre> <dl><dt><b>Examples: </b></dt><dd><a class=
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_v_g_a_text_controller.html">VGATextController</a></li>
-    <li class="footer">Generated on Mon Aug 2 2021 07:08:09 for FabGL by
+    <li class="footer">Generated on Tue Oct 19 2021 09:56:36 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

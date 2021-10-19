@@ -3,6 +3,7 @@ var classfabgl_1_1_v_g_a_paletted_controller =
     [ "begin", "classfabgl_1_1_v_g_a_paletted_controller.html#a406a206bc0e13ee2a48591fcfdae6e22", null ],
     [ "begin", "classfabgl_1_1_v_g_a_paletted_controller.html#ada2833a4d6b69eb90c28a273438735d6", null ],
     [ "begin", "classfabgl_1_1_v_g_a_paletted_controller.html#ab0bdf5cca484fb2ba637c39384b27fb2", null ],
+    [ "colorsCount", "classfabgl_1_1_v_g_a_paletted_controller_a811a555ee536c2845522b045cb63f713.html#a811a555ee536c2845522b045cb63f713", null ],
     [ "controllerType", "classfabgl_1_1_v_g_a_paletted_controller.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
     [ "createRawPixel", "classfabgl_1_1_v_g_a_paletted_controller.html#aaacdb5ed30e79800dfd5e6b7a1a00464", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_paletted_controller.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],

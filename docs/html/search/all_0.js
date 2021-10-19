@@ -6,6 +6,7 @@ var searchData=
   ['active',['active',['../structfabgl_1_1ui_window_state_a05c940dbc220f5a723afd70071aebff8.html#a05c940dbc220f5a723afd70071aebff8',1,'fabgl::uiWindowState']]],
   ['activebordercolor',['activeBorderColor',['../structfabgl_1_1ui_window_style_aece198b85b269fb10a6c29f8628f7c4f.html#aece198b85b269fb10a6c29f8628f7c4f',1,'fabgl::uiWindowStyle']]],
   ['activebuttoncolor',['activeButtonColor',['../structfabgl_1_1ui_frame_style_ade1f7f42a9d7d89649fbe2993de807a5.html#ade1f7f42a9d7d89649fbe2993de807a5',1,'fabgl::uiFrameStyle']]],
+  ['activelook',['activeLook',['../structfabgl_1_1ui_window_props_a6ef7bc6ecb1d1880e16a7683e522dd9f.html#a6ef7bc6ecb1d1880e16a7683e522dd9f',1,'fabgl::uiWindowProps']]],
   ['activetitlebackgroundcolor',['activeTitleBackgroundColor',['../structfabgl_1_1ui_frame_style_a6ad317dd2061eb1fdcadda6df58ebace.html#a6ad317dd2061eb1fdcadda6df58ebace',1,'fabgl::uiFrameStyle']]],
   ['activetitlecolor',['activeTitleColor',['../structfabgl_1_1ui_frame_style_a729cb15b9ffe573d76491210bd53ddf5.html#a729cb15b9ffe573d76491210bd53ddf5',1,'fabgl::uiFrameStyle']]],
   ['activewindow',['activeWindow',['../classfabgl_1_1ui_app_a8abc25e39b6ac1cb85f08791d30d46c8.html#a8abc25e39b6ac1cb85f08791d30d46c8',1,'fabgl::uiApp']]],

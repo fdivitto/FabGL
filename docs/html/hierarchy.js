@@ -60,6 +60,7 @@ var hierarchy =
     [ "uiComboBoxProps", "structfabgl_1_1ui_combo_box_props.html", null ],
     [ "uiComboBoxStyle", "structfabgl_1_1ui_combo_box_style.html", null ],
     [ "uiFrameProps", "structfabgl_1_1ui_frame_props.html", null ],
+    [ "uiFrameState", "structfabgl_1_1ui_frame_state.html", null ],
     [ "uiFrameStyle", "structfabgl_1_1ui_frame_style.html", null ],
     [ "uiImageStyle", "structfabgl_1_1ui_image_style.html", null ],
     [ "uiKeyEventInfo", "structfabgl_1_1ui_key_event_info.html", null ],
@@ -77,7 +78,8 @@ var hierarchy =
             [ "uiColorBox", "classfabgl_1_1ui_color_box.html", null ],
             [ "uiCustomComboBox", "classfabgl_1_1ui_custom_combo_box.html", [
               [ "uiColorComboBox", "classfabgl_1_1ui_color_combo_box.html", null ],
-              [ "uiComboBox", "classfabgl_1_1ui_combo_box.html", null ]
+              [ "uiComboBox", "classfabgl_1_1ui_combo_box.html", null ],
+              [ "uiSplitButton", "classfabgl_1_1ui_split_button.html", null ]
             ] ],
             [ "uiImage", "classfabgl_1_1ui_image.html", null ],
             [ "uiLabel", "classfabgl_1_1ui_label.html", null ],
@@ -87,7 +89,8 @@ var hierarchy =
               [ "uiCustomListBox", "classfabgl_1_1ui_custom_list_box.html", [
                 [ "uiColorListBox", "classfabgl_1_1ui_color_list_box.html", null ],
                 [ "uiFileBrowser", "classfabgl_1_1ui_file_browser.html", null ],
-                [ "uiListBox", "classfabgl_1_1ui_list_box.html", null ]
+                [ "uiListBox", "classfabgl_1_1ui_list_box.html", null ],
+                [ "uiSimpleMenu", "classfabgl_1_1ui_simple_menu.html", null ]
               ] ],
               [ "uiPaintBox", "classfabgl_1_1ui_paint_box.html", null ]
             ] ],

@@ -13,9 +13,9 @@ var classfabgl_1_1ui_panel =
     [ "focusIndex", "classfabgl_1_1ui_panel.html#ab994df5c260330a1a283e04d8b1d4455", null ],
     [ "hasChildren", "classfabgl_1_1ui_panel.html#a1e1bd91469c7a0d321a3d63e59a7c63c", null ],
     [ "hasFocus", "classfabgl_1_1ui_panel.html#acbfaf08686b51f8772f88625a3b269b1", null ],
+    [ "isActiveWindow", "classfabgl_1_1ui_panel.html#ac6ebba7585563f036e04b1844e536325", null ],
     [ "isMouseOver", "classfabgl_1_1ui_panel.html#a28c46beb152c3da8f65c1382a960c013", null ],
     [ "lastChild", "classfabgl_1_1ui_panel.html#ae59d2e22c889f42bfba84e0534ecb824", null ],
-    [ "mouseDownPos", "classfabgl_1_1ui_panel.html#ace505188cc5b850f8ae1cb7b24c0d301", null ],
     [ "next", "classfabgl_1_1ui_panel.html#a0e7dd6748ff0d88ee369eaec7ed3e8df", null ],
     [ "objectType", "classfabgl_1_1ui_panel.html#a2dc2ed52df2ea2acf6b131ec8fc0861f", null ],
     [ "panelStyle", "classfabgl_1_1ui_panel_aa277e484f0b38589aab050396390a960.html#aa277e484f0b38589aab050396390a960", null ],
@@ -28,13 +28,11 @@ var classfabgl_1_1ui_panel =
     [ "repaint", "classfabgl_1_1ui_panel.html#ac827b978aa122f136a14c198687ad80f", null ],
     [ "setFocusIndex", "classfabgl_1_1ui_panel.html#a49030071385647e7e0333cc5edbb1601", null ],
     [ "setParentProcessKbdEvents", "classfabgl_1_1ui_panel.html#a96d664e7e00d6642673c01031c60d88f", null ],
-    [ "setStyleClassID", "classfabgl_1_1ui_panel.html#a816758aa450b96367bcbe296aa1ed3b3", null ],
+    [ "setStyleClassID", "classfabgl_1_1ui_panel.html#a388f329bfaaff43c38453e053a78e37b", null ],
     [ "size", "classfabgl_1_1ui_panel.html#a9a4c32403766cd16ca4e3a5479f075bd", null ],
     [ "state", "classfabgl_1_1ui_panel.html#aebdc12addfb08da7d30dbdf6faf67106", null ],
-    [ "styleClassID", "classfabgl_1_1ui_panel.html#a83e017fa223a05b99da58f491ba37039", null ],
+    [ "styleClassID", "classfabgl_1_1ui_panel.html#a86cf22137a7e0c4231e28275d76ffd43", null ],
     [ "transformRect", "classfabgl_1_1ui_panel.html#a343994179627cf8043ecaef0b576cc47", null ],
     [ "windowProps", "classfabgl_1_1ui_panel.html#a9ed949007146977879a4d2a8a21044d4", null ],
-    [ "windowStyle", "classfabgl_1_1ui_panel.html#a4beec167f802915f8b440aaaac8bbd29", null ],
-    [ "onClick", "classfabgl_1_1ui_panel.html#a914317af0316c756a7d24551e30d7efb", null ],
-    [ "onDblClick", "classfabgl_1_1ui_panel.html#ad5f6ddcb45b86ae7965c7443e9667b6a", null ]
+    [ "windowStyle", "classfabgl_1_1ui_panel.html#a4beec167f802915f8b440aaaac8bbd29", null ]
 ];

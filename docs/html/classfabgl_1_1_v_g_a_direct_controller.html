@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_v_g_a_direct_controller
 </div><!--header-->
 <div class="contents">
 
-<p>Represents an base abstract class for direct draw VGA controller.  
+<p>Represents a base abstract class for direct draw VGA controller.  
  <a href="classfabgl_1_1_v_g_a_direct_controller.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="vgadirectcontroller_8h_source.html">vgadirectcontroller.h</a>&gt;</code></p>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_v_g_a_direct_controller
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8a53693107c15d147a4cbae5e6c38192"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a8a53693107c15d147a4cbae5e6c38192.html#a8a53693107c15d147a4cbae5e6c38192">VGADirectController</a> (bool autoRun=true)</td></tr>
-<tr class="memdesc:a8a53693107c15d147a4cbae5e6c38192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">VGADirectController</a>.  <a href="classfabgl_1_1_v_g_a_direct_controller_a8a53693107c15d147a4cbae5e6c38192.html#a8a53693107c15d147a4cbae5e6c38192">More...</a><br /></td></tr>
+<tr class="memdesc:a8a53693107c15d147a4cbae5e6c38192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a new instance of <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents a base abstract class for direct draw VGA controller. ">VGADirectController</a>.  <a href="classfabgl_1_1_v_g_a_direct_controller_a8a53693107c15d147a4cbae5e6c38192.html#a8a53693107c15d147a4cbae5e6c38192">More...</a><br /></td></tr>
 <tr class="separator:a8a53693107c15d147a4cbae5e6c38192"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a406a206bc0e13ee2a48591fcfdae6e22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</td></tr>
 <tr class="memdesc:a406a206bc0e13ee2a48591fcfdae6e22"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the 8 colors (5 GPIOs) initializer.  <a href="classfabgl_1_1_v_g_a_base_controller_a406a206bc0e13ee2a48591fcfdae6e22.html#a406a206bc0e13ee2a48591fcfdae6e22">More...</a><br /></td></tr>
@@ -133,9 +133,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad9ffd66b73475faf2e93721c4064560"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>getBitsPerChannel</b> ()</td></tr>
 <tr class="memdesc:aad9ffd66b73475faf2e93721c4064560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets number of bits allocated for each channel.  <a href="classfabgl_1_1_v_g_a_base_controller_aad9ffd66b73475faf2e93721c4064560.html#aad9ffd66b73475faf2e93721c4064560">More...</a><br /></td></tr>
 <tr class="separator:aad9ffd66b73475faf2e93721c4064560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86d0129bb7756a7ea9f3dbbdee15adbb"><td class="memItemLeft" align="right" valign="top">uint8_t volatile *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a86d0129bb7756a7ea9f3dbbdee15adbb.html#a86d0129bb7756a7ea9f3dbbdee15adbb">getDefaultScanlineBuffer</a> (int scanline)</td></tr>
+<tr class="memdesc:a86d0129bb7756a7ea9f3dbbdee15adbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets default scanline buffer.  <a href="classfabgl_1_1_v_g_a_direct_controller_a86d0129bb7756a7ea9f3dbbdee15adbb.html#a86d0129bb7756a7ea9f3dbbdee15adbb">More...</a><br /></td></tr>
+<tr class="separator:a86d0129bb7756a7ea9f3dbbdee15adbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c43499630248f81952ce628261f2bd4"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><b>getScanline</b> (int y)</td></tr>
 <tr class="memdesc:a2c43499630248f81952ce628261f2bd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a raw scanline pointer.  <a href="classfabgl_1_1_v_g_a_base_controller_a2c43499630248f81952ce628261f2bd4.html#a2c43499630248f81952ce628261f2bd4">More...</a><br /></td></tr>
 <tr class="separator:a2c43499630248f81952ce628261f2bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8009d8485f446244a413d5e6a5f5ff2"><td class="memItemLeft" align="right" valign="top">uint8_t volatile *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_ae8009d8485f446244a413d5e6a5f5ff2.html#ae8009d8485f446244a413d5e6a5f5ff2">getScanlineBuffer</a> (int scanline)</td></tr>
+<tr class="memdesc:ae8009d8485f446244a413d5e6a5f5ff2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current scanline buffer.  <a href="classfabgl_1_1_v_g_a_direct_controller_ae8009d8485f446244a413d5e6a5f5ff2.html#ae8009d8485f446244a413d5e6a5f5ff2">More...</a><br /></td></tr>
+<tr class="separator:ae8009d8485f446244a413d5e6a5f5ff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0872427e4a351bb3590e8d00096e9cba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_base_display_controller_a0872427e4a351bb3590e8d00096e9cba.html#a0872427e4a351bb3590e8d00096e9cba">getScreenHeight</a> ()</td></tr>
 <tr class="memdesc:a0872427e4a351bb3590e8d00096e9cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the screen height in pixels.  <a href="classfabgl_1_1_base_display_controller_a0872427e4a351bb3590e8d00096e9cba.html#a0872427e4a351bb3590e8d00096e9cba">More...</a><br /></td></tr>
 <tr class="separator:a0872427e4a351bb3590e8d00096e9cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,7 +176,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a13a43e6d814de94978c515cb084873b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins to call the callback function and to display video frames.  <a href="classfabgl_1_1_v_g_a_direct_controller_a13a43e6d814de94978c515cb084873b1.html#a13a43e6d814de94978c515cb084873b1">More...</a><br /></td></tr>
 <tr class="separator:a13a43e6d814de94978c515cb084873b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18497a8f427eca28ee4bc4fed3a76508"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a18497a8f427eca28ee4bc4fed3a76508.html#a18497a8f427eca28ee4bc4fed3a76508">setDrawScanlineCallback</a> (DrawScanlineCallback drawScanlineCallback, void *arg=nullptr)</td></tr>
-<tr class="memdesc:a18497a8f427eca28ee4bc4fed3a76508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the callback used when <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">VGADirectController</a> needs to prepare a new scanline to be sent to the VGA output.  <a href="classfabgl_1_1_v_g_a_direct_controller_a18497a8f427eca28ee4bc4fed3a76508.html#a18497a8f427eca28ee4bc4fed3a76508">More...</a><br /></td></tr>
+<tr class="memdesc:a18497a8f427eca28ee4bc4fed3a76508"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the callback used when <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents a base abstract class for direct draw VGA controller. ">VGADirectController</a> needs to prepare a new scanline to be sent to the VGA output.  <a href="classfabgl_1_1_v_g_a_direct_controller_a18497a8f427eca28ee4bc4fed3a76508.html#a18497a8f427eca28ee4bc4fed3a76508">More...</a><br /></td></tr>
 <tr class="separator:a18497a8f427eca28ee4bc4fed3a76508"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94fd39f8c9245ed51545f9dd6ce7f6ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller_a94fd39f8c9245ed51545f9dd6ce7f6ee.html#a94fd39f8c9245ed51545f9dd6ce7f6ee">setMouseCursor</a> (<a class="el" href="structfabgl_1_1_cursor.html">Cursor</a> *cursor)</td></tr>
 <tr class="memdesc:a94fd39f8c9245ed51545f9dd6ce7f6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets mouse cursor and make it visible.  <a href="classfabgl_1_1_bitmapped_display_controller_a94fd39f8c9245ed51545f9dd6ce7f6ee.html#a94fd39f8c9245ed51545f9dd6ce7f6ee">More...</a><br /></td></tr>
@@ -184,6 +190,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2ac60f74ade23bfba42ef0985635589d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><b>setResolution</b> (char const *modeline, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</td></tr>
 <tr class="memdesc:a2ac60f74ade23bfba42ef0985635589d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets current resolution using linux-like modeline.  <a href="classfabgl_1_1_v_g_a_base_controller_a2ac60f74ade23bfba42ef0985635589d.html#a2ac60f74ade23bfba42ef0985635589d">More...</a><br /></td></tr>
 <tr class="separator:a2ac60f74ade23bfba42ef0985635589d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6af1859ce756c21730a2137d83b87897"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a6af1859ce756c21730a2137d83b87897.html#a6af1859ce756c21730a2137d83b87897">setScanlineBuffer</a> (int scanline, uint8_t volatile *lineBuffer)</td></tr>
+<tr class="memdesc:a6af1859ce756c21730a2137d83b87897"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a scanline buffer.  <a href="classfabgl_1_1_v_g_a_direct_controller_a6af1859ce756c21730a2137d83b87897.html#a6af1859ce756c21730a2137d83b87897">More...</a><br /></td></tr>
+<tr class="separator:a6af1859ce756c21730a2137d83b87897"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22746803b0a00aea677779c4994b5980"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a22746803b0a00aea677779c4994b5980.html#a22746803b0a00aea677779c4994b5980">setScanlinesPerCallBack</a> (int value)</td></tr>
 <tr class="memdesc:a22746803b0a00aea677779c4994b5980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets number of scanlines to draw in a single callback.  <a href="classfabgl_1_1_v_g_a_direct_controller_a22746803b0a00aea677779c4994b5980.html#a22746803b0a00aea677779c4994b5980">More...</a><br /></td></tr>
 <tr class="separator:a22746803b0a00aea677779c4994b5980"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,7 +207,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a4a19c29f374552ddcc0c88df7fa879fa"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html">VGADirectController</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a4a19c29f374552ddcc0c88df7fa879fa.html#a4a19c29f374552ddcc0c88df7fa879fa">instance</a> ()</td></tr>
-<tr class="memdesc:a4a19c29f374552ddcc0c88df7fa879fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the singleton instance of <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents an base abstract class for direct draw VGA controller. ">VGADirectController</a> class.  <a href="classfabgl_1_1_v_g_a_direct_controller_a4a19c29f374552ddcc0c88df7fa879fa.html#a4a19c29f374552ddcc0c88df7fa879fa">More...</a><br /></td></tr>
+<tr class="memdesc:a4a19c29f374552ddcc0c88df7fa879fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the singleton instance of <a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html" title="Represents a base abstract class for direct draw VGA controller. ">VGADirectController</a> class.  <a href="classfabgl_1_1_v_g_a_direct_controller_a4a19c29f374552ddcc0c88df7fa879fa.html#a4a19c29f374552ddcc0c88df7fa879fa">More...</a><br /></td></tr>
 <tr class="separator:a4a19c29f374552ddcc0c88df7fa879fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa203d6a753ed968e78c58b866c736cb4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller_aa203d6a753ed968e78c58b866c736cb4.html#aa203d6a753ed968e78c58b866c736cb4">VSync</a> ()</td></tr>
 <tr class="memdesc:aa203d6a753ed968e78c58b866c736cb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if retracing is in progress.  <a href="classfabgl_1_1_v_g_a_direct_controller_aa203d6a753ed968e78c58b866c736cb4.html#aa203d6a753ed968e78c58b866c736cb4">More...</a><br /></td></tr>
@@ -211,7 +220,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a6b94fdf3692083a41291eec4920c62d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Represents an base abstract class for direct draw VGA controller. </p>
+<div class="textblock"><p>Represents a base abstract class for direct draw VGA controller. </p>
 <p>A direct draw VGA controller draws paint the screen in real time, for each scanline. Every two scanlines an interrupt is generated. Put your drawing code inside a callback and call <a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a18497a8f427eca28ee4bc4fed3a76508.html#a18497a8f427eca28ee4bc4fed3a76508" title="Sets the callback used when VGADirectController needs to prepare a new scanline to be sent to the VGA...">setDrawScanlineCallback()</a> to assign it.</p>
 <p>See DirectVGA.ino example. </p>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="_v_g_a_2_direct_v_g_a_2_direct_v_g_a_8ino-example.html#_a0">VGA/DirectVGA/DirectVGA.ino</a>, and <a class="el" href="_v_g_a_2_direct_v_g_a__el_muro_2_direct_v_g_a__el_muro_8ino-example.html#_a0">VGA/DirectVGA_ElMuro/DirectVGA_ElMuro.ino</a>.</dd>
@@ -227,7 +236,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_v_g_a_direct_controller.html">VGADirectController</a></li>
-    <li class="footer">Generated on Mon Aug 2 2021 07:08:09 for FabGL by
+    <li class="footer">Generated on Tue Oct 19 2021 09:56:36 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

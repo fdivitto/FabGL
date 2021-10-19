@@ -15,5 +15,6 @@ var searchData=
   ['doublewidth',['doubleWidth',['../unionfabgl_1_1_glyph_options_a89a44c5e986590e4eca4fb8649bba64e.html#a89a44c5e986590e4eca4fb8649bba64e',1,'fabgl::GlyphOptions::doubleWidth()'],['../displaycontroller_8h_a89a44c5e986590e4eca4fb8649bba64e.html#a89a44c5e986590e4eca4fb8649bba64e',1,'doubleWidth():&#160;displaycontroller.h']]],
   ['down',['down',['../structfabgl_1_1_virtual_key_item_a957456ebb10d8e0ec184480894c0b885.html#a957456ebb10d8e0ec184480894c0b885',1,'fabgl::VirtualKeyItem']]],
   ['downbackgroundcolor',['downBackgroundColor',['../structfabgl_1_1ui_button_style_ad030d951c454d9a353c1d1fcc206b9cc.html#ad030d951c454d9a353c1d1fcc206b9cc',1,'fabgl::uiButtonStyle']]],
-  ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style_a28a83a5f7d4066995791678c57411fdb.html#a28a83a5f7d4066995791678c57411fdb',1,'fabgl::uiButtonStyle']]]
+  ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style_a28a83a5f7d4066995791678c57411fdb.html#a28a83a5f7d4066995791678c57411fdb',1,'fabgl::uiButtonStyle']]],
+  ['downtextcolor',['downTextColor',['../structfabgl_1_1ui_button_style_a261543a41e1e77cd2cc3b795e8120875.html#a261543a41e1e77cd2cc3b795e8120875',1,'fabgl::uiButtonStyle']]]
 ];

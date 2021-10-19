@@ -16,9 +16,9 @@ var classfabgl_1_1ui_scrollable_control =
     [ "HScrollBarPos", "classfabgl_1_1ui_scrollable_control_adf681536187c8f8dfb634f13f052b30f.html#adf681536187c8f8dfb634f13f052b30f", null ],
     [ "HScrollBarRange", "classfabgl_1_1ui_scrollable_control_ab8fcf2bad34535d92291bb9a27942b31.html#ab8fcf2bad34535d92291bb9a27942b31", null ],
     [ "HScrollBarVisible", "classfabgl_1_1ui_scrollable_control_af0c9906b9a790f016d109646ec7d1a7e.html#af0c9906b9a790f016d109646ec7d1a7e", null ],
+    [ "isActiveWindow", "classfabgl_1_1ui_scrollable_control.html#ac6ebba7585563f036e04b1844e536325", null ],
     [ "isMouseOver", "classfabgl_1_1ui_scrollable_control.html#a28c46beb152c3da8f65c1382a960c013", null ],
     [ "lastChild", "classfabgl_1_1ui_scrollable_control.html#ae59d2e22c889f42bfba84e0534ecb824", null ],
-    [ "mouseDownPos", "classfabgl_1_1ui_scrollable_control.html#ace505188cc5b850f8ae1cb7b24c0d301", null ],
     [ "next", "classfabgl_1_1ui_scrollable_control.html#a0e7dd6748ff0d88ee369eaec7ed3e8df", null ],
     [ "objectType", "classfabgl_1_1ui_scrollable_control.html#a2dc2ed52df2ea2acf6b131ec8fc0861f", null ],
     [ "parent", "classfabgl_1_1ui_scrollable_control.html#a051d9774ae68e91417129c1d588116e3", null ],
@@ -32,10 +32,10 @@ var classfabgl_1_1ui_scrollable_control =
     [ "setFocusIndex", "classfabgl_1_1ui_scrollable_control.html#a49030071385647e7e0333cc5edbb1601", null ],
     [ "setParentProcessKbdEvents", "classfabgl_1_1ui_scrollable_control.html#a96d664e7e00d6642673c01031c60d88f", null ],
     [ "setScrollBar", "classfabgl_1_1ui_scrollable_control_a5d12e9e747e2423c6a711cd5e74e09b6.html#a5d12e9e747e2423c6a711cd5e74e09b6", null ],
-    [ "setStyleClassID", "classfabgl_1_1ui_scrollable_control.html#a816758aa450b96367bcbe296aa1ed3b3", null ],
+    [ "setStyleClassID", "classfabgl_1_1ui_scrollable_control.html#a388f329bfaaff43c38453e053a78e37b", null ],
     [ "size", "classfabgl_1_1ui_scrollable_control.html#a9a4c32403766cd16ca4e3a5479f075bd", null ],
     [ "state", "classfabgl_1_1ui_scrollable_control.html#aebdc12addfb08da7d30dbdf6faf67106", null ],
-    [ "styleClassID", "classfabgl_1_1ui_scrollable_control.html#a83e017fa223a05b99da58f491ba37039", null ],
+    [ "styleClassID", "classfabgl_1_1ui_scrollable_control.html#a86cf22137a7e0c4231e28275d76ffd43", null ],
     [ "transformRect", "classfabgl_1_1ui_scrollable_control.html#a343994179627cf8043ecaef0b576cc47", null ],
     [ "VScrollBarPos", "classfabgl_1_1ui_scrollable_control_af4792dc3506be6e624e7310a6925d912.html#af4792dc3506be6e624e7310a6925d912", null ],
     [ "VScrollBarRange", "classfabgl_1_1ui_scrollable_control_a195bff627b5825cb579ede568a8db54c.html#a195bff627b5825cb579ede568a8db54c", null ],
@@ -43,7 +43,5 @@ var classfabgl_1_1ui_scrollable_control =
     [ "windowProps", "classfabgl_1_1ui_scrollable_control.html#a9ed949007146977879a4d2a8a21044d4", null ],
     [ "windowStyle", "classfabgl_1_1ui_scrollable_control.html#a4beec167f802915f8b440aaaac8bbd29", null ],
     [ "onChangeHScrollBar", "classfabgl_1_1ui_scrollable_control_a7900599c996fc166ec37cdd14add2e47.html#a7900599c996fc166ec37cdd14add2e47", null ],
-    [ "onChangeVScrollBar", "classfabgl_1_1ui_scrollable_control_afc3948e2bf193d2d55846cbec63b028c.html#afc3948e2bf193d2d55846cbec63b028c", null ],
-    [ "onClick", "classfabgl_1_1ui_scrollable_control.html#a914317af0316c756a7d24551e30d7efb", null ],
-    [ "onDblClick", "classfabgl_1_1ui_scrollable_control.html#ad5f6ddcb45b86ae7965c7443e9667b6a", null ]
+    [ "onChangeVScrollBar", "classfabgl_1_1ui_scrollable_control_afc3948e2bf193d2d55846cbec63b028c.html#afc3948e2bf193d2d55846cbec63b028c", null ]
 ];

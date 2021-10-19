@@ -153,9 +153,9 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_input_box_a5aae0f53ec7c
 <dl class="section return"><dt>Returns</dt><dd>Dialog box result (Cancel or Enter)</dd></dl>
 <p>Example: </p><pre class="fragment">InputBox ib;
 ib.begin();
-auto r = ib.progressBox("This is the title", "Abort", true, 200, [&amp;](fabgl::ProgressApp * app) {
+auto r = ib.progressBox("This is the title", "Abort", true, 200, [&amp;](fabgl::ProgressForm * form) {
   for (int i = 0; i &lt;= 100; ++i) {
-    if (!app-&gt;update(i, "Index is %d/100", i))
+    if (!form-&gt;update(i, "Index is %d/100", i))
       break;
     delay(100);
   }
@@ -163,7 +163,7 @@ auto r = ib.progressBox("This is the title", "Abort", true, 200, [&amp;](fabgl::
 if (r == InputResult::Cancel)
   ib.message("", "Operation Aborted");
 ib.end();</pre> 
-<p class="definition">Definition at line <a class="el" href="inputbox_8h_source.html#l00419">419</a> of file <a class="el" href="inputbox_8h_source.html">inputbox.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="inputbox_8h_source.html#l00619">619</a> of file <a class="el" href="inputbox_8h_source.html">inputbox.h</a>.</p>
 
 </div>
 </div>
@@ -173,7 +173,7 @@ ib.end();</pre>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_input_box.html">InputBox</a></li>
-    <li class="footer">Generated on Mon Aug 2 2021 07:08:05 for FabGL by
+    <li class="footer">Generated on Tue Oct 19 2021 09:56:34 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

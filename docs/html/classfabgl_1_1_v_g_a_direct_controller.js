@@ -9,7 +9,9 @@ var classfabgl_1_1_v_g_a_direct_controller =
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_v_g_a_direct_controller.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],
     [ "enableBackgroundPrimitiveTimeout", "classfabgl_1_1_v_g_a_direct_controller.html#a1a03e74ed2fb8e2af22e7fd0454ae828", null ],
     [ "getBitsPerChannel", "classfabgl_1_1_v_g_a_direct_controller.html#aad9ffd66b73475faf2e93721c4064560", null ],
+    [ "getDefaultScanlineBuffer", "classfabgl_1_1_v_g_a_direct_controller_a86d0129bb7756a7ea9f3dbbdee15adbb.html#a86d0129bb7756a7ea9f3dbbdee15adbb", null ],
     [ "getScanline", "classfabgl_1_1_v_g_a_direct_controller.html#a2c43499630248f81952ce628261f2bd4", null ],
+    [ "getScanlineBuffer", "classfabgl_1_1_v_g_a_direct_controller_ae8009d8485f446244a413d5e6a5f5ff2.html#ae8009d8485f446244a413d5e6a5f5ff2", null ],
     [ "getScreenHeight", "classfabgl_1_1_v_g_a_direct_controller.html#a0872427e4a351bb3590e8d00096e9cba", null ],
     [ "getScreenWidth", "classfabgl_1_1_v_g_a_direct_controller.html#a749df909b39fd096bf6e2813f2f5324c", null ],
     [ "getViewPortCol", "classfabgl_1_1_v_g_a_direct_controller.html#a7700dc8f620e8077717a7dfad380a006", null ],
@@ -26,6 +28,7 @@ var classfabgl_1_1_v_g_a_direct_controller =
     [ "setMouseCursor", "classfabgl_1_1_v_g_a_direct_controller.html#a43a95ed39cce3e065407d1e7a30b2f4f", null ],
     [ "setMouseCursorPos", "classfabgl_1_1_v_g_a_direct_controller.html#ae0897f2355f7462b5ab003083418e3b4", null ],
     [ "setResolution", "classfabgl_1_1_v_g_a_direct_controller.html#a2ac60f74ade23bfba42ef0985635589d", null ],
+    [ "setScanlineBuffer", "classfabgl_1_1_v_g_a_direct_controller_a6af1859ce756c21730a2137d83b87897.html#a6af1859ce756c21730a2137d83b87897", null ],
     [ "setScanlinesPerCallBack", "classfabgl_1_1_v_g_a_direct_controller_a22746803b0a00aea677779c4994b5980.html#a22746803b0a00aea677779c4994b5980", null ],
     [ "setSprites", "classfabgl_1_1_v_g_a_direct_controller.html#a75ba732cc6ae90f53757b588f6c75d7e", null ],
     [ "shrinkScreen", "classfabgl_1_1_v_g_a_direct_controller.html#a770ea50d044c8c792185fbcb5b766736", null ]

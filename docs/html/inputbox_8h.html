@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('inputbox_8h.html','');});
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabui_8h_source.html">fabui.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabutils_8h_source.html">fabutils.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="vga16controller_8h_source.html">dispdrivers/vga16controller.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="vgapalettedcontroller_8h_source.html">dispdrivers/vgapalettedcontroller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ps2controller_8h_source.html">comdrivers/ps2controller.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for inputbox.h:</div>
@@ -155,9 +155,19 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ga25f6dff2b7711962b46d7c9313d28aa2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#ga25f6dff2b7711962b46d7c9313d28aa2">InputResult</a> { <a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a6adf97f83acf6453d4a6a4b1070f3754">None</a>, 
-<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2aea4788705e6873b424c65e91c2846b19">Cancel</a>, 
-<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2af1851d5600eae616ee802a31ac74701b">Enter</a>
+<tr class="memitem:ga25f6dff2b7711962b46d7c9313d28aa2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#ga25f6dff2b7711962b46d7c9313d28aa2">InputResult</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a6adf97f83acf6453d4a6a4b1070f3754">None</a> = 0, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2ac66bc91f86413a150cb0c0af0b42c2d2">ButtonExt0</a> = 1, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a11abc5b5c203eb9270a89611728a6c0f">ButtonExt1</a> = 2, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2ab1ac5e8d2bf29a81d37637bd758abe03">ButtonExt2</a> = 3, 
+<br />
+&#160;&#160;<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a71f1a08df71ebb013a262f54356e27da">ButtonExt3</a> = 4, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2aea4788705e6873b424c65e91c2846b19">Cancel</a> = 5, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a73bbc53e5b81f06eb4b1d68052a36187">ButtonLeft</a> = 5, 
+<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2af1851d5600eae616ee802a31ac74701b">Enter</a> = 6, 
+<br />
+&#160;&#160;<a class="el" href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a93c4a961054f2fa59f45f358526b02ad">ButtonRight</a> = 6
+<br />
  }</td></tr>
 <tr class="memdesc:ga25f6dff2b7711962b46d7c9313d28aa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of InputBox dialogs helper class.  <a href="group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#ga25f6dff2b7711962b46d7c9313d28aa2">More...</a><br /></td></tr>
 <tr class="separator:ga25f6dff2b7711962b46d7c9313d28aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,7 +182,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="inputbox_8h.html">inputbox.h</a></li>
-    <li class="footer">Generated on Mon Aug 2 2021 07:08:04 for FabGL by
+    <li class="footer">Generated on Tue Oct 19 2021 09:56:32 for FabGL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
   </ul>

@@ -4,6 +4,7 @@ var classfabgl_1_1_i_l_i9341_controller =
     [ "begin", "classfabgl_1_1_i_l_i9341_controller.html#a20fc26f4bd4369c4f129b0bb2cd2c3dc", null ],
     [ "begin", "classfabgl_1_1_i_l_i9341_controller.html#ab251e10b12bf2f0ff100b48676669c71", null ],
     [ "begin", "classfabgl_1_1_i_l_i9341_controller.html#ab0bdf5cca484fb2ba637c39384b27fb2", null ],
+    [ "colorsCount", "classfabgl_1_1_i_l_i9341_controller.html#a811a555ee536c2845522b045cb63f713", null ],
     [ "controllerType", "classfabgl_1_1_i_l_i9341_controller.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_i_l_i9341_controller.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],
     [ "enableBackgroundPrimitiveTimeout", "classfabgl_1_1_i_l_i9341_controller.html#a1a03e74ed2fb8e2af22e7fd0454ae828", null ],

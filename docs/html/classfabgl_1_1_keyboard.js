@@ -3,6 +3,7 @@ var classfabgl_1_1_keyboard =
     [ "begin", "classfabgl_1_1_keyboard_a4f1c6a36aae1c88e57c6bc7e05c772d1.html#a4f1c6a36aae1c88e57c6bc7e05c772d1", null ],
     [ "begin", "classfabgl_1_1_keyboard_a387c13d2b898fc5f2ce94cadf693fd2c.html#a387c13d2b898fc5f2ce94cadf693fd2c", null ],
     [ "emptyVirtualKeyQueue", "classfabgl_1_1_keyboard_aefe8cfbbb777abf28e87a1caf05da5e8.html#aefe8cfbbb777abf28e87a1caf05da5e8", null ],
+    [ "enableVirtualKeys", "classfabgl_1_1_keyboard_a3634bbeb8aa072c0d2e6e2c6c1553301.html#a3634bbeb8aa072c0d2e6e2c6c1553301", null ],
     [ "getLayout", "classfabgl_1_1_keyboard_a164361d7dc1597cd75db35c06d87e7d6.html#a164361d7dc1597cd75db35c06d87e7d6", null ],
     [ "getLEDs", "classfabgl_1_1_keyboard_abda5b9383751f677dd50359f5d5e6767.html#abda5b9383751f677dd50359f5d5e6767", null ],
     [ "getNextScancode", "classfabgl_1_1_keyboard_ad95b6b1928e6bd2cb5b5e3fb8be11f52.html#ad95b6b1928e6bd2cb5b5e3fb8be11f52", null ],

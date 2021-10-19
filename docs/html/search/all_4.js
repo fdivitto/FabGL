@@ -14,6 +14,7 @@ var searchData=
   ['enablekeyboardandmouseevents',['enableKeyboardAndMouseEvents',['../classfabgl_1_1ui_app_a76392c5042fdbc0a177f72b2dda85055.html#a76392c5042fdbc0a177f72b2dda85055',1,'fabgl::uiApp']]],
   ['enableportpullup',['enablePortPullUp',['../classfabgl_1_1_m_c_p23_s17_ad87ef9d4b57ebfecc575f6f2147f162a.html#ad87ef9d4b57ebfecc575f6f2147f162a',1,'fabgl::MCP23S17']]],
   ['enablerx',['enableRX',['../classfabgl_1_1_p_s2_controller_afbd77f408f7e0e90acad462c6b31b151.html#afbd77f408f7e0e90acad462c6b31b151',1,'fabgl::PS2Controller']]],
+  ['enablevirtualkeys',['enableVirtualKeys',['../classfabgl_1_1_keyboard_a3634bbeb8aa072c0d2e6e2c6c1553301.html#a3634bbeb8aa072c0d2e6e2c6c1553301',1,'fabgl::Keyboard']]],
   ['end',['end',['../classfabgl_1_1_input_box_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087',1,'fabgl::InputBox::end()'],['../classfabgl_1_1_terminal_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087',1,'fabgl::Terminal::end()'],['../classfabgl_1_1_m_c_p23_s17_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087',1,'fabgl::MCP23S17::end()']]],
   ['endmodalwindow',['endModalWindow',['../classfabgl_1_1ui_app_a671d421f94b3548eed565e47cc738ce4.html#a671d421f94b3548eed565e47cc738ce4',1,'fabgl::uiApp']]],
   ['endupdate',['endUpdate',['../classfabgl_1_1_canvas_ae75638d96ce77bea32eb76333b76cbc5.html#ae75638d96ce77bea32eb76333b76cbc5',1,'fabgl::Canvas']]],

@@ -2913,6 +2913,8 @@ public:
    * @param pos Top-left coordinates of the splitbutton relative to the parent
    * @param size The splitbutton size
    * @param listHeight Height in pixels of the open menu
+   * @param itemsText Separated list of menu items (ie "options 1;option 2;option 3")
+   * @param separator Character used to separate itemsText. Default is ";"
    * @param visible If true the splitbutton is immediately visible
    * @param styleClassID Optional style class identifier
    */

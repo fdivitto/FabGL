@@ -7,6 +7,7 @@ var classfabgl_1_1_file_browser =
     [ "exists", "classfabgl_1_1_file_browser_ada0ad83619db625b54d8ebd96569dd2a.html#ada0ad83619db625b54d8ebd96569dd2a", null ],
     [ "fileAccessDate", "classfabgl_1_1_file_browser_a2f7745f4bdc15c5fc80a6adb51848e0e.html#a2f7745f4bdc15c5fc80a6adb51848e0e", null ],
     [ "fileCreationDate", "classfabgl_1_1_file_browser_ab83dce66efa36c6dfa8a9e2c537c5ced.html#ab83dce66efa36c6dfa8a9e2c537c5ced", null ],
+    [ "filePathExists", "classfabgl_1_1_file_browser_a2215c74b7814c04d0d328c7eddd6490e.html#a2215c74b7814c04d0d328c7eddd6490e", null ],
     [ "fileSize", "classfabgl_1_1_file_browser_a491bdb8de71e71b25c40f94e19abfb8a.html#a491bdb8de71e71b25c40f94e19abfb8a", null ],
     [ "fileUpdateDate", "classfabgl_1_1_file_browser_a0fe266e857208c45e5427d1c53fe718d.html#a0fe266e857208c45e5427d1c53fe718d", null ],
     [ "get", "classfabgl_1_1_file_browser_a4963004dc43bdb4caa8b6f1f591d71cd.html#a4963004dc43bdb4caa8b6f1f591d71cd", null ],

@@ -71,8 +71,14 @@ var group___enumerations =
     ] ],
     [ "InputResult", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#ga25f6dff2b7711962b46d7c9313d28aa2", [
       [ "None", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "ButtonExt0", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2ac66bc91f86413a150cb0c0af0b42c2d2", null ],
+      [ "ButtonExt1", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a11abc5b5c203eb9270a89611728a6c0f", null ],
+      [ "ButtonExt2", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2ab1ac5e8d2bf29a81d37637bd758abe03", null ],
+      [ "ButtonExt3", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a71f1a08df71ebb013a262f54356e27da", null ],
       [ "Cancel", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2aea4788705e6873b424c65e91c2846b19", null ],
-      [ "Enter", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2af1851d5600eae616ee802a31ac74701b", null ]
+      [ "ButtonLeft", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a73bbc53e5b81f06eb4b1d68052a36187", null ],
+      [ "Enter", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2af1851d5600eae616ee802a31ac74701b", null ],
+      [ "ButtonRight", "group___enumerations_ga25f6dff2b7711962b46d7c9313d28aa2.html#gga25f6dff2b7711962b46d7c9313d28aa2a93c4a961054f2fa59f45f358526b02ad", null ]
     ] ],
     [ "KbdMode", "group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#ga5d7071ad7a22fa20e52ba3e855cb4cff", [
       [ "NoVirtualKeys", "group___enumerations_ga5d7071ad7a22fa20e52ba3e855cb4cff.html#gga5d7071ad7a22fa20e52ba3e855cb4cffadaa64f7602ad3caa98f09799e3e683b1", null ],
@@ -181,6 +187,7 @@ var group___enumerations =
     [ "uiMessageBoxResult", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#ga78d47ab4ff34b1ed9fb7db4c3a98789e", [
       [ "Cancel", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eaea4788705e6873b424c65e91c2846b19", null ],
       [ "Button1", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6475a3746209a62a6ce6289a3741d07e", null ],
+      [ "ButtonOK", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eacb3460ff48fc5b3526ced8f2cbf77db9", null ],
       [ "Button2", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eae165925a7c2d5ea94209b91389aa189f", null ],
       [ "Button3", "group___enumerations_ga78d47ab4ff34b1ed9fb7db4c3a98789e.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6d0c69e60d65a93dd244ae95f90e679c", null ]
     ] ],

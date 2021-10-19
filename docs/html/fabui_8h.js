@@ -20,6 +20,7 @@ var fabui_8h =
     [ "uiFileBrowser", "classfabgl_1_1ui_file_browser.html", "classfabgl_1_1ui_file_browser" ],
     [ "uiFrame", "classfabgl_1_1ui_frame.html", "classfabgl_1_1ui_frame" ],
     [ "uiFrameProps", "structfabgl_1_1ui_frame_props.html", "structfabgl_1_1ui_frame_props" ],
+    [ "uiFrameState", "structfabgl_1_1ui_frame_state.html", "structfabgl_1_1ui_frame_state" ],
     [ "uiFrameStyle", "structfabgl_1_1ui_frame_style.html", "structfabgl_1_1ui_frame_style" ],
     [ "uiImage", "classfabgl_1_1ui_image.html", "classfabgl_1_1ui_image" ],
     [ "uiImageStyle", "structfabgl_1_1ui_image_style.html", "structfabgl_1_1ui_image_style" ],
@@ -41,8 +42,10 @@ var fabui_8h =
     [ "uiProgressBarStyle", "structfabgl_1_1ui_progress_bar_style.html", "structfabgl_1_1ui_progress_bar_style" ],
     [ "uiScrollableControl", "classfabgl_1_1ui_scrollable_control.html", "classfabgl_1_1ui_scrollable_control" ],
     [ "uiScrollableControlStyle", "structfabgl_1_1ui_scrollable_control_style.html", "structfabgl_1_1ui_scrollable_control_style" ],
+    [ "uiSimpleMenu", "classfabgl_1_1ui_simple_menu.html", "classfabgl_1_1ui_simple_menu" ],
     [ "uiSlider", "classfabgl_1_1ui_slider.html", "classfabgl_1_1ui_slider" ],
     [ "uiSliderStyle", "structfabgl_1_1ui_slider_style.html", "structfabgl_1_1ui_slider_style" ],
+    [ "uiSplitButton", "classfabgl_1_1ui_split_button.html", "classfabgl_1_1ui_split_button" ],
     [ "uiTextEdit", "classfabgl_1_1ui_text_edit.html", "classfabgl_1_1ui_text_edit" ],
     [ "uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", "structfabgl_1_1ui_text_edit_props" ],
     [ "uiTextEditStyle", "structfabgl_1_1ui_text_edit_style.html", "structfabgl_1_1ui_text_edit_style" ],
@@ -73,6 +76,7 @@ var fabui_8h =
     [ "uiMessageBoxResult", "fabui_8h.html#ga78d47ab4ff34b1ed9fb7db4c3a98789e", [
       [ "Cancel", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eaea4788705e6873b424c65e91c2846b19", null ],
       [ "Button1", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6475a3746209a62a6ce6289a3741d07e", null ],
+      [ "ButtonOK", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eacb3460ff48fc5b3526ced8f2cbf77db9", null ],
       [ "Button2", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789eae165925a7c2d5ea94209b91389aa189f", null ],
       [ "Button3", "fabui_8h.html#gga78d47ab4ff34b1ed9fb7db4c3a98789ea6d0c69e60d65a93dd244ae95f90e679c", null ]
     ] ],

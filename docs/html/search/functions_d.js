@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['objecttype',['objectType',['../classfabgl_1_1ui_object_a2dc2ed52df2ea2acf6b131ec8fc0861f.html#a2dc2ed52df2ea2acf6b131ec8fc0861f',1,'fabgl::uiObject']]],
-  ['openfile',['openFile',['../classfabgl_1_1_file_browser_a735bef30b9975fce75c682f0170fe748.html#a735bef30b9975fce75c682f0170fe748',1,'fabgl::FileBrowser']]]
+  ['nativepixelformat',['nativePixelFormat',['../classfabgl_1_1_bitmapped_display_controller_adc1527381cd987281396cd3d894b73b1.html#adc1527381cd987281396cd3d894b73b1',1,'fabgl::BitmappedDisplayController::nativePixelFormat()'],['../classfabgl_1_1_s_s_d1306_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91',1,'fabgl::SSD1306Controller::nativePixelFormat()'],['../classfabgl_1_1_t_f_t_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91',1,'fabgl::TFTController::nativePixelFormat()'],['../classfabgl_1_1_v_g_a_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91',1,'fabgl::VGAController::nativePixelFormat()'],['../classfabgl_1_1_v_g_a_direct_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91',1,'fabgl::VGADirectController::nativePixelFormat()'],['../classfabgl_1_1_v_g_a_paletted_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91',1,'fabgl::VGAPalettedController::nativePixelFormat()']]],
+  ['next',['next',['../classfabgl_1_1ui_window_a0e7dd6748ff0d88ee369eaec7ed3e8df.html#a0e7dd6748ff0d88ee369eaec7ed3e8df',1,'fabgl::uiWindow']]]
 ];

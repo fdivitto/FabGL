@@ -1,16 +1,25 @@
 var classfabgl_1_1_input_box =
 [
-    [ "InputBox", "classfabgl_1_1_input_box_a17332cc2353029a0fc7e909941346f4e.html#a17332cc2353029a0fc7e909941346f4e", null ],
-    [ "begin", "classfabgl_1_1_input_box_aa8a070a03cec28fca95d0e35f2d49f64.html#aa8a070a03cec28fca95d0e35f2d49f64", null ],
+    [ "InputBox", "classfabgl_1_1_input_box_aeed16a1f110da832346d6177acd00d07.html#aeed16a1f110da832346d6177acd00d07", null ],
+    [ "begin", "classfabgl_1_1_input_box_abaff5cb73e3c60262d8f96d4bea27fb4.html#abaff5cb73e3c60262d8f96d4bea27fb4", null ],
     [ "begin", "classfabgl_1_1_input_box_a09d6c04dbe3aa0bc7220b4ebd8323746.html#a09d6c04dbe3aa0bc7220b4ebd8323746", null ],
     [ "end", "classfabgl_1_1_input_box_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087", null ],
+    [ "fileSelector", "classfabgl_1_1_input_box_a6241937ae9870d37f4947ef9b4cde1f4.html#a6241937ae9870d37f4947ef9b4cde1f4", null ],
+    [ "folderBrowser", "classfabgl_1_1_input_box_aef83632569a1995f12f701922106d827.html#aef83632569a1995f12f701922106d827", null ],
+    [ "getDisplayController", "classfabgl_1_1_input_box_a68e646a3e168d23dc088dd1922e0801f.html#a68e646a3e168d23dc088dd1922e0801f", null ],
+    [ "getLastResult", "classfabgl_1_1_input_box_a03a8ca3293dfb3946f6dd5a0d69c3d26.html#a03a8ca3293dfb3946f6dd5a0d69c3d26", null ],
     [ "menu", "classfabgl_1_1_input_box_a909d54457e17a691b324f65a7637caa0.html#a909d54457e17a691b324f65a7637caa0", null ],
     [ "menu", "classfabgl_1_1_input_box_abbfa60003c83722f3fa22fe0d870ee23.html#abbfa60003c83722f3fa22fe0d870ee23", null ],
     [ "message", "classfabgl_1_1_input_box_a28a9108d1cfab33a1b1054f0c22782a3.html#a28a9108d1cfab33a1b1054f0c22782a3", null ],
     [ "messageFmt", "classfabgl_1_1_input_box_aa16a7bd46cbf4f1a3b9ce6f46d8c49e5.html#aa16a7bd46cbf4f1a3b9ce6f46d8c49e5", null ],
     [ "progressBox", "classfabgl_1_1_input_box_a5aae0f53ec7c8f05fc206aa5b9c6e501.html#a5aae0f53ec7c8f05fc206aa5b9c6e501", null ],
-    [ "select", "classfabgl_1_1_input_box_a2334236f9bd09e5f43ace12a3b685bf4.html#a2334236f9bd09e5f43ace12a3b685bf4", null ],
-    [ "select", "classfabgl_1_1_input_box_acad2320e92b9e6dfe972abdebcc0751d.html#acad2320e92b9e6dfe972abdebcc0751d", null ],
+    [ "select", "classfabgl_1_1_input_box_ab72467a63779dd88176432ff3d5b24b7.html#ab72467a63779dd88176432ff3d5b24b7", null ],
+    [ "select", "classfabgl_1_1_input_box_a8ab9323152ae5b47daea7dcabdee7e6b.html#a8ab9323152ae5b47daea7dcabdee7e6b", null ],
+    [ "selectedSubItem", "classfabgl_1_1_input_box_a6c5831f0da2247fac5e74c48626c9a87.html#a6c5831f0da2247fac5e74c48626c9a87", null ],
+    [ "setAutoOK", "classfabgl_1_1_input_box_ac183cebdfbacb6a523725f0cd620eb9d.html#ac183cebdfbacb6a523725f0cd620eb9d", null ],
     [ "setBackgroundColor", "classfabgl_1_1_input_box_af73b152e9293e3b0fc0835274538ca82.html#af73b152e9293e3b0fc0835274538ca82", null ],
-    [ "textInput", "classfabgl_1_1_input_box_a0e125469676d904e23584f68c8518780.html#a0e125469676d904e23584f68c8518780", null ]
+    [ "setMinButtonsWidth", "classfabgl_1_1_input_box_a3c7b7124f7c6cd722d53e7032dce1efa.html#a3c7b7124f7c6cd722d53e7032dce1efa", null ],
+    [ "setupButton", "classfabgl_1_1_input_box_a5c26d3b0f55937545f658d66d78c7067.html#a5c26d3b0f55937545f658d66d78c7067", null ],
+    [ "textInput", "classfabgl_1_1_input_box_a0e125469676d904e23584f68c8518780.html#a0e125469676d904e23584f68c8518780", null ],
+    [ "onPaint", "classfabgl_1_1_input_box_af3a004aaef5d509371945a87d4239a30.html#af3a004aaef5d509371945a87d4239a30", null ]
 ];

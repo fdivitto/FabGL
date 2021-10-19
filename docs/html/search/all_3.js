@@ -35,6 +35,7 @@ var searchData=
   ['down',['down',['../structfabgl_1_1_virtual_key_item_a957456ebb10d8e0ec184480894c0b885.html#a957456ebb10d8e0ec184480894c0b885',1,'fabgl::VirtualKeyItem::down()'],['../classfabgl_1_1ui_button_ac8345b9649ab88f18a52a1ab7468d2bf.html#ac8345b9649ab88f18a52a1ab7468d2bf',1,'fabgl::uiButton::down()']]],
   ['downbackgroundcolor',['downBackgroundColor',['../structfabgl_1_1ui_button_style_ad030d951c454d9a353c1d1fcc206b9cc.html#ad030d951c454d9a353c1d1fcc206b9cc',1,'fabgl::uiButtonStyle']]],
   ['downbitmap',['downBitmap',['../structfabgl_1_1ui_button_style_a28a83a5f7d4066995791678c57411fdb.html#a28a83a5f7d4066995791678c57411fdb',1,'fabgl::uiButtonStyle']]],
+  ['downtextcolor',['downTextColor',['../structfabgl_1_1ui_button_style_a261543a41e1e77cd2cc3b795e8120875.html#a261543a41e1e77cd2cc3b795e8120875',1,'fabgl::uiButtonStyle']]],
   ['drawbitmap',['drawBitmap',['../classfabgl_1_1_canvas_a3447e9b59b69ead99cf3735e1bd18c02.html#a3447e9b59b69ead99cf3735e1bd18c02',1,'fabgl::Canvas']]],
   ['drawchar',['drawChar',['../classfabgl_1_1_canvas_ace0e4720eb75f05b029c455982653ed2.html#ace0e4720eb75f05b029c455982653ed2',1,'fabgl::Canvas']]],
   ['drawellipse',['drawEllipse',['../classfabgl_1_1_canvas_a37ccab1d5906bc2facb56457e89ee0bc.html#a37ccab1d5906bc2facb56457e89ee0bc',1,'fabgl::Canvas']]],
