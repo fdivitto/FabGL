@@ -634,7 +634,7 @@ bool i8086::IRQ(uint8_t interrupt_num)
 #define MEM16(addr) (*(uint16_t*)(s_memory + (addr)))
 
 
-inline __attribute__((always_inline)) uint8_t i8086::RMEM8(int addr)
+uint8_t i8086::RMEM8(int addr)
 {
   if (addr >= VIDEOMEM_START && addr < VIDEOMEM_END) {
     return s_readVideoMemory8(s_context, addr);
@@ -644,7 +644,7 @@ inline __attribute__((always_inline)) uint8_t i8086::RMEM8(int addr)
 }
 
 
-inline __attribute__((always_inline)) uint16_t i8086::RMEM16(int addr)
+uint16_t i8086::RMEM16(int addr)
 {
   if (addr >= VIDEOMEM_START && addr < VIDEOMEM_END) {
     return s_readVideoMemory16(s_context, addr);
@@ -763,20 +763,18 @@ void i8086::pc_interrupt(uint8_t interrupt_num)
   }
 
   if (!s_interrupt(s_context, interrupt_num)) {
-    regs16[REG_SP] -= 2;
-    MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = make_flags();
+    uint16_t newIP     = MEM16(4 * interrupt_num);
+    uint16_t newCS     = MEM16(4 * interrupt_num + 2);
 
-    regs16[REG_SP] -= 2;
-    MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_CS];
+    uint16_t * stack = &MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+    stack[-1] = make_flags();
+    stack[-2] = regs16[REG_CS];
+    stack[-3] = reg_ip;
 
-    regs16[REG_SP] -= 2;
-    MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip;
+    regs16[REG_SP] -= 6;
 
-    PSRAM_WORKAROUND1
-
-    regs16[REG_CS] = MEM16(4 * interrupt_num + 2);
-
-    reg_ip = MEM16(4 * interrupt_num);
+    reg_ip         = newIP;
+    regs16[REG_CS] = newCS;
 
     FLAG_TF = FLAG_IF = 0;
   }
@@ -802,10 +800,35 @@ uint8_t i8086::raiseDivideByZeroInterrupt()
 
 
 // AAA and AAS instructions - which_operation is +1 for AAA, and -1 for AAS
-int i8086::AAA_AAS(int8_t which_operation)
+static int32_t AAA_AAS()
 {
-  regs16[REG_AX] += 262 * which_operation * set_AF(set_CF(((regs8[REG_AL] & 0x0F) > 9) || FLAG_AF));
+  regs16[REG_AX] += 262 * (extra - 1) * set_AF(set_CF(((regs8[REG_AL] & 0x0F) > 9) || FLAG_AF));
   return regs8[REG_AL] &= 0x0F;
+}
+
+
+static int32_t DAA_DAS()
+{
+  // fab: fixed to pass test186
+  i_w = 0;
+  FLAG_AF = (regs8[REG_AL] & 0x0f) > 9 || FLAG_AF;
+  FLAG_CF = regs8[REG_AL] > 0x99 || FLAG_CF;
+  if (extra) {
+    // DAS
+    if (FLAG_CF)
+      regs8[REG_AL] -= 0x60;
+    else if (FLAG_AF)
+      FLAG_CF = (regs8[REG_AL] < 6);
+    if (FLAG_AF)
+      regs8[REG_AL] -= 6;
+  } else {
+    // DAA
+    if (FLAG_CF)
+      regs8[REG_AL] += 0x60;
+    if (FLAG_AF)
+      regs8[REG_AL] += 6;
+  }
+  return regs8[REG_AL];
 }
 
 
@@ -842,7 +865,7 @@ void IRAM_ATTR i8086::step()
     static uint64_t opcodeStatsT0 = esp_timer_get_time();
     opcodeStats[*opcode_stream] += 1;
     ++opcodeStatsCount;
-    if ((opcodeStatsCount % 1000000) == 0) {
+    if ((opcodeStatsCount % 500000000) == 0) {
       opcodeStatsCount = 0;
       if (Serial.available()) {
         Serial.read();
@@ -877,7 +900,8 @@ void IRAM_ATTR i8086::step()
       case 0x3e:
         seg_override_en = 2;
         seg_override    = ex_data[*opcode_stream];
-        rep_override_en && rep_override_en++;
+        if (rep_override_en)
+          ++rep_override_en;
         ++reg_ip;
         break;
 
@@ -926,11 +950,13 @@ void IRAM_ATTR i8086::step()
 
       // CALL disp16
       case 0xe8:
+      {
+        uint16_t pIP = reg_ip + 3;
+        reg_ip = pIP + *(uint16_t*)(opcode_stream + 1);
         regs16[REG_SP] -= 2;
-        MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip + 3;
-        PSRAM_WORKAROUND1
-        reg_ip += 3 + *(uint16_t*)(opcode_stream + 1);
+        MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = pIP;
         break;
+      }
 
       // RET (intrasegment)
       case 0xc3:
@@ -1086,7 +1112,7 @@ void i8086::stepEx(uint8_t const * opcode_stream)
         }
         if (i_reg & 1) {
           // JMP|CALL (far)
-          PSRAM_WORKAROUND1
+          PSRAM_WORKAROUND2
           regs16[REG_CS] = MEM16(op_from_addr + 2);
         }
         reg_ip = jumpTo;
@@ -1481,21 +1507,11 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       };
       break;
     }
-    case 13: // LOOPxx / JCXZ
-    {
-      int32_t scratch_uint = !!--regs16[REG_CX];
-      switch (i_reg4bit) {
-        case 0: // LOOPNZ
-          scratch_uint &= !FLAG_ZF;
-          break;
-        case 1: // LOOPZ
-          scratch_uint &= FLAG_ZF;
-          break;
-        // case 2 is LOOP
-      }
-      reg_ip += scratch_uint * (int8_t) i_data0;
+    case 13: // LOOPxx
+      // i_reg4bit: 0=LOOPNZ, 1=LOOPZ, 2=LOOP
+      if (--regs16[REG_CX])
+        reg_ip += ((FLAG_ZF ^ !i_reg4bit) | (bool)(i_reg4bit & 2)) * (int8_t) i_data0;
       break;
-    }
     case 14: // JMP | CALL int16_t/near
       reg_ip += 3 - i_d;
       if (!i_w) {
@@ -1662,29 +1678,10 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       ++reg_ip;
       return; // no calc ip, no flags
     case 28: // DAA/DAS
-      // fab: fixed to pass test186
-      i_w = 0;
-      FLAG_AF = (regs8[REG_AL] & 0x0f) > 9 || FLAG_AF;
-      FLAG_CF = regs8[REG_AL] > 0x99 || FLAG_CF;
-      if (extra) {
-        // DAS
-        if (FLAG_CF)
-          regs8[REG_AL] -= 0x60;
-        else if (FLAG_AF)
-          FLAG_CF = (regs8[REG_AL] < 6);
-        if (FLAG_AF)
-          regs8[REG_AL] -= 6;
-      } else {
-        // DAA
-        if (FLAG_CF)
-          regs8[REG_AL] += 0x60;
-        if (FLAG_AF)
-          regs8[REG_AL] += 6;
-      }
-      op_result = regs8[REG_AL];
+      op_result = DAA_DAS();
       break;
     case 29: // AAA/AAS
-      op_result = AAA_AAS(extra - 1);
+      op_result = AAA_AAS();
       break;
     case 30: // CBW
       regs8[REG_AH] = -(1 & (i_w ? * (int16_t *) & regs8[REG_AL] : regs8[REG_AL]) >> (8 * (i_w + 1) - 1));
@@ -1693,13 +1690,15 @@ void i8086::stepEx(uint8_t const * opcode_stream)
       regs16[REG_DX] = -(1 & (i_w ? * (int16_t *) & regs16[REG_AX] : regs16[REG_AX]) >> (8 * (i_w + 1) - 1));
       break;
     case 32: // CALL FAR imm16:imm16
-      regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = regs16[REG_CS];
-      regs16[REG_SP] -= 2;
-      MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = reg_ip + 5;
-      regs16[REG_CS] = i_data2;
-      reg_ip = i_data0;
+    {
+      uint16_t * stack = &MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
+      stack[-1] = regs16[REG_CS];
+      stack[-2] = reg_ip + 5;
+      regs16[REG_SP] -= 4;
+      regs16[REG_CS]  = i_data2;
+      reg_ip          = i_data0;
       return; // no calc ip, no flags
+    }
     case 33: // PUSHF
       regs16[REG_SP] -= 2;
       MEM16(16 * regs16[REG_SS] + regs16[REG_SP]) = make_flags();

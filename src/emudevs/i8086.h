@@ -126,8 +126,6 @@ private:
 
   static void pc_interrupt(uint8_t interrupt_num);
 
-  static int AAA_AAS(int8_t which_operation);
-
   static uint8_t raiseDivideByZeroInterrupt();
 
   static void stepEx(uint8_t const * opcode_stream);
