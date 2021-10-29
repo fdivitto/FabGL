@@ -832,7 +832,7 @@ void i8086::reset()
 // tries to make more compact opcode "switch"
 static uint8_t optcodes[] = {
 // 0    1   2   3   4   5   6   7   8   9   a   b   c   d   e   f
-   0,   0,  0,  0,  0,  0, 13, 12,  0,  0,  0,  0,  0,  0, 13, 12, // 00 - 0f
+   0,   0,  0,  0,  0,  0, 13, 12,  0,  0,  0,  0,  0,  0, 13,  0, // 00 - 0f
    0,   0,  0,  0,  0,  0, 13, 12,  0,  0,  0,  0,  0,  0, 13, 12, // 10 - 1f
    0,   0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1,  0, // 20 - 2f
    0,   0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  1,  0, // 30 - 3f
@@ -1010,10 +1010,9 @@ void IRAM_ATTR i8086::step()
         break;
 
       // POP ES
-      // POP CS (80186)
       // POP SS
       // POP DS
-      // opcodes 0x07 0x0f 0x17 0x1f
+      // opcodes 0x07 0x17 0x1f
       case 12:
         regs16[REG_ES + (*opcode_stream >> 3)] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
         regs16[REG_SP] += 2;
