@@ -840,7 +840,7 @@ static uint8_t optcodes[] = {
    9,   9,  9,  9,  9,  9,  9,  9,  8,  8,  8,  8,  8,  8,  8,  8, // 50 - 5f
    0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, // 60 - 6f
    2,   2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2, // 70 - 7f
-   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, // 80 - 8f
+   0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 18,  0, // 80 - 8f
    0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, // 90 - 9f
    0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, // a0 - af
    10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, // b0 - bf
@@ -853,6 +853,14 @@ static uint8_t optcodes[] = {
 
 void IRAM_ATTR i8086::step()
 {
+
+  // Interrupts handling
+  // Following instructions inhibits interrupts for the next instruction:
+  //    MOV SS, xxx     [opcode 0x8e]
+  //    POP SS          [opcode 0x17]
+  //    STI             [opcode 0xfb]
+  // They are hard coded inside below loop, repeating it with "rep_override_en"
+
   // Application has set trap flag, so fire INT 1
   if (FLAG_TF) {
     pc_interrupt(1);
@@ -864,6 +872,8 @@ void IRAM_ATTR i8086::step()
     s_pendingIRQ = false;
     return;
   }
+
+  // Instructions handling
 
   PSRAM_WORKAROUND2
   do {
@@ -952,7 +962,8 @@ void IRAM_ATTR i8086::step()
         static int16_t FADDR[3] = { CF_ADDR, IF_ADDR, DF_ADDR };
         flags[FADDR[(*opcode_stream >> 1) & 3]] = *opcode_stream & 1;
         ++reg_ip;
-        return;
+        ++rep_override_en;  // this is required to inhibit interrupt until next instruction (actually should be just for STI...)
+        break;
       }
 
       // JCXZ
@@ -1017,7 +1028,8 @@ void IRAM_ATTR i8086::step()
         regs16[REG_ES + (*opcode_stream >> 3)] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
         regs16[REG_SP] += 2;
         ++reg_ip;
-        return;
+        ++rep_override_en;  // this is required to inhibit interrupt until next instruction (actually should be just for POP SS...)
+        break;
 
       // PUSH ES
       // PUSH CS (80186)
@@ -1070,13 +1082,19 @@ void IRAM_ATTR i8086::step()
         return;
       }
 
+      // MOV SS, r/m
+      case 18:
+        stepEx(opcode_stream);
+        ++rep_override_en;  // this is required to inhibit interrupt until next instruction
+        break;
+
       default:
         stepEx(opcode_stream);
         break;
 
     }
 
-  } while (seg_override_en > 1 || rep_override_en > 1);
+  } while (seg_override_en || rep_override_en);
 
 }
 
