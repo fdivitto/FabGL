@@ -859,24 +859,30 @@ void IRAM_ATTR i8086::step()
   //    MOV SS, xxx     [opcode 0x8e]
   //    POP SS          [opcode 0x17]
   //    STI             [opcode 0xfb]
-  // They are hard coded inside below loop, repeating it with "rep_override_en"
+  // They are hard coded inside below loop, repeating it using "break" instead of "return"
 
   // Application has set trap flag, so fire INT 1
-  if (FLAG_TF) {
+  if (FLAG_TF && !seg_override_en && !rep_override_en) {
     pc_interrupt(1);
-    return;
   }
   // Check for interrupts triggered by system interfaces
-  else if (FLAG_IF && s_pendingIRQ) {
+  else if (FLAG_IF && s_pendingIRQ && !seg_override_en && !rep_override_en) {
     pc_interrupt(s_pendingIRQIndex);
     s_pendingIRQ = false;
-    return;
   }
 
   // Instructions handling
 
   PSRAM_WORKAROUND2
-  do {
+  
+  // external interrupts allowed only out of this loop
+  while (true) {
+
+    // seg_override_en and rep_override_en contain number of instructions to hold segment override and REP prefix respectively
+    if (seg_override_en)
+      --seg_override_en;
+    if (rep_override_en)
+      --rep_override_en;
 
     uint8_t const * opcode_stream = s_memory + 16 * regs16[REG_CS] + reg_ip;
 
@@ -902,13 +908,7 @@ void IRAM_ATTR i8086::step()
     }
     #endif
 
-    // seg_override_en and rep_override_en contain number of instructions to hold segment override and REP prefix respectively
-    if (seg_override_en)
-      seg_override_en--;
-    if (rep_override_en)
-      rep_override_en--;
-
-    // quick and dirty processing of the most common instructions (statistically measured)
+    // quick and dirty processing of simple and common instructions
     switch (optcodes[*opcode_stream]) {
 
       // SEG ES
@@ -922,7 +922,7 @@ void IRAM_ATTR i8086::step()
         if (rep_override_en)
           ++rep_override_en;
         ++reg_ip;
-        break;
+        return;
 
       // JO
       // JNO
@@ -962,8 +962,7 @@ void IRAM_ATTR i8086::step()
         static int16_t FADDR[3] = { CF_ADDR, IF_ADDR, DF_ADDR };
         flags[FADDR[(*opcode_stream >> 1) & 3]] = *opcode_stream & 1;
         ++reg_ip;
-        ++rep_override_en;  // this is required to inhibit interrupt until next instruction (actually should be just for STI...)
-        break;
+        break;  // reloop, this is required to inhibit interrupt until next instruction (actually should be just for STI...)
       }
 
       // JCXZ
@@ -1011,14 +1010,14 @@ void IRAM_ATTR i8086::step()
       case 10:
         regs8[((*opcode_stream >> 2) & 1) + (*opcode_stream & 3) * 2] = *(opcode_stream + 1);
         reg_ip += 2;
-        break;
+        return;
 
       // MOV reg16, data16
       // opcodes 0xb8 ... 0xbf
       case 11:
         regs16[*opcode_stream & 0x7] = *(uint16_t*)(opcode_stream + 1);
         reg_ip += 3;
-        break;
+        return;
 
       // POP ES
       // POP SS
@@ -1028,8 +1027,7 @@ void IRAM_ATTR i8086::step()
         regs16[REG_ES + (*opcode_stream >> 3)] = MEM16(16 * regs16[REG_SS] + regs16[REG_SP]);
         regs16[REG_SP] += 2;
         ++reg_ip;
-        ++rep_override_en;  // this is required to inhibit interrupt until next instruction (actually should be just for POP SS...)
-        break;
+        break; // reloop, this is required to inhibit interrupt until next instruction (actually just for POP SS)
 
       // PUSH ES
       // PUSH CS (80186)
@@ -1050,7 +1048,7 @@ void IRAM_ATTR i8086::step()
         if (seg_override_en)
           ++seg_override_en;
         ++reg_ip;
-        break;
+        return;
 
       // INT imm8
       // opcode 0xcd
@@ -1085,16 +1083,15 @@ void IRAM_ATTR i8086::step()
       // MOV SS, r/m
       case 18:
         stepEx(opcode_stream);
-        ++rep_override_en;  // this is required to inhibit interrupt until next instruction
-        break;
+        break;  // reloop, this is required to inhibit interrupt until next instruction
 
       default:
         stepEx(opcode_stream);
-        break;
+        return;
 
     }
-
-  } while (seg_override_en || rep_override_en);
+    
+  };
 
 }
 
