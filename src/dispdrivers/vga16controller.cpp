@@ -477,7 +477,7 @@ void IRAM_ATTR VGA16Controller::ISRHandler(void * arg)
       auto src  = (uint8_t const *) s_viewPortVisible[scanLine];
       auto dest = (uint16_t*) lines[lineIndex];
 
-      // optimizazion warn: horizontal resolution must be a multiple of 16!
+      // optimization warn: horizontal resolution must be a multiple of 16!
       for (int col = 0; col < width; col += 16) {
 
         auto src1 = *(src + 0);
