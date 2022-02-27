@@ -320,6 +320,7 @@
 #include "dispdrivers/vga8controller.h"
 #include "dispdrivers/vga16controller.h"
 #include "dispdrivers/vgadirectcontroller.h"
+#include "dispdrivers/cvbs16controller.h"
 #include "fabui.h"
 #include "inputbox.h"
 #include "comdrivers/ps2controller.h"
