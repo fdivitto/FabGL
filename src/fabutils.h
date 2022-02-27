@@ -99,6 +99,9 @@ namespace fabgl {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define TORAD(a) ((a) * M_PI / 180.)
+
+
 // Integer square root by Halleck's method, with Legalize's speedup
 int isqrt (int x);
 
@@ -183,6 +186,16 @@ inline uint32_t changeEndiannesDWord(uint32_t value)
 {
   return ((value & 0xff) << 24) | ((value & 0xff00) << 8) | ((value & 0xff0000) >> 8) | ((value & 0xff000000) >> 24);
 }
+
+
+struct APLLParams {
+  uint8_t sdm0;
+  uint8_t sdm1;
+  uint8_t sdm2;
+  uint8_t o_div;
+};
+
+void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_t * b, double * out_freq, double * error);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
