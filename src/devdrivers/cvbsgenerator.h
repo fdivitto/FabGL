@@ -56,6 +56,7 @@ struct CVBSParams {
   double          sampleRate_hz;                  // sample rate (see note above)
   double          subcarrierFreq_hz;
   double          line_us;                        // line duration
+  double          hline_us;                       // half line duration (vsync and equalization pulse)
   double          hsync_us;                       // horizontal sync pulse duration
   double          backPorch_us;                   // back porch duration
   double          frontPorch_us;                  // front porch duration
@@ -65,7 +66,6 @@ struct CVBSParams {
   double          fieldLines;                     // number of lines in a field
   double          longPulse_us;                   // vertical sync, long pulse duration
   double          shortPulse_us;                  // vertical sync, short pulse duration (equalization pulse)
-  double          vsync_us;                       // vsync duration
   uint8_t         blankLines;                     // vertical blank after vertical sync to keep blank (adjusts vertical position)
   uint8_t         frameGroupCount;                // number of frames for each DMA chain. Controls how much fields are presented to getBurstPhase() function. See note above.
   int8_t          preEqualizingPulseCount;        // vertical sync, number of short pulses just before vsync (at the beginning of field)
@@ -95,12 +95,6 @@ struct CVBSParams {
   // phase in radians
   virtual double getColorBurst(bool oddLine, double phase) const = 0;
   
-  // result: 0..1, where 0 is 0˚ and 1 = 360˚
-  virtual double calcSubCarrierPhase(double actualLine_us, int field, int frame, int frameLine) const {
-    int interFrameLine = fieldLines * fields * (frame - 1) + frameLine - 1; // range: 0...
-    double ipart;
-    return modf((subcarrierFreq_hz * interFrameLine * actualLine_us) / 1000000., &ipart);  // return just the fractional part
-  }
 };
 
 
@@ -220,6 +214,7 @@ private:
   volatile int                  m_linesPerFrame;                // number of lines in a frame
   static volatile scPhases_t *  s_lineSampleToSubCarrierSample; // converts a line sample (full line, from hsync to front porch) to m_colorBurstLUT[] item
   double                        m_actualLine_us;                // actual value of m_params->line_us, after samples alignment
+  double                        m_actualHLine_us;               // actual value of m_params->hline_us, after samples alignment
   double                        m_sample_us;                    // duration of a sample
   
   CVBSParams const *            m_params;                       // decides the CVBS standard (PAL, NTSC...)
