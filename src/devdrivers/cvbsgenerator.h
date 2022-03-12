@@ -66,6 +66,8 @@ struct CVBSParams {
   double          fieldLines;                     // number of lines in a field
   double          longPulse_us;                   // vertical sync, long pulse duration
   double          shortPulse_us;                  // vertical sync, short pulse duration (equalization pulse)
+  double          hsyncEdge_us;                   // line sync falling and rising edges duration
+  double          vsyncEdge_us;                   // short and long syncs falling and rising edge duration
   uint8_t         blankLines;                     // vertical blank after vertical sync to keep blank (adjusts vertical position)
   uint8_t         frameGroupCount;                // number of frames for each DMA chain. Controls how much fields are presented to getBurstPhase() function. See note above.
   int8_t          preEqualizingPulseCount;        // vertical sync, number of short pulses just before vsync (at the beginning of field)

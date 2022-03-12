@@ -67,6 +67,8 @@ static const struct CVBS_I_PAL_B : CVBSParams {
     fieldLines                   = 312.5;
     longPulse_us                 = 27.3;
     shortPulse_us                = 2.35;
+    hsyncEdge_us                 = 0.3;
+    vsyncEdge_us                 = 0.2;
     blankLines                   = 19;
     frameGroupCount              = 4;
     preEqualizingPulseCount      = 0;
@@ -144,6 +146,8 @@ static const struct CVBS_I_NTSC_M : CVBSParams {
     fieldLines                   = 262.5;
     longPulse_us                 = 27.3;
     shortPulse_us                = 2.3;
+    hsyncEdge_us                 = 0.3;
+    vsyncEdge_us                 = 0.2;
     blankLines                   = 30;
     frameGroupCount              = 2;
     preEqualizingPulseCount      = 6;
@@ -378,9 +382,10 @@ void CVBSGenerator::closeDMAChain(int index)
 // align samples, incrementing or decrementing value
 static int bestAlignValue(int value)
 {
-  //return value & ~1;  // 2 samples
+  // 2 samples
+  return value & ~1;
 
-///*
+/*
   // 4 samples
   int up   = (value + 3) & ~3;
   int down = (value & ~3);
@@ -412,41 +417,49 @@ void CVBSGenerator::buildDMAChain()
   m_lsyncBuf = (volatile uint16_t *) heap_caps_malloc(hlineSamplesCount * sizeof(uint16_t), MALLOC_CAP_DMA);
   int lsyncStart = 0;
   int lsyncEnd   = m_params->longPulse_us / m_sample_us;
-  for (int s = 0; s < hlineSamplesCount; ++s) {
-    if (s == lsyncStart || s == lsyncEnd)
-      m_lsyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel) / 2 << 8;  // 50% hsync
+  int vedgeLen   = ceil(m_params->vsyncEdge_us / m_sample_us);
+  for (int s = 0, fallCount = vedgeLen, riseCount = 0; s < hlineSamplesCount; ++s) {
+    if (s < lsyncStart + vedgeLen)
+      m_lsyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel * --fallCount / vedgeLen) << 8;    // falling edge
+    else if (s <= lsyncEnd - vedgeLen)
+      m_lsyncBuf[s ^ 1] = m_params->syncLevel << 8;                                                      // sync
     else if (s < lsyncEnd)
-      m_lsyncBuf[s ^ 1] = m_params->syncLevel << 8;
+      m_lsyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel * ++riseCount / vedgeLen) << 8;    // rising edge
     else
-      m_lsyncBuf[s ^ 1] = m_params->blackLevel << 8;
+      m_lsyncBuf[s ^ 1] = m_params->blackLevel << 8;                                                     // black level
   }
-
+  
   // setup short sync pulse buffer
   m_ssyncBuf = (volatile uint16_t *) heap_caps_malloc(hlineSamplesCount * sizeof(uint16_t), MALLOC_CAP_DMA);
   int ssyncStart = 0;
   int ssyncEnd   = m_params->shortPulse_us / m_sample_us;
-  for (int s = 0; s < hlineSamplesCount; ++s) {
-    if (s == ssyncStart || s == ssyncEnd)
-      m_ssyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel) / 2 << 8;  // 50% hsync
+  for (int s = 0, fallCount = vedgeLen, riseCount = 0; s < hlineSamplesCount; ++s) {
+    if (s < ssyncStart + vedgeLen)
+      m_ssyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel * --fallCount / vedgeLen) << 8;    // falling edge
+    else if (s <= ssyncEnd - vedgeLen)
+      m_ssyncBuf[s ^ 1] = m_params->syncLevel << 8;                                                      // sync
     else if (s < ssyncEnd)
-      m_ssyncBuf[s ^ 1] = m_params->syncLevel << 8;
+      m_ssyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel * ++riseCount / vedgeLen) << 8;    // rising edge
     else
-      m_ssyncBuf[s ^ 1] = m_params->blackLevel << 8;
+      m_ssyncBuf[s ^ 1] = m_params->blackLevel << 8;                                                     // black level
   }
 
   // setup line buffer
   m_lineBuf = (volatile uint16_t * *) malloc(CVBS_ALLOCATED_LINES * sizeof(uint16_t*));
   int hsyncStart = 0;
-  int hsyncEnd   = m_params->hsync_us / m_sample_us;
+  int hsyncEnd   = (m_params->hsync_us + m_params->hsyncEdge_us) / m_sample_us;
+  int hedgeLen   = ceil(m_params->hsyncEdge_us / m_sample_us);
   for (int l = 0; l < CVBS_ALLOCATED_LINES; ++l) {
     m_lineBuf[l] = (volatile uint16_t *) heap_caps_malloc(lineSamplesCount * sizeof(uint16_t) + 1, MALLOC_CAP_DMA);
-    for (int s = 0; s < lineSamplesCount; ++s) {
-      if (s == hsyncStart || s == hsyncEnd)              // to smooth fall and rise time
-        m_lineBuf[l][s ^ 1] = (m_params->syncLevel + m_params->blackLevel) / 2 << 8;  // 50% hsync
+    for (int s = 0, fallCount = hedgeLen, riseCount = 0; s < lineSamplesCount; ++s) {
+      if (s < hsyncStart + hedgeLen)
+        m_lineBuf[l][s ^ 1] = (m_params->syncLevel + m_params->blackLevel * --fallCount / hedgeLen) << 8;    // falling edge
+      else if (s <= hsyncEnd - hedgeLen)
+        m_lineBuf[l][s ^ 1] = m_params->syncLevel << 8;                                                      // sync
       else if (s < hsyncEnd)
-        m_lineBuf[l][s ^ 1] = m_params->syncLevel << 8;  // hsync
+        m_lineBuf[l][s ^ 1] = (m_params->syncLevel + m_params->blackLevel * ++riseCount / hedgeLen) << 8;    // rising edge
       else
-        m_lineBuf[l][s ^ 1] = m_params->blackLevel << 8; // back porch, active line, front porch
+        m_lineBuf[l][s ^ 1] = m_params->blackLevel << 8;                                                     // back porch, active line, front porch
     }
   }
   
@@ -484,7 +497,7 @@ void CVBSGenerator::buildDMAChain()
   volatile lldesc_t * nodeptr = nullptr;
   
   // microseconds since start of frame sequence
-  double us = 0;
+  double us = 0;  // @TODO: should we offset by half of hsync falling edge??
 
   for (int frame = 1; frame <= m_params->frameGroupCount; ++frame) {
 
