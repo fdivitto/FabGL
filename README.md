@@ -7,6 +7,7 @@
 
 
 You can support development by purchasing my own [development board](https://www.tindie.com/products/24612/) and [Serial Terminal](https://www.tindie.com/products/21107/).
+You may also support me donating hardware (boards, lab instruments, etc...). [**Credits**](https://github.com/fdivitto/FabGL/wiki/Credits)
 
 =================================================================================
 
