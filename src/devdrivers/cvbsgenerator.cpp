@@ -402,7 +402,7 @@ void CVBSGenerator::buildDMAChain()
   printf("lineSamplesCount  = %d\n", lineSamplesCount);
   printf("hlineSamplesCount = %d\n\n", hlineSamplesCount);
 
-  // make sizes 4 samples aligned
+  // make sizes aligned
   lineSamplesCount      = bestAlignValue(lineSamplesCount);
   hlineSamplesCount     = bestAlignValue(hlineSamplesCount);
     
@@ -429,8 +429,9 @@ void CVBSGenerator::buildDMAChain()
       m_lsyncBuf[s ^ 1] = m_params->blackLevel << 8;                                                     // black level
   }
   
-  // setup short sync pulse buffer
-  m_ssyncBuf = (volatile uint16_t *) heap_caps_malloc(hlineSamplesCount * sizeof(uint16_t), MALLOC_CAP_DMA);
+  // setup short sync pulse buffer and black buffer
+  m_blackBuffer = nullptr;
+  m_ssyncBuf    = (volatile uint16_t *) heap_caps_malloc(hlineSamplesCount * sizeof(uint16_t), MALLOC_CAP_DMA);
   int ssyncStart = 0;
   int ssyncEnd   = m_params->shortPulse_us / m_sample_us;
   for (int s = 0, fallCount = vedgeLen, riseCount = 0; s < hlineSamplesCount; ++s) {
@@ -440,8 +441,13 @@ void CVBSGenerator::buildDMAChain()
       m_ssyncBuf[s ^ 1] = m_params->syncLevel << 8;                                                      // sync
     else if (s < ssyncEnd)
       m_ssyncBuf[s ^ 1] = (m_params->syncLevel + m_params->blackLevel * ++riseCount / vedgeLen) << 8;    // rising edge
-    else
+    else {
       m_ssyncBuf[s ^ 1] = m_params->blackLevel << 8;                                                     // black level
+      if (!m_blackBuffer && !(s & 3)) {
+        m_blackBuffer       = &m_ssyncBuf[s ^ 1];
+        m_blackBufferLength = hlineSamplesCount - s;
+      }
+    }
   }
 
   // setup line buffer
@@ -450,7 +456,7 @@ void CVBSGenerator::buildDMAChain()
   int hsyncEnd   = (m_params->hsync_us + m_params->hsyncEdge_us) / m_sample_us;
   int hedgeLen   = ceil(m_params->hsyncEdge_us / m_sample_us);
   for (int l = 0; l < CVBS_ALLOCATED_LINES; ++l) {
-    m_lineBuf[l] = (volatile uint16_t *) heap_caps_malloc(lineSamplesCount * sizeof(uint16_t) + 1, MALLOC_CAP_DMA);
+    m_lineBuf[l] = (volatile uint16_t *) heap_caps_malloc(lineSamplesCount * sizeof(uint16_t), MALLOC_CAP_DMA);
     for (int s = 0, fallCount = hedgeLen, riseCount = 0; s < lineSamplesCount; ++s) {
       if (s < hsyncStart + hedgeLen)
         m_lineBuf[l][s ^ 1] = (m_params->syncLevel + m_params->blackLevel * --fallCount / hedgeLen) << 8;    // falling edge
@@ -497,7 +503,10 @@ void CVBSGenerator::buildDMAChain()
   volatile lldesc_t * nodeptr = nullptr;
   
   // microseconds since start of frame sequence
-  double us = 0;  // @TODO: should we offset by half of hsync falling edge??
+  double us  = 0;  // @TODO: should we offset by half of hsync falling edge??
+  
+  // microseconds since start of frame sequence: actual value, sample size rounded
+  double aus = us;
 
   for (int frame = 1; frame <= m_params->frameGroupCount; ++frame) {
 
@@ -530,7 +539,7 @@ void CVBSGenerator::buildDMAChain()
         #endif
         
         double ipart;
-        double subCarrierPhase = modf(m_params->subcarrierFreq_hz * us / 1000000., &ipart); // 0.0 = 0˚ ... 1.0 = 360˚
+        double subCarrierPhase = modf(m_params->subcarrierFreq_hz * aus / 1000000., &ipart); // 0.0 = 0˚ ... 1.0 = 360˚
         
         if (m_params->lineHasColorBurst(frame, frameLine)) {
           // stores subcarrier phase (in samples) for this line
@@ -560,7 +569,8 @@ void CVBSGenerator::buildDMAChain()
             nodeptr = setDMANode(node++, m_ssyncBuf, hlineSamplesCount);
           frameLine += .5;
           fieldLine += .5;
-          us        += m_actualHLine_us;
+          us        += m_params->hline_us;
+          aus       += m_actualHLine_us;
         
         } else if (fieldLine < (m_params->preEqualizingPulseCount + m_params->vsyncPulseCount) * .5 + 1.0) {
         
@@ -585,7 +595,8 @@ void CVBSGenerator::buildDMAChain()
           #endif
           frameLine += .5;
           fieldLine += .5;
-          us        += m_actualHLine_us;
+          us        += m_params->hline_us;
+          aus       += m_actualHLine_us;
           
         } else if (fieldLine < (m_params->preEqualizingPulseCount + m_params->vsyncPulseCount + m_params->postEqualizingPulseCount) * .5 + 1.0) {
         
@@ -597,7 +608,8 @@ void CVBSGenerator::buildDMAChain()
             nodeptr = setDMANode(node++, m_ssyncBuf, hlineSamplesCount);
           frameLine += .5;
           fieldLine += .5;
-          us        += m_actualHLine_us;
+          us        += m_params->hline_us;
+          aus       += m_actualHLine_us;
           
         } else if (fieldLine < m_params->fieldLines - m_params->endFieldEqualizingPulseCount * .5 + 1.0) {
         
@@ -639,7 +651,8 @@ void CVBSGenerator::buildDMAChain()
               nodeptr = setDMANode(node++, m_lineBuf[activeLineIndex % CVBS_ALLOCATED_LINES] + hlineSamplesCount, hlineSamplesCount);
             frameLine += .5;
             fieldLine += .5;
-            us        += m_actualHLine_us;
+            us        += m_params->hline_us;
+            aus       += m_actualHLine_us;
           } else if (fieldLine + 1.0 > m_params->fieldLines + 1.0 - m_params->endFieldEqualizingPulseCount * .5) {
             // beginning half of line (half line)
             #if SHOWDMADETAILS
@@ -649,7 +662,8 @@ void CVBSGenerator::buildDMAChain()
               nodeptr = setDMANode(node++, m_lineBuf[activeLineIndex % CVBS_ALLOCATED_LINES], hlineSamplesCount);
             frameLine += .5;
             fieldLine += .5;
-            us        += m_actualHLine_us;
+            us        += m_params->hline_us;
+            aus       += m_actualHLine_us;
           } else {
             // full line
             #if SHOWDMADETAILS
@@ -659,7 +673,8 @@ void CVBSGenerator::buildDMAChain()
               nodeptr = setDMANode(node++, m_lineBuf[activeLineIndex % CVBS_ALLOCATED_LINES], lineSamplesCount);
             frameLine += 1.0;
             fieldLine += 1.0;
-            us        += m_actualLine_us;
+            us        += m_params->line_us;
+            aus       += m_actualLine_us;
           }
             
           // generate interrupt every half CVBS_ALLOCATED_LINES
@@ -684,12 +699,23 @@ void CVBSGenerator::buildDMAChain()
             nodeptr = setDMANode(node++, m_ssyncBuf, hlineSamplesCount);
           frameLine += .5;
           fieldLine += .5;
-          us        += m_actualHLine_us;
+          us        += m_params->hline_us;
+          aus       += m_actualHLine_us;
           
         }
         
+      /*
+      int extra_samples = imin(((us - aus) / m_sample_us), m_blackBufferLength) & ~3;
+      if (extra_samples > 0 && frame == 1 && ((int)fieldLine < m_firstVisibleFieldLine-1 || (int)fieldLine > m_lastVisibleFieldLine+1)) {
+        setDMANode(node++, m_blackBuffer, extra_samples);
+        aus += extra_samples * m_sample_us;
+        printf("added %d extra samples\n", extra_samples);
+      }
+      */
+        
+        
       } // field-line loop
-      
+            
     } // field loop
     
   } // frame loop

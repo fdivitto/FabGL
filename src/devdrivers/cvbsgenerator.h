@@ -197,6 +197,11 @@ private:
   volatile uint16_t *           m_ssyncBuf;                     // vertical blank, short pulse buffer (equalizing pulse)
   volatile uint16_t * *         m_lineBuf;                      // hsync + back porch + line + front porch
   
+  // not allocated buffers
+  volatile uint16_t *           m_blackBuffer;                  // derived from ending black part of m_ssyncBuf
+  int                           m_blackBufferLength;            // number of available samples in m_blackBuffer
+  
+  
   intr_handle_t                 m_isr_handle;
   static volatile int16_t       s_visibleSamplesCount;          // visible samples in a line
   static volatile int16_t       s_firstVisibleSample;           // first visible sample (0...)
