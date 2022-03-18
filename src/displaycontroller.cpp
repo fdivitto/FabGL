@@ -781,10 +781,11 @@ void IRAM_ATTR BitmappedDisplayController::execPrimitive(Primitive const & prim,
     case PrimitiveCmd::SwapBuffers:
       swapBuffers();
       updateRect = updateRect.merge(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
-      if (insideISR)
+      if (insideISR) {
         vTaskNotifyGiveFromISR(prim.notifyTask, nullptr);
-      else
+      } else {
         xTaskNotifyGive(prim.notifyTask);
+      }
       break;
     case PrimitiveCmd::DrawPath:
       drawPath(prim.path, updateRect);

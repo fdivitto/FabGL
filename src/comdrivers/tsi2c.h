@@ -39,6 +39,7 @@
 
 #include "esp32-hal.h"
 
+#include "fabutils.h"
 #include "fabglconf.h"
 
 
@@ -60,7 +61,11 @@ struct I2CJobInfo {
   uint16_t  size;
   uint16_t  timeout;
   uint32_t  readCount;
+  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
   i2c_err_t lastError;
+  #else
+  esp_err_t lastError;
+  #endif
 };
 
 
@@ -147,8 +152,11 @@ private:
 
   static void commTaskFunc(void * pvParameters);
 
-
+  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
   i2c_t *            m_i2c;
+  #endif
+  
+  bool               m_i2cAvailable;
 
   uint8_t            m_bus;
   gpio_num_t         m_SDAGPIO;

@@ -51,7 +51,11 @@ namespace fabgl {
 
 
 I2C::I2C(int bus)
-  : m_i2c(nullptr),
+  :
+    #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+    m_i2c(nullptr),
+    #endif
+    m_i2cAvailable(false),
     m_bus(bus),
     m_commTaskHandle(nullptr),
     m_eventGroup(nullptr)
@@ -82,7 +86,7 @@ bool I2C::begin(gpio_num_t SDAGPIO, gpio_num_t SCLGPIO)
   // ready to accept jobs
   xEventGroupSetBits(m_eventGroup, EVTGROUP_READY);
 
-  return m_i2c != nullptr;
+  return m_i2cAvailable;
 }
 
 
@@ -92,13 +96,17 @@ void I2C::end()
     vTaskDelete(m_commTaskHandle);
   m_commTaskHandle = nullptr;
 
+  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
   if (m_i2c)
     i2cRelease(m_i2c);
   m_i2c = nullptr;
+  #endif
 
   if (m_eventGroup)
     vEventGroupDelete(m_eventGroup);
   m_eventGroup = nullptr;
+  
+  m_i2cAvailable = false;
 }
 
 
@@ -117,8 +125,11 @@ bool I2C::write(int address, uint8_t * buffer, int size, int frequency, int time
   // wait for comm task to finish job
   xEventGroupSync(m_eventGroup, EVTGROUP_WRITE, EVTGROUP_DONE, portMAX_DELAY);
 
-
+  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
   bool ret = (m_jobInfo.lastError == I2C_ERROR_OK);
+  #else
+  bool ret = (m_jobInfo.lastError == ESP_OK);
+  #endif
 
   // makes I2C ready for new requests
   xEventGroupSetBits(m_eventGroup, EVTGROUP_READY);
@@ -151,20 +162,43 @@ int I2C::read(int address, uint8_t * buffer, int size, int frequency, int timeOu
 }
 
 
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+static int i2cGetFrequency(uint8_t i2c_num)
+{
+  uint32_t r;
+  i2cGetClock(i2c_num, &r);
+  return r;
+}
+static void i2cSetFrequency(uint8_t i2c_num, int freq)
+{
+  i2cSetClock(i2c_num, freq);
+}
+#endif
+
 
 void I2C::commTaskFunc(void * pvParameters)
 {
   I2C * ths = (I2C*) pvParameters;
 
-  i2c_t * i2c = i2cInit(ths->m_bus, ths->m_SDAGPIO, ths->m_SCLGPIO, I2C_DEFAULT_FREQUENCY);
-  if (!i2c) {
+  auto initRes = i2cInit(ths->m_bus, ths->m_SDAGPIO, ths->m_SCLGPIO, I2C_DEFAULT_FREQUENCY);
+  
+  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  if (!initRes) {
     ESP_LOGE("unable to init I2C");
     abort();
   }
-
+  auto i2c = initRes;
   i2cFlush(i2c);
-
   ths->m_i2c = i2c;
+  #else
+  if (initRes != ESP_OK) {
+    ESP_LOGE("unable to init I2C");
+    abort();
+  }
+  auto i2c = ths->m_bus;
+  #endif
+  
+  ths->m_i2cAvailable = true;
 
   // get initial default frequency
   int freq = i2cGetFrequency(i2c);
@@ -186,10 +220,17 @@ void I2C::commTaskFunc(void * pvParameters)
       i2cSetFrequency(i2c, freq);
     }
 
+    #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
     if (bits & EVTGROUP_WRITE)
       job->lastError = i2cWrite(i2c, job->address, job->buffer, job->size, true, job->timeout);
     else if (bits & EVTGROUP_READ)
       job->lastError = i2cRead(i2c, job->address, job->buffer, job->size, true, job->timeout, &job->readCount);
+    #else
+    if (bits & EVTGROUP_WRITE)
+      job->lastError = i2cWrite(i2c, job->address, job->buffer, job->size, job->timeout);
+    else if (bits & EVTGROUP_READ)
+      job->lastError = i2cRead(i2c, job->address, job->buffer, job->size, job->timeout, &job->readCount);
+    #endif
 
   }
 
