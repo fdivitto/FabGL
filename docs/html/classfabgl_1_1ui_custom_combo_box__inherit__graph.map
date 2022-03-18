@@ -1,8 +1,10 @@
 <map id="uiCustomComboBox" name="uiCustomComboBox">
-<area shape="rect" id="node6" href="$classfabgl_1_1ui_color_combo_box.html" title="This is a combination of a color listbox and a colorbox. " alt="" coords="5,379,133,405"/>
-<area shape="rect" id="node7" href="$classfabgl_1_1ui_combo_box.html" title="This is a combination of a listbox and a single&#45;line editable textbox. " alt="" coords="158,379,255,405"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="100,229,175,256"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="98,155,177,181"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="89,80,186,107"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="102,5,173,32"/>
+<area shape="rect" id="node1" title="This is a combination of a listbox and another component, base of all combobox components." alt="" coords="135,304,278,331"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_color_combo_box.html" title="This is a combination of a color listbox and a colorbox." alt="" coords="5,379,133,405"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_combo_box.html" title="This is a combination of a listbox and a single&#45;line editable textbox." alt="" coords="158,379,255,405"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_split_button.html" title="This is a combination of a button and a simple menu." alt="" coords="280,379,376,405"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="169,229,244,256"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="167,155,246,181"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="158,80,255,107"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="171,5,242,32"/>
 </map>

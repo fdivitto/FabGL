@@ -1,6 +1,20 @@
 <map id="vgabasecontroller.h" name="vgabasecontroller.h">
-<area shape="rect" id="node8" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="306,155,393,181"/>
-<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="548,155,623,181"/>
-<area shape="rect" id="node14" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition. " alt="" coords="166,80,333,107"/>
-<area shape="rect" id="node16" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition. " alt="" coords="459,80,586,107"/>
+<area shape="rect" id="node1" title="This file contains fabgl::VGABaseController definition." alt="" coords="506,5,641,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="217,155,282,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="123,155,192,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="889,80,951,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="975,80,1068,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="783,229,927,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="698,155,814,181"/>
+<area shape="rect" id="node8" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="306,155,393,181"/>
+<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="548,155,623,181"/>
+<area shape="rect" id="node15" href="$swgenerator_8h.html" title="This file contains fabgl::GPIOStream definition." alt="" coords="166,80,333,107"/>
+<area shape="rect" id="node17" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="459,80,586,107"/>
+<area shape="rect" id="node9" title=" " alt="" coords="154,229,235,256"/>
+<area shape="rect" id="node11" title=" " alt="" coords="521,229,644,256"/>
+<area shape="rect" id="node12" title=" " alt="" coords="668,229,759,256"/>
+<area shape="rect" id="node13" title=" " alt="" coords="260,229,364,256"/>
+<area shape="rect" id="node14" title=" " alt="" coords="389,229,497,256"/>
+<area shape="rect" id="node16" title=" " alt="" coords="5,155,99,181"/>
+<area shape="rect" id="node18" title=" " alt="" coords="417,155,524,181"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classfabgl_1_1_base_display_controller.html" title="Represents the base abstract class for all display controllers. " alt="" coords="5,31,157,57"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers. " alt="" coords="205,5,389,32"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_textual_display_controller.html" title="Represents the base abstract class for textual display controllers. " alt="" coords="215,56,379,83"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1_v_g_a_text_controller.html" title="Represents the VGA text&#45;only controller. " alt="" coords="437,56,568,83"/>
+<area shape="rect" id="node1" href="$classfabgl_1_1_base_display_controller.html" title="Represents the base abstract class for all display controllers." alt="" coords="5,31,157,57"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers." alt="" coords="205,5,389,32"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_textual_display_controller.html" title="Represents the base abstract class for textual display controllers." alt="" coords="215,56,379,83"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_v_g_a_text_controller.html" title="Represents the VGA text&#45;only controller." alt="" coords="437,56,568,83"/>
 </map>

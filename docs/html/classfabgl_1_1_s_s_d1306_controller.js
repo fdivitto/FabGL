@@ -1,8 +1,8 @@
 var classfabgl_1_1_s_s_d1306_controller =
 [
     [ "available", "classfabgl_1_1_s_s_d1306_controller_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a", null ],
-    [ "begin", "classfabgl_1_1_s_s_d1306_controller_af4457c33ec3247fb92c8bf2a2d8e9819.html#af4457c33ec3247fb92c8bf2a2d8e9819", null ],
     [ "begin", "classfabgl_1_1_s_s_d1306_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2", null ],
+    [ "begin", "classfabgl_1_1_s_s_d1306_controller_af4457c33ec3247fb92c8bf2a2d8e9819.html#af4457c33ec3247fb92c8bf2a2d8e9819", null ],
     [ "colorsCount", "classfabgl_1_1_s_s_d1306_controller_a811a555ee536c2845522b045cb63f713.html#a811a555ee536c2845522b045cb63f713", null ],
     [ "controllerType", "classfabgl_1_1_s_s_d1306_controller.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_s_s_d1306_controller.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],

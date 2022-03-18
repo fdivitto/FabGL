@@ -1,12 +1,12 @@
 var classfabgl_1_1_input_box =
 [
     [ "InputBox", "classfabgl_1_1_input_box_aeed16a1f110da832346d6177acd00d07.html#aeed16a1f110da832346d6177acd00d07", null ],
-    [ "begin", "classfabgl_1_1_input_box_abaff5cb73e3c60262d8f96d4bea27fb4.html#abaff5cb73e3c60262d8f96d4bea27fb4", null ],
     [ "begin", "classfabgl_1_1_input_box_a09d6c04dbe3aa0bc7220b4ebd8323746.html#a09d6c04dbe3aa0bc7220b4ebd8323746", null ],
+    [ "begin", "classfabgl_1_1_input_box_abaff5cb73e3c60262d8f96d4bea27fb4.html#abaff5cb73e3c60262d8f96d4bea27fb4", null ],
     [ "end", "classfabgl_1_1_input_box_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087", null ],
     [ "fileSelector", "classfabgl_1_1_input_box_a6241937ae9870d37f4947ef9b4cde1f4.html#a6241937ae9870d37f4947ef9b4cde1f4", null ],
     [ "folderBrowser", "classfabgl_1_1_input_box_aef83632569a1995f12f701922106d827.html#aef83632569a1995f12f701922106d827", null ],
-    [ "getDisplayController", "classfabgl_1_1_input_box_a68e646a3e168d23dc088dd1922e0801f.html#a68e646a3e168d23dc088dd1922e0801f", null ],
+    [ "getDisplayController", "classfabgl_1_1_input_box_a0788e9d707a2308fc26567a56802d523.html#a0788e9d707a2308fc26567a56802d523", null ],
     [ "getLastResult", "classfabgl_1_1_input_box_a03a8ca3293dfb3946f6dd5a0d69c3d26.html#a03a8ca3293dfb3946f6dd5a0d69c3d26", null ],
     [ "menu", "classfabgl_1_1_input_box_a909d54457e17a691b324f65a7637caa0.html#a909d54457e17a691b324f65a7637caa0", null ],
     [ "menu", "classfabgl_1_1_input_box_abbfa60003c83722f3fa22fe0d870ee23.html#abbfa60003c83722f3fa22fe0d870ee23", null ],

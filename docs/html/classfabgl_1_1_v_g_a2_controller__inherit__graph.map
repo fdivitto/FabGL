@@ -1,3 +1,4 @@
 <map id="VGA2Controller" name="VGA2Controller">
-<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller, VGA8Controller, etc.. " alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node1" title="Represents the VGA 2 colors bitmapped controller." alt="" coords="26,80,139,107"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a_paletted_controller.html" title="Represents the base class for paletted bitmapped controllers like VGA16Controller,..." alt="" coords="5,5,160,32"/>
 </map>

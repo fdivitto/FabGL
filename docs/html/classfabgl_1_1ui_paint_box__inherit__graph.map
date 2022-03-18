@@ -1,7 +1,8 @@
 <map id="uiPaintBox" name="uiPaintBox">
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars. " alt="" coords="5,304,136,331"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="33,229,108,256"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="31,155,110,181"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="22,80,119,107"/>
-<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="35,5,106,32"/>
+<area shape="rect" id="node1" title="A paintbox control allows applications to perform custom drawings providing uiPaintBox...." alt="" coords="28,379,113,405"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars." alt="" coords="5,304,136,331"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="33,229,108,256"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="31,155,110,181"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="22,80,119,107"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="35,5,106,32"/>
 </map>

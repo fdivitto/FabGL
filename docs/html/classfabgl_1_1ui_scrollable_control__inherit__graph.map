@@ -1,11 +1,13 @@
 <map id="uiScrollableControl" name="uiScrollableControl">
-<area shape="rect" id="node6" href="$classfabgl_1_1ui_custom_list_box.html" title="Shows generic a list of selectable items. " alt="" coords="125,379,248,405"/>
-<area shape="rect" id="node10" href="$classfabgl_1_1ui_paint_box.html" title="A paintbox control allows applications to perform custom drawings providing uiPaintBox.onPaint delegate. A paintbox can have horizontal and vertical scrollbars. " alt="" coords="272,379,357,405"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="213,229,288,256"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="211,155,290,181"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="202,80,299,107"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="215,5,286,32"/>
-<area shape="rect" id="node7" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable. " alt="" coords="5,453,112,480"/>
-<area shape="rect" id="node8" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content. " alt="" coords="136,453,237,480"/>
-<area shape="rect" id="node9" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items. " alt="" coords="262,453,338,480"/>
+<area shape="rect" id="node1" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars." alt="" coords="241,304,372,331"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_custom_list_box.html" title="Shows generic a list of selectable items." alt="" coords="181,379,304,405"/>
+<area shape="rect" id="node11" href="$classfabgl_1_1ui_paint_box.html" title="A paintbox control allows applications to perform custom drawings providing uiPaintBox...." alt="" coords="328,379,413,405"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="269,229,344,256"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="267,155,346,181"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="258,80,355,107"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="271,5,342,32"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable." alt="" coords="5,453,112,480"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content." alt="" coords="136,453,237,480"/>
+<area shape="rect" id="node9" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items." alt="" coords="262,453,338,480"/>
+<area shape="rect" id="node10" href="$classfabgl_1_1ui_simple_menu.html" title="Shows a list of selectable string items. Selection is done clicking or pressing ENTER or SPACE key." alt="" coords="363,453,467,480"/>
 </map>

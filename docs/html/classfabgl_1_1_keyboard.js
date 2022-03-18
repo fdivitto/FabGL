@@ -1,10 +1,10 @@
 var classfabgl_1_1_keyboard =
 [
-    [ "begin", "classfabgl_1_1_keyboard_a4f1c6a36aae1c88e57c6bc7e05c772d1.html#a4f1c6a36aae1c88e57c6bc7e05c772d1", null ],
     [ "begin", "classfabgl_1_1_keyboard_a387c13d2b898fc5f2ce94cadf693fd2c.html#a387c13d2b898fc5f2ce94cadf693fd2c", null ],
+    [ "begin", "classfabgl_1_1_keyboard_a4f1c6a36aae1c88e57c6bc7e05c772d1.html#a4f1c6a36aae1c88e57c6bc7e05c772d1", null ],
     [ "emptyVirtualKeyQueue", "classfabgl_1_1_keyboard_aefe8cfbbb777abf28e87a1caf05da5e8.html#aefe8cfbbb777abf28e87a1caf05da5e8", null ],
     [ "enableVirtualKeys", "classfabgl_1_1_keyboard_a3634bbeb8aa072c0d2e6e2c6c1553301.html#a3634bbeb8aa072c0d2e6e2c6c1553301", null ],
-    [ "getLayout", "classfabgl_1_1_keyboard_a164361d7dc1597cd75db35c06d87e7d6.html#a164361d7dc1597cd75db35c06d87e7d6", null ],
+    [ "getLayout", "classfabgl_1_1_keyboard_aed861a34a0b8194ff5eed19088e6e04d.html#aed861a34a0b8194ff5eed19088e6e04d", null ],
     [ "getLEDs", "classfabgl_1_1_keyboard_abda5b9383751f677dd50359f5d5e6767.html#abda5b9383751f677dd50359f5d5e6767", null ],
     [ "getNextScancode", "classfabgl_1_1_keyboard_ad95b6b1928e6bd2cb5b5e3fb8be11f52.html#ad95b6b1928e6bd2cb5b5e3fb8be11f52", null ],
     [ "getNextVirtualKey", "classfabgl_1_1_keyboard_a0de31f752f76a296060bc792b51e50ba.html#a0de31f752f76a296060bc792b51e50ba", null ],
@@ -19,8 +19,8 @@ var classfabgl_1_1_keyboard =
     [ "resumePort", "classfabgl_1_1_keyboard.html#ae5e89fd1fac0904104dfab776e4fb15c", null ],
     [ "scancodeAvailable", "classfabgl_1_1_keyboard_a55976327987b5fa4942532e400d7480c.html#a55976327987b5fa4942532e400d7480c", null ],
     [ "scancodeSet", "classfabgl_1_1_keyboard_aac6f6dc99df5db0ee8bb96b4917022b6.html#aac6f6dc99df5db0ee8bb96b4917022b6", null ],
-    [ "sendCommand", "classfabgl_1_1_keyboard.html#a2cca4ba4bef3e1e010b7614be84323e3", null ],
     [ "sendCommand", "classfabgl_1_1_keyboard.html#a069efe90366fe5ca0c22eaf17a0e30fc", null ],
+    [ "sendCommand", "classfabgl_1_1_keyboard.html#a2cca4ba4bef3e1e010b7614be84323e3", null ],
     [ "setCodePage", "classfabgl_1_1_keyboard_ac1d99a6ef63ceea2bdf227fd7dc1c1af.html#ac1d99a6ef63ceea2bdf227fd7dc1c1af", null ],
     [ "setLayout", "classfabgl_1_1_keyboard_aca97a7179d5358ec795485e15618b243.html#aca97a7179d5358ec795485e15618b243", null ],
     [ "setLEDs", "classfabgl_1_1_keyboard_a99a84478b09fbb13863c3ec64f7ca872.html#a99a84478b09fbb13863c3ec64f7ca872", null ],

@@ -1,3 +1,4 @@
 <map id="Mouse" name="Mouse">
-<area shape="rect" id="node2" href="$classfabgl_1_1_p_s2_device.html" title="Base class for PS2 devices (like mouse or keyboard). " alt="" coords="5,5,93,32"/>
+<area shape="rect" id="node1" title="The PS2 Mouse controller class." alt="" coords="19,80,80,107"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_p_s2_device.html" title="Base class for PS2 devices (like mouse or keyboard)." alt="" coords="5,5,93,32"/>
 </map>

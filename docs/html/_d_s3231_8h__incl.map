@@ -1,5 +1,16 @@
 <map id="DS3231.h" name="DS3231.h">
-<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="189,155,276,181"/>
-<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="735,80,810,107"/>
-<area shape="rect" id="node11" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition. " alt="" coords="283,80,412,107"/>
+<area shape="rect" id="node1" title="This file contains the DS3231 (Real Time Clock) device driver." alt="" coords="301,5,381,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="34,155,99,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="124,155,193,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="251,229,395,256"/>
+<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="673,155,759,181"/>
+<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="573,155,648,181"/>
+<area shape="rect" id="node12" href="$tsi2c_8h.html" title="This file contains fabgl::I2C definition." alt="" coords="338,80,467,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="941,229,1022,256"/>
+<area shape="rect" id="node8" title=" " alt="" coords="419,229,541,256"/>
+<area shape="rect" id="node9" title=" " alt="" coords="565,229,656,256"/>
+<area shape="rect" id="node10" title=" " alt="" coords="680,229,784,256"/>
+<area shape="rect" id="node11" title=" " alt="" coords="809,229,917,256"/>
+<area shape="rect" id="node13" title=" " alt="" coords="218,155,334,181"/>
+<area shape="rect" id="node14" title=" " alt="" coords="358,155,447,181"/>
 </map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['waveformgenerator',['WaveformGenerator',['../classfabgl_1_1_waveform_generator.html',1,'fabgl']]]
+  ['waveformgenerator_0',['WaveformGenerator',['../classfabgl_1_1_waveform_generator.html',1,'fabgl']]]
 ];

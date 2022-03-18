@@ -1,0 +1,21 @@
+<map id="cvbspalettedcontroller.h" name="cvbspalettedcontroller.h">
+<area shape="rect" id="node1" title="This file contains fabgl::CVBSPalettedController definition." alt="" coords="377,5,536,32"/>
+<area shape="rect" id="node2" href="$cvbs16controller_8h.html" title="This file contains fabgl::CVBS16Controller definition." alt="" coords="307,80,433,107"/>
+<area shape="rect" id="node19" href="$cvbspalettedcontroller_8cpp_source.html" title=" " alt="" coords="458,80,631,107"/>
+<area shape="rect" id="node3" href="$cvbs16controller_8cpp_source.html" title=" " alt="" coords="237,155,378,181"/>
+<area shape="rect" id="node4" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="402,155,463,181"/>
+<area shape="rect" id="node5" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,229,123,256"/>
+<area shape="rect" id="node7" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="155,229,239,256"/>
+<area shape="rect" id="node9" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="277,229,359,256"/>
+<area shape="rect" id="node11" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="391,229,474,256"/>
+<area shape="rect" id="node13" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="505,229,629,256"/>
+<area shape="rect" id="node15" href="$i8042_8h_source.html" title=" " alt="" coords="665,229,729,256"/>
+<area shape="rect" id="node17" href="$i8086_8h_source.html" title=" " alt="" coords="766,229,830,256"/>
+<area shape="rect" id="node6" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,304,116,331"/>
+<area shape="rect" id="node8" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="141,304,239,331"/>
+<area shape="rect" id="node10" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="263,304,359,331"/>
+<area shape="rect" id="node12" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="384,304,481,331"/>
+<area shape="rect" id="node14" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="506,304,645,331"/>
+<area shape="rect" id="node16" href="$i8042_8cpp_source.html" title=" " alt="" coords="669,304,748,331"/>
+<area shape="rect" id="node18" href="$i8086_8cpp_source.html" title=" " alt="" coords="772,304,851,331"/>
+</map>

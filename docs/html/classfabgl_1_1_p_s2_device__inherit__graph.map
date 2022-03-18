@@ -1,4 +1,5 @@
 <map id="PS2Device" name="PS2Device">
-<area shape="rect" id="node2" href="$classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class. " alt="" coords="5,80,83,107"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class. " alt="" coords="107,80,168,107"/>
+<area shape="rect" id="node1" title="Base class for PS2 devices (like mouse or keyboard)." alt="" coords="47,5,135,32"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_keyboard.html" title="The PS2 Keyboard controller class." alt="" coords="5,80,83,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_mouse.html" title="The PS2 Mouse controller class." alt="" coords="107,80,168,107"/>
 </map>

@@ -54,7 +54,10 @@ namespace fabgl {
 static const struct CVBS_I_PAL_B : CVBSParams {
   CVBS_I_PAL_B() {
     desc                         = "I-PAL-B";
-    sampleRate_hz                = 17750000.0;  // = 1136/64*1000000
+    
+    //sampleRate_hz                = 4433618.75*4.;
+    sampleRate_hz                = 19250000.0;  // = 1136/64*1000000
+    
     subcarrierFreq_hz            = 4433618.75;
     line_us                      = 64.0;
     hline_us                     = 32.0;
@@ -385,12 +388,18 @@ static int bestAlignValue(int value)
   // 2 samples
   return value & ~1;
 
-/*
-  // 4 samples
+  /*
+  // 4 samples (round up or down)
   int up   = (value + 3) & ~3;
   int down = (value & ~3);
   return abs(value - up) < abs(value - down) ? up : down;
-  //*/
+  */
+  
+  // 4 samples round down
+  //return value & ~3;
+  
+  // 4 samples round up
+  //return (value + 3) & ~3;
 }
 
 
@@ -705,11 +714,12 @@ void CVBSGenerator::buildDMAChain()
         }
         
       /*
-      int extra_samples = imin(((us - aus) / m_sample_us), m_blackBufferLength) & ~3;
-      if (extra_samples > 0 && frame == 1 && ((int)fieldLine < m_firstVisibleFieldLine-1 || (int)fieldLine > m_lastVisibleFieldLine+1)) {
+      int extra_samples = imin(((us - aus) / m_sample_us), m_blackBufferLength) & ~1;
+      //if (extra_samples > 0 && frame == 1 && ((int)fieldLine < m_firstVisibleFieldLine-1 || (int)fieldLine > m_lastVisibleFieldLine+1)) {
+      if (extra_samples > 0 && frame == 1) {
         setDMANode(node++, m_blackBuffer, extra_samples);
         aus += extra_samples * m_sample_us;
-        printf("added %d extra samples\n", extra_samples);
+        printf("line %d, added %d extra samples\n", (int)fieldLine, extra_samples);
       }
       */
         
@@ -934,8 +944,9 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
       } else {
         // fill color burst
         auto colorBurstLUT = ctrl->m_colorBurstLUT[s_interFrameLine & 1];
+        auto sampleLUT     = CVBSGenerator::lineSampleToSubCarrierSample() + firstColorBurstSample;
         for (int s = firstColorBurstSample; s <= lastColorBurstSample; ++s)
-          fullLineBuf[s ^ 1] = colorBurstLUT[s_lineSampleToSubCarrierSample[s] + *s_subCarrierPhase];
+          fullLineBuf[s ^ 1] = colorBurstLUT[*sampleLUT++ + *s_subCarrierPhase];
       }
       
       // fill active area

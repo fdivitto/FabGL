@@ -1,4 +1,5 @@
 <map id="TFTController" name="TFTController">
-<area shape="rect" id="node2" href="$classfabgl_1_1_i_l_i9341_controller.html" title="Implements ILI9341 display driver controller. " alt="" coords="5,80,127,107"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_s_t7789_controller.html" title="Implements ST7789 display driver controller. " alt="" coords="151,80,274,107"/>
+<area shape="rect" id="node1" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="88,5,191,32"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_i_l_i9341_controller.html" title="Implements ILI9341 display driver controller." alt="" coords="5,80,127,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_s_t7789_controller.html" title="Implements ST7789 display driver controller." alt="" coords="151,80,274,107"/>
 </map>

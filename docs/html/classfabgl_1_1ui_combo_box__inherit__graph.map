@@ -1,7 +1,8 @@
 <map id="uiComboBox" name="uiComboBox">
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_custom_combo_box.html" title="This is a combination of a listbox and another component, base of all combobox components. " alt="" coords="5,304,148,331"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="39,229,114,256"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="37,155,116,181"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="28,80,125,107"/>
-<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="41,5,112,32"/>
+<area shape="rect" id="node1" title="This is a combination of a listbox and a single&#45;line editable textbox." alt="" coords="28,379,125,405"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_custom_combo_box.html" title="This is a combination of a listbox and another component, base of all combobox components." alt="" coords="5,304,148,331"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="39,229,114,256"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="37,155,116,181"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="28,80,125,107"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="41,5,112,32"/>
 </map>

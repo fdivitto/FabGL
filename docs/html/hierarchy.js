@@ -46,13 +46,8 @@ var hierarchy =
     [ "Size", "structfabgl_1_1_size.html", null ],
     [ "SoundGenerator", "classfabgl_1_1_sound_generator.html", null ],
     [ "Sprite", "structfabgl_1_1_sprite.html", null ],
-    [ "SSD1306Controller", "classfabgl_1_1_s_s_d1306_controller.html", null ],
     [ "Terminal", "classfabgl_1_1_terminal.html", null ],
     [ "TerminalController", "classfabgl_1_1_terminal_controller.html", null ],
-    [ "TFTController", "classfabgl_1_1_t_f_t_controller.html", [
-      [ "ILI9341Controller", "classfabgl_1_1_i_l_i9341_controller.html", null ],
-      [ "ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", null ]
-    ] ],
     [ "uiAnchors", "structfabgl_1_1ui_anchors.html", null ],
     [ "uiAppProps", "structfabgl_1_1ui_app_props.html", null ],
     [ "uiButtonStyle", "structfabgl_1_1ui_button_style.html", null ],
@@ -113,14 +108,6 @@ var hierarchy =
     [ "uiWindowProps", "structfabgl_1_1ui_window_props.html", null ],
     [ "uiWindowState", "structfabgl_1_1ui_window_state.html", null ],
     [ "uiWindowStyle", "structfabgl_1_1ui_window_style.html", null ],
-    [ "VGAController", "classfabgl_1_1_v_g_a_controller.html", null ],
-    [ "VGADirectController", "classfabgl_1_1_v_g_a_direct_controller.html", null ],
-    [ "VGAPalettedController", "classfabgl_1_1_v_g_a_paletted_controller.html", [
-      [ "VGA16Controller", "classfabgl_1_1_v_g_a16_controller.html", null ],
-      [ "VGA2Controller", "classfabgl_1_1_v_g_a2_controller.html", null ],
-      [ "VGA4Controller", "classfabgl_1_1_v_g_a4_controller.html", null ],
-      [ "VGA8Controller", "classfabgl_1_1_v_g_a8_controller.html", null ]
-    ] ],
     [ "VGATimings", "structfabgl_1_1_v_g_a_timings.html", null ],
     [ "VIA6522", "classfabgl_1_1_v_i_a6522.html", null ],
     [ "VirtualKeyDef", "structfabgl_1_1_virtual_key_def.html", null ],

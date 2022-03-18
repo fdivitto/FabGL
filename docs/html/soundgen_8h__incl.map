@@ -1,4 +1,13 @@
 <map id="soundgen.h" name="soundgen.h">
-<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors..." alt="" coords="189,80,276,107"/>
-<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="425,80,499,107"/>
+<area shape="rect" id="node1" title="This file contains all classes related to FabGL Sound System." alt="" coords="188,5,277,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,71,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="95,80,165,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="242,155,386,181"/>
+<area shape="rect" id="node5" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="189,80,276,107"/>
+<area shape="rect" id="node7" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="490,80,565,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="136,155,217,181"/>
+<area shape="rect" id="node8" title=" " alt="" coords="671,155,794,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="818,155,909,181"/>
+<area shape="rect" id="node10" title=" " alt="" coords="410,155,514,181"/>
+<area shape="rect" id="node11" title=" " alt="" coords="539,155,647,181"/>
 </map>

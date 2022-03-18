@@ -1,6 +1,7 @@
 <map id="VGAPalettedController" name="VGAPalettedController">
-<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller. " alt="" coords="5,80,125,107"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller. " alt="" coords="150,80,263,107"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller. " alt="" coords="287,80,401,107"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller. " alt="" coords="425,80,538,107"/>
+<area shape="rect" id="node1" title="Represents the base class for paletted bitmapped controllers like VGA16Controller,..." alt="" coords="197,5,352,32"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_v_g_a16_controller.html" title="Represents the VGA 16 colors bitmapped controller." alt="" coords="5,80,125,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_v_g_a2_controller.html" title="Represents the VGA 2 colors bitmapped controller." alt="" coords="150,80,263,107"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1_v_g_a4_controller.html" title="Represents the VGA 4 colors bitmapped controller." alt="" coords="287,80,401,107"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1_v_g_a8_controller.html" title="Represents the VGA 8 colors bitmapped controller." alt="" coords="425,80,538,107"/>
 </map>

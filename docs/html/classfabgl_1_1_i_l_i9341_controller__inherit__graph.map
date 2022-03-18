@@ -1,3 +1,4 @@
 <map id="ILI9341Controller" name="ILI9341Controller">
-<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection. " alt="" coords="15,5,117,32"/>
+<area shape="rect" id="node1" title="Implements ILI9341 display driver controller." alt="" coords="5,80,127,107"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="15,5,117,32"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="uiApp" name="uiApp">
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="5,80,103,107"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="19,5,89,32"/>
+<area shape="rect" id="node1" title="Represents the whole application base class." alt="" coords="27,155,81,181"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="5,80,103,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="19,5,89,32"/>
 </map>

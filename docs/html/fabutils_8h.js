@@ -259,7 +259,6 @@ var fabutils_8h =
       [ "VK_MU", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a31355f4fa8d2c9e8974c8490725c6a71", null ],
       [ "VK_ASCII", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6", null ]
     ] ],
-    [ "replacePathSep", "fabutils_8h.html#ae290b4bddb18288d7c1ab44d059a4d32", null ],
     [ "UARTConf", "fabutils_8h.html#a8658ffb2de6d8bd0d22fc9ca1bcf3a91", null ],
     [ "height", "fabutils_8h_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662", null ],
     [ "width", "fabutils_8h_ae0ffb42440f0305b6d22a1c6106b6e6f.html#ae0ffb42440f0305b6d22a1c6106b6e6f", null ],

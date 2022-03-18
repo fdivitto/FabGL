@@ -1,25 +1,26 @@
 /*
-@ @licstart  The following is the entire license notice for the
-JavaScript code in this file.
+ @licstart  The following is the entire license notice for the JavaScript code in this file.
 
-Copyright (C) 1997-2017 by Dimitri van Heesch
+ The MIT License (MIT)
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+ Copyright (C) 1997-2020 by Dimitri van Heesch
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ The above copyright notice and this permission notice shall be included in all copies or
+ substantial portions of the Software.
 
-@licend  The above is the entire license notice
-for the JavaScript code in this file
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var NAVTREE =
 [
@@ -56,20 +57,18 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html",
-"classfabgl_1_1_i_l_i9341_controller.html#a811a555ee536c2845522b045cb63f713",
-"classfabgl_1_1_sawtooth_waveform_generator.html#ace43e846a26854aa34091e3eabd07f24",
-"classfabgl_1_1_v_g_a4_controller.html#a749df909b39fd096bf6e2813f2f5324c",
-"classfabgl_1_1ui_button.html#ac6abc7197736d26b3f9029ac1541f0d4",
-"classfabgl_1_1ui_control.html#a25446fe6e054355699a76d8021723ab0",
-"classfabgl_1_1ui_image.html#a28c46beb152c3da8f65c1382a960c013",
-"classfabgl_1_1ui_progress_bar.html#aebdc12addfb08da7d30dbdf6faf67106",
-"classfabgl_1_1ui_window_a3a5d411895de42d3fc0dfa1c63cf87c9.html#a3a5d411895de42d3fc0dfa1c63cf87c9",
-"fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031",
-"functions_func.html",
-"group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0b2293e7aacb193170100eee1e620ca9",
-"i8080_8cpp_source.html",
-"structfabgl_1_1ui_key_event_info.html"
+"_d_s3231_8cpp_source.html",
+"classfabgl_1_1_input_box_a909d54457e17a691b324f65a7637caa0.html#a909d54457e17a691b324f65a7637caa0",
+"classfabgl_1_1_sine_waveform_generator.html#abc395029362d9990b5dad44dfafe9d63",
+"classfabgl_1_1_v_g_a_direct_controller.html",
+"classfabgl_1_1ui_color_combo_box.html#a0ef98742c841cb9a650dd4c257913878",
+"classfabgl_1_1ui_custom_list_box.html#ac6abc7197736d26b3f9029ac1541f0d4",
+"classfabgl_1_1ui_list_box.html#a86cf22137a7e0c4231e28275d76ffd43",
+"classfabgl_1_1ui_simple_menu.html#af0c9906b9a790f016d109646ec7d1a7e",
+"fabglconf_8h_a43c6ca9559a450f58fdf5640a85305c4.html#a43c6ca9559a450f58fdf5640a85305c4",
+"group___enumerations_gaae85628862e3db5a13e7c21a90589c1d.html#ggaae85628862e3db5a13e7c21a90589c1da0eaadb4fcb48a0a0ed7bc9868be9fbaa",
+"group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02abb9ca27af609da819e3bd3e04a10126b",
+"structfabgl_1_1ui_app_props_a6bb8300a9b1a94627cf4188bb1b5d17a.html#a6bb8300a9b1a94627cf4188bb1b5d17a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

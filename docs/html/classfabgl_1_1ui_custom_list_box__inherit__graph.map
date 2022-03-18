@@ -1,10 +1,12 @@
 <map id="uiCustomListBox" name="uiCustomListBox">
-<area shape="rect" id="node7" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable. " alt="" coords="5,453,112,480"/>
-<area shape="rect" id="node8" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content. " alt="" coords="136,453,237,480"/>
-<area shape="rect" id="node9" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items. " alt="" coords="262,453,338,480"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars. " alt="" coords="121,304,252,331"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable. " alt="" coords="149,229,224,256"/>
-<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls) " alt="" coords="147,155,226,181"/>
-<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events. " alt="" coords="138,80,235,107"/>
-<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls. " alt="" coords="151,5,222,32"/>
+<area shape="rect" id="node1" title="Shows generic a list of selectable items." alt="" coords="181,379,304,405"/>
+<area shape="rect" id="node7" href="$classfabgl_1_1ui_color_list_box.html" title="Shows a list of 16 colors, one selectable." alt="" coords="5,453,112,480"/>
+<area shape="rect" id="node8" href="$classfabgl_1_1ui_file_browser.html" title="Shows and navigates Virtual Filesystem content." alt="" coords="136,453,237,480"/>
+<area shape="rect" id="node9" href="$classfabgl_1_1ui_list_box.html" title="Shows a list of selectable string items." alt="" coords="262,453,338,480"/>
+<area shape="rect" id="node10" href="$classfabgl_1_1ui_simple_menu.html" title="Shows a list of selectable string items. Selection is done clicking or pressing ENTER or SPACE key." alt="" coords="363,453,467,480"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_scrollable_control.html" title="A scrollable control is a control with optionally vertical and/or horizontal scrollbars." alt="" coords="177,304,308,331"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="205,229,280,256"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="203,155,282,181"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="194,80,291,107"/>
+<area shape="rect" id="node6" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="207,5,278,32"/>
 </map>

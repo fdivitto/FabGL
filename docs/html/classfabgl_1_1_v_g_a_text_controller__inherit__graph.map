@@ -1,4 +1,5 @@
 <map id="VGATextController" name="VGATextController">
-<area shape="rect" id="node2" href="$classfabgl_1_1_textual_display_controller.html" title="Represents the base abstract class for textual display controllers. " alt="" coords="5,80,169,107"/>
-<area shape="rect" id="node3" href="$classfabgl_1_1_base_display_controller.html" title="Represents the base abstract class for all display controllers. " alt="" coords="11,5,163,32"/>
+<area shape="rect" id="node1" title="Represents the VGA text&#45;only controller." alt="" coords="22,155,153,181"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_textual_display_controller.html" title="Represents the base abstract class for textual display controllers." alt="" coords="5,80,169,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_base_display_controller.html" title="Represents the base abstract class for all display controllers." alt="" coords="11,5,163,32"/>
 </map>

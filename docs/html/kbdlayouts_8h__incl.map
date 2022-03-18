@@ -1,3 +1,10 @@
 <map id="kbdlayouts.h" name="kbdlayouts.h">
-<area shape="rect" id="node3" href="$fabutils_8h.html" title="This file contains some utility classes and functions. " alt="" coords="263,80,337,107"/>
+<area shape="rect" id="node1" title="This file contains keyboard layouts." alt="" coords="269,5,365,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="238,80,303,107"/>
+<area shape="rect" id="node3" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="328,80,403,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,155,149,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="173,155,296,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="320,155,411,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="435,155,539,181"/>
+<area shape="rect" id="node8" title=" " alt="" coords="563,155,671,181"/>
 </map>

@@ -25,26 +25,38 @@
 
 
 #include "fabgl.h"
+#include "devdrivers/cvbsgenerator.h"
 
 #include "vtanimations.h"
 
 
 
-fabgl::VGA16Controller DisplayController;
+fabgl::CVBS16Controller DisplayController;
 fabgl::Terminal        Terminal;
 
 
+using fabgl::CVBSGenerator;
+
 void setup()
 {
-  //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x480_60Hz);
+  
+  DisplayController.setHorizontalRate(2);
+  DisplayController.setMonochrome(false);
+  
+  //DisplayController.setResolution("I-PAL-B");
+  DisplayController.setResolution("P-PAL-B");
+  //DisplayController.setResolution("I-NTSC-M");
+  //DisplayController.setResolution("P-NTSC-M");
+  
+  //while (1) printf("frame=%d field=%d frameLine=%d interFrameLine=%d pictureLine=%d scPhaseSam=%d\n", CVBSGenerator::frame(), CVBSGenerator::field(), CVBSGenerator::frameLine(), CVBSGenerator::interFrameLine(), CVBSGenerator::pictureLine(), CVBSGenerator::subCarrierPhase());
 
   Terminal.begin(&DisplayController);
   //Terminal.setLogStream(Serial);  // DEBUG ONLY
 
-  Terminal.enableCursor(true);
+  //Terminal.enableCursor(true);
 }
 
 
@@ -60,6 +72,7 @@ void slowPrintf(const char * format, ...)
     vsnprintf(buf, size, format, ap);
     for (int i = 0; i < size; ++i) {
       Terminal.write(buf[i]);
+      //Serial.write(buf[i]);
       delay(25);
     }
   }
@@ -69,6 +82,82 @@ void slowPrintf(const char * format, ...)
 
 void demo1()
 {
+  ///*
+  //Terminal.loadFont(&fabgl::FONT_10x20);
+  Terminal.loadFont(&fabgl::FONT_8x8);
+  Terminal.setForegroundColor(Color::BrightGreen);
+  Terminal.clear();
+  Terminal.enableCursor(false);
+  //*/
+  
+  ///*
+  for (int i = 1; i < Terminal.getColumns(); ++i)
+    Terminal.write("M");
+  Terminal.write("X\r\n");
+  for (int i = 2; i < Terminal.getRows(); ++i)
+    Terminal.printf("%d\r\n", i);
+  Terminal.printf("%d", Terminal.getRows());
+  Terminal.flush(); delay(500);
+  //*/
+
+  
+  Canvas cv(&DisplayController);
+  
+  ///*
+  // linee rosse
+  cv.setPenColor(255, 0, 0);
+  cv.drawLine(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);
+  cv.drawLine(0, cv.getHeight() - 1, cv.getWidth() - 1, 0);
+  cv.drawLine(cv.getWidth() / 2, 0, cv.getWidth() / 2, cv.getHeight() - 1);
+  cv.drawLine(0, cv.getHeight() / 2, cv.getWidth() - 1, cv.getHeight() / 2);
+  //*/
+  
+  ///*
+  ///// bande colorate RGB, gialla e grigia
+  cv.setBrushColor(Color::BrightRed);
+  cv.fillRectangle(cv.getWidth()/2-80, cv.getHeight()/2-80, cv.getWidth()/2+80, cv.getHeight()/2+80);
+  cv.setBrushColor(Color::BrightGreen);
+  cv.fillRectangle(cv.getWidth()/2-60, cv.getHeight()/2-60, cv.getWidth()/2+60, cv.getHeight()/2+60);
+  cv.setBrushColor(Color::BrightBlue);
+  cv.fillRectangle(cv.getWidth()/2-40, cv.getHeight()/2-40, cv.getWidth()/2+40, cv.getHeight()/2+40);
+  cv.setBrushColor(Color::BrightYellow);
+  cv.fillRectangle(50, cv.getHeight()/2 - 20, 100, cv.getHeight()/2 + 20);
+  cv.setBrushColor(Color::White);
+  cv.fillRectangle(cv.getWidth() - 50, cv.getHeight()/2 - 20, cv.getWidth() - 100, cv.getHeight()/2 + 20);
+  //*/
+    
+  /*
+  // tre bande orizzontali
+  int w = cv.getWidth();
+  int h = cv.getHeight() / 3;
+  cv.setBrushColor(Color::BrightRed);
+  cv.fillRectangle(0, 0, w, h);
+  cv.setBrushColor(Color::BrightGreen);
+  cv.fillRectangle(0, h, w, h + h);
+  cv.setBrushColor(Color::BrightBlue);
+  cv.fillRectangle(0, h + h, w, h + h + h);
+  //*/
+  
+  /*
+  // tutto rosso
+  int w = cv.getWidth();
+  int h = cv.getHeight();
+  cv.setBrushColor(Color::BrightRed);
+  cv.fillRectangle(0, 0, w, h);
+  //*/
+  
+  
+  //cv.setBrushColor(Color::BrightBlue);
+  //cv.fillRectangle(0, 0, cv.getWidth(), cv.getHeight());
+
+  ///*
+  while (1) {
+    delay(10);
+    //while (1) printf("frame=%d field=%d frameLine=%d interFrameLine=%d pictureLine=%d scPhaseSam=%d\n", CVBSGenerator::frame(), CVBSGenerator::field(), CVBSGenerator::frameLine(), CVBSGenerator::interFrameLine(), CVBSGenerator::pictureLine(), CVBSGenerator::subCarrierPhase());
+  }
+  //*/
+    
+
   Terminal.write("\e[40;92m"); // background: black, foreground: green
   Terminal.write("\e[2J");     // clear screen
   Terminal.write("\e[1;1H");   // move cursor to 1,1

@@ -1,3 +1,4 @@
 <map id="ST7789Controller" name="ST7789Controller">
-<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection. " alt="" coords="15,5,118,32"/>
+<area shape="rect" id="node1" title="Implements ST7789 display driver controller." alt="" coords="5,80,128,107"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="15,5,118,32"/>
 </map>
