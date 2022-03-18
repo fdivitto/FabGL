@@ -16,7 +16,7 @@
       "maintainer": true
     }
   ],
-  "version": "1.0.5",
+  "version": "1.0.6",
   "frameworks": "arduino",
   "platforms": "espressif32"
 }
