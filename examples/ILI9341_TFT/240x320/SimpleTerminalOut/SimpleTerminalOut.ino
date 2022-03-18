@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2022 Fabrizio Di Vittorio.
   All rights reserved.
 
 
@@ -95,7 +95,7 @@ void demo1()
   Terminal.write("\e[2J");     // clear screen
   Terminal.write("\e[1;1H");   // move cursor to 1,1
   slowPrintf("* * * *  W E L C O M E   T O   F a b G L  * * * *\r\n");
-  slowPrintf("2019-2021 by Fabrizio Di Vittorio - www.fabgl.com\r\n");
+  slowPrintf("2019-2022 by Fabrizio Di Vittorio - www.fabgl.com\r\n");
   slowPrintf("===============================================\r\n\n");
   slowPrintf("This is a VGA Controller, PS2 Mouse and Keyboard Controller, Graphics Library,  Game Engine and ANSI/VT Terminal for the ESP32\r\n\n");
   slowPrintf("Current settings\r\n");

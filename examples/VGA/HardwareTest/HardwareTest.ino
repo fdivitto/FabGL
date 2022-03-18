@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2022 Fabrizio Di Vittorio.
   All rights reserved.
 
 
@@ -249,7 +249,7 @@ struct TestApp : public uiApp {
 
 
     y = frame->size().height - 40;
-    new uiLabel(frame, "FabGL - Copyright 2019-2021 by Fabrizio Di Vittorio", Point(175, y));
+    new uiLabel(frame, "FabGL - Copyright 2019-2022 by Fabrizio Di Vittorio", Point(175, y));
     new uiLabel(frame, "WWW.FABGL.COM", Point(260, y + 17));
 
   }

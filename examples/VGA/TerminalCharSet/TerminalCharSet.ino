@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2022 Fabrizio Di Vittorio.
   All rights reserved.
 
 
@@ -70,7 +70,7 @@ void loop()
   Terminal.write("\e[1;1H");   // move cursor to 1,1
 
   slowPrintf("\e[37m* * FabGL - Character set show\r\n");
-  slowPrintf("\e[34m* * 2019-2021 by Fabrizio Di Vittorio - www.fabgl.com\e[32m\r\n\n");
+  slowPrintf("\e[34m* * 2019-2022 by Fabrizio Di Vittorio - www.fabgl.com\e[32m\r\n\n");
 
   for (int i = 32; i <= 255; ++i) {
     Terminal.setForegroundColor(Color::Green);

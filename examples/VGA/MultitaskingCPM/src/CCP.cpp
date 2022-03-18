@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2021 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2022 Fabrizio Di Vittorio.
   All rights reserved.
 
 
@@ -1147,7 +1147,7 @@ bool CCP::cmd_INFO(uint16_t paramsAddr)
 
   m_termCtrl.setBackgroundColor(Color::Blue);
   m_termCtrl.setForegroundColor(Color::BrightCyan);
-  consoleOut("(c) 2021 by Fabrizio Di Vittorio - fdivitto2013@gmail.com");
+  consoleOut("(c) 2022 by Fabrizio Di Vittorio - fdivitto2013@gmail.com");
 
   m_termCtrl.setForegroundColor(Color::BrightYellow);
   m_termCtrl.setBackgroundColor(Color::Black);
