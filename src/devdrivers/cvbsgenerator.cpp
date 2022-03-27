@@ -54,7 +54,7 @@ namespace fabgl {
 static const struct CVBS_I_PAL_B : CVBSParams {
   CVBS_I_PAL_B() {
     desc                         = "I-PAL-B";
-    sampleRate_hz                = 17750000.0;  // = 1136/64*1000000
+    sampleRate_hz                = 17500000.0; // 1120/64*1000000    
     subcarrierFreq_hz            = 4433618.75;
     line_us                      = 64.0;
     hline_us                     = 32.0;
@@ -226,11 +226,11 @@ volatile int          CVBSGenerator::s_field;
 volatile int          CVBSGenerator::s_frame;
 volatile int          CVBSGenerator::s_frameLine;
 volatile int          CVBSGenerator::s_activeLineIndex;
-volatile int          CVBSGenerator::s_interFrameLine;
 volatile scPhases_t * CVBSGenerator::s_subCarrierPhase;
 volatile scPhases_t * CVBSGenerator::s_lineSampleToSubCarrierSample;
 volatile int16_t      CVBSGenerator::s_firstVisibleSample;
 volatile int16_t      CVBSGenerator::s_visibleSamplesCount;
+volatile bool         CVBSGenerator::s_lineSwitch;
 
 
 #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
@@ -515,10 +515,12 @@ void CVBSGenerator::buildDMAChain()
   volatile lldesc_t * nodeptr = nullptr;
   
   // microseconds since start of frame sequence
-  double us  = 0;  // @TODO: should we offset by half of hsync falling edge??
+  double us = m_params->hsyncEdge_us / 2.;
   
   // microseconds since start of frame sequence: actual value, sample size rounded
   double aus = us;
+
+  bool lineSwitch = false;
 
   for (int frame = 1; frame <= m_params->frameGroupCount; ++frame) {
 
@@ -564,11 +566,8 @@ void CVBSGenerator::buildDMAChain()
         //printf("frame(0)=%d frameLine(0)=%d scPhase=%.1f scSample=%d\n", frame-1, (int)frameLine-1, subCarrierPhase * 360., m_subCarrierPhases[frame - 1][(int)frameLine - 1]);
         
         #if SHOWDMADETAILS
-        int interFrameLine = m_params->fieldLines * m_params->fields * (frame - 1) + frameLine - 1; // range: 0...
-        bool oddLine = ((interFrameLine & 1) == 0);
-        printf("SCPhase = %.2f ", subCarrierPhase * 360.);
-        printf("BurstPhase = %.2f ", fmod(subCarrierPhase * 2. * M_PI + (oddLine ? 1 : -1) * 3. * M_PI / 4., 2. * M_PI) / M_PI * 180.);
-        oddLine = !oddLine;
+        printf("SCPhase = %.2f  ", subCarrierPhase * 360.);
+        printf("BurstPhase = %.2f (%c)  ", fmod(subCarrierPhase * 2. * M_PI + (lineSwitch ? 1 : -1) * 3. * M_PI / 4., 2. * M_PI) / M_PI * 180., lineSwitch ? 'O' : 'E');
         #endif
         
         if (fieldLine < m_params->preEqualizingPulseCount * .5 + 1.0) {
@@ -638,6 +637,7 @@ void CVBSGenerator::buildDMAChain()
          
           if (firstActiveLine) {
             m_firstActiveFrameLine[field - 1] = (int)frameLine - 1;
+            m_firstActiveFieldLineSwitch[frame - 1][field - 1] = lineSwitch;
             firstActiveLine = false;
             activeLineIndex = 0;
             #if SHOWDMADETAILS
@@ -728,6 +728,9 @@ void CVBSGenerator::buildDMAChain()
           aus       += m_actualHLine_us;
           
         }
+        
+        if (frameLine == (int)frameLine)
+          lineSwitch = !lineSwitch;
         
       } // field-line loop
       
@@ -923,11 +926,11 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
       s_field = (s_field + 1) % ctrl->m_params->fields;
       if (s_field == 0)
         s_frame = (s_frame + 1) % ctrl->m_params->frameGroupCount;  // first field
-      s_interFrameLine   = ctrl->m_linesPerFrame * s_frame + ctrl->m_firstActiveFrameLine[s_field];
       s_frameLine        = ctrl->m_firstActiveFrameLine[s_field];
       s_subCarrierPhase  = &(ctrl->m_subCarrierPhases[s_frame][s_frameLine]);
       s_activeLineIndex  = 0;
       s_scanLine         = ctrl->m_startingScanLine[s_field];
+      s_lineSwitch       = ctrl->m_firstActiveFieldLineSwitch[s_frame][s_field];
       s_VSync            = false;
     }
 
@@ -952,7 +955,7 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
           fullLineBuf[s ^ 1] = blk;
       } else {
         // fill color burst
-        auto colorBurstLUT = ctrl->m_colorBurstLUT[s_interFrameLine & 1];
+        auto colorBurstLUT = ctrl->m_colorBurstLUT[s_lineSwitch];
         auto sampleLUT     = CVBSGenerator::lineSampleToSubCarrierSample() + firstColorBurstSample;
         for (int s = firstColorBurstSample; s <= lastColorBurstSample; ++s)
           fullLineBuf[s ^ 1] = colorBurstLUT[*sampleLUT++ + *s_subCarrierPhase];
@@ -972,9 +975,9 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
       }
       
       ++s_activeLineIndex;
-      ++s_interFrameLine;
       ++s_frameLine;
       ++s_subCarrierPhase;
+      s_lineSwitch = !s_lineSwitch;
       
     }
 

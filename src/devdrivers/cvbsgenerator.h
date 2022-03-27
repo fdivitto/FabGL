@@ -157,8 +157,8 @@ public:
   static int frame()                                          { return s_frame; }
   static int frameLine()                                      { return s_frameLine; }
   static int subCarrierPhase()                                { return *s_subCarrierPhase; }
-  static int interFrameLine()                                 { return s_interFrameLine; }
   static int pictureLine()                                    { return s_scanLine; }
+  static bool lineSwitch()                                    { return s_lineSwitch; }
   static volatile scPhases_t * lineSampleToSubCarrierSample() { return s_lineSampleToSubCarrierSample; }
   static int firstVisibleSample()                             { return s_firstVisibleSample; }     // first visible sample in a line
   
@@ -187,7 +187,7 @@ private:
   static volatile int           s_frameLine;                    // current frame line: 0 to m_params->fieldLines * 2 - 1. Integer part only (ie line 200.5 will be 200). This is not equivalent to image "scanline" in case of interlaced fields.
   static volatile int           s_activeLineIndex;              // current active line index: 0... active line index (reset for each field)
   static volatile scPhases_t *  s_subCarrierPhase;              // ptr to current subcarrier phase: sample index in m_colorBurstLUT[] LUT, 0..CVBS_SUBCARRIERPHASES*2
-  static volatile int           s_interFrameLine;               // current interframe line: 0 to m_params->frameGroupCount * m_params->fieldLines * 2 - 1
+  static volatile bool          s_lineSwitch;                   // line switch
 
   gpio_num_t                    m_gpio;
   bool                          m_DMAStarted;
@@ -224,6 +224,7 @@ private:
   double                        m_actualLine_us;                // actual value of m_params->line_us, after samples alignment
   double                        m_actualHLine_us;               // actual value of m_params->hline_us, after samples alignment
   double                        m_sample_us;                    // duration of a sample
+  bool                          m_firstActiveFieldLineSwitch[4][2];  // line switch state for first active line at frame (0..) and field (0..)
   
   CVBSParams const *            m_params;                       // decides the CVBS standard (PAL, NTSC...)
   

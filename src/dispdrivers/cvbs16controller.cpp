@@ -504,7 +504,7 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int
   
   int  firstVisibleSample = CVBSGenerator::firstVisibleSample();
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
-  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
+  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::lineSwitch()];
   auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
   
   // optimization warn: horizontal resolution must be a multiple of 16!
@@ -563,7 +563,7 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
   auto dest32 = (uint32_t*) (dest + destSample);
   
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
-  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
+  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::lineSwitch()];
   auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
   
   /*
@@ -628,7 +628,7 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int
   
   int  firstVisibleSample = CVBSGenerator::firstVisibleSample();
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
-  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
+  auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::lineSwitch()];
   auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
   
   // optimization warn: horizontal resolution must be a multiple of 8!
