@@ -121,7 +121,7 @@ struct CVBSParams {
 #endif
 
 
-typedef void (*CVBSDrawScanlineCallback)(void * arg, uint16_t * dest, int scanLine);
+typedef void (*CVBSDrawScanlineCallback)(void * arg, uint16_t * dest, int destSample, int scanLine);
 
 
 class CVBSGenerator {
@@ -175,6 +175,7 @@ private:
   void closeDMAChain(int index);
   void buildDMAChain();
   void buildDMAChain_subCarrierOnly();
+  void addExtraSamples(double us, double * aus, int * node);
   static void ISRHandler(void * arg);
 
 

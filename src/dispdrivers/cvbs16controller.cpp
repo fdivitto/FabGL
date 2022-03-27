@@ -142,13 +142,17 @@ void CVBS16Controller::setPaletteItem(int index, RGB888 const & color)
   
   double range = params()->whiteLevel - params()->blackLevel + 1;
   
+  double r = color.R / 255.;
+  double g = color.G / 255.;
+  double b = color.B / 255.;
+  
   for (int line = 0; line < 2; ++line) {
     for (int sample = 0; sample < CVBS_SUBCARRIERPHASES * 2; ++sample) {
     
-      double phase = 2. * M_PI * (sample) / CVBS_SUBCARRIERPHASES;
+      double phase = 2. * M_PI * sample / CVBS_SUBCARRIERPHASES;
       
       double Y;
-      double chroma = params()->getComposite(line == 0, phase, color.R / 255., color.G / 255., color.B / 255., &Y);
+      double chroma = params()->getComposite(line == 0, phase, r, g, b, &Y);
       
       // black/white?
       if (m_monochrome)
@@ -488,7 +492,7 @@ void CVBS16Controller::rawDrawBitmap_RGBA8888(int destX, int destY, Bitmap const
 }
 
 
-void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int scanLine)
+void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int destSample, int scanLine)
 {
   auto ctrl = (CVBS16Controller *) arg;
 
@@ -496,17 +500,12 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int
   auto const height = ctrl->m_viewPortHeight;
 
   auto src    = (uint8_t const *) s_viewPortVisible[scanLine];
-  auto dest32 = (uint32_t*) dest;
+  auto dest32 = (uint32_t*) (dest + destSample);
   
   int  firstVisibleSample = CVBSGenerator::firstVisibleSample();
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
   auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
-  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample();
-  
-  //if (CVBSGenerator::frame() == 0) {
-  //  for (int i = 0; i < width; ++i)
-  //    *dest++ = 0x2000;
-  //} else
+  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
   
   // optimization warn: horizontal resolution must be a multiple of 16!
   for (int col = 0; col < width; col += 16) {
@@ -522,16 +521,14 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int
     
     PSRAM_HACK;
     
-    int sample = firstVisibleSample + col;
-
-    auto v1 = (paletteToRaw[src1 >> 4][sampleLUT[sample +  0] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  1] + subCarrierPhaseSam]);
-    auto v2 = (paletteToRaw[src2 >> 4][sampleLUT[sample +  2] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][sampleLUT[sample +  3] + subCarrierPhaseSam]);
-    auto v3 = (paletteToRaw[src3 >> 4][sampleLUT[sample +  4] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][sampleLUT[sample +  5] + subCarrierPhaseSam]);
-    auto v4 = (paletteToRaw[src4 >> 4][sampleLUT[sample +  6] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][sampleLUT[sample +  7] + subCarrierPhaseSam]);
-    auto v5 = (paletteToRaw[src5 >> 4][sampleLUT[sample +  8] + subCarrierPhaseSam] << 16) | (paletteToRaw[src5 & 0x0f][sampleLUT[sample +  9] + subCarrierPhaseSam]);
-    auto v6 = (paletteToRaw[src6 >> 4][sampleLUT[sample + 10] + subCarrierPhaseSam] << 16) | (paletteToRaw[src6 & 0x0f][sampleLUT[sample + 11] + subCarrierPhaseSam]);
-    auto v7 = (paletteToRaw[src7 >> 4][sampleLUT[sample + 12] + subCarrierPhaseSam] << 16) | (paletteToRaw[src7 & 0x0f][sampleLUT[sample + 13] + subCarrierPhaseSam]);
-    auto v8 = (paletteToRaw[src8 >> 4][sampleLUT[sample + 14] + subCarrierPhaseSam] << 16) | (paletteToRaw[src8 & 0x0f][sampleLUT[sample + 15] + subCarrierPhaseSam]);
+    auto v1 = (paletteToRaw[src1 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v2 = (paletteToRaw[src2 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v3 = (paletteToRaw[src3 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v4 = (paletteToRaw[src4 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v5 = (paletteToRaw[src5 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src5 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v6 = (paletteToRaw[src6 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src6 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v7 = (paletteToRaw[src7 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src7 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v8 = (paletteToRaw[src8 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src8 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
 
     *(dest32 + 0) = v1;
     *(dest32 + 1) = v2;
@@ -552,11 +549,10 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int
     // warn: don't use vTaskSuspendAll() in primitive drawing, otherwise vTaskNotifyGiveFromISR may be blocked and screen will flick!
     vTaskNotifyGiveFromISR(ctrl->m_primitiveExecTask, NULL);
   }
-
 }
 
 
-void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int scanLine)
+void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int destSample, int scanLine)
 {
   auto ctrl = (CVBS16Controller *) arg;
 
@@ -564,12 +560,19 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
   auto const height = ctrl->m_viewPortHeight;
 
   auto src    = (uint8_t const *) s_viewPortVisible[scanLine];
-  auto dest32 = (uint32_t*) dest;
+  auto dest32 = (uint32_t*) (dest + destSample);
   
-  int  firstVisibleSample = CVBSGenerator::firstVisibleSample();
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
   auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
-  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample();
+  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
+  
+  /*
+  if (CVBSGenerator::field() == 0) {
+    dest += destSample;
+    for (int i = 0; i < width; ++i)
+      *dest++ = 0x1900;
+  } else
+  //*/
   
   // optimization warn: horizontal resolution must be a multiple of 8!
   for (int col = 0; col < width; col += 16) {
@@ -580,17 +583,15 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
     auto src4 = *(src + 3);
     
     PSRAM_HACK;
-    
-    int sample = firstVisibleSample + col;
 
-    auto v1 = (paletteToRaw[src1 >> 4  ][sampleLUT[sample +  0] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 >> 4  ][sampleLUT[sample +  1] + subCarrierPhaseSam]);
-    auto v2 = (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  2] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  3] + subCarrierPhaseSam]);
-    auto v3 = (paletteToRaw[src2 >> 4  ][sampleLUT[sample +  4] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 >> 4  ][sampleLUT[sample +  5] + subCarrierPhaseSam]);
-    auto v4 = (paletteToRaw[src2 & 0x0f][sampleLUT[sample +  6] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][sampleLUT[sample +  7] + subCarrierPhaseSam]);
-    auto v5 = (paletteToRaw[src3 >> 4  ][sampleLUT[sample +  8] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 >> 4  ][sampleLUT[sample +  9] + subCarrierPhaseSam]);
-    auto v6 = (paletteToRaw[src3 & 0x0f][sampleLUT[sample + 10] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][sampleLUT[sample + 11] + subCarrierPhaseSam]);
-    auto v7 = (paletteToRaw[src4 >> 4  ][sampleLUT[sample + 12] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 >> 4  ][sampleLUT[sample + 13] + subCarrierPhaseSam]);
-    auto v8 = (paletteToRaw[src4 & 0x0f][sampleLUT[sample + 14] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][sampleLUT[sample + 15] + subCarrierPhaseSam]);
+    auto v1 = (paletteToRaw[src1 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v2 = (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v3 = (paletteToRaw[src2 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v4 = (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v5 = (paletteToRaw[src3 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v6 = (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v7 = (paletteToRaw[src4 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v8 = (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
 
     *(dest32 + 0) = v1;
     *(dest32 + 1) = v2;
@@ -615,7 +616,7 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
 }
 
 
-void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int scanLine)
+void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int destSample, int scanLine)
 {
   auto ctrl = (CVBS16Controller *) arg;
 
@@ -623,12 +624,12 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int
   auto const height = ctrl->m_viewPortHeight;
 
   auto src    = (uint8_t const *) s_viewPortVisible[scanLine];
-  auto dest32 = (uint32_t*) dest;
+  auto dest32 = (uint32_t*) (dest + destSample);
   
   int  firstVisibleSample = CVBSGenerator::firstVisibleSample();
   int  subCarrierPhaseSam = CVBSGenerator::subCarrierPhase();
   auto paletteToRaw       = s_paletteToRawPixel[CVBSGenerator::interFrameLine() & 1];
-  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample();
+  auto sampleLUT          = CVBSGenerator::lineSampleToSubCarrierSample() + destSample;
   
   // optimization warn: horizontal resolution must be a multiple of 8!
   for (int col = 0; col < width; col += 24) {
@@ -640,23 +641,21 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int
     
     PSRAM_HACK;
     
-    int sample = firstVisibleSample + col;
-
-    auto v1  = (paletteToRaw[src1 >> 4  ][sampleLUT[sample +  0] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 >> 4  ][sampleLUT[sample +  1] + subCarrierPhaseSam]);
-    auto v2  = (paletteToRaw[src1 >> 4  ][sampleLUT[sample +  2] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  3] + subCarrierPhaseSam]);
-    auto v3  = (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  4] + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][sampleLUT[sample +  5] + subCarrierPhaseSam]);
+    auto v1  = (paletteToRaw[src1 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v2  = (paletteToRaw[src1 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v3  = (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
     
-    auto v4  = (paletteToRaw[src2 >> 4  ][sampleLUT[sample +  6] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 >> 4  ][sampleLUT[sample +  7] + subCarrierPhaseSam]);
-    auto v5  = (paletteToRaw[src2 >> 4  ][sampleLUT[sample +  8] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][sampleLUT[sample +  9] + subCarrierPhaseSam]);
-    auto v6  = (paletteToRaw[src2 & 0x0f][sampleLUT[sample + 10] + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][sampleLUT[sample + 11] + subCarrierPhaseSam]);
+    auto v4  = (paletteToRaw[src2 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v5  = (paletteToRaw[src2 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v6  = (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
     
-    auto v7  = (paletteToRaw[src3 >> 4  ][sampleLUT[sample + 12] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 >> 4  ][sampleLUT[sample + 13] + subCarrierPhaseSam]);
-    auto v8  = (paletteToRaw[src3 >> 4  ][sampleLUT[sample + 14] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][sampleLUT[sample + 15] + subCarrierPhaseSam]);
-    auto v9  = (paletteToRaw[src3 & 0x0f][sampleLUT[sample + 16] + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][sampleLUT[sample + 17] + subCarrierPhaseSam]);
+    auto v7  = (paletteToRaw[src3 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v8  = (paletteToRaw[src3 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v9  = (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
 
-    auto v10 = (paletteToRaw[src4 >> 4  ][sampleLUT[sample + 18] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 >> 4  ][sampleLUT[sample + 19] + subCarrierPhaseSam]);
-    auto v11 = (paletteToRaw[src4 >> 4  ][sampleLUT[sample + 20] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][sampleLUT[sample + 21] + subCarrierPhaseSam]);
-    auto v12 = (paletteToRaw[src4 & 0x0f][sampleLUT[sample + 22] + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][sampleLUT[sample + 23] + subCarrierPhaseSam]);
+    auto v10 = (paletteToRaw[src4 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 >> 4  ][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v11 = (paletteToRaw[src4 >> 4  ][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    auto v12 = (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
 
     *(dest32 +  0) = v1;
     *(dest32 +  1) = v2;
@@ -681,7 +680,6 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int
     // warn: don't use vTaskSuspendAll() in primitive drawing, otherwise vTaskNotifyGiveFromISR may be blocked and screen will flick!
     vTaskNotifyGiveFromISR(ctrl->m_primitiveExecTask, NULL);
   }
-
 }
 
 
