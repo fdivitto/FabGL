@@ -325,7 +325,7 @@ class Menu : public uiApp {
       cv->selectFont(&fabgl::FONT_std_12);
       cv->setPenColor(RGB888(255, 128, 0));
       cv->drawText(160, 358, "www.fabgl.com");
-      cv->drawText(130, 371, "2019/21 by Fabrizio Di Vittorio");
+      cv->drawText(130, 371, "2019/22 by Fabrizio Di Vittorio");
     };
 
     // programs list
