@@ -68,7 +68,7 @@ public:
 
   void setPaletteItem(int index, RGB888 const & color);
   
-  void setMonochrome(bool value)                            { m_monochrome = value; }
+  void setMonochrome(bool value);
   bool monochrome()                                         { return m_monochrome; }
 
 

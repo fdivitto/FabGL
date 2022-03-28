@@ -89,6 +89,7 @@ CVBS16Controller::CVBS16Controller()
     m_monochrome(false)
 {
   s_instance = this;
+  s_paletteToRawPixel[0] = s_paletteToRawPixel[1] = nullptr;
 }
 
 
@@ -125,7 +126,6 @@ void CVBS16Controller::checkViewPortSize()
 }
 
 
-
 void CVBS16Controller::setupDefaultPalette()
 {
   for (int colorIndex = 0; colorIndex < 16; ++colorIndex) {
@@ -135,30 +135,39 @@ void CVBS16Controller::setupDefaultPalette()
 }
 
 
+void CVBS16Controller::setMonochrome(bool value)
+{
+  m_monochrome = value;
+  setupDefaultPalette();
+}
+
+
 void CVBS16Controller::setPaletteItem(int index, RGB888 const & color)
 {
-  index %= 16;
-  m_palette[index] = color;
-  
-  double range = params()->whiteLevel - params()->blackLevel + 1;
-  
-  double r = color.R / 255.;
-  double g = color.G / 255.;
-  double b = color.B / 255.;
-  
-  for (int line = 0; line < 2; ++line) {
-    for (int sample = 0; sample < CVBS_SUBCARRIERPHASES * 2; ++sample) {
+  if (s_paletteToRawPixel[0]) {
+    index %= 16;
+    m_palette[index] = color;
     
-      double phase = 2. * M_PI * sample / CVBS_SUBCARRIERPHASES;
+    double range = params()->whiteLevel - params()->blackLevel + 1;
+    
+    double r = color.R / 255.;
+    double g = color.G / 255.;
+    double b = color.B / 255.;
+    
+    for (int line = 0; line < 2; ++line) {
+      for (int sample = 0; sample < CVBS_SUBCARRIERPHASES * 2; ++sample) {
       
-      double Y;
-      double chroma = params()->getComposite(line == 0, phase, r, g, b, &Y);
-      
-      // black/white?
-      if (m_monochrome)
-        chroma = 0;
-      
-      s_paletteToRawPixel[line][index][sample] = (uint16_t)(params()->blackLevel + (Y + chroma) * range) << 8;
+        double phase = 2. * M_PI * sample / CVBS_SUBCARRIERPHASES;
+        
+        double Y;
+        double chroma = params()->getComposite(line == 0, phase, r, g, b, &Y);
+        
+        // black/white?
+        if (m_monochrome)
+          chroma = 0;
+        
+        s_paletteToRawPixel[line][index][sample] = (uint16_t)(params()->blackLevel + (Y + chroma) * range) << 8;
+      }
     }
   }
 }
