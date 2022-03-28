@@ -116,8 +116,8 @@ struct CVBSParams {
 #define CVBS_NOBURSTFLAG (CVBS_SUBCARRIERPHASES * 2 - 1)
 
 
-#if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
-  extern volatile uint64_t s_compctrlcycles;
+#if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
+  extern volatile uint64_t s_cvbsctrlcycles;
 #endif
 
 

@@ -212,8 +212,7 @@ struct MyApp : public uiApp {
   }
   
 
-
-};
+} app;
 
 
 
@@ -233,11 +232,33 @@ void setup()
   DisplayController.setMonochrome(MyApp::getMonochromatic());
   
   DisplayController.setResolution(MODES_STD[mode]);
+  
 }
 
+
+#if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
+namespace fabgl {
+  extern volatile uint64_t s_cvbsctrlcycles;
+}
+using fabgl::s_cvbsctrlcycles;
+#endif
 
 
 void loop()
 {
-  MyApp().runAsync(&DisplayController, 2000).joinAsyncRun();
+  app.runAsync(&DisplayController, 2000);
+  
+  #if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
+  uint32_t s1 = 0;
+  while (true) {
+    printf("%lld / %d   (%d%%)\n", s_cvbsctrlcycles, fabgl::getCycleCount() - s1, (int)((double)s_cvbsctrlcycles/240000000*100));
+    s_cvbsctrlcycles = 0;
+    s1 = fabgl::getCycleCount();
+    delay(1000);
+  }
+  #else
+  vTaskDelete(NULL);
+  #endif
+  
+  
 }

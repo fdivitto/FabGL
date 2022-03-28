@@ -233,8 +233,8 @@ volatile int16_t      CVBSGenerator::s_visibleSamplesCount;
 volatile bool         CVBSGenerator::s_lineSwitch;
 
 
-#if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
-  volatile uint64_t s_compctrlcycles = 0;
+#if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
+  volatile uint64_t s_cvbsctrlcycles = 0;
 #endif
 
 
@@ -912,7 +912,7 @@ void CVBSGenerator::setDrawScanlineCallback(CVBSDrawScanlineCallback drawScanlin
 
 void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
 {
-  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
+  #if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
   auto s1 = getCycleCount();
   #endif
 
@@ -985,8 +985,8 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
       s_VSync = true;
   }
 
-  #if FABGLIB_VGAXCONTROLLER_PERFORMANCE_CHECK
-  s_compctrlcycles += getCycleCount() - s1;
+  #if FABGLIB_CVBSCONTROLLER_PERFORMANCE_CHECK
+  s_cvbsctrlcycles += getCycleCount() - s1;
   #endif
 
   I2S0.int_clr.val = I2S0.int_st.val;
