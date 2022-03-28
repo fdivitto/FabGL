@@ -139,7 +139,7 @@
 
 
 /** Stack size of primitives drawing task of paletted based VGA controllers */
-#define FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_STACK_SIZE 1024
+#define FABGLIB_VGAPALETTEDCONTROLLER_PRIMTASK_STACK_SIZE 1200
 
 
 /** Priority of primitives drawing task of paletted based VGA controllers */
