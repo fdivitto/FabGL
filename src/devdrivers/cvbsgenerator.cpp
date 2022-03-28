@@ -945,8 +945,7 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
     
     for (int i = 0; i < CVBS_ALLOCATED_LINES / 2; ++i) {
     
-      int l = s_activeLineIndex % CVBS_ALLOCATED_LINES;
-      auto fullLineBuf = (uint16_t*)lineBuf[l];
+      auto fullLineBuf = (uint16_t*)lineBuf[s_activeLineIndex % CVBS_ALLOCATED_LINES];
 
       if (*s_subCarrierPhase == CVBS_NOBURSTFLAG) {
         // no burst for this line
@@ -955,7 +954,7 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
           fullLineBuf[s ^ 1] = blk;
       } else {
         // fill color burst
-        auto colorBurstLUT = ctrl->m_colorBurstLUT[s_lineSwitch];
+        auto colorBurstLUT = (uint16_t *) ctrl->m_colorBurstLUT[s_lineSwitch];
         auto sampleLUT     = CVBSGenerator::lineSampleToSubCarrierSample() + firstColorBurstSample;
         for (int s = firstColorBurstSample; s <= lastColorBurstSample; ++s)
           fullLineBuf[s ^ 1] = colorBurstLUT[*sampleLUT++ + *s_subCarrierPhase];

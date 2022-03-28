@@ -159,7 +159,7 @@ public:
   static int subCarrierPhase()                                { return *s_subCarrierPhase; }
   static int pictureLine()                                    { return s_scanLine; }
   static bool lineSwitch()                                    { return s_lineSwitch; }
-  static volatile scPhases_t * lineSampleToSubCarrierSample() { return s_lineSampleToSubCarrierSample; }
+  static scPhases_t * lineSampleToSubCarrierSample()          { return (scPhases_t*) s_lineSampleToSubCarrierSample; }
   static int firstVisibleSample()                             { return s_firstVisibleSample; }     // first visible sample in a line
   
   int visibleLines()                                          { return m_visibleLines; }           // visible lines in a field
