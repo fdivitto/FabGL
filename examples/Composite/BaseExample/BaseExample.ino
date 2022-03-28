@@ -61,7 +61,7 @@ static const char * PREF_HRATE   = "HRate";
 static const char * MODES_DESC[]  = { "Interlaced PAL-B",
                                       "Progressive PAL-B",
                                       "Interlaced NTSC-M",
-                                      "Processive NTSC-M",
+                                      "Progressive NTSC-M",
                                     };
                                     
 static const char * MODES_STD[]   = { "I-PAL-B",
