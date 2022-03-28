@@ -62,12 +62,20 @@ static const char * MODES_DESC[]  = { "Interlaced PAL-B",
                                       "Progressive PAL-B",
                                       "Interlaced NTSC-M",
                                       "Progressive NTSC-M",
+                                      "Interlaced PAL-B Wide",
+                                      "Progressive PAL-B Wide",
+                                      "Interlaced NTSC-M Wide",
+                                      "Progressive NTSC-M Wide",
                                     };
                                     
 static const char * MODES_STD[]   = { "I-PAL-B",
                                       "P-PAL-B",
                                       "I-NTSC-M",
                                       "P-NTSC-M",
+                                      "I-PAL-B-WIDE",
+                                      "P-PAL-B-WIDE",
+                                      "I-NTSC-M-WIDE",
+                                      "P-NTSC-M-WIDE",
                                     };
                                     
 
@@ -157,7 +165,7 @@ struct MyApp : public uiApp {
     
     // mode selection
     new uiLabel(rootWindow(), "Mode", Point(2,  60), Size(0, 0), true, STYLE_LABEL);
-    modeComboBox = new uiComboBox(rootWindow(), Point(40, 58), Size(120, 20), 80, true, STYLE_COMBOBOX);
+    modeComboBox = new uiComboBox(rootWindow(), Point(40, 58), Size(140, 20), 80, true, STYLE_COMBOBOX);
     modeComboBox->items().append(MODES_DESC, sizeof(MODES_DESC) / sizeof(char*));
     modeComboBox->selectItem(getMode());
 
@@ -170,8 +178,8 @@ struct MyApp : public uiApp {
     };
 
     // horizontal rate
-    new uiLabel(rootWindow(), "H. Rate", Point(78,  88), Size(0, 0), true, STYLE_LABEL);
-    hrateComboBox = new uiComboBox(rootWindow(), Point(120, 84), Size(40, 20), 55, true, STYLE_COMBOBOX);
+    new uiLabel(rootWindow(), "H. Rate", Point(103,  88), Size(0, 0), true, STYLE_LABEL);
+    hrateComboBox = new uiComboBox(rootWindow(), Point(145, 84), Size(35, 20), 55, true, STYLE_COMBOBOX);
     hrateComboBox->items().appendSepList("x1,x2,x3", ',');
     hrateComboBox->selectItem(getHRate() - 1);
 

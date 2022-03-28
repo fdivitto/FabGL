@@ -113,7 +113,6 @@ static const struct CVBS_I_PAL_B_WIDE : CVBS_I_PAL_B {
   CVBS_I_PAL_B_WIDE() : CVBS_I_PAL_B() {
     desc                         = "I-PAL-B-WIDE";
     defaultVisibleSamples        = 768;
-    defaultVisibleLines          = 240;
   }
 } CVBS_I_PAL_B_WIDE;
 
@@ -127,6 +126,17 @@ static const struct CVBS_P_PAL_B : CVBS_I_PAL_B {
     interlaceFactor              = 1;
   }
 } CVBS_P_PAL_B;
+
+
+// progressive PAL-B wide
+static const struct CVBS_P_PAL_B_WIDE : CVBS_I_PAL_B_WIDE {
+  CVBS_P_PAL_B_WIDE() : CVBS_I_PAL_B_WIDE() {
+    desc                         = "P-PAL-B-WIDE";
+    fieldStartingLine[0]         = 1;
+    fieldStartingLine[1]         = 1;
+    interlaceFactor              = 1;
+  }
+} CVBS_P_PAL_B_WIDE;
 
 
 // interlaced NTSC-M
@@ -188,7 +198,6 @@ static const struct CVBS_I_NTSC_M_WIDE : CVBS_I_NTSC_M {
   CVBS_I_NTSC_M_WIDE() : CVBS_I_NTSC_M() {
     desc                         = "I-NTSC-M-WIDE";
     defaultVisibleSamples        = 768;
-    defaultVisibleLines          = 200;
   };
 } CVBS_I_NTSC_M_WIDE;
 
@@ -204,13 +213,27 @@ static const struct CVBS_P_NTSC_M : CVBS_I_NTSC_M {
 } CVBS_P_NTSC_M;
 
 
+// progressive NTSC-M wide
+static const struct CVBS_P_NTSC_M_WIDE : CVBS_I_NTSC_M_WIDE {
+  CVBS_P_NTSC_M_WIDE() : CVBS_I_NTSC_M_WIDE() {
+    desc                         = "P-NTSC-M-WIDE";
+    fieldStartingLine[0]         = 1;
+    fieldStartingLine[1]         = 1;
+    interlaceFactor              = 1;
+  }
+} CVBS_P_NTSC_M_WIDE;
+
+
+
 static CVBSParams const * CVBS_Standards[] = {
   &CVBS_I_PAL_B,
   &CVBS_P_PAL_B,
   &CVBS_I_PAL_B_WIDE,
+  &CVBS_P_PAL_B_WIDE,
   &CVBS_I_NTSC_M,
   &CVBS_P_NTSC_M,
   &CVBS_I_NTSC_M_WIDE,
+  &CVBS_P_NTSC_M_WIDE,
 };
 
 
