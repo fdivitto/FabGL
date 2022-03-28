@@ -116,7 +116,7 @@ void GraphicsAdapter::setupEmulation(Emulation emulation)
     { false,    nullptr,  0,  0, 1, drawScanline_PC_Graphics_640x200_2Colors, VGA_640x240_60Hz,  640, 200 },
 
     // Emulation::PC_Graphics_HGC_720x348 (Hercules, Graphics Mode, 720x348x2)
-    { false,    nullptr,  0,  0, 2,     drawScanline_PC_Graphics_HGC_720x348, VGA_720x348_59HzD,  -1,  -1 },
+    { false,    nullptr,  0,  0, 2,     drawScanline_PC_Graphics_HGC_720x348, VGA_720x350_70Hz,  -1,  -1 },
 
   };
 

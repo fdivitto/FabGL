@@ -266,6 +266,9 @@
 /** Modeline for 720x348@73Hz resolution */
 #define VGA_720x348_73Hz "\"720x348@73Hz\" 27 720 736 799 872 348 379 381 433 -HSync -VSync"
 
+/** Modeline for 720x350@70Hz resolution - thanks Stan Pechal */
+#define VGA_720x350_70Hz "\"720x350@70Hz\" 28.32 720 738 846 900 350 387 389 449 -HSync -VSync"
+
 /** Modeline for 720x400@70Hz resolution */
 #define VGA_720x400_70Hz "\"720x400@70Hz\" 28.32  720 738 846 900  400 412 414 449 -hsync +vsync"
 
