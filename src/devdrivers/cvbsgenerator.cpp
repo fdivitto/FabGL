@@ -50,11 +50,15 @@ namespace fabgl {
 // CVBS Standards
 
 
-// interlaced PAL-B
+// interlaced PAL-B (max 640x480)
 static const struct CVBS_I_PAL_B : CVBSParams {
   CVBS_I_PAL_B() {
     desc                         = "I-PAL-B";
-    sampleRate_hz                = 17500000.0; // 1120/64*1000000    
+    
+    //sampleRate_hz                = 17750000.0;  // = 1136/64*1000000
+    //sampleRate_hz                = 4433618.75*4;  // = 1136/64*1000000
+    sampleRate_hz                = 17500000.0; // 1120/64*1000000
+    
     subcarrierFreq_hz            = 4433618.75;
     line_us                      = 64.0;
     hline_us                     = 32.0;
@@ -108,7 +112,7 @@ static const struct CVBS_I_PAL_B : CVBSParams {
 } CVBS_I_PAL_B;
 
 
-// interlaced PAL-B wide
+// interlaced PAL-B wide (max 768x480)
 static const struct CVBS_I_PAL_B_WIDE : CVBS_I_PAL_B {
   CVBS_I_PAL_B_WIDE() : CVBS_I_PAL_B() {
     desc                         = "I-PAL-B-WIDE";
@@ -117,7 +121,7 @@ static const struct CVBS_I_PAL_B_WIDE : CVBS_I_PAL_B {
 } CVBS_I_PAL_B_WIDE;
 
 
-// progressive PAL-B
+// progressive PAL-B (max 640x240)
 static const struct CVBS_P_PAL_B : CVBS_I_PAL_B {
   CVBS_P_PAL_B() : CVBS_I_PAL_B() {
     desc                         = "P-PAL-B";
@@ -128,18 +132,16 @@ static const struct CVBS_P_PAL_B : CVBS_I_PAL_B {
 } CVBS_P_PAL_B;
 
 
-// progressive PAL-B wide
-static const struct CVBS_P_PAL_B_WIDE : CVBS_I_PAL_B_WIDE {
-  CVBS_P_PAL_B_WIDE() : CVBS_I_PAL_B_WIDE() {
+// progressive PAL-B wide (max 768x240)
+static const struct CVBS_P_PAL_B_WIDE : CVBS_P_PAL_B {
+  CVBS_P_PAL_B_WIDE() : CVBS_P_PAL_B() {
     desc                         = "P-PAL-B-WIDE";
-    fieldStartingLine[0]         = 1;
-    fieldStartingLine[1]         = 1;
-    interlaceFactor              = 1;
+    defaultVisibleSamples        = 768;
   }
 } CVBS_P_PAL_B_WIDE;
 
 
-// interlaced NTSC-M
+// interlaced NTSC-M (max 640x200)
 static const struct CVBS_I_NTSC_M : CVBSParams {
   CVBS_I_NTSC_M() {
     desc                         = "I-NTSC-M";
@@ -193,7 +195,7 @@ static const struct CVBS_I_NTSC_M : CVBSParams {
 } CVBS_I_NTSC_M;
 
 
-// interlaced NTSC-M wide
+// interlaced NTSC-M wide (max 768x200)
 static const struct CVBS_I_NTSC_M_WIDE : CVBS_I_NTSC_M {
   CVBS_I_NTSC_M_WIDE() : CVBS_I_NTSC_M() {
     desc                         = "I-NTSC-M-WIDE";
@@ -202,7 +204,7 @@ static const struct CVBS_I_NTSC_M_WIDE : CVBS_I_NTSC_M {
 } CVBS_I_NTSC_M_WIDE;
 
 
-// progressive NTSC-M
+// progressive NTSC-M (max 640x200)
 static const struct CVBS_P_NTSC_M : CVBS_I_NTSC_M {
   CVBS_P_NTSC_M() : CVBS_I_NTSC_M() {
     desc                         = "P-NTSC-M";
@@ -213,15 +215,23 @@ static const struct CVBS_P_NTSC_M : CVBS_I_NTSC_M {
 } CVBS_P_NTSC_M;
 
 
-// progressive NTSC-M wide
-static const struct CVBS_P_NTSC_M_WIDE : CVBS_I_NTSC_M_WIDE {
-  CVBS_P_NTSC_M_WIDE() : CVBS_I_NTSC_M_WIDE() {
+// progressive NTSC-M wide (max 768x200)
+static const struct CVBS_P_NTSC_M_WIDE : CVBS_P_NTSC_M {
+  CVBS_P_NTSC_M_WIDE() : CVBS_P_NTSC_M() {
     desc                         = "P-NTSC-M-WIDE";
-    fieldStartingLine[0]         = 1;
-    fieldStartingLine[1]         = 1;
-    interlaceFactor              = 1;
+    defaultVisibleSamples        = 768;
   }
 } CVBS_P_NTSC_M_WIDE;
+
+
+// progressive NTSC-M extended (max 768x240)
+static const struct CVBS_P_NTSC_M_EXT : CVBS_P_NTSC_M_WIDE {
+  CVBS_P_NTSC_M_EXT() : CVBS_P_NTSC_M_WIDE() {
+    desc                         = "P-NTSC-M-EXT";
+    defaultVisibleLines          = 240;
+    blankLines                   = 17;
+  }
+} CVBS_P_NTSC_M_EXT;
 
 
 
@@ -234,6 +244,7 @@ static CVBSParams const * CVBS_Standards[] = {
   &CVBS_P_NTSC_M,
   &CVBS_I_NTSC_M_WIDE,
   &CVBS_P_NTSC_M_WIDE,
+  &CVBS_P_NTSC_M_EXT,
 };
 
 
