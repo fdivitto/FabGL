@@ -66,6 +66,7 @@ static const char * MODES_DESC[]  = { "Interlaced PAL-B",
                                       "Progressive PAL-B Wide",
                                       "Interlaced NTSC-M Wide",
                                       "Progressive NTSC-M Wide",
+                                      "Progressive NTSC-M Ext",
                                     };
                                     
 static const char * MODES_STD[]   = { "I-PAL-B",
@@ -76,6 +77,7 @@ static const char * MODES_STD[]   = { "I-PAL-B",
                                       "P-PAL-B-WIDE",
                                       "I-NTSC-M-WIDE",
                                       "P-NTSC-M-WIDE",
+                                      "P-NTSC-M-EXT",
                                     };
                                     
 
