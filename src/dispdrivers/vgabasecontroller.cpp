@@ -428,7 +428,7 @@ void VGABaseController::allocateViewPort(uint32_t allocCaps, int rowlen)
   while (remainingLines > 0 && poolsCount < FABGLIB_VIEWPORT_MEMORY_POOL_COUNT) {
     int largestBlock = heap_caps_get_largest_free_block(allocCaps);
     linesCount[poolsCount] = tmin(remainingLines, largestBlock / rowlen);
-    if (linesCount[poolsCount] == 0)  // no more memory available for lines
+    if (linesCount[poolsCount] == 0 || largestBlock < FABGLIB_MINFREELARGESTBLOCK)  // no more memory available for lines
       break;
     m_viewPortMemoryPool[poolsCount] = (uint8_t*) heap_caps_malloc(linesCount[poolsCount] * rowlen, allocCaps);
     remainingLines -= linesCount[poolsCount];

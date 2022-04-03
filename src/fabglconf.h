@@ -58,6 +58,10 @@
 #define FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MAX_THRESHOLD 300
 
 
+/** Size (in bytes) of largest block to maintain free */
+#define FABGLIB_MINFREELARGESTBLOCK 8192
+
+
 /** Size (in bytes) of primitives dynamic buffers. Used by primitives like drawPath and fillPath to contain path points. */
 #define FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE 512
 
