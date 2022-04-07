@@ -36,8 +36,8 @@
  struct ProgsDialog : public uiFrame {
 
   uiComboBox *      progComboBox;
-  uiLabel    *      helpLabel1;
-  uiLabel    *      helpLabel2;
+  uiStaticLabel *   helpLabel1;
+  uiStaticLabel *   helpLabel2;
 
 
   ProgsDialog(uiFrame * parent)
@@ -55,13 +55,13 @@
     int y = 24;
 
     // help labels
-    helpLabel1 = new uiLabel(this, "", Point(120, y + 15), Size(0, 0), true, STYLE_LABELHELP);
+    helpLabel1 = new uiStaticLabel(this, "", Point(120, y + 15), true, STYLE_LABELHELP);
     helpLabel1->setText(PROGRAMS_HELP[0]);
-    helpLabel2 = new uiLabel(this, "", Point(120, y + 30), Size(0, 0), true, STYLE_LABELHELP);
+    helpLabel2 = new uiStaticLabel(this, "", Point(120, y + 30), true, STYLE_LABELHELP);
     helpLabel2->setText(PROGRAMS_HELP[1]);
 
     // select program
-    new uiLabel(this, "Program", Point(10,  y), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(this, "Program", Point(10,  y), true, STYLE_STATICLABEL);
     progComboBox = new uiComboBox(this, Point(10, y + 12), Size(100, 20), 66, true, STYLE_COMBOBOX);
     progComboBox->items().append(PROGRAMS_NAME, PROGRAMS_COUNT);
     progComboBox->selectItem(0);

@@ -267,13 +267,13 @@ struct ConfigDialog : public uiApp {
     constexpr int dy = hh + 9;
 
     // description
-    new uiLabel(mainFrame, "Description", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "Description", Point(x, y + oy));
     descEdit = new uiTextEdit(mainFrame, item->desc, Point(70, y), Size(270, hh));
 
     y += dy;
 
     // floppy 0
-    new uiLabel(mainFrame, "Floppy 0", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "Floppy 0", Point(x, y + oy));
     FD0PathEdit = new uiTextEdit(mainFrame, item->disk[0], Point(60, y), Size(260, hh));
     browseFD0Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
     browseFD0Button->onClick = [&]() { browseFilename(FD0PathEdit); };
@@ -282,7 +282,7 @@ struct ConfigDialog : public uiApp {
     y += dy;
 
     // floppy 1
-    new uiLabel(mainFrame, "Floppy 1", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "Floppy 1", Point(x, y + oy));
     FD1PathEdit = new uiTextEdit(mainFrame, item->disk[1], Point(60, y), Size(260, hh));
     browseFD1Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
     browseFD1Button->onClick = [&]() { browseFilename(FD1PathEdit); };
@@ -290,24 +290,24 @@ struct ConfigDialog : public uiApp {
     y += dy;
 
     // HDD 0
-    new uiLabel(mainFrame, "HDD 0", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "HDD 0", Point(x, y + oy));
     HD0PathEdit = new uiTextEdit(mainFrame, item->disk[2], Point(60, y), Size(260, hh));
     browseHD0Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
     browseHD0Button->onClick = [&]() { browseFilename(HD0PathEdit); };
-    new uiLabel(mainFrame, "Cyls", Point(350, y - 13));
+    new uiStaticLabel(mainFrame, "Cyls", Point(350, y - 13));
     HD0CylEdit  = new uiTextEdit(mainFrame, "", Point(350, y), Size(34, hh));
     HD0CylEdit->setTextFmt("%hu", item->cylinders[2]);
-    new uiLabel(mainFrame, "Head", Point(385, y - 13));
+    new uiStaticLabel(mainFrame, "Head", Point(385, y - 13));
     HD0HdsEdit  = new uiTextEdit(mainFrame, "", Point(385, y), Size(34, hh));
     HD0HdsEdit->setTextFmt("%hu", item->heads[2]);
-    new uiLabel(mainFrame, "Sect", Point(420, y - 13));
+    new uiStaticLabel(mainFrame, "Sect", Point(420, y - 13));
     HD0SecEdit  = new uiTextEdit(mainFrame, "", Point(420, y), Size(34, hh));
     HD0SecEdit->setTextFmt("%hu", item->sectors[2]);
 
     y += dy;
 
     // HDD 1
-    new uiLabel(mainFrame, "HDD 1", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "HDD 1", Point(x, y + oy));
     HD1PathEdit = new uiTextEdit(mainFrame, item->disk[3], Point(60, y), Size(260, hh));
     browseHD1Button = new uiButton(mainFrame, "...", Point(322, y), Size(20, hh));
     browseHD1Button->onClick = [&]() { browseFilename(HD1PathEdit); };
@@ -321,7 +321,7 @@ struct ConfigDialog : public uiApp {
     y += dy;
 
     // boot drive selection
-    new uiLabel(mainFrame, "Boot Drive", Point(x, y + oy));
+    new uiStaticLabel(mainFrame, "Boot Drive", Point(x, y + oy));
     bootDriveComboBox = new uiComboBox(mainFrame, Point(60, y), Size(60, hh), 50);
     bootDriveComboBox->items().append("Floppy 0");
     bootDriveComboBox->items().append("Floppy 1");

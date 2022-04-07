@@ -15,7 +15,7 @@ struct TestControlsFrame : public uiFrame {
   TestControlsFrame(uiFrame * parent)
     : uiFrame(parent, "Test Controls", Point(150, 20), Size(420, 270), false) {
 
-    new uiLabel(this, "Text Label:", Point(10,  33));
+    new uiStaticLabel(this, "Text Label:", Point(10,  33));
     textEdit = new uiTextEdit(this, "Text Edit", Point(70,  30), Size(340, 20));
     textEdit->anchors().right = true;
 
@@ -39,7 +39,7 @@ struct TestControlsFrame : public uiFrame {
     listBox->items().append("Listbox Row 6");
     listBox->items().append("Listbox Row 7");
 
-    auto label = new uiLabel(this, "Normal ComboBox:", Point(170, 93));
+    auto label = new uiStaticLabel(this, "Normal ComboBox:", Point(170, 93));
     label->anchors().left  = false;
     label->anchors().right = true;
     comboBox1 = new uiComboBox(this, Point(270, 90), Size(140, 20), 80);
@@ -55,7 +55,7 @@ struct TestControlsFrame : public uiFrame {
     comboBox1->items().append("ComboBox Row 7");
     comboBox1->items().append("ComboBox Row 8");
     comboBox1->items().append("ComboBox Row 9");
-    label = new uiLabel(this, "Editable ComboBox:", Point(170, 123));
+    label = new uiStaticLabel(this, "Editable ComboBox:", Point(170, 123));
     label->anchors().left  = false;
     label->anchors().right = true;
     comboBox2 = new uiComboBox(this, Point(270, 120), Size(140, 20), 80);
@@ -66,16 +66,16 @@ struct TestControlsFrame : public uiFrame {
     comboBox2->anchors().right = true;
     comboBox2->items().copyFrom(comboBox1->items());
 
-    label = new uiLabel(this, "CheckBox: ", Point(200, 150));
+    label = new uiStaticLabel(this, "CheckBox: ", Point(200, 150));
     label->anchors().left  = false;
     label->anchors().right = true;
     checkBox = new uiCheckBox(this, Point(270, 150), Size(16, 16));
     checkBox->anchors().left  = false;
     checkBox->anchors().right = true;
 
-    new uiLabel(this, "Radio1", Point(10, 180));
-    new uiLabel(this, "Radio2", Point(80, 180));
-    new uiLabel(this, "Radio3", Point(150, 180));
+    new uiStaticLabel(this, "Radio1", Point(10, 180));
+    new uiStaticLabel(this, "Radio2", Point(80, 180));
+    new uiStaticLabel(this, "Radio3", Point(150, 180));
     radio1 = new uiCheckBox(this, Point(45, 180), Size(16, 16), uiCheckBoxKind::RadioButton);
     radio2 = new uiCheckBox(this, Point(115, 180), Size(16, 16), uiCheckBoxKind::RadioButton);
     radio3 = new uiCheckBox(this, Point(185, 180), Size(16, 16), uiCheckBoxKind::RadioButton);

@@ -174,7 +174,7 @@ void copyEmbeddedPrograms()
 }
 
 
-enum { STYLE_NONE, STYLE_LABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_BUTTONHELP, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};
+enum { STYLE_NONE, STYLE_LABEL, STYLE_STATICLABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_BUTTONHELP, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};
 
 
 #define BACKGROUND_COLOR RGB888(0, 0, 0)
@@ -188,10 +188,15 @@ struct DialogStyle : uiStyle {
         ((uiLabel*)object)->labelStyle().backgroundColor                    = BACKGROUND_COLOR;
         ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 255, 255);
         break;
+      case STYLE_STATICLABEL:
+        ((uiStaticLabel*)object)->labelStyle().textFont                     = &fabgl::FONT_std_12;
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor              = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor                    = RGB888(255, 255, 255);
+        break;
       case STYLE_LABELGROUP:
-        ((uiLabel*)object)->labelStyle().textFont                           = &fabgl::FONT_std_12;
-        ((uiLabel*)object)->labelStyle().backgroundColor                    = BACKGROUND_COLOR;
-        ((uiLabel*)object)->labelStyle().textColor                          = RGB888(255, 128, 0);
+        ((uiStaticLabel*)object)->labelStyle().textFont                     = &fabgl::FONT_std_12;
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor              = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor                    = RGB888(255, 128, 0);
         break;
       case STYLE_BUTTON:
         ((uiButton*)object)->windowStyle().borderColor                      = RGB888(255, 255, 255);
@@ -424,7 +429,7 @@ class Menu : public uiApp {
 
     // select keyboard layout
     int y = 145;
-    new uiLabel(rootWindow(), "Keyboard Layout:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiStaticLabel(rootWindow(), "Keyboard Layout:", Point(150, y), true, STYLE_LABELGROUP);
     kbdComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 20), 70, true, STYLE_COMBOBOX);
     kbdComboBox->items().append(SupportedLayouts::names(), SupportedLayouts::count());
     kbdComboBox->onChange = [&]() {
@@ -435,7 +440,7 @@ class Menu : public uiApp {
 
     // RAM expansion options
     y += 50;
-    new uiLabel(rootWindow(), "RAM Expansion:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiStaticLabel(rootWindow(), "RAM Expansion:", Point(150, y), true, STYLE_LABELGROUP);
     RAMExpComboBox = new uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 19), 130, true, STYLE_COMBOBOX);
     char const * RAMOPTS[] = { "Unexpanded", "3K", "8K", "16K", "24K", "27K (24K+3K)", "32K", "35K (32K+3K)" };
     for (int i = 0; i < 8; ++i)
@@ -447,12 +452,12 @@ class Menu : public uiApp {
 
     // joystick emulation options
     y += 50;
-    new uiLabel(rootWindow(), "Joystick:", Point(150, y), Size(0, 0), true, STYLE_LABELGROUP);
-    new uiLabel(rootWindow(), "None", Point(180, y + 21), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "Joystick:", Point(150, y), true, STYLE_LABELGROUP);
+    new uiStaticLabel(rootWindow(), "None", Point(180, y + 21), true, STYLE_STATICLABEL);
     auto radioJNone = new uiCheckBox(rootWindow(), Point(158, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
-    new uiLabel(rootWindow(), "Cursor Keys", Point(180, y + 41), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "Cursor Keys", Point(180, y + 41), true, STYLE_STATICLABEL);
     auto radioJCurs = new uiCheckBox(rootWindow(), Point(158, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
-    new uiLabel(rootWindow(), "Mouse", Point(180, y + 61), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "Mouse", Point(180, y + 61), true, STYLE_STATICLABEL);
     auto radioJMous = new uiCheckBox(rootWindow(), Point(158, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, true, STYLE_CHECKBOX);
     radioJNone->setGroupIndex(1);
     radioJCurs->setGroupIndex(1);
@@ -469,7 +474,7 @@ class Menu : public uiApp {
     updateFreeSpaceLabel();
 
     // "Download From" label
-    new uiLabel(rootWindow(), "Download From:", Point(5, 326), Size(0, 0), true, STYLE_LABELGROUP);
+    new uiStaticLabel(rootWindow(), "Download From:", Point(5, 326), true, STYLE_LABELGROUP);
 
     // Download List button (download programs listed and linked in LIST_URL)
     auto downloadProgsBtn = new uiButton(rootWindow(), "List", Point(13, 345), Size(27, 20), uiButtonKind::Button, true, STYLE_BUTTON);

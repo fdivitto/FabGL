@@ -13,7 +13,8 @@ class MyApp : public uiApp {
   uiButton * testPaintBoxButton, * testTimerButton, * testControlsButton, * testInputBoxButton;
   TestPaintBoxFrame * paintBoxFrame;
   TestTimerFrame * testTimerFrame;
-  uiLabel * freeMemLabel1, * freeMemLabel2, * authorLabel;
+  uiLabel * freeMemLabel1, * freeMemLabel2;
+  uiStaticLabel * authorLabel;
   TestControlsFrame * testControlsFrame;
 
   fabgl::Stack<uiFrame*> dynamicFrames;
@@ -28,7 +29,7 @@ class MyApp : public uiApp {
     onTimer = [&](uiTimerHandle tHandle) { showFreeMemory(); };
 
     // author label
-    authorLabel = new uiLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(130, 10));
+    authorLabel = new uiStaticLabel(rootWindow(), "www.fabgl.com - by Fabrizio Di Vittorio", Point(130, 10));
     authorLabel->labelStyle().backgroundColor = rootWindow()->frameStyle().backgroundColor;
     authorLabel->labelStyle().textFont = &fabgl::FONT_std_17;
     authorLabel->labelStyle().textColor = RGB888(255, 255, 255);
@@ -101,12 +102,13 @@ class MyApp : public uiApp {
     uiFrame * newFrame = new uiFrame(rootWindow(), "", Point(110 + random(400), random(300)), Size(175, 80));
     newFrame->setTitleFmt("Frame #%d", dynamicFrames.count());
     newFrame->frameStyle().backgroundColor = RGB888(random(256), random(256), random(256));
-    auto label = new uiLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30), Size(160, 35));
+    auto label = new uiStaticLabel(newFrame, "FabGL - www.fabgl.com", Point(5, 30));
     label->anchors().left = false;
     label->anchors().top = false;
     label->labelStyle().textFont  = &fabgl::FONT_std_17;
     label->labelStyle().textColor = RGB888(random(256), random(256), random(256));
     label->labelStyle().backgroundColor = newFrame->frameStyle().backgroundColor;
+    label->update();
     dynamicFrames.push(newFrame);
   }
 

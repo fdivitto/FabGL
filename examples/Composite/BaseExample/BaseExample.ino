@@ -84,7 +84,7 @@ static const char * MODES_STD[]   = { "I-PAL-B",
 
 // UI Style
 
-enum { STYLE_NONE, STYLE_LABEL, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX };
+enum { STYLE_NONE, STYLE_LABEL, STYLE_STATICLABEL, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX };
 
 #define BACKGROUND_COLOR RGB888(0, 0, 0)
 
@@ -97,6 +97,10 @@ struct DialogStyle : uiStyle {
       case STYLE_LABEL:
         ((uiLabel*)object)->labelStyle().backgroundColor            = BACKGROUND_COLOR;
         ((uiLabel*)object)->labelStyle().textColor                  = RGB888(255, 255, 255);
+        break;
+      case STYLE_STATICLABEL:
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor      = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor            = RGB888(255, 255, 255);
         break;
       case STYLE_BUTTON:
         ((uiButton*)object)->windowStyle().borderColor              = RGB888(128, 128, 128);
@@ -166,13 +170,13 @@ struct MyApp : public uiApp {
     };
     
     // mode selection
-    new uiLabel(rootWindow(), "Mode", Point(2,  60), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "Mode", Point(2,  60), true, STYLE_STATICLABEL);
     modeComboBox = new uiComboBox(rootWindow(), Point(40, 58), Size(140, 20), 80, true, STYLE_COMBOBOX);
     modeComboBox->items().append(MODES_DESC, sizeof(MODES_DESC) / sizeof(char*));
     modeComboBox->selectItem(getMode());
 
     // monochromatic checkbox
-    new uiLabel(rootWindow(), "B/W", Point(2, 88), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "B/W", Point(2, 88), true, STYLE_STATICLABEL);
     monoCheckbox = new uiCheckBox(rootWindow(), Point(40, 85), Size(16, 20), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
     monoCheckbox->setChecked(getMonochromatic());
     monoCheckbox->onChange = [&]() {
@@ -180,7 +184,7 @@ struct MyApp : public uiApp {
     };
 
     // horizontal rate
-    new uiLabel(rootWindow(), "H. Rate", Point(103,  88), Size(0, 0), true, STYLE_LABEL);
+    new uiStaticLabel(rootWindow(), "H. Rate", Point(103,  88), true, STYLE_STATICLABEL);
     hrateComboBox = new uiComboBox(rootWindow(), Point(145, 84), Size(35, 20), 55, true, STYLE_COMBOBOX);
     hrateComboBox->items().appendSepList("x1,x2,x3", ',');
     hrateComboBox->selectItem(getHRate() - 1);

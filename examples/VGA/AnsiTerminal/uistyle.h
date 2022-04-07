@@ -27,7 +27,7 @@
 #pragma once
 
 
-enum { STYLE_NONE, STYLE_FRAME, STYLE_LABEL, STYLE_LABELHELP, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_LABELBUTTON };
+enum { STYLE_NONE, STYLE_FRAME, STYLE_LABEL, STYLE_STATICLABEL, STYLE_LABELHELP, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_LABELBUTTON };
 
 
 #define BACKGROUND_COLOR RGB888(64, 64, 64)
@@ -46,10 +46,15 @@ struct DialogStyle : uiStyle {
         ((uiLabel*)object)->labelStyle().backgroundColor            = BACKGROUND_COLOR;
         ((uiLabel*)object)->labelStyle().textColor                  = RGB888(255, 255, 255);
         break;
+      case STYLE_STATICLABEL:
+        ((uiStaticLabel*)object)->labelStyle().textFont             = &fabgl::FONT_std_12;
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor      = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor            = RGB888(255, 255, 255);
+        break;
       case STYLE_LABELHELP:
-        ((uiLabel*)object)->labelStyle().textFont                   = &fabgl::FONT_std_14;
-        ((uiLabel*)object)->labelStyle().backgroundColor            = BACKGROUND_COLOR;
-        ((uiLabel*)object)->labelStyle().textColor                  = RGB888(255, 255, 0);
+        ((uiStaticLabel*)object)->labelStyle().textFont             = &fabgl::FONT_std_14;
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor      = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor            = RGB888(255, 255, 0);
         break;
       case STYLE_LABELBUTTON:
         ((uiLabel*)object)->labelStyle().textFont                   = &fabgl::FONT_std_14;
@@ -60,13 +65,14 @@ struct DialogStyle : uiStyle {
       case STYLE_BUTTON:
         ((uiButton*)object)->windowStyle().borderColor              = RGB888(0, 0, 0);
         ((uiButton*)object)->buttonStyle().backgroundColor          = RGB888(128, 128, 64);
+        ((uiButton*)object)->buttonStyle().textColor                = RGB888(0, 0, 0);
         break;
       case STYLE_COMBOBOX:
-        ((uiFrame*)object)->windowStyle().borderColor               = RGB888(255, 255, 255);
-        ((uiFrame*)object)->windowStyle().borderSize                = 1;
+        ((uiComboBox*)object)->windowStyle().borderColor            = RGB888(255, 255, 255);
+        ((uiComboBox*)object)->windowStyle().borderSize             = 1;
         break;
       case STYLE_CHECKBOX:
-        ((uiFrame*)object)->windowStyle().borderColor               = RGB888(255, 255, 255);
+        ((uiCheckBox*)object)->windowStyle().borderColor            = RGB888(255, 255, 255);
         break;
     }
   }

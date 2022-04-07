@@ -59,7 +59,7 @@ struct TestApp : public uiApp {
   SoundGenerator * soundGenerator;
   uiTimerHandle    soundTimer;
   uiButton *       sdButton;
-  uiLabel *        sdResultLabel;
+  uiStaticLabel *  sdResultLabel;
   uiComboBox *     gpioInComboBox;
   uiButton *       gpioInState;
   uiComboBox *     gpioOutComboBox;
@@ -97,23 +97,23 @@ struct TestApp : public uiApp {
       int left = 60;
       int hspc = 60;
       int vspc = 30;
-      new uiLabel(frame, COLORSL[i], Point(left + i * hspc, y));
+      new uiStaticLabel(frame, COLORSL[i], Point(left + i * hspc, y));
       new uiColorBox(frame, Point(left + i * hspc, y + 15), Size(50, 14), (Color)i);
-      new uiLabel(frame, COLORSH[i], Point(left + i * hspc, y + vspc));
+      new uiStaticLabel(frame, COLORSH[i], Point(left + i * hspc, y + vspc));
       new uiColorBox(frame, Point(left + i * hspc, y + 15 + vspc), Size(50, 14), (Color)(i+ 8));
     }
 
     y += 80;
 
     // keyboard test
-    new uiLabel(frame, "KEYBOARD TEST:", Point(10, y));
+    new uiStaticLabel(frame, "KEYBOARD TEST:", Point(10, y));
     new uiTextEdit(frame, "Please type something", Point(110, y - 3), Size(435, 20));
 
     y += 40;
 
     // sound test
     soundGenerator = new SoundGenerator;
-    new uiLabel(frame, "SOUND TEST:", Point(10, y));
+    new uiStaticLabel(frame, "SOUND TEST:", Point(10, y));
     soundButton = new uiButton(frame, "Start", Point(110, y - 3), Size(80, 20), uiButtonKind::Switch);
     soundButton->onChange = [&]() {
       if (soundButton->down()) {
@@ -128,21 +128,21 @@ struct TestApp : public uiApp {
     y += 40;
 
     // SD Card test
-    new uiLabel(frame, "SDCARD TEST:", Point(10, y));
+    new uiStaticLabel(frame, "SDCARD TEST:", Point(10, y));
     sdButton = new uiButton(frame, "Start", Point(110, y - 3), Size(80, 20));
     sdButton->onClick = [&]() {
       testSD();
     };
-    sdResultLabel = new uiLabel(frame, "", Point(210, y));
+    sdResultLabel = new uiStaticLabel(frame, "", Point(210, y));
 
     y += 44;
 
     // internal GPIOs test
     static const int GPIOS_IN[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18, 34, 35, 36, 39 };
     static const int GPIOS_OUT[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18 };
-    new uiLabel(frame, "GPIO TEST:", Point(10, y));
+    new uiStaticLabel(frame, "GPIO TEST:", Point(10, y));
 
-    new uiLabel(frame, "In", Point(110, y - 18));
+    new uiStaticLabel(frame, "In", Point(110, y - 18));
     gpioInComboBox = new uiComboBox(frame, Point(110, y - 3), Size(34, 22), 60);
     for (int i = 0; i < sizeof(GPIOS_IN) / sizeof(int); ++i)
       gpioInComboBox->items().appendFmt("%d", GPIOS_IN[i]);
@@ -153,11 +153,11 @@ struct TestApp : public uiApp {
     gpioIn = GPIOS_IN[10];
     pinMode(gpioIn, INPUT);
     gpioInComboBox->selectItem(10);
-    new uiLabel(frame, "State", Point(152, y - 18));
+    new uiStaticLabel(frame, "State", Point(152, y - 18));
     gpioInState = new uiButton(frame, "", Point(152, y - 3), Size(25, 22), uiButtonKind::Switch);
     gpioInPrevState = 0;
 
-    new uiLabel(frame, "Out", Point(220, y - 18));
+    new uiStaticLabel(frame, "Out", Point(220, y - 18));
     gpioOutComboBox = new uiComboBox(frame, Point(220, y - 3), Size(34, 22), 60);
     for (int i = 0; i < sizeof(GPIOS_OUT) / sizeof(int); ++i)
       gpioOutComboBox->items().appendFmt("%d", GPIOS_OUT[i]);
@@ -169,7 +169,7 @@ struct TestApp : public uiApp {
     gpioOut = GPIOS_OUT[2];
     pinMode(gpioOut, OUTPUT);
     gpioOutComboBox->selectItem(2);
-    new uiLabel(frame, "State", Point(262, y - 18));
+    new uiStaticLabel(frame, "State", Point(262, y - 18));
     gpioOutState = new uiButton(frame, "", Point(262, y - 3), Size(25, 22), uiButtonKind::Switch);
     gpioOutState->setDown(false);
     gpioOutState->onChange = [&]() {
@@ -185,9 +185,9 @@ struct TestApp : public uiApp {
     // external GPIOs test
 
     if (initMCP()) {
-      new uiLabel(frame, "EXT GPIO TEST:", Point(10, y));
-      new uiLabel(frame, "Outputs", Point(110, y - 13));
-      new uiLabel(frame, "Inputs", Point(355, y - 13));
+      new uiStaticLabel(frame, "EXT GPIO TEST:", Point(10, y));
+      new uiStaticLabel(frame, "Outputs", Point(110, y - 13));
+      new uiStaticLabel(frame, "Inputs", Point(355, y - 13));
       constexpr int w = 20;
       constexpr int h = 22;
       for (int i = 0; i < 16; ++i) {
@@ -227,7 +227,7 @@ struct TestApp : public uiApp {
 
 
     // wifi
-    new uiLabel(frame, "WIFI TEST:", Point(10, y));
+    new uiStaticLabel(frame, "WIFI TEST:", Point(10, y));
     wifiButton = new uiButton(frame, "Start", Point(110, y - 3), Size(80, 20));
     wifiButton->onClick = [&]() {
       testWifi();
@@ -249,8 +249,8 @@ struct TestApp : public uiApp {
 
 
     y = frame->size().height - 40;
-    new uiLabel(frame, "FabGL - Copyright 2019-2022 by Fabrizio Di Vittorio", Point(175, y));
-    new uiLabel(frame, "WWW.FABGL.COM", Point(260, y + 17));
+    new uiStaticLabel(frame, "FabGL - Copyright 2019-2022 by Fabrizio Di Vittorio", Point(175, y));
+    new uiStaticLabel(frame, "WWW.FABGL.COM", Point(260, y + 17));
 
   }
 

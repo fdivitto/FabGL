@@ -13,19 +13,19 @@ struct TestModalDialog : public uiFrame {
     frameProps().hasMaximizeButton = false;
     frameProps().hasMinimizeButton = false;
 
-    new uiLabel(this, "This is a Modal Window: click on Close to continue", Point(5, 30));
+    new uiStaticLabel(this, "This is a Modal Window: click on Close to continue", Point(5, 30));
 
     panel = new uiPanel(this, Point(5, 50), Size(290, 125));
     panel->panelStyle().backgroundColor = RGB888(255, 255, 255);
 
-    new uiLabel(panel, "First Name:",     Point(10,  5), Size( 80, 20));
-    textEdit1 = new uiTextEdit(panel, "", Point(80,  5), Size(200, 20));
-    new uiLabel(panel, "Last Name:",      Point(10, 35), Size( 80, 20));
-    textEdit2 = new uiTextEdit(panel, "", Point(80, 35), Size(200, 20));
-    new uiLabel(panel, "Address:",        Point(10, 65), Size( 80, 20));
-    textEdit3 = new uiTextEdit(panel, "", Point(80, 65), Size(200, 20));
-    new uiLabel(panel, "Phone:",          Point(10, 95), Size( 80, 20));
-    textEdit4 = new uiTextEdit(panel, "", Point(80, 95), Size(200, 20));
+    new uiStaticLabel(panel, "First Name:",  Point(10,  5));
+    textEdit1 = new uiTextEdit(panel, "",    Point(80,  5), Size(200, 20));
+    new uiStaticLabel(panel, "Last Name:",   Point(10, 35));
+    textEdit2 = new uiTextEdit(panel, "",    Point(80, 35), Size(200, 20));
+    new uiStaticLabel(panel, "Address:",     Point(10, 65));
+    textEdit3 = new uiTextEdit(panel, "",    Point(80, 65), Size(200, 20));
+    new uiStaticLabel(panel, "Phone:",       Point(10, 95));
+    textEdit4 = new uiTextEdit(panel, "",    Point(80, 95), Size(200, 20));
 
     button1 = new uiButton(this, "Add Item", Point(5, 180), Size(80, 20));
     button1->onClick = [&]() {

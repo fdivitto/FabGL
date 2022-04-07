@@ -101,7 +101,7 @@ public:
     volumeSlider->setPosition(100);
 
     // generator combobox
-    new uiLabel(this, "Type", Point(230, 20));
+    new uiStaticLabel(this, "Type", Point(230, 20));
     genComboBox = new uiComboBox(this, Point(260, 20), Size(140, 16), 35);
     genComboBox->listBoxStyle().textFont = &fabgl::FONT_std_12;
     genComboBox->textEditStyle().textFont = &fabgl::FONT_std_12;
@@ -131,7 +131,7 @@ public:
     startingFreq += 50;
 
     // enable checkbox
-    new uiLabel(this, "Enable", Point(5, 76-17));
+    new uiStaticLabel(this, "Enable", Point(5, 76-17));
     enableCheck = new uiCheckBox(this, Point(77, 75-17), Size(17, 17));
     enableCheck->onChange = [&]() {
       if (curGen)
