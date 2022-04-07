@@ -264,7 +264,6 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   // root window always stays at 0, 0 and cannot be moved
   m_rootWindow = new uiFrame(nullptr, "", Point(0, 0), Size(m_canvas->getWidth(), m_canvas->getHeight()), false);
   m_rootWindow->setApp(this);
-  m_rootWindow->setCanvas(m_canvas);
 
   m_rootWindow->windowStyle().borderSize     = 0;
   m_rootWindow->frameStyle().backgroundColor = RGB888(255, 255, 255);
@@ -1376,12 +1375,12 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
     m_parent(parent),
     m_pos(pos),
     m_size(size),
-    m_isMouseOver(false),
-    m_styleClassID(styleClassID),
     m_next(nullptr),
     m_prev(nullptr),
     m_firstChild(nullptr),
     m_lastChild(nullptr),
+    m_styleClassID(styleClassID),
+    m_isMouseOver(false),
     m_parentProcessKbdEvents(false)
 {
   objectType().uiWindow = true;
@@ -1391,7 +1390,6 @@ uiWindow::uiWindow(uiWindow * parent, const Point & pos, const Size & size, bool
 
   if (app()) {
     m_windowStyle.adaptToDisplayColors(app()->displayColors());
-    m_canvas = app()->canvas();
     if (app()->style() && styleClassID)
       app()->style()->setStyle(this, styleClassID);
   }
@@ -1835,6 +1833,12 @@ void uiWindow::reshape(Rect const & r)
   }
 
   app()->rootWindow()->generatePaintEvents(newRect);
+}
+
+
+Canvas * uiWindow::canvas()
+{
+  return app()->canvas();
 }
 
 

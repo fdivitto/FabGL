@@ -421,8 +421,6 @@ public:
 
   virtual void processEvent(uiEvent * event);
 
-  void setCanvas(Canvas * canvas) { m_canvas = canvas; }
-
   /**
    * @brief Gets next sibling
    *
@@ -642,7 +640,7 @@ public:
    */
   int focusIndex()                       { return m_focusIndex; }
 
-  Canvas * canvas()                      { return m_canvas; }
+  Canvas * canvas();
 
   /**
    * @brief Sets style class for this UI element
@@ -696,24 +694,8 @@ private:
 
   uiWindow *    m_parent;
 
-  Canvas *      m_canvas;
-
   Point         m_pos;
   Size          m_size;
-
-  uiWindowState m_state;
-
-  uiWindowProps m_windowProps;
-
-  uiWindowStyle m_windowStyle;
-
-  bool          m_isMouseOver;     // true after mouse entered, false after mouse left
-
-  uiAnchors     m_anchors;
-
-  int16_t       m_focusIndex;      // -1 = doesn't partecipate to focus trip
-
-  uint16_t      m_styleClassID;
 
   // double linked list, order is: bottom (first items) -> up (last items)
   uiWindow *    m_next;
@@ -721,8 +703,21 @@ private:
   uiWindow *    m_firstChild;
   uiWindow *    m_lastChild;
 
-  // if true parent processes keyboard events
-  bool          m_parentProcessKbdEvents;
+  uiWindowStyle m_windowStyle;
+
+  uiWindowProps m_windowProps;
+
+  uiWindowState m_state;
+
+  uiAnchors     m_anchors;
+
+  int8_t        m_focusIndex;      // -1 = doesn't partecipate to focus trip
+
+  uint8_t       m_styleClassID;
+
+  uint8_t       m_isMouseOver;     // 1 after mouse entered, 0 after mouse left
+  
+  uint8_t       m_parentProcessKbdEvents; // if 1 parent processes keyboard events
 };
 
 
