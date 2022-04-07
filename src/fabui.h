@@ -63,6 +63,7 @@
         *uiControl
           *uiButton
           *uiLabel
+          *uiStaticLabel
           *uiImage
           *uiPanel
           *uiTextEdit
@@ -248,6 +249,7 @@ struct uiObjectType {
   uint32_t uiButton            : 1;
   uint32_t uiTextEdit          : 1;
   uint32_t uiLabel             : 1;
+  uint32_t uiStaticLabel       : 1;
   uint32_t uiImage             : 1;
   uint32_t uiPanel             : 1;
   uint32_t uiPaintBox          : 1;
@@ -266,7 +268,7 @@ struct uiObjectType {
   uint32_t uiSimpleMenu        : 1;
 
   uiObjectType() : uiApp(0), uiEvtHandler(0), uiWindow(0), uiFrame(0), uiControl(0), uiScrollableControl(0), uiButton(0), uiTextEdit(0),
-                   uiLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
+                   uiLabel(0), uiStaticLabel(0), uiImage(0), uiPanel(0), uiPaintBox(0), uiCustomListBox(0), uiListBox(0), uiFileBrowser(0), uiComboBox(0),
                    uiCheckBox(0), uiSlider(0), uiColorListBox(0), uiCustomComboBox(0), uiColorBox(0), uiColorComboBox(0), uiProgressBar(0),
                    uiSplitButton(0), uiSimpleMenu(0)
     { }
@@ -1631,9 +1633,87 @@ private:
 
   uiLabelStyle   m_labelStyle;
 
-  uint16_t       m_textExtent;  // calculated by setText()
-
   uint8_t        m_autoSize;
+
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// uiStaticLabel
+
+
+/** @brief Contains the label style */
+struct uiStaticLabelStyle {
+  FontInfo const * textFont                 = &FONT_std_14;              /**< Text font */
+  RGB888           backgroundColor          = RGB888(255, 255, 255);     /**< Background color */
+  RGB888           textColor                = RGB888(0, 0, 0);           /**< Text color */
+
+  void adaptToDisplayColors(int displayColors) {
+    if (displayColors < 16) {
+    }
+  }
+};
+
+
+/** @brief A staticlabel is a light version of uiLabel (text must be static). uiStaticLabel has lower memory footprint than uiLabel */
+class uiStaticLabel : public uiControl {
+
+public:
+
+  /**
+   * @brief Creates an instance of the object
+   *
+   * @param parent The parent window. A label must always have a parent window
+   * @param text Text of the label. Must be Static. This is not owned by the object
+   * @param pos Top-left coordinates of the label relative to the parent
+   * @param visible If true the label is immediately visible
+   * @param styleClassID Optional style class identifier
+   */
+  uiStaticLabel(uiWindow * parent, char const * text, const Point & pos, bool visible = true, uint32_t styleClassID = 0);
+  
+  virtual void processEvent(uiEvent * event);
+
+  /**
+   * @brief Sets label text
+   *
+   * To update label content and size call uiLabel.update().
+   * Text is not owned by the object (must be static or deleted by the application)
+   *
+   * @param value Label text
+   */
+  void setText(char const * value);
+
+  /**
+   * @brief Determines label text
+   *
+   * @return Label text
+   */
+  char const * text() { return m_text; }
+
+  /**
+   * @brief Sets or gets label style
+   *
+   * @return L-value representing label style (colors, font, etc...)
+   */
+  uiStaticLabelStyle & labelStyle() { return m_staticLabelStyle; }
+
+  /**
+   * @brief Updates the label content
+   *
+   * Call this method whenever text or font changes.
+   */
+  void update();
+
+
+private:
+
+  void paintLabel();
+
+
+  char const *       m_text;
+
+  uiStaticLabelStyle m_staticLabelStyle;
 
 };
 
@@ -3545,6 +3625,7 @@ using fabgl::uiApp;
 using fabgl::uiFrame;
 using fabgl::uiButton;
 using fabgl::uiLabel;
+using fabgl::uiStaticLabel;
 using fabgl::uiImage;
 using fabgl::uiPanel;
 using fabgl::uiMessageBoxIcon;
