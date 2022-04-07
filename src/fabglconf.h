@@ -58,10 +58,6 @@
 #define FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MAX_THRESHOLD 300
 
 
-/** Size (in bytes) of largest block to maintain free */
-#define FABGLIB_MINFREELARGESTBLOCK 8192
-
-
 /** Size (in bytes) of primitives dynamic buffers. Used by primitives like drawPath and fillPath to contain path points. */
 #define FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE 512
 
@@ -127,7 +123,11 @@
 
 
 /** To reduce memory overhead the viewport is allocated as few big buffers. This parameter defines the maximum number of these big buffers. */
-#define FABGLIB_VIEWPORT_MEMORY_POOL_COUNT 10
+#define FABGLIB_VIEWPORT_MEMORY_POOL_COUNT 128
+
+
+/** Size (in bytes) of largest block to maintain free */
+#define FABGLIB_MINFREELARGESTBLOCK 40000
 
 
 /** Size of virtualkey queue */

@@ -408,7 +408,7 @@ private:
   volatile uint8_t *     m_HBlankLine_withVSync;
   volatile uint8_t *     m_HBlankLine;
 
-  uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
+  uint8_t * *            m_viewPortMemoryPool;  // array ends with nullptr
 
   int16_t                m_rawFrameHeight;
 

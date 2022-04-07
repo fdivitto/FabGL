@@ -126,7 +126,7 @@ private:
   
   int                    m_horizontalRate; // 1...
   
-  uint8_t *              m_viewPortMemoryPool[FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1];  // last allocated pool is nullptr
+  uint8_t * *            m_viewPortMemoryPool;  // array ends with nullptr
 };
 
 

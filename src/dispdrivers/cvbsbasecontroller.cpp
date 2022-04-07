@@ -54,7 +54,7 @@ void CVBSBaseController::init()
 {
   m_primitiveProcessingSuspended = 1; // >0 suspended
   m_viewPort                     = nullptr;
-  m_viewPortMemoryPool[0]        = nullptr;
+  m_viewPortMemoryPool           = nullptr;
 }
 
 
@@ -79,9 +79,11 @@ void CVBSBaseController::end()
 
 void CVBSBaseController::freeViewPort()
 {
-  for (uint8_t * * poolPtr = m_viewPortMemoryPool; *poolPtr; ++poolPtr) {
-    heap_caps_free((void*) *poolPtr);
-    *poolPtr = nullptr;
+  if (m_viewPortMemoryPool) {
+    for (auto poolPtr = m_viewPortMemoryPool; *poolPtr; ++poolPtr)
+      heap_caps_free((void*) *poolPtr);
+    heap_caps_free(m_viewPortMemoryPool);
+    m_viewPortMemoryPool = nullptr;
   }
   if (m_viewPort) {
     heap_caps_free(m_viewPort);
@@ -168,12 +170,15 @@ void CVBSBaseController::allocateViewPort(uint32_t allocCaps, int rowlen)
     remainingLines *= 2;
 
   // allocate pools
+  m_viewPortMemoryPool = (uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * (FABGLIB_VIEWPORT_MEMORY_POOL_COUNT + 1), MALLOC_CAP_32BIT);
   while (remainingLines > 0 && poolsCount < FABGLIB_VIEWPORT_MEMORY_POOL_COUNT) {
     int largestBlock = heap_caps_get_largest_free_block(allocCaps);
-    linesCount[poolsCount] = tmin(remainingLines, largestBlock / rowlen);
-    if (linesCount[poolsCount] == 0 || largestBlock < FABGLIB_MINFREELARGESTBLOCK)  // no more memory available for lines
+    if (largestBlock < FABGLIB_MINFREELARGESTBLOCK)
       break;
+    linesCount[poolsCount] = tmax(1, tmin(remainingLines, (largestBlock - FABGLIB_MINFREELARGESTBLOCK) / rowlen));
     m_viewPortMemoryPool[poolsCount] = (uint8_t*) heap_caps_malloc(linesCount[poolsCount] * rowlen, allocCaps);
+    if (m_viewPortMemoryPool[poolsCount] == nullptr)
+      break;
     remainingLines -= linesCount[poolsCount];
     m_viewPortHeight += linesCount[poolsCount];
     ++poolsCount;
