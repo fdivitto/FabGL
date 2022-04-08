@@ -277,6 +277,7 @@
  * @example VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino Simple terminal text-only mode - output only
  * @example VGA/Songs/Songs.ino Music and sound demo, from Carles Oriol
  * @example VGA/SpaceInvaders/SpaceInvaders.ino Space invaders full game
+ * @example VGA/SoundChipSimulator/SoundChipSimulator.ino Sound chip simulator, from Carles Oriol
  * @example VGA/Sprites/Sprites.ino Simple sprites animation
  * @example VGA/VIC20/VIC20.ino Commodore VIC20 Emulator
  * @example VGA/InputBox/InputBox.ino InputBox UI wizard
