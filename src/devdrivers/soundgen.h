@@ -41,6 +41,14 @@
 
 #include "freertos/FreeRTOS.h"
 
+#if __has_include("esp32/rom/lldesc.h")
+  #include "esp32/rom/lldesc.h"
+#else
+  #include "rom/lldesc.h"
+#endif
+#include "soc/i2s_struct.h"
+#include "soc/sens_struct.h"
+
 #include "fabglconf.h"
 #include "fabutils.h"
 
@@ -49,13 +57,11 @@
 namespace fabgl {
 
 
-#define DEFAULT_SAMPLE_RATE 16000
+#define FABGL_SOUNDGEN_DEFAULT_SAMPLE_RATE 16384
 
-// 512 samples, at 16KHz generate a send every 512/16000*1000 = 32ms (16000/512=31.25 sends per second)
-// 200 samples, at 16Khz generate a send every 200/16000*1000 = 12.5ms (16000/200=80 sends per second)
-#define I2S_SAMPLE_BUFFER_SIZE 200  // must be even
+// setting 64 at 16KHz, generates 16000/64=250 interrupts per second
+#define FABGL_SOUNDGEN_SAMPLE_BUFFER_SIZE 64
 
-#define WAVEGENTASK_STACK_SIZE 2000
 
 
 /** @brief Base abstract class for waveform generators. A waveform generator can be seen as an audio channel that will be mixed by SoundGenerator. */
@@ -348,7 +354,7 @@ public:
   /**
    * @brief Creates an instance of the sound generator. Only one instance is allowed
    */
-  SoundGenerator(int sampleRate = DEFAULT_SAMPLE_RATE);
+  SoundGenerator(int sampleRate = FABGL_SOUNDGEN_DEFAULT_SAMPLE_RATE, gpio_num_t gpio = GPIO_NUM_25);
 
   ~SoundGenerator();
 
@@ -465,27 +471,28 @@ public:
 
 private:
 
+  static void ISRHandler(void * arg);
+
   void i2s_audio_init();
-  static void waveGenTask(void * arg);
-  bool forcePlay(bool value);
-  void mutizeOutput();
   void detachNoSuspend(WaveformGenerator * value);
-  bool actualPlaying();
+  void setDMANode(int index, volatile uint16_t * buf, int len);
 
-
-  TaskHandle_t        m_waveGenTaskHandle;
 
   WaveformGenerator * m_channels;
 
-  uint16_t *          m_sampleBuffer;
+  uint16_t *          m_sampleBuffer[2];
 
   int8_t              m_volume;
 
   uint16_t            m_sampleRate;
 
   bool                m_play;
-  SoundGeneratorState m_state;
-  SemaphoreHandle_t   m_mutex;
+  
+  gpio_num_t          m_gpio;
+  
+  intr_handle_t       m_isr_handle;
+  
+  lldesc_t volatile * m_DMAChain;
 
 };
 

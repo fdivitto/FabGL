@@ -1716,6 +1716,57 @@ void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_t * b, 
 }
 
 
+// derived from: https://linuxos.sk/blog/mirecove-dristy/detail/esp32-dynamicka-zmena-vzorkovacej-frekvencie-/
+// A    : 1..63
+// B    : 0..63
+// N    : 2..254
+// M    : 1..63
+// ret: actual sample rate
+int calcI2STimingParams(int sampleRate, int * outA, int * outB, int * outN, int * outM)
+{
+  *outM = 1;
+
+  double N = (double)APB_CLK_FREQ / sampleRate;
+  while (N >= 255) {
+    ++(*outM);
+    N = (double)APB_CLK_FREQ / sampleRate / *outM;
+  }
+
+  double min_error = 1.0;
+  *outN = N;
+  *outB = 0;
+  *outA = 1;
+
+  for (int a = 1; a < 64; ++a) {
+    int b = (N - (double)(*outN)) * (double)a;
+    if (b > 63)
+      continue;
+
+    double divisor = (double)(*outN) + (double)b / (double)a;
+    double error = divisor > N ? divisor - N : N - divisor;
+    if (error < min_error) {
+      min_error = error;
+      *outA = a;
+      *outB = b;
+    }
+
+    ++b;
+    if (b > 63)
+      continue;
+    divisor = (double)(*outN) + (double)b / (double)a;
+    error = divisor > N ? divisor - N : N - divisor;
+    if (error < min_error) {
+      min_error = error;
+      *outA = a;
+      *outB = b;
+    }
+  }
+
+  return APB_CLK_FREQ / ((double)(*outN) + (double)(*outB) / (*outA)) / *outM;
+}
+
+
+
 
 }
 

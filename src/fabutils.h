@@ -197,6 +197,8 @@ struct APLLParams {
 
 void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_t * b, double * out_freq, double * error);
 
+int calcI2STimingParams(int sampleRate, int * outA, int * outB, int * outN, int * outM);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
