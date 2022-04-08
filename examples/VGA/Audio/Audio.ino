@@ -33,17 +33,19 @@
 #include "mario.h"
 
 
-fabgl::VGAController DisplayController;
-fabgl::PS2Controller PS2Controller;
-SoundGenerator       soundGenerator;
+fabgl::VGA16Controller DisplayController;
+fabgl::PS2Controller   PS2Controller;
+SoundGenerator         soundGenerator;
 
 
 void setup()
 {
+  //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
+
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_640x350_70HzAlt1);
+  DisplayController.setResolution(VGA_640x480_60Hz);
 
   // adjust this to center screen in your monitor
   //DisplayController.moveScreen(20, -2);
@@ -189,7 +191,7 @@ public:
     frameProps().hasMinimizeButton = false;
     frameProps().hasCloseButton = false;
 
-    uiButton * addChannelBtn = new uiButton(this, "Add Channel", Point(7, 22), Size(80, 16));
+    auto addChannelBtn = new uiButton(this, "Add Channel", Point(7, 22), Size(80, 16));
     addChannelBtn->onClick = [=]() {
       if (heap_caps_get_free_size(MALLOC_CAP_8BIT) < 5000)
         app()->messageBox("Out of memory!", "I'm sorry, there is no more memory available!", "OK");
@@ -197,15 +199,23 @@ public:
         new ChannelFrame(parent);
     };
 
-    uiButton * resetBtn = new uiButton(this, "Reset", Point(7, 45), Size(80, 16));
+    auto resetBtn = new uiButton(this, "Reset", Point(7, 45), Size(80, 16));
     resetBtn->onClick = [=]() {
       if (app()->messageBox("Reset ESP32", "Are you sure?", "Yes", "No", nullptr, uiMessageBoxIcon::Question) == uiMessageBoxResult::Button1)
         ESP.restart();
     };
+    
+    // global enable checkbox
+    new uiStaticLabel(this, "Enable", Point(7, 70));
+    auto enableCheck = new uiCheckBox(this, Point(48, 68), Size(17, 17));
+    enableCheck->setChecked(true);
+    enableCheck->onChange = [=]() {
+      soundGenerator.play(enableCheck->checked());
+    };
 
     // main volume slider
-    uiLabel * volumeLabel = new uiLabel(this, "", Point(90, 182));
-    uiSlider * volumeSlider = new uiSlider(this, Point(100, 20), Size(17, 160), uiOrientation::Vertical);
+    auto volumeLabel = new uiLabel(this, "", Point(90, 182));
+    auto volumeSlider = new uiSlider(this, Point(100, 20), Size(17, 160), uiOrientation::Vertical);
     volumeSlider->onChange = [=]() {
       volumeLabel->setTextFmt("Vol %d", volumeSlider->position());
       soundGenerator.setVolume(volumeSlider->position());
