@@ -1,51 +1,113 @@
+************************************
 ** FabGL GPIOs assignment summary **
+************************************
 
-VGA
-  HSync => 23
-  VSync => 15
-  R0    => 21
-  R1    => 22
-  G0    => 18
-  G1    => 19
-  B0    => 4
-  B1    => 5
 
-PS/2 - Keyboard
-  DAT   => 32
-  CLK   => 33
+**** VGA boards:
 
-PS/2 - Mouse
-  DAT   => 27
-  CLK   => 26
+  VGA
+    HSync => 23
+    VSync => 15
+    R0    => 21
+    R1    => 22
+    G0    => 18
+    G1    => 19
+    B0    => 4
+    B1    => 5
 
-Audio
-  AUD   => 25
+  Audio
+    AUD   => 25
 
-SDCard - HSPI
-  MOSI  => 17 (12 on TTGO/WROVER)
-  MISO  => 16 (2 on TTGO, 35 WROVER)
-  CLK   => 14
-  CS    => 13
+  PS/2 - Keyboard
+    DAT   => 32
+    CLK   => 33
 
-UART - UART1 (USB)
-  RX    => 3
-  TX    => 1
+  PS/2 - Mouse
+    DAT   => 27
+    CLK   => 26
 
-UART - UART2
-  RX    => 34
-  TX    => 2  (not usable on TTGO/WROVER with SDCard active)
+  SDCard - HSPI
+    MOSI  => 17 (12 on TTGO/WROVER)
+    MISO  => 16 (2 on TTGO, 35 WROVER)
+    CLK   => 14
+    CS    => 13
 
-I2C (not usable with VGA)
-  SDA   => 4  (conflicts with VGA B1)
-  SCL   => 15 (conflicts with VGA VSync)
+  UART - UART1 (USB)
+    RX    => 3
+    TX    => 1
 
-SPI Display - VSPI (not usable with VGA)
-  CLK   => 18 (conflicts with VGA G1)
-  MISO  => 19 (conflicts with VGA G0)
-  MOSI  => 23 (conflicts with VGA HSync)
-  CS    => 5  (conflicts with VGA B0)
-  D/C   => 22 (conflicts with VGA R0)
-  RESET => 21 (conflicts with VGA R1)
+  UART - UART2
+    RX    => 34
+    TX    => 2  (not usable on TTGO/WROVER with SDCard active)
+
+
+**** Composite Video boards:
+
+  Video
+    CVBS => 25
+    
+  Audio
+    AUD  => 23
+
+  PS/2 - Keyboard
+    DAT   => 32
+    CLK   => 33
+
+  PS/2 - Mouse
+    DAT   => 27
+    CLK   => 26
+
+  SDCard - HSPI
+    MOSI  => 17 (12 on TTGO/WROVER)
+    MISO  => 16 (2 on TTGO, 35 WROVER)
+    CLK   => 14
+    CS    => 13
+
+
+**** SPI display boards:
+
+  SPI Display - VSPI
+    CLK   => 18
+    MISO  => 19
+    MOSI  => 23
+    CS    => 5
+    D/C   => 22
+    RESET => 21
+
+  Audio
+    AUD   => 25
+
+  PS/2 - Keyboard
+    DAT   => 32
+    CLK   => 33
+
+  PS/2 - Mouse
+    DAT   => 27
+    CLK   => 26
+
+
+
+**** I2C display boards:
+
+  I2C (not usable with VGA)
+    SDA   => 4
+    SCL   => 15
+
+  Audio
+    AUD   => 25
+
+  PS/2 - Keyboard
+    DAT   => 32
+    CLK   => 33
+
+  PS/2 - Mouse
+    DAT   => 27
+    CLK   => 26
+
   
+  
+  
+Composite (CVBS)
+  Video => 25
   
   
