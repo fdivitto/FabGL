@@ -39,6 +39,7 @@
 #include "soc/rtc.h"
 #include <soc/sens_reg.h>
 #include "esp_log.h"
+#include "driver/sigmadelta.h"
 
 
 #include "soundgen.h"
@@ -450,7 +451,7 @@ int SamplesGenerator::getSample() {
 // SoundGenerator
 
 
-SoundGenerator::SoundGenerator(int sampleRate, gpio_num_t gpio)
+SoundGenerator::SoundGenerator(int sampleRate, gpio_num_t gpio, SoundGenMethod genMethod)
   : m_channels(nullptr),
     m_sampleBuffer{0},
     m_volume(100),
@@ -458,9 +459,11 @@ SoundGenerator::SoundGenerator(int sampleRate, gpio_num_t gpio)
     m_play(false),
     m_gpio(gpio),
     m_isr_handle(nullptr),
-    m_DMAChain(nullptr)
+    m_DMAChain(nullptr),
+    m_genMethod(genMethod),
+    m_initDone(false),
+    m_timerHandle(nullptr)
 {
-  i2s_audio_init();
 }
 
 
@@ -472,6 +475,12 @@ SoundGenerator::~SoundGenerator()
   if (m_isr_handle) {
     esp_intr_free(m_isr_handle);
     m_isr_handle = nullptr;
+  }
+  
+  if (m_timerHandle) {
+    esp_timer_stop(m_timerHandle);
+    esp_timer_delete(m_timerHandle);
+    m_timerHandle = nullptr;
   }
   
   for (int i = 0; i < 2; ++i)
@@ -501,7 +510,7 @@ void SoundGenerator::setDMANode(int index, volatile uint16_t * buf, int len)
 }
 
 
-void SoundGenerator::i2s_audio_init()
+void SoundGenerator::dac_init()
 {
   m_DMAChain = (volatile lldesc_t *) heap_caps_malloc(2 * sizeof(lldesc_t), MALLOC_CAP_DMA);
   
@@ -556,7 +565,7 @@ void SoundGenerator::i2s_audio_init()
   I2S0.sample_rate_conf.tx_bits_mod      = 16;
 
   if (m_isr_handle == nullptr) {
-    esp_intr_alloc(ETS_I2S0_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1, ISRHandler, this, &m_isr_handle);
+    esp_intr_alloc_pinnedToCore(ETS_I2S0_INTR_SOURCE, ESP_INTR_FLAG_LEVEL1, ISRHandler, this, &m_isr_handle, CoreUsage::quietCore());
     I2S0.int_clr.val     = 0xFFFFFFFF;
     I2S0.int_ena.out_eof = 1;
   }
@@ -570,10 +579,55 @@ void SoundGenerator::i2s_audio_init()
 }
 
 
+void SoundGenerator::sigmadelta_init()
+{
+  sigmadelta_config_t sigmadelta_cfg;
+  sigmadelta_cfg.channel             = SIGMADELTA_CHANNEL_0;
+  sigmadelta_cfg.sigmadelta_prescale = 10;
+  sigmadelta_cfg.sigmadelta_duty     = 0;
+  sigmadelta_cfg.sigmadelta_gpio     = m_gpio;
+  sigmadelta_config(&sigmadelta_cfg);
+
+  esp_timer_create_args_t args = { };
+  args.callback        = timerHandler;
+  args.arg             = this;
+  args.dispatch_method = ESP_TIMER_TASK;
+  esp_timer_create(&args, &m_timerHandle);
+}
+
+
+void SoundGenerator::init()
+{
+  if (!m_initDone) {
+    // handle automatic paramters
+    if (m_genMethod == SoundGenMethod::Auto)
+      m_genMethod = CurrentVideoMode::get() == VideoMode::CVBS ? SoundGenMethod::SigmaDelta : SoundGenMethod::DAC;
+    if (m_gpio == GPIO_AUTO)
+      m_gpio = m_genMethod == SoundGenMethod::DAC ? GPIO_NUM_25 : GPIO_NUM_23;
+    
+    // actual init
+    if (m_genMethod == SoundGenMethod::DAC)
+      dac_init();
+    else
+      sigmadelta_init();
+      
+    m_initDone = true;
+  }
+}
+
+
 bool SoundGenerator::play(bool value)
 {
   if (value != m_play) {
-    I2S0.conf.tx_start = value;
+    init();
+    if (m_genMethod == SoundGenMethod::DAC) {
+      I2S0.conf.tx_start = value;
+    } else {
+      if (value)
+        esp_timer_start_periodic(m_timerHandle, 1000000 / m_sampleRate);
+      else
+        esp_timer_stop(m_timerHandle);
+    }
     m_play = value;
     return !value;
   } else
@@ -636,6 +690,7 @@ void SoundGenerator::detachNoSuspend(WaveformGenerator * value)
 }
 
 
+// used by DAC generator
 void IRAM_ATTR SoundGenerator::ISRHandler(void * arg)
 {
   if (I2S0.int_st.out_eof) {
@@ -674,6 +729,35 @@ void IRAM_ATTR SoundGenerator::ISRHandler(void * arg)
   I2S0.int_clr.val = I2S0.int_st.val;
 }
 
+
+// used by sigma-delta generator
+void SoundGenerator::timerHandler(void * args)
+{
+  auto soundGenerator = (SoundGenerator *) args;
+
+  int mainVolume = soundGenerator->volume();
+  auto channels  = soundGenerator->m_channels;
+
+  int sample = 0, tvol = 0;
+  for (auto g = channels; g; ) {
+    if (g->enabled()) {
+      sample += g->getSample();
+      tvol += g->volume();
+    } else if (g->duration() == 0 && g->autoDetach()) {
+      auto curr = g;
+      g = g->next;  // setup next item before detaching this one
+      soundGenerator->detachNoSuspend(curr);
+      continue; // bypass "g = g->next;"
+    }
+    g = g->next;
+  }
+
+  int avol = tvol ? imin(127, 127 * 127 / tvol) : 127;
+  sample = sample * avol / 127;
+  sample = sample * mainVolume / 127;
+  
+  sigmadelta_set_duty(SIGMADELTA_CHANNEL_0, sample);
+}
 
 
 // SoundGenerator

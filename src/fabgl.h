@@ -349,6 +349,7 @@ using fabgl::MouseDelta;
 using fabgl::MouseStatus;
 using fabgl::CursorName;
 using fabgl::SoundGenerator;
+using fabgl::SoundGenMethod;
 using fabgl::SineWaveformGenerator;
 using fabgl::SquareWaveformGenerator;
 using fabgl::NoiseWaveformGenerator;

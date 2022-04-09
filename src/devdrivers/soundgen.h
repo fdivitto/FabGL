@@ -59,6 +59,8 @@ namespace fabgl {
 
 #define FABGL_SOUNDGEN_DEFAULT_SAMPLE_RATE 16384
 
+
+// DAC mode specific:
 // setting 64 at 16KHz, generates 16000/64=250 interrupts per second
 #define FABGL_SOUNDGEN_SAMPLE_BUFFER_SIZE 64
 
@@ -323,20 +325,18 @@ private:
 /** \ingroup Enumerations
  * @brief
  */
-enum class SoundGeneratorState {
-  Stop,             /**<  */
-  RequestToPlay,    /**<  */
-  Playing,          /**<  */
-  RequestToStop,    /**<  */
+enum class SoundGenMethod {
+  DAC,             /**< Use DAC. Available on gpio 25 or 26. Very low resources occupation. */
+  SigmaDelta,      /**< Use Sigma-Delta. Available on almost all GPIO pins. Requires a lot of CPU power for high sample rates. */
+  Auto,            /**< Use DAC when video output is VGA, use SigmaDelta when video output is Composite. */
 };
 
 
 /**
  * @brief SoundGenerator handles audio output
  *
+ * SoundGenerator generates audio samples using DAC or Sigma-Delta modulation. Use constructor to specify GPIO and generation method.
  * Applications attach waveform generators (like SineWaveformGenerator, SquareWaveformGenerator, etc...) and call SoundGenerator.play() to start audio generation.
- *
- * The GPIO used for audio output is GPIO-25. See @ref confAudio "Configuring Audio port" for audio connection sample schema.
  *
  * Here is a list of supported sound generators:
  * - SineWaveformGenerator
@@ -353,8 +353,23 @@ public:
 
   /**
    * @brief Creates an instance of the sound generator. Only one instance is allowed
+   *
+   * @param sampleRate Sample rate in Hertz.
+   * @param gpio GPIO to use. DAC mode can be set on 25 or 26. Value GPIO_AUTO will set GPIO 25 when genMethod is DAC and GPIO 23 when genMethod is SigmaDelta.
+   * @param genMethod Sound generation method. Can be DAC, sigma-delta or automatic. If automatic then DAC is selected when VGA is used, otherwise SigmaDelta is selected when Composite is used.
+   *
+   * Example:
+   *
+   *     // creates sound generator with automatic values (depends by selected video output, VGA or CVBS)
+   *     SoundGenerator soundGenerator;
+   *
+   *     // creates sound generator using 16Khz sample rate, GPIO 25 in DAC mode
+   *     SoundGenerator soundGenerator(16000, GPIO_NUM_25, SoundGenMethod::DAC);
+   *
+   *     // creates sound generator using 16Khz sample rate, GPIO 23 in sigma-delta mode
+   *     SoundGenerator soundGenerator(16000, GPIO_NUM_23, SoundGenMethod::SigmaDelta);
    */
-  SoundGenerator(int sampleRate = FABGL_SOUNDGEN_DEFAULT_SAMPLE_RATE, gpio_num_t gpio = GPIO_NUM_25);
+  SoundGenerator(int sampleRate = FABGL_SOUNDGEN_DEFAULT_SAMPLE_RATE, gpio_num_t gpio = GPIO_AUTO, SoundGenMethod genMethod = SoundGenMethod::Auto);
 
   ~SoundGenerator();
 
@@ -471,11 +486,14 @@ public:
 
 private:
 
-  static void ISRHandler(void * arg);
+  static void ISRHandler(void * arg);     // used in DAC mode
+  static void timerHandler(void * args);  // used in sigma-delta mode
 
-  void i2s_audio_init();
+  void dac_init();
+  void sigmadelta_init();
   void detachNoSuspend(WaveformGenerator * value);
   void setDMANode(int index, volatile uint16_t * buf, int len);
+  void init();
 
 
   WaveformGenerator * m_channels;
@@ -493,6 +511,12 @@ private:
   intr_handle_t       m_isr_handle;
   
   lldesc_t volatile * m_DMAChain;
+  
+  SoundGenMethod      m_genMethod;
+  
+  bool                m_initDone;
+  
+  esp_timer_handle_t  m_timerHandle;
 
 };
 

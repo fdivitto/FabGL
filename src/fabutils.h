@@ -58,7 +58,8 @@ namespace fabgl {
 
 
 
-#define GPIO_UNUSED GPIO_NUM_MAX
+#define GPIO_UNUSED (GPIO_NUM_MAX)
+#define GPIO_AUTO   ((gpio_num_t)(GPIO_NUM_MAX + 1))
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
