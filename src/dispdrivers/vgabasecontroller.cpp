@@ -62,6 +62,8 @@ VGABaseController::VGABaseController()
 
 void VGABaseController::init()
 {
+  CurrentVideoMode::set(VideoMode::VGA);
+
   m_DMABuffers                   = nullptr;
   m_DMABuffersCount              = 0;
   m_DMABuffersHead               = nullptr;

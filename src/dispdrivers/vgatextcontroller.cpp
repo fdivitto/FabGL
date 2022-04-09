@@ -94,6 +94,7 @@ void VGATextController::setFont(FontInfo const * value)
 
 void VGATextController::init(gpio_num_t VSyncGPIO)
 {
+  CurrentVideoMode::set(VideoMode::VGA);
   m_DMABuffers = nullptr;
   m_GPIOStream.begin();
 }

@@ -1047,6 +1047,36 @@ struct CoreUsage {
 };
 
 
+
+///////////////////////////////////////////////////////////////////////////////////
+// VideoMode
+
+/** \ingroup Enumerations
+ * @brief
+ */
+enum class VideoMode {
+  None,     /**< Video mode has not been set. */
+  VGA,      /**< VGA display. */
+  CVBS,     /**< Composite display. */
+  I2C,      /**< I2C display. */
+  SPI,      /**< SPI display. */
+};
+
+
+/**
+ * @brief This class helps to know which is the current video output (VGA or Composite)
+ */
+struct CurrentVideoMode {
+
+  static VideoMode get()           { return s_videoMode; }
+  static void set(VideoMode value) { s_videoMode = value; }
+
+  private:
+    static VideoMode s_videoMode;
+};
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 

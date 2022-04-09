@@ -52,6 +52,7 @@ CVBSBaseController::CVBSBaseController()
 
 void CVBSBaseController::init()
 {
+  CurrentVideoMode::set(VideoMode::CVBS);
   m_primitiveProcessingSuspended = 1; // >0 suspended
   m_viewPort                     = nullptr;
   m_viewPortMemoryPool           = nullptr;

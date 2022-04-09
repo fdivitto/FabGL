@@ -135,6 +135,7 @@ SSD1306Controller::~SSD1306Controller()
 
 void SSD1306Controller::begin(I2C * i2c, int address, gpio_num_t resetGPIO)
 {
+  CurrentVideoMode::set(VideoMode::I2C);
   m_i2c        = i2c;
   m_i2cAddress = address;
   m_resetGPIO  = resetGPIO;

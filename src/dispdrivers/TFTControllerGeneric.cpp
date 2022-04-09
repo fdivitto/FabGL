@@ -150,6 +150,8 @@ void TFTController::setupGPIO()
 #ifdef ARDUINO
 void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_num_t CS)
 {
+  CurrentVideoMode::set(VideoMode::SPI);
+
   #ifdef ARDUINO
   m_spi   = spi;
   #endif
