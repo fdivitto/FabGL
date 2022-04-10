@@ -106,7 +106,7 @@ void exe_help()
   Terminal.write("\e[93mreboot\r\n");
   Terminal.write("\e[97m  Restart the system.\e[92m\r\n");
   Terminal.write("\e[93mkeyb LAYOUT\r\n");
-  Terminal.write("\e[97m  Set keyboard layout. LAYOUT can be 'us', 'uk', 'de', 'it', 'es', 'fr', 'be'\r\n");
+  Terminal.write("\e[97m  Set keyboard layout. LAYOUT can be 'us', 'uk', 'de', 'it', 'es', 'fr', 'be', 'no'\r\n");
   Terminal.write("\e[97m  Example:\r\n");
   Terminal.write("\e[97m    keyb de\e[92m\r\n");
   error = false;
@@ -357,6 +357,8 @@ void exe_keyb()
         Terminal.keyboard()->setLayout(&fabgl::FrenchLayout);
       else if (strcasecmp(layout, "BE") == 0)
         Terminal.keyboard()->setLayout(&fabgl::BelgianLayout);
+      else if (strcasecmp(layout, "NO") == 0)
+        Terminal.keyboard()->setLayout(&fabgl::NorwegianLayout);
       else {
         Terminal.printf("Error! Invalid keyboard layout.\r\n");
         state = State::Prompt;
