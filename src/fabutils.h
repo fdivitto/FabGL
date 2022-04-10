@@ -1342,6 +1342,14 @@ enum VirtualKey {
   VK_SQUARE,          /**< Square     : ² */
   VK_CURRENCY,        /**< Currency   : ¤ */
   VK_MU,              /**< Mu         : µ */
+  
+  VK_aelig,           /** Lower case aelig  : æ */
+  VK_oslash,          /** Lower case oslash : ø */
+  VK_aring,           /** Lower case aring  : å */
+
+  VK_AELIG,           /** Upper case aelig  : Æ */
+  VK_OSLASH,          /** Upper case oslash : Ø */
+  VK_ARING,           /** Upper case aring  : Å */
 
   VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
   VK_LAST,            // marks the last virtual key
