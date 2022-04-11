@@ -197,7 +197,7 @@ struct MyApp : public uiApp {
 
     // info label
     auto infoLabel = new uiLabel(rootWindow(), "", Point(2, rootWindow()->clientSize().height - COLORBARS_HEIGHT * 2), Size(0, 0), true, STYLE_LABEL);
-    infoLabel->setTextFmt("Free Mem: %d KiB   Resolution: %d x %d", heap_caps_get_free_size(MALLOC_CAP_32BIT) / 1024, DisplayController.getScreenWidth(), DisplayController.getScreenHeight());
+    infoLabel->setTextFmt("Free Mem: %d KiB   Resolution: %d x %d", heap_caps_get_free_size(MALLOC_CAP_32BIT) / 1024, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());
     
   }
 
