@@ -1,5 +1,5 @@
 # FabGL
-### Display Controller, PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game/Emulation Engine and ANSI/VT Terminal for the **ESP32**
+### **ESP32** Display Controller (VGA, Color NTSC/PAL Composite, I2C and SPI displays), PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game/Emulation Engine and ANSI/VT Terminal
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
@@ -8,6 +8,8 @@
 
 You can support development by purchasing my own [development board](https://www.tindie.com/products/24612/) and [Serial Terminal](https://www.tindie.com/products/21107/).
 You may also support me donating hardware (boards, lab instruments, etc...). [**Credits**](https://github.com/fdivitto/FabGL/wiki/Credits)
+
+...or just...[<img src="http://www.fabglib.org/images/kofi3.png?v=3">](https://ko-fi.com/W7W2C59SA)
 
 =================================================================================
 
@@ -25,12 +27,11 @@ Please contact fdivitto2013@gmail.com if you need a commercial license.
 
 =================================================================================
 
-This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
 FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (VGA output, PAL/NTSC Color Composite, I2C and SPI displays).
 FabGL can also get input from a PS/2 Keyboard and a Mouse. FabGL implements also: an Audio Engine (DAC and Sigma-Delta), a Graphical User Interface (GUI), a Game Engine and an ANSI/VT Terminal.
 
-This library works with ESP32 revision 1 and upper.
+This library works with ESP32 revision 1 or upper. See [**Compatible Boards**][Boards].
 
 VGA output requires a external digital to analog converter (DAC): it can be done by three 270 Ohm resistors to have 8 colors, or by 6 resistors to have 64 colors.
 Composite output doesn't require external components (maybe a 5Mhz low pass filter).
