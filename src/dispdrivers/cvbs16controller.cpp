@@ -528,14 +528,22 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX1(void * arg, uint16_t * dest, int
     
     PSRAM_HACK;
     
-    *dest32++ = (paletteToRaw[src1 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src2 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src3 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src4 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src5 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src5 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src6 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src6 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src7 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src7 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
-    *dest32++ = (paletteToRaw[src8 >> 4][*sampleLUT++ + subCarrierPhaseSam] << 16) | (paletteToRaw[src8 & 0x0f][*sampleLUT++ + subCarrierPhaseSam]);
+    *dest32++ = (paletteToRaw[src1 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src1 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src2 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src2 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src3 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src3 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src4 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src4 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src5 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src5 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src6 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src6 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src7 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src7 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
+    *dest32++ = (paletteToRaw[src8 >> 4][*sampleLUT + subCarrierPhaseSam] << 16) | (paletteToRaw[src8 & 0x0f][*(sampleLUT + 1) + subCarrierPhaseSam]);
+    sampleLUT += 2;
 
     src    += 8;  // advance by 8x2=16 pixels
 
@@ -581,28 +589,36 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
     PSRAM_HACK;
 
     auto praw = paletteToRaw[src1 >> 4] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src1 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src2 >> 4] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src2 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src3 >> 4] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src3 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src4 >> 4] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     praw = paletteToRaw[src4 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (praw[*sampleLUT++] << 16) | (praw[*sampleLUT++]);
+    *dest32++ = (praw[*sampleLUT] << 16) | (praw[*(sampleLUT + 1)]);
+    sampleLUT += 2;
 
     src += 4;  // advance by 4x2=8 pixels
 
@@ -642,27 +658,39 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX3(void * arg, uint16_t * dest, int
     
     auto prawl = paletteToRaw[src1 >> 4] + subCarrierPhaseSam;
     auto prawr = paletteToRaw[src1 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawl[*sampleLUT++]);
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
-    *dest32++ = (prawr[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawl[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawr[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     prawl = paletteToRaw[src2 >> 4] + subCarrierPhaseSam;
     prawr = paletteToRaw[src2 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawl[*sampleLUT++]);
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
-    *dest32++ = (prawr[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawl[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawr[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
     
     prawl = paletteToRaw[src3 >> 4] + subCarrierPhaseSam;
     prawr = paletteToRaw[src3 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawl[*sampleLUT++]);
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
-    *dest32++ = (prawr[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawl[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawr[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
 
     prawl = paletteToRaw[src4 >> 4] + subCarrierPhaseSam;
     prawr = paletteToRaw[src4 & 0x0f] + subCarrierPhaseSam;
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawl[*sampleLUT++]);
-    *dest32++ = (prawl[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
-    *dest32++ = (prawr[*sampleLUT++] << 16) | (prawr[*sampleLUT++]);
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawl[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawl[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
+    *dest32++ = (prawr[*sampleLUT] << 16) | (prawr[*(sampleLUT + 1)]);
+    sampleLUT += 2;
 
     src    += 4;  // advance by 4x2=8 pixels
 
