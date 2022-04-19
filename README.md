@@ -25,6 +25,8 @@ This library and related software is available under GPL v3.
 
 Please contact fdivitto2013@gmail.com if you need a commercial license.
 
+**Please don't remove copyright and/or original author from FabGL examples (ie from screens, dialogs, etc..), even from derived works which use examples as base.**
+
 =================================================================================
 
 
