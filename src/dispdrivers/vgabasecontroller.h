@@ -232,12 +232,6 @@ public:
    */
   int getViewPortRow()                             { return m_viewPortRow; }
 
-  // abstract method of BitmappedDisplayController
-  int getViewPortWidth()                           { return m_viewPortWidth; }
-
-  // abstract method of BitmappedDisplayController
-  int getViewPortHeight()                          { return m_viewPortHeight; }
-
   /**
    * @brief Moves screen by specified horizontal and vertical offset.
    *
@@ -370,9 +364,6 @@ protected:
   bool                   m_doubleBufferOverDMA;
 
   volatile int           m_primitiveProcessingSuspended;             // 0 = enabled, >0 suspended
-
-  volatile int16_t       m_viewPortWidth;
-  volatile int16_t       m_viewPortHeight;
 
   intr_handle_t          m_isr_handle;
 

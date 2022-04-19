@@ -154,12 +154,6 @@ public:
 
   virtual int colorsCount()             { return 2; }
 
-  // abstract method of BitmappedDisplayController
-  int getViewPortWidth()  { return m_viewPortWidth; }
-
-  // abstract method of BitmappedDisplayController
-  int getViewPortHeight() { return m_viewPortHeight; }
-
   /**
    * @brief Set initial left column of the viewport
    *
@@ -301,9 +295,6 @@ private:
   int16_t            m_screenHeight;
   int16_t            m_screenCol;
   int16_t            m_screenRow;
-
-  int16_t            m_viewPortWidth;
-  int16_t            m_viewPortHeight;
 
   TaskHandle_t       m_updateTaskHandle;
 

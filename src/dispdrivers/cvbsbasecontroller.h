@@ -80,12 +80,6 @@ public:
   
   virtual void setResolution(CVBSParams const * params, int viewPortWidth = -1, int viewPortHeight = -1, bool doubleBuffered = false);
 
-  // abstract method of BitmappedDisplayController
-  int getViewPortWidth()                           { return m_viewPortWidth; }
-
-  // abstract method of BitmappedDisplayController
-  int getViewPortHeight()                          { return m_viewPortHeight; }
-
   uint8_t * getScanline(int y)                     { return (uint8_t*) m_viewPort[y]; }
   
   CVBSParams const * params()                      { return m_CVBSGenerator.params(); }
@@ -115,9 +109,6 @@ protected:
   volatile uint8_t * *   m_viewPortVisible;
 
   volatile int           m_primitiveProcessingSuspended;             // 0 = enabled, >0 suspended
-
-  volatile int16_t       m_viewPortWidth;
-  volatile int16_t       m_viewPortHeight;
 
 
 private:

@@ -695,16 +695,30 @@ public:
    */
   int getScreenHeight()                        { return m_screenHeight; }
 
+  /**
+   * @brief Determines horizontal size of the viewport.
+   *
+   * @return Horizontal size of the viewport.
+   */
+  int getViewPortWidth()                       { return m_viewPortWidth; }
+
+  /**
+   * @brief Determines vertical size of the viewport.
+   *
+   * @return Vertical size of the viewport.
+   */
+  int getViewPortHeight()                      { return m_viewPortHeight; }
+
 protected:
 
   // inherited classes should call setScreenSize once display size is known
   void setScreenSize(int width, int height)    { m_screenWidth = width; m_screenHeight = height; }
 
-private:
-
   // we store here these info to avoid to have virtual methods (due the -vtables in flash- problem)
-  int16_t m_screenWidth;
-  int16_t m_screenHeight;
+  int16_t          m_screenWidth;
+  int16_t          m_screenHeight;
+  volatile int16_t m_viewPortWidth;
+  volatile int16_t m_viewPortHeight;
 };
 
 
@@ -742,20 +756,6 @@ public:
   virtual ~BitmappedDisplayController();
 
   DisplayControllerType controllerType() { return DisplayControllerType::Bitmapped; }
-
-  /**
-   * @brief Determines horizontal size of the viewport.
-   *
-   * @return Horizontal size of the viewport.
-   */
-  virtual int getViewPortWidth() = 0;
-
-  /**
-   * @brief Determines vertical size of the viewport.
-   *
-   * @return Vertical size of the viewport.
-   */
-  virtual int getViewPortHeight() = 0;
 
   /**
    * @brief Represents the native pixel format used by this display.
