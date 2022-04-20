@@ -128,19 +128,19 @@ struct IntroScene : public Scene {
 
       if (updateCount % 20 == 0) {
         canvas.setPenColor(random(256), random(256), random(256));
-        if (keyboard->isKeyboardAvailable() && mouse->isMouseAvailable())
+        if (keyboard && keyboard->isKeyboardAvailable() && mouse && mouse->isMouseAvailable())
           canvas.drawText(45, 75, "Press [SPACE] or CLICK to Play");
-        else if (keyboard->isKeyboardAvailable())
+        else if (keyboard && keyboard->isKeyboardAvailable())
           canvas.drawText(80, 75, "Press [SPACE] to Play");
-        else if (mouse->isMouseAvailable())
+        else if (mouse && mouse->isMouseAvailable())
           canvas.drawText(105, 75, "Click to Play");
       }
 
       // handle keyboard or mouse (after two seconds)
       if (updateCount > 50) {
-        if (keyboard->isKeyboardAvailable() && keyboard->isVKDown(fabgl::VK_SPACE))
+        if (keyboard && keyboard->isKeyboardAvailable() && keyboard->isVKDown(fabgl::VK_SPACE))
           controller_ = 1;  // select keyboard as controller
-        else if (mouse->isMouseAvailable() && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
+        else if (mouse && mouse->isMouseAvailable() && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
           controller_ = 2;  // select mouse as controller
         starting_ = (controller_ > 0);  // start only when a controller has been selected
       }
