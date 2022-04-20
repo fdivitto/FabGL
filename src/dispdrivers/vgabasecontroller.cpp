@@ -266,16 +266,13 @@ bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimin
     char const * pc = modeline + pos;
     for (; *pc; ++pc) {
       if (*pc == '+' || *pc == '-') {
-        if (!HSyncPol)
+        if (!HSyncPol) {
           timings->HSyncLogic = HSyncPol = *pc;
-        else if (!VSyncPol) {
+        } else if (!VSyncPol) {
           timings->VSyncLogic = VSyncPol = *pc;
-          while (*pc && *pc != ' ')
-            ++pc;
           break;
         }
-      } else if (*pc != ' ')
-        break;
+      }
     }
 
     // get [DoubleScan | QuadScan] [FrontPorchBegins | SyncBegins | BackPorchBegins | VisibleBegins] [MultiScanBlank]
