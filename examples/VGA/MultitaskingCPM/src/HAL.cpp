@@ -25,8 +25,6 @@
 
 
 
-#include <sys/time.h>
-
 #include "driver/gpio.h"
 #include "driver/dac.h"
 
@@ -493,10 +491,17 @@ void HAL::getDateTime(int * year, int * month, int * day, int * hour, int * minu
 
 void HAL::setDateTime(int year, int month, int day, int hour, int minutes, int seconds)
 {
-  // not implemented
-  #if MSGDEBUG & DEBUG_ERRORS
-  logf("unimplemented setting system datetime\r\n");
-  #endif
+  struct timeval tv;
+  struct tm t = { 0 };
+  t.tm_year   = year - 1900;
+  t.tm_mon    = month - 1;
+  t.tm_mday   = day;
+  t.tm_hour   = hour;
+  t.tm_min    = minutes;
+  t.tm_sec    = seconds;
+  tv.tv_sec   = mktime(&t);
+  tv.tv_usec  = 0;
+  settimeofday(&tv, NULL);
 }
 
 
