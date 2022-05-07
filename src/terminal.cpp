@@ -460,7 +460,7 @@ void Terminal::connectSerialPort(HardwareSerial & serialPort, bool autoXONXOFF)
 // returns number of bytes received (in the UART2 rx fifo buffer)
 inline int uartGetRXFIFOCount()
 {
-  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
   return uart->status.rxfifo_cnt | ((int)(uart->mem_cnt_status.rx_cnt) << 8);
 }
 
@@ -468,7 +468,7 @@ inline int uartGetRXFIFOCount()
 // flushes TX buffer of UART2
 static void uartFlushTXFIFO()
 {
-  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
   while (uart->status.txfifo_cnt || uart->status.st_utx_out)
     ;
 }
@@ -477,7 +477,7 @@ static void uartFlushTXFIFO()
 // flushes RX buffer of UART2
 static void uartFlushRXFIFO()
 {
-  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
   while (uartGetRXFIFOCount() != 0 || uart->mem_rx_status.wr_addr != uart->mem_rx_status.rd_addr)
     uart->fifo.rw_byte;
 }
@@ -487,7 +487,7 @@ static void uartFlushRXFIFO()
 void Terminal::uartCheckInputQueueForFlowControl()
 {
   if (m_flowControl != FlowControl::None) {
-    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     if (uxQueueMessagesWaiting(m_inputQueue) == 0 && uart->int_ena.rxfifo_full == 0) {
       if (m_sentXOFF)
         flowControl(true);  // enable RX
@@ -510,7 +510,7 @@ void Terminal::setRTSStatus(bool value)
 void Terminal::flowControl(bool enableRX)
 {
   //Serial.printf("flowControl(%d)\n", enableRX);
-  uart_dev_t * uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
+  auto uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
   if (enableRX) {
     if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
       uart->flow_conf.send_xon = 1;  // send XON
@@ -542,7 +542,7 @@ bool Terminal::flowControl()
 // connect to UART2
 void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
 {
-  uart_dev_t * uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
+  auto uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
 
   bool initialSetup = !m_uart;
 
@@ -589,7 +589,7 @@ void Terminal::connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int 
     uart->int_ena.parity_err  = 1;      // interrupt on rx parity error
     uart->int_ena.rxfifo_ovf  = 1;      // interrupt on rx overflow
     uart->int_clr.val = 0xffffffff;
-    esp_intr_alloc(ETS_UART2_INTR_SOURCE, 0, uart_isr, this, nullptr);
+    esp_intr_alloc_pinnedToCore(ETS_UART2_INTR_SOURCE, 0, uart_isr, this, nullptr, CoreUsage::quietCore());
 
     // setup FIFOs size
     uart->mem_conf.rx_size = 3;  // RX: 384 bytes (this is the max for UART2)
@@ -1769,7 +1769,7 @@ void Terminal::pollSerialPort()
 void IRAM_ATTR Terminal::uart_isr(void *arg)
 {
   Terminal * term = (Terminal*) arg;
-  uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+  auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
 
   // look for overflow or RX errors
   if (uart->int_st.rxfifo_ovf || uart->int_st.frm_err || uart->int_st.parity_err) {
@@ -1803,7 +1803,7 @@ void IRAM_ATTR Terminal::uart_isr(void *arg)
       break;
     }
     // add to input queue
-    auto r = uart->fifo.rw_byte;
+    uint8_t r = READ_PERI_REG(UART_FIFO_REG(2));
     if (term->m_uartRXEnabled)
       term->write(r, true);
   }
@@ -1831,10 +1831,10 @@ void Terminal::send(uint8_t c)
   if (m_uart) {
     //while (!flowControl())
     //  vTaskDelay(1);
-    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     while (uart->status.txfifo_cnt == 0x7F)
       ;
-    uart->fifo.rw_byte = c;
+    WRITE_PERI_REG(UART_FIFO_AHB_REG(2), c);
   }
 
   localWrite(c);  // write to m_outputQueue
@@ -1861,7 +1861,7 @@ void Terminal::send(char const * str)
   #endif
 
   if (m_uart) {
-    uart_dev_t * uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
+    auto uart = (volatile uart_dev_t *)(DR_REG_UART2_BASE);
     while (*str) {
       //while (!flowControl())
       //  vTaskDelay(1);
