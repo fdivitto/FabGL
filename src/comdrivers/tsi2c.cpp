@@ -184,7 +184,7 @@ void I2C::commTaskFunc(void * pvParameters)
   
   #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
   if (!initRes) {
-    ESP_LOGE("unable to init I2C");
+    ESP_LOGE("FabGL", "unable to init I2C");
     abort();
   }
   auto i2c = initRes;
@@ -192,7 +192,7 @@ void I2C::commTaskFunc(void * pvParameters)
   ths->m_i2c = i2c;
   #else
   if (initRes != ESP_OK) {
-    ESP_LOGE("unable to init I2C");
+    ESP_LOGE("FabGL", "unable to init I2C");
     abort();
   }
   auto i2c = ths->m_bus;
