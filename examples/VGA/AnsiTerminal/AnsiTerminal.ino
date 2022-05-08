@@ -61,12 +61,12 @@ fabgl::Terminal                     Terminal;
 #define RTS      13
 #define CTS      35
 
-///* prev conf
+/* prev conf
 #define RESET_PIN 12
 #define RESET_PIN_ACTIVE 1
 #define USERESETPIN 1
 //*/
-/*
+///*
 #define RESET_PIN 39
 #define RESET_PIN_ACTIVE 0
 #define USERESETPIN 0
