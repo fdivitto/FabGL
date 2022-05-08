@@ -1017,7 +1017,9 @@ public:
    * You may call connectSerialPort whenever a parameters needs to be changed (except for rx and tx pins).
    *
    * @param baud Baud rate.
-   * @param config Defines word length, parity and stop bits. Example: SERIAL_8N1.
+   * @param dataLength Data word length. 5 = 5 bits, 6 = 6 bits, 7 = 7 bits, 8 = 8 bits
+   * @param parity Parity. 'N' = none, 'E' = even, 'O' = odd
+   * @param stopBits Number of stop bits. 1 = 1 bit, 1.5 = 1.5 bits, 2 = 2 bits, 3 = 3 bits
    * @param rxPin UART RX pin GPIO number.
    * @param txPin UART TX pin GPIO number.
    * @param flowControl Flow control.
@@ -1028,9 +1030,9 @@ public:
    * Example:
    *
    *     Terminal.begin(&DisplayController);
-   *     Terminal.connectSerialPort(115200, SERIAL_8N1, 34, 2, FlowControl::Software);
+   *     Terminal.connectSerialPort(115200, 8, 'N', 1, 34, 2, FlowControl::Software);
    */
-  void connectSerialPort(uint32_t baud, uint32_t config, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
+  void connectSerialPort(uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
 
   /**
    * @brief Pools the serial port for incoming data.
