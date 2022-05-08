@@ -1935,7 +1935,8 @@ void Terminal::write(uint8_t c, bool fromISR)
   m_lastWrittenChar = c;
 
   #if FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES
-  logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
+  if (!fromISR)
+    logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
   #endif
 }
 

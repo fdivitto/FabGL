@@ -62,14 +62,14 @@ fabgl::Terminal                     Terminal;
 #define CTS      35
 
 /* prev conf
-#define RESET_PIN 12
-#define RESET_PIN_ACTIVE 1
-#define USERESETPIN 1
+#define RESET_PIN        12
+#define RESET_PIN_ACTIVE  1
+#define USERESETPIN       1
 //*/
 ///*
-#define RESET_PIN 39
-#define RESET_PIN_ACTIVE 0
-#define USERESETPIN 0
+#define RESET_PIN        39
+#define RESET_PIN_ACTIVE  1
+#define USERESETPIN       0
 //*/
 
 
@@ -80,7 +80,9 @@ fabgl::Terminal                     Terminal;
 
 void setup()
 {
-  //Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
+  #if FABGLIB_TERMINAL_DEBUG_REPORT
+  Serial.begin(115200); delay(500); Serial.write("\n\nReset\n\n"); // DEBUG ONLY
+  #endif
 
   disableCore0WDT();
   delay(100); // experienced crashes without this delay!
@@ -111,7 +113,9 @@ void setup()
 
   ConfDialogApp::loadConfiguration();  
 
-  //Terminal.setLogStream(Serial);  // debug only
+  #if FABGLIB_TERMINAL_DEBUG_REPORT
+  Terminal.setLogStream(Serial);  // debug only
+  #endif
 
   Terminal.clear();
   Terminal.enableCursor(true);

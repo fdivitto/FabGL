@@ -152,6 +152,7 @@
 
 
 // debug options
+#define FABGLIB_TERMINAL_DEBUG_REPORT                0  // this must be enabled to make below settings active
 #define FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES       0
 #define FABGLIB_TERMINAL_DEBUG_REPORT_INQUEUE_CODES  0  // use as alternative to FABGLIB_TERMINAL_DEBUG_REPORT_IN_CODES when write() is called inside isr
 #define FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES      0
