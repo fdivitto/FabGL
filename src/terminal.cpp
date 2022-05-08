@@ -4586,32 +4586,38 @@ void Terminal::keyboardReaderTask(void * pvParameters)
     VirtualKeyItem item;
     if (term->m_keyboard->getNextVirtualKey(&item)) {
 
-      if (term->isActive() && term->flowControl()) {
-
+      if (term->isActive()) {
+      
         term->onVirtualKey(&item.vk, item.down);
         term->onVirtualKeyItem(&item);
 
-        if (item.down) {
+        if (term->flowControl()) {
 
-          if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == item.vk)
-            continue; // don't repeat
-          term->m_lastPressedKey = item.vk;
+          // note: when flow is locked, no key event is reinjected. This to allow onVirtualKey to always work on last pressed char.
 
-          xSemaphoreTake(term->m_mutex, portMAX_DELAY);
+          if (item.down) {
 
-          if (term->m_termInfo == nullptr) {
-            if (term->m_emuState.ANSIMode)
-              term->ANSIDecodeVirtualKey(item);
-            else
-              term->VT52DecodeVirtualKey(item);
-          } else
-            term->TermDecodeVirtualKey(item);
+            if (!term->m_emuState.keyAutorepeat && term->m_lastPressedKey == item.vk)
+              continue; // don't repeat
+            term->m_lastPressedKey = item.vk;
 
-          xSemaphoreGive(term->m_mutex);
+            xSemaphoreTake(term->m_mutex, portMAX_DELAY);
 
-        } else {
-          // !keyDown
-          term->m_lastPressedKey = VK_NONE;
+            if (term->m_termInfo == nullptr) {
+              if (term->m_emuState.ANSIMode)
+                term->ANSIDecodeVirtualKey(item);
+              else
+                term->VT52DecodeVirtualKey(item);
+            } else
+              term->TermDecodeVirtualKey(item);
+
+            xSemaphoreGive(term->m_mutex);
+
+          } else {
+            // !keyDown
+            term->m_lastPressedKey = VK_NONE;
+          }
+          
         }
 
       } else {
