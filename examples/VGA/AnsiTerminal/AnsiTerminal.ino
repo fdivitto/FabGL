@@ -61,16 +61,16 @@ fabgl::Terminal                     Terminal;
 #define RTS      13
 #define CTS      35
 
-/* prev conf
+// settings reset control
+/* for old WROOM-32 boards
 #define RESET_PIN        12
-#define RESET_PIN_ACTIVE  1
-#define USERESETPIN       1
+#define RESET_PIN_ACTIVE  1   // 0 = reset when low, 1 = reset when high
+#define USERESETPIN       1   // 1 = reset enabled
 //*/
-///*
 #define RESET_PIN        39
-#define RESET_PIN_ACTIVE  1
-#define USERESETPIN       0
-//*/
+#define RESET_PIN_ACTIVE  0   // 0 = reset when low, 1 = reset when high
+#define USERESETPIN       0   // 1 = reset enabled
+
 
 
 
