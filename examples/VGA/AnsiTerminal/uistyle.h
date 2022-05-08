@@ -27,7 +27,7 @@
 #pragma once
 
 
-enum { STYLE_NONE, STYLE_FRAME, STYLE_LABEL, STYLE_STATICLABEL, STYLE_LABELHELP, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_LABELBUTTON };
+enum { STYLE_NONE, STYLE_FRAME, STYLE_LABEL, STYLE_STATICLABEL, STYLE_LABELHELP, STYLE_LABELHELP2, STYLE_BUTTON, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_LABELBUTTON };
 
 
 #define BACKGROUND_COLOR RGB888(64, 64, 64)
@@ -55,6 +55,11 @@ struct DialogStyle : uiStyle {
         ((uiStaticLabel*)object)->labelStyle().textFont             = &fabgl::FONT_std_14;
         ((uiStaticLabel*)object)->labelStyle().backgroundColor      = BACKGROUND_COLOR;
         ((uiStaticLabel*)object)->labelStyle().textColor            = RGB888(255, 255, 0);
+        break;
+      case STYLE_LABELHELP2:
+        ((uiStaticLabel*)object)->labelStyle().textFont             = &fabgl::FONT_std_14;
+        ((uiStaticLabel*)object)->labelStyle().backgroundColor      = BACKGROUND_COLOR;
+        ((uiStaticLabel*)object)->labelStyle().textColor            = RGB888(255, 255, 255);
         break;
       case STYLE_LABELBUTTON:
         ((uiLabel*)object)->labelStyle().textFont                   = &fabgl::FONT_std_14;
