@@ -203,6 +203,9 @@ def savefontVar_h(f, file, fname):
   file.write("  .chptr     = FONT_{}_CHPTR,\n".format(fname))
   file.write("  .codepage  = 1252,\n")
   file.write("};\n\n")
+  file.write("#else\n\n")
+  file.write("extern const FontInfo FONT_{};\n\n".format(fname))
+  file.write("#endif\n\n")
   file.write("}\n")
 
 
