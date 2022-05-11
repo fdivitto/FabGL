@@ -3,7 +3,7 @@
 #
 # (c) 2022 by Fabrizio Di Vittorio (part of www.fabgl.com)
 #
-# plese install prerequisites:
+# please install prerequisites:
 #   pip3 install Pillow
 #
 
