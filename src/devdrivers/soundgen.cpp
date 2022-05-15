@@ -470,23 +470,27 @@ SoundGenerator::SoundGenerator(int sampleRate, gpio_num_t gpio, SoundGenMethod g
 SoundGenerator::~SoundGenerator()
 {
   clear();
-  
-  periph_module_disable(PERIPH_I2S0_MODULE);
+    
   if (m_isr_handle) {
+    // cleanup DAC mode
+    periph_module_disable(PERIPH_I2S0_MODULE);
     esp_intr_free(m_isr_handle);
-    m_isr_handle = nullptr;
+    for (int i = 0; i < 2; ++i)
+      heap_caps_free(m_sampleBuffer[i]);
+    heap_caps_free((void*)m_DMAChain);
   }
   
   if (m_timerHandle) {
+    // cleanup sigmadelta mode
     esp_timer_stop(m_timerHandle);
     esp_timer_delete(m_timerHandle);
     m_timerHandle = nullptr;
   }
   
-  for (int i = 0; i < 2; ++i)
-    heap_caps_free(m_sampleBuffer[i]);
+  #ifdef FABGL_EMULATED
+  SDL_CloseAudioDevice(m_device);
+  #endif
     
-  heap_caps_free((void*)m_DMAChain);
 }
 
 
@@ -570,7 +574,7 @@ void SoundGenerator::dac_init()
     I2S0.int_ena.out_eof = 1;
   }
   
-  I2S0.out_link.addr  = (uint32_t) m_DMAChain;
+  I2S0.out_link.addr  = (uintptr_t) m_DMAChain;
   I2S0.out_link.start = 1;
   I2S0.conf.tx_start  = 1;
 
@@ -596,6 +600,23 @@ void SoundGenerator::sigmadelta_init()
 }
 
 
+#ifdef FABGL_EMULATED
+void SoundGenerator::sdl_init()
+{
+  SDL_AudioSpec wantSpec, haveSpec;
+  SDL_zero(wantSpec);
+  wantSpec.freq     = m_sampleRate;
+  wantSpec.format   = AUDIO_U8;
+  wantSpec.channels = 1;
+  wantSpec.samples  = 2048;
+  wantSpec.callback = SDLAudioCallback;
+  wantSpec.userdata = this;
+  m_device = SDL_OpenAudioDevice(NULL, 0, &wantSpec, &haveSpec, SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+  m_sampleRate = haveSpec.freq;
+}
+#endif
+
+
 void SoundGenerator::init()
 {
   if (!m_initDone) {
@@ -611,6 +632,10 @@ void SoundGenerator::init()
     else
       sigmadelta_init();
       
+    #ifdef FABGL_EMULATED
+    sdl_init();
+    #endif
+      
     m_initDone = true;
   }
 }
@@ -620,6 +645,7 @@ bool SoundGenerator::play(bool value)
 {
   if (value != m_play) {
     init();
+    
     if (m_genMethod == SoundGenMethod::DAC) {
       I2S0.conf.tx_start = value;
     } else {
@@ -628,6 +654,11 @@ bool SoundGenerator::play(bool value)
       else
         esp_timer_stop(m_timerHandle);
     }
+    
+    #ifdef FABGL_EMULATED
+    SDL_PauseAudioDevice(m_device, !value);
+    #endif
+    
     m_play = value;
     return !value;
   } else
@@ -690,6 +721,30 @@ void SoundGenerator::detachNoSuspend(WaveformGenerator * value)
 }
 
 
+int IRAM_ATTR SoundGenerator::getSample()
+{
+  int sample = 0, tvol = 0;
+  for (auto g = m_channels; g; ) {
+    if (g->enabled()) {
+      sample += g->getSample();
+      tvol += g->volume();
+    } else if (g->duration() == 0 && g->autoDetach()) {
+      auto curr = g;
+      g = g->next;  // setup next item before detaching this one
+      detachNoSuspend(curr);
+      continue; // bypass "g = g->next;"
+    }
+    g = g->next;
+  }
+
+  int avol = tvol ? imin(127, 127 * 127 / tvol) : 127;
+  sample = sample * avol / 127;
+  sample = sample * volume() / 127;
+  
+  return sample;
+}
+
+
 // used by DAC generator
 void IRAM_ATTR SoundGenerator::ISRHandler(void * arg)
 {
@@ -700,30 +755,8 @@ void IRAM_ATTR SoundGenerator::ISRHandler(void * arg)
     
     auto buf = (uint16_t *) soundGenerator->m_sampleBuffer[desc->sosf];
     
-    int mainVolume = soundGenerator->volume();
-    auto channels  = soundGenerator->m_channels;
-
-    for (int i = 0; i < FABGL_SOUNDGEN_SAMPLE_BUFFER_SIZE; ++i) {
-      int sample = 0, tvol = 0;
-      for (auto g = channels; g; ) {
-        if (g->enabled()) {
-          sample += g->getSample();
-          tvol += g->volume();
-        } else if (g->duration() == 0 && g->autoDetach()) {
-          auto curr = g;
-          g = g->next;  // setup next item before detaching this one
-          soundGenerator->detachNoSuspend(curr);
-          continue; // bypass "g = g->next;"
-        }
-        g = g->next;
-      }
-
-      int avol = tvol ? imin(127, 127 * 127 / tvol) : 127;
-      sample = sample * avol / 127;
-      sample = sample * mainVolume / 127 + 127;
-      
-      buf[i ^ 1] = sample << 8;
-    }
+    for (int i = 0; i < FABGL_SOUNDGEN_SAMPLE_BUFFER_SIZE; ++i)
+      buf[i ^ 1] = (soundGenerator->getSample() + 127) << 8;
     
   }
   I2S0.int_clr.val = I2S0.int_st.val;
@@ -735,29 +768,19 @@ void SoundGenerator::timerHandler(void * args)
 {
   auto soundGenerator = (SoundGenerator *) args;
 
-  int mainVolume = soundGenerator->volume();
-  auto channels  = soundGenerator->m_channels;
-
-  int sample = 0, tvol = 0;
-  for (auto g = channels; g; ) {
-    if (g->enabled()) {
-      sample += g->getSample();
-      tvol += g->volume();
-    } else if (g->duration() == 0 && g->autoDetach()) {
-      auto curr = g;
-      g = g->next;  // setup next item before detaching this one
-      soundGenerator->detachNoSuspend(curr);
-      continue; // bypass "g = g->next;"
-    }
-    g = g->next;
-  }
-
-  int avol = tvol ? imin(127, 127 * 127 / tvol) : 127;
-  sample = sample * avol / 127;
-  sample = sample * mainVolume / 127;
-  
-  sigmadelta_set_duty(SIGMADELTA_CHANNEL_0, sample);
+  sigmadelta_set_duty(SIGMADELTA_CHANNEL_0, soundGenerator->getSample());
 }
+
+
+#ifdef FABGL_EMULATED
+void SoundGenerator::SDLAudioCallback(void * data, Uint8 * buffer, int length)
+{
+  auto soundGenerator = (SoundGenerator *) data;
+
+  for (int i = 0; i < length; ++i)
+    buffer[i] = soundGenerator->getSample() + 127;
+}
+#endif
 
 
 // SoundGenerator

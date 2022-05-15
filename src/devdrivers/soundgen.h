@@ -323,7 +323,7 @@ private:
 
 
 /** \ingroup Enumerations
- * @brief
+ * @brief Specifies sound generation method
  */
 enum class SoundGenMethod {
   DAC,             /**< Use DAC. Available on gpio 25 or 26. Very low resources occupation. */
@@ -494,6 +494,13 @@ private:
   void detachNoSuspend(WaveformGenerator * value);
   void setDMANode(int index, volatile uint16_t * buf, int len);
   void init();
+  
+  int getSample();
+  
+  #ifdef FABGL_EMULATED
+  void sdl_init();
+  static void SDLAudioCallback(void * data, Uint8 * buffer, int length);
+  #endif
 
 
   WaveformGenerator * m_channels;
@@ -517,6 +524,10 @@ private:
   bool                m_initDone;
   
   esp_timer_handle_t  m_timerHandle;
+  
+  #ifdef FABGL_EMULATED
+  SDL_AudioDeviceID   m_device;
+  #endif
 
 };
 
