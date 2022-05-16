@@ -1334,6 +1334,13 @@ enum VirtualKey {
   VK_AELIG,           /** Upper case aelig  : Æ */
   VK_OSLASH,          /** Upper case oslash : Ø */
   VK_ARING,           /** Upper case aring  : Å */
+  
+  // Japanese layout support
+  VK_YEN,
+  VK_MUHENKAN,
+  VK_HENKAN,
+  VK_KATAKANA_HIRAGANA_ROMAJI,
+  VK_SHIFT_0,
 
   VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
   VK_LAST,            // marks the last virtual key
