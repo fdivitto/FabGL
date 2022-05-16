@@ -44,8 +44,9 @@ namespace fabgl {
  * accepted at the instruction right after a DI or EI on an actual processor.
  */
 
-/*
+
  #define Z80_CATCH_HALT
+/*
  #define Z80_CATCH_DI
  #define Z80_CATCH_EI
  #define Z80_CATCH_RETI
@@ -271,11 +272,14 @@ public:
   uint16_t getPC()                            { return state.pc; }
   void setPC(uint16_t value)                  { state.pc = value; }
 
+  int getStatus()                             { return state.status; }
+  int getIM()                                 { return state.im; }
+  int getIFF1()                               { return state.iff1; }
+  int getIFF2()                               { return state.iff2; }
 
 private:
 
   int intemulate(int opcode, int elapsed_cycles);
-
 
   Z80_STATE         state;
 

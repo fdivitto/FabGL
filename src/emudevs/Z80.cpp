@@ -2838,7 +2838,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
 
   #ifdef Z80_CATCH_HALT
 
-        state.status = Z80_STATUS_FLAG_HALT;
+        state.status = Z80_STATUS_HALT;
 
   #endif
 
@@ -2852,7 +2852,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
 
   #ifdef Z80_CATCH_DI
 
-        state.status = Z80_STATUS_FLAG_DI;
+        state.status = Z80_STATUS_DI;
 
   #endif
 
@@ -2866,7 +2866,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
 
   #ifdef Z80_CATCH_EI
 
-        state.status = Z80_STATUS_FLAG_EI;
+        state.status = Z80_STATUS_EI;
 
   #endif
 
@@ -3797,16 +3797,16 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
   #if defined(Z80_CATCH_RETI) && defined(Z80_CATCH_RETN)
 
         state.status = opcode == OPCODE_RETI
-        ? Z80_STATUS_FLAG_RETI
-        : Z80_STATUS_FLAG_RETN;
+        ? Z80_STATUS_RETI
+        : Z80_STATUS_RETN;
 
   #elif defined(Z80_CATCH_RETI)
 
-        state.status = Z80_STATUS_FLAG_RETI;
+        state.status = Z80_STATUS_RETI;
 
   #elif defined(Z80_CATCH_RETN)
 
-        state.status = Z80_STATUS_FLAG_RETN;
+        state.status = Z80_STATUS_RETN;
 
   #endif
 
