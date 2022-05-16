@@ -40,7 +40,9 @@
 #define UART_TX 2
 
 #define UART_BAUD     115200
-#define UART_CONF     SERIAL_8N1
+#define UART_DATALEN  8
+#define UART_PARITY   'N'
+#define UART_STOPBITS 1
 #define UART_FLOWCTRL FlowControl::Software
 
 
@@ -204,7 +206,7 @@ void Supervisor::sessionThread(void * arg)
     case AbortReason::AuxTerm:
       term->write("\r\n\nOpening UART terminal...\r\n");
       term->disconnectLocally();
-      term->connectSerialPort(UART_BAUD, UART_CONF, UART_RX, UART_TX, UART_FLOWCTRL);
+      term->connectSerialPort(UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_RX, UART_TX, UART_FLOWCTRL);
       vTaskDelete(NULL);
       break;
     case AbortReason::SessionClosed:
