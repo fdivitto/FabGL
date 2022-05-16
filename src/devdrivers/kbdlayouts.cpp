@@ -1093,6 +1093,7 @@ const KeyboardLayout NorwegianLayout{
 
 /**************************************************************************************/
 /* Japanese LAYOUT                                                                    */
+/* Credits: https://github.com/bellTanTan/fabglKeyboardJapaneseLayout                 */
 /**************************************************************************************/
 const KeyboardLayout JapaneseLayout {
   // name
