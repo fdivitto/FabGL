@@ -351,6 +351,9 @@ void setup()
 
   // uncomment to clear preferences
   //preferences.clear();
+  
+  // save some space reducing UI queue
+  fabgl::BitmappedDisplayController::queueSize = 128;
 
   ibox.begin(VGA_640x480_60Hz, 500, 400, 4);
   ibox.setBackgroundColor(RGB888(0, 0, 0));
