@@ -36,6 +36,7 @@ namespace fabgl {
 
 PIT8253::PIT8253()
 {
+  FRC1Timer_init(PIT_FRC1_PRESCALER);
 }
 
 
@@ -53,7 +54,8 @@ void PIT8253::reset()
     m_timer[i].latch     = -1;
     m_timer[i].LSBToggle = true;
   }
-  m_lastTickTime = esp_timer_get_time();
+  m_lastTickTime = FRC1Timer();
+  m_acc = 0;
 }
 
 
@@ -62,30 +64,30 @@ void PIT8253::write(int reg, uint8_t value)
   // just in case ticks are needed
   tick();
 
-  int timerIndex;
-
   if (reg == 3) {
 
     // write control register
-    timerIndex = (value >> 6) & 0x03;
+    
+    int timerIndex = (value >> 6) & 0x03;
+    auto & timer = m_timer[timerIndex];
 
     int RLMode = (value >> 4) & 0x03;
 
     if (RLMode == 0) {
       // counter latching operation (doesn't change BCD or mode)
-      m_timer[timerIndex].latch     = m_timer[timerIndex].count;
-      m_timer[timerIndex].LSBToggle = true;
-      m_timer[timerIndex].ctrlSet   = false;
-      //printf("%lld, PIT8253: write ctrl reg, %02X (timer=%d, latched=%04X)\n", esp_timer_get_time(), value, timerIndex, m_timer[timerIndex].latch);
+      timer.latch     = timer.count;
+      timer.LSBToggle = true;
+      timer.ctrlSet   = false;
+      //printf("%lld, PIT8253: write ctrl reg, %02X (timer=%d, latched=%04X)\n", esp_timer_get_time(), value, timerIndex, timer.latch);
     } else {
       // read / load
-      m_timer[timerIndex].mode    = (value >> 1) & 0x07;
-      m_timer[timerIndex].BCD     = (value & 1) == 1;
-      m_timer[timerIndex].RLMode  = RLMode;
-      m_timer[timerIndex].ctrlSet = true;
+      timer.mode    = (value >> 1) & 0x07;
+      timer.BCD     = (value & 1) == 1;
+      timer.RLMode  = RLMode;
+      timer.ctrlSet = true;
       if (RLMode == 3)
-        m_timer[timerIndex].LSBToggle = true;
-      //printf("%lld, PIT8253: write ctrl reg, %02X (timer=%d, mode=%d)\n", esp_timer_get_time(), value, timerIndex, m_timer[timerIndex].mode);
+        timer.LSBToggle = true;
+      //printf("%lld, PIT8253: write ctrl reg, %02X (timer=%d, mode=%d)\n", esp_timer_get_time(), value, timerIndex, timer.mode);
     }
 
     if (value >> 6 == 3)
@@ -94,36 +96,39 @@ void PIT8253::write(int reg, uint8_t value)
   } else {
 
     // write timers registers
-    timerIndex = reg;
+    
+    int timerIndex = reg;
+    auto & timer = m_timer[timerIndex];
+    
     bool writeLSB = false;
 
-    switch (m_timer[timerIndex].RLMode) {
+    switch (timer.RLMode) {
       case 1:
         writeLSB = true;
         break;
       case 3:
-        writeLSB = m_timer[timerIndex].LSBToggle;
-        m_timer[timerIndex].LSBToggle = !m_timer[timerIndex].LSBToggle;
+        writeLSB = timer.LSBToggle;
+        timer.LSBToggle = !timer.LSBToggle;
         break;
     }
 
     if (writeLSB) {
       // LSB
       //printf("%lld, PIT8253: timer %d write LSB, %02X\n", esp_timer_get_time(), timerIndex, value);
-      m_timer[timerIndex].resetHolding = (m_timer[timerIndex].resetHolding & 0xFF00) | value;
+      timer.resetHolding = (timer.resetHolding & 0xFF00) | value;
     } else {
       // MSB
       //printf("%lld, PIT8253: timer %d write MSB, %02X\n", esp_timer_get_time(), timerIndex, value);
-      m_timer[timerIndex].resetHolding = (m_timer[timerIndex].resetHolding & 0x00FF) | (((int)value) << 8);
-      m_timer[timerIndex].resetCount   = m_timer[timerIndex].resetHolding;
-      if (m_timer[timerIndex].ctrlSet) {
-        m_timer[timerIndex].count   = (uint16_t)(m_timer[timerIndex].resetCount - 1);
-        m_timer[timerIndex].ctrlSet = false;
+      timer.resetHolding = (timer.resetHolding & 0x00FF) | (((int)value) << 8);
+      timer.resetCount   = timer.resetHolding;
+      if (timer.ctrlSet) {
+        timer.count   = (uint16_t)(timer.resetCount - 1);
+        timer.ctrlSet = false;
       }
     }
 
     // OUT: with mode 0 it starts low, other modes it starts high
-    changeOut(timerIndex, m_timer[timerIndex].mode != 0);
+    changeOut(timerIndex, timer.mode != 0);
 
   }
 
@@ -139,23 +144,23 @@ uint8_t PIT8253::read(int reg)
 
   if (reg < 3) {
     // read timers registers
-    int timerIndex = reg;
+    auto & timer = m_timer[reg];
 
-    int readValue = m_timer[timerIndex].latch != -1 ? m_timer[timerIndex].latch : m_timer[timerIndex].count;
+    int readValue = timer.latch != -1 ? timer.latch : timer.count;
 
     bool readLSB = false;
-    if (m_timer[timerIndex].RLMode == 1) {
+    if (timer.RLMode == 1) {
       readLSB = true;
-    } else if (m_timer[timerIndex].RLMode == 3) {
-      readLSB = m_timer[timerIndex].LSBToggle;
-      m_timer[timerIndex].LSBToggle = !m_timer[timerIndex].LSBToggle;
+    } else if (timer.RLMode == 3) {
+      readLSB = timer.LSBToggle;
+      timer.LSBToggle = !timer.LSBToggle;
     }
 
     if (readLSB) {
       value = readValue & 0xFF;
     } else {
       value = (readValue >> 8) & 0xFF;
-      m_timer[timerIndex].latch = -1;
+      timer.latch = -1;
     }
     //printf("read reg %d => %02X (%04X)\n", reg, value, readValue);
   }
@@ -168,32 +173,34 @@ void PIT8253::setGate(int timerIndex, bool value)
 {
   // just in case ticks are needed
   tick();
+  
+  auto & timer = m_timer[timerIndex];
 
-  switch (m_timer[timerIndex].mode) {
+  switch (timer.mode) {
     case 0:
     case 2:
     case 3:
       // running when gate is high
-      m_timer[timerIndex].running = value;
+      timer.running = value;
       break;
     case 1:
     case 5:
       // switch to running when gate changes to high
-      if (m_timer[timerIndex].gate == false && value == true)
-        m_timer[timerIndex].running = true;
+      if (timer.gate == false && value == true)
+        timer.running = true;
       break;
   }
-  switch (m_timer[timerIndex].mode) {
+  switch (timer.mode) {
     case 2:
     case 3:
       if (value == false)
         changeOut(timerIndex, true);
       break;
   }
-  if (!m_timer[timerIndex].gate && value)
-    m_timer[timerIndex].count = m_timer[timerIndex].resetCount;
-  m_timer[timerIndex].gate = value;
-  //printf("setGate(%d, %d) [gate=%d running=%d]\n", timerIndex, value, m_timer[timerIndex].gate, m_timer[timerIndex].running);
+  if (!timer.gate && value)
+    timer.count = timer.resetCount;
+  timer.gate = value;
+  //printf("setGate(%d, %d) [gate=%d running=%d]\n", timerIndex, value, timer.gate, timer.running);
 }
 
 
@@ -209,47 +216,55 @@ void PIT8253::changeOut(int timer, bool value)
 
 void PIT8253::tick()
 {
-  uint64_t now = esp_timer_get_time();
-  int ticks = (int) ((now - m_lastTickTime) * 1000 / (1000000000 / PIT_TICK_FREQ));
-  //printf("ticks=%d (now=%lld last=%lld now-last=%lld)\n", ticks, now, m_lastTickTime, now-m_lastTickTime);
+  uint32_t now = FRC1Timer();
+  int32_t diff = now - m_lastTickTime;
+  if (diff < 0)
+    diff = FRC1TimerMax - m_lastTickTime + now;
+
+  constexpr uint32_t BITS = 10;
+  constexpr uint32_t INC  = (PIT_TICK_FREQ << BITS) / PIT_FRC1_FREQUENCY;
+  
+  m_acc += INC * diff;
+  int ticks = m_acc >> BITS;
+  m_acc &= (1 << BITS) - 1;
+  
+  m_lastTickTime = now;
+  
   if (ticks == 0)
     return;
-  m_lastTickTime = now;
-
-  if (ticks > 65535)
-    printf("Too much ticks! (%d)\n", ticks);
+    
+  if (ticks > 65535) {
+    //printf("Too much ticks! (%d)\n", ticks);
+    m_acc += (ticks - 65535) << BITS;
+    ticks = 65535;
+  }
 
   for (int timerIndex = 0; timerIndex < 3; ++timerIndex) {
 
-    if (m_timer[timerIndex].running) {
+    auto & timer = m_timer[timerIndex];
 
-      // modes 4 or 5, end of ending low pulse?
-      if (m_timer[timerIndex].mode >= 4 && m_timer[timerIndex].out == false) {
+    if (timer.running) {
+
+      // modes 4 or 5: end of ending low pulse?
+      if (timer.mode >= 4 && timer.out == false) {
         // mode 4, end of low pulse
         changeOut(timerIndex, true);
-        m_timer[timerIndex].running = false;
-        m_timer[timerIndex].count   = 65535;
+        timer.running = false;
+        timer.count   = 65535;
         continue;
       }
 
-      m_timer[timerIndex].count -= ticks;
+      timer.count -= ticks;
 
       // in mode 3 each tick subtract 2 instead of 1
-      if (m_timer[timerIndex].mode == 3)
-        m_timer[timerIndex].count -= ticks;
+      if (timer.mode == 3)
+        timer.count -= ticks;
 
-      if (m_timer[timerIndex].count <= 0) {
+      if (timer.count <= 0) {
         // count terminated
-        if (m_timer[timerIndex].resetCount == 0) {
-          m_timer[timerIndex].count += 65536;
-        } else {
-          m_timer[timerIndex].count += m_timer[timerIndex].resetCount;
-        }
-        switch (m_timer[timerIndex].mode) {
+        timer.count += timer.resetCount == 0 ? 65536 : timer.resetCount;
+        switch (timer.mode) {
           case 0:
-            // at the end OUT goes high
-            changeOut(timerIndex, true);
-            break;
           case 1:
             // at the end OUT goes high
             changeOut(timerIndex, true);
@@ -258,31 +273,30 @@ void PIT8253::tick()
             changeOut(timerIndex, false);
             break;
           case 3:
-            changeOut(timerIndex, !m_timer[timerIndex].out);
+            changeOut(timerIndex, !timer.out);
             break;
         }
       } else {
         // count running
-        switch (m_timer[timerIndex].mode) {
+        switch (timer.mode) {
           case 1:
-            // OUT is low while running
-            changeOut(timerIndex, false);
-            break;
-          case 2:
-            changeOut(timerIndex, true);
-            break;
           case 4:
           case 5:
             // start low pulse
             changeOut(timerIndex, false);
             break;
+          case 2:
+            changeOut(timerIndex, true);
+            break;
         }
       }
+      
+      //printf("running: timer %d [count = %04X, ticks = %d]\n", timerIndex, timer.count, ticks);
 
     }
 
-    //if (m_timer[timerIndex].running) printf("running: timer %d [count = %04X, ticks = %d]\n", timerIndex, m_timer[timerIndex].count, ticks);
   }
+  
 }
 
 

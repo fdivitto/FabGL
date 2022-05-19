@@ -36,6 +36,10 @@ namespace fabgl {
 // PIT (timers) frequency in Hertz
 #define PIT_TICK_FREQ        1193182
 
+// FRC1 timer prescaler and frequency
+#define PIT_FRC1_PRESCALER   FRC_TIMER_PRESCALER_16
+#define PIT_FRC1_FREQUENCY   5000000                // 80000000 / 16 = 5000000
+
 
 
 // PIT 8253 (Programmable Interval Timers)
@@ -90,11 +94,12 @@ private:
 
 
   TimerInfo         m_timer[3];
-
+  
   // callbacks
   void *            m_context;
   ChangeOut         m_changeOut;
-  uint64_t          m_lastTickTime;
+  uint32_t          m_lastTickTime;
+  uint32_t          m_acc;
 
 };
 

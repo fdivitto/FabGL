@@ -320,7 +320,7 @@ void Machine::tick()
 {
   ++m_ticksCounter;
 
-  if ((m_ticksCounter & 0xfff) == 0xfff) {
+  if ((m_ticksCounter & 0x7f) == 0x7f) {
     m_PIT8253.tick();
     // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
     m_i8042.tick();
