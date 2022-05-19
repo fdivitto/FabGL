@@ -42,6 +42,7 @@
 #include <driver/adc.h>
 #include <esp_system.h>
 #include "sdmmc_cmd.h"
+#include "soc/frc_timer_reg.h"
 
 
 namespace fabgl {
@@ -1001,6 +1002,31 @@ void configureGPIO(gpio_num_t gpio, gpio_mode_t mode);
 uint32_t getApbFrequency();
 
 uint32_t getCPUFrequencyMHz();
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///// FRC1 timer
+
+
+// FRC1 timer has 23 bits (8388608 values)
+constexpr int FRC1TimerMax = 8388607;
+
+
+// prescaler: FRC_TIMER_PRESCALER_1, FRC_TIMER_PRESCALER_16, FRC_TIMER_PRESCALER_256
+// 80Mhz / prescaler = timer frequency
+inline void FRC1Timer_init(int prescaler)
+{
+  REG_WRITE(FRC_TIMER_LOAD_REG(0), 0);
+  REG_WRITE(FRC_TIMER_CTRL_REG(0), prescaler | FRC_TIMER_ENABLE);
+}
+
+
+inline uint32_t FRC1Timer()
+{
+  return FRC1TimerMax - REG_READ(FRC_TIMER_COUNT_REG(0)); // make timer count up
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
