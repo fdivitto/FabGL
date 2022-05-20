@@ -4,11 +4,21 @@
 Converts a TTF font to FabGL header to be included and used as FabGL font.
 
 Usage:
-  python3 ttf2header.py filename size [stroke]
+  python3 ttf2header.py filename size [-s stroke] [-o output_filename] [-r firstindex lastindex]
 
 Examples:
-  python3 ttf2header.py Arial.ttf 24
-  python3 ttf2header.py Arial.ttf 24 1
+
+ - create file Arial24.h, size 24, indexes 0 to 255
+     python3 ttf2header.py Arial.ttf 24
+
+ - create file Arial44.h, size 44, indexes 0 to 255, not filled with line width 1
+     python3 ttf2header.py Arial.ttf 44 -s 1
+
+ - create file myfont.h, size 44, indexes 32 to 127
+     python3 ttf2header.py Arial.ttf 44 -o "myfont.h" -r 32 127
+
+ - create file Arial44.h, size 44, indexes 32 to 127
+     python3 ttf2header.py Arial.ttf 44 -r 32 127
 
 
 

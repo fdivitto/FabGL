@@ -6,6 +6,9 @@
 # please install prerequisites:
 #   pip3 install Pillow
 #
+# usage:
+#   python3 ttf2header.py filename size [-s stroke] [-o output_filename] [-r firstindex lastindex]
+#
 # examples:
 #
 #   - create file Arial24.h, size 24, indexes 0 to 255
