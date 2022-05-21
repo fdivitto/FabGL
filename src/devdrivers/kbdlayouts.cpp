@@ -1107,7 +1107,7 @@ const KeyboardLayout JapaneseLayout {
 
   // single byte scancodes
   {
-    //{ 0x0E, VK_HANKAKU_ZENKAKU_KANJI },
+    { 0x0E, VK_HANKAKU_ZENKAKU_KANJI },
     { 0x55, VK_CARET },
     { 0x54, VK_AT },
     { 0x5B, VK_LEFTBRACKET },

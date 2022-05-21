@@ -1366,6 +1366,7 @@ enum VirtualKey {
   VK_MUHENKAN,
   VK_HENKAN,
   VK_KATAKANA_HIRAGANA_ROMAJI,
+  VK_HANKAKU_ZENKAKU_KANJI,
   VK_SHIFT_0,
 
   VK_ASCII,           /**< Specifies an ASCII code - used when virtual key is embedded in VirtualKeyItem structure and VirtualKeyItem.ASCII is valid */
