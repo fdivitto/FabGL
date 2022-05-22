@@ -149,7 +149,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">  SoundGenerator * soundGenerator;</div>
 <div class="line">  uiTimerHandle    soundTimer;</div>
 <div class="line">  uiButton *       sdButton;</div>
-<div class="line">  uiLabel *        sdResultLabel;</div>
+<div class="line">  uiStaticLabel *  sdResultLabel;</div>
 <div class="line">  uiComboBox *     gpioInComboBox;</div>
 <div class="line">  uiButton *       gpioInState;</div>
 <div class="line">  uiComboBox *     gpioOutComboBox;</div>
@@ -187,23 +187,23 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">      <span class="keywordtype">int</span> left = 60;</div>
 <div class="line">      <span class="keywordtype">int</span> hspc = 60;</div>
 <div class="line">      <span class="keywordtype">int</span> vspc = 30;</div>
-<div class="line">      <span class="keyword">new</span> uiLabel(frame, COLORSL[i], Point(left + i * hspc, y));</div>
+<div class="line">      <span class="keyword">new</span> uiStaticLabel(frame, COLORSL[i], Point(left + i * hspc, y));</div>
 <div class="line">      <span class="keyword">new</span> uiColorBox(frame, Point(left + i * hspc, y + 15), Size(50, 14), (<a id="a4" name="a4"></a><a class="code hl_enumeration" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#gab87bacfdad76e61b9412d7124be44c1c">Color</a>)i);</div>
-<div class="line">      <span class="keyword">new</span> uiLabel(frame, COLORSH[i], Point(left + i * hspc, y + vspc));</div>
+<div class="line">      <span class="keyword">new</span> uiStaticLabel(frame, COLORSH[i], Point(left + i * hspc, y + vspc));</div>
 <div class="line">      <span class="keyword">new</span> uiColorBox(frame, Point(left + i * hspc, y + 15 + vspc), Size(50, 14), (<a class="code hl_enumeration" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#gab87bacfdad76e61b9412d7124be44c1c">Color</a>)(i+ 8));</div>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    y += 80;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// keyboard test</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;KEYBOARD TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;KEYBOARD TEST:&quot;</span>, Point(10, y));</div>
 <div class="line">    <span class="keyword">new</span> uiTextEdit(frame, <span class="stringliteral">&quot;Please type something&quot;</span>, Point(110, y - 3), Size(435, 20));</div>
 <div class="line"> </div>
 <div class="line">    y += 40;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// sound test</span></div>
 <div class="line">    soundGenerator = <span class="keyword">new</span> SoundGenerator;</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;SOUND TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;SOUND TEST:&quot;</span>, Point(10, y));</div>
 <div class="line">    soundButton = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;Start&quot;</span>, Point(110, y - 3), Size(80, 20), uiButtonKind::Switch);</div>
 <div class="line">    soundButton-&gt;onChange = [&amp;]() {</div>
 <div class="line">      <span class="keywordflow">if</span> (soundButton-&gt;down()) {</div>
@@ -218,21 +218,21 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">    y += 40;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// SD Card test</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;SDCARD TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;SDCARD TEST:&quot;</span>, Point(10, y));</div>
 <div class="line">    sdButton = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;Start&quot;</span>, Point(110, y - 3), Size(80, 20));</div>
 <div class="line">    sdButton-&gt;onClick = [&amp;]() {</div>
 <div class="line">      testSD();</div>
 <div class="line">    };</div>
-<div class="line">    sdResultLabel = <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;&quot;</span>, Point(210, y));</div>
+<div class="line">    sdResultLabel = <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;&quot;</span>, Point(210, y));</div>
 <div class="line"> </div>
 <div class="line">    y += 44;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// internal GPIOs test</span></div>
 <div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> GPIOS_IN[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18, 34, 35, 36, 39 };</div>
 <div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> GPIOS_OUT[] = { 0, 1, 2, 3, 12, 13, 14, 16, 17, 18 };</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;GPIO TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;GPIO TEST:&quot;</span>, Point(10, y));</div>
 <div class="line"> </div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;In&quot;</span>, Point(110, y - 18));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;In&quot;</span>, Point(110, y - 18));</div>
 <div class="line">    gpioInComboBox = <span class="keyword">new</span> uiComboBox(frame, Point(110, y - 3), Size(34, 22), 60);</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <span class="keyword">sizeof</span>(GPIOS_IN) / <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>); ++i)</div>
 <div class="line">      gpioInComboBox-&gt;items().appendFmt(<span class="stringliteral">&quot;%d&quot;</span>, GPIOS_IN[i]);</div>
@@ -243,11 +243,11 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">    gpioIn = GPIOS_IN[10];</div>
 <div class="line">    pinMode(gpioIn, INPUT);</div>
 <div class="line">    gpioInComboBox-&gt;selectItem(10);</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;State&quot;</span>, Point(152, y - 18));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;State&quot;</span>, Point(152, y - 18));</div>
 <div class="line">    gpioInState = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;&quot;</span>, Point(152, y - 3), Size(25, 22), uiButtonKind::Switch);</div>
 <div class="line">    gpioInPrevState = 0;</div>
 <div class="line"> </div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;Out&quot;</span>, Point(220, y - 18));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;Out&quot;</span>, Point(220, y - 18));</div>
 <div class="line">    gpioOutComboBox = <span class="keyword">new</span> uiComboBox(frame, Point(220, y - 3), Size(34, 22), 60);</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <span class="keyword">sizeof</span>(GPIOS_OUT) / <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>); ++i)</div>
 <div class="line">      gpioOutComboBox-&gt;items().appendFmt(<span class="stringliteral">&quot;%d&quot;</span>, GPIOS_OUT[i]);</div>
@@ -259,7 +259,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">    gpioOut = GPIOS_OUT[2];</div>
 <div class="line">    pinMode(gpioOut, OUTPUT);</div>
 <div class="line">    gpioOutComboBox-&gt;selectItem(2);</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;State&quot;</span>, Point(262, y - 18));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;State&quot;</span>, Point(262, y - 18));</div>
 <div class="line">    gpioOutState = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;&quot;</span>, Point(262, y - 3), Size(25, 22), uiButtonKind::Switch);</div>
 <div class="line">    gpioOutState-&gt;setDown(<span class="keyword">false</span>);</div>
 <div class="line">    gpioOutState-&gt;onChange = [&amp;]() {</div>
@@ -275,9 +275,9 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">    <span class="comment">// external GPIOs test</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span> (initMCP()) {</div>
-<div class="line">      <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;EXT GPIO TEST:&quot;</span>, Point(10, y));</div>
-<div class="line">      <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;Outputs&quot;</span>, Point(110, y - 13));</div>
-<div class="line">      <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;Inputs&quot;</span>, Point(355, y - 13));</div>
+<div class="line">      <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;EXT GPIO TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">      <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;Outputs&quot;</span>, Point(110, y - 13));</div>
+<div class="line">      <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;Inputs&quot;</span>, Point(355, y - 13));</div>
 <div class="line">      <span class="keyword">constexpr</span> <span class="keywordtype">int</span> w = 20;</div>
 <div class="line">      <span class="keyword">constexpr</span> <span class="keywordtype">int</span> h = 22;</div>
 <div class="line">      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 16; ++i) {</div>
@@ -317,7 +317,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// wifi</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;WIFI TEST:&quot;</span>, Point(10, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;WIFI TEST:&quot;</span>, Point(10, y));</div>
 <div class="line">    wifiButton = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;Start&quot;</span>, Point(110, y - 3), Size(80, 20));</div>
 <div class="line">    wifiButton-&gt;onClick = [&amp;]() {</div>
 <div class="line">      testWifi();</div>
@@ -339,8 +339,8 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line">    y = frame-&gt;size().height - 40;</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;FabGL - Copyright 2019-2022 by Fabrizio Di Vittorio&quot;</span>, Point(175, y));</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(frame, <span class="stringliteral">&quot;WWW.FABGL.COM&quot;</span>, Point(260, y + 17));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;FabGL - Copyright 2019-2022 by Fabrizio Di Vittorio&quot;</span>, Point(175, y));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(frame, <span class="stringliteral">&quot;WWW.FABGL.COM&quot;</span>, Point(260, y + 17));</div>
 <div class="line"> </div>
 <div class="line">  }</div>
 <div class="line"> </div>
@@ -552,21 +552,21 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <div class="line">}</div>
 <div class="ttc" id="a_m_c_p23_s17_8h_html"><div class="ttname"><a href="_m_c_p23_s17_8h.html">MCP23S17.h</a></div><div class="ttdoc">This file contains the MCP23S17 driver class.</div></div>
 <div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2_html_a6b94fdf3692083a41291eec4920c62d2"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2.html#a6b94fdf3692083a41291eec4920c62d2">fabgl::BitmappedDisplayController::queueSize</a></div><div class="ttdeci">static int queueSize</div><div class="ttdoc">Size of display controller primitives queue.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00912">displaycontroller.h:912</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a0f75f7eae543df606255fb17aaff4fcd_html_a0f75f7eae543df606255fb17aaff4fcd"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a0f75f7eae543df606255fb17aaff4fcd.html#a0f75f7eae543df606255fb17aaff4fcd">fabgl::MCP23S17::configureGPIO</a></div><div class="ttdeci">void configureGPIO(int gpio, MCPDir dir, bool pullup=false, uint8_t hwAddr=0)</div><div class="ttdoc">Configure a pin direction and pullup.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00252">MCP23S17.cpp:252</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a1762512f6b6a1b4149af5778d048fa26_html_a1762512f6b6a1b4149af5778d048fa26"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a1762512f6b6a1b4149af5778d048fa26.html#a1762512f6b6a1b4149af5778d048fa26">fabgl::MCP23S17::writeGPIO</a></div><div class="ttdeci">void writeGPIO(int gpio, bool value, uint8_t hwAddr=0)</div><div class="ttdoc">Sets output status of a pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00267">MCP23S17.cpp:267</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a193701415e90c6513fa98fd5303ad8c8_html_a193701415e90c6513fa98fd5303ad8c8"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a193701415e90c6513fa98fd5303ad8c8.html#a193701415e90c6513fa98fd5303ad8c8">fabgl::MCP23S17::enableINTMirroring</a></div><div class="ttdeci">void enableINTMirroring(bool value, uint8_t hwAddr=0)</div><div class="ttdoc">Enables/disables INTs pins mirroring.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00234">MCP23S17.cpp:234</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a0f75f7eae543df606255fb17aaff4fcd_html_a0f75f7eae543df606255fb17aaff4fcd"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a0f75f7eae543df606255fb17aaff4fcd.html#a0f75f7eae543df606255fb17aaff4fcd">fabgl::MCP23S17::configureGPIO</a></div><div class="ttdeci">void configureGPIO(int gpio, MCPDir dir, bool pullup=false, uint8_t hwAddr=0)</div><div class="ttdoc">Configure a pin direction and pullup.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00258">MCP23S17.cpp:258</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a1762512f6b6a1b4149af5778d048fa26_html_a1762512f6b6a1b4149af5778d048fa26"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a1762512f6b6a1b4149af5778d048fa26.html#a1762512f6b6a1b4149af5778d048fa26">fabgl::MCP23S17::writeGPIO</a></div><div class="ttdeci">void writeGPIO(int gpio, bool value, uint8_t hwAddr=0)</div><div class="ttdoc">Sets output status of a pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00273">MCP23S17.cpp:273</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a193701415e90c6513fa98fd5303ad8c8_html_a193701415e90c6513fa98fd5303ad8c8"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a193701415e90c6513fa98fd5303ad8c8.html#a193701415e90c6513fa98fd5303ad8c8">fabgl::MCP23S17::enableINTMirroring</a></div><div class="ttdeci">void enableINTMirroring(bool value, uint8_t hwAddr=0)</div><div class="ttdoc">Enables/disables INTs pins mirroring.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00240">MCP23S17.cpp:240</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a34e4bc492e58778c7d864db2cf4ec57d_html_a34e4bc492e58778c7d864db2cf4ec57d"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a34e4bc492e58778c7d864db2cf4ec57d.html#a34e4bc492e58778c7d864db2cf4ec57d">fabgl::MCP23S17::getPortIntFlags</a></div><div class="ttdeci">uint8_t getPortIntFlags(int port, uint8_t hwAddr=0)</div><div class="ttdoc">Reads interrupt flags for the specified port.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8h_source.html#l00512">MCP23S17.h:512</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_a4a47f12debf6d5d7273c3e5fb360417a_html_a4a47f12debf6d5d7273c3e5fb360417a"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a">fabgl::MCP23S17::available</a></div><div class="ttdeci">bool available()</div><div class="ttdoc">Determines MCP23S17 availability.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8h_source.html#l00188">MCP23S17.h:188</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_aaf81d3fdaf258088d7692fa70cece087_html_aaf81d3fdaf258088d7692fa70cece087"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_aaf81d3fdaf258088d7692fa70cece087.html#aaf81d3fdaf258088d7692fa70cece087">fabgl::MCP23S17::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Deinitializes MCP23S17 driver.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00113">MCP23S17.cpp:113</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_ab205baa284c3197865fef390a0304355_html_ab205baa284c3197865fef390a0304355"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_ab205baa284c3197865fef390a0304355.html#ab205baa284c3197865fef390a0304355">fabgl::MCP23S17::begin</a></div><div class="ttdeci">bool begin(int MISO=-1, int MOSI=-1, int CLK=-1, int CS=-1, int CSActiveState=-1, int host=HSPI_HOST)</div><div class="ttdoc">Initializes MCP23S17 driver.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00053">MCP23S17.cpp:53</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_ac85086c7d62df2eace4d8fa2be5a6987_html_ac85086c7d62df2eace4d8fa2be5a6987"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_ac85086c7d62df2eace4d8fa2be5a6987.html#ac85086c7d62df2eace4d8fa2be5a6987">fabgl::MCP23S17::enableInterrupt</a></div><div class="ttdeci">void enableInterrupt(int gpio, MCPIntTrigger trigger, bool defaultValue=false, uint8_t hwAddr=0)</div><div class="ttdoc">Enables interrupt on the specific pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00282">MCP23S17.cpp:282</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_afe1923d1107ce527071d3d0b0dc50b3a_html_afe1923d1107ce527071d3d0b0dc50b3a"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_afe1923d1107ce527071d3d0b0dc50b3a.html#afe1923d1107ce527071d3d0b0dc50b3a">fabgl::MCP23S17::readGPIO</a></div><div class="ttdeci">bool readGPIO(int gpio, uint8_t hwAddr=0)</div><div class="ttdoc">Reads input status of a pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00276">MCP23S17.cpp:276</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_ac85086c7d62df2eace4d8fa2be5a6987_html_ac85086c7d62df2eace4d8fa2be5a6987"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_ac85086c7d62df2eace4d8fa2be5a6987.html#ac85086c7d62df2eace4d8fa2be5a6987">fabgl::MCP23S17::enableInterrupt</a></div><div class="ttdeci">void enableInterrupt(int gpio, MCPIntTrigger trigger, bool defaultValue=false, uint8_t hwAddr=0)</div><div class="ttdoc">Enables interrupt on the specific pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00288">MCP23S17.cpp:288</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_afe1923d1107ce527071d3d0b0dc50b3a_html_afe1923d1107ce527071d3d0b0dc50b3a"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17_afe1923d1107ce527071d3d0b0dc50b3a.html#afe1923d1107ce527071d3d0b0dc50b3a">fabgl::MCP23S17::readGPIO</a></div><div class="ttdeci">bool readGPIO(int gpio, uint8_t hwAddr=0)</div><div class="ttdoc">Reads input status of a pin.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8cpp_source.html#l00282">MCP23S17.cpp:282</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_m_c_p23_s17_html"><div class="ttname"><a href="classfabgl_1_1_m_c_p23_s17.html">fabgl::MCP23S17</a></div><div class="ttdoc">MCP23S17 driver.</div><div class="ttdef"><b>Definition:</b> <a href="_m_c_p23_s17_8h_source.html#l00155">MCP23S17.h:155</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09_html_ab8520612804a921ad834b41214a99c09"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09.html#ab8520612804a921ad834b41214a99c09">fabgl::PS2Controller::begin</a></div><div class="ttdeci">static void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_UNUSED, gpio_num_t port1_datGPIO=GPIO_UNUSED)</div><div class="ttdoc">Initializes PS2 device controller.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8cpp_source.html#l01115">ps2controller.cpp:1115</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_html"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a></div><div class="ttdoc">The PS2 device controller class.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8h_source.html#l00082">ps2controller.h:82</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_v_g_a16_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a></div><div class="ttdoc">Represents the VGA 16 colors bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vga16controller_8h_source.html#l00082">vga16controller.h:82</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
-<div class="ttc" id="afabglconf_8h_addea82fe18c9c78642f2754141fbcc43_html_addea82fe18c9c78642f2754141fbcc43"><div class="ttname"><a href="fabglconf_8h_addea82fe18c9c78642f2754141fbcc43.html#addea82fe18c9c78642f2754141fbcc43">VESA_640x480_75Hz</a></div><div class="ttdeci">#define VESA_640x480_75Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00252">fabglconf.h:252</a></div></div>
+<div class="ttc" id="afabglconf_8h_addea82fe18c9c78642f2754141fbcc43_html_addea82fe18c9c78642f2754141fbcc43"><div class="ttname"><a href="fabglconf_8h_addea82fe18c9c78642f2754141fbcc43.html#addea82fe18c9c78642f2754141fbcc43">VESA_640x480_75Hz</a></div><div class="ttdeci">#define VESA_640x480_75Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00258">fabglconf.h:258</a></div></div>
 <div class="ttc" id="afabui_8h_html"><div class="ttname"><a href="fabui_8h.html">fabui.h</a></div><div class="ttdoc">This file contains all classes related to FabGL Graphical User Interface.</div></div>
 <div class="ttc" id="agroup___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00_html_gga8389ac8ebb8a33d21364f84ddfa64c00a29c2c02a361c9d7028472e5d92cd4a54"><div class="ttname"><a href="group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#gga8389ac8ebb8a33d21364f84ddfa64c00a29c2c02a361c9d7028472e5d92cd4a54">fabgl::MCPDir::Output</a></div><div class="ttdeci">@ Output</div></div>
 <div class="ttc" id="agroup___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00_html_gga8389ac8ebb8a33d21364f84ddfa64c00a324118a6721dd6b8a9b9f4e327df2bf5"><div class="ttname"><a href="group___enumerations_ga8389ac8ebb8a33d21364f84ddfa64c00.html#gga8389ac8ebb8a33d21364f84ddfa64c00a324118a6721dd6b8a9b9f4e327df2bf5">fabgl::MCPDir::Input</a></div><div class="ttdeci">@ Input</div></div>
@@ -581,7 +581,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_hardware_test_2_hardware_test
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

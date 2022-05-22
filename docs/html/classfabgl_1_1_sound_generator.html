@@ -98,9 +98,9 @@ $(document).ready(function(){initNavTree('classfabgl_1_1_sound_generator.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9137f26490315305b1fc3bc796a8e924"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_sound_generator_a9137f26490315305b1fc3bc796a8e924.html#a9137f26490315305b1fc3bc796a8e924">SoundGenerator</a> (int sampleRate=16000)</td></tr>
-<tr class="memdesc:a9137f26490315305b1fc3bc796a8e924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the sound generator. Only one instance is allowed.  <a href="classfabgl_1_1_sound_generator_a9137f26490315305b1fc3bc796a8e924.html#a9137f26490315305b1fc3bc796a8e924">More...</a><br /></td></tr>
-<tr class="separator:a9137f26490315305b1fc3bc796a8e924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f313ace9bd328af72dac21f508f7b25"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_sound_generator_a1f313ace9bd328af72dac21f508f7b25.html#a1f313ace9bd328af72dac21f508f7b25">SoundGenerator</a> (int sampleRate=16384, gpio_num_t gpio=GPIO_AUTO, <a class="el" href="group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#ga0c57da098cf653e49e8c46e3a86eee31">SoundGenMethod</a> genMethod=<a class="el" href="group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#gga0c57da098cf653e49e8c46e3a86eee31a06b9281e396db002010bde1de57262eb">SoundGenMethod::Auto</a>)</td></tr>
+<tr class="memdesc:a1f313ace9bd328af72dac21f508f7b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an instance of the sound generator. Only one instance is allowed.  <a href="classfabgl_1_1_sound_generator_a1f313ace9bd328af72dac21f508f7b25.html#a1f313ace9bd328af72dac21f508f7b25">More...</a><br /></td></tr>
+<tr class="separator:a1f313ace9bd328af72dac21f508f7b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04178c4d1679101843945ecfe8c8d3e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_sound_generator_a04178c4d1679101843945ecfe8c8d3e1.html#a04178c4d1679101843945ecfe8c8d3e1">attach</a> (<a class="el" href="classfabgl_1_1_waveform_generator.html">WaveformGenerator</a> *value)</td></tr>
 <tr class="memdesc:a04178c4d1679101843945ecfe8c8d3e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches a waveform generator.  <a href="classfabgl_1_1_sound_generator_a04178c4d1679101843945ecfe8c8d3e1.html#a04178c4d1679101843945ecfe8c8d3e1">More...</a><br /></td></tr>
 <tr class="separator:a04178c4d1679101843945ecfe8c8d3e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,8 +132,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output.">SoundGenerator</a> handles audio output. </p>
-<p >Applications attach waveform generators (like <a class="el" href="classfabgl_1_1_sine_waveform_generator.html" title="Sine waveform generator.">SineWaveformGenerator</a>, <a class="el" href="classfabgl_1_1_square_waveform_generator.html" title="Square waveform generator.">SquareWaveformGenerator</a>, etc...) and call <a class="el" href="classfabgl_1_1_sound_generator_aa7c56b84cb4738b6826e34ca20993d62.html#aa7c56b84cb4738b6826e34ca20993d62" title="Starts or stops playing.">SoundGenerator.play()</a> to start audio generation.</p>
-<p >The GPIO used for audio output is GPIO-25. See <a class="el" href="conf_audio.html">Configuring Audio port</a> for audio connection sample schema.</p>
+<p ><a class="el" href="classfabgl_1_1_sound_generator.html" title="SoundGenerator handles audio output.">SoundGenerator</a> generates audio samples using DAC or Sigma-Delta modulation. Use constructor to specify GPIO and generation method. Applications attach waveform generators (like <a class="el" href="classfabgl_1_1_sine_waveform_generator.html" title="Sine waveform generator.">SineWaveformGenerator</a>, <a class="el" href="classfabgl_1_1_square_waveform_generator.html" title="Square waveform generator.">SquareWaveformGenerator</a>, etc...) and call <a class="el" href="classfabgl_1_1_sound_generator_aa7c56b84cb4738b6826e34ca20993d62.html#aa7c56b84cb4738b6826e34ca20993d62" title="Starts or stops playing.">SoundGenerator.play()</a> to start audio generation.</p>
 <p >Here is a list of supported sound generators:</p><ul>
 <li><a class="el" href="classfabgl_1_1_sine_waveform_generator.html" title="Sine waveform generator.">SineWaveformGenerator</a></li>
 <li><a class="el" href="classfabgl_1_1_square_waveform_generator.html" title="Square waveform generator.">SquareWaveformGenerator</a></li>
@@ -144,7 +143,7 @@ Public Member Functions</h2></td></tr>
 <li><a class="el" href="classfabgl_1_1_samples_generator.html" title="Samples generator.">SamplesGenerator</a> </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="soundgen_8h_source.html#l00344">344</a> of file <a class="el" href="soundgen_8h_source.html">soundgen.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soundgen_8h_source.html#l00350">350</a> of file <a class="el" href="soundgen_8h_source.html">soundgen.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="soundgen_8h_source.html">soundgen.h</a></li>
 <li><a class="el" href="soundgen_8cpp_source.html">soundgen.cpp</a></li>
@@ -155,7 +154,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_sound_generator.html">SoundGenerator</a></li>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:39 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:46 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

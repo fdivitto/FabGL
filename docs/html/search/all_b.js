@@ -1,7 +1,7 @@
 var searchData=
 [
   ['label_0',['label',['../structfabgl_1_1_v_g_a_timings_a992b8d2b11ffd133791d51f799aa2124.html#a992b8d2b11ffd133791d51f799aa2124',1,'fabgl::VGATimings']]],
-  ['labelstyle_1',['labelStyle',['../classfabgl_1_1ui_label_af9fb3349b8d4a6639be9ea73a046f1c1.html#af9fb3349b8d4a6639be9ea73a046f1c1',1,'fabgl::uiLabel']]],
+  ['labelstyle_1',['labelStyle',['../classfabgl_1_1ui_label_af9fb3349b8d4a6639be9ea73a046f1c1.html#af9fb3349b8d4a6639be9ea73a046f1c1',1,'fabgl::uiLabel::labelStyle()'],['../classfabgl_1_1ui_static_label_a650d751d983ca725794b2e3b689e977c.html#a650d751d983ca725794b2e3b689e977c',1,'fabgl::uiStaticLabel::labelStyle()']]],
   ['lalt_2',['LALT',['../structfabgl_1_1ui_key_event_info_a47ea40cf04a32cf7688d9cba2348954d.html#a47ea40cf04a32cf7688d9cba2348954d',1,'fabgl::uiKeyEventInfo::LALT()'],['../structfabgl_1_1_virtual_key_item_a47ea40cf04a32cf7688d9cba2348954d.html#a47ea40cf04a32cf7688d9cba2348954d',1,'fabgl::VirtualKeyItem::LALT()']]],
   ['lalt_3',['lalt',['../structfabgl_1_1_alt_virtual_key_def_ae43091f834e80fc3dbd1b1f74dd67ce1.html#ae43091f834e80fc3dbd1b1f74dd67ce1',1,'fabgl::AltVirtualKeyDef']]],
   ['lastchild_4',['lastChild',['../classfabgl_1_1ui_window_a7def4b2ca2ba849a4759507cfe67e034.html#a7def4b2ca2ba849a4759507cfe67e034',1,'fabgl::uiWindow']]],

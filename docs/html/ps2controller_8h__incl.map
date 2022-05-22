@@ -1,13 +1,14 @@
 <map id="ps2controller.h" name="ps2controller.h">
-<area shape="rect" id="node1" title="This file contains fabgl::PS2Controller definition." alt="" coords="251,5,357,32"/>
+<area shape="rect" id="node1" title="This file contains fabgl::PS2Controller definition." alt="" coords="297,5,404,32"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,155,149,181"/>
-<area shape="rect" id="node3" title=" " alt="" coords="115,80,221,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="245,80,363,107"/>
-<area shape="rect" id="node5" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="387,80,461,107"/>
-<area shape="rect" id="node10" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="589,80,675,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,80,268,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="292,80,409,107"/>
+<area shape="rect" id="node5" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="433,80,508,107"/>
+<area shape="rect" id="node11" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="691,80,778,107"/>
 <area shape="rect" id="node6" title=" " alt="" coords="173,155,296,181"/>
 <area shape="rect" id="node7" title=" " alt="" coords="320,155,411,181"/>
 <area shape="rect" id="node8" title=" " alt="" coords="435,155,539,181"/>
 <area shape="rect" id="node9" title=" " alt="" coords="563,155,671,181"/>
-<area shape="rect" id="node11" title=" " alt="" coords="695,155,777,181"/>
+<area shape="rect" id="node10" title=" " alt="" coords="695,155,830,181"/>
+<area shape="rect" id="node12" title=" " alt="" coords="854,155,935,181"/>
 </map>

@@ -46,6 +46,8 @@ var fabui_8h =
     [ "uiSlider", "classfabgl_1_1ui_slider.html", "classfabgl_1_1ui_slider" ],
     [ "uiSliderStyle", "structfabgl_1_1ui_slider_style.html", "structfabgl_1_1ui_slider_style" ],
     [ "uiSplitButton", "classfabgl_1_1ui_split_button.html", "classfabgl_1_1ui_split_button" ],
+    [ "uiStaticLabel", "classfabgl_1_1ui_static_label.html", "classfabgl_1_1ui_static_label" ],
+    [ "uiStaticLabelStyle", "structfabgl_1_1ui_static_label_style.html", "structfabgl_1_1ui_static_label_style" ],
     [ "uiTextEdit", "classfabgl_1_1ui_text_edit.html", "classfabgl_1_1ui_text_edit" ],
     [ "uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", "structfabgl_1_1ui_text_edit_props" ],
     [ "uiTextEditStyle", "structfabgl_1_1ui_text_edit_style.html", "structfabgl_1_1ui_text_edit_style" ],

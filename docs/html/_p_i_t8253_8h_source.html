@@ -125,70 +125,75 @@ $(document).ready(function(){initNavTree('_p_i_t8253_8h_source.html',''); initRe
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">// PIT (timers) frequency in Hertz</span></div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#define PIT_TICK_FREQ        1193182</span></div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">// PIT 8253 (Programmable Interval Timers)</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">// FRC1 timer prescaler and frequency</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#define PIT_FRC1_PRESCALER   FRC_TIMER_PRESCALER_16</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#define PIT_FRC1_FREQUENCY   5000000                </span><span class="comment">// 80000000 / 16 = 5000000</span></div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">class </span>PIT8253 {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">// PIT 8253 (Programmable Interval Timers)</span></div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keyword">typedef</span> void (*ChangeOut)(<span class="keywordtype">void</span> * context, <span class="keywordtype">int</span> timerIndex);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">class </span>PIT8253 {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="keyword">struct </span>TimerInfo {</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">bool</span>    BCD;          <span class="comment">// BCD mode</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    int32_t mode;         <span class="comment">// Timer mode</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    int32_t RLMode;       <span class="comment">// Read/Load mode</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    int32_t resetHolding; <span class="comment">// Holding area for timer reset count</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    int32_t resetCount;   <span class="comment">// Reload value when count is zero</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    int32_t count;        <span class="comment">// Current timer counter</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    int32_t latch;        <span class="comment">// Latched timer count (-1 = not latched)</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">bool</span>    LSBToggle;    <span class="comment">// true: Read load LSB, false: Read load MSB</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">bool</span>    out;          <span class="comment">// out state</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">bool</span>    gate;         <span class="comment">// date (1 = timer running)</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordtype">bool</span>    running;      <span class="comment">// counting down in course</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">bool</span>    ctrlSet;      <span class="comment">// control word set</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  };</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  PIT8253();</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  ~PIT8253();</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">void</span> setCallbacks(<span class="keywordtype">void</span> * context, ChangeOut changeOut) {</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    m_context   = context;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    m_changeOut = changeOut;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  }</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">void</span> reset();</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordtype">void</span> tick();</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keyword">typedef</span> void (*ChangeOut)(<span class="keywordtype">void</span> * context, <span class="keywordtype">int</span> timerIndex);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keyword">struct </span>TimerInfo {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">bool</span>    BCD;          <span class="comment">// BCD mode</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    int32_t mode;         <span class="comment">// Timer mode</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    int32_t RLMode;       <span class="comment">// Read/Load mode</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    int32_t resetHolding; <span class="comment">// Holding area for timer reset count</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    int32_t resetCount;   <span class="comment">// Reload value when count is zero</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    int32_t count;        <span class="comment">// Current timer counter</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    int32_t latch;        <span class="comment">// Latched timer count (-1 = not latched)</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">bool</span>    LSBToggle;    <span class="comment">// true: Read load LSB, false: Read load MSB</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">bool</span>    out;          <span class="comment">// out state</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">bool</span>    gate;         <span class="comment">// date (1 = timer running)</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">bool</span>    running;      <span class="comment">// counting down in course</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordtype">bool</span>    ctrlSet;      <span class="comment">// control word set</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  };</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  PIT8253();</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  ~PIT8253();</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">void</span> setCallbacks(<span class="keywordtype">void</span> * context, ChangeOut changeOut) {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    m_context   = context;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    m_changeOut = changeOut;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  }</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keywordtype">void</span> write(<span class="keywordtype">int</span> reg, uint8_t value);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  uint8_t read(<span class="keywordtype">int</span> reg);</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <span class="keywordtype">bool</span> getOut(<span class="keywordtype">int</span> timerIndex)  { <span class="keywordflow">return</span> m_timer[timerIndex].out; }</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">bool</span> getGate(<span class="keywordtype">int</span> timerIndex) { <span class="keywordflow">return</span> m_timer[timerIndex].gate; }</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keywordtype">void</span> setGate(<span class="keywordtype">int</span> timerIndex, <span class="keywordtype">bool</span> value);</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  TimerInfo <span class="keyword">const</span> &amp; timerInfo(<span class="keywordtype">int</span> timerIndex) { <span class="keywordflow">return</span> m_timer[timerIndex]; }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keywordtype">void</span> reset();</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">void</span> tick();</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">void</span> write(<span class="keywordtype">int</span> reg, uint8_t value);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  uint8_t read(<span class="keywordtype">int</span> reg);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keywordtype">bool</span> getOut(<span class="keywordtype">int</span> timerIndex)  { <span class="keywordflow">return</span> m_timer[timerIndex].out; }</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="keywordtype">bool</span> getGate(<span class="keywordtype">int</span> timerIndex) { <span class="keywordflow">return</span> m_timer[timerIndex].gate; }</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  <span class="keywordtype">void</span> changeOut(<span class="keywordtype">int</span> timer, <span class="keywordtype">bool</span> value);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <span class="keywordtype">void</span> setGate(<span class="keywordtype">int</span> timerIndex, <span class="keywordtype">bool</span> value);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  TimerInfo <span class="keyword">const</span> &amp; timerInfo(<span class="keywordtype">int</span> timerIndex) { <span class="keywordflow">return</span> m_timer[timerIndex]; }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  TimerInfo         m_timer[3];</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="comment">// callbacks</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <span class="keywordtype">void</span> *            m_context;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  ChangeOut         m_changeOut;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  uint64_t          m_lastTickTime;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>};</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>} <span class="comment">// namespace fabgl</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="keywordtype">void</span> changeOut(<span class="keywordtype">int</span> timer, <span class="keywordtype">bool</span> value);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  TimerInfo         m_timer[3];</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <span class="comment">// callbacks</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  <span class="keywordtype">void</span> *            m_context;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  ChangeOut         m_changeOut;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  uint32_t          m_lastTickTime;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  uint32_t          m_acc;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>};</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>} <span class="comment">// namespace fabgl</span></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -196,7 +201,7 @@ $(document).ready(function(){initNavTree('_p_i_t8253_8h_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_8be7dd06aece89a21c34f4f57592b45a.html">emudevs</a></li><li class="navelem"><b>PIT8253.h</b></li>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

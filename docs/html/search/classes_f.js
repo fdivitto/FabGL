@@ -46,11 +46,13 @@ var searchData=
   ['uislider_43',['uiSlider',['../classfabgl_1_1ui_slider.html',1,'fabgl']]],
   ['uisliderstyle_44',['uiSliderStyle',['../structfabgl_1_1ui_slider_style.html',1,'fabgl']]],
   ['uisplitbutton_45',['uiSplitButton',['../classfabgl_1_1ui_split_button.html',1,'fabgl']]],
-  ['uitextedit_46',['uiTextEdit',['../classfabgl_1_1ui_text_edit.html',1,'fabgl']]],
-  ['uitexteditprops_47',['uiTextEditProps',['../structfabgl_1_1ui_text_edit_props.html',1,'fabgl']]],
-  ['uitexteditstyle_48',['uiTextEditStyle',['../structfabgl_1_1ui_text_edit_style.html',1,'fabgl']]],
-  ['uiwindow_49',['uiWindow',['../classfabgl_1_1ui_window.html',1,'fabgl']]],
-  ['uiwindowprops_50',['uiWindowProps',['../structfabgl_1_1ui_window_props.html',1,'fabgl']]],
-  ['uiwindowstate_51',['uiWindowState',['../structfabgl_1_1ui_window_state.html',1,'fabgl']]],
-  ['uiwindowstyle_52',['uiWindowStyle',['../structfabgl_1_1ui_window_style.html',1,'fabgl']]]
+  ['uistaticlabel_46',['uiStaticLabel',['../classfabgl_1_1ui_static_label.html',1,'fabgl']]],
+  ['uistaticlabelstyle_47',['uiStaticLabelStyle',['../structfabgl_1_1ui_static_label_style.html',1,'fabgl']]],
+  ['uitextedit_48',['uiTextEdit',['../classfabgl_1_1ui_text_edit.html',1,'fabgl']]],
+  ['uitexteditprops_49',['uiTextEditProps',['../structfabgl_1_1ui_text_edit_props.html',1,'fabgl']]],
+  ['uitexteditstyle_50',['uiTextEditStyle',['../structfabgl_1_1ui_text_edit_style.html',1,'fabgl']]],
+  ['uiwindow_51',['uiWindow',['../classfabgl_1_1ui_window.html',1,'fabgl']]],
+  ['uiwindowprops_52',['uiWindowProps',['../structfabgl_1_1ui_window_props.html',1,'fabgl']]],
+  ['uiwindowstate_53',['uiWindowState',['../structfabgl_1_1ui_window_state.html',1,'fabgl']]],
+  ['uiwindowstyle_54',['uiWindowStyle',['../structfabgl_1_1ui_window_style.html',1,'fabgl']]]
 ];

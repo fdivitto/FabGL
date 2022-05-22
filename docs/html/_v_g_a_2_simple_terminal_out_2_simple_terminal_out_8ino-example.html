@@ -115,38 +115,26 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="fabgl_8h.html">fabgl.h</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;devdrivers/cvbsgenerator.h&quot;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &quot;vtanimations.h&quot;</span></div>
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line">fabgl::CVBS16Controller DisplayController;</div>
-<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a>        Terminal;</div>
+<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a> DisplayController;</div>
+<div class="line"><a id="_a1" name="_a1"></a><a class="code hl_class" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a>        Terminal;</div>
 <div class="line"> </div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">using</span> fabgl::CVBSGenerator;</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> setup()</div>
 <div class="line">{</div>
-<div class="line">  Serial.<a id="a1" name="a1"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">begin</a>(115200); delay(500); Serial.write(<span class="stringliteral">&quot;\n\n\n&quot;</span>); <span class="comment">// DEBUG ONLY</span></div>
+<div class="line">  <span class="comment">//Serial.begin(115200); delay(500); Serial.write(&quot;\n\n\n&quot;); // DEBUG ONLY</span></div>
 <div class="line"> </div>
 <div class="line">  DisplayController.begin();</div>
-<div class="line">  </div>
-<div class="line">  DisplayController.setHorizontalRate(2);</div>
-<div class="line">  DisplayController.setMonochrome(<span class="keyword">false</span>);</div>
-<div class="line">  </div>
-<div class="line">  <span class="comment">//DisplayController.setResolution(&quot;I-PAL-B&quot;);</span></div>
-<div class="line">  DisplayController.setResolution(<span class="stringliteral">&quot;P-PAL-B&quot;</span>);</div>
-<div class="line">  <span class="comment">//DisplayController.setResolution(&quot;I-NTSC-M&quot;);</span></div>
-<div class="line">  <span class="comment">//DisplayController.setResolution(&quot;P-NTSC-M&quot;);</span></div>
-<div class="line">  </div>
-<div class="line">  <span class="comment">//while (1) printf(&quot;frame=%d field=%d frameLine=%d interFrameLine=%d pictureLine=%d scPhaseSam=%d\n&quot;, CVBSGenerator::frame(), CVBSGenerator::field(), CVBSGenerator::frameLine(), CVBSGenerator::interFrameLine(), CVBSGenerator::pictureLine(), CVBSGenerator::subCarrierPhase());</span></div>
+<div class="line">  DisplayController.<a id="a2" name="a2"></a>setResolution(<a id="a3" name="a3"></a><a class="code hl_define" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>);</div>
 <div class="line"> </div>
-<div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">begin</a>(&amp;DisplayController);</div>
+<div class="line">  Terminal.<a id="a4" name="a4"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">begin</a>(&amp;DisplayController);</div>
 <div class="line">  <span class="comment">//Terminal.setLogStream(Serial);  // DEBUG ONLY</span></div>
 <div class="line"> </div>
-<div class="line">  <span class="comment">//Terminal.enableCursor(true);</span></div>
+<div class="line">  Terminal.<a id="a5" name="a5"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23.html#aace245bfe6cab7b4339bd691077e1c23">enableCursor</a>(<span class="keyword">true</span>);</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"> </div>
@@ -161,8 +149,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line">    <span class="keywordtype">char</span> buf[size + 1];</div>
 <div class="line">    vsnprintf(buf, size, format, ap);</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; size; ++i) {</div>
-<div class="line">      Terminal.<a id="a2" name="a2"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(buf[i]);</div>
-<div class="line">      <span class="comment">//Serial.write(buf[i]);</span></div>
+<div class="line">      Terminal.<a id="a6" name="a6"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(buf[i]);</div>
 <div class="line">      delay(25);</div>
 <div class="line">    }</div>
 <div class="line">  }</div>
@@ -172,76 +159,6 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> demo1()</div>
 <div class="line">{</div>
-<div class="line">  <span class="comment">//Terminal.loadFont(&amp;fabgl::FONT_10x20);</span></div>
-<div class="line">  Terminal.<a id="a3" name="a3"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a72770033c3a06f499a251909efba87c7.html#a72770033c3a06f499a251909efba87c7">loadFont</a>(&amp;fabgl::FONT_8x8);</div>
-<div class="line">  Terminal.<a id="a4" name="a4"></a><a class="code hl_function" href="classfabgl_1_1_terminal_afad23f091c4bb07a71963f5f7aa1831d.html#afad23f091c4bb07a71963f5f7aa1831d">setForegroundColor</a>(<a id="a5" name="a5"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca8e551a5ca49dca47dd8d5af7a04dd9ea">Color::BrightGreen</a>);</div>
-<div class="line">  Terminal.<a id="a6" name="a6"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a2da678d7453efcfed190b99ac93a53d0.html#a2da678d7453efcfed190b99ac93a53d0">clear</a>();</div>
-<div class="line">  Terminal.<a id="a7" name="a7"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23.html#aace245bfe6cab7b4339bd691077e1c23">enableCursor</a>(<span class="keyword">false</span>);</div>
-<div class="line">  <span class="comment">//*/</span></div>
-<div class="line">  </div>
-<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; Terminal.<a id="a8" name="a8"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c.html#a6e9094a53fd8a44ad7a061abae461e5c">getColumns</a>(); ++i)</div>
-<div class="line">    Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;M&quot;</span>);</div>
-<div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;X\r\n&quot;</span>);</div>
-<div class="line">  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 2; i &lt; Terminal.<a id="a9" name="a9"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">getRows</a>(); ++i)</div>
-<div class="line">    Terminal.printf(<span class="stringliteral">&quot;%d\r\n&quot;</span>, i);</div>
-<div class="line">  Terminal.printf(<span class="stringliteral">&quot;%d&quot;</span>, Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">getRows</a>());</div>
-<div class="line">  Terminal.<a id="a10" name="a10"></a><a class="code hl_function" href="classfabgl_1_1_terminal_af04a513134593e61c4575b266c8bf0ee.html#af04a513134593e61c4575b266c8bf0ee">flush</a>(); delay(500);</div>
-<div class="line">  <span class="comment">//*/</span></div>
-<div class="line"> </div>
-<div class="line">  </div>
-<div class="line">  Canvas cv(&amp;DisplayController);</div>
-<div class="line">  </div>
-<div class="line">  <span class="comment">// linee rosse</span></div>
-<div class="line">  cv.setPenColor(255, 0, 0);</div>
-<div class="line">  cv.drawLine(0, 0, cv.getWidth() - 1, cv.getHeight() - 1);</div>
-<div class="line">  cv.drawLine(0, cv.getHeight() - 1, cv.getWidth() - 1, 0);</div>
-<div class="line">  cv.drawLine(cv.getWidth() / 2, 0, cv.getWidth() / 2, cv.getHeight() - 1);</div>
-<div class="line">  cv.drawLine(0, cv.getHeight() / 2, cv.getWidth() - 1, cv.getHeight() / 2);</div>
-<div class="line">  <span class="comment">//*/</span></div>
-<div class="line">  </div>
-<div class="line">  cv.setBrushColor(<a id="a11" name="a11"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca2ed18d4ecd62410034c7ff19a1384357">Color::BrightRed</a>);</div>
-<div class="line">  cv.fillRectangle(cv.getWidth()/2-80, cv.getHeight()/2-80, cv.getWidth()/2+80, cv.getHeight()/2+80);</div>
-<div class="line">  cv.setBrushColor(<a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca8e551a5ca49dca47dd8d5af7a04dd9ea">Color::BrightGreen</a>);</div>
-<div class="line">  cv.fillRectangle(cv.getWidth()/2-60, cv.getHeight()/2-60, cv.getWidth()/2+60, cv.getHeight()/2+60);</div>
-<div class="line">  cv.setBrushColor(<a id="a12" name="a12"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1caaf9643770f3422478c9b60a3c71cd0aa">Color::BrightBlue</a>);</div>
-<div class="line">  cv.fillRectangle(cv.getWidth()/2-40, cv.getHeight()/2-40, cv.getWidth()/2+40, cv.getHeight()/2+40);</div>
-<div class="line">  cv.setBrushColor(<a id="a13" name="a13"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca19153c6eb83006792aac10c7eddb1df6">Color::BrightYellow</a>);</div>
-<div class="line">  cv.fillRectangle(50, cv.getHeight()/2 - 20, 100, cv.getHeight()/2 + 20);</div>
-<div class="line">  cv.setBrushColor(<a id="a14" name="a14"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">Color::White</a>);</div>
-<div class="line">  cv.fillRectangle(cv.getWidth() - 50, cv.getHeight()/2 - 20, cv.getWidth() - 100, cv.getHeight()/2 + 20);</div>
-<div class="line">  <span class="comment">//*/</span></div>
-<div class="line">    </div>
-<div class="line">  <span class="comment">/*</span></div>
-<div class="line"><span class="comment">  // tre bande orizzontali</span></div>
-<div class="line"><span class="comment">  int w = cv.getWidth();</span></div>
-<div class="line"><span class="comment">  int h = cv.getHeight() / 3;</span></div>
-<div class="line"><span class="comment">  cv.setBrushColor(Color::BrightRed);</span></div>
-<div class="line"><span class="comment">  cv.fillRectangle(0, 0, w, h);</span></div>
-<div class="line"><span class="comment">  cv.setBrushColor(Color::BrightGreen);</span></div>
-<div class="line"><span class="comment">  cv.fillRectangle(0, h, w, h + h);</span></div>
-<div class="line"><span class="comment">  cv.setBrushColor(Color::BrightBlue);</span></div>
-<div class="line"><span class="comment">  cv.fillRectangle(0, h + h, w, h + h + h);</span></div>
-<div class="line"><span class="comment">  //*/</span></div>
-<div class="line">  </div>
-<div class="line">  <span class="comment">/*</span></div>
-<div class="line"><span class="comment">  // tutto rosso</span></div>
-<div class="line"><span class="comment">  int w = cv.getWidth();</span></div>
-<div class="line"><span class="comment">  int h = cv.getHeight();</span></div>
-<div class="line"><span class="comment">  cv.setBrushColor(Color::BrightRed);</span></div>
-<div class="line"><span class="comment">  cv.fillRectangle(0, 0, w, h);</span></div>
-<div class="line"><span class="comment">  //*/</span></div>
-<div class="line">  </div>
-<div class="line">  </div>
-<div class="line">  <span class="comment">//cv.setBrushColor(Color::BrightBlue);</span></div>
-<div class="line">  <span class="comment">//cv.fillRectangle(0, 0, cv.getWidth(), cv.getHeight());</span></div>
-<div class="line"> </div>
-<div class="line">  <span class="keywordflow">while</span> (1) {</div>
-<div class="line">    delay(10);</div>
-<div class="line">    <span class="comment">//while (1) printf(&quot;frame=%d field=%d frameLine=%d interFrameLine=%d pictureLine=%d scPhaseSam=%d\n&quot;, CVBSGenerator::frame(), CVBSGenerator::field(), CVBSGenerator::frameLine(), CVBSGenerator::interFrameLine(), CVBSGenerator::pictureLine(), CVBSGenerator::subCarrierPhase());</span></div>
-<div class="line">  }</div>
-<div class="line">  <span class="comment">//*/</span></div>
-<div class="line">    </div>
-<div class="line"> </div>
 <div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;\e[40;92m&quot;</span>); <span class="comment">// background: black, foreground: green</span></div>
 <div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;\e[2J&quot;</span>);     <span class="comment">// clear screen</span></div>
 <div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;\e[1;1H&quot;</span>);   <span class="comment">// move cursor to 1,1</span></div>
@@ -250,9 +167,9 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;=================================================\r\n\n&quot;</span>);</div>
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;A Display Controller, PS2 Mouse and Keyboard Controller, Graphics Library, Audio Engine, Game Engine and ANSI/VT Terminal for the ESP32\r\n\n&quot;</span>);</div>
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;Current settings\r\n&quot;</span>);</div>
-<div class="line">  slowPrintf(<span class="stringliteral">&quot;Screen Size   : %d x %d\r\n&quot;</span>, DisplayController.getScreenWidth(), DisplayController.getScreenHeight());</div>
-<div class="line">  slowPrintf(<span class="stringliteral">&quot;Viewport Size : %d x %d\r\n&quot;</span>, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());</div>
-<div class="line">  slowPrintf(<span class="stringliteral">&quot;Terminal Size : %d x %d\r\n&quot;</span>, Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c.html#a6e9094a53fd8a44ad7a061abae461e5c">getColumns</a>(), Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">getRows</a>());</div>
+<div class="line">  slowPrintf(<span class="stringliteral">&quot;Screen Size   : %d x %d\r\n&quot;</span>, DisplayController.<a id="a7" name="a7"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a749df909b39fd096bf6e2813f2f5324c.html#a749df909b39fd096bf6e2813f2f5324c">getScreenWidth</a>(), DisplayController.<a id="a8" name="a8"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a0872427e4a351bb3590e8d00096e9cba.html#a0872427e4a351bb3590e8d00096e9cba">getScreenHeight</a>());</div>
+<div class="line">  slowPrintf(<span class="stringliteral">&quot;Viewport Size : %d x %d\r\n&quot;</span>, DisplayController.<a id="a9" name="a9"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525.html#a69dd55b31e9c284aeec6f2b91a8da525">getViewPortWidth</a>(), DisplayController.<a id="a10" name="a10"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535.html#a5308b6853d3778845649f08832e96535">getViewPortHeight</a>());</div>
+<div class="line">  slowPrintf(<span class="stringliteral">&quot;Terminal Size : %d x %d\r\n&quot;</span>, Terminal.<a id="a11" name="a11"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c.html#a6e9094a53fd8a44ad7a061abae461e5c">getColumns</a>(), Terminal.<a id="a12" name="a12"></a><a class="code hl_function" href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">getRows</a>());</div>
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;Free Memory   : %d bytes\r\n\n&quot;</span>, heap_caps_get_free_size(MALLOC_CAP_32BIT));</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -376,8 +293,8 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line"><span class="keywordtype">void</span> demo6()</div>
 <div class="line">{</div>
 <div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">write</a>(<span class="stringliteral">&quot;\e[40;32m&quot;</span>); <span class="comment">// background: black, foreground: green</span></div>
-<div class="line">  Terminal.<a id="a15" name="a15"></a><a class="code hl_function" href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">setColorForAttribute</a>(<a id="a16" name="a16"></a><a class="code hl_function" href="displaycontroller_8h_a9654cce0b924d8c1f9bb05be40d8a14c.html#a9654cce0b924d8c1f9bb05be40d8a14c">CharStyle::Bold</a>, <a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca19153c6eb83006792aac10c7eddb1df6">Color::BrightYellow</a>, <span class="keyword">true</span>);</div>
-<div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">setColorForAttribute</a>(<a id="a17" name="a17"></a><a class="code hl_function" href="displaycontroller_8h_a813752697ff0e80f822a6f0ca57ad254.html#a813752697ff0e80f822a6f0ca57ad254">CharStyle::Italic</a>, <a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca2ed18d4ecd62410034c7ff19a1384357">Color::BrightRed</a>, <span class="keyword">true</span>);</div>
+<div class="line">  Terminal.<a id="a13" name="a13"></a><a class="code hl_function" href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">setColorForAttribute</a>(<a id="a14" name="a14"></a><a class="code hl_function" href="displaycontroller_8h_a9654cce0b924d8c1f9bb05be40d8a14c.html#a9654cce0b924d8c1f9bb05be40d8a14c">CharStyle::Bold</a>, <a id="a15" name="a15"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca19153c6eb83006792aac10c7eddb1df6">Color::BrightYellow</a>, <span class="keyword">true</span>);</div>
+<div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">setColorForAttribute</a>(<a id="a16" name="a16"></a><a class="code hl_function" href="displaycontroller_8h_a813752697ff0e80f822a6f0ca57ad254.html#a813752697ff0e80f822a6f0ca57ad254">CharStyle::Italic</a>, <a id="a17" name="a17"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca2ed18d4ecd62410034c7ff19a1384357">Color::BrightRed</a>, <span class="keyword">true</span>);</div>
 <div class="line">  Terminal.<a class="code hl_function" href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">setColorForAttribute</a>(<a id="a18" name="a18"></a><a class="code hl_function" href="displaycontroller_8h_a3cc8d313aec4f4379f92332b6d0c2615.html#a3cc8d313aec4f4379f92332b6d0c2615">CharStyle::Underline</a>, <a id="a19" name="a19"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca3bec3eb0c8a4aab8e31a3a290493ab85">Color::BrightWhite</a>, <span class="keyword">true</span>);</div>
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;\nColored Attributes with styles:\r\n&quot;</span>);</div>
 <div class="line">  slowPrintf(<span class="stringliteral">&quot;\e[0mNormal\r\n&quot;</span>);</div>
@@ -418,33 +335,32 @@ $(document).ready(function(){initNavTree('_v_g_a_2_simple_terminal_out_2_simple_
 <div class="line">  demo6();</div>
 <div class="line">  delay(4000);</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9_html_a1bb8ac2a73a5d9e6256505e1bf51c6a9"><div class="ttname"><a href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">fabgl::Terminal::getRows</a></div><div class="ttdeci">int getRows()</div><div class="ttdoc">Returns the number of lines.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01215">terminal.h:1215</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a2da678d7453efcfed190b99ac93a53d0_html_a2da678d7453efcfed190b99ac93a53d0"><div class="ttname"><a href="classfabgl_1_1_terminal_a2da678d7453efcfed190b99ac93a53d0.html#a2da678d7453efcfed190b99ac93a53d0">fabgl::Terminal::clear</a></div><div class="ttdeci">void clear(bool moveCursor=true)</div><div class="ttdoc">Clears the screen.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l01001">terminal.cpp:1001</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c_html_a6e9094a53fd8a44ad7a061abae461e5c"><div class="ttname"><a href="classfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c.html#a6e9094a53fd8a44ad7a061abae461e5c">fabgl::Terminal::getColumns</a></div><div class="ttdeci">int getColumns()</div><div class="ttdoc">Returns the number of columns.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01208">terminal.h:1208</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a72770033c3a06f499a251909efba87c7_html_a72770033c3a06f499a251909efba87c7"><div class="ttname"><a href="classfabgl_1_1_terminal_a72770033c3a06f499a251909efba87c7.html#a72770033c3a06f499a251909efba87c7">fabgl::Terminal::loadFont</a></div><div class="ttdeci">void loadFont(FontInfo const *font)</div><div class="ttdoc">Sets the font to use.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00797">terminal.cpp:797</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7_html_a7c66fc8d559f4956d4ccea196299bca7"><div class="ttname"><a href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">fabgl::Terminal::write</a></div><div class="ttdeci">size_t write(const uint8_t *buffer, size_t size)</div><div class="ttdoc">Sends specified number of codes to the display.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l01950">terminal.cpp:1950</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23_html_aace245bfe6cab7b4339bd691077e1c23"><div class="ttname"><a href="classfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23.html#aace245bfe6cab7b4339bd691077e1c23">fabgl::Terminal::enableCursor</a></div><div class="ttdeci">void enableCursor(bool value)</div><div class="ttdoc">Enables or disables cursor.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l01106">terminal.cpp:1106</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43_html_ae14dcf743cee53855ef05cc98b7a9e43"><div class="ttname"><a href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">fabgl::Terminal::setColorForAttribute</a></div><div class="ttdeci">void setColorForAttribute(CharStyle attribute, Color color, bool maintainStyle)</div><div class="ttdoc">Selects a color for the specified attribute.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00968">terminal.cpp:968</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a0872427e4a351bb3590e8d00096e9cba_html_a0872427e4a351bb3590e8d00096e9cba"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a0872427e4a351bb3590e8d00096e9cba.html#a0872427e4a351bb3590e8d00096e9cba">fabgl::BaseDisplayController::getScreenHeight</a></div><div class="ttdeci">int getScreenHeight()</div><div class="ttdoc">Determines the screen height in pixels.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00696">displaycontroller.h:696</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535_html_a5308b6853d3778845649f08832e96535"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535.html#a5308b6853d3778845649f08832e96535">fabgl::BaseDisplayController::getViewPortHeight</a></div><div class="ttdeci">int getViewPortHeight()</div><div class="ttdoc">Determines vertical size of the viewport.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00710">displaycontroller.h:710</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525_html_a69dd55b31e9c284aeec6f2b91a8da525"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525.html#a69dd55b31e9c284aeec6f2b91a8da525">fabgl::BaseDisplayController::getViewPortWidth</a></div><div class="ttdeci">int getViewPortWidth()</div><div class="ttdoc">Determines horizontal size of the viewport.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00703">displaycontroller.h:703</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a749df909b39fd096bf6e2813f2f5324c_html_a749df909b39fd096bf6e2813f2f5324c"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a749df909b39fd096bf6e2813f2f5324c.html#a749df909b39fd096bf6e2813f2f5324c">fabgl::BaseDisplayController::getScreenWidth</a></div><div class="ttdeci">int getScreenWidth()</div><div class="ttdoc">Determines the screen width in pixels.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00689">displaycontroller.h:689</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9_html_a1bb8ac2a73a5d9e6256505e1bf51c6a9"><div class="ttname"><a href="classfabgl_1_1_terminal_a1bb8ac2a73a5d9e6256505e1bf51c6a9.html#a1bb8ac2a73a5d9e6256505e1bf51c6a9">fabgl::Terminal::getRows</a></div><div class="ttdeci">int getRows()</div><div class="ttdoc">Returns the number of lines.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01217">terminal.h:1217</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c_html_a6e9094a53fd8a44ad7a061abae461e5c"><div class="ttname"><a href="classfabgl_1_1_terminal_a6e9094a53fd8a44ad7a061abae461e5c.html#a6e9094a53fd8a44ad7a061abae461e5c">fabgl::Terminal::getColumns</a></div><div class="ttdeci">int getColumns()</div><div class="ttdoc">Returns the number of columns.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01210">terminal.h:1210</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7_html_a7c66fc8d559f4956d4ccea196299bca7"><div class="ttname"><a href="classfabgl_1_1_terminal_a7c66fc8d559f4956d4ccea196299bca7.html#a7c66fc8d559f4956d4ccea196299bca7">fabgl::Terminal::write</a></div><div class="ttdeci">size_t write(const uint8_t *buffer, size_t size)</div><div class="ttdoc">Sends specified number of codes to the display.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l01958">terminal.cpp:1958</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23_html_aace245bfe6cab7b4339bd691077e1c23"><div class="ttname"><a href="classfabgl_1_1_terminal_aace245bfe6cab7b4339bd691077e1c23.html#aace245bfe6cab7b4339bd691077e1c23">fabgl::Terminal::enableCursor</a></div><div class="ttdeci">void enableCursor(bool value)</div><div class="ttdoc">Enables or disables cursor.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l01115">terminal.cpp:1115</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43_html_ae14dcf743cee53855ef05cc98b7a9e43"><div class="ttname"><a href="classfabgl_1_1_terminal_ae14dcf743cee53855ef05cc98b7a9e43.html#ae14dcf743cee53855ef05cc98b7a9e43">fabgl::Terminal::setColorForAttribute</a></div><div class="ttdeci">void setColorForAttribute(CharStyle attribute, Color color, bool maintainStyle)</div><div class="ttdoc">Selects a color for the specified attribute.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00977">terminal.cpp:977</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5_html_aebaecc1fa474fddc48dd5778024b19a5"><div class="ttname"><a href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">fabgl::Terminal::begin</a></div><div class="ttdeci">bool begin(BaseDisplayController *displayController, int maxColumns=-1, int maxRows=-1, Keyboard *keyboard=nullptr)</div><div class="ttdoc">Initializes the terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00323">terminal.cpp:323</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_af04a513134593e61c4575b266c8bf0ee_html_af04a513134593e61c4575b266c8bf0ee"><div class="ttname"><a href="classfabgl_1_1_terminal_af04a513134593e61c4575b266c8bf0ee.html#af04a513134593e61c4575b266c8bf0ee">fabgl::Terminal::flush</a></div><div class="ttdeci">void flush(bool waitVSync)</div><div class="ttdoc">Waits for all codes sent to the display has been processed.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00878">terminal.cpp:878</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_afad23f091c4bb07a71963f5f7aa1831d_html_afad23f091c4bb07a71963f5f7aa1831d"><div class="ttname"><a href="classfabgl_1_1_terminal_afad23f091c4bb07a71963f5f7aa1831d.html#afad23f091c4bb07a71963f5f7aa1831d">fabgl::Terminal::setForegroundColor</a></div><div class="ttdeci">void setForegroundColor(Color color, bool setAsDefault=true)</div><div class="ttdoc">Sets the foreground color.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00931">terminal.cpp:931</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_terminal_html"><div class="ttname"><a href="classfabgl_1_1_terminal.html">fabgl::Terminal</a></div><div class="ttdoc">An ANSI-VT100 compatible display terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l00953">terminal.h:953</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_v_g_a16_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a></div><div class="ttdoc">Represents the VGA 16 colors bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vga16controller_8h_source.html#l00082">vga16controller.h:82</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_a3cc8d313aec4f4379f92332b6d0c2615_html_a3cc8d313aec4f4379f92332b6d0c2615"><div class="ttname"><a href="displaycontroller_8h_a3cc8d313aec4f4379f92332b6d0c2615.html#a3cc8d313aec4f4379f92332b6d0c2615">Underline</a></div><div class="ttdeci">GlyphOptions &amp; Underline(bool value)</div><div class="ttdoc">Helper method to set or reset underlined.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00024">displaycontroller.h:24</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_a813752697ff0e80f822a6f0ca57ad254_html_a813752697ff0e80f822a6f0ca57ad254"><div class="ttname"><a href="displaycontroller_8h_a813752697ff0e80f822a6f0ca57ad254.html#a813752697ff0e80f822a6f0ca57ad254">Italic</a></div><div class="ttdeci">GlyphOptions &amp; Italic(bool value)</div><div class="ttdoc">Helper method to set or reset italic.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00021">displaycontroller.h:21</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_a9654cce0b924d8c1f9bb05be40d8a14c_html_a9654cce0b924d8c1f9bb05be40d8a14c"><div class="ttname"><a href="displaycontroller_8h_a9654cce0b924d8c1f9bb05be40d8a14c.html#a9654cce0b924d8c1f9bb05be40d8a14c">Bold</a></div><div class="ttdeci">GlyphOptions &amp; Bold(bool value)</div><div class="ttdoc">Helper method to set or reset bold.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00018">displaycontroller.h:18</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
+<div class="ttc" id="afabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8_html_a2d4571e9072b78877c36bf32bc9423f8"><div class="ttname"><a href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a></div><div class="ttdeci">#define VGA_640x480_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00246">fabglconf.h:246</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1ca19153c6eb83006792aac10c7eddb1df6"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca19153c6eb83006792aac10c7eddb1df6">fabgl::BrightYellow</a></div><div class="ttdeci">@ BrightYellow</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00214">displaycontroller.h:214</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1ca2ed18d4ecd62410034c7ff19a1384357"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca2ed18d4ecd62410034c7ff19a1384357">fabgl::BrightRed</a></div><div class="ttdeci">@ BrightRed</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00212">displaycontroller.h:212</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1ca3bec3eb0c8a4aab8e31a3a290493ab85"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca3bec3eb0c8a4aab8e31a3a290493ab85">fabgl::BrightWhite</a></div><div class="ttdeci">@ BrightWhite</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00218">displaycontroller.h:218</a></div></div>
-<div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1ca8e551a5ca49dca47dd8d5af7a04dd9ea"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1ca8e551a5ca49dca47dd8d5af7a04dd9ea">fabgl::BrightGreen</a></div><div class="ttdeci">@ BrightGreen</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00213">displaycontroller.h:213</a></div></div>
-<div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1caaf9643770f3422478c9b60a3c71cd0aa"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1caaf9643770f3422478c9b60a3c71cd0aa">fabgl::BrightBlue</a></div><div class="ttdeci">@ BrightBlue</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00215">displaycontroller.h:215</a></div></div>
-<div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">fabgl::White</a></div><div class="ttdeci">@ White</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00210">displaycontroller.h:210</a></div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

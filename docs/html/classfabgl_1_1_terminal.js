@@ -8,7 +8,7 @@ var classfabgl_1_1_terminal =
     [ "clear", "classfabgl_1_1_terminal_a2da678d7453efcfed190b99ac93a53d0.html#a2da678d7453efcfed190b99ac93a53d0", null ],
     [ "connectLocally", "classfabgl_1_1_terminal_a068123b964647130439aa949370181dc.html#a068123b964647130439aa949370181dc", null ],
     [ "connectSerialPort", "classfabgl_1_1_terminal_aa1dda18e2c27808389d9e514d185a49e.html#aa1dda18e2c27808389d9e514d185a49e", null ],
-    [ "connectSerialPort", "classfabgl_1_1_terminal_a90a10a9154b6a336b169b7c5557d8167.html#a90a10a9154b6a336b169b7c5557d8167", null ],
+    [ "connectSerialPort", "classfabgl_1_1_terminal_a129ac59532b808defcec3545a147ac8e.html#a129ac59532b808defcec3545a147ac8e", null ],
     [ "CTSStatus", "classfabgl_1_1_terminal_ad1fd20c20148243054588e87df747ab3.html#ad1fd20c20148243054588e87df747ab3", null ],
     [ "deactivate", "classfabgl_1_1_terminal_a8308b4bb6079733f4b77ced9d46da7a9.html#a8308b4bb6079733f4b77ced9d46da7a9", null ],
     [ "disableSerialPortRX", "classfabgl_1_1_terminal_a4e2c950db07da337819f6e47e91c8d9a.html#a4e2c950db07da337819f6e47e91c8d9a", null ],

@@ -1,6 +1,7 @@
 var fabutils_8h =
 [
     [ "CoreUsage", "structfabgl_1_1_core_usage.html", null ],
+    [ "CurrentVideoMode", "structfabgl_1_1_current_video_mode.html", null ],
     [ "DirItem", "structfabgl_1_1_dir_item.html", "structfabgl_1_1_dir_item" ],
     [ "FileBrowser", "classfabgl_1_1_file_browser.html", "classfabgl_1_1_file_browser" ],
     [ "MouseButtons", "structfabgl_1_1_mouse_buttons.html", "structfabgl_1_1_mouse_buttons" ],
@@ -19,6 +20,13 @@ var fabutils_8h =
       [ "None", "fabutils_8h.html#gga6c3316022eddc73875d854fcf43e61aaa6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "SPIFFS", "fabutils_8h.html#gga6c3316022eddc73875d854fcf43e61aaa146673cebceb52efdad49e33019dd764", null ],
       [ "SDCard", "fabutils_8h.html#gga6c3316022eddc73875d854fcf43e61aaa826ee4b27642806340fe4905532841e8", null ]
+    ] ],
+    [ "VideoMode", "fabutils_8h.html#ga1e46218ee302fcc8c77e4ea0968ea149", [
+      [ "None", "fabutils_8h.html#gga1e46218ee302fcc8c77e4ea0968ea149a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "VGA", "fabutils_8h.html#gga1e46218ee302fcc8c77e4ea0968ea149adb4371197d1f58c7d4edb7dcd0565ad1", null ],
+      [ "CVBS", "fabutils_8h.html#gga1e46218ee302fcc8c77e4ea0968ea149a9de917eb8d6dcec8b9e987a7dfc09379", null ],
+      [ "I2C", "fabutils_8h.html#gga1e46218ee302fcc8c77e4ea0968ea149afb87bf1fc88386ca21395991f90fff95", null ],
+      [ "SPI", "fabutils_8h.html#gga1e46218ee302fcc8c77e4ea0968ea149a33dc5312b091968f5a120c2484d40df8", null ]
     ] ],
     [ "VirtualKey", "fabutils_8h.html#gad0e6e31d5953384be4ea987eb3923e02", [
       [ "VK_NONE", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06", null ],
@@ -257,9 +265,14 @@ var fabutils_8h =
       [ "VK_SQUARE", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aedc115d80abdb63b858de48fa34d19b2", null ],
       [ "VK_CURRENCY", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a84a801eaf0d418321b6f26085ac145c1", null ],
       [ "VK_MU", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a31355f4fa8d2c9e8974c8490725c6a71", null ],
+      [ "VK_oslash", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02acfdd05dfd83f8c1aa5fc5ef016d7b56a", null ],
+      [ "VK_aring", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02ac041bd0a56de9d7eed36800a12344e67", null ],
+      [ "VK_AELIG", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a36882c061207065ecbac454259e71351", null ],
+      [ "VK_OSLASH", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a9d5d611b0279ba7cbabf02ac796b8774", null ],
+      [ "VK_ARING", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a3c03cd7c117bc019a57cd5508ebe187b", null ],
+      [ "VK_YEN", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02a3c975142749281dc0fd02b7a40dfe6c0", null ],
       [ "VK_ASCII", "fabutils_8h.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6", null ]
     ] ],
-    [ "UARTConf", "fabutils_8h.html#a8658ffb2de6d8bd0d22fc9ca1bcf3a91", null ],
     [ "height", "fabutils_8h_a777dd66f9609a587ee98ad50de301662.html#a777dd66f9609a587ee98ad50de301662", null ],
     [ "width", "fabutils_8h_ae0ffb42440f0305b6d22a1c6106b6e6f.html#ae0ffb42440f0305b6d22a1c6106b6e6f", null ],
     [ "X", "fabutils_8h_aa6aba27bc1a89db9e350b50bbf881f57.html#aa6aba27bc1a89db9e350b50bbf881f57", null ],

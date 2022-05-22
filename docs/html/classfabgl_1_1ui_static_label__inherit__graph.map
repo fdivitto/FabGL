@@ -1,0 +1,7 @@
+<map id="uiStaticLabel" name="uiStaticLabel">
+<area shape="rect" id="node1" title="A staticlabel is a light version of uiLabel (text must be static). uiStaticLabel has lower memory foo..." alt="" coords="5,304,103,331"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1ui_control.html" title="This is the base class for all controls. A control can have focus and is not activable." alt="" coords="17,229,91,256"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1ui_window.html" title="Base class for all visible UI elements (Frames and Controls)" alt="" coords="15,155,93,181"/>
+<area shape="rect" id="node4" href="$classfabgl_1_1ui_evt_handler.html" title="Base class of all UI elements that can receive events." alt="" coords="5,80,103,107"/>
+<area shape="rect" id="node5" href="$classfabgl_1_1ui_object.html" title="Base class of all UI elements like windows and controls." alt="" coords="19,5,89,32"/>
+</map>

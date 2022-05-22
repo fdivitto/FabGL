@@ -69,7 +69,7 @@ fabgl::Terminal                     Terminal;
 //*/
 #define RESET_PIN        39
 #define RESET_PIN_ACTIVE  0   // 0 = reset when low, 1 = reset when high
-#define USERESETPIN       0   // 1 = reset enabled
+#define USERESETPIN       1   // 1 = reset enabled
 
 
 

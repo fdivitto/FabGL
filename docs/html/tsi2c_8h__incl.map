@@ -1,15 +1,16 @@
 <map id="tsi2c.h" name="tsi2c.h">
-<area shape="rect" id="node1" title="This file contains fabgl::I2C definition." alt="" coords="269,5,331,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="15,80,81,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="105,80,175,107"/>
+<area shape="rect" id="node1" title="This file contains fabgl::I2C definition." alt="" coords="304,5,365,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="50,80,115,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="140,80,209,107"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,155,149,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="399,80,515,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="434,80,550,107"/>
 <area shape="rect" id="node6" title=" " alt="" coords="173,155,296,181"/>
-<area shape="rect" id="node7" title=" " alt="" coords="539,80,629,107"/>
-<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="300,80,375,107"/>
-<area shape="rect" id="node12" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="687,80,774,107"/>
-<area shape="rect" id="node9" title=" " alt="" coords="320,155,411,181"/>
-<area shape="rect" id="node10" title=" " alt="" coords="435,155,539,181"/>
-<area shape="rect" id="node11" title=" " alt="" coords="563,155,671,181"/>
-<area shape="rect" id="node13" title=" " alt="" coords="695,155,777,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="574,80,663,107"/>
+<area shape="rect" id="node8" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="335,80,409,107"/>
+<area shape="rect" id="node13" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="770,80,857,107"/>
+<area shape="rect" id="node9" title=" " alt="" coords="740,155,831,181"/>
+<area shape="rect" id="node10" title=" " alt="" coords="320,155,424,181"/>
+<area shape="rect" id="node11" title=" " alt="" coords="449,155,557,181"/>
+<area shape="rect" id="node12" title=" " alt="" coords="581,155,715,181"/>
+<area shape="rect" id="node14" title=" " alt="" coords="855,155,937,181"/>
 </map>

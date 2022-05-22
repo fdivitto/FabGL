@@ -21,6 +21,7 @@ var examples =
     [ "VGA/SimpleTextTerminalOut/SimpleTextTerminalOut.ino", "_v_g_a_2_simple_text_terminal_out_2_simple_text_terminal_out_8ino-example.html", null ],
     [ "VGA/Songs/Songs.ino", "_v_g_a_2_songs_2_songs_8ino-example.html", null ],
     [ "VGA/SpaceInvaders/SpaceInvaders.ino", "_v_g_a_2_space_invaders_2_space_invaders_8ino-example.html", null ],
+    [ "VGA/SoundChipSimulator/SoundChipSimulator.ino", "_v_g_a_2_sound_chip_simulator_2_sound_chip_simulator_8ino-example.html", null ],
     [ "VGA/Sprites/Sprites.ino", "_v_g_a_2_sprites_2_sprites_8ino-example.html", null ],
     [ "VGA/VIC20/VIC20.ino", "_v_g_a_2_v_i_c20_2_v_i_c20_8ino-example.html", null ],
     [ "VGA/InputBox/InputBox.ino", "_v_g_a_2_input_box_2_input_box_8ino-example.html", null ],

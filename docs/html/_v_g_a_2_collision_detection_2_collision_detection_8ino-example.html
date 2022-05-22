@@ -198,7 +198,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <div class="line">      <span class="keywordflow">if</span> (sprite-&gt;isAlive) {</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// this object is alive, move to the next position</span></div>
-<div class="line">        sprite-&gt;moveBy(sprite-&gt;velX, sprite-&gt;velY, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());</div>
+<div class="line">        sprite-&gt;moveBy(sprite-&gt;velX, sprite-&gt;velY, DisplayController.<a id="a2" name="a2"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525.html#a69dd55b31e9c284aeec6f2b91a8da525">getViewPortWidth</a>(), DisplayController.<a id="a3" name="a3"></a><a class="code hl_function" href="classfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535.html#a5308b6853d3778845649f08832e96535">getViewPortHeight</a>());</div>
 <div class="line"> </div>
 <div class="line">        <span class="comment">// update the collision detector and check for a possible collision</span></div>
 <div class="line">        updateSpriteAndDetectCollisions(sprite);</div>
@@ -215,9 +215,9 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <div class="line"> </div>
 <div class="line">    <span class="comment">// move Jupiter every 20 updates</span></div>
 <div class="line">    <span class="keywordflow">if</span> ((updateCount % 20) == 0)</div>
-<div class="line">      objects_[0].moveBy(1, 0, DisplayController.getViewPortWidth(), DisplayController.getViewPortHeight());</div>
+<div class="line">      objects_[0].moveBy(1, 0, DisplayController.<a class="code hl_function" href="classfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525.html#a69dd55b31e9c284aeec6f2b91a8da525">getViewPortWidth</a>(), DisplayController.<a class="code hl_function" href="classfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535.html#a5308b6853d3778845649f08832e96535">getViewPortHeight</a>());</div>
 <div class="line"> </div>
-<div class="line">    DisplayController.<a id="a2" name="a2"></a><a class="code hl_function" href="classfabgl_1_1_bitmapped_display_controller_aeb689cfc2364a4d66e3ac3368146c70d.html#aeb689cfc2364a4d66e3ac3368146c70d">refreshSprites</a>();</div>
+<div class="line">    DisplayController.<a id="a4" name="a4"></a><a class="code hl_function" href="classfabgl_1_1_bitmapped_display_controller_aeb689cfc2364a4d66e3ac3368146c70d.html#aeb689cfc2364a4d66e3ac3368146c70d">refreshSprites</a>();</div>
 <div class="line">  }</div>
 <div class="line"> </div>
 <div class="line">  <span class="keywordtype">void</span> collisionDetected(Sprite * spriteA, Sprite * spriteB, Point collisionPoint)</div>
@@ -243,9 +243,9 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <div class="line">  <span class="keywordtype">void</span> paintSpace()</div>
 <div class="line">  {</div>
 <div class="line">    Canvas cv(&amp;DisplayController);</div>
-<div class="line">    cv.setBrushColor(<a id="a3" name="a3"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cac1e9bce8242f443c54c7405223d616cd">Color::Black</a>);</div>
+<div class="line">    cv.setBrushColor(<a id="a5" name="a5"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cac1e9bce8242f443c54c7405223d616cd">Color::Black</a>);</div>
 <div class="line">    cv.clear();</div>
-<div class="line">    cv.setPenColor(<a id="a4" name="a4"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">Color::White</a>);</div>
+<div class="line">    cv.setPenColor(<a id="a6" name="a6"></a><a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">Color::White</a>);</div>
 <div class="line">    cv.setBrushColor(<a class="code hl_enumvalue" href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">Color::White</a>);</div>
 <div class="line">    <span class="comment">// far stars</span></div>
 <div class="line">    cv.setPenColor(64, 64, 64);</div>
@@ -269,7 +269,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <div class="line">  Serial.begin(115200);</div>
 <div class="line"> </div>
 <div class="line">  DisplayController.begin();</div>
-<div class="line">  DisplayController.<a id="a5" name="a5"></a>setResolution(<a id="a6" name="a6"></a><a class="code hl_define" href="fabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb.html#a053cde6629b66d4ba3e31e92af8861bb">VGA_320x200_75Hz</a>);</div>
+<div class="line">  DisplayController.<a id="a7" name="a7"></a>setResolution(<a id="a8" name="a8"></a><a class="code hl_define" href="fabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb.html#a053cde6629b66d4ba3e31e92af8861bb">VGA_320x200_75Hz</a>);</div>
 <div class="line">  <span class="comment">//DisplayController.moveScreen(20, 0);</span></div>
 <div class="line">  DisplayController.moveScreen(-8, 0);</div>
 <div class="line">}</div>
@@ -281,11 +281,13 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <div class="line">  scene.start();</div>
 <div class="line">  vTaskSuspend(<span class="keyword">nullptr</span>);</div>
 <div class="line">}</div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535_html_a5308b6853d3778845649f08832e96535"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a5308b6853d3778845649f08832e96535.html#a5308b6853d3778845649f08832e96535">fabgl::BaseDisplayController::getViewPortHeight</a></div><div class="ttdeci">int getViewPortHeight()</div><div class="ttdoc">Determines vertical size of the viewport.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00710">displaycontroller.h:710</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525_html_a69dd55b31e9c284aeec6f2b91a8da525"><div class="ttname"><a href="classfabgl_1_1_base_display_controller_a69dd55b31e9c284aeec6f2b91a8da525.html#a69dd55b31e9c284aeec6f2b91a8da525">fabgl::BaseDisplayController::getViewPortWidth</a></div><div class="ttdeci">int getViewPortWidth()</div><div class="ttdoc">Determines horizontal size of the viewport.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00703">displaycontroller.h:703</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a75ba732cc6ae90f53757b588f6c75d7e_html_a75ba732cc6ae90f53757b588f6c75d7e"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a75ba732cc6ae90f53757b588f6c75d7e.html#a75ba732cc6ae90f53757b588f6c75d7e">fabgl::BitmappedDisplayController::setSprites</a></div><div class="ttdeci">void setSprites(T *sprites, int count)</div><div class="ttdoc">Sets the list of active sprites.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00846">displaycontroller.h:846</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_aeb689cfc2364a4d66e3ac3368146c70d_html_aeb689cfc2364a4d66e3ac3368146c70d"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_aeb689cfc2364a4d66e3ac3368146c70d.html#aeb689cfc2364a4d66e3ac3368146c70d">fabgl::BitmappedDisplayController::refreshSprites</a></div><div class="ttdeci">void refreshSprites()</div><div class="ttdoc">Forces the sprites to be updated.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8cpp_source.html#l00562">displaycontroller.cpp:562</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_v_g_a_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></div><div class="ttdoc">Represents the VGA bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgacontroller_8h_source.html#l00089">vgacontroller.h:89</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
-<div class="ttc" id="afabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb_html_a053cde6629b66d4ba3e31e92af8861bb"><div class="ttname"><a href="fabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb.html#a053cde6629b66d4ba3e31e92af8861bb">VGA_320x200_75Hz</a></div><div class="ttdeci">#define VGA_320x200_75Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00177">fabglconf.h:177</a></div></div>
+<div class="ttc" id="afabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb_html_a053cde6629b66d4ba3e31e92af8861bb"><div class="ttname"><a href="fabglconf_8h_a053cde6629b66d4ba3e31e92af8861bb.html#a053cde6629b66d4ba3e31e92af8861bb">VGA_320x200_75Hz</a></div><div class="ttdeci">#define VGA_320x200_75Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00183">fabglconf.h:183</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">fabgl::White</a></div><div class="ttdeci">@ White</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00210">displaycontroller.h:210</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cac1e9bce8242f443c54c7405223d616cd"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cac1e9bce8242f443c54c7405223d616cd">fabgl::Black</a></div><div class="ttdeci">@ Black</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00203">displaycontroller.h:203</a></div></div>
 </div><!-- fragment --> </div><!-- contents -->
@@ -293,7 +295,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_collision_detection_2_collisi
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

@@ -1,17 +1,18 @@
 <map id="scene.h" name="scene.h">
-<area shape="rect" id="node1" title="This file contains fabgl::Scene definition." alt="" coords="438,5,506,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="55,304,199,331"/>
-<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="628,229,714,256"/>
-<area shape="rect" id="node5" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition." alt="" coords="409,80,536,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="745,304,826,331"/>
-<area shape="rect" id="node6" title=" " alt="" coords="538,229,604,256"/>
-<area shape="rect" id="node7" title=" " alt="" coords="23,229,92,256"/>
-<area shape="rect" id="node8" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="342,155,469,181"/>
-<area shape="rect" id="node9" title=" " alt="" coords="117,229,233,256"/>
-<area shape="rect" id="node10" title=" " alt="" coords="258,229,364,256"/>
-<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="439,229,514,256"/>
-<area shape="rect" id="node12" title=" " alt="" coords="223,304,346,331"/>
-<area shape="rect" id="node13" title=" " alt="" coords="370,304,460,331"/>
-<area shape="rect" id="node14" title=" " alt="" coords="484,304,588,331"/>
-<area shape="rect" id="node15" title=" " alt="" coords="613,304,721,331"/>
+<area shape="rect" id="node1" title="This file contains fabgl::Scene definition." alt="" coords="449,5,517,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,304,149,331"/>
+<area shape="rect" id="node3" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="638,229,725,256"/>
+<area shape="rect" id="node5" href="$collisiondetector_8h.html" title="This file contains fabgl::CollisionDetector class definition." alt="" coords="419,80,546,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="854,304,935,331"/>
+<area shape="rect" id="node6" title=" " alt="" coords="549,229,614,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="33,229,103,256"/>
+<area shape="rect" id="node8" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="353,155,479,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="127,229,243,256"/>
+<area shape="rect" id="node10" title=" " alt="" coords="268,229,375,256"/>
+<area shape="rect" id="node11" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="449,229,524,256"/>
+<area shape="rect" id="node12" title=" " alt="" coords="173,304,296,331"/>
+<area shape="rect" id="node13" title=" " alt="" coords="320,304,411,331"/>
+<area shape="rect" id="node14" title=" " alt="" coords="435,304,539,331"/>
+<area shape="rect" id="node15" title=" " alt="" coords="563,304,671,331"/>
+<area shape="rect" id="node16" title=" " alt="" coords="695,304,830,331"/>
 </map>

@@ -11,6 +11,7 @@ var hierarchy =
     [ "Canvas", "classfabgl_1_1_canvas.html", null ],
     [ "CollisionDetector", "classfabgl_1_1_collision_detector.html", null ],
     [ "CoreUsage", "structfabgl_1_1_core_usage.html", null ],
+    [ "CurrentVideoMode", "structfabgl_1_1_current_video_mode.html", null ],
     [ "Cursor", "structfabgl_1_1_cursor.html", null ],
     [ "DateTime", "structfabgl_1_1_date_time.html", null ],
     [ "DirItem", "structfabgl_1_1_dir_item.html", null ],
@@ -90,6 +91,7 @@ var hierarchy =
               [ "uiPaintBox", "classfabgl_1_1ui_paint_box.html", null ]
             ] ],
             [ "uiSlider", "classfabgl_1_1ui_slider.html", null ],
+            [ "uiStaticLabel", "classfabgl_1_1ui_static_label.html", null ],
             [ "uiTextEdit", "classfabgl_1_1ui_text_edit.html", null ]
           ] ],
           [ "uiFrame", "classfabgl_1_1ui_frame.html", null ]
@@ -103,6 +105,7 @@ var hierarchy =
     [ "uiProgressBarStyle", "structfabgl_1_1ui_progress_bar_style.html", null ],
     [ "uiScrollableControlStyle", "structfabgl_1_1ui_scrollable_control_style.html", null ],
     [ "uiSliderStyle", "structfabgl_1_1ui_slider_style.html", null ],
+    [ "uiStaticLabelStyle", "structfabgl_1_1ui_static_label_style.html", null ],
     [ "uiTextEditProps", "structfabgl_1_1ui_text_edit_props.html", null ],
     [ "uiTextEditStyle", "structfabgl_1_1ui_text_edit_style.html", null ],
     [ "uiWindowProps", "structfabgl_1_1ui_window_props.html", null ],

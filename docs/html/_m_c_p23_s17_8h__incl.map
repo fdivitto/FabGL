@@ -1,10 +1,11 @@
 <map id="MCP23S17.h" name="MCP23S17.h">
-<area shape="rect" id="node1" title="This file contains the MCP23S17 driver class." alt="" coords="251,5,351,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="171,80,303,107"/>
-<area shape="rect" id="node3" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="328,80,403,107"/>
+<area shape="rect" id="node1" title="This file contains the MCP23S17 driver class." alt="" coords="311,5,411,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="231,80,363,107"/>
+<area shape="rect" id="node3" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="388,80,463,107"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,155,149,181"/>
 <area shape="rect" id="node5" title=" " alt="" coords="173,155,296,181"/>
 <area shape="rect" id="node6" title=" " alt="" coords="320,155,411,181"/>
 <area shape="rect" id="node7" title=" " alt="" coords="435,155,539,181"/>
 <area shape="rect" id="node8" title=" " alt="" coords="563,155,671,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="695,155,830,181"/>
 </map>

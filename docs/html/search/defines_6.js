@@ -31,5 +31,6 @@ var searchData=
   ['vga_5f720x348_5f50hzd_28',['VGA_720x348_50HzD',['../fabglconf_8h_a412cf149c885e4929aff0f246a98ad8a.html#a412cf149c885e4929aff0f246a98ad8a',1,'fabglconf.h']]],
   ['vga_5f720x348_5f59hzd_29',['VGA_720x348_59HzD',['../fabglconf_8h_ae025bb189d82b69b1343ad4d965eb87a.html#ae025bb189d82b69b1343ad4d965eb87a',1,'fabglconf.h']]],
   ['vga_5f720x348_5f73hz_30',['VGA_720x348_73Hz',['../fabglconf_8h_a30629859b390a433f51a0672ae0ca41b.html#a30629859b390a433f51a0672ae0ca41b',1,'fabglconf.h']]],
-  ['vga_5f720x400_5f70hz_31',['VGA_720x400_70Hz',['../fabglconf_8h_acab226c21682068088776984adf72be0.html#acab226c21682068088776984adf72be0',1,'fabglconf.h']]]
+  ['vga_5f720x350_5f70hz_31',['VGA_720x350_70Hz',['../fabglconf_8h_a7df18b779d9318d1327f936d12393d18.html#a7df18b779d9318d1327f936d12393d18',1,'fabglconf.h']]],
+  ['vga_5f720x400_5f70hz_32',['VGA_720x400_70Hz',['../fabglconf_8h_acab226c21682068088776984adf72be0.html#acab226c21682068088776984adf72be0',1,'fabglconf.h']]]
 ];

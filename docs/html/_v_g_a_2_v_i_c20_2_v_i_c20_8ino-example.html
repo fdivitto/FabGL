@@ -264,7 +264,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">enum</span> { STYLE_NONE, STYLE_LABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_BUTTONHELP, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};</div>
+<div class="line"><span class="keyword">enum</span> { STYLE_NONE, STYLE_LABEL, STYLE_STATICLABEL, STYLE_LABELGROUP, STYLE_BUTTON, STYLE_BUTTONHELP, STYLE_COMBOBOX, STYLE_CHECKBOX, STYLE_FILEBROWSER};</div>
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#define BACKGROUND_COLOR RGB888(0, 0, 0)</span></div>
@@ -278,10 +278,15 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line">        ((uiLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().backgroundColor                    = BACKGROUND_COLOR;</div>
 <div class="line">        ((uiLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textColor                          = RGB888(255, 255, 255);</div>
 <div class="line">        <span class="keywordflow">break</span>;</div>
+<div class="line">      <span class="keywordflow">case</span> STYLE_STATICLABEL:</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textFont                     = &amp;fabgl::FONT_std_12;</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().backgroundColor              = BACKGROUND_COLOR;</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textColor                    = RGB888(255, 255, 255);</div>
+<div class="line">        <span class="keywordflow">break</span>;</div>
 <div class="line">      <span class="keywordflow">case</span> STYLE_LABELGROUP:</div>
-<div class="line">        ((uiLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textFont                           = &amp;fabgl::FONT_std_12;</div>
-<div class="line">        ((uiLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().backgroundColor                    = BACKGROUND_COLOR;</div>
-<div class="line">        ((uiLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textColor                          = RGB888(255, 128, 0);</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textFont                     = &amp;fabgl::FONT_std_12;</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().backgroundColor              = BACKGROUND_COLOR;</div>
+<div class="line">        ((uiStaticLabel*)<span class="keywordtype">object</span>)-&gt;labelStyle().textColor                    = RGB888(255, 128, 0);</div>
 <div class="line">        <span class="keywordflow">break</span>;</div>
 <div class="line">      <span class="keywordflow">case</span> STYLE_BUTTON:</div>
 <div class="line">        ((uiButton*)<span class="keywordtype">object</span>)-&gt;windowStyle().borderColor                      = RGB888(255, 255, 255);</div>
@@ -415,7 +420,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line">      cv-&gt;selectFont(&amp;fabgl::FONT_std_12);</div>
 <div class="line">      cv-&gt;setPenColor(RGB888(255, 128, 0));</div>
 <div class="line">      cv-&gt;drawText(160, 358, <span class="stringliteral">&quot;www.fabgl.com&quot;</span>);</div>
-<div class="line">      cv-&gt;drawText(130, 371, <span class="stringliteral">&quot;2019/21 by Fabrizio Di Vittorio&quot;</span>);</div>
+<div class="line">      cv-&gt;drawText(130, 371, <span class="stringliteral">&quot;2019/22 by Fabrizio Di Vittorio&quot;</span>);</div>
 <div class="line">    };</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// programs list</span></div>
@@ -514,7 +519,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line"> </div>
 <div class="line">    <span class="comment">// select keyboard layout</span></div>
 <div class="line">    <span class="keywordtype">int</span> y = 145;</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;Keyboard Layout:&quot;</span>, Point(150, y), Size(0, 0), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;Keyboard Layout:&quot;</span>, Point(150, y), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
 <div class="line">    kbdComboBox = <span class="keyword">new</span> uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 20), 70, <span class="keyword">true</span>, STYLE_COMBOBOX);</div>
 <div class="line">    kbdComboBox-&gt;items().append(SupportedLayouts::names(), SupportedLayouts::count());</div>
 <div class="line">    kbdComboBox-&gt;onChange = [&amp;]() {</div>
@@ -525,7 +530,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line"> </div>
 <div class="line">    <span class="comment">// RAM expansion options</span></div>
 <div class="line">    y += 50;</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;RAM Expansion:&quot;</span>, Point(150, y), Size(0, 0), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;RAM Expansion:&quot;</span>, Point(150, y), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
 <div class="line">    RAMExpComboBox = <span class="keyword">new</span> uiComboBox(rootWindow(), Point(158, y + 20), Size(75, 19), 130, <span class="keyword">true</span>, STYLE_COMBOBOX);</div>
 <div class="line">    <span class="keywordtype">char</span> <span class="keyword">const</span> * RAMOPTS[] = { <span class="stringliteral">&quot;Unexpanded&quot;</span>, <span class="stringliteral">&quot;3K&quot;</span>, <span class="stringliteral">&quot;8K&quot;</span>, <span class="stringliteral">&quot;16K&quot;</span>, <span class="stringliteral">&quot;24K&quot;</span>, <span class="stringliteral">&quot;27K (24K+3K)&quot;</span>, <span class="stringliteral">&quot;32K&quot;</span>, <span class="stringliteral">&quot;35K (32K+3K)&quot;</span> };</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 8; ++i)</div>
@@ -537,12 +542,12 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line"> </div>
 <div class="line">    <span class="comment">// joystick emulation options</span></div>
 <div class="line">    y += 50;</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;Joystick:&quot;</span>, Point(150, y), Size(0, 0), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;None&quot;</span>, Point(180, y + 21), Size(0, 0), <span class="keyword">true</span>, STYLE_LABEL);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;Joystick:&quot;</span>, Point(150, y), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;None&quot;</span>, Point(180, y + 21), <span class="keyword">true</span>, STYLE_STATICLABEL);</div>
 <div class="line">    <span class="keyword">auto</span> radioJNone = <span class="keyword">new</span> uiCheckBox(rootWindow(), Point(158, y + 20), Size(16, 16), uiCheckBoxKind::RadioButton, <span class="keyword">true</span>, STYLE_CHECKBOX);</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;Cursor Keys&quot;</span>, Point(180, y + 41), Size(0, 0), <span class="keyword">true</span>, STYLE_LABEL);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;Cursor Keys&quot;</span>, Point(180, y + 41), <span class="keyword">true</span>, STYLE_STATICLABEL);</div>
 <div class="line">    <span class="keyword">auto</span> radioJCurs = <span class="keyword">new</span> uiCheckBox(rootWindow(), Point(158, y + 40), Size(16, 16), uiCheckBoxKind::RadioButton, <span class="keyword">true</span>, STYLE_CHECKBOX);</div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;Mouse&quot;</span>, Point(180, y + 61), Size(0, 0), <span class="keyword">true</span>, STYLE_LABEL);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;Mouse&quot;</span>, Point(180, y + 61), <span class="keyword">true</span>, STYLE_STATICLABEL);</div>
 <div class="line">    <span class="keyword">auto</span> radioJMous = <span class="keyword">new</span> uiCheckBox(rootWindow(), Point(158, y + 60), Size(16, 16), uiCheckBoxKind::RadioButton, <span class="keyword">true</span>, STYLE_CHECKBOX);</div>
 <div class="line">    radioJNone-&gt;setGroupIndex(1);</div>
 <div class="line">    radioJCurs-&gt;setGroupIndex(1);</div>
@@ -559,7 +564,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="line">    updateFreeSpaceLabel();</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// &quot;Download From&quot; label</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(rootWindow(), <span class="stringliteral">&quot;Download From:&quot;</span>, Point(5, 326), Size(0, 0), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(rootWindow(), <span class="stringliteral">&quot;Download From:&quot;</span>, Point(5, 326), <span class="keyword">true</span>, STYLE_LABELGROUP);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Download List button (download programs listed and linked in LIST_URL)</span></div>
 <div class="line">    <span class="keyword">auto</span> downloadProgsBtn = <span class="keyword">new</span> uiButton(rootWindow(), <span class="stringliteral">&quot;List&quot;</span>, Point(13, 345), Size(27, 20), uiButtonKind::Button, <span class="keyword">true</span>, STYLE_BUTTON);</div>
@@ -996,7 +1001,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="ttc" id="aclassfabgl_1_1_v_g_a_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></div><div class="ttdoc">Represents the VGA bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgacontroller_8h_source.html#l00089">vgacontroller.h:89</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21_html_a96db82e580e46e24e2b39dd6c5bf7c21"><div class="ttname"><a href="displaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21.html#a96db82e580e46e24e2b39dd6c5bf7c21">data</a></div><div class="ttdeci">uint8_t const  * data</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00004">displaycontroller.h:4</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
-<div class="ttc" id="afabglconf_8h_a79c16e345febd0d26723e122a4b939b4_html_a79c16e345febd0d26723e122a4b939b4"><div class="ttname"><a href="fabglconf_8h_a79c16e345febd0d26723e122a4b939b4.html#a79c16e345febd0d26723e122a4b939b4">VGA_256x384_60Hz</a></div><div class="ttdeci">#define VGA_256x384_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00169">fabglconf.h:169</a></div></div>
+<div class="ttc" id="afabglconf_8h_a79c16e345febd0d26723e122a4b939b4_html_a79c16e345febd0d26723e122a4b939b4"><div class="ttname"><a href="fabglconf_8h_a79c16e345febd0d26723e122a4b939b4.html#a79c16e345febd0d26723e122a4b939b4">VGA_256x384_60Hz</a></div><div class="ttdeci">#define VGA_256x384_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00175">fabglconf.h:175</a></div></div>
 <div class="ttc" id="afabutils_8h_html"><div class="ttname"><a href="fabutils_8h.html">fabutils.h</a></div><div class="ttdoc">This file contains some utility classes and functions.</div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cab5059a620e2c7dc57556b1e275c2f9bc"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab5059a620e2c7dc57556b1e275c2f9bc">fabgl::Magenta</a></div><div class="ttdeci">@ Magenta</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00208">displaycontroller.h:208</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cab548046646b36c12aa6ba841de500094">fabgl::White</a></div><div class="ttdeci">@ White</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00210">displaycontroller.h:210</a></div></div>
@@ -1004,18 +1009,18 @@ $(document).ready(function(){initNavTree('_v_g_a_2_v_i_c20_2_v_i_c20_8ino-exampl
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cad0784a3f969fe736e8b271a5a161d106"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cad0784a3f969fe736e8b271a5a161d106">fabgl::Green</a></div><div class="ttdeci">@ Green</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00205">displaycontroller.h:205</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1cad3163c1fcda01965b692ec2c3122b743"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1cad3163c1fcda01965b692ec2c3122b743">fabgl::Red</a></div><div class="ttdeci">@ Red</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00204">displaycontroller.h:204</a></div></div>
 <div class="ttc" id="agroup___enumerations_gab87bacfdad76e61b9412d7124be44c1c_html_ggab87bacfdad76e61b9412d7124be44c1caf5e09dd1da4088464f264b7a3118bff8"><div class="ttname"><a href="group___enumerations_gab87bacfdad76e61b9412d7124be44c1c.html#ggab87bacfdad76e61b9412d7124be44c1caf5e09dd1da4088464f264b7a3118bff8">fabgl::Blue</a></div><div class="ttdeci">@ Blue</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00207">displaycontroller.h:207</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_gad0e6e31d5953384be4ea987eb3923e02"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">fabgl::VirtualKey</a></div><div class="ttdeci">VirtualKey</div><div class="ttdoc">Represents each possible real or derived (SHIFT + real) key.</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01054">fabutils.h:1054</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">fabgl::VK_F12</a></div><div class="ttdeci">@ VK_F12</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01234">fabutils.h:1234</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b">fabgl::VK_RETURN</a></div><div class="ttdeci">@ VK_RETURN</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01206">fabutils.h:1206</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98">fabgl::VK_ESCAPE</a></div><div class="ttdeci">@ VK_ESCAPE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01186">fabutils.h:1186</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">fabgl::VK_F1</a></div><div class="ttdeci">@ VK_F1</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01223">fabutils.h:1223</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02aa9d7938ace5b7bbf6d6774a7c970a8be"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa9d7938ace5b7bbf6d6774a7c970a8be">fabgl::VK_DELETE</a></div><div class="ttdeci">@ VK_DELETE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01193">fabutils.h:1193</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_gad0e6e31d5953384be4ea987eb3923e02"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">fabgl::VirtualKey</a></div><div class="ttdeci">VirtualKey</div><div class="ttdoc">Represents each possible real or derived (SHIFT + real) key.</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01097">fabutils.h:1097</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">fabgl::VK_F12</a></div><div class="ttdeci">@ VK_F12</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01277">fabutils.h:1277</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a232f985e67663de971fe9d184e838a2b">fabgl::VK_RETURN</a></div><div class="ttdeci">@ VK_RETURN</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01249">fabutils.h:1249</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a292abb1d79755a30f0316d7b13478f98">fabgl::VK_ESCAPE</a></div><div class="ttdeci">@ VK_ESCAPE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01229">fabutils.h:1229</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">fabgl::VK_F1</a></div><div class="ttdeci">@ VK_F1</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01266">fabutils.h:1266</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02aa9d7938ace5b7bbf6d6774a7c970a8be"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aa9d7938ace5b7bbf6d6774a7c970a8be">fabgl::VK_DELETE</a></div><div class="ttdeci">@ VK_DELETE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01236">fabutils.h:1236</a></div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

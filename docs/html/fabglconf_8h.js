@@ -13,6 +13,7 @@ var fabglconf_8h =
     [ "FABGLIB_KEYBOARD_VIRTUALKEY_QUEUE_SIZE", "fabglconf_8h_ae75fceca4fe46e0258a376be50f6c692.html#ae75fceca4fe46e0258a376be50f6c692", null ],
     [ "FABGLIB_MAX_CSI_PARAMS", "fabglconf_8h_a99b271b008df5c718700df60533916db.html#a99b271b008df5c718700df60533916db", null ],
     [ "FABGLIB_MAX_DCS_CONTENT", "fabglconf_8h_a88492a438ec3ba7cd8f59e36b81d719b.html#a88492a438ec3ba7cd8f59e36b81d719b", null ],
+    [ "FABGLIB_MINFREELARGESTBLOCK", "fabglconf_8h_addff8695eb7dc9eee835e709fac9b808.html#addff8695eb7dc9eee835e709fac9b808", null ],
     [ "FABGLIB_MOUSE_EVENTS_QUEUE_SIZE", "fabglconf_8h_a4ed8f72017c1de9d95dedeb6e37b199b.html#a4ed8f72017c1de9d95dedeb6e37b199b", null ],
     [ "FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE", "fabglconf_8h_a6a28696a36e7ed9d40cee15b3dba1330.html#a6a28696a36e7ed9d40cee15b3dba1330", null ],
     [ "FABGLIB_SCODETOVK_TASK_PRIORITY", "fabglconf_8h_ad011d9ff772ecf5ab8be25d0261c38f9.html#ad011d9ff772ecf5ab8be25d0261c38f9", null ],
@@ -72,5 +73,6 @@ var fabglconf_8h =
     [ "VGA_720x348_50HzD", "fabglconf_8h_a412cf149c885e4929aff0f246a98ad8a.html#a412cf149c885e4929aff0f246a98ad8a", null ],
     [ "VGA_720x348_59HzD", "fabglconf_8h_ae025bb189d82b69b1343ad4d965eb87a.html#ae025bb189d82b69b1343ad4d965eb87a", null ],
     [ "VGA_720x348_73Hz", "fabglconf_8h_a30629859b390a433f51a0672ae0ca41b.html#a30629859b390a433f51a0672ae0ca41b", null ],
+    [ "VGA_720x350_70Hz", "fabglconf_8h_a7df18b779d9318d1327f936d12393d18.html#a7df18b779d9318d1327f936d12393d18", null ],
     [ "VGA_720x400_70Hz", "fabglconf_8h_acab226c21682068088776984adf72be0.html#acab226c21682068088776984adf72be0", null ]
 ];

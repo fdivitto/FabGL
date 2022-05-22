@@ -138,6 +138,11 @@ var group___enumerations =
       [ "fabgl::PS2Preset::MousePort0", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daab315933e6f8a71499678887626ae5fd4", null ],
       [ "fabgl::PS2Preset::MousePort1", "group___enumerations_gaca5d0f920057bf01d133384645a654da.html#ggaca5d0f920057bf01d133384645a654daa0e528e35537f6d49cb912f4bcaaf5c12", null ]
     ] ],
+    [ "fabgl::SoundGenMethod", "group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#ga0c57da098cf653e49e8c46e3a86eee31", [
+      [ "fabgl::SoundGenMethod::DAC", "group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#gga0c57da098cf653e49e8c46e3a86eee31a52a8b954485e8bf8ebe32865d17563a6", null ],
+      [ "fabgl::SoundGenMethod::SigmaDelta", "group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#gga0c57da098cf653e49e8c46e3a86eee31a582cc73bac6fd333fd602b6a3db1dfd4", null ],
+      [ "fabgl::SoundGenMethod::Auto", "group___enumerations_ga0c57da098cf653e49e8c46e3a86eee31.html#gga0c57da098cf653e49e8c46e3a86eee31a06b9281e396db002010bde1de57262eb", null ]
+    ] ],
     [ "fabgl::SSD1306Orientation", "group___enumerations_ga56be86abe812065345408e6741aa1e37.html#ga56be86abe812065345408e6741aa1e37", [
       [ "fabgl::SSD1306Orientation::Normal", "group___enumerations_ga56be86abe812065345408e6741aa1e37.html#gga56be86abe812065345408e6741aa1e37a960b44c579bc2f6818d2daaf9e4c16f0", null ],
       [ "fabgl::SSD1306Orientation::ReverseHorizontal", "group___enumerations_ga56be86abe812065345408e6741aa1e37.html#gga56be86abe812065345408e6741aa1e37ac3b9e126f88f9f8df2fd2be6e8a32559", null ],
@@ -213,6 +218,13 @@ var group___enumerations =
       [ "fabgl::VIA6522Port::CA2", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a3702f3bfbd91df0d6105cbd8b8d8b963", null ],
       [ "fabgl::VIA6522Port::CB1", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0ac479bbda96996453098aaa0687a9197e", null ],
       [ "fabgl::VIA6522Port::CB2", "group___enumerations_ga69838990f93c3301289776790e4fc0e0.html#gga69838990f93c3301289776790e4fc0e0a96d495d6079a5d50e1b6bc3fc9255f09", null ]
+    ] ],
+    [ "fabgl::VideoMode", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#ga1e46218ee302fcc8c77e4ea0968ea149", [
+      [ "fabgl::VideoMode::None", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a6adf97f83acf6453d4a6a4b1070f3754", null ],
+      [ "fabgl::VideoMode::VGA", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149adb4371197d1f58c7d4edb7dcd0565ad1", null ],
+      [ "fabgl::VideoMode::CVBS", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a9de917eb8d6dcec8b9e987a7dfc09379", null ],
+      [ "fabgl::VideoMode::I2C", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149afb87bf1fc88386ca21395991f90fff95", null ],
+      [ "fabgl::VideoMode::SPI", "group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a33dc5312b091968f5a120c2484d40df8", null ]
     ] ],
     [ "fabgl::VirtualKey", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02", [
       [ "fabgl::VK_NONE", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06", null ],
@@ -451,6 +463,12 @@ var group___enumerations =
       [ "fabgl::VK_SQUARE", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aedc115d80abdb63b858de48fa34d19b2", null ],
       [ "fabgl::VK_CURRENCY", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a84a801eaf0d418321b6f26085ac145c1", null ],
       [ "fabgl::VK_MU", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a31355f4fa8d2c9e8974c8490725c6a71", null ],
+      [ "fabgl::VK_oslash", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acfdd05dfd83f8c1aa5fc5ef016d7b56a", null ],
+      [ "fabgl::VK_aring", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac041bd0a56de9d7eed36800a12344e67", null ],
+      [ "fabgl::VK_AELIG", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a36882c061207065ecbac454259e71351", null ],
+      [ "fabgl::VK_OSLASH", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a9d5d611b0279ba7cbabf02ac796b8774", null ],
+      [ "fabgl::VK_ARING", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c03cd7c117bc019a57cd5508ebe187b", null ],
+      [ "fabgl::VK_YEN", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c975142749281dc0fd02b7a40dfe6c0", null ],
       [ "fabgl::VK_ASCII", "group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6", null ]
     ] ]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['labelstyle_0',['labelStyle',['../classfabgl_1_1ui_label_af9fb3349b8d4a6639be9ea73a046f1c1.html#af9fb3349b8d4a6639be9ea73a046f1c1',1,'fabgl::uiLabel']]],
+  ['labelstyle_0',['labelStyle',['../classfabgl_1_1ui_label_af9fb3349b8d4a6639be9ea73a046f1c1.html#af9fb3349b8d4a6639be9ea73a046f1c1',1,'fabgl::uiLabel::labelStyle()'],['../classfabgl_1_1ui_static_label_a650d751d983ca725794b2e3b689e977c.html#a650d751d983ca725794b2e3b689e977c',1,'fabgl::uiStaticLabel::labelStyle()']]],
   ['lastchild_1',['lastChild',['../classfabgl_1_1ui_window_a7def4b2ca2ba849a4759507cfe67e034.html#a7def4b2ca2ba849a4759507cfe67e034',1,'fabgl::uiWindow']]],
   ['lastselecteditem_2',['lastSelectedItem',['../classfabgl_1_1ui_custom_list_box_a4610b49a13217bc61f731b6e2d75a114.html#a4610b49a13217bc61f731b6e2d75a114',1,'fabgl::uiCustomListBox']]],
   ['lastuseractiontime_3',['lastUserActionTime',['../classfabgl_1_1ui_app_a8071e191ba94de4b26741ecc9cb6cd0c.html#a8071e191ba94de4b26741ecc9cb6cd0c',1,'fabgl::uiApp']]],

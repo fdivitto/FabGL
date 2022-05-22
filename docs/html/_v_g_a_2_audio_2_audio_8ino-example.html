@@ -123,17 +123,19 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line"><span class="preprocessor">#include &quot;mario.h&quot;</span></div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a> DisplayController;</div>
-<div class="line"><a id="_a1" name="_a1"></a><a class="code hl_class" href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a> PS2Controller;</div>
-<div class="line">SoundGenerator       soundGenerator;</div>
+<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a> DisplayController;</div>
+<div class="line"><a id="_a1" name="_a1"></a><a class="code hl_class" href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a>   PS2Controller;</div>
+<div class="line">SoundGenerator         soundGenerator;</div>
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> setup()</div>
 <div class="line">{</div>
+<div class="line">  <span class="comment">//Serial.begin(115200); delay(500); Serial.write(&quot;\n\nReset\n\n&quot;); // DEBUG ONLY</span></div>
+<div class="line"> </div>
 <div class="line">  PS2Controller.<a id="a2" name="a2"></a><a class="code hl_function" href="classfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09.html#ab8520612804a921ad834b41214a99c09">begin</a>(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);</div>
 <div class="line"> </div>
 <div class="line">  DisplayController.begin();</div>
-<div class="line">  DisplayController.<a id="a3" name="a3"></a>setResolution(<a id="a4" name="a4"></a><a class="code hl_define" href="fabglconf_8h_ae913dffdd13bd77b79d1a253e88bf22f.html#ae913dffdd13bd77b79d1a253e88bf22f">VGA_640x350_70HzAlt1</a>);</div>
+<div class="line">  DisplayController.<a id="a3" name="a3"></a>setResolution(<a id="a4" name="a4"></a><a class="code hl_define" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>);</div>
 <div class="line"> </div>
 <div class="line">  <span class="comment">// adjust this to center screen in your monitor</span></div>
 <div class="line">  <span class="comment">//DisplayController.moveScreen(20, -2);</span></div>
@@ -191,7 +193,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line">    volumeSlider-&gt;setPosition(100);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// generator combobox</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;Type&quot;</span>, Point(230, 20));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;Type&quot;</span>, Point(230, 20));</div>
 <div class="line">    genComboBox = <span class="keyword">new</span> uiComboBox(<span class="keyword">this</span>, Point(260, 20), Size(140, 16), 35);</div>
 <div class="line">    genComboBox-&gt;listBoxStyle().textFont = &amp;fabgl::FONT_std_12;</div>
 <div class="line">    genComboBox-&gt;textEditStyle().textFont = &amp;fabgl::FONT_std_12;</div>
@@ -221,7 +223,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line">    startingFreq += 50;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// enable checkbox</span></div>
-<div class="line">    <span class="keyword">new</span> uiLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;Enable&quot;</span>, Point(5, 76-17));</div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;Enable&quot;</span>, Point(5, 76-17));</div>
 <div class="line">    enableCheck = <span class="keyword">new</span> uiCheckBox(<span class="keyword">this</span>, Point(77, 75-17), Size(17, 17));</div>
 <div class="line">    enableCheck-&gt;onChange = [&amp;]() {</div>
 <div class="line">      <span class="keywordflow">if</span> (curGen)</div>
@@ -279,7 +281,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line">    frameProps().hasMinimizeButton = <span class="keyword">false</span>;</div>
 <div class="line">    frameProps().hasCloseButton = <span class="keyword">false</span>;</div>
 <div class="line"> </div>
-<div class="line">    uiButton * addChannelBtn = <span class="keyword">new</span> uiButton(<span class="keyword">this</span>, <span class="stringliteral">&quot;Add Channel&quot;</span>, Point(7, 22), Size(80, 16));</div>
+<div class="line">    <span class="keyword">auto</span> addChannelBtn = <span class="keyword">new</span> uiButton(<span class="keyword">this</span>, <span class="stringliteral">&quot;Add Channel&quot;</span>, Point(7, 22), Size(80, 16));</div>
 <div class="line">    addChannelBtn-&gt;onClick = [=]() {</div>
 <div class="line">      <span class="keywordflow">if</span> (heap_caps_get_free_size(MALLOC_CAP_8BIT) &lt; 5000)</div>
 <div class="line">        app()-&gt;messageBox(<span class="stringliteral">&quot;Out of memory!&quot;</span>, <span class="stringliteral">&quot;I&#39;m sorry, there is no more memory available!&quot;</span>, <span class="stringliteral">&quot;OK&quot;</span>);</div>
@@ -287,15 +289,23 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line">        <span class="keyword">new</span> ChannelFrame(parent);</div>
 <div class="line">    };</div>
 <div class="line"> </div>
-<div class="line">    uiButton * resetBtn = <span class="keyword">new</span> uiButton(<span class="keyword">this</span>, <span class="stringliteral">&quot;Reset&quot;</span>, Point(7, 45), Size(80, 16));</div>
+<div class="line">    <span class="keyword">auto</span> resetBtn = <span class="keyword">new</span> uiButton(<span class="keyword">this</span>, <span class="stringliteral">&quot;Reset&quot;</span>, Point(7, 45), Size(80, 16));</div>
 <div class="line">    resetBtn-&gt;onClick = [=]() {</div>
 <div class="line">      <span class="keywordflow">if</span> (app()-&gt;messageBox(<span class="stringliteral">&quot;Reset ESP32&quot;</span>, <span class="stringliteral">&quot;Are you sure?&quot;</span>, <span class="stringliteral">&quot;Yes&quot;</span>, <span class="stringliteral">&quot;No&quot;</span>, <span class="keyword">nullptr</span>, uiMessageBoxIcon::Question) == uiMessageBoxResult::Button1)</div>
 <div class="line">        ESP.restart();</div>
 <div class="line">    };</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// global enable checkbox</span></div>
+<div class="line">    <span class="keyword">new</span> uiStaticLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;Enable&quot;</span>, Point(7, 70));</div>
+<div class="line">    <span class="keyword">auto</span> enableCheck = <span class="keyword">new</span> uiCheckBox(<span class="keyword">this</span>, Point(48, 68), Size(17, 17));</div>
+<div class="line">    enableCheck-&gt;setChecked(<span class="keyword">true</span>);</div>
+<div class="line">    enableCheck-&gt;onChange = [=]() {</div>
+<div class="line">      soundGenerator.play(enableCheck-&gt;checked());</div>
+<div class="line">    };</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// main volume slider</span></div>
-<div class="line">    uiLabel * volumeLabel = <span class="keyword">new</span> uiLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;&quot;</span>, Point(90, 182));</div>
-<div class="line">    uiSlider * volumeSlider = <span class="keyword">new</span> uiSlider(<span class="keyword">this</span>, Point(100, 20), Size(17, 160), uiOrientation::Vertical);</div>
+<div class="line">    <span class="keyword">auto</span> volumeLabel = <span class="keyword">new</span> uiLabel(<span class="keyword">this</span>, <span class="stringliteral">&quot;&quot;</span>, Point(90, 182));</div>
+<div class="line">    <span class="keyword">auto</span> volumeSlider = <span class="keyword">new</span> uiSlider(<span class="keyword">this</span>, Point(100, 20), Size(17, 160), uiOrientation::Vertical);</div>
 <div class="line">    volumeSlider-&gt;onChange = [=]() {</div>
 <div class="line">      volumeLabel-&gt;setTextFmt(<span class="stringliteral">&quot;Vol %d&quot;</span>, volumeSlider-&gt;position());</div>
 <div class="line">      soundGenerator.setVolume(volumeSlider-&gt;position());</div>
@@ -340,17 +350,17 @@ $(document).ready(function(){initNavTree('_v_g_a_2_audio_2_audio_8ino-example.ht
 <div class="line"> </div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09_html_ab8520612804a921ad834b41214a99c09"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09.html#ab8520612804a921ad834b41214a99c09">fabgl::PS2Controller::begin</a></div><div class="ttdeci">static void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_UNUSED, gpio_num_t port1_datGPIO=GPIO_UNUSED)</div><div class="ttdoc">Initializes PS2 device controller.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8cpp_source.html#l01115">ps2controller.cpp:1115</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_html"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a></div><div class="ttdoc">The PS2 device controller class.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8h_source.html#l00082">ps2controller.h:82</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_v_g_a_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></div><div class="ttdoc">Represents the VGA bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgacontroller_8h_source.html#l00089">vgacontroller.h:89</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_v_g_a16_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a></div><div class="ttdoc">Represents the VGA 16 colors bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vga16controller_8h_source.html#l00082">vga16controller.h:82</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_ad12fc34ce789bce6c8a05d8a17138534_html_ad12fc34ce789bce6c8a05d8a17138534"><div class="ttname"><a href="displaycontroller_8h_ad12fc34ce789bce6c8a05d8a17138534.html#ad12fc34ce789bce6c8a05d8a17138534">height</a></div><div class="ttdeci">uint8_t height</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00003">displaycontroller.h:3</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
-<div class="ttc" id="afabglconf_8h_ae913dffdd13bd77b79d1a253e88bf22f_html_ae913dffdd13bd77b79d1a253e88bf22f"><div class="ttname"><a href="fabglconf_8h_ae913dffdd13bd77b79d1a253e88bf22f.html#ae913dffdd13bd77b79d1a253e88bf22f">VGA_640x350_70HzAlt1</a></div><div class="ttdeci">#define VGA_640x350_70HzAlt1</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00222">fabglconf.h:222</a></div></div>
+<div class="ttc" id="afabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8_html_a2d4571e9072b78877c36bf32bc9423f8"><div class="ttname"><a href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a></div><div class="ttdeci">#define VGA_640x480_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00246">fabglconf.h:246</a></div></div>
 <div class="ttc" id="afabui_8h_html"><div class="ttname"><a href="fabui_8h.html">fabui.h</a></div><div class="ttdoc">This file contains all classes related to FabGL Graphical User Interface.</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

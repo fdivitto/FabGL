@@ -2927,7 +2927,7 @@ $(document).ready(function(){initNavTree('_z80_8cpp_source.html',''); initResiza
 <div class="line"><a id="l02838" name="l02838"></a><span class="lineno"> 2838</span> </div>
 <div class="line"><a id="l02839" name="l02839"></a><span class="lineno"> 2839</span><span class="preprocessor">  #ifdef Z80_CATCH_HALT</span></div>
 <div class="line"><a id="l02840" name="l02840"></a><span class="lineno"> 2840</span> </div>
-<div class="line"><a id="l02841" name="l02841"></a><span class="lineno"> 2841</span>        state.status = Z80_STATUS_FLAG_HALT;</div>
+<div class="line"><a id="l02841" name="l02841"></a><span class="lineno"> 2841</span>        state.status = Z80_STATUS_HALT;</div>
 <div class="line"><a id="l02842" name="l02842"></a><span class="lineno"> 2842</span> </div>
 <div class="line"><a id="l02843" name="l02843"></a><span class="lineno"> 2843</span><span class="preprocessor">  #endif</span></div>
 <div class="line"><a id="l02844" name="l02844"></a><span class="lineno"> 2844</span> </div>
@@ -2941,7 +2941,7 @@ $(document).ready(function(){initNavTree('_z80_8cpp_source.html',''); initResiza
 <div class="line"><a id="l02852" name="l02852"></a><span class="lineno"> 2852</span> </div>
 <div class="line"><a id="l02853" name="l02853"></a><span class="lineno"> 2853</span><span class="preprocessor">  #ifdef Z80_CATCH_DI</span></div>
 <div class="line"><a id="l02854" name="l02854"></a><span class="lineno"> 2854</span> </div>
-<div class="line"><a id="l02855" name="l02855"></a><span class="lineno"> 2855</span>        state.status = Z80_STATUS_FLAG_DI;</div>
+<div class="line"><a id="l02855" name="l02855"></a><span class="lineno"> 2855</span>        state.status = Z80_STATUS_DI;</div>
 <div class="line"><a id="l02856" name="l02856"></a><span class="lineno"> 2856</span> </div>
 <div class="line"><a id="l02857" name="l02857"></a><span class="lineno"> 2857</span><span class="preprocessor">  #endif</span></div>
 <div class="line"><a id="l02858" name="l02858"></a><span class="lineno"> 2858</span> </div>
@@ -2955,7 +2955,7 @@ $(document).ready(function(){initNavTree('_z80_8cpp_source.html',''); initResiza
 <div class="line"><a id="l02866" name="l02866"></a><span class="lineno"> 2866</span> </div>
 <div class="line"><a id="l02867" name="l02867"></a><span class="lineno"> 2867</span><span class="preprocessor">  #ifdef Z80_CATCH_EI</span></div>
 <div class="line"><a id="l02868" name="l02868"></a><span class="lineno"> 2868</span> </div>
-<div class="line"><a id="l02869" name="l02869"></a><span class="lineno"> 2869</span>        state.status = Z80_STATUS_FLAG_EI;</div>
+<div class="line"><a id="l02869" name="l02869"></a><span class="lineno"> 2869</span>        state.status = Z80_STATUS_EI;</div>
 <div class="line"><a id="l02870" name="l02870"></a><span class="lineno"> 2870</span> </div>
 <div class="line"><a id="l02871" name="l02871"></a><span class="lineno"> 2871</span><span class="preprocessor">  #endif</span></div>
 <div class="line"><a id="l02872" name="l02872"></a><span class="lineno"> 2872</span> </div>
@@ -3886,16 +3886,16 @@ $(document).ready(function(){initNavTree('_z80_8cpp_source.html',''); initResiza
 <div class="line"><a id="l03797" name="l03797"></a><span class="lineno"> 3797</span><span class="preprocessor">  #if defined(Z80_CATCH_RETI) &amp;&amp; defined(Z80_CATCH_RETN)</span></div>
 <div class="line"><a id="l03798" name="l03798"></a><span class="lineno"> 3798</span> </div>
 <div class="line"><a id="l03799" name="l03799"></a><span class="lineno"> 3799</span>        state.status = opcode == OPCODE_RETI</div>
-<div class="line"><a id="l03800" name="l03800"></a><span class="lineno"> 3800</span>        ? Z80_STATUS_FLAG_RETI</div>
-<div class="line"><a id="l03801" name="l03801"></a><span class="lineno"> 3801</span>        : Z80_STATUS_FLAG_RETN;</div>
+<div class="line"><a id="l03800" name="l03800"></a><span class="lineno"> 3800</span>        ? Z80_STATUS_RETI</div>
+<div class="line"><a id="l03801" name="l03801"></a><span class="lineno"> 3801</span>        : Z80_STATUS_RETN;</div>
 <div class="line"><a id="l03802" name="l03802"></a><span class="lineno"> 3802</span> </div>
 <div class="line"><a id="l03803" name="l03803"></a><span class="lineno"> 3803</span><span class="preprocessor">  #elif defined(Z80_CATCH_RETI)</span></div>
 <div class="line"><a id="l03804" name="l03804"></a><span class="lineno"> 3804</span> </div>
-<div class="line"><a id="l03805" name="l03805"></a><span class="lineno"> 3805</span>        state.status = Z80_STATUS_FLAG_RETI;</div>
+<div class="line"><a id="l03805" name="l03805"></a><span class="lineno"> 3805</span>        state.status = Z80_STATUS_RETI;</div>
 <div class="line"><a id="l03806" name="l03806"></a><span class="lineno"> 3806</span> </div>
 <div class="line"><a id="l03807" name="l03807"></a><span class="lineno"> 3807</span><span class="preprocessor">  #elif defined(Z80_CATCH_RETN)</span></div>
 <div class="line"><a id="l03808" name="l03808"></a><span class="lineno"> 3808</span> </div>
-<div class="line"><a id="l03809" name="l03809"></a><span class="lineno"> 3809</span>        state.status = Z80_STATUS_FLAG_RETN;</div>
+<div class="line"><a id="l03809" name="l03809"></a><span class="lineno"> 3809</span>        state.status = Z80_STATUS_RETN;</div>
 <div class="line"><a id="l03810" name="l03810"></a><span class="lineno"> 3810</span> </div>
 <div class="line"><a id="l03811" name="l03811"></a><span class="lineno"> 3811</span><span class="preprocessor">  #endif</span></div>
 <div class="line"><a id="l03812" name="l03812"></a><span class="lineno"> 3812</span> </div>
@@ -4258,7 +4258,7 @@ $(document).ready(function(){initNavTree('_z80_8cpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_8be7dd06aece89a21c34f4f57592b45a.html">emudevs</a></li><li class="navelem"><b>Z80.cpp</b></li>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:38 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

@@ -1,16 +1,17 @@
 <map id="collisiondetector.h" name="collisiondetector.h">
-<area shape="rect" id="node1" title="This file contains fabgl::CollisionDetector class definition." alt="" coords="121,5,248,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="27,155,92,181"/>
-<area shape="rect" id="node3" title=" " alt="" coords="117,155,186,181"/>
-<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="211,155,297,181"/>
-<area shape="rect" id="node6" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="288,80,415,107"/>
+<area shape="rect" id="node1" title="This file contains fabgl::CollisionDetector class definition." alt="" coords="209,5,336,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="115,155,180,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="205,155,274,181"/>
+<area shape="rect" id="node4" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="299,155,385,181"/>
+<area shape="rect" id="node6" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="376,80,503,107"/>
 <area shape="rect" id="node5" title=" " alt="" coords="5,229,87,256"/>
-<area shape="rect" id="node7" title=" " alt="" coords="634,229,778,256"/>
-<area shape="rect" id="node8" title=" " alt="" coords="421,155,537,181"/>
-<area shape="rect" id="node9" title=" " alt="" coords="562,155,669,181"/>
-<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="322,155,397,181"/>
-<area shape="rect" id="node11" title=" " alt="" coords="487,229,610,256"/>
-<area shape="rect" id="node12" title=" " alt="" coords="111,229,202,256"/>
-<area shape="rect" id="node13" title=" " alt="" coords="226,229,330,256"/>
-<area shape="rect" id="node14" title=" " alt="" coords="355,229,463,256"/>
+<area shape="rect" id="node7" title=" " alt="" coords="793,229,937,256"/>
+<area shape="rect" id="node8" title=" " alt="" coords="509,155,625,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="650,155,757,181"/>
+<area shape="rect" id="node10" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="410,155,485,181"/>
+<area shape="rect" id="node11" title=" " alt="" coords="111,229,234,256"/>
+<area shape="rect" id="node12" title=" " alt="" coords="258,229,349,256"/>
+<area shape="rect" id="node13" title=" " alt="" coords="373,229,477,256"/>
+<area shape="rect" id="node14" title=" " alt="" coords="501,229,609,256"/>
+<area shape="rect" id="node15" title=" " alt="" coords="633,229,768,256"/>
 </map>

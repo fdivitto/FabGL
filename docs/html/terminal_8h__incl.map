@@ -4,59 +4,59 @@
 <area shape="rect" id="node3" title=" " alt="" coords="107,80,181,107"/>
 <area shape="rect" id="node4" title=" " alt="" coords="206,80,271,107"/>
 <area shape="rect" id="node5" title=" " alt="" coords="295,80,361,107"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1040,543,1184,569"/>
-<area shape="rect" id="node7" title=" " alt="" coords="740,461,847,487"/>
-<area shape="rect" id="node8" title=" " alt="" coords="497,461,615,487"/>
-<area shape="rect" id="node9" title=" " alt="" coords="591,543,713,569"/>
-<area shape="rect" id="node10" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="922,461,1009,487"/>
-<area shape="rect" id="node12" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition." alt="" coords="1393,304,1468,331"/>
-<area shape="rect" id="node21" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="1094,155,1245,181"/>
-<area shape="rect" id="node59" href="$terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="1073,80,1153,107"/>
-<area shape="rect" id="node60" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System." alt="" coords="1125,379,1278,405"/>
-<area shape="rect" id="node11" title=" " alt="" coords="925,543,1006,569"/>
-<area shape="rect" id="node13" title=" " alt="" coords="1321,461,1386,487"/>
-<area shape="rect" id="node14" title=" " alt="" coords="1176,461,1245,487"/>
-<area shape="rect" id="node15" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="1405,379,1531,405"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1410,461,1526,487"/>
-<area shape="rect" id="node17" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="1551,461,1625,487"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1421,543,1512,569"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1536,543,1640,569"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1665,543,1773,569"/>
-<area shape="rect" id="node22" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition." alt="" coords="737,304,897,331"/>
-<area shape="rect" id="node24" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="1525,229,1587,256"/>
-<area shape="rect" id="node57" href="$codepages_8h.html" title="This file contains codepages declarations." alt="" coords="1809,304,1905,331"/>
-<area shape="rect" id="node58" href="$kbdlayouts_8h.html" title="This file contains keyboard layouts." alt="" coords="1759,379,1855,405"/>
-<area shape="rect" id="node23" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition." alt="" coords="689,379,796,405"/>
-<area shape="rect" id="node25" title=" " alt="" coords="1594,304,1633,331"/>
-<area shape="rect" id="node26" href="$fabfonts_8h_source.html" title=" " alt="" coords="3676,379,3756,405"/>
-<area shape="rect" id="node27" title=" " alt="" coords="4454,461,4570,487"/>
-<area shape="rect" id="node28" title=" " alt="" coords="4594,461,4710,487"/>
-<area shape="rect" id="node29" title=" " alt="" coords="4734,461,4850,487"/>
-<area shape="rect" id="node30" title=" " alt="" coords="4874,461,4990,487"/>
-<area shape="rect" id="node31" title=" " alt="" coords="5014,461,5130,487"/>
-<area shape="rect" id="node32" title=" " alt="" coords="5155,461,5277,487"/>
-<area shape="rect" id="node33" title=" " alt="" coords="5301,461,5424,487"/>
-<area shape="rect" id="node34" title=" " alt="" coords="5448,461,5571,487"/>
-<area shape="rect" id="node35" title=" " alt="" coords="5595,461,5717,487"/>
-<area shape="rect" id="node36" title=" " alt="" coords="5741,461,5864,487"/>
-<area shape="rect" id="node37" title=" " alt="" coords="5888,461,6011,487"/>
-<area shape="rect" id="node38" title=" " alt="" coords="6035,461,6151,487"/>
-<area shape="rect" id="node39" title=" " alt="" coords="1650,461,1766,487"/>
-<area shape="rect" id="node40" title=" " alt="" coords="1791,461,1913,487"/>
-<area shape="rect" id="node41" title=" " alt="" coords="1937,461,2060,487"/>
-<area shape="rect" id="node42" title=" " alt="" coords="2084,461,2207,487"/>
-<area shape="rect" id="node43" title=" " alt="" coords="2231,461,2353,487"/>
-<area shape="rect" id="node44" title=" " alt="" coords="2377,461,2500,487"/>
-<area shape="rect" id="node45" title=" " alt="" coords="2524,461,2655,487"/>
-<area shape="rect" id="node46" title=" " alt="" coords="2679,461,2838,487"/>
-<area shape="rect" id="node47" title=" " alt="" coords="2863,453,2993,495"/>
-<area shape="rect" id="node48" title=" " alt="" coords="3017,453,3148,495"/>
-<area shape="rect" id="node49" title=" " alt="" coords="3172,461,3319,487"/>
-<area shape="rect" id="node50" title=" " alt="" coords="3343,453,3465,495"/>
-<area shape="rect" id="node51" title=" " alt="" coords="3489,453,3628,495"/>
-<area shape="rect" id="node52" title=" " alt="" coords="3653,453,3779,495"/>
-<area shape="rect" id="node53" title=" " alt="" coords="3803,453,3930,495"/>
-<area shape="rect" id="node54" title=" " alt="" coords="3954,461,4115,487"/>
-<area shape="rect" id="node55" title=" " alt="" coords="4139,453,4279,495"/>
-<area shape="rect" id="node56" title=" " alt="" coords="4304,453,4429,495"/>
+<area shape="rect" id="node6" title=" " alt="" coords="789,543,933,569"/>
+<area shape="rect" id="node7" title=" " alt="" coords="527,461,633,487"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1207,461,1324,487"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5823,543,5945,569"/>
+<area shape="rect" id="node10" href="$fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="658,461,745,487"/>
+<area shape="rect" id="node12" href="$canvas_8h.html" title="This file contains fabgl::Canvas definition." alt="" coords="975,304,1049,331"/>
+<area shape="rect" id="node22" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="658,155,809,181"/>
+<area shape="rect" id="node56" href="$terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="692,80,772,107"/>
+<area shape="rect" id="node57" href="$soundgen_8h.html" title="This file contains all classes related to FabGL Sound System." alt="" coords="1650,379,1803,405"/>
+<area shape="rect" id="node11" title=" " alt="" coords="661,543,742,569"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1349,461,1414,487"/>
+<area shape="rect" id="node14" title=" " alt="" coords="972,461,1041,487"/>
+<area shape="rect" id="node15" href="$displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="973,379,1099,405"/>
+<area shape="rect" id="node16" title=" " alt="" coords="1066,461,1182,487"/>
+<area shape="rect" id="node17" href="$fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="1489,461,1564,487"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1295,543,1385,569"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1409,543,1513,569"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1538,543,1646,569"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1670,543,1805,569"/>
+<area shape="rect" id="node23" href="$ps2device_8h.html" title="This file contains fabgl::PS2Device definition." alt="" coords="663,304,823,331"/>
+<area shape="rect" id="node25" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="1157,229,1219,256"/>
+<area shape="rect" id="node54" href="$codepages_8h.html" title="This file contains codepages declarations." alt="" coords="1543,304,1639,331"/>
+<area shape="rect" id="node55" href="$kbdlayouts_8h.html" title="This file contains keyboard layouts." alt="" coords="1428,379,1524,405"/>
+<area shape="rect" id="node24" href="$ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition." alt="" coords="689,379,796,405"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1226,304,1265,331"/>
+<area shape="rect" id="node27" href="$fabfonts_8h_source.html" title=" " alt="" coords="3645,379,3725,405"/>
+<area shape="rect" id="node28" title=" " alt="" coords="4730,461,4846,487"/>
+<area shape="rect" id="node29" title=" " alt="" coords="4870,461,4986,487"/>
+<area shape="rect" id="node30" title=" " alt="" coords="5010,461,5126,487"/>
+<area shape="rect" id="node31" title=" " alt="" coords="5150,461,5266,487"/>
+<area shape="rect" id="node32" title=" " alt="" coords="5290,461,5406,487"/>
+<area shape="rect" id="node33" title=" " alt="" coords="5431,461,5553,487"/>
+<area shape="rect" id="node34" title=" " alt="" coords="5577,461,5700,487"/>
+<area shape="rect" id="node35" title=" " alt="" coords="5724,461,5847,487"/>
+<area shape="rect" id="node36" title=" " alt="" coords="1996,461,2119,487"/>
+<area shape="rect" id="node37" title=" " alt="" coords="2143,461,2265,487"/>
+<area shape="rect" id="node38" title=" " alt="" coords="2289,461,2412,487"/>
+<area shape="rect" id="node39" title=" " alt="" coords="2437,461,2553,487"/>
+<area shape="rect" id="node40" title=" " alt="" coords="2577,461,2693,487"/>
+<area shape="rect" id="node41" title=" " alt="" coords="2717,461,2840,487"/>
+<area shape="rect" id="node42" title=" " alt="" coords="2864,461,2987,487"/>
+<area shape="rect" id="node43" title=" " alt="" coords="3011,461,3133,487"/>
+<area shape="rect" id="node44" title=" " alt="" coords="3157,461,3280,487"/>
+<area shape="rect" id="node45" title=" " alt="" coords="3304,461,3427,487"/>
+<area shape="rect" id="node46" title=" " alt="" coords="3451,461,3581,487"/>
+<area shape="rect" id="node47" title=" " alt="" coords="3606,461,3765,487"/>
+<area shape="rect" id="node48" title=" " alt="" coords="3789,453,3920,495"/>
+<area shape="rect" id="node49" title=" " alt="" coords="3944,453,4075,495"/>
+<area shape="rect" id="node50" title=" " alt="" coords="4099,461,4245,487"/>
+<area shape="rect" id="node51" title=" " alt="" coords="4269,453,4392,495"/>
+<area shape="rect" id="node52" title=" " alt="" coords="4416,453,4555,495"/>
+<area shape="rect" id="node53" title=" " alt="" coords="4579,453,4706,495"/>
+<area shape="rect" id="node58" title=" " alt="" coords="1588,461,1681,487"/>
+<area shape="rect" id="node59" title=" " alt="" coords="1705,461,1820,487"/>
+<area shape="rect" id="node60" title=" " alt="" coords="1845,461,1971,487"/>
 </map>

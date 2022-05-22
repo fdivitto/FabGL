@@ -100,17 +100,19 @@ $(document).ready(function(){initNavTree('fabutils_8h.html',''); initResizable()
 <code>#include &lt;driver/adc.h&gt;</code><br />
 <code>#include &lt;esp_system.h&gt;</code><br />
 <code>#include &quot;sdmmc_cmd.h&quot;</code><br />
+<code>#include &quot;soc/frc_timer_reg.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fabutils.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="fabutils_8h__incl.png" border="0" usemap="#afabutils_8h" alt=""/></div>
 <map name="afabutils_8h" id="afabutils_8h">
-<area shape="rect" title="This file contains some utility classes and functions." alt="" coords="328,5,403,32"/>
+<area shape="rect" title="This file contains some utility classes and functions." alt="" coords="388,5,463,32"/>
 <area shape="rect" title=" " alt="" coords="5,80,149,107"/>
 <area shape="rect" title=" " alt="" coords="173,80,296,107"/>
 <area shape="rect" title=" " alt="" coords="320,80,411,107"/>
 <area shape="rect" title=" " alt="" coords="435,80,539,107"/>
 <area shape="rect" title=" " alt="" coords="563,80,671,107"/>
+<area shape="rect" title=" " alt="" coords="695,80,830,107"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -188,6 +190,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_core_usage.html">CoreUsage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class helps to choice a core for intensive processing tasks.  <a href="structfabgl_1_1_core_usage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_current_video_mode.html">CurrentVideoMode</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class helps to know which is the current video output (VGA or Composite)  <a href="structfabgl_1_1_current_video_mode.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structfabgl_1_1_dir_item.html">DirItem</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classfabgl_1_1_file_browser.html" title="FileBrowser allows basic file system operations (dir, mkdir, remove and rename)">FileBrowser</a> item specificator.  <a href="structfabgl_1_1_dir_item.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,6 +229,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ga6c3316022eddc73875d854fcf43e61aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines drive types (SPIFFS or SD Card)  <a href="group___enumerations_ga6c3316022eddc73875d854fcf43e61aa.html#ga6c3316022eddc73875d854fcf43e61aa">More...</a><br /></td></tr>
 <tr class="separator:ga6c3316022eddc73875d854fcf43e61aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1e46218ee302fcc8c77e4ea0968ea149"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#ga1e46218ee302fcc8c77e4ea0968ea149">VideoMode</a> { <br />
+&#160;&#160;<a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149adb4371197d1f58c7d4edb7dcd0565ad1">VGA</a>
+, <a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a9de917eb8d6dcec8b9e987a7dfc09379">CVBS</a>
+, <a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149afb87bf1fc88386ca21395991f90fff95">I2C</a>
+, <br />
+&#160;&#160;<a class="el" href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#gga1e46218ee302fcc8c77e4ea0968ea149a33dc5312b091968f5a120c2484d40df8">SPI</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:ga1e46218ee302fcc8c77e4ea0968ea149"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies a video mode.  <a href="group___enumerations_ga1e46218ee302fcc8c77e4ea0968ea149.html#ga1e46218ee302fcc8c77e4ea0968ea149">More...</a><br /></td></tr>
+<tr class="separator:ga1e46218ee302fcc8c77e4ea0968ea149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad0e6e31d5953384be4ea987eb3923e02"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">VirtualKey</a> { <br />
 &#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06">VK_NONE</a>
 , <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c7529306367d92950b980963dabe2b0">VK_SPACE</a>
@@ -520,6 +536,21 @@ Enumerations</h2></td></tr>
 , <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a84a801eaf0d418321b6f26085ac145c1">VK_CURRENCY</a>
 , <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a31355f4fa8d2c9e8974c8490725c6a71">VK_MU</a>
 , <br />
+&#160;&#160;<b>VK_aelig</b>
+, <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acfdd05dfd83f8c1aa5fc5ef016d7b56a">VK_oslash</a>
+, <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02ac041bd0a56de9d7eed36800a12344e67">VK_aring</a>
+, <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a36882c061207065ecbac454259e71351">VK_AELIG</a>
+, <br />
+&#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a9d5d611b0279ba7cbabf02ac796b8774">VK_OSLASH</a>
+, <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c03cd7c117bc019a57cd5508ebe187b">VK_ARING</a>
+, <a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a3c975142749281dc0fd02b7a40dfe6c0">VK_YEN</a>
+, <b>VK_MUHENKAN</b>
+, <br />
+&#160;&#160;<b>VK_HENKAN</b>
+, <b>VK_KATAKANA_HIRAGANA_ROMAJI</b>
+, <b>VK_HANKAKU_ZENKAKU_KANJI</b>
+, <b>VK_SHIFT_0</b>
+, <br />
 &#160;&#160;<a class="el" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02aeb012bdd9dc9790e9f0bc8597dfe1ec6">VK_ASCII</a>
 , <b>VK_LAST</b>
 <br />
@@ -532,9 +563,6 @@ Functions</h2></td></tr>
 <tr class="memitem:ae290b4bddb18288d7c1ab44d059a4d32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabutils_8cpp_ae290b4bddb18288d7c1ab44d059a4d32.html#ae290b4bddb18288d7c1ab44d059a4d32">replacePathSep</a> (char *path, char newSep)</td></tr>
 <tr class="memdesc:ae290b4bddb18288d7c1ab44d059a4d32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces path separators.  <a href="fabutils_8cpp_ae290b4bddb18288d7c1ab44d059a4d32.html#ae290b4bddb18288d7c1ab44d059a4d32">More...</a><br /></td></tr>
 <tr class="separator:ae290b4bddb18288d7c1ab44d059a4d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8658ffb2de6d8bd0d22fc9ca1bcf3a91"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fabutils_8h_a8658ffb2de6d8bd0d22fc9ca1bcf3a91.html#a8658ffb2de6d8bd0d22fc9ca1bcf3a91">UARTConf</a> (int parity, int dataLength, int stopBits)</td></tr>
-<tr class="memdesc:a8658ffb2de6d8bd0d22fc9ca1bcf3a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Composes UART configuration word.  <a href="fabutils_8h_a8658ffb2de6d8bd0d22fc9ca1bcf3a91.html#a8658ffb2de6d8bd0d22fc9ca1bcf3a91">More...</a><br /></td></tr>
-<tr class="separator:a8658ffb2de6d8bd0d22fc9ca1bcf3a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -565,7 +593,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="fabutils_8h.html">fabutils.h</a></li>
-    <li class="footer">Generated on Fri Mar 18 2022 20:49:39 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Sun May 22 2022 11:19:46 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>
