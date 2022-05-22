@@ -1063,7 +1063,7 @@ struct CoreUsage {
 // VideoMode
 
 /** \ingroup Enumerations
- * @brief
+ * @brief Specifies a video mode
  */
 enum class VideoMode {
   None,     /**< Video mode has not been set. */

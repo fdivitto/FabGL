@@ -576,7 +576,7 @@ void IRAM_ATTR CVBS16Controller::drawScanlineX2(void * arg, uint16_t * dest, int
     for (int i = 0; i < width; ++i)
       *dest++ = 0x1900;
   } else
-  //*/
+  */
   
   // optimization warn: horizontal resolution must be a multiple of 8!
   for (int col = 0; col < width; col += 16) {
