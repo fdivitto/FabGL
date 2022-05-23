@@ -541,8 +541,6 @@ bool Terminal::flowControl()
 // connect to UART2
 void Terminal::connectSerialPort(uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
 {
-  auto uart = (volatile uart_dev_t *) DR_REG_UART2_BASE;
-
   bool initialSetup = !m_uart;
 
   if (initialSetup) {

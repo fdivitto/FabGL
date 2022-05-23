@@ -1226,14 +1226,13 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   // @TODO: check again
   host.max_freq_khz = 19000;
 
-  spi_bus_config_t bus_cfg = {
-        .mosi_io_num = int2gpio(MOSI),
-        .miso_io_num = int2gpio(MISO),
-        .sclk_io_num = int2gpio(CLK),
-        .quadwp_io_num = -1,
-        .quadhd_io_num = -1,
-        .max_transfer_sz = 4000,
-  };
+  spi_bus_config_t bus_cfg = { };
+  bus_cfg.mosi_io_num      = int2gpio(MOSI);
+  bus_cfg.miso_io_num      = int2gpio(MISO);
+  bus_cfg.sclk_io_num      = int2gpio(CLK);
+  bus_cfg.quadwp_io_num    = -1;
+  bus_cfg.quadhd_io_num    = -1;
+  bus_cfg.max_transfer_sz  = 4000;
   auto r = spi_bus_initialize((spi_host_device_t)host.slot, &bus_cfg, 2);
 
   if (r == ESP_OK || r == ESP_ERR_INVALID_STATE) {  // ESP_ERR_INVALID_STATE, maybe spi_bus_initialize already called
