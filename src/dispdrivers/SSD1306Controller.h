@@ -206,6 +206,8 @@ public:
    *     DisplayController.setOrientation(fabgl::SSD1306Orientation::Rotate180);
    */
   void setOrientation(SSD1306Orientation value);
+  
+  virtual bool suspendDoubleBuffering(bool value);
 
 
 private:

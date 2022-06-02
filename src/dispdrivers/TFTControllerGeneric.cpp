@@ -30,6 +30,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#include "esp_log.h"
+
 #include "fabutils.h"
 #include "TFTControllerGeneric.h"
 
@@ -831,6 +833,13 @@ void TFTController::swapBuffers()
 {
   // nothing to do, we just send current view port to the device
   sendScreenBuffer(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
+}
+
+
+bool TFTController::suspendDoubleBuffering(bool value)
+{
+  ESP_LOGE("FabGL", "TFT, Unsupported suspendDoubleBuffering");
+  return BitmappedDisplayController::suspendDoubleBuffering(value);
 }
 
 

@@ -298,6 +298,17 @@ void VGAPalettedController::swapBuffers()
 }
 
 
+bool VGAPalettedController::suspendDoubleBuffering(bool value)
+{
+  auto prevValue = VGABaseController::suspendDoubleBuffering(value);
+  if (prevValue != value && isDoubleBuffered()) {
+    s_viewPort        = m_viewPort;
+    s_viewPortVisible = m_viewPortVisible;
+  }
+  return prevValue;
+}
+
+
 
 } // end of namespace
 

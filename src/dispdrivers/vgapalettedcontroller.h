@@ -106,6 +106,8 @@ public:
 
   // abstract method of BitmappedDisplayController
   NativePixelFormat nativePixelFormat()                 { return m_nativePixelFormat; }
+  
+  virtual bool suspendDoubleBuffering(bool value);
 
 
 protected:

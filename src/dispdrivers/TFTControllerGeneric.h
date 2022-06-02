@@ -267,6 +267,8 @@ public:
    * @param value True inverts horizontal axis.
    */
   void setReverseHorizontal(bool value);
+  
+  virtual bool suspendDoubleBuffering(bool value);
 
 
 protected:

@@ -163,7 +163,7 @@ enum PrimitiveCmd : uint8_t {
   // no params
   RefreshSprites,
 
-  // Swap buffers (m_doubleBuffered must be True)
+  // Swap buffers (m_doubleBufferedEnabled must be True)
   // params: notifyTask
   SwapBuffers,
 
@@ -869,7 +869,26 @@ public:
    *
    * @return True if BitmappedDisplayController is on double buffered mode.
    */
-  bool isDoubleBuffered() { return m_doubleBuffered; }
+  bool isDoubleBuffered()                  { return m_doubleBufferedSetup; }
+  
+  /**
+   * @brief Determines whether BitmappedDisplayController is on double buffered mode and it is actually enabled.
+   *
+   * Use BitmappedDisplayController.suspendDoubleBuffering() to suspend or resume double buffering.
+   *
+   * @return True if BitmappedDisplayController is on double buffered mode and it is actually enabled.
+   */
+  bool isDoubleBufferedEnabled()           { return m_doubleBufferedEnabled; }
+
+  /**
+   * @brief Suspends or resumes double buffering
+   *
+   * Suspend is only allowed when display controller has been initialized for double buffering.<br>
+   * Look at BitmappedDisplayController.isDoubleBufferedEnabled() to check if double buffering is suspended or not.
+   *
+   * @return Returns previous value (true = suspended, false = double buffering)
+   */
+  virtual bool suspendDoubleBuffering(bool value);
 
   /**
    * @brief Sets mouse cursor and make it visible.
@@ -1009,8 +1028,11 @@ private:
 
   PaintState             m_paintState;
 
-  volatile bool          m_doubleBuffered;
-  volatile QueueHandle_t m_execQueue;
+  volatile bool          m_doubleBufferedSetup;   // true = controller initialized for double buffering
+  volatile bool          m_doubleBufferedEnabled; // true = double buffering actually enabled
+  
+  volatile QueueHandle_t m_execQueue;             // current primitives queue
+  volatile QueueHandle_t m_execQueueAlt;          // alternate (in pause) primitive queue
 
   bool                   m_backgroundPrimitiveExecutionEnabled; // when False primitives are execute immediately
   volatile bool          m_backgroundPrimitiveTimeoutEnabled;   // when False VSyncInterrupt() has not timeout

@@ -378,10 +378,12 @@ BitmappedDisplayController::BitmappedDisplayController()
   : m_primDynMemPool(FABGLIB_PRIMITIVES_DYNBUFFERS_SIZE)
 {
   m_execQueue                           = nullptr;
+  m_execQueueAlt                        = nullptr;
   m_backgroundPrimitiveExecutionEnabled = true;
   m_sprites                             = nullptr;
   m_spritesCount                        = 0;
-  m_doubleBuffered                      = false;
+  m_doubleBufferedSetup                 = false;
+  m_doubleBufferedEnabled               = false;
   m_mouseCursor.visible                 = false;
   m_backgroundPrimitiveTimeoutEnabled   = true;
   m_spritesHidden                       = true;
@@ -391,16 +393,35 @@ BitmappedDisplayController::BitmappedDisplayController()
 BitmappedDisplayController::~BitmappedDisplayController()
 {
   vQueueDelete(m_execQueue);
+  if (m_execQueueAlt)
+    vQueueDelete(m_execQueueAlt);
 }
 
 
 void BitmappedDisplayController::setDoubleBuffered(bool value)
 {
-  m_doubleBuffered = value;
+  m_doubleBufferedSetup = m_doubleBufferedEnabled = value;
   if (m_execQueue)
     vQueueDelete(m_execQueue);
   // on double buffering a queue of single element is enough and necessary (see addPrimitive() for details)
   m_execQueue = xQueueCreate(value ? 1 : BitmappedDisplayController::queueSize, sizeof(Primitive));
+}
+
+
+// return previous value
+bool BitmappedDisplayController::suspendDoubleBuffering(bool value)
+{
+  auto ret = !m_doubleBufferedEnabled;
+  if (m_doubleBufferedSetup && m_doubleBufferedEnabled == value) {
+    processPrimitives();
+    if (value && !m_execQueueAlt) {
+      // need to create alternate primitives queue
+      m_execQueueAlt = xQueueCreate(BitmappedDisplayController::queueSize, sizeof(Primitive));
+    }
+    tswap(m_execQueueAlt, m_execQueue);
+    m_doubleBufferedEnabled = !value;
+  }
+  return ret;
 }
 
 
@@ -422,12 +443,12 @@ void IRAM_ATTR BitmappedDisplayController::resetPaintState()
 
 void BitmappedDisplayController::addPrimitive(Primitive & primitive)
 {
-  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBuffered == false) || primitive.cmd == PrimitiveCmd::SwapBuffers) {
+  if ((m_backgroundPrimitiveExecutionEnabled && m_doubleBufferedEnabled == false) || primitive.cmd == PrimitiveCmd::SwapBuffers) {
     primitiveReplaceDynamicBuffers(primitive);
     xQueueSendToBack(m_execQueue, &primitive, portMAX_DELAY);
 
-    if (m_doubleBuffered) {
-      // wait notufy from PrimitiveCmd::SwapBuffers executor
+    if (m_doubleBufferedEnabled) {
+      // wait notify from PrimitiveCmd::SwapBuffers executor
       ulTaskNotifyTake(true, portMAX_DELAY);
     }
 
@@ -539,7 +560,7 @@ void BitmappedDisplayController::setSprites(Sprite * sprites, int count, int spr
   m_spritesCount = count;
 
   // allocates background buffer
-  if (!isDoubleBuffered()) {
+  if (!isDoubleBufferedEnabled()) {
     uint8_t * spritePtr = (uint8_t*)m_sprites;
     for (int i = 0; i < m_spritesCount; ++i, spritePtr += m_spriteSize) {
       Sprite * sprite = (Sprite*) spritePtr;
@@ -572,7 +593,7 @@ void IRAM_ATTR BitmappedDisplayController::hideSprites(Rect & updateRect)
     m_spritesHidden = true;
 
     // normal sprites
-    if (spritesCount() > 0 && !isDoubleBuffered()) {
+    if (spritesCount() > 0 && !isDoubleBufferedEnabled()) {
       // restore saved backgrounds
       for (int i = spritesCount() - 1; i >= 0; --i) {
         Sprite * sprite = getSprite(i);
@@ -673,7 +694,7 @@ void BitmappedDisplayController::setMouseCursor(Cursor * cursor)
       m_mouseCursor.addBitmap(&cursor->bitmap);
       m_mouseCursor.visible = true;
       m_mouseCursor.moveBy(-m_mouseHotspotX, -m_mouseHotspotY);
-      if (!isDoubleBuffered())
+      if (!isDoubleBufferedEnabled())
         m_mouseCursor.savedBackground = (uint8_t*) realloc(m_mouseCursor.savedBackground, cursor->bitmap.width * getBitmapSavePixelSize() * cursor->bitmap.height);
     }
     refreshSprites();

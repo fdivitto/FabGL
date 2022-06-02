@@ -83,6 +83,8 @@ public:
   uint8_t * getScanline(int y)                     { return (uint8_t*) m_viewPort[y]; }
   
   CVBSParams const * params()                      { return m_CVBSGenerator.params(); }
+  
+  virtual bool suspendDoubleBuffering(bool value);
 
 
 protected:
@@ -102,11 +104,13 @@ protected:
   
   void run();
   
-
   // when double buffer is enabled the "drawing" view port is always m_viewPort, while the "visible" view port is always m_viewPortVisible
   // when double buffer is not enabled then m_viewPort = m_viewPortVisible
   volatile uint8_t * *   m_viewPort;
   volatile uint8_t * *   m_viewPortVisible;
+  
+  // screen buffers (m_viewPort and m_viewPortVisible contain these values)
+  volatile uint8_t * *   m_viewPorts[2];
 
   volatile int           m_primitiveProcessingSuspended;             // 0 = enabled, >0 suspended
 

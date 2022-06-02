@@ -307,6 +307,7 @@ public:
 
   uint8_t createBlankRawPixel()                  { return m_HVSync; }
 
+  virtual bool suspendDoubleBuffering(bool value);
 
 
 protected:
@@ -359,6 +360,9 @@ protected:
   // when double buffer is not enabled then m_viewPort = m_viewPortVisible
   volatile uint8_t * *   m_viewPort;
   volatile uint8_t * *   m_viewPortVisible;
+  
+  // screen buffers (m_viewPort and m_viewPortVisible contain these values)
+  volatile uint8_t * *   m_viewPorts[2];
 
   // true: double buffering is implemented in DMA
   bool                   m_doubleBufferOverDMA;

@@ -53,9 +53,11 @@ CVBSBaseController::CVBSBaseController()
 void CVBSBaseController::init()
 {
   CurrentVideoMode::set(VideoMode::CVBS);
-  m_primitiveProcessingSuspended = 1; // >0 suspended
-  m_viewPort                     = nullptr;
-  m_viewPortMemoryPool           = nullptr;
+  m_primitiveProcessingSuspended  = 1;        // >0 suspended
+  m_viewPorts[0] = m_viewPorts[1] = nullptr;
+  m_viewPort                      = nullptr;
+  m_viewPortVisible               = nullptr;
+  m_viewPortMemoryPool            = nullptr;
 }
 
 
@@ -86,13 +88,12 @@ void CVBSBaseController::freeViewPort()
     heap_caps_free(m_viewPortMemoryPool);
     m_viewPortMemoryPool = nullptr;
   }
-  if (m_viewPort) {
-    heap_caps_free(m_viewPort);
-    m_viewPort = nullptr;
-  }
-  if (isDoubleBuffered())
-    heap_caps_free(m_viewPortVisible);
-  m_viewPortVisible = nullptr;
+  for (int i = 0; i < 2; ++i)
+    if (m_viewPorts[i]) {
+      heap_caps_free(m_viewPorts[i]);
+      m_viewPorts[i] = nullptr;
+    }
+  m_viewPort = m_viewPortVisible = nullptr;
 }
 
 
@@ -189,9 +190,9 @@ void CVBSBaseController::allocateViewPort(uint32_t allocCaps, int rowlen)
   // fill m_viewPort[] with line pointers
   if (isDoubleBuffered()) {
     m_viewPortHeight /= 2;
-    m_viewPortVisible = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
+    m_viewPortVisible = m_viewPorts[1] = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
   }
-  m_viewPort = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
+  m_viewPort = m_viewPorts[0] = (volatile uint8_t * *) heap_caps_malloc(sizeof(uint8_t*) * m_viewPortHeight, MALLOC_CAP_32BIT | MALLOC_CAP_INTERNAL);
   if (!isDoubleBuffered())
     m_viewPortVisible = m_viewPort;
   for (int p = 0, l = 0; p < poolsCount; ++p) {
@@ -211,6 +212,23 @@ void CVBSBaseController::allocateViewPort(uint32_t allocCaps, int rowlen)
 void IRAM_ATTR CVBSBaseController::swapBuffers()
 {
   tswap(m_viewPort, m_viewPortVisible);
+}
+
+
+bool CVBSBaseController::suspendDoubleBuffering(bool value)
+{
+  auto prevValue = BitmappedDisplayController::suspendDoubleBuffering(value);
+  if (prevValue != value && isDoubleBuffered()) {
+    if (value) {
+      m_viewPorts[0]    = m_viewPort;
+      m_viewPorts[1]    = m_viewPortVisible;
+      m_viewPort        = m_viewPortVisible;
+    } else {
+      m_viewPort        = m_viewPorts[0];
+      m_viewPortVisible = m_viewPorts[1];
+    }
+  }
+  return prevValue;
 }
 
 

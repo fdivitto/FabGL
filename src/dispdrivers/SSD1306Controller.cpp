@@ -32,6 +32,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+#include "esp_log.h"
+
 #include "fabutils.h"
 #include "SSD1306Controller.h"
 
@@ -628,6 +630,12 @@ void SSD1306Controller::swapBuffers()
   SSD1306_sendScreenBuffer(Rect(0, 0, getViewPortWidth() - 1, getViewPortHeight() - 1));
 }
 
+
+bool SSD1306Controller::suspendDoubleBuffering(bool value)
+{
+  ESP_LOGE("FabGL", "SSD1306, Unsupported suspendDoubleBuffering");
+  return BitmappedDisplayController::suspendDoubleBuffering(value);
+}
 
 
 
