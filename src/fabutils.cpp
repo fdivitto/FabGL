@@ -1223,8 +1223,8 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   #else
 
   // slow down SD card. Using ESP32 core 2.0.0 may crash SD subsystem, having VGA output and WiFi enabled
-  // @TODO: check again
-  host.max_freq_khz = 19000;
+  // @TODO: check again, checked it seems fixed with 2.0.6
+  //host.max_freq_khz = 19000;
 
   spi_bus_config_t bus_cfg = { };
   bus_cfg.mosi_io_num      = int2gpio(MOSI);
