@@ -229,6 +229,7 @@ bool downloadURL(char const * URL, FILE * file)
   ibox.progressBox("", "Abort", true, 380, [&](fabgl::ProgressForm * form) {
     form->update(0, "Preparing to download %s", filename);
     HTTPClient http;
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     http.begin(URL);
     int httpCode = http.GET();
     if (httpCode == HTTP_CODE_OK) {
@@ -271,7 +272,7 @@ char const * getDisk(char const * url)
 
   char const * filename = nullptr;
   if (url) {
-    if (strncmp("://", url + 4, 3) == 0) {
+    if (strncmp("http://", url, 7) == 0 || strncmp("https://", url, 7) == 0) {
       // this is actually an URL
       filename = strrchr(url, '/') + 1;
       if (filename && !fb.exists(filename, false)) {
