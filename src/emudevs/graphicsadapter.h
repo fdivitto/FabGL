@@ -52,11 +52,27 @@ public:
 
   enum class Emulation {
     None,
-    PC_Text_40x25_16Colors,       // CGA Color Text Mode (PC BIOS 00h/01h)
-    PC_Text_80x25_16Colors,       // CGA Color Text Mode (PC BIOS 02h/03h) - not visually because use 640x400 screen with 8x16 fonts, while should be 640x200 with 8x8 fonts
-    PC_Graphics_320x200_4Colors,  // CGA 320x200, 4 Colors Graphics Mode (PC BIOS 04h/05h)
-    PC_Graphics_640x200_2Colors,  // CGA 640x200, 2 Colors Graphics Mode (PC BIOS 06h)
-    PC_Graphics_HGC_720x348,      // Hercules 720x348 Graphics Black/White
+    
+    // CGA Color Text Mode (PC BIOS 00h/01h)
+    // Requires 2 * 40 * 25 = 2000 bytes
+    PC_Text_40x25_16Colors,
+    
+    // CGA Color Text Mode (PC BIOS 02h/03h)
+    // This is not visually like CGA because use 640x400 screen with 8x16 fonts, while should be 640x200 with 8x8 fonts
+    // Requires 2 * 80 * 25 = 4000 bytes
+    PC_Text_80x25_16Colors,
+    
+    // CGA 320x200, 4 Colors Graphics Mode (PC BIOS 04h/05h)
+    // Requires 320 / 4 * 200 = 16000 bytes
+    PC_Graphics_320x200_4Colors,
+    
+    // CGA 640x200, 2 Colors Graphics Mode (PC BIOS 06h)
+    // Requires 640 / 8 * 200 = 16000 bytes
+    PC_Graphics_640x200_2Colors,
+    
+    // Hercules 720x348 Graphics Black/White
+    // Requires 720 / 8 * 348 = 31320 bytes
+    PC_Graphics_HGC_720x348,
   };
 
 
