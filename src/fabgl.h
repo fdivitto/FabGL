@@ -85,6 +85,7 @@
  *    * fabgl::SSD1306Controller, device driver for SSD1306 based OLED displays
  *    * fabgl::ST7789Controller, device driver for ST7789 based TFT displays
  *    * fabgl::ILI9341Controller, device driver for ILI9341 based TFT displays
+ *    * fabgl::TTGOTDisplayV11Controller, device driver for TTGO T-Display V1.1 (ST7789 based)
  *    * fabgl::Canvas, that provides a set of drawing primitives (lines, rectangles, text...)
  *    * fabgl::Terminal, that emulates an ANSI/VT100/VT102/etc and up terminal (look at @ref vttest "vttest score")
  *    * fabgl::Keyboard, that controls a PS2 keyboard and translates scancodes to virtual keys or ASCII/ANSI codes

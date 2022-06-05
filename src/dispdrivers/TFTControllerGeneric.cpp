@@ -44,7 +44,6 @@
 
 #define TFT_BACKGROUND_PRIMITIVE_TIMEOUT 10000  // uS
 
-#define TFT_SPI_WRITE_FREQUENCY          40000000
 #define TFT_SPI_MODE                     3
 #define TFT_DMACHANNEL                   2
 
@@ -144,13 +143,19 @@ void TFTController::setupGPIO()
     configureGPIO(m_CS, GPIO_MODE_OUTPUT);
     gpio_set_level(m_CS, 1);
   }
+
+  // BL GPIO
+  if (m_BL != GPIO_UNUSED) {
+    configureGPIO(m_BL, GPIO_MODE_OUTPUT);
+    gpio_set_level(m_BL, 1);
+  }
 }
 
 
 // use SPIClass
 // without CS it is not possible to share SPI with other devices
 #ifdef ARDUINO
-void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_num_t CS)
+void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_num_t CS, gpio_num_t BL, int freq)
 {
   CurrentVideoMode::set(VideoMode::SPI);
 
@@ -161,6 +166,9 @@ void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_n
   m_DC    = DC;
   m_RESX  = RESX;
   m_CS    = CS;
+  m_BL    = BL;
+  
+  m_freq  = freq;
 
   setupGPIO();
 }
@@ -170,16 +178,16 @@ void TFTController::begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX, gpio_n
 // use SPIClass
 // without CS it is not possible to share SPI with other devices
 #ifdef ARDUINO
-void TFTController::begin(SPIClass * spi, int DC, int RESX, int CS)
+void TFTController::begin(SPIClass * spi, int DC, int RESX, int CS, int BL, int freq)
 {
-  begin(spi, int2gpio(DC), int2gpio(RESX), int2gpio(CS));
+  begin(spi, int2gpio(DC), int2gpio(RESX), int2gpio(CS), int2gpio(BL), freq);
 }
 #endif
 
 
 // use SDK driver
 // without CS it is not possible to share SPI with other devices
-void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host)
+void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host, int BL, int freq)
 {
   m_SPIHost = (spi_host_device_t)host;
   m_SCK     = int2gpio(SCK);
@@ -187,6 +195,8 @@ void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host)
   m_DC      = int2gpio(DC);
   m_RESX    = int2gpio(RESX);
   m_CS      = int2gpio(CS);
+  m_BL      = int2gpio(BL);
+  m_freq    = freq;
 
   setupGPIO();
   SPIBegin();
@@ -292,8 +302,6 @@ void TFTController::setupOrientation()
   freeViewPort();
   m_viewPortWidth  = m_rot0ViewPortWidth;
   m_viewPortHeight = m_rot0ViewPortHeight;
-  m_rotOffsetX = 0;
-  m_rotOffsetY = 0;
   uint8_t MX = m_reverseHorizontal ? 0x40 : 0;
   uint8_t madclt = 0x08 | MX;    // BGR
   switch (m_orientation) {
@@ -305,17 +313,18 @@ void TFTController::setupOrientation()
     case TFTOrientation::Rotate180:
       madclt |= 0x80;            // MY = 1
       madclt ^= 0x40;            // inv MX
-      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
-      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
       break;
     case TFTOrientation::Rotate270:
       tswap(m_viewPortWidth, m_viewPortHeight);
       madclt |= 0x20 | 0x80;     // MV = 1, MY = 1
-      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
       break;
     default:
       break;
   }
+  
+  // set m_rotOffsetX and m_rotOffsetY
+  updateOrientationOffsets();
+  
   // Memory Access Control
   writeCommand(TFT_MADCTL);
   writeByte(madclt);
@@ -327,6 +336,25 @@ void TFTController::setupOrientation()
   Primitive p;
   p.cmd = PrimitiveCmd::Reset;
   addPrimitive(p);
+}
+
+
+void TFTController::updateOrientationOffsets()
+{
+  switch (m_orientation) {
+    case TFTOrientation::Rotate180:
+      m_rotOffsetY = m_controllerHeight - m_viewPortHeight;
+      m_rotOffsetX = m_controllerWidth - m_viewPortWidth;
+      break;
+    case TFTOrientation::Rotate270:
+      m_rotOffsetX = m_controllerHeight - m_viewPortWidth;
+      m_rotOffsetY = 0;
+      break;
+    default:
+      m_rotOffsetX = 0;
+      m_rotOffsetY = 0;
+      break;
+  }
 }
 
 
@@ -371,7 +399,7 @@ void TFTController::SPIBegin()
     spi_device_interface_config_t devconf;
     memset(&devconf, 0, sizeof(devconf));
     devconf.mode           = TFT_SPI_MODE;
-    devconf.clock_speed_hz = TFT_SPI_WRITE_FREQUENCY;
+    devconf.clock_speed_hz = m_freq;
     devconf.spics_io_num   = -1;
     devconf.flags          = 0;
     devconf.queue_size     = 1;
@@ -404,7 +432,7 @@ void TFTController::SPIBeginWrite()
 {
   #ifdef ARDUINO
   if (m_spi) {
-    m_spi->beginTransaction(SPISettings(TFT_SPI_WRITE_FREQUENCY, SPI_MSBFIRST, TFT_SPI_MODE));
+    m_spi->beginTransaction(SPISettings(m_freq, SPI_MSBFIRST, TFT_SPI_MODE));
   }
   #endif
 

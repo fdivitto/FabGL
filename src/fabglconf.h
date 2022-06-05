@@ -331,6 +331,9 @@
 /** Modeline for OLED 128x32 */
 #define OLED_128x32 "\"OLED_128x32\" 128 32"
 
+/** Modeline for TFT 240x135 */
+#define TFT_135x240 "\"TFT_135x240\" 135 240"
+
 /** Modeline for TFT 240x240 */
 #define TFT_240x240 "\"TFT_240x240\" 240 240"
 

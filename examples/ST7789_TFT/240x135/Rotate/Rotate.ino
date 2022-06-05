@@ -25,11 +25,7 @@
 
 
 /*
-* TFT Display signals:
-*   SCK  => GPIO 18
-*   MOSI => GPIO 23
-*   D/C  => GPIO 22
-*   RESX => GPIO 21
+* Example for TTGO T-Display V1.1
 */
 
 
@@ -38,14 +34,16 @@
 
 
 
-fabgl::ST7789Controller  DisplayController;
+fabgl::TTGOTDisplayV11Controller DisplayController;
 
 
-
-#define TFT_SCK    18
-#define TFT_MOSI   23
-#define TFT_DC     22
-#define TFT_RESET  21
+#define TFT_SCK         18
+#define TFT_MOSI        19
+#define TFT_DC          16
+#define TFT_RESET       23
+#define TFT_CS           5
+#define TFT_BL           4
+#define TFT_FREQ  20000000
 #define TFT_SPIBUS VSPI_HOST
 
 
@@ -63,7 +61,7 @@ void test(Color bcolor, char const * msg)
   cv.fillPath(pts, 3);
   cv.drawPath(pts, 3);
   cv.selectFont(&fabgl::FONT_8x14);
-  cv.drawTextFmt(w/3, h/2, "%s", msg);
+  cv.drawTextFmt(w/3, h - 20, "%s", msg);
   delay(2000);
 }
 
@@ -72,8 +70,8 @@ void setup()
 {
   //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
 
-  DisplayController.begin(TFT_SCK, TFT_MOSI, TFT_DC, TFT_RESET, -1, TFT_SPIBUS);
-  DisplayController.setResolution(TFT_240x240);
+  DisplayController.begin(TFT_SCK, TFT_MOSI, TFT_DC, TFT_RESET, TFT_CS, TFT_SPIBUS, TFT_BL, TFT_FREQ);
+  DisplayController.setResolution(TFT_135x240);
 }
 
 

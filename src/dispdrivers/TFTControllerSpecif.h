@@ -96,6 +96,30 @@ protected:
 
 
 
+/**
+ * @brief Implements TTGO T-Display V1.1 display driver controller.
+ *
+ * Example:
+ *
+ *     fabgl::TTGOTDisplayV11Controller DisplayController;
+ *
+ *     void setup() {
+ *       // SCK = 18, MOSI = 19, D/C = 16, RESET = 23, CS = 5, BL = 4, freq = 20Mhz
+ *       DisplayController.begin(18, 19, 16, 23, 5, VSPI_HOST, 4, 20000000);
+ *       DisplayController.setResolution(TFT_135x240);
+ *
+ *       Canvas cv(&DisplayController);
+ *       cv.clear();
+ *       cv.drawText(0, 0, "Hello World!");
+ *     }
+ */
+class TTGOTDisplayV11Controller : public ST7789Controller {
+protected:
+  void updateOrientationOffsets();
+};
+
+
+
 
 
 

@@ -76,7 +76,7 @@ void ST7789Controller::softReset()
   SPIBeginWrite();
   writeCommand(ST7789_SWRST);
   SPIEndWrite();
-  vTaskDelay(150 / portTICK_PERIOD_MS);
+  vTaskDelay(5 / portTICK_PERIOD_MS);
 
   SPIBeginWrite();
 
@@ -373,6 +373,41 @@ void ILI9341Controller::softReset()
   
   SPIEndWrite();
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// TTGOTDisplayV11Controller
+
+
+
+void TTGOTDisplayV11Controller::updateOrientationOffsets()
+{
+  switch (m_orientation) {
+    case TFTOrientation::Rotate0:
+      m_rotOffsetX = 52;
+      m_rotOffsetY = 40;
+      break;
+    case TFTOrientation::Rotate90:
+      m_rotOffsetX = 40;
+      m_rotOffsetY = 53;
+      break;
+    case TFTOrientation::Rotate180:
+      m_rotOffsetX = 53;
+      m_rotOffsetY = 40;
+      break;
+    case TFTOrientation::Rotate270:
+      m_rotOffsetX = 40;
+      m_rotOffsetY = 52;
+      break;
+    default:
+      m_rotOffsetX = 0;
+      m_rotOffsetY = 0;
+      break;
+  }
+}
+
 
 
 } // end of namespace

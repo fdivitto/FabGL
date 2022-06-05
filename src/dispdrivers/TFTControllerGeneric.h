@@ -56,6 +56,8 @@
 #define TFT_RAMWR      0x2C
 #define TFT_MADCTL     0x36
 
+#define TFT_SPI_WRITE_FREQUENCY 40000000
+
 
 
 namespace fabgl {
@@ -108,7 +110,9 @@ public:
    * @param spi SPIClass object.
    * @param DC GPIO of D/C signal (Data/Command).
    * @param RESX GPIO of Reset signal (can be GPIO_UNUSED).
-   * @param CS GPIO of Optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.
+   * @param CS GPIO of optional Select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.
+   * @param BL GPIO of optional BL (LEDK) signal (can be GPIO_UNUSED).
+   * @param freq SPI frequency in Hertz.
    *
    * Example:
    *
@@ -120,7 +124,7 @@ public:
    *     DisplayController.setResolution(TFT_240x240);
    */
   #ifdef ARDUINO
-  void begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX = GPIO_UNUSED, gpio_num_t CS = GPIO_UNUSED);
+  void begin(SPIClass * spi, gpio_num_t DC, gpio_num_t RESX = GPIO_UNUSED, gpio_num_t CS = GPIO_UNUSED, gpio_num_t BL = GPIO_UNUSED, int freq = TFT_SPI_WRITE_FREQUENCY);
   #endif
 
   /**
@@ -128,8 +132,10 @@ public:
    *
    * @param spi SPIClass object.
    * @param DC GPIO of D/C signal (Data/Command).
-   * @param RESX GPIO of Reset signal (can be GPIO_UNUSED).
-   * @param CS GPIO of optional select signal (can be GPIO_UNUSED). Without CS signal it is impossible to share SPI channel with other devices.
+   * @param RESX GPIO of Reset signal (can be -1).
+   * @param CS GPIO of optional select signal (can be -1). Without CS signal it is impossible to share SPI channel with other devices.
+   * @param BL GPIO of optional BL (LEDK) signal (can be -1).
+   * @param freq SPI frequency in Hertz.
    *
    * Example:
    *
@@ -141,7 +147,7 @@ public:
    *     DisplayController.setResolution(TFT_240x240);
    */
   #ifdef ARDUINO
-  void begin(SPIClass * spi, int DC, int RESX = -1, int CS = -1);
+  void begin(SPIClass * spi, int DC, int RESX = -1, int CS = -1, int BL = -1, int freq = TFT_SPI_WRITE_FREQUENCY);
   #endif
 
   /**
@@ -155,6 +161,8 @@ public:
    * @param RESX GPIO of optional reset signal (sometimes named RESX, can be -1).
    * @param CS GPIO of optional selet signal (can be -1). Without CS signal it is impossible to share SPI channel with other devices.
    * @param host SPI bus to use (1 = HSPI, 2 = VSPI).
+   * @param BL GPIO of optional BL (LEDK) signal (can be -1).
+   * @param freq SPI frequency in Hertz.
    *
    * Example:
    *
@@ -163,7 +171,7 @@ public:
    *     DisplayController.begin(18, 23, 22, 21, -1, VSPI_HOST);
    *     DisplayController.setResolution(TFT_240x240);
    */
-  void begin(int SCK, int MOSI, int DC, int RESX, int CS, int host);
+  void begin(int SCK, int MOSI, int DC, int RESX, int CS, int host, int BL = -1, int freq = TFT_SPI_WRITE_FREQUENCY);
 
   /**
    * @brief Initializes TFT display controller
@@ -273,7 +281,11 @@ public:
 
 protected:
 
+  // performs soft reset
   virtual void softReset() = 0;
+  
+  // updates m_rotOffsetX and m_rotOffsetY from current m_orientation
+  virtual void updateOrientationOffsets();
 
   virtual void setupOrientation();
 
@@ -369,6 +381,8 @@ protected:
   gpio_num_t         m_DC;
   gpio_num_t         m_RESX;
   gpio_num_t         m_CS;
+  gpio_num_t         m_BL;
+  int32_t            m_freq;
 
   spi_device_handle_t m_SPIDevHandle;
 
