@@ -22,6 +22,7 @@
 
 import sys
 import os
+import math
 from PIL import Image
 
 
@@ -41,19 +42,19 @@ format = 0  # RGBA2222
 outmode = 0  # C++
 
 if len(sys.argv) < 2:
-  print "Converts an image (png, jpeg, ....) to FabGL Bitmap structure"
-  print "Usage:"
-  print "  python img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2]  [-o0 | -o1]\n"
-  print "  -t  = pixel where to take transparent color"
-  print "  -s  = resize to specified values\n"
-  print "  -d  = enable dithering\n"
-  print "  -f0 = format is RGBA2222 (default)\n"
-  print "  -f1 = format is RGBA8888\n"
-  print "  -f2 = format is 1 bit monochrome (color/transparent)\n"
-  print "  -o0 = output as FabGL C++ code (default)\n"
-  print "  -o1 = output as simple hex string\n\n"
-  print "Example:"
-  print "  python img2bitmap.py input.png -s 64 64 >out.c"
+  print("Converts an image (png, jpeg, ....) to FabGL Bitmap structure")
+  print("Usage:")
+  print("  python3 img2bitmap.py filename [-t x y] [-s width height] [-d] [-f0 | -f1 | -f2]  [-o0 | -o1]\n")
+  print("  -t  = pixel where to take transparent color")
+  print("  -s  = resize to specified values\n")
+  print("  -d  = enable dithering\n")
+  print("  -f0 = format is RGBA2222 (default)\n")
+  print("  -f1 = format is RGBA8888\n")
+  print("  -f2 = format is 1 bit monochrome (color/transparent)\n")
+  print("  -o0 = output as FabGL C++ code (default)\n")
+  print("  -o1 = output as simple hex string\n\n")
+  print("Example:")
+  print("  python img2bitmap.py input.png -s 64 64 >out.c")
   sys.exit()
 
 i = 2
@@ -108,21 +109,19 @@ opix = im.load()
 if dithering:
   # dithering
   pal64 = []
-  for r in range(4):
-    for g in range(4):
-      for b in range(4):
-        pal64.extend((r * 64, g * 64, b * 64))
+  for r in range(5):
+    for g in range(5):
+      for b in range(5):
+        pal64.extend((min(r * 64, 255), min(g * 64, 255), min(b * 64, 255)))
   pal64image = Image.new('P', (16, 16))
   pal64image.putpalette(pal64)
-
   im = im.convert("RGB").quantize(64, palette = pal64image).convert("RGB")
-
+  
 else:
   # no dithering
   im = im.quantize(64).convert("RGB")
 
 pix = im.load()
-
 
 outs = ""
 
@@ -138,11 +137,12 @@ if format == 0:
   for y in range(0, im.height):
     outs = outs + "\t"
     for x in range(0, im.width):
-      v  = int(pix[x, y][0] / 255.0 * 3.0)        # R
-      v |= int(pix[x, y][1] / 255.0 * 3.0) << 2   # G
-      v |= int(pix[x, y][2] / 255.0 * 3.0) << 4   # B
-      v |= int(opix[x, y][3] / 255.0 * 3.0) << 6  # A
+      v  = math.ceil(pix[x, y][0] * 3 / 255)        # R
+      v |= math.ceil(pix[x, y][1] * 3 / 255) << 2   # G
+      v |= math.ceil(pix[x, y][2] * 3 / 255) << 4   # B
+      v |= math.ceil(opix[x, y][3] * 3 / 255) << 6  # A
       outhex(v)
+      # outs += "/*{},{},{}*/".format(pix[x, y][0], pix[x, y][1], pix[x, y][2])
     outs = outs + "\n"
 
 if format == 1:
@@ -173,6 +173,6 @@ if outmode == 0:
   outs = outs + "};\n"
   outs = outs + "Bitmap {} = Bitmap({}, {}, &{}_data[0], {});".format(name, im.width, im.height, name, formatstr)
 
-print outs
+print(outs)
 
 
