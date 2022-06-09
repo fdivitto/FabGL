@@ -454,7 +454,7 @@ void Terminal::connectSerialPort(uint32_t baud, int dataLength, char parity, flo
     m_uart = new SerialPort;
     m_uart->setCallbacks(this, rxReadyCallback, rxCallback);
   }
-  m_uart->connect(2, baud, dataLength, parity, stopBits, rxPin, txPin, flowControl, inverted, rtsPin, ctsPin);
+  m_uart->setup(2, baud, dataLength, parity, stopBits, rxPin, txPin, flowControl, inverted, rtsPin, ctsPin);
 
   if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
     xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);

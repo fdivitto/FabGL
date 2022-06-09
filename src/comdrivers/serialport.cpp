@@ -99,7 +99,7 @@ void SerialPort::setRTSStatus(bool value)
 
 
 // uart = 0, 1, 2
-void SerialPort::connect(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
+void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
 {
   static const int URXD_IN_IDX[]    = { U0RXD_IN_IDX, U1RXD_IN_IDX, U2RXD_IN_IDX };
   static const int UTXD_OUT_IDX[]   = { U0TXD_OUT_IDX, U1TXD_OUT_IDX, U2TXD_OUT_IDX };
@@ -217,12 +217,14 @@ void SerialPort::connect(int uartIndex, uint32_t baud, int dataLength, char pari
 void SerialPort::flowControl(bool enableRX)
 {
   if (enableRX) {
+    // suspend RX
     if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
       send(ASCII_XON);
     if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
       setRTSStatus(true);            // assert RTS
     m_sentXOFF = false;
   } else {
+    // resume RX
     if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
       send(ASCII_XOFF);
     if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)

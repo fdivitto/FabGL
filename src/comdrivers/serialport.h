@@ -63,7 +63,9 @@ enum class FlowControl {
 };
 
 
-
+/**
+ * @brief SerialPort class handles UART setup and communications
+ */
 class SerialPort {
 public:
 
@@ -74,24 +76,87 @@ public:
   
   void setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback);
   
-  void connect(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin);
-
-  void setRTSStatus(bool value);
+  /**
+   * @brief Configure and activate specified UART
+   *
+   * You may call connect whenever a parameters needs to be changed (except for rx and tx pins).
+   *
+   * @param uartIndex UART device to use (0, 1, 2)
+   * @param baud Baud rate.
+   * @param dataLength Data word length. 5 = 5 bits, 6 = 6 bits, 7 = 7 bits, 8 = 8 bits
+   * @param parity Parity. 'N' = none, 'E' = even, 'O' = odd
+   * @param stopBits Number of stop bits. 1 = 1 bit, 1.5 = 1.5 bits, 2 = 2 bits, 3 = 3 bits
+   * @param rxPin UART RX pin GPIO number.
+   * @param txPin UART TX pin GPIO number.
+   * @param flowControl Flow control.
+   * @param inverted If true RX and TX signals are inverted.
+   * @param rtsPin RTS signal GPIO number (-1 = not used)
+   * @param ctsPin CTS signal GPIO number (-1 = not used)
+   *
+   * Example:
+   *
+   *     serialPort.connect(2, 115200, 8, 'N', 1, 34, 2, FlowControl::Software);
+   */
+  void setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin);
   
+  /**
+   * @brief Allows/disallows host to send data
+   *
+   * @param enableRX If True host can send data (sent XON and/or RTS asserted)
+   */
   void flowControl(bool enableRX);
   
+  /**
+   * @brief Checks if TX is enabled looking for XOFF received or reading CTS
+   *
+   * @return True if sending is allowed
+   */
   bool readyToSend();
   
   void updateFlowControlStatus();
   
-  bool initialized() { return m_initialized; }
+  /**
+   * @brief Checks if the object is initialized
+   *
+   * @return True if serial port has been initialized
+   */
+  bool initialized()                   { return m_initialized; }
   
-  bool CTSStatus()   { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : false; }
-  
+  /**
+   * @brief Reports current CTS signal status
+   *
+   * @return True if RTS is asserted (low voltage, host is ready to receive data)
+   */
+  bool CTSStatus()                     { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : false; }
+
+  /**
+   * @brief Sets RTS signal status
+   *
+   * RTS signal is handled automatically when flow control has been setup
+   *
+   * @param value True to assert RTS (low voltage)
+   */
+  void setRTSStatus(bool value);
+
+  /**
+   * @brief Reports current RTS signal status
+   *
+   * @return True if RTS is asserted (low voltage, terminal is ready to receive data)
+   */
   bool RTSStatus()                     { return m_RTSStatus; }
   
+  /**
+   * @brief Reports whether TX is active
+   *
+   * @return True if XOFF has been sent or RTS is not asserted
+   */
   bool XOFFStatus()                    { return m_sentXOFF; }
   
+  /**
+   * @brief Sends a byte
+   *
+   * @param value Byte to send
+   */
   void send(uint8_t value);
   
 
