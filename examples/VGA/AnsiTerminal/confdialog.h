@@ -360,22 +360,22 @@ struct ConfDialogApp : public uiApp {
 
     // RTS Status (clickable)
     RTSStatus = new uiLabel(frame, "RTS", Point(300, 210), Size(30, 15), true, STYLE_LABELBUTTON);
-    setRTSStatus(Terminal.RTSStatus());
+    setRTSStatus(Terminal.serialPort()->RTSStatus());
     RTSStatus->onClick = [&]() {
-      bool newval = !Terminal.RTSStatus();
-      Terminal.setRTSStatus(newval);
+      bool newval = !Terminal.serialPort()->RTSStatus();
+      Terminal.serialPort()->setRTSStatus(newval);
       setRTSStatus(newval);
     };
 
     // CTS Status
     CTSStatus = new uiLabel(frame, "CTS", Point(335, 210), Size(30, 15), true, STYLE_LABELBUTTON);
-    lastCTSStatus = Terminal.CTSStatus();
+    lastCTSStatus = Terminal.serialPort()->CTSStatus();
     setCTSStatus(lastCTSStatus);
 
     // timer
     frame->onTimer = [&](uiTimerHandle) {
       // monitor CTS status
-      if (Terminal.CTSStatus() != lastCTSStatus) {
+      if (Terminal.serialPort()->CTSStatus() != lastCTSStatus) {
         lastCTSStatus = !lastCTSStatus;
         setCTSStatus(lastCTSStatus);
       }
