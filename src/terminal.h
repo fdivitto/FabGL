@@ -1354,13 +1354,6 @@ public:
    */
   SoundGenerator * soundGenerator();
 
-  /**
-   * @brief Checks whether host can receive data
-   *
-   * @return True if host can receive data. False if host sent XOFF or CTS is not asserted.
-   */
-  bool flowControl();
-
 
 
   //// Delegates ////

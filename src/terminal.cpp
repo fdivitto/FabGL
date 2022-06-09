@@ -422,16 +422,6 @@ void Terminal::end()
 }
 
 
-// check if TX is enabled looking for XOFF received or reading CTS
-bool Terminal::flowControl()
-{
-  //Serial.printf("flowControl\n");
-  if (m_uart)
-    return m_uart->readyToSend();
-  return true;  // TX enabled
-}
-
-
 void Terminal::rxCallback(void * args, uint8_t value, bool fromISR)
 {
   auto term = (Terminal *) args;
@@ -4293,7 +4283,7 @@ void Terminal::keyboardReaderTask(void * pvParameters)
         term->onVirtualKey(&item.vk, item.down);
         term->onVirtualKeyItem(&item);
 
-        if (term->flowControl()) {
+        if (term->m_uart == nullptr || term->m_uart->readyToSend()) {
 
           // note: when flow is locked, no key event is reinjected. This to allow onVirtualKey to always work on last pressed char.
 
