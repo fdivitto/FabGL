@@ -2053,8 +2053,9 @@ uint8_t Terminal::getNextCode(bool processCtrlCodes)
     logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
     #endif
 
-    if (m_uart)
-      m_uart->updateFlowControlStatus();
+    // resume RX?
+    if (m_uart && !m_uart->readyToReceive() && availableForWrite())
+      m_uart->flowControl(true);
 
     // inside an ESC sequence we may find control characters!
     if (processCtrlCodes && ISCTRLCHAR(c))

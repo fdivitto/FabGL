@@ -217,19 +217,25 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
 void SerialPort::flowControl(bool enableRX)
 {
   if (enableRX) {
-    // suspend RX
-    if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
-      send(ASCII_XON);
-    if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
-      setRTSStatus(true);            // assert RTS
-    m_sentXOFF = false;
-  } else {
     // resume RX
-    if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
-      send(ASCII_XOFF);
-    if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
-      setRTSStatus(false);           // disable RTS
-    m_sentXOFF = true;
+    if (m_sentXOFF) {
+      if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
+        send(ASCII_XON);
+      if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
+        setRTSStatus(true);            // assert RTS
+      SET_PERI_REG_MASK(UART_INT_ENA_REG(m_idx), UART_RXFIFO_FULL_INT_ENA_M); // enable RX FIFO full interrupt
+      m_sentXOFF = false;
+    }
+  } else {
+    // suspend RX
+    if (!m_sentXOFF) {
+      if (m_flowControl == FlowControl::Software || m_flowControl == FlowControl::Hardsoft)
+        send(ASCII_XOFF);
+      if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
+        setRTSStatus(false);           // disable RTS
+      // note: here we don't disable FIFO interrupts. These are disabled in ISR when input queue is full
+      m_sentXOFF = true;
+    }
   }
 }
 
@@ -243,19 +249,6 @@ bool SerialPort::readyToSend()
   if ((m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft) && CTSStatus() == false)
     return false; // TX disabled (CTS=high, not active)
   return true;  // TX enabled
-}
-
-
-void SerialPort::updateFlowControlStatus()
-{
-  if (m_flowControl != FlowControl::None) {
-    if (m_rxReadyCallback(m_callbackArgs, false) && m_dev->int_ena.rxfifo_full == 0) {
-      if (m_sentXOFF)
-        flowControl(true);  // enable RX
-      // enable RX FIFO full interrupt
-      SET_PERI_REG_MASK(UART_INT_ENA_REG(m_idx), UART_RXFIFO_FULL_INT_ENA_M);
-    }
-  }
 }
 
 
@@ -286,18 +279,17 @@ void IRAM_ATTR SerialPort::uart_isr(void * arg)
   if (ser->m_flowControl != FlowControl::None) {
     // send XOFF/XON or set RTS looking at RX FIFO occupation
     int count = ser->uartGetRXFIFOCount();
-    if (count > FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MAX_THRESHOLD && !ser->m_sentXOFF)
-      ser->flowControl(false); // disable RX
-    else if (count < FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MIN_THRESHOLD && ser->m_sentXOFF)
-      ser->flowControl(true);  // enable RX
+    if (count > FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MAX_THRESHOLD)
+      ser->flowControl(false); // suspend RX
+    else if (count < FABGLIB_TERMINAL_FLOWCONTROL_RXFIFO_MIN_THRESHOLD)
+      ser->flowControl(true);  // resume RX
   }
 
   // main receive loop
   while (ser->uartGetRXFIFOCount() != 0 || dev->mem_rx_status.wr_addr != dev->mem_rx_status.rd_addr) {
     // look for enough room in input queue
     if (ser->m_flowControl != FlowControl::None && !ser->m_rxReadyCallback(ser->m_callbackArgs, true)) {
-      if (!ser->m_sentXOFF)
-        ser->flowControl(false);  // disable RX
+      ser->flowControl(false);  // suspend RX
       // block further interrupts
       CLEAR_PERI_REG_MASK(UART_INT_ENA_REG(idx), UART_RXFIFO_FULL_INT_ENA_M);
       break;

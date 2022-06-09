@@ -113,7 +113,12 @@ public:
    */
   bool readyToSend();
   
-  void updateFlowControlStatus();
+  /**
+   * @brief Reports whether RX is active
+   *
+   * @return False if XOFF has been sent or RTS is not asserted
+   */
+  bool readyToReceive()                { return !m_sentXOFF; }
   
   /**
    * @brief Checks if the object is initialized
@@ -144,14 +149,7 @@ public:
    * @return True if RTS is asserted (low voltage, terminal is ready to receive data)
    */
   bool RTSStatus()                     { return m_RTSStatus; }
-  
-  /**
-   * @brief Reports whether TX is active
-   *
-   * @return True if XOFF has been sent or RTS is not asserted
-   */
-  bool XOFFStatus()                    { return m_sentXOFF; }
-  
+    
   /**
    * @brief Sends a byte
    *
