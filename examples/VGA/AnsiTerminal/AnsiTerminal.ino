@@ -71,7 +71,7 @@ fabgl::SerialPortTerminalConnector  SerialPortTerminalConnector;
 //*/
 #define RESET_PIN        39
 #define RESET_PIN_ACTIVE  0   // 0 = reset when low, 1 = reset when high
-#define USERESETPIN       1   // 1 = reset enabled
+#define USERESETPIN       0   // 1 = reset enabled
 
 
 
@@ -132,7 +132,7 @@ void setup()
     //Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
     Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
     //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
-    if (ConfDialogApp::getSerCtl() == SERCTL_ENABLED)
+    if (ConfDialogApp::getSerCtl())
       Terminal.printf("Serial Port        : USB RX-Pin[%d] TX-Pin[%d]\r\n", UART_URX, UART_UTX);
     else
       Terminal.printf("Serial Port        : Serial RX-Pin[%d] TX-Pin[%d]\r\n", UART_SRX, UART_STX);

@@ -136,9 +136,6 @@ constexpr int       BOOTINFO_DISABLED     = 0;
 constexpr int       BOOTINFO_ENABLED      = 1;
 constexpr int       BOOTINFO_TEMPDISABLED = 2;
 
-constexpr int       SERCTL_DISABLED     = 0;
-constexpr int       SERCTL_ENABLED      = 1;
-
 // preferences keys
 static const char * PREF_VERMAJ         = "VerMaj";
 static const char * PREF_VERMIN         = "VerMin";
@@ -323,7 +320,7 @@ struct ConfDialogApp : public uiApp {
     // set control to usb-serial
     new uiStaticLabel(frame, "USBSerial", Point(10, y), true, STYLE_STATICLABEL);
     serctlCheckBox = new uiCheckBox(frame, Point(80, y - 2), Size(16, 16), uiCheckBoxKind::CheckBox, true, STYLE_CHECKBOX);
-    serctlCheckBox->setChecked(getSerCtl() == SERCTL_ENABLED);
+    serctlCheckBox->setChecked(getSerCtl());
 
     y += 24;
 
@@ -407,7 +404,8 @@ struct ConfDialogApp : public uiApp {
                   fontComboBox->selectedItem()       != getFontIndex()       ||
                   columnsComboBox->selectedItem()    != getColumnsIndex()    ||
                   rowsComboBox->selectedItem()       != getRowsIndex()       ||
-                  bgColorComboBox->selectedColor()   != getBGColor();
+                  bgColorComboBox->selectedColor()   != getBGColor()         ||
+                  serctlCheckBox->checked()          != getSerCtl();
 
     preferences.putInt(PREF_TERMTYPE, termComboBox->selectedItem());
     preferences.putInt(PREF_KBDLAYOUT, kbdComboBox->selectedItem());
@@ -423,8 +421,10 @@ struct ConfDialogApp : public uiApp {
     preferences.putInt(PREF_COLUMNS, columnsComboBox->selectedItem());
     preferences.putInt(PREF_ROWS, rowsComboBox->selectedItem());
     preferences.putInt(PREF_BOOTINFO, infoCheckBox->checked() ? BOOTINFO_ENABLED : BOOTINFO_DISABLED);
-    preferences.putInt(PREF_SERCTL, serctlCheckBox->checked() ? SERCTL_ENABLED : SERCTL_DISABLED);
-
+    preferences.putInt(PREF_SERCTL, serctlCheckBox->checked());
+    
+    preferences.end();
+    
     if (reboot)
       performReboot(); // no return from here!
 
@@ -522,7 +522,7 @@ struct ConfDialogApp : public uiApp {
 
 
   static int getSerCtl() {
-    return preferences.getInt(PREF_SERCTL, SERCTL_DISABLED);
+    return preferences.getInt(PREF_SERCTL, false);
   }
 
 
@@ -600,7 +600,7 @@ struct ConfDialogApp : public uiApp {
     Terminal.setForegroundColor(getFGColor());
     
     // configure serial port
-    bool serctl = (getSerCtl() == SERCTL_ENABLED);
+    bool serctl = getSerCtl();
     auto rxPin  = serctl ? UART_URX : UART_SRX;
     auto txPin  = serctl ? UART_UTX : UART_STX;
     SerialPort.setup(2, BAUDRATES_INT[getBaudRateIndex()], DATALENS_INT[getDataLenIndex()], PARITY_CHAR[getParityIndex()], STOPBITS_FLOAT[getStopBitsIndex()], rxPin, txPin, getFlowCtrl(), false, RTS, CTS);
