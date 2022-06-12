@@ -37,6 +37,8 @@
 fabgl::BitmappedDisplayController * DisplayController;
 fabgl::PS2Controller                PS2Controller;
 fabgl::Terminal                     Terminal;
+fabgl::SerialPort                   SerialPort;
+fabgl::SerialPortTerminalConnector  SerialPortTerminalConnector;
 
 
 
@@ -111,8 +113,8 @@ void setup()
 
   ConfDialogApp::setupDisplay();
 
-  ConfDialogApp::loadConfiguration();  
-
+  ConfDialogApp::loadConfiguration();
+  
   #if FABGLIB_TERMINAL_DEBUG_REPORT
   Terminal.setLogStream(Serial);  // debug only
   #endif

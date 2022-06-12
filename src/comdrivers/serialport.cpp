@@ -48,6 +48,7 @@ namespace fabgl {
 
 SerialPort::SerialPort()
   : m_initialized(false),
+    m_RTSStatus(true),
     m_flowControl(FlowControl::None),
     m_sentXOFF(false),
     m_recvXOFF(false),
@@ -310,6 +311,58 @@ void IRAM_ATTR SerialPort::uart_isr(void * arg)
 }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// SerialPortTerminalConnector
+
+
+SerialPortTerminalConnector::SerialPortTerminalConnector()
+  : m_terminal(nullptr),
+    m_serialPort(nullptr),
+    m_serialPortRXEnabled(true)
+{
+}
+
+
+void SerialPortTerminalConnector::connect(SerialPort * serialPort, Terminal * terminal)
+{
+  m_serialPort = serialPort;
+  m_serialPort->setCallbacks(this, rxReadyCallback, rxCallback);
+  
+  m_terminal = terminal;
+  m_terminal->connectKeyboard();
+  
+  m_terminal->onReceive = [&](uint8_t c) {
+    // resume RX?
+    if (!m_serialPort->readyToReceive() && m_terminal->availableForWrite())
+      m_serialPort->flowControl(true);
+  };
+  
+  m_terminal->onReadyToSend = [&](bool * readyToSend) {
+    // suspend/resume TX?
+    if (*readyToSend)
+      *readyToSend = m_serialPort->readyToSend();
+  };
+  
+  m_terminal->onSend = [&](uint8_t c) {
+    m_serialPort->send(c);
+  };
+}
+
+
+void SerialPortTerminalConnector::rxCallback(void * args, uint8_t value, bool fromISR)
+{
+  auto obj = (SerialPortTerminalConnector *) args;
+  if (obj->m_serialPortRXEnabled)
+    obj->m_terminal->write(value, fromISR);
+}
+
+
+bool SerialPortTerminalConnector::rxReadyCallback(void * args, bool fromISR)
+{
+  auto obj = (SerialPortTerminalConnector *) args;
+  return obj->m_terminal->availableForWrite(fromISR) > 0;
+}
 
 
 } // end of namespace

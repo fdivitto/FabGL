@@ -330,6 +330,7 @@
 #include "devdrivers/keyboard.h"
 #include "devdrivers/mouse.h"
 #include "devdrivers/DS3231.h"
+#include "comdrivers/serialport.h"
 #include "scene.h"
 #include "collisiondetector.h"
 #include "devdrivers/soundgen.h"

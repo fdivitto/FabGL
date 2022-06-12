@@ -43,12 +43,16 @@
 #include "freertos/timers.h"
 #include "freertos/semphr.h"
 
+#ifdef ARDUINO
+  #include "Arduino.h"
+  #include "Stream.h"
+#endif
+
 #include "fabglconf.h"
 #include "canvas.h"
 #include "devdrivers/keyboard.h"
 #include "terminfo.h"
 #include "devdrivers/soundgen.h"
-#include "comdrivers/serialport.h"
 
 
 
@@ -940,51 +944,16 @@ public:
   void end();
 
   /**
-   * @brief Connects a remote host using UART
+   * @brief Connect keyboard to the terminal
    *
-   * When serial port is set, the typed keys on PS/2 keyboard are encoded
-   * as ANSI/VT100 codes and then sent to the specified serial port.<br>
-   * Also replies to terminal queries like terminal identification, cursor position, etc.. will be
-   * sent to the serial port.<br>
-   * This method setups the UART2 with specified parameters. Received characters are handlded using interrupts freeing main
-   * loop to do something other.<br>
-   * <br>
-   * This is the preferred way to connect the Terminal with a serial port.<br>
-   * You may call connectSerialPort whenever a parameters needs to be changed (except for rx and tx pins).
-   *
-   * @param baud Baud rate.
-   * @param dataLength Data word length. 5 = 5 bits, 6 = 6 bits, 7 = 7 bits, 8 = 8 bits
-   * @param parity Parity. 'N' = none, 'E' = even, 'O' = odd
-   * @param stopBits Number of stop bits. 1 = 1 bit, 1.5 = 1.5 bits, 2 = 2 bits, 3 = 3 bits
-   * @param rxPin UART RX pin GPIO number.
-   * @param txPin UART TX pin GPIO number.
-   * @param flowControl Flow control.
-   * @param inverted If true RX and TX signals are inverted.
-   * @param rtsPin RTS signal GPIO number (-1 = not used)
-   * @param ctsPin CTS signal GPIO number (-1 = not used)
-   *
-   * Example:
-   *
-   *     Terminal.begin(&DisplayController);
-   *     Terminal.connectSerialPort(115200, 8, 'N', 1, 34, 2, FlowControl::Software);
+   * Creates a task that read Keyboard scancodes and generates emulated terminal codes.
    */
-  void connectSerialPort(uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
-
-  SerialPort * serialPort() { return m_uart; }
-
-  /**
-   * @brief Disables/Enables serial port RX
-   *
-   * This method temporarily disables RX from serial port, discarding all incoming data.
-   *
-   * @param value If True RX is disabled. If False RX is re-enabled.
-   */
-  void disableSerialPortRX(bool value)         { m_uartRXEnabled = !value; }
-
+  void connectKeyboard();
+  
   /**
    * @brief Permits using of terminal locally.
    *
-   * Create a queue where to put ANSI keys decoded from keyboard or as replies to terminal queries.<br>
+   * Creates a queue where to put ANSI keys decoded from keyboard or as replies to terminal queries.<br>
    * This queue is accessible with read(), available() and peek() methods.
    *
    * Example:
@@ -1383,6 +1352,29 @@ public:
    * receives "ESC_#mycommand$", the delegate receives "mycommand" string.
    */
   Delegate<char const *> onUserSequence;
+  
+  
+  /**
+   * @brief Delegate called whenever the terminal need to send a character
+   *
+   * Parameter contains the character to send
+   */
+  Delegate<uint8_t> onSend;
+  
+  
+  /**
+   * @brief Delegate called whenever the terminal receives a character
+   *
+   * Parameter contains the character received
+   */
+  Delegate<uint8_t> onReceive;
+  
+  /**
+   * @brief Delegate called whenever the terminal is ready to send
+   *
+   * Parameter contains a reference to bool. It can be changed to False if received is not ready.
+   */
+  Delegate<bool *> onReadyToSend;
 
 
 
@@ -1540,9 +1532,6 @@ private:
 
   uint32_t makeGlyphItem(uint8_t c, GlyphOptions * glyphOptions, Color * newForegroundColor);
   
-  static void rxCallback(void * args, uint8_t value, bool fromISR);
-  static bool rxReadyCallback(void * args, bool fromISR);
-
   // indicates which is the active terminal when there are multiple instances of Terminal
   static Terminal *  s_activeTerminal;
 
@@ -1610,14 +1599,6 @@ private:
   // checked in loadFont() to limit m_columns and m_rows (-1 = not checked)
   int                m_maxColumns;
   int                m_maxRows;
-
-  // optional serial port (directly handled)
-  // data from serial port is processed and displayed
-  // keys from keyboard are processed and sent to serial port
-  SerialPort *              m_uart;
-
-  // if false all inputs from UART are discarded
-  volatile bool             m_uartRXEnabled;
 
   // contains characters to be processed (from write() calls)
   volatile QueueHandle_t    m_inputQueue;

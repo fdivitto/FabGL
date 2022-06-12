@@ -179,7 +179,6 @@ int Terminal::keyboardReaderTaskStackSize = FABGLIB_DEFAULT_TERMINAL_KEYBOARD_RE
 Terminal::Terminal()
   : m_canvas(nullptr),
     m_mutex(nullptr),
-    m_uartRXEnabled(true),
     m_soundGenerator(nullptr),
     m_sprites(nullptr),
     m_spritesCount(0)
@@ -375,7 +374,6 @@ bool Terminal::begin(BaseDisplayController * displayController, int maxColumns, 
   m_defaultForegroundColor = Color::White;
 
   m_keyboardReaderTaskHandle = nullptr;
-  m_uart = nullptr;
 
   m_outputQueue = nullptr;
 
@@ -399,9 +397,6 @@ void Terminal::end()
 
   clearSavedCursorStates();
 
-  if (m_uart)
-    delete m_uart;
-
   vTaskDelete(m_charsConsumerTaskHandle);
   vQueueDelete(m_inputQueue);
 
@@ -422,30 +417,8 @@ void Terminal::end()
 }
 
 
-void Terminal::rxCallback(void * args, uint8_t value, bool fromISR)
+void Terminal::connectKeyboard()
 {
-  auto term = (Terminal *) args;
-  if (term->m_uartRXEnabled)
-    term->write(value, fromISR);
-}
-
-
-bool Terminal::rxReadyCallback(void * args, bool fromISR)
-{
-  auto term = (Terminal *) args;
-  return term->availableForWrite(fromISR) > 0;
-}
-
-
-// connect to UART2
-void Terminal::connectSerialPort(uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
-{
-  if (!m_uart) {
-    m_uart = new SerialPort;
-    m_uart->setCallbacks(this, rxReadyCallback, rxCallback);
-  }
-  m_uart->setup(2, baud, dataLength, parity, stopBits, rxPin, txPin, flowControl, inverted, rtsPin, ctsPin);
-
   if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
     xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
 }
@@ -454,8 +427,7 @@ void Terminal::connectSerialPort(uint32_t baud, int dataLength, char parity, flo
 void Terminal::connectLocally()
 {
   m_outputQueue = xQueueCreate(FABGLIB_TERMINAL_OUTPUT_QUEUE_SIZE, sizeof(uint8_t));
-  if (!m_keyboardReaderTaskHandle && m_keyboard->isKeyboardAvailable())
-    xTaskCreate(&keyboardReaderTask, "", Terminal::keyboardReaderTaskStackSize, this, FABGLIB_KEYBOARD_READER_TASK_PRIORITY, &m_keyboardReaderTaskHandle);
+  connectKeyboard();
 }
 
 
@@ -1545,28 +1517,25 @@ void Terminal::flush()
 }
 
 
-// send a character to m_uart or m_outputQueue
+// send a character to onSend() delegate or m_outputQueue
 void Terminal::send(uint8_t c)
 {
   #if FABGLIB_TERMINAL_DEBUG_REPORT_OUT_CODES
   logFmt("=> %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
   #endif
 
-  if (m_uart) {
-    m_uart->send(c);
-  }
-
+  onSend(c);
+    
   localWrite(c);  // write to m_outputQueue
 }
 
 
-// send a string to m_uart or m_outputQueue
+// send a string to onSend() delegate or m_outputQueue
 void Terminal::send(char const * str)
 {
-  if (m_uart) {
-    while (*str)
-      m_uart->send(*str++);
-  }
+  auto s = str;
+  while (*s)
+    onSend(*s++);
 
   localWrite(str);  // write to m_outputQueue
 }
@@ -2043,9 +2012,7 @@ uint8_t Terminal::getNextCode(bool processCtrlCodes)
     logFmt("<= %02X  %s%c\n", (int)c, (c <= ASCII_SPC ? CTRLCHAR_TO_STR[(int)c] : ""), (c > ASCII_SPC ? c : ASCII_SPC));
     #endif
 
-    // resume RX?
-    if (m_uart && !m_uart->readyToReceive() && availableForWrite())
-      m_uart->flowControl(true);
+    onReceive(c);
 
     // inside an ESC sequence we may find control characters!
     if (processCtrlCodes && ISCTRLCHAR(c))
@@ -4283,7 +4250,10 @@ void Terminal::keyboardReaderTask(void * pvParameters)
         term->onVirtualKey(&item.vk, item.down);
         term->onVirtualKeyItem(&item);
 
-        if (term->m_uart == nullptr || term->m_uart->readyToSend()) {
+        bool readyToSend = true;
+        term->onReadyToSend(&readyToSend);
+
+        if (readyToSend) {
 
           // note: when flow is locked, no key event is reinjected. This to allow onVirtualKey to always work on last pressed char.
 

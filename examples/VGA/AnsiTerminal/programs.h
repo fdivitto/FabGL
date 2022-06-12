@@ -360,11 +360,11 @@ void sendString(char const * str)
 void installProgram(int progIndex)
 {
   Terminal.printf("Saving %s...", PROGRAMS_NAME[progIndex]);
-  Terminal.disableSerialPortRX(true);
+  SerialPortTerminalConnector.disableSerialPortRX(true);
   sendString("PIP ");
   sendString(PROGRAMS_NAME[progIndex]);
   sendString("=CON:\r\n");
   delay(3000);
   sendString(PROGRAMS[progIndex]);
-  Terminal.disableSerialPortRX(false);
+  SerialPortTerminalConnector.disableSerialPortRX(false);
 }

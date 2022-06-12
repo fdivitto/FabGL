@@ -39,13 +39,9 @@
 
 #include "soc/uart_struct.h"
 
-#ifdef ARDUINO
-  #include "Arduino.h"
-  #include "Stream.h"
-#endif
-
 #include "fabutils.h"
 #include "fabglconf.h"
+#include "terminal.h"
 
 
 namespace fabgl {
@@ -185,6 +181,35 @@ private:
 
 };
 
+
+
+/**
+ * @brief SerialPortTerminalConnector is an helper class used to connect Terminal and SerialPort
+ */
+class SerialPortTerminalConnector {
+public:
+  SerialPortTerminalConnector();
+  void connect(SerialPort * serialPort, Terminal * terminal);
+
+  /**
+   * @brief Disables/Enables serial port RX
+   *
+   * This method temporarily disables RX from serial port, discarding all incoming data.
+   *
+   * @param value If True RX is disabled. If False RX is re-enabled.
+   */
+  void disableSerialPortRX(bool value)         { m_serialPortRXEnabled = !value; }
+
+private:
+  static void rxCallback(void * args, uint8_t value, bool fromISR);
+  static bool rxReadyCallback(void * args, bool fromISR);
+  
+  Terminal *    m_terminal;
+  SerialPort *  m_serialPort;
+
+  // if false all inputs from UART are discarded
+  volatile bool m_serialPortRXEnabled;
+};
 
 
 

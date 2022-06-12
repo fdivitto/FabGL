@@ -360,22 +360,22 @@ struct ConfDialogApp : public uiApp {
 
     // RTS Status (clickable)
     RTSStatus = new uiLabel(frame, "RTS", Point(300, 210), Size(30, 15), true, STYLE_LABELBUTTON);
-    setRTSStatus(Terminal.serialPort()->RTSStatus());
+    setRTSStatus(SerialPort.RTSStatus());
     RTSStatus->onClick = [&]() {
-      bool newval = !Terminal.serialPort()->RTSStatus();
-      Terminal.serialPort()->setRTSStatus(newval);
+      bool newval = !SerialPort.RTSStatus();
+      SerialPort.setRTSStatus(newval);
       setRTSStatus(newval);
     };
 
     // CTS Status
     CTSStatus = new uiLabel(frame, "CTS", Point(335, 210), Size(30, 15), true, STYLE_LABELBUTTON);
-    lastCTSStatus = Terminal.serialPort()->CTSStatus();
+    lastCTSStatus = SerialPort.CTSStatus();
     setCTSStatus(lastCTSStatus);
 
     // timer
     frame->onTimer = [&](uiTimerHandle) {
       // monitor CTS status
-      if (Terminal.serialPort()->CTSStatus() != lastCTSStatus) {
+      if (SerialPort.CTSStatus() != lastCTSStatus) {
         lastCTSStatus = !lastCTSStatus;
         setCTSStatus(lastCTSStatus);
       }
@@ -578,6 +578,8 @@ struct ConfDialogApp : public uiApp {
     auto cols = COLUMNS_INT[getColumnsIndex()];
     auto rows = ROWS_INT[getRowsIndex()];
     Terminal.begin(DisplayController, (cols ? cols : -1), (rows ? rows : -1));
+    // connects SerialPort with Terminal
+    SerialPortTerminalConnector.connect(&SerialPort, &Terminal);
     // this is required when terminal columns and rows do not cover entire screen
     Terminal.canvas()->setBrushColor(getBGColor());
     Terminal.canvas()->clear();
@@ -596,12 +598,12 @@ struct ConfDialogApp : public uiApp {
     Terminal.keyboard()->setLayout(SupportedLayouts::layouts()[getKbdLayoutIndex()]);
     Terminal.setBackgroundColor(getBGColor());
     Terminal.setForegroundColor(getFGColor());
+    
     // configure serial port
     bool serctl = (getSerCtl() == SERCTL_ENABLED);
     auto rxPin  = serctl ? UART_URX : UART_SRX;
     auto txPin  = serctl ? UART_UTX : UART_STX;
-    
-    Terminal.connectSerialPort(BAUDRATES_INT[getBaudRateIndex()], DATALENS_INT[getDataLenIndex()], PARITY_CHAR[getParityIndex()], STOPBITS_FLOAT[getStopBitsIndex()], rxPin, txPin, getFlowCtrl(), false, RTS, CTS);
+    SerialPort.setup(2, BAUDRATES_INT[getBaudRateIndex()], DATALENS_INT[getDataLenIndex()], PARITY_CHAR[getParityIndex()], STOPBITS_FLOAT[getStopBitsIndex()], rxPin, txPin, getFlowCtrl(), false, RTS, CTS);
   }
 
 
