@@ -217,6 +217,9 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
 // enable/disable RX sending XON/XOFF and/or setting RTS
 void SerialPort::flowControl(bool enableRX)
 {
+  bool isrEnabled = m_dev->int_ena.rxfifo_full;
+  CLEAR_PERI_REG_MASK(UART_INT_ENA_REG(m_idx), UART_RXFIFO_FULL_INT_ENA_M);
+  
   if (enableRX) {
     // resume RX
     if (m_sentXOFF) {
@@ -224,7 +227,7 @@ void SerialPort::flowControl(bool enableRX)
         send(ASCII_XON);
       if (m_flowControl == FlowControl::Hardware || m_flowControl == FlowControl::Hardsoft)
         setRTSStatus(true);            // assert RTS
-      SET_PERI_REG_MASK(UART_INT_ENA_REG(m_idx), UART_RXFIFO_FULL_INT_ENA_M); // enable RX FIFO full interrupt
+      isrEnabled = true;
       m_sentXOFF = false;
     }
   } else {
@@ -238,6 +241,9 @@ void SerialPort::flowControl(bool enableRX)
       m_sentXOFF = true;
     }
   }
+  
+  if (isrEnabled)
+    SET_PERI_REG_MASK(UART_INT_ENA_REG(m_idx), UART_RXFIFO_FULL_INT_ENA_M); // enable RX FIFO full interrupt
 }
 
 
