@@ -35,9 +35,13 @@
 #define SESSIONTHREAD_TASK_PRIORITY 5
 #define SESSION_MIN_MEM             20000
 
-
+// UART Pins for normal serial
 #define UART_RX 34
 #define UART_TX 2
+
+// UART Pins for USB serial
+#define UART_URX 3
+#define UART_UTX 1
 
 #define UART_BAUD     115200
 #define UART_DATALEN  8
@@ -61,9 +65,11 @@ Supervisor::Supervisor(BaseDisplayController * displayController)
   s_singleton = this;
 
   for (int i = 0; i < MAXSESSIONS; ++i) {
-    m_sessions[i].id         = i;
-    m_sessions[i].thread     = nullptr;
-    m_sessions[i].terminal   = nullptr;
+    m_sessions[i].id                          = i;
+    m_sessions[i].thread                      = nullptr;
+    m_sessions[i].terminal                    = nullptr;
+    m_sessions[i].serialPort                  = nullptr;
+    m_sessions[i].serialPortTerminalConnector = nullptr;
   }
 }
 
@@ -71,6 +77,7 @@ Supervisor::Supervisor(BaseDisplayController * displayController)
 Supervisor::~Supervisor()
 {
 }
+
 
 Terminal * Supervisor::createTerminal()
 {
@@ -152,7 +159,7 @@ int Supervisor::getOpenSessions()
 void Supervisor::sessionThread(void * arg)
 {
 
-  Session * session = (Session*) arg;
+  auto session = (Session*) arg;
 
   AbortReason abortReason = AbortReason::NoAbort;
 
@@ -204,9 +211,15 @@ void Supervisor::sessionThread(void * arg)
       term->write("\r\n\nGeneral failure, session aborted.\r\n");
       break;
     case AbortReason::AuxTerm:
+    case AbortReason::USBTerm:
       term->write("\r\n\nOpening UART terminal...\r\n");
       term->disconnectLocally();
-      term->connectSerialPort(UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_RX, UART_TX, UART_FLOWCTRL);
+      session->serialPort = new SerialPort;
+      session->serialPortTerminalConnector = new SerialPortTerminalConnector(session->serialPort, term);
+      if (abortReason == AbortReason::AuxTerm)
+        session->serialPort->setup(2, UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_RX, UART_TX, UART_FLOWCTRL);
+      else
+        session->serialPort->setup(2, UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_URX, UART_UTX, UART_FLOWCTRL);
       vTaskDelete(NULL);
       break;
     case AbortReason::SessionClosed:

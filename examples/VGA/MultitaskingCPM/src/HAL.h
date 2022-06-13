@@ -81,6 +81,7 @@ enum class AbortReason {
   OutOfMemory,
   GeneralFailure,
   AuxTerm,
+  USBTerm,
 };
 
 

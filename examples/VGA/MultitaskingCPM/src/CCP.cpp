@@ -1099,6 +1099,7 @@ bool CCP::cmd_TERM(uint16_t paramsAddr)
     consoleOut("Usage:\r\n");
     consoleOut("  TERM 0-11 : Activate specified session. Example: TERM 1\r\n");
     consoleOut("  TERM AUX  : Connect a new session to the serial port\r\n");
+    consoleOut("  TERM USB  : Connect a new session to USB serial\r\n");
     return true;
   }
 
@@ -1115,6 +1116,12 @@ bool CCP::cmd_TERM(uint16_t paramsAddr)
     m_HAL->abort(AbortReason::AuxTerm);
     return true;
 
+  } else if (strcasecmp(param, "USB") == 0) {
+
+    // start USB serial port session
+    m_HAL->abort(AbortReason::USBTerm);
+    return true;
+    
   } else {
 
     int id = atoi(param);

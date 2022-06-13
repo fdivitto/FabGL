@@ -40,13 +40,17 @@
 
 
 using fabgl::BaseDisplayController;
+using fabgl::SerialPort;
+using fabgl::SerialPortTerminalConnector;
 
 
 struct Session {
-  int          id;
-  TaskHandle_t thread;
-  Terminal *   terminal;
-  HAL *        hal;
+  int                           id;
+  TaskHandle_t                  thread;
+  Terminal *                    terminal;
+  SerialPort *                  serialPort;
+  SerialPortTerminalConnector * serialPortTerminalConnector;
+  HAL *                         hal;
 };
 
 
