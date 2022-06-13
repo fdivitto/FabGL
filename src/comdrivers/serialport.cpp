@@ -330,6 +330,13 @@ SerialPortTerminalConnector::SerialPortTerminalConnector()
 }
 
 
+SerialPortTerminalConnector::SerialPortTerminalConnector(SerialPort * serialPort, Terminal * terminal)
+  : SerialPortTerminalConnector()
+{
+  connect(serialPort, terminal);
+}
+
+
 void SerialPortTerminalConnector::connect(SerialPort * serialPort, Terminal * terminal)
 {
   m_serialPort = serialPort;

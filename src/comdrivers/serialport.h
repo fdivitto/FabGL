@@ -91,9 +91,9 @@ public:
    *
    * Example:
    *
-   *     serialPort.connect(2, 115200, 8, 'N', 1, 34, 2, FlowControl::Software);
+   *     serialPort.setup(2, 115200, 8, 'N', 1, 34, 2, FlowControl::Software);
    */
-  void setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin);
+  void setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
   
   /**
    * @brief Allows/disallows host to send data
@@ -189,6 +189,7 @@ private:
 class SerialPortTerminalConnector {
 public:
   SerialPortTerminalConnector();
+  SerialPortTerminalConnector(SerialPort * serialPort, Terminal * terminal);
   void connect(SerialPort * serialPort, Terminal * terminal);
 
   /**
