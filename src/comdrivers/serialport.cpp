@@ -112,7 +112,7 @@ void SerialPort::setDTRStatus(bool value)
 }
 
 
-void SerialPort::setSignals(int rxPin, int txPin, int rtsPin, int ctsPin, int dtrPin)
+void SerialPort::setSignals(int rxPin, int txPin, int rtsPin, int ctsPin, int dtrPin, int dsrPin, int dcdPin, int riPin)
 {
   // RX (in)
   m_rxPin = int2gpio(rxPin);
@@ -140,6 +140,24 @@ void SerialPort::setSignals(int rxPin, int txPin, int rtsPin, int ctsPin, int dt
   m_ctsPin = int2gpio(ctsPin);
   if (m_ctsPin != GPIO_UNUSED) {
     configureGPIO(m_ctsPin, GPIO_MODE_INPUT);
+  }
+
+  // DSR (in)
+  m_dsrPin = int2gpio(dsrPin);
+  if (m_dsrPin != GPIO_UNUSED) {
+    configureGPIO(m_dsrPin, GPIO_MODE_INPUT);
+  }
+
+  // DCD (in)
+  m_dcdPin = int2gpio(dcdPin);
+  if (m_dcdPin != GPIO_UNUSED) {
+    configureGPIO(m_dcdPin, GPIO_MODE_INPUT);
+  }
+
+  // RI (in)
+  m_riPin = int2gpio(riPin);
+  if (m_riPin != GPIO_UNUSED) {
+    configureGPIO(m_riPin, GPIO_MODE_INPUT);
   }
 }
 

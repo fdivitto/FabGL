@@ -82,13 +82,16 @@ public:
    * @param rtsPin RTS signal GPIO number (-1 = not used)
    * @param ctsPin CTS signal GPIO number (-1 = not used)
    * @param dtrPin DTR signal GPIO number (-1 = not used)
+   * @param dsrPin DSR signal GPIO number (-1 = not used)
+   * @param dcdPin DCD signal GPIO number (-1 = not used)
+   * @param riPin RI signal GPIO number (-1 = not used)
    *
    * Example:
    *
    *     serialPort.setSignals(34, 2);  // rx = GPIO 34, tx = GPIO 2
    *     serialPort.setup(2, 115200, 8, 'N', 1, FlowControl::Software);
    */
-  void setSignals(int rxPin, int txPin, int rtsPin = -1, int ctsPin = -1, int dtrPin = -1);
+  void setSignals(int rxPin, int txPin, int rtsPin = -1, int ctsPin = -1, int dtrPin = -1, int dsrPin = -1, int dcdPin = -1, int riPin = -1);
   
   /**
    * @brief Configures and activates specified UART
@@ -161,7 +164,7 @@ public:
   /**
    * @brief Reports current CTS signal status
    *
-   * @return True if RTS is asserted (low voltage, host is ready to receive data)
+   * @return True if CTS is asserted (low voltage, host is ready to receive data)
    */
   bool CTSStatus()                     { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : false; }
 
@@ -191,9 +194,30 @@ public:
   /**
    * @brief Reports current DTR signal status
    *
-   * @return True if RTS is asserted (low voltage)
+   * @return True if DTR is asserted (low voltage)
    */
   bool DTRStatus()                     { return m_DTRStatus; }
+
+  /**
+   * @brief Reports current DSR signal status
+   *
+   * @return True if DSR is asserted (low voltage)
+   */
+  bool DSRStatus()                     { return m_dsrPin != GPIO_UNUSED ? gpio_get_level(m_dsrPin) == 0 : false; }
+
+  /**
+   * @brief Reports current DCD signal status
+   *
+   * @return True if DCD is asserted (low voltage)
+   */
+  bool DCDStatus()                     { return m_dcdPin != GPIO_UNUSED ? gpio_get_level(m_dcdPin) == 0 : false; }
+
+  /**
+   * @brief Reports current RI signal status
+   *
+   * @return True if RI is asserted (low voltage)
+   */
+  bool RIStatus()                     { return m_riPin != GPIO_UNUSED ? gpio_get_level(m_riPin) == 0 : false; }
 
   /**
    * @brief Sends a byte
@@ -247,6 +271,9 @@ private:
   gpio_num_t                m_rtsPin;
   gpio_num_t                m_ctsPin;
   gpio_num_t                m_dtrPin;
+  gpio_num_t                m_dsrPin;
+  gpio_num_t                m_dcdPin;
+  gpio_num_t                m_riPin;
   
   bool                      m_RTSStatus;      // true = asserted (low)
   bool                      m_DTRStatus;      // true = asserted (low)
