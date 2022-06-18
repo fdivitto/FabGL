@@ -166,7 +166,7 @@ public:
    *
    * @return True if CTS is asserted (low voltage, host is ready to receive data)
    */
-  bool CTSStatus()                     { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : false; }
+  bool CTSStatus()                     { return m_ctsPin != GPIO_UNUSED ? gpio_get_level(m_ctsPin) == 0 : true; }
 
   /**
    * @brief Sets RTS signal status
@@ -203,21 +203,21 @@ public:
    *
    * @return True if DSR is asserted (low voltage)
    */
-  bool DSRStatus()                     { return m_dsrPin != GPIO_UNUSED ? gpio_get_level(m_dsrPin) == 0 : false; }
+  bool DSRStatus()                     { return m_dsrPin != GPIO_UNUSED ? gpio_get_level(m_dsrPin) == 0 : true; }
 
   /**
    * @brief Reports current DCD signal status
    *
    * @return True if DCD is asserted (low voltage)
    */
-  bool DCDStatus()                     { return m_dcdPin != GPIO_UNUSED ? gpio_get_level(m_dcdPin) == 0 : false; }
+  bool DCDStatus()                     { return m_dcdPin != GPIO_UNUSED ? gpio_get_level(m_dcdPin) == 0 : true; }
 
   /**
    * @brief Reports current RI signal status
    *
    * @return True if RI is asserted (low voltage)
    */
-  bool RIStatus()                     { return m_riPin != GPIO_UNUSED ? gpio_get_level(m_riPin) == 0 : false; }
+  bool RIStatus()                      { return m_riPin != GPIO_UNUSED ? gpio_get_level(m_riPin) == 0 : false; }
 
   /**
    * @brief Sends a byte
