@@ -60,8 +60,8 @@ fabgl::SerialPortTerminalConnector  SerialPortTerminalConnector;
 #define UART_STX 2
 
 // RTS/CTS hardware flow gpios
-#define RTS      13
-#define CTS      35
+#define UART_RTS 13
+#define UART_CTS 35
 
 // settings reset control
 /* for old WROOM-32 boards

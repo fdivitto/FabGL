@@ -71,29 +71,64 @@ public:
   SerialPort();
   
   void setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback);
+
+  /**
+   * @brief Associates GPIOs to serial port signals
+   *
+   * This method must be called before setup(). setSignals() can be called just one time.
+   *
+   * @param rxPin UART RX pin GPIO number.
+   * @param txPin UART TX pin GPIO number.
+   * @param rtsPin RTS signal GPIO number (-1 = not used)
+   * @param ctsPin CTS signal GPIO number (-1 = not used)
+   * @param dtrPin DTR signal GPIO number (-1 = not used)
+   *
+   * Example:
+   *
+   *     serialPort.setSignals(34, 2);  // rx = GPIO 34, tx = GPIO 2
+   *     serialPort.setup(2, 115200, 8, 'N', 1, FlowControl::Software);
+   */
+  void setSignals(int rxPin, int txPin, int rtsPin = -1, int ctsPin = -1, int dtrPin = -1);
   
   /**
-   * @brief Configure and activate specified UART
+   * @brief Configures and activates specified UART
    *
-   * You may call connect whenever a parameters needs to be changed (except for rx and tx pins).
+   * You may call this method whenever a parameters needs to be changed. setSignals() must be called before.
    *
    * @param uartIndex UART device to use (0, 1, 2)
    * @param baud Baud rate.
    * @param dataLength Data word length. 5 = 5 bits, 6 = 6 bits, 7 = 7 bits, 8 = 8 bits
    * @param parity Parity. 'N' = none, 'E' = even, 'O' = odd
    * @param stopBits Number of stop bits. 1 = 1 bit, 1.5 = 1.5 bits, 2 = 2 bits, 3 = 3 bits
-   * @param rxPin UART RX pin GPIO number.
-   * @param txPin UART TX pin GPIO number.
    * @param flowControl Flow control.
    * @param inverted If true RX and TX signals are inverted.
-   * @param rtsPin RTS signal GPIO number (-1 = not used)
-   * @param ctsPin CTS signal GPIO number (-1 = not used)
    *
    * Example:
    *
-   *     serialPort.setup(2, 115200, 8, 'N', 1, 34, 2, FlowControl::Software);
+   *     serialPort.setSignals(34, 2);  // rx = GPIO 34, tx = GPIO 2
+   *     serialPort.setup(2, 115200, 8, 'N', 1, FlowControl::Software);
    */
-  void setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted = false, int rtsPin = -1, int ctsPin = -1);
+  void setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, FlowControl flowControl, bool inverted = false);
+  
+  /**
+   * @brief Changes baud rate
+   *
+   * This method can be called after setup to change current baud rate
+   *
+   * @param value New baud rate
+   */
+  void setBaud(int value);
+  
+  /**
+   * @brief Changes frame structure
+   *
+   * This method can be called after setup to change frame structure
+   *
+   * @param dataLength Data word length. 5 = 5 bits, 6 = 6 bits, 7 = 7 bits, 8 = 8 bits
+   * @param parity Parity. 'N' = none, 'E' = even, 'O' = odd
+   * @param stopBits Number of stop bits. 1 = 1 bit, 1.5 = 1.5 bits, 2 = 2 bits, 3 = 3 bits
+   */
+  void setFrame(int dataLength, char parity, float stopBits);
   
   /**
    * @brief Allows/disallows host to send data
@@ -145,13 +180,54 @@ public:
    * @return True if RTS is asserted (low voltage, terminal is ready to receive data)
    */
   bool RTSStatus()                     { return m_RTSStatus; }
-    
+
+  /**
+   * @brief Sets DTR signal status
+   *
+   * @param value True to assert DTR (low voltage)
+   */
+  void setDTRStatus(bool value);
+
+  /**
+   * @brief Reports current DTR signal status
+   *
+   * @return True if RTS is asserted (low voltage)
+   */
+  bool DTRStatus()                     { return m_DTRStatus; }
+
   /**
    * @brief Sends a byte
    *
    * @param value Byte to send
    */
   void send(uint8_t value);
+  
+  /**
+   * @brief Gets parity error status
+   *
+   * Calling this method resets the error.
+   *
+   * @return Parity error status
+   */
+  bool parityError()   { auto r = m_parityError; m_parityError = false; return r; }
+  
+  /**
+   * @brief Gets framing error status
+   *
+   * Calling this method resets the error.
+   *
+   * @return Framing error status
+   */
+  bool framingError()  { auto r = m_framingError; m_framingError = false; return r; }
+  
+  /**
+   * @brief Gets overflow error status
+   *
+   * Calling this method resets the error.
+   *
+   * @return Overflow error status
+   */
+  bool overflowError() { auto r = m_overflowError; m_overflowError = false; return r; }
   
 
 private:
@@ -166,10 +242,14 @@ private:
   int                       m_idx;
   volatile uart_dev_t *     m_dev;
   
-  // hardware flow pins
+  gpio_num_t                m_rxPin;
+  gpio_num_t                m_txPin;
   gpio_num_t                m_rtsPin;
   gpio_num_t                m_ctsPin;
+  gpio_num_t                m_dtrPin;
+  
   bool                      m_RTSStatus;      // true = asserted (low)
+  bool                      m_DTRStatus;      // true = asserted (low)
   
   volatile FlowControl      m_flowControl;
   volatile bool             m_sentXOFF;       // true if XOFF has been sent or RTS is disabled (high)
@@ -178,6 +258,10 @@ private:
   void *                    m_callbackArgs;
   RXReadyCallback           m_rxReadyCallback;
   RXCallback                m_rxCallback;
+  
+  volatile bool             m_parityError;
+  volatile bool             m_framingError;
+  volatile bool             m_overflowError;
 
 };
 

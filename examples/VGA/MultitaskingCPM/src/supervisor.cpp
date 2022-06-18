@@ -217,9 +217,10 @@ void Supervisor::sessionThread(void * arg)
       session->serialPort = new SerialPort;
       session->serialPortTerminalConnector = new SerialPortTerminalConnector(session->serialPort, term);
       if (abortReason == AbortReason::AuxTerm)
-        session->serialPort->setup(2, UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_RX, UART_TX, UART_FLOWCTRL);
+        session->serialPort->setSignals(UART_RX, UART_TX);
       else
-        session->serialPort->setup(2, UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_URX, UART_UTX, UART_FLOWCTRL);
+        session->serialPort->setSignals(UART_URX, UART_UTX);
+      session->serialPort->setup(2, UART_BAUD, UART_DATALEN, UART_PARITY, UART_STOPBITS, UART_FLOWCTRL);
       vTaskDelete(NULL);
       break;
     case AbortReason::SessionClosed:

@@ -603,7 +603,8 @@ struct ConfDialogApp : public uiApp {
     bool serctl = getSerCtl();
     auto rxPin  = serctl ? UART_URX : UART_SRX;
     auto txPin  = serctl ? UART_UTX : UART_STX;
-    SerialPort.setup(2, BAUDRATES_INT[getBaudRateIndex()], DATALENS_INT[getDataLenIndex()], PARITY_CHAR[getParityIndex()], STOPBITS_FLOAT[getStopBitsIndex()], rxPin, txPin, getFlowCtrl(), false, RTS, CTS);
+    SerialPort.setSignals(rxPin, txPin, UART_RTS, UART_CTS);
+    SerialPort.setup(2, BAUDRATES_INT[getBaudRateIndex()], DATALENS_INT[getDataLenIndex()], PARITY_CHAR[getParityIndex()], STOPBITS_FLOAT[getStopBitsIndex()], getFlowCtrl());
   }
 
 

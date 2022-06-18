@@ -49,12 +49,16 @@ namespace fabgl {
 SerialPort::SerialPort()
   : m_initialized(false),
     m_RTSStatus(true),
+    m_DTRStatus(true),
     m_flowControl(FlowControl::None),
     m_sentXOFF(false),
     m_recvXOFF(false),
     m_callbackArgs(nullptr),
     m_rxReadyCallback(nullptr),
-    m_rxCallback(nullptr)
+    m_rxCallback(nullptr),
+    m_parityError(false),
+    m_framingError(false),
+    m_overflowError(false)
 {
 }
 
@@ -99,8 +103,49 @@ void SerialPort::setRTSStatus(bool value)
 }
 
 
+void SerialPort::setDTRStatus(bool value)
+{
+  if (m_dtrPin != GPIO_UNUSED) {
+    m_DTRStatus = value;
+    gpio_set_level(m_dtrPin, !value); // low = asserted
+  }
+}
+
+
+void SerialPort::setSignals(int rxPin, int txPin, int rtsPin, int ctsPin, int dtrPin)
+{
+  // RX (in)
+  m_rxPin = int2gpio(rxPin);
+  configureGPIO(m_rxPin, GPIO_MODE_INPUT);
+  
+  // TX (out)
+  m_txPin = int2gpio(txPin);
+  configureGPIO(m_txPin, GPIO_MODE_OUTPUT);
+
+  // RTS (out)
+  m_rtsPin = int2gpio(rtsPin);
+  if (m_rtsPin != GPIO_UNUSED) {
+    configureGPIO(m_rtsPin, GPIO_MODE_OUTPUT);
+    setRTSStatus(true); // assert RTS
+  }
+
+  // DTR (out)
+  m_dtrPin = int2gpio(dtrPin);
+  if (m_dtrPin != GPIO_UNUSED) {
+    configureGPIO(m_dtrPin, GPIO_MODE_OUTPUT);
+    setDTRStatus(true); // assert DTR
+  }
+
+  // CTS (in)
+  m_ctsPin = int2gpio(ctsPin);
+  if (m_ctsPin != GPIO_UNUSED) {
+    configureGPIO(m_ctsPin, GPIO_MODE_INPUT);
+  }
+}
+
+
 // uart = 0, 1, 2
-void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, int rxPin, int txPin, FlowControl flowControl, bool inverted, int rtsPin, int ctsPin)
+void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, FlowControl flowControl, bool inverted)
 {
   static const int URXD_IN_IDX[]    = { U0RXD_IN_IDX, U1RXD_IN_IDX, U2RXD_IN_IDX };
   static const int UTXD_OUT_IDX[]   = { U0TXD_OUT_IDX, U1TXD_OUT_IDX, U2TXD_OUT_IDX };
@@ -141,23 +186,6 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
     uartFlushTXFIFO();
     uartFlushRXFIFO();
 
-    // TX/RX Pin direction
-    configureGPIO(int2gpio(rxPin), GPIO_MODE_INPUT);
-    configureGPIO(int2gpio(txPin), GPIO_MODE_OUTPUT);
-
-    // RTS
-    m_rtsPin = int2gpio(rtsPin);
-    if (m_rtsPin != GPIO_UNUSED) {
-      configureGPIO(m_rtsPin, GPIO_MODE_OUTPUT);
-      setRTSStatus(true); // assert RTS
-    }
-
-    // CTS
-    m_ctsPin = int2gpio(ctsPin);
-    if (m_ctsPin != GPIO_UNUSED) {
-      configureGPIO(m_ctsPin, GPIO_MODE_INPUT);
-    }
-
     // setup RX interrupt
     WRITE_PERI_REG(UART_CONF1_REG(m_idx), (1 << UART_RXFIFO_FULL_THRHD_S) |      // an interrupt for each character received
                                           (2 << UART_RX_TOUT_THRHD_S)     |      // actually not used
@@ -177,12 +205,36 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
 
   m_flowControl = flowControl;
 
-  // set baud rate
-  uint32_t clk_div = (getApbFrequency() << 4) / baud;
-  WRITE_PERI_REG(UART_CLKDIV_REG(m_idx), ((clk_div >> 4)  << UART_CLKDIV_S) |
-                                         ((clk_div & 0xf) << UART_CLKDIV_FRAG_S));
+  // baud rate
+  setBaud(baud);
 
   // frame
+  setFrame(dataLength, parity, stopBits);
+
+  // TX/RX Pin logic
+  gpio_matrix_in(m_rxPin, URXD_IN_IDX[m_idx], inverted);
+  gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], inverted, false);
+
+  // Flow Control
+  WRITE_PERI_REG(UART_FLOW_CONF_REG(m_idx), 0);
+  
+  m_initialized = true;
+
+  // APB Change callback (TODO?)
+  //addApbChangeCallback(this, uart_on_apb_change);
+}
+
+
+void SerialPort::setBaud(int value)
+{
+  uint32_t clk_div = (getApbFrequency() << 4) / value;
+  WRITE_PERI_REG(UART_CLKDIV_REG(m_idx), ((clk_div >> 4)  << UART_CLKDIV_S) |
+                                         ((clk_div & 0xf) << UART_CLKDIV_FRAG_S));
+}
+
+
+void SerialPort::setFrame(int dataLength, char parity, float stopBits)
+{
   uint32_t config0 = (1 << UART_TICK_REF_ALWAYS_ON_S) | ((dataLength - 5) << UART_BIT_NUM_S);
   if (parity == 'E')
     config0 |= (1 << UART_PARITY_EN_S);
@@ -199,18 +251,6 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
       SET_PERI_REG_BITS(UART_RS485_CONF_REG(m_idx), UART_DL0_EN_V, 1, UART_DL1_EN_S); // additional 1 stop bit
   }
   WRITE_PERI_REG(UART_CONF0_REG(m_idx), config0);
-
-  // TX/RX Pin logic
-  gpio_matrix_in(rxPin, URXD_IN_IDX[m_idx], inverted);
-  gpio_matrix_out(txPin, UTXD_OUT_IDX[m_idx], inverted, false);
-
-  // Flow Control
-  WRITE_PERI_REG(UART_FLOW_CONF_REG(m_idx), 0);
-  
-  m_initialized = true;
-
-  // APB Change callback (TODO?)
-  //addApbChangeCallback(this, uart_on_apb_change);
 }
 
 
@@ -275,6 +315,10 @@ void IRAM_ATTR SerialPort::uart_isr(void * arg)
 
   // look for overflow or RX errors
   if (dev->int_st.rxfifo_ovf || dev->int_st.frm_err || dev->int_st.parity_err) {
+    // save (or) error states
+    ser->m_parityError   |= dev->int_st.parity_err;
+    ser->m_framingError  |= dev->int_st.frm_err;
+    ser->m_overflowError |= dev->int_st.rxfifo_ovf;
     // reset RX-FIFO, because hardware bug rxfifo_rst cannot be used, so just flush
     ser->uartFlushRXFIFO();
     // clear interrupt flags
