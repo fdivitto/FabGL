@@ -38,11 +38,51 @@ Preferences preferences;
 
 
 #define TERMVERSION_MAJ 1
-#define TERMVERSION_MIN 5
+#define TERMVERSION_MIN 6
 
 
-static const char * BAUDRATES_STR[]  = { "110", "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "38400", "57600", "115200", "128000", "230400", "250000", "256000", "500000", "1000000", "2000000" };
-static const int    BAUDRATES_INT[]  = { 110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 230400, 250000, 256000, 500000, 1000000, 2000000 };
+static const char * BAUDRATES_STR[]  = { "110",
+                                         "150",
+                                         "300",
+                                         "600",
+                                         "1200",
+                                         "2400",
+                                         "4800",
+                                         "9600",
+                                         "14400",
+                                         "19200",
+                                         "38400",
+                                         "57600",
+                                         "76800",
+                                         "115200",
+                                         "128000",
+                                         "230400",
+                                         "250000",
+                                         "256000",
+                                         "500000",
+                                         "1000000",
+                                         "2000000" };
+static const int    BAUDRATES_INT[]  = { 110,
+                                         150,
+                                         300,
+                                         600,
+                                         1200,
+                                         2400,
+                                         4800,
+                                         9600,
+                                         14400,
+                                         19200,
+                                         38400,
+                                         57600,
+                                         76800,
+                                         115200,
+                                         128000,
+                                         230400,
+                                         250000,
+                                         256000,
+                                         500000,
+                                         1000000,
+                                         2000000 };
 constexpr int       BAUDRATES_COUNT  = sizeof(BAUDRATES_INT) / sizeof(int);
 
 static const char * DATALENS_STR[]   = { "5 bits", "6 bits", "7 bits", "8 bits" };
@@ -423,10 +463,10 @@ struct ConfDialogApp : public uiApp {
     preferences.putInt(PREF_BOOTINFO, infoCheckBox->checked() ? BOOTINFO_ENABLED : BOOTINFO_DISABLED);
     preferences.putInt(PREF_SERCTL, serctlCheckBox->checked());
     
-    preferences.end();
-    
-    if (reboot)
+    if (reboot) {
+      preferences.end();
       performReboot(); // no return from here!
+    }
 
     loadConfiguration();
   }
@@ -457,7 +497,7 @@ struct ConfDialogApp : public uiApp {
 
 
   static int getBaudRateIndex() {
-    return preferences.getInt(PREF_BAUDRATE, 11);              // default 11 = 115200
+    return preferences.getInt(PREF_BAUDRATE, 13);              // default 13 = 115200
   }
 
 
