@@ -98,6 +98,7 @@ private:
   // callbacks
   void *            m_context;
   ChangeOut         m_changeOut;
+  
   uint32_t          m_lastTickTime;
   uint32_t          m_acc;
 
