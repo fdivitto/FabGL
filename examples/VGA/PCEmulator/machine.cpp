@@ -245,6 +245,20 @@ void Machine::autoDetectDriveGeometry(int drive)
 }
 
 
+void Machine::setCOM1(SerialPort * serialPort)
+{
+  m_COM1.setCallbacks(this, COM1Interrupt);
+  m_COM1.setSerialPort(serialPort);
+}
+
+
+void Machine::setCOM2(SerialPort * serialPort)
+{
+  m_COM2.setCallbacks(this, COM2Interrupt);
+  m_COM2.setSerialPort(serialPort);
+}
+
+
 void Machine::reset()
 {
   m_reset = false;
@@ -273,6 +287,9 @@ void Machine::reset()
   //m_PIT8253.setGate(1, true); // @TODO: timer 1 used for DRAM refresh, required to run?
 
   m_MC146818.reset();
+  
+  m_COM1.reset();
+  m_COM2.reset();
 
   memset(m_CGA6845, 0, sizeof(m_CGA6845));
   memset(m_HGC6845, 0, sizeof(m_HGC6845));
@@ -320,12 +337,21 @@ void Machine::tick()
 {
   ++m_ticksCounter;
 
-  if ((m_ticksCounter & 0x7f) == 0x7f) {
-    m_PIT8253.tick();
-    // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
-    m_i8042.tick();
+  if ((m_ticksCounter & 0x03) == 0x03) {
+  
+    if (m_COM1.assigned())
+      m_COM1.tick();
+    if (m_COM2.assigned())
+      m_COM2.tick();
+      
+    if ((m_ticksCounter & 0x7f) == 0x7f) {
+      m_PIT8253.tick();
+      // run keyboard controller every PIT tick (just to not overload CPU with continous checks)
+      m_i8042.tick();
+    }
+    
   }
-
+  
   if (m_PIC8259A.pendingInterrupt() && i8086::IRQ(m_PIC8259A.pendingInterruptNum()))
     m_PIC8259A.ackPendingInterrupt();
   if (m_PIC8259B.pendingInterrupt() && i8086::IRQ(m_PIC8259B.pendingInterruptNum()))
@@ -544,6 +570,12 @@ void Machine::writePort(void * context, int address, uint8_t value)
     case 0x0071:
       m->m_MC146818.write(address & 1, value);
       break;
+      
+    // COM2
+    case 0x2f8 ... 0x2ff:
+      if (m->m_COM2.assigned())
+        m->m_COM2.write(address, value);
+      break;
 
     // CGA - CRT 6845 - register selection register
     case 0x3d4:
@@ -587,6 +619,12 @@ void Machine::writePort(void * context, int address, uint8_t value)
     case 0x3bf:
       m->m_HGCSwitchReg = value;
       m->setHGCMode();
+      break;
+      
+    // COM1
+    case 0x3f8 ... 0x3ff:
+      if (m->m_COM1.assigned())
+        m->m_COM1.write(address, value);
       break;
 
     // I/O expander - Configuration
@@ -684,6 +722,10 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x0071:
       return m->m_MC146818.read(address & 1);
 
+    // COM2
+    case 0x2f8 ... 0x2ff:
+      return m->m_COM2.assigned() ? m->m_COM2.read(address) : 0;
+
     // CGA - CRT 6845 - register selection register
     case 0x3d4:
       return 0x00;  // not readable
@@ -718,6 +760,10 @@ uint8_t Machine::readPort(void * context, int address)
     case 0x3ba:
       m->m_HGCVSyncQuery += 1;
       return (m->m_HGCVSyncQuery & 0x7) != 0 ? 0x00 : 0x80; // "not VSync" (0x80) every 7 queries
+
+    // COM1
+    case 0x3f8 ... 0x3ff:
+      return m->m_COM1.assigned() ? m->m_COM1.read(address) : 0;
 
     // I/O expander - Configuration
     case EXTIO_CONFIG:
@@ -802,6 +848,22 @@ bool Machine::MC146818Interrupt(void * context)
 {
   auto m = (Machine*)context;
   return m->m_PIC8259B.signalInterrupt(0);
+}
+
+
+// interrupt from COM1, trig 8259A-IR4 (IRQ4, INT 0Ch)
+bool Machine::COM1Interrupt(PC8250 * source, void * context)
+{
+  auto m = (Machine*)context;
+  return m->m_PIC8259A.signalInterrupt(4);
+}
+
+
+// interrupt from COM2, trig 8259A-IR3 (IRQ3, INT 0Bh)
+bool Machine::COM2Interrupt(PC8250 * source, void * context)
+{
+  auto m = (Machine*)context;
+  return m->m_PIC8259A.signalInterrupt(3);
 }
 
 

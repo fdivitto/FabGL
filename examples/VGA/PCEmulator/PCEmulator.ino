@@ -56,6 +56,12 @@ extern "C" {
 
 
 
+// UART Pins for USB serial
+#define UART_URX 3
+#define UART_UTX 1
+
+
+
 using std::unique_ptr;
 
 using fabgl::StringList;
@@ -475,6 +481,10 @@ void setup()
     machine->setDriveImage(i, diskFilename[i], conf->cylinders[i], conf->heads[i], conf->sectors[i]);
 
   machine->setBootDrive(conf->bootDrive);
+  
+  auto serial1 = new SerialPort;
+  serial1->setSignals(UART_URX, UART_UTX);
+  machine->setCOM1(serial1);
 
   /*
   printf("MALLOC_CAP_32BIT : %d bytes (largest %d bytes)\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT), heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));

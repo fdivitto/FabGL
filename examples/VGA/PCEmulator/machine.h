@@ -34,6 +34,7 @@
 #include "emudevs/PIT8253.h"
 #include "emudevs/i8042.h"
 #include "emudevs/MC146818.h"
+#include "emudevs/PC8250.h"
 #include "devdrivers/MCP23S17.h"
 
 #include "bios.h"
@@ -41,6 +42,9 @@
 
 #define RAM_SIZE             1048576    // must correspond to bios MEMSIZE
 #define VIDEOMEMSIZE         65536
+
+// maximum number of serial ports
+#define SERIALPORTS          2
 
 
 
@@ -50,6 +54,8 @@ using fabgl::PIT8253;
 using fabgl::i8042;
 using fabgl::MC146818;
 using fabgl::MCP23S17;
+using fabgl::SerialPort;
+using fabgl::PC8250;
 
 
 #ifdef FABGL_EMULATED
@@ -74,6 +80,10 @@ public:
   void setBootDrive(int drive)                 { m_bootDrive = drive; }
 
   void setSysReqCallback(SysReqCallback value) { m_sysReqCallback = value; }
+  
+  void setCOM1(SerialPort * serialPort);
+  
+  void setCOM2(SerialPort * serialPort);
 
   void run();
 
@@ -136,6 +146,9 @@ private:
   static void PITChangeOut(void * context, int timerIndex);
 
   static bool MC146818Interrupt(void * context);
+  
+  static bool COM1Interrupt(PC8250 * source, void * context);
+  static bool COM2Interrupt(PC8250 * source, void * context);
 
   static bool keyboardInterrupt(void * context);
   static bool mouseInterrupt(void * context);
@@ -225,6 +238,10 @@ private:
   SysReqCallback           m_sysReqCallback;
 
   char const *             m_baseDir;
+  
+  // serial ports
+  PC8250                   m_COM1;
+  PC8250                   m_COM2;
 
 };
 

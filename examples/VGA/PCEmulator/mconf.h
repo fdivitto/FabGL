@@ -90,7 +90,7 @@ static const char DefaultConfFile[] =
   "desc \"DOS Programming Tools (HDD 20MB)\"           hd0 http://www.fabglib.org/downloads/hd20_DOSDEV.img     boot hd0" NL
   "desc \"Windows 3.0 (HDD 20MB)\"                     hd0 http://www.fabglib.org/downloads/hd20_WINHERC.img    boot hd0" NL
   "desc \"GEM 3.13 (HDD 8MB)\"                         hd0 http://www.fabglib.org/downloads/hd8_GEM31.img       boot hd0" NL
-  "desc \"GEOS 2.0 (HDD 20MB)\"                        hd0 http://www.fabglib.org/downloads/hd20_GEOS20.img      boot hd0" NL
+  "desc \"GEOS 2.0 (HDD 20MB)\"                        hd0 http://www.fabglib.org/downloads/hd20_GEOS20.img     boot hd0" NL
   "desc \"MS-DOS 5.00 (HDD 8MB)\"                      hd0 http://www.fabglib.org/downloads/hd8_MSDOS500.img    boot hd0" NL
   "desc \"MS-DOS 6.22 (HDD 8MB)\"                      hd0 http://www.fabglib.org/downloads/hd8_MSDOS622.img    boot hd0" NL
   "desc \"SvarDOS (HDD (hDD 10MB)\"                    hd0 http://www.fabglib.org/downloads/hd10_SVARDOS.img    boot hd0" NL;
