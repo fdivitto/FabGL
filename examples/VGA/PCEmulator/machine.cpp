@@ -855,7 +855,7 @@ bool Machine::MC146818Interrupt(void * context)
 bool Machine::COM1Interrupt(PC8250 * source, void * context)
 {
   auto m = (Machine*)context;
-  return m->m_PIC8259A.signalInterrupt(4);
+  return source->getOut2() && m->m_PIC8259A.signalInterrupt(4);
 }
 
 
@@ -863,7 +863,7 @@ bool Machine::COM1Interrupt(PC8250 * source, void * context)
 bool Machine::COM2Interrupt(PC8250 * source, void * context)
 {
   auto m = (Machine*)context;
-  return m->m_PIC8259A.signalInterrupt(3);
+  return source->getOut2() && m->m_PIC8259A.signalInterrupt(3);
 }
 
 
