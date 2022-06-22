@@ -109,11 +109,12 @@ private:
   
   SerialPort *      m_serialPort;
   
-  QueueHandle_t     m_rxQueue;  // not actually exists on 8250!
-  
   // callbacks
   void *            m_context;
   InterruptCallback m_interruptCallback;
+  
+  // Transmitter Holding Register (THR)
+  uint8_t           m_THR;
   
   // Interrupt Enable Register (IER)
   //   0 = Receiver Data Available interrupt enabled
@@ -179,6 +180,10 @@ private:
   
   // bytes lost flag (not an actual 8250 register)
   volatile bool     m_overrun;
+  
+  // a byte has been received
+  volatile bool     m_dataReady;
+  volatile uint8_t  m_dataRecv;
   
 };
 

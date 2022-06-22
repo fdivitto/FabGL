@@ -77,28 +77,27 @@ PC8250::PC8250(int freq)
   : m_freq(freq),
     m_serialPort(nullptr)
 {
-  m_rxQueue = xQueueCreate(16, 1);
 }
 
 
 PC8250::~PC8250()
 {
-  vQueueDelete(m_rxQueue);
 }
 
 
 void PC8250::reset()
 {
-  m_DLL     = 0;
-  m_DLM     = 0;
-  m_trigs   = 0;
-  m_IER     = 0;
-  m_LCR     = 0;
-  m_MCR     = 0;
-  m_LSR     = PC8250_LSR_THRE | PC8250_LSR_TEMT;
-  m_MSR     = 0;
-  m_SCR     = 0;
-  m_overrun = false;
+  m_DLL       = 0;
+  m_DLM       = 0;
+  m_trigs     = 0;
+  m_IER       = 0;
+  m_LCR       = 0;
+  m_MCR       = 0;
+  m_LSR       = PC8250_LSR_THRE | PC8250_LSR_TEMT;
+  m_MSR       = 0;
+  m_SCR       = 0;
+  m_overrun   = false;
+  m_dataReady = false;
 }
 
 
@@ -113,9 +112,10 @@ void PC8250::setSerialPort(SerialPort * value)
 void PC8250::rxCallback(void * args, uint8_t value, bool fromISR)
 {
   auto obj = (PC8250 *) args;
-  bool r = fromISR ? xQueueSendToBackFromISR(obj->m_rxQueue, &value, nullptr) : xQueueSendToBack(obj->m_rxQueue, &value, 0);
-  if (!r)
+  obj->m_dataRecv = value;
+  if (obj->m_dataReady)
     obj->m_overrun = true;
+  obj->m_dataReady = true;
 }
 
 
@@ -138,18 +138,16 @@ uint8_t PC8250::read(int reg)
       
         // Divisor Latch LSB Register (DLL)
         ret = m_DLL;
+        //printf("RD DLL %02X\n", ret);
         
       } else {
       
         // Receiver Buffer Register (RBR)
-        //printf("RD RBR ");
-        if (xQueueReceive(m_rxQueue, &ret, 0)) {
-          m_LSR   &= ~PC8250_LSR_DR;       // reset DR flag
-          m_trigs &= ~PC8250_IER_RX_INT;   // reset interrupt triggered flag
-          //printf("%02X\n", ret);
-        } else {
-          //printf("--\n");
-        }
+        ret = m_MCR & PC8250_MCR_LOOPBACK ? m_THR : m_dataRecv;
+        m_dataReady = false;
+        m_LSR      &= ~PC8250_LSR_DR;       // reset DR flag
+        m_trigs    &= ~PC8250_IER_RX_INT;   // reset interrupt triggered flag
+        //printf("RD RBR %02X\n", ret);
         
       }
       break;
@@ -161,6 +159,7 @@ uint8_t PC8250::read(int reg)
       
         // Divisor Latch MSB Register (DLM)
         ret = m_DLM;
+        //printf("RD DLM %02X\n", ret);
         
       } else {
       
@@ -177,9 +176,10 @@ uint8_t PC8250::read(int reg)
         ret = 0b110;
       else if (m_trigs & PC8250_IER_RX_INT)
         ret = 0b100;
-      else if (m_trigs & PC8250_IER_TX_INT)
+      else if (m_trigs & PC8250_IER_TX_INT) {
         ret = 0b010;
-      else if (m_trigs & PC8250_IER_MODEM_INT)
+        m_trigs &= ~PC8250_IER_TX_INT;
+      } else if (m_trigs & PC8250_IER_MODEM_INT)
         ret = 0b000;
       else
         ret = 0b001;
@@ -195,7 +195,7 @@ uint8_t PC8250::read(int reg)
     // MODEM Control Register (MCR)
     case 4:
       ret = m_MCR;
-      //printf("RD MCR %02X\n", ret);
+      //printf("RD MCR %02X (%s %s %s %s %s)\n", ret, ret & PC8250_MCR_DTR ? "DTR" : "", ret & PC8250_MCR_RTS ? "RTS" : "", ret & PC8250_MCR_OUT1 ? "OUT1(RI)" : "", ret & PC8250_MCR_OUT2 ? "OUT2(DCD)" : "", ret & PC8250_MCR_LOOPBACK ? "LOOPBACK" : "");
       break;
       
     // Line Status Register (LSR)
@@ -258,11 +258,13 @@ void PC8250::write(int reg, uint8_t value)
         if (m_MCR & PC8250_MCR_LOOPBACK) {
           // loopback mode
           //printf("  loopback ");
-          if ((m_LSR & PC8250_LSR_DR) || !xQueueSendToBack(m_rxQueue, &value, 0)) {
+          m_THR = value;
+          if (m_LSR & PC8250_LSR_DR) {
             //printf("  overrun ");
             m_overrun = true;
           }
-          m_LSR |= PC8250_LSR_DR;
+          m_LSR   |= PC8250_LSR_DR;                // set DR flag
+          m_trigs |= m_IER & PC8250_IER_RX_INT;    // set int triggered flag
         } else {
           // normal mode
           m_serialPort->send(value);
@@ -284,6 +286,7 @@ void PC8250::write(int reg, uint8_t value)
       } else {
         // Interrupt Enable Register (IER)
         m_IER = value & 0x0f;
+        m_trigs |= m_IER & PC8250_IER_TX_INT;
         //printf("WR IER = %02X\n", value);
       }
       break;
@@ -303,9 +306,16 @@ void PC8250::write(int reg, uint8_t value)
     // MODEM Control Register (MCR)
     case 4:
       m_MCR = value & 0x1f;
-      m_serialPort->setDTRStatus(m_MCR & PC8250_MCR_DTR);
-      m_serialPort->setRTSStatus(m_MCR & PC8250_MCR_RTS);
-      //printf("WR MCR = %02X (%s %s %s %s)\n", value, value & PC8250_MCR_DTR ? "DTR" : "", value & PC8250_MCR_RTS ? "RTS" : "", value & PC8250_MCR_OUT1 ? "OUT1(RI)" : "", value & PC8250_MCR_OUT2 ? "OUT2(DCD)" : "");
+      if (m_MCR & PC8250_MCR_LOOPBACK) {
+        checkCTSChanged();
+        checkDSRChanged();
+        checkRIChangeLow();
+        checkDCDChanged();
+      } else {
+        m_serialPort->setDTRStatus(m_MCR & PC8250_MCR_DTR);
+        m_serialPort->setRTSStatus(m_MCR & PC8250_MCR_RTS);
+      }
+      //printf("WR MCR = %02X (%s %s %s %s %s)\n", value, value & PC8250_MCR_DTR ? "DTR" : "", value & PC8250_MCR_RTS ? "RTS" : "", value & PC8250_MCR_OUT1 ? "OUT1(RI)" : "", value & PC8250_MCR_OUT2 ? "OUT2(DCD)" : "", value & PC8250_MCR_LOOPBACK ? "LOOPBACK" : "");
       break;
       
     case 5:
@@ -314,10 +324,10 @@ void PC8250::write(int reg, uint8_t value)
     
     // MODEM Status Register (MSR)
     case 6:
+      //printf("WR MSR = %02X (%s %s %s %s %s %s %s %s)\n", value, value & PC8250_MSR_DCTS ? "DCTS" : "", value & PC8250_MSR_DDSR ? "DDSR" : "", value & PC8250_MSR_TERI ? "TERI" : "",value & PC8250_MSR_DDCD ? "DDCD" : "", value & PC8250_MSR_CTS ? "CTS" : "", value & PC8250_MSR_DSR ? "DSR" : "", value & PC8250_MSR_RI ? "RI(OUT1)" : "", value & PC8250_MSR_DCD ? "DCD(OUT2)" : "");
       m_MSR = (m_MSR & 0xf0) | (value & 0x0f);
       if (m_MSR & 0x0f)
         m_trigs |= m_IER & PC8250_IER_MODEM_INT;
-      //printf("WR MSR = %02X (%s %s %s %s %s %s %s %s)\n", value, value & PC8250_MSR_DCTS ? "DCTS" : "", value & PC8250_MSR_DDSR ? "DDSR" : "", value & PC8250_MSR_TERI ? "TERI" : "",value & PC8250_MSR_DDCD ? "DDCD" : "", value & PC8250_MSR_CTS ? "CTS" : "", value & PC8250_MSR_DSR ? "DSR" : "", value & PC8250_MSR_RI ? "RI(OUT1)" : "", value & PC8250_MSR_DCD ? "DCD(OUT2)" : "");
       break;
       
     // Scratch Register
@@ -390,7 +400,7 @@ void PC8250::checkFramingError()
 
 void PC8250::checkByteReceived()
 {
-  if (uxQueueMessagesWaiting(m_rxQueue)) {
+  if (m_dataReady && (m_MCR & PC8250_MCR_LOOPBACK) == 0) {
     m_LSR   |= PC8250_LSR_DR;                // set DR flag
     m_trigs |= m_IER & PC8250_IER_RX_INT;    // set int triggered flag
   }
@@ -422,13 +432,12 @@ void PC8250::checkDSRChanged()
 void PC8250::checkRIChangeLow()
 {
   bool value = m_MCR & PC8250_MCR_LOOPBACK ? m_MCR & PC8250_MCR_OUT1 : m_serialPort->RIStatus();
-  if ((bool)(m_MSR & PC8250_MSR_RI) != value) {
-    m_MSR   ^= PC8250_MSR_RI;                // invert RI
+  if ((bool)(m_MSR & PC8250_MSR_RI) != value && !value) {
+    m_MSR   &= ~PC8250_MSR_RI;                // reset RI
     m_MSR   |= PC8250_MSR_TERI;               // set TERI
     m_trigs |= m_IER & PC8250_IER_MODEM_INT;  // set int triggered flag
   }
-  //m_MSR = (m_MSR & ~PC8250_MSR_RI) | (value ? PC8250_MSR_RI : 0);
-    
+  m_MSR = (m_MSR & ~PC8250_MSR_RI) | (value ? PC8250_MSR_RI : 0);
 }
 
 
@@ -460,7 +469,7 @@ void PC8250::tick()
     }
     
     // check for MODEM changes interrupt?
-    if (m_IER & PC8250_IER_MODEM_INT) {
+    if ((m_IER & PC8250_IER_MODEM_INT) && !(m_MCR & PC8250_MCR_LOOPBACK)) {
       checkCTSChanged();
       checkDSRChanged();
       checkRIChangeLow();
