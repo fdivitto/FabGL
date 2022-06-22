@@ -42,6 +42,7 @@
 ;   - INT13, reiplemented using emulated helpers
 ;   - int10_write_char_tty, checked page num for old MSDOS versions
 ;   - int10, implemented service 0c, write pixel
+;   - int14, fixed initialization bug
 ;    
 ;
 ;
@@ -2511,7 +2512,7 @@ int14_init:
   and  dx, 0x0003
   shl  dx, 1
   mov  bx, dx
-  mov  dx, [com1addr-bios_data+bx]
+  mov  dx, [com1addr - bios_data + bx]
 
   ; set baud rate divisor
   mov  bx, 0
@@ -2526,16 +2527,16 @@ int14_init:
   mov  cx, [cs:baud_rate_div+bx]
 
   push  ax
-  add  dx, 3    ; dx = line control register
-  mov  al, 0x80  ; turn on bit 7 (divisor latch)
-  out  dx, al
-  sub  dx, 2    ; MSB of divisor latch
-  mov  al, ch
-  out  dx, al
-  dec  dx    ; LSB of divisor latch
-  mov  al, cl
-  out  dx, al
-  pop  ax
+  add   dx, 3    ; dx = line control register
+  mov   al, 0x80  ; turn on bit 7 (divisor latch)
+  out   dx, al
+  sub   dx, 2    ; MSB of divisor latch
+  mov   al, ch
+  out   dx, al
+  dec   dx    ; LSB of divisor latch
+  mov   al, cl
+  out   dx, al
+  pop   ax
 
   ; Initialise the Line Control Register
   mov  bl, al    ; Set stop bits and data bits into bl
@@ -2545,10 +2546,10 @@ int14_init:
   shl  cl, 1
   or   bl, cl
   add  dx, 3    ; write Line Control register
-  mov  bl, al
+  mov  al, bl ;mov  bl, al
   out  dx, al
 
-  ; Assert RTS and DTR in the modme control register
+  ; Assert RTS and DTR in the modem control register
   inc  dx
   mov  al, 0x03
   out  dx, al
