@@ -473,6 +473,10 @@ void setup()
   }
 
   ibox.end();
+  
+  // without WiFi it is possible to increase SD card speed
+  FileBrowser::setSDCardMaxFreqKHz(SDMMC_FREQ_DEFAULT);
+  FileBrowser::remountSDCard();
 
   machine = new Machine;
 
