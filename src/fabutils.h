@@ -789,6 +789,8 @@ public:
    */
   static bool format(DriveType driveType, int drive);
 
+  static void setSDCardMaxFreqKHz(int value) { s_SDCardMaxFreqKHz = value; }
+
   /**
    * @brief Mounts filesystem on SD Card
    *
@@ -896,6 +898,7 @@ private:
   static int8_t         s_SDCardCLK;
   static int8_t         s_SDCardCS;
   static sdmmc_card_t * s_SDCard;
+  static int            s_SDCardMaxFreqKHz;
 
   char *    m_dir;
   int       m_count;
