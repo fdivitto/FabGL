@@ -116,6 +116,9 @@ private:
   // Transmitter Holding Register (THR)
   uint8_t           m_THR;
   
+  // Interrupt Identification Register (IIR)
+  uint8_t           m_IIR;
+  
   // Interrupt Enable Register (IER)
   //   0 = Receiver Data Available interrupt enabled
   //   1 = Transmitter Holding Register Empty interrupt enabled
