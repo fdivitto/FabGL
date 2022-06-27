@@ -74,6 +74,8 @@ fabgl::SerialPortTerminalConnector  SerialPortTerminalConnector;
 #define USERESETPIN       0   // 1 = reset enabled
 
 
+#define SHOWBREAKS        0
+
 
 
 
@@ -146,6 +148,8 @@ void setup()
   // onVirtualKey is triggered whenever a key is pressed or released
   Terminal.onVirtualKeyItem = [&](VirtualKeyItem * vkItem) {
     if (vkItem->vk == VirtualKey::VK_F12) {
+      // CTRL ALT F12 -> show reboot dialog
+      // F12          -> show configuration dialog
       if (vkItem->CTRL && (vkItem->LALT || vkItem->RALT)) {
         Terminal.deactivate();
         preferences.clear();
@@ -167,6 +171,13 @@ void setup()
           installProgram(progToInstall);
         vkItem->vk = VirtualKey::VK_NONE;
       }
+    } else if (vkItem->vk == VirtualKey::VK_BREAK && !vkItem->down) {
+      // BREAK (CTRL PAUSE) -> short break (TX low for 3.5 s)
+      // SHIFT BREAK (SHIFT CTRL PAUSE) -> long break (TX low for 0.233 ms)
+      SerialPort.sendBreak(true);
+      vTaskDelay((vkItem->SHIFT ? 3500 : 233) / portTICK_PERIOD_MS);
+      SerialPort.sendBreak(false);
+      vkItem->vk = VirtualKey::VK_NONE;
     }
   };
 
@@ -187,6 +198,15 @@ void setup()
 
 void loop()
 {
+  #if SHOWBREAKS
+  if (SerialPort.breakDetected()) {
+    Terminal.printf("BREAK\r\n");
+  }
+  vTaskDelay(50);
+  #else
+
   // the job is done using UART interrupts
   vTaskDelete(NULL);
+
+  #endif
 }
