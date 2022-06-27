@@ -94,6 +94,7 @@ private:
   void checkOverflowError();
   void checkParityError();
   void checkFramingError();
+  void checkBreakDetected();
   
   // rx check
   void checkByteReceived();
@@ -139,7 +140,7 @@ private:
   //   3    = parity enable: 1 = parity enabled
   //   4    = parity type: 0 = odd, 1 = even
   //   5    = stick parity (UNSUPPORTED)
-  //   6    = send break (UNSUPPORTED)
+  //   6    = send break
   //   7    = Divisor Latch Access Bit (DLAB)
   uint8_t           m_LCR;
   
@@ -156,7 +157,7 @@ private:
   //   1 = Overrun Error (OE), 1 = error
   //   2 = Parity Error (PE), 1 = error
   //   3 = Framing Error (FE), 1 = error
-  //   4 = Break Interrupt (BI), 1 = break received (UNSUPPORTED)
+  //   4 = Break Interrupt (BI), 1 = break received
   //   5 = Transmitter Holding Register Empty (THRE), 1 = transmitter holding register empty
   //   6 = Transmitter Empty indicator (TEMT), 1 = transmitter shift register empty
   uint8_t           m_LSR;

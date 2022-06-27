@@ -40,6 +40,7 @@
 #define PC8250_LCR_MBITSTOP   0x04
 #define PC8250_LCR_PARITYEN   0x08
 #define PC8250_LCR_PARITYEVEN 0x10
+#define PC8250_LCR_SENDBREAK  0x40
 #define PC8250_LCR_DLAB       0x80
 
 
@@ -233,14 +234,17 @@ uint8_t PC8250::read(int reg)
       
     // Line Status Register (LSR)
     case 5:
-      checkByteReceived();
-      checkOverflowError();
-      checkParityError();
-      checkFramingError();
+      if ((m_MCR & PC8250_MCR_LOOPBACK) == 0) {
+        checkByteReceived();
+        checkOverflowError();
+        checkParityError();
+        checkFramingError();
+        checkBreakDetected();
+      }
       ret = m_LSR;
-      // reset OE, PE, FE flags
-      m_LSR  &= ~(PC8250_LSR_OE | PC8250_LSR_PE | PC8250_LSR_FE);
-      // reset interrupt triggered flag
+      // reset OE, PE, FE, BI flags
+      m_LSR  &= ~(PC8250_LSR_OE | PC8250_LSR_PE | PC8250_LSR_FE | PC8250_LSR_BI);
+      // reset line interrupt triggered flag
       m_trigs &= ~PC8250_IER_LINE_INT;
       m_IIR    = 1;
       
@@ -367,12 +371,24 @@ void PC8250::write(int reg, uint8_t value)
       
     // Line Control Register (LCR)
     case 3:
+      if ((m_LCR & PC8250_LCR_SENDBREAK) != (value & PC8250_LCR_SENDBREAK)) {
+        // send break changed
+        if (m_MCR & PC8250_MCR_LOOPBACK) {
+          if (value & PC8250_LCR_SENDBREAK) {
+            m_LSR   |= PC8250_LSR_BI | PC8250_LSR_DR;
+            m_trigs |= m_IER & PC8250_IER_LINE_INT;
+            m_THR    = 0;
+          }
+        } else {
+          m_serialPort->sendBreak(value & PC8250_LCR_SENDBREAK);
+        }
+      }
       m_LCR = value;
       setFrame();
       
       #if PC8250_DEBUG
       printf("WR LCR = %02X (%d ms)\n", value, (int)esp_timer_get_time()/1000);
-      if (m_LCR & 0x40) printf("  SEND BREAK!!\n");
+      if (m_LCR & PC8250_LCR_SENDBREAK) printf("  SEND BREAK\n");
       #endif
       
       break;
@@ -488,6 +504,16 @@ void PC8250::checkFramingError()
 }
 
 
+void PC8250::checkBreakDetected()
+{
+  if (m_serialPort->breakDetected()) {
+    m_LSR   |= PC8250_LSR_BI | PC8250_LSR_DR;
+    m_trigs |= m_IER & PC8250_IER_LINE_INT;
+    m_THR    = 0;
+  }
+}
+
+
 void PC8250::checkByteReceived()
 {
   if (m_dataReady && (m_MCR & PC8250_MCR_LOOPBACK) == 0) {
@@ -551,11 +577,12 @@ void PC8250::tick()
     if (m_IER & PC8250_IER_RX_INT)
       checkByteReceived();
 
-    // check for line status error interrupt?
+    // check for line status error or break interrupt?
     if (m_IER & PC8250_IER_LINE_INT) {
       checkOverflowError();
       checkParityError();
       checkFramingError();
+      checkBreakDetected();
     }
     
     // check for MODEM changes interrupt?
