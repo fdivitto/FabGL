@@ -46,6 +46,13 @@ namespace fabgl {
 
 
 
+static const int URXD_IN_IDX[]    = { U0RXD_IN_IDX, U1RXD_IN_IDX, U2RXD_IN_IDX };
+static const int UTXD_OUT_IDX[]   = { U0TXD_OUT_IDX, U1TXD_OUT_IDX, U2TXD_OUT_IDX };
+static const int INTR_SRC[]       = { ETS_UART0_INTR_SOURCE, ETS_UART1_INTR_SOURCE, ETS_UART2_INTR_SOURCE };
+static const uint32_t UART_BASE[] = { DR_REG_UART_BASE, DR_REG_UART1_BASE, DR_REG_UART2_BASE };
+
+
+
 SerialPort::SerialPort()
   : m_initialized(false),
     m_RTSStatus(true),
@@ -56,18 +63,21 @@ SerialPort::SerialPort()
     m_callbackArgs(nullptr),
     m_rxReadyCallback(nullptr),
     m_rxCallback(nullptr),
+    m_lineStatusCallback(nullptr),
     m_parityError(false),
     m_framingError(false),
-    m_overflowError(false)
+    m_overflowError(false),
+    m_breakDetected(false)
 {
 }
 
 
-void SerialPort::setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback)
+void SerialPort::setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback, LineStatusCallback lineStatusCallback)
 {
-  m_callbackArgs    = args;
-  m_rxReadyCallback = rxReadyCallback;
-  m_rxCallback      = rxCallback;
+  m_callbackArgs       = args;
+  m_rxReadyCallback    = rxReadyCallback;
+  m_rxCallback         = rxCallback;
+  m_lineStatusCallback = lineStatusCallback;
 }
 
 
@@ -165,11 +175,6 @@ void SerialPort::setSignals(int rxPin, int txPin, int rtsPin, int ctsPin, int dt
 // uart = 0, 1, 2
 void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity, float stopBits, FlowControl flowControl, bool inverted)
 {
-  static const int URXD_IN_IDX[]    = { U0RXD_IN_IDX, U1RXD_IN_IDX, U2RXD_IN_IDX };
-  static const int UTXD_OUT_IDX[]   = { U0TXD_OUT_IDX, U1TXD_OUT_IDX, U2TXD_OUT_IDX };
-  static const int INTR_SRC[]       = { ETS_UART0_INTR_SOURCE, ETS_UART1_INTR_SOURCE, ETS_UART2_INTR_SOURCE };
-  static const uint32_t UART_BASE[] = { DR_REG_UART_BASE, DR_REG_UART1_BASE, DR_REG_UART2_BASE };
-
   if (!m_initialized) {
     // uart not configured, configure now
 
@@ -212,7 +217,8 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
                                             (1 << UART_FRM_ERR_INT_ENA_S)     |  // interrupt on frame error
                                             (0 << UART_RXFIFO_TOUT_INT_ENA_S) |  // no interrupt on rx timeout (see rx_tout_en and rx_tout_thrhd)
                                             (1 << UART_PARITY_ERR_INT_ENA_S)  |  // interrupt on rx parity error
-                                            (1 << UART_RXFIFO_OVF_INT_ENA_S));   // interrupt on rx overflow
+                                            (1 << UART_RXFIFO_OVF_INT_ENA_S)  |  // interrupt on rx overflow
+                                            (1 << UART_BRK_DET_INT_ENA_S));        // interrupt on Break
     WRITE_PERI_REG(UART_INT_CLR_REG(m_idx), 0xffffffff);
     esp_intr_alloc_pinnedToCore(INTR_SRC[m_idx], 0, uart_isr, this, nullptr, CoreUsage::quietCore());
 
@@ -222,6 +228,8 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
   }
 
   m_flowControl = flowControl;
+  
+  m_inverted    = inverted;
 
   // baud rate
   setBaud(baud);
@@ -230,8 +238,8 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
   setFrame(dataLength, parity, stopBits);
 
   // TX/RX Pin logic
-  gpio_matrix_in(m_rxPin, URXD_IN_IDX[m_idx], inverted);
-  gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], inverted, false);
+  gpio_matrix_in(m_rxPin, URXD_IN_IDX[m_idx], m_inverted);
+  gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
 
   // Flow Control
   WRITE_PERI_REG(UART_FLOW_CONF_REG(m_idx), 0);
@@ -325,6 +333,22 @@ void SerialPort::send(uint8_t value)
 }
 
 
+void SerialPort::sendBreak(bool value)
+{
+  constexpr int MATRIX_DETACH_OUT_SIG = 0x100;
+
+  while (m_dev->status.txfifo_cnt == 0x7F)
+    ;
+  if (value) {
+    gpio_matrix_out(m_txPin, MATRIX_DETACH_OUT_SIG, m_inverted, false);
+    configureGPIO(m_txPin, GPIO_MODE_OUTPUT);
+    gpio_set_level(m_txPin, 0);
+  } else {
+    gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
+  }
+}
+
+
 void IRAM_ATTR SerialPort::uart_isr(void * arg)
 {
   auto ser = (SerialPort*) arg;
@@ -337,10 +361,23 @@ void IRAM_ATTR SerialPort::uart_isr(void * arg)
     ser->m_parityError   |= dev->int_st.parity_err;
     ser->m_framingError  |= dev->int_st.frm_err;
     ser->m_overflowError |= dev->int_st.rxfifo_ovf;
+    if (ser->m_lineStatusCallback)
+      ser->m_lineStatusCallback(ser->m_callbackArgs, ser->m_parityError, ser->m_framingError, ser->m_overflowError, ser->m_breakDetected, true);
     // reset RX-FIFO, because hardware bug rxfifo_rst cannot be used, so just flush
     ser->uartFlushRXFIFO();
     // clear interrupt flags
     SET_PERI_REG_MASK(UART_INT_CLR_REG(idx), UART_RXFIFO_OVF_INT_CLR_M | UART_FRM_ERR_INT_CLR_M | UART_PARITY_ERR_INT_CLR_M);
+    return;
+  }
+  
+  // Break detection
+  if (dev->int_st.brk_det) {
+    // save (or) break state
+    ser->m_breakDetected |= dev->int_st.brk_det;
+    if (ser->m_lineStatusCallback)
+      ser->m_lineStatusCallback(ser->m_callbackArgs, ser->m_parityError, ser->m_framingError, ser->m_overflowError, ser->m_breakDetected, true);
+    // clear interrupt flags
+    SET_PERI_REG_MASK(UART_INT_CLR_REG(idx), UART_BRK_DET_INT_CLR_M);
     return;
   }
 

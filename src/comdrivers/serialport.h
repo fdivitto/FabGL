@@ -67,10 +67,11 @@ public:
 
   typedef void (*RXCallback)(void * args, uint8_t value, bool fromISR);
   typedef bool (*RXReadyCallback)(void * args, bool fromISR);
+  typedef void (*LineStatusCallback)(void * args, bool parityError, bool framingError, bool overflowError, bool breakDetected, bool fromISR);
 
   SerialPort();
   
-  void setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback);
+  void setCallbacks(void * args, RXReadyCallback rxReadyCallback, RXCallback rxCallback, LineStatusCallback lineStatusCallback = nullptr);
 
   /**
    * @brief Associates GPIOs to serial port signals
@@ -227,6 +228,13 @@ public:
   void send(uint8_t value);
   
   /**
+   * @brief Activates or disattivaes Break
+   *
+   * @param If True Break is active (keep TX low)
+   */
+  void sendBreak(bool value);
+  
+  /**
    * @brief Gets parity error status
    *
    * Calling this method resets the error.
@@ -252,7 +260,16 @@ public:
    * @return Overflow error status
    */
   bool overflowError() { auto r = m_overflowError; m_overflowError = false; return r; }
-  
+
+  /**
+   * @brief Gets Break detected flag status
+   *
+   * Calling this method resets the status to False.
+   *
+   * @return Break detected status
+   */
+  bool breakDetected() { auto r = m_breakDetected; m_breakDetected = false; return r; }
+
 
 private:
 
@@ -265,6 +282,8 @@ private:
   bool                      m_initialized;
   int                       m_idx;
   volatile uart_dev_t *     m_dev;
+  
+  bool                      m_inverted;
   
   gpio_num_t                m_rxPin;
   gpio_num_t                m_txPin;
@@ -285,10 +304,12 @@ private:
   void *                    m_callbackArgs;
   RXReadyCallback           m_rxReadyCallback;
   RXCallback                m_rxCallback;
+  LineStatusCallback        m_lineStatusCallback;
   
   volatile bool             m_parityError;
   volatile bool             m_framingError;
   volatile bool             m_overflowError;
+  volatile bool             m_breakDetected;
 
 };
 
