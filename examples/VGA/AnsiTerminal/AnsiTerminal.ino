@@ -159,7 +159,8 @@ void setup()
       } else if (!vkItem->CTRL && !vkItem->LALT && !vkItem->RALT && !vkItem->down) {
         // releasing F12 key to open configuration dialog
         Terminal.deactivate();
-        PS2Controller.mouse()->emptyQueue();  // avoid previous mouse movements to be showed on UI
+        if (PS2Controller.mouse())
+          PS2Controller.mouse()->emptyQueue();  // avoid previous mouse movements to be showed on UI
         auto dlgApp = new ConfDialogApp;
         dlgApp->run(DisplayController);
         auto progToInstall = dlgApp->progToInstall;
