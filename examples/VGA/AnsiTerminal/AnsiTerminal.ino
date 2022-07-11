@@ -41,27 +41,10 @@ fabgl::SerialPort                   SerialPort;
 fabgl::SerialPortTerminalConnector  SerialPortTerminalConnector;
 
 
-
-// notes about GPIO 2 and 12
-//    - GPIO2:  may cause problem on programming. GPIO2 must also be either left unconnected/floating, or driven Low, in order to enter the serial bootloader.
-//              In normal boot mode (GPIO0 high), GPIO2 is ignored.
-//    - GPIO12: should be avoided. It selects flash voltage. To use it disable GPIO12 detection setting efuses with:
-//                    python espefuse.py --port /dev/cu.SLAB_USBtoUART set_flash_voltage 3.3V
-//                       WARN!! Good for ESP32 with 3.3V voltage (ESP-WROOM-32). This will BRICK your ESP32 if the flash isn't 3.3V
-//                       NOTE1: replace "/dev/cu.SLAB_USBtoUART" with your serial port
-//                       NOTE2: espefuse.py is downloadable from https://github.com/espressif/esptool
-
-// UART Pins for USB serial
-#define UART_URX 3
-#define UART_UTX 1
-
-// UART Pins for normal serial Port
-#define UART_SRX 34
-#define UART_STX 2
-
 // RTS/CTS hardware flow gpios
 #define UART_RTS 13
 #define UART_CTS 35
+
 
 // settings reset control
 /* for old WROOM-32 boards
@@ -111,7 +94,10 @@ void setup()
   fabgl::Mouse::quickCheckHardware();
 
   // keyboard configured on port 0, and optionally mouse on port 1
-  PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
+  if (UARTPORT_FLAGS[ConfDialogApp::getUARTPortIndex()] & UARTFLAG_USE_PS2PORT1)
+    PS2Controller.begin(PS2Preset::KeyboardPort0);  // mouse port used as serial port, so no mouse available
+  else
+    PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1);
 
   ConfDialogApp::setupDisplay();
 
@@ -134,10 +120,7 @@ void setup()
     //Terminal.printf("Mouse              : %s\r\n", PS2Controller.mouse()->isMouseAvailable() ? "Yes" : "No");
     Terminal.printf("Terminal Type      : %s\r\n", SupportedTerminals::names()[(int)ConfDialogApp::getTermType()]);
     //Terminal.printf("Free Memory        : %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
-    if (ConfDialogApp::getSerCtl())
-      Terminal.printf("Serial Port        : USB RX-Pin[%d] TX-Pin[%d]\r\n", UART_URX, UART_UTX);
-    else
-      Terminal.printf("Serial Port        : Serial RX-Pin[%d] TX-Pin[%d]\r\n", UART_SRX, UART_STX);
+    Terminal.printf("Serial Port        : %s\r\n", UARTPORT_STR[ConfDialogApp::getUARTPortIndex()]);
     Terminal.printf("Serial Parameters  : %s\r\n", ConfDialogApp::getSerParamStr());
 
     Terminal.write("\r\nPress F12 to change terminal configuration and CTRL-ALT-F12 to reset settings\r\n\n");
