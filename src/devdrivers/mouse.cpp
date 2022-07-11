@@ -314,7 +314,7 @@ void Mouse::mouseUpdateTask(void * arg)
 
         // queue (if you need availableStatus() or getNextStatus())
         if (mouse->m_absoluteQueue) {
-          xQueueSend(mouse->m_absoluteQueue, &mouse->m_status, 0);
+          xQueueSendToBack(mouse->m_absoluteQueue, &mouse->m_status, 0);
         }
 
         if (mouse->m_uiApp) {
