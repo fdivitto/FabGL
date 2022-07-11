@@ -2352,13 +2352,13 @@ uint8_t Terminal::consumeParamsAndGetCode(int * params, int * paramsCount, bool 
       #endif
 
       // reset non specified parameters
-      while (p < params + FABGLIB_MAX_CSI_PARAMS)
+      while (p < params + FABGLIB_MAX_CSI_PARAMS - 1)
         *(++p) = 0;
 
       return c;
     }
 
-    if (p < params + FABGLIB_MAX_CSI_PARAMS) {
+    if (p < params + FABGLIB_MAX_CSI_PARAMS - 1) {
       if (c == ';') {
         ++p;
         *p = 0;
