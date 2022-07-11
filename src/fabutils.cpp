@@ -521,7 +521,7 @@ void StringList::appendSepList(char const * strlist, char separator)
       auto end = strchr(start, separator);
       if (!end)
         end = strchr(start, 0);
-      int len = end - start;
+      auto len = end - start;
       char str[len + 1];
       memcpy(str, start, len);
       str[len] = 0;
@@ -940,7 +940,7 @@ bool FileBrowser::reload()
 // "dirname" is not a path, just a directory name created inside "m_dir"
 void FileBrowser::makeDirectory(char const * dirname)
 {
-  int dirnameLen = strlen(dirname);
+  auto dirnameLen = strlen(dirname);
   if (dirnameLen > 0) {
     if (getCurrentDriveType() == DriveType::SPIFFS) {
       // simulated directory, puts an hidden placeholder

@@ -1638,7 +1638,7 @@ void Terminal::int_setTerminalType(TermInfo const * value)
   if (value != nullptr) {
     // need to "insert" initString in reverse order
     auto s = value->initString;
-    for (int i = strlen(s) - 1; i >= 0; --i)
+    for (int i = (int)strlen(s) - 1; i >= 0; --i)
       insertToInputQueue(s[i], false);
 
     m_termInfo = value;
@@ -1695,7 +1695,7 @@ void Terminal::convHandleTranslation(uint8_t c, bool fromISR)
           continue;
       }
       // here (item == m_convMatchedItem) is always true
-      if (item->termSeq[m_convMatchedCount] == 0xFF || item->termSeq[m_convMatchedCount] == c) {
+      if ((uint8_t) item->termSeq[m_convMatchedCount] == 0xFF || item->termSeq[m_convMatchedCount] == c) {
         // are there other chars to process?
         ++m_convMatchedCount;
         if (item->termSeqLen == m_convMatchedCount) {
@@ -4891,7 +4891,7 @@ void LineEditor::typeText(char const * text)
 
 void LineEditor::setText(char const * text, bool moveCursor)
 {
-  setText(text, strlen(text), moveCursor);
+  setText(text, (int) strlen(text), moveCursor);
 }
 
 
@@ -4945,7 +4945,7 @@ void LineEditor::beginInput()
   m_homeRow = m_termctrl.getCursorRow();
   if (m_text) {
     // m_inputPos already set by setText()
-    for (int i = 0, len = strlen(m_text); i < len; ++i)
+    for (int i = 0, len = (int) strlen(m_text); i < len; ++i)
       m_homeRow -= m_termctrl.setChar(m_text[i]);
     if (m_inputPos == 0)
       m_termctrl.setCursorPos(m_homeCol, m_homeRow);

@@ -242,7 +242,7 @@ void Mouse::updateAbsolutePosition(MouseDelta * delta)
   int dz = delta->deltaZ;
 
   int64_t now   = esp_timer_get_time();
-  int deltaTime = now - m_prevDeltaTime; // time in microseconds
+  int deltaTime = (int) (now - m_prevDeltaTime); // time in microseconds
 
   if (deltaTime < maxDeltaTimeUS) {
 

@@ -1147,10 +1147,10 @@ void IRAM_ATTR BitmappedDisplayController::absDrawThickLine(int X1, int Y1, int 
 
   const double angle = atan2(Y2 - Y1, X2 - X1);
   const double pw = (double)penWidth / 2.0;
-  const int ofs1 = lround(pw * cos(angle + M_PI_2));
-  const int ofs2 = lround(pw * sin(angle + M_PI_2));
-  const int ofs3 = lround(pw * cos(angle - M_PI_2));
-  const int ofs4 = lround(pw * sin(angle - M_PI_2));
+  const int ofs1 = (int) lround(pw * cos(angle + M_PI_2));
+  const int ofs2 = (int) lround(pw * sin(angle + M_PI_2));
+  const int ofs3 = (int) lround(pw * cos(angle - M_PI_2));
+  const int ofs4 = (int) lround(pw * sin(angle - M_PI_2));
   pts[0].X = X1 + ofs1;
   pts[0].Y = Y1 + ofs2;
   pts[1].X = X1 + ofs3;

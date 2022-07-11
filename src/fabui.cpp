@@ -279,7 +279,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   // avoid slow paint on low resolutions
   m_displayController->enableBackgroundPrimitiveTimeout(false);
 
-  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+  m_lastUserActionTimeMS = (int) (esp_timer_get_time() / 1000);
 
   showWindow(m_rootWindow, true);
 
@@ -486,7 +486,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
       getEvent(event, -1);
   }
 
-  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+  m_lastUserActionTimeMS = (int) (esp_timer_get_time() / 1000);
 
   Point mousePos = Point(event->params.mouse.status.X, event->params.mouse.status.Y);
 
@@ -531,7 +531,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 
   // double click?
   if (event->id == UIEVT_MOUSEBUTTONUP && event->params.mouse.changedButton == 1) {
-    int curTime = esp_timer_get_time() / 1000;  // uS -> MS
+    int curTime = (int) (esp_timer_get_time() / 1000);  // uS -> MS
     if (m_lastMouseUpPos == mousePos && curTime - m_lastMouseUpTimeMS <= m_appProps.doubleClickTime) {
       // post double click message
       uiEvent evt = *event;
@@ -546,7 +546,7 @@ void uiApp::preprocessMouseEvent(uiEvent * event)
 
 void uiApp::preprocessKeyboardEvent(uiEvent * event)
 {
-  m_lastUserActionTimeMS = esp_timer_get_time() / 1000;
+  m_lastUserActionTimeMS = (int) (esp_timer_get_time() / 1000);
 
   // keyboard events go to focused window
   if (m_focusedWindow) {
@@ -1253,7 +1253,7 @@ uiMessageBoxResult uiApp::inputBox(char const * title, char const * text, char *
   switch (modalResult) {
     case 1:
     {
-      int len = imin(maxLength, strlen(edit->text()));
+      auto len = imin(maxLength, (int) strlen(edit->text()));
       memcpy(inOutString, edit->text(), len);
       inOutString[len] = 0;
       return uiMessageBoxResult::Button1;
@@ -1326,11 +1326,11 @@ uiMessageBoxResult uiApp::fileDialog(char const * title, char * inOutDirectory, 
   switch (modalResult) {
     case 1:
     {
-      int len = imin(maxDirNameSize, strlen(browser->directory()));
+      auto len = imin(maxDirNameSize, (int) strlen(browser->directory()));
       memcpy(inOutDirectory, browser->directory(), len);
       inOutDirectory[len] = 0;
 
-      len = imin(maxFileNameSize, strlen(filenameEdit->text()));
+      len = imin(maxFileNameSize, (int) strlen(filenameEdit->text()));
       memcpy(inOutFilename, filenameEdit->text(), len);
       inOutFilename[len] = 0;
 
@@ -1941,7 +1941,7 @@ uiFrame::~uiFrame()
 void uiFrame::setTitle(char const * value)
 {
   if (value) {
-    m_titleLength = strlen(value);
+    m_titleLength = (int) strlen(value);
     m_title = (char*) realloc(m_title, m_titleLength + 1);
     strcpy(m_title, value);
   } else {
@@ -2563,7 +2563,7 @@ uiButton::~uiButton()
 
 void uiButton::setText(char const * value)
 {
-  int len = strlen(value);
+  auto len = strlen(value);
   m_text = (char*) realloc(m_text, len + 1);
   strcpy(m_text, value);
 
@@ -2729,7 +2729,7 @@ uiTextEdit::~uiTextEdit()
 void uiTextEdit::setText(char const * value)
 {
   if (value) {
-    m_textLength = strlen(value);
+    m_textLength = (int) strlen(value);
     checkAllocatedSpace(m_textLength);
     strcpy(m_text, value);
   } else {
@@ -2749,7 +2749,7 @@ void uiTextEdit::setTextFmt(const char *format, ...)
     va_start(ap, format);
     checkAllocatedSpace(size + 1);
     vsnprintf(m_text, size, format, ap);
-    m_textLength = strlen(m_text);
+    m_textLength = (int) strlen(m_text);
   }
   va_end(ap);
 }
@@ -3210,7 +3210,7 @@ uiLabel::~uiLabel()
 
 void uiLabel::setText(char const * value)
 {
-  int len = strlen(value);
+  auto len = strlen(value);
   m_text = (char*) realloc(m_text, len + 1);
   strcpy(m_text, value);
   update();
