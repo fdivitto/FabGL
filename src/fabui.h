@@ -793,7 +793,7 @@ struct uiFrameState {
 
 
 /** \ingroup Enumerations
- * @brief
+ * @brief Frame items
  */
 enum class uiFrameItem : uint8_t {
   None,                 /**<     */
@@ -1034,7 +1034,7 @@ struct uiScrollableControlStyle {
 
 
 /** \ingroup Enumerations
- * @brief
+ * @brief Scrollbar items
  */
 enum class uiScrollBarItem {
   None,           /**<     */
@@ -1375,9 +1375,7 @@ private:
 
 
 /**
- * @brief Sets or gets text edit style
- *
- * @return L-value representing frame style (colors, font, etc...)
+ * @brief Represents text edit style
  */
 struct uiTextEditStyle {
   RGB888           backgroundColor            = RGB888(128, 128, 128);     /**< Background color */
