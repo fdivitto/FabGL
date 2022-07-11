@@ -48,6 +48,7 @@
 #endif
 #include "soc/i2s_struct.h"
 #include "soc/sens_struct.h"
+#include "esp_timer.h"
 
 #include "fabglconf.h"
 #include "fabutils.h"

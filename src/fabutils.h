@@ -43,6 +43,7 @@
 #include <esp_system.h>
 #include "sdmmc_cmd.h"
 #include "soc/frc_timer_reg.h"
+#include "rom/lldesc.h"
 
 
 namespace fabgl {

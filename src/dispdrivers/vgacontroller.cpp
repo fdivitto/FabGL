@@ -25,23 +25,15 @@
 
 
 
-#include <alloca.h>
-#include <stdarg.h>
 #include <math.h>
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 #include "soc/i2s_struct.h"
-#include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
-#include "soc/rtc.h"
-#include "esp_spi_flash.h"
 
 #include "fabutils.h"
 #include "vgacontroller.h"
-#include "devdrivers/swgenerator.h"
 
 
 

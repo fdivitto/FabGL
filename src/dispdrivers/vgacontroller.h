@@ -37,17 +37,11 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <atomic>
-
-#include "driver/gpio.h"
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/queue.h"
 
 #include "fabglconf.h"
 #include "fabutils.h"
-#include "devdrivers/swgenerator.h"
-#include "displaycontroller.h"
 #include "dispdrivers/vgabasecontroller.h"
 
 

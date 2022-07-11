@@ -31,11 +31,6 @@
 #include "freertos/task.h"
 #include "freertos/timers.h"
 
-#include "esp_attr.h"
-#include "soc/rtc.h"
-#include "esp_intr_alloc.h"
-
-
 #include "fabutils.h"
 #include "terminal.h"
 #include "devdrivers/mouse.h"
