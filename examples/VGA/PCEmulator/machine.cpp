@@ -321,7 +321,7 @@ void IRAM_ATTR Machine::runTask(void * pvParameters)
       m->reset();
 
     #ifdef FABGL_EMULATED
-    pthread_testcancel();
+    taskEmuCheck();
     if (m->m_stepCallback)
       m->m_stepCallback(m);
     #endif

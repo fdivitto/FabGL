@@ -146,6 +146,8 @@ uint32_t msToTicks(int ms)
 ////////////////////////////////////////////////////////////////////////////////////////////
 // getChipPackage
 
+#ifndef FABGL_EMULATED
+
 ChipPackage getChipPackage()
 {
   // read CHIP_VER_PKG (block0, byte 3, 105th bit % 32 = 9, 3 bits)
@@ -163,6 +165,8 @@ ChipPackage getChipPackage()
       return ChipPackage::Unknown;
   }
 }
+
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,33 +199,41 @@ adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio)
 // configureGPIO
 void configureGPIO(gpio_num_t gpio, gpio_mode_t mode)
 {
+  #ifndef FABGL_EMULATED
   PIN_FUNC_SELECT(GPIO_PIN_MUX_REG[gpio], PIN_FUNC_GPIO);
   gpio_set_direction(gpio, mode);
+  #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // getApbFrequency
+#ifndef FABGL_EMULATED
 uint32_t getApbFrequency()
 {
   rtc_cpu_freq_config_t conf;
   rtc_clk_cpu_freq_get_config(&conf);
   return conf.freq_mhz >= 80 ? 80000000 : (conf.source_freq_mhz * 80000000 / conf.div);
 }
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // getCPUFrequencyMHz
+#ifndef FABGL_EMULATED
 uint32_t getCPUFrequencyMHz()
 {
   rtc_cpu_freq_config_t conf;
   rtc_clk_cpu_freq_get_config(&conf);
   return conf.freq_mhz;
 }
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // esp_intr_alloc_pinnedToCore
+
+#ifndef FABGL_EMULATED
 
 struct esp_intr_alloc_args {
   int             source;
@@ -245,6 +257,8 @@ void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, 
   esp_intr_alloc_args args = { source, flags, handler, arg, ret_handle, xTaskGetCurrentTaskHandle() };
   esp_ipc_call_blocking(core, esp_intr_alloc_pinnedToCore_call, &args);
 }
+
+#endif
 
 
 
@@ -628,6 +642,9 @@ sdmmc_card_t * FileBrowser::s_SDCard = nullptr;
 // @TODO: check again next versions
 int            FileBrowser::s_SDCardMaxFreqKHz = 19000;
 
+#ifdef FABGL_EMULATED
+char const *   FileBrowser::BASEPATH = "";
+#endif
 
 
 FileBrowser::FileBrowser()
@@ -674,7 +691,12 @@ bool FileBrowser::setDirectory(const char * path)
 {
   if (m_dir == nullptr || strcmp(path, m_dir) != 0) {
     free(m_dir);
+    #ifdef FABGL_EMULATED
+    m_dir = (char*)malloc(PATH_MAX);
+    sprintf(m_dir, "%s%s", BASEPATH, path);
+    #else
     m_dir = strdup(path);
+    #endif
   }
   return reload();
 }
@@ -1117,12 +1139,19 @@ FILE * FileBrowser::openFile(char const * filename, char const * mode)
 
 DriveType FileBrowser::getCurrentDriveType()
 {
+  #ifdef FABGL_EMULATED
+  return DriveType::SDCard;
+  #else
   return getDriveType(m_dir);
+  #endif
 }
 
 
 DriveType FileBrowser::getDriveType(char const * path)
 {
+  #ifdef FABGL_EMULATED
+  return DriveType::SDCard;
+  #else
   if (strncmp(path, "/spiffs", 7) == 0 || (s_SPIFFSMounted && strncmp(path, s_SPIFFSMountPath, strlen(s_SPIFFSMountPath)) == 0)) {
     return DriveType::SPIFFS;
   } else if (s_SDCardMounted && strncmp(path, s_SDCardMountPath, strlen(s_SDCardMountPath)) == 0) {
@@ -1130,8 +1159,18 @@ DriveType FileBrowser::getDriveType(char const * path)
   } else {
     return DriveType::None;
   }
+  #endif
 }
 
+
+#ifdef FABGL_EMULATED
+
+bool FileBrowser::format(DriveType driveType, int drive)
+{
+  return true;
+}
+
+#else
 
 bool FileBrowser::format(DriveType driveType, int drive)
 {
@@ -1179,6 +1218,17 @@ bool FileBrowser::format(DriveType driveType, int drive)
     return false;
 }
 
+#endif
+
+
+#ifdef FABGL_EMULATED
+
+bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
+{
+  return true;
+}
+
+#else
 
 bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t maxFiles, int allocationUnitSize, int MISO, int MOSI, int CLK, int CS)
 {
@@ -1255,6 +1305,16 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   return s_SDCardMounted;
 }
 
+#endif
+
+
+#ifdef FABGL_EMULATED
+
+void FileBrowser::unmountSDCard()
+{
+}
+
+#else
 
 void FileBrowser::unmountSDCard()
 {
@@ -1268,6 +1328,8 @@ void FileBrowser::unmountSDCard()
   }
 }
 
+#endif
+
 
 bool FileBrowser::remountSDCard()
 {
@@ -1275,6 +1337,15 @@ bool FileBrowser::remountSDCard()
   return mountSDCard(false, s_SDCardMountPath, s_SDCardMaxFiles, s_SDCardAllocationUnitSize, s_SDCardMISO, s_SDCardMOSI, s_SDCardCLK, s_SDCardCS);
 }
 
+
+#ifdef FABGL_EMULATED
+
+bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t maxFiles)
+{
+  return true;
+}
+
+#else
 
 bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t maxFiles)
 {
@@ -1290,6 +1361,16 @@ bool FileBrowser::mountSPIFFS(bool formatOnFail, char const * mountPath, size_t 
   return s_SPIFFSMounted;
 }
 
+#endif
+
+
+#ifdef FABGL_EMULATED
+
+void FileBrowser::unmountSPIFFS()
+{
+}
+
+#else
 
 void FileBrowser::unmountSPIFFS()
 {
@@ -1298,6 +1379,8 @@ void FileBrowser::unmountSPIFFS()
     s_SPIFFSMounted = false;
   }
 }
+
+#endif
 
 
 bool FileBrowser::remountSPIFFS()
@@ -1309,6 +1392,15 @@ bool FileBrowser::remountSPIFFS()
 
 bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int64_t * used)
 {
+  #ifdef FABGL_EMULATED
+
+  // just a placeholder
+  *total = 2147483647;  // 2G
+  *used  = 0;     // 1MB
+  return true;
+
+  #else
+
   *total = *used = 0;
 
   if (driveType == DriveType::SDCard) {
@@ -1336,6 +1428,8 @@ bool FileBrowser::getFSInfo(DriveType driveType, int drive, int64_t * total, int
 
   } else
     return false;
+    
+  #endif
 }
 
 
@@ -1729,6 +1823,9 @@ void APLLCalcParams(double freq, APLLParams * params, uint8_t * a, uint8_t * b, 
 }
 
 
+
+#ifndef FABGL_EMULATED
+
 // derived from: https://linuxos.sk/blog/mirecove-dristy/detail/esp32-dynamicka-zmena-vzorkovacej-frekvencie-/
 // A    : 1..63
 // B    : 0..63
@@ -1778,6 +1875,7 @@ int calcI2STimingParams(int sampleRate, int * outA, int * outB, int * outN, int 
   return APB_CLK_FREQ / ((double)(*outN) + (double)(*outB) / (*outA)) / *outM;
 }
 
+#endif
 
 
 

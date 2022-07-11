@@ -516,6 +516,7 @@ void SoundGenerator::setDMANode(int index, volatile uint16_t * buf, int len)
 
 void SoundGenerator::dac_init()
 {
+  #ifndef FABGL_EMULATED
   m_DMAChain = (volatile lldesc_t *) heap_caps_malloc(2 * sizeof(lldesc_t), MALLOC_CAP_DMA);
   
   for (int i = 0; i < 2; ++i) {
@@ -580,6 +581,7 @@ void SoundGenerator::dac_init()
 
   dac_i2s_enable();
   dac_output_enable(m_gpio == GPIO_NUM_25 ? DAC_CHANNEL_1 : DAC_CHANNEL_2);
+  #endif
 }
 
 

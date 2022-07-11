@@ -249,6 +249,10 @@ private:
   int getBitmapSavePixelSize() { return 1; }
 
   static void VSyncInterrupt(void * arg);
+  
+  #ifdef FABGL_EMULATED
+  virtual void updateFrameBuffer(uint32_t * frameBuffer);
+  #endif
 
 
 
