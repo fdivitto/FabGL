@@ -27,6 +27,7 @@
 #include <string.h>
 #include <memory>
 
+#include "dispdrivers/vgacontroller.h"
 #include "dispdrivers/vga2controller.h"
 #include "dispdrivers/vga4controller.h"
 #include "dispdrivers/vga8controller.h"
@@ -79,8 +80,10 @@ void InputBox::begin(char const * modeline, int viewPortWidth, int viewPortHeigh
     m_vgaCtrl = new VGA4Controller;
   else if (displayColors <= 8)
     m_vgaCtrl = new VGA8Controller;
-  else
+  else if (displayColors <= 16)
     m_vgaCtrl = new VGA16Controller;
+  else
+    m_vgaCtrl = new VGAController;
   m_dispCtrl = m_vgaCtrl;
   m_vgaCtrl->begin();
   m_vgaCtrl->setResolution(modeline ? modeline : VESA_640x480_75Hz, viewPortWidth, viewPortHeight);
