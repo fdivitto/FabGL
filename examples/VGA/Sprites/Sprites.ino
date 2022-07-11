@@ -154,7 +154,7 @@ void loop()
 
   count += 0.10;
 
-  delay(max(10, 50 - (int)count / 2));
+  delay(std::max(10, 50 - (int)count / 2));
 }
 
 

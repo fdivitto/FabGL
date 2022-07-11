@@ -36,7 +36,7 @@ struct TestTimerFrame : public uiFrame {
     time_t now = time(0);
     tm * localtm = localtime(&now);
 
-    double radius = min(width, height) / 1.6;
+    double radius = std::min(width, height) / 1.6;
     double pointsRadius  = radius * 0.76;
     double secondsRadius = radius * 0.72;
     double minutesRadius = radius * 0.60;

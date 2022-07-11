@@ -97,6 +97,10 @@ void Scene::updateTask(void * pvParameters)
 
   while (true) {
 
+    #ifdef FABGL_EMULATED
+    taskEmuCheck();
+    #endif
+
     xSemaphoreTake(scene->m_mutex, portMAX_DELAY);
 
     int64_t t0 = esp_timer_get_time();  // us

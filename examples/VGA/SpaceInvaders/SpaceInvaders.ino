@@ -414,7 +414,7 @@ struct GameScene : public Scene {
     if (gameState_ == GAMESTATE_PLAYING || gameState_ == GAMESTATE_PLAYERKILLED) {
 
       // move enemies and shoot
-      if ((updateCount % max(3, 21 - level_ * 2)) == 0) {
+      if ((updateCount % std::max(3, 21 - level_ * 2)) == 0) {
         // handle enemy explosion
         if (lastHitEnemy_) {
           lastHitEnemy_->visible = false;
