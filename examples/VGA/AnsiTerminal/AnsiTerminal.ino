@@ -147,6 +147,10 @@ void setup()
         auto dlgApp = new ConfDialogApp;
         dlgApp->run(DisplayController);
         auto progToInstall = dlgApp->progToInstall;
+        // this is required, because the terminal may not cover the entire screen
+        Terminal.canvas()->reset();
+        Terminal.canvas()->setBrushColor(dlgApp->getBGColor());
+        Terminal.canvas()->fillRectangle(dlgApp->frameRect);        
         delete dlgApp;
         Terminal.keyboard()->emptyVirtualKeyQueue();
         Terminal.activate();

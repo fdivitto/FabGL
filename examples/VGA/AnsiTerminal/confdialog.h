@@ -508,10 +508,6 @@ struct ConfDialogApp : public uiApp {
 
 
   ~ConfDialogApp() {
-    // this is required, becasue the terminal may not cover the entire screen
-    canvas()->reset();
-    canvas()->setBrushColor(getBGColor());
-    canvas()->fillRectangle(frameRect);
   }
 
 

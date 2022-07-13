@@ -337,6 +337,7 @@ int uiApp::run(BitmappedDisplayController * displayController, Keyboard * keyboa
   m_eventsQueue = nullptr;
 
   delete m_canvas;
+  m_canvas = nullptr;
 
   return exitCode;
 }
