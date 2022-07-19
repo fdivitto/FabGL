@@ -162,7 +162,7 @@ constexpr int MaxColorsIndex     = 5;
 #ifdef USE_TEXTUAL_DISPLAYCONTROLLER
 fabgl::VGATextController DisplayController;
 #else
-fabgl::VGAController     DisplayController;
+fabgl::VGA16Controller   DisplayController;
 #endif
 fabgl::PS2Controller     PS2Controller;
 fabgl::Terminal          Terminal;
