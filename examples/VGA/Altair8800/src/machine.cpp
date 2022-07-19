@@ -24,14 +24,11 @@
  */
 
 
-#include "Arduino.h"
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/stat.h>
-
-#include "esp_int_wdt.h"
 
 #include "machine.h"
 

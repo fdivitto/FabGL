@@ -37,6 +37,8 @@
 
 
 
+#include <string>
+
 #include <Preferences.h>
 
 #include "fabgl.h"
@@ -178,6 +180,8 @@ Preferences          preferences;
 // base path (can be SPIFFS_MOUNT_PATH or SDCARD_MOUNT_PATH depending from what was successfully mounted first)
 char const * basepath = nullptr;
 
+
+using std::string;
 
 
 TermType getTerminalEmu()
@@ -459,23 +463,31 @@ void attachDisk(int drive, void const * data)
   auto filename = (char const *)data;
   auto dskimage = (uint8_t const *) data;
 
+  FileBrowser fb(basepath);
+
   if (dskimage[0] >= 0x80) {
     // "data" is a disk image
     if (FileBrowser::getDriveType(basepath) == fabgl::DriveType::SDCard) {
       // when storage is SD Card, copy read only disk image into a file, if doesn't already exist
-      auto newfilename = String(basepath) + String("/disk") + String((char)('A' + drive)) + String(".dsk");
-      Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, newfilename.c_str());
-      diskDrive.attachFileFromImage(drive, newfilename.c_str(), dskimage);
+      char newfilename[10] = { 'd', 'i', 's', 'k', (char)('A' + drive), '.', 'd', 's', 'k' };
+      Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, newfilename);
+      auto sz = fb.getFullPath(newfilename, nullptr, 0);
+      char newfilenamePath[sz];
+      fb.getFullPath(newfilename, newfilenamePath, sz);
+      diskDrive.attachFileFromImage(drive, newfilenamePath, dskimage);
     } else {
       // when storage is SPIFFS just mount image as Read Only image
       diskDrive.attachReadOnlyBuffer(drive, dskimage);
     }
   } else {
-    if (filename[0] < 0x80) {
+    if ((uint8_t)filename[0] < 0x80) {
       // "data" is a filename
       Terminal.printf("\r\nAttaching disk %c to %s...", 'A' + drive, filename);
       Terminal.flush();
-      diskDrive.attachFile(drive, (String(basepath) + String("/") + String(filename)).c_str());
+      auto sz = fb.getFullPath(filename, nullptr, 0);
+      char filenamePath[sz];
+      fb.getFullPath(filename, filenamePath, sz);
+      diskDrive.attachFile(drive, filenamePath);
     }
   }
 }

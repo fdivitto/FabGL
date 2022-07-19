@@ -30,6 +30,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "fabutils.h"
+
 #include "emudevs/Z80.h"
 #include "emudevs/i8080.h"
 
@@ -41,7 +43,6 @@ const int Altair88DiskBootROMRun  = 0xFF00;
 
 
 class Machine;
-class Stream;
 
 
 
