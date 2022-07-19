@@ -554,16 +554,8 @@ void IRAM_ATTR VGAController::rawDrawBitmap_RGBA8888(int destX, int destY, Bitma
 #ifdef FABGL_EMULATED
 void VGAController::updateFrameBuffer(uint32_t * frameBuffer)
 {
-  Rect updateRect = Rect(SHRT_MAX, SHRT_MAX, SHRT_MIN, SHRT_MIN);
-  do {
-    Primitive prim;
-    if (getPrimitive(&prim) == false)
-      break;
-    execPrimitive(prim, updateRect, true);
-    if (m_primitiveProcessingSuspended)
-      break;
-  } while (!backgroundPrimitiveTimeoutEnabled());
-  showSprites(updateRect);
+  I2S1.int_st.out_eof = 1;
+  VSyncInterrupt(this);
 
   auto dst = frameBuffer;
   for (int row = 0; row < m_viewPortHeight; ++row) {
