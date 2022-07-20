@@ -97,7 +97,7 @@ public:
       // create a new sprite
       MySprite * newSprite = &sprites_[spritesCount_++];
       newSprite->addBitmap(&spaceship);
-      newSprite->dir = random(0, 360) * PI / 180.0;
+      newSprite->dir = random(0, 360) * M_PI / 180.0;
       newSprite->fx = canvas.getWidth() / 2.0;
       newSprite->fy = canvas.getHeight() / 2.0;
       newSprite->moveTo(ceil(newSprite->fx), ceil(newSprite->fy));

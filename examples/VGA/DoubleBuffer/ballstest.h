@@ -42,9 +42,9 @@ public:
 
       // test collision with borders and bounce
       if (ball->x < ball->size / 2 || ball->x > canvas.getWidth() - ball->size / 2)
-        ball->dir = PI - ball->dir;
+        ball->dir = M_PI - ball->dir;
       else if (ball->y < ball->size / 2 || ball->y > canvas.getHeight() - ball->size / 2)
-        ball->dir = 2 * PI - ball->dir;
+        ball->dir = 2 * M_PI - ball->dir;
 
       ball->x += ball->vel * cos(ball->dir);
       ball->y += ball->vel * sin(ball->dir);
@@ -67,7 +67,7 @@ public:
     newBall->x     = canvas.getWidth() / 2;
     newBall->y     = canvas.getHeight() / 2;
     newBall->size  = random(6, canvas.getHeight() / 6);
-    newBall->dir   = random(360) * PI / 180.0;
+    newBall->dir   = random(360) * M_PI / 180.0;
     newBall->vel   = 0.1 + random(10) / 2.0;
     newBall->color = (Color) random(1, 16);
     return true;

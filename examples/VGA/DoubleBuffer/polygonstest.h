@@ -90,7 +90,7 @@ public:
     newPolygon->center.X /= newPolygon->pointsCount;
     newPolygon->center.Y /= newPolygon->pointsCount;
     newPolygon->color = (Color) random(1, 16);
-    newPolygon->avel = PI / random(5, 300) * (random(2) ? 1 : -1);
+    newPolygon->avel = M_PI / random(5, 300) * (random(2) ? 1 : -1);
     return true;
   }
 
