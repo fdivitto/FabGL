@@ -52,7 +52,7 @@ namespace fabgl {
 
 I2C::I2C(int bus)
   :
-    #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+    #ifdef FABGL_OLDI2C
     m_i2c(nullptr),
     #endif
     m_i2cAvailable(false),
@@ -96,7 +96,7 @@ void I2C::end()
     vTaskDelete(m_commTaskHandle);
   m_commTaskHandle = nullptr;
 
-  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  #ifdef FABGL_OLDI2C
   if (m_i2c)
     i2cRelease(m_i2c);
   m_i2c = nullptr;
@@ -125,7 +125,7 @@ bool I2C::write(int address, uint8_t * buffer, int size, int frequency, int time
   // wait for comm task to finish job
   xEventGroupSync(m_eventGroup, EVTGROUP_WRITE, EVTGROUP_DONE, portMAX_DELAY);
 
-  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  #ifdef FABGL_OLDI2C
   bool ret = (m_jobInfo.lastError == I2C_ERROR_OK);
   #else
   bool ret = (m_jobInfo.lastError == ESP_OK);
@@ -162,7 +162,7 @@ int I2C::read(int address, uint8_t * buffer, int size, int frequency, int timeOu
 }
 
 
-#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+#ifndef FABGL_OLDI2C
 static int i2cGetFrequency(uint8_t i2c_num)
 {
   uint32_t r;
@@ -182,7 +182,7 @@ void I2C::commTaskFunc(void * pvParameters)
 
   auto initRes = i2cInit(ths->m_bus, ths->m_SDAGPIO, ths->m_SCLGPIO, I2C_DEFAULT_FREQUENCY);
   
-  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  #ifdef FABGL_OLDI2C
   if (!initRes) {
     ESP_LOGE("FabGL", "unable to init I2C");
     abort();
@@ -220,7 +220,7 @@ void I2C::commTaskFunc(void * pvParameters)
       i2cSetFrequency(i2c, freq);
     }
 
-    #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+    #ifdef FABGL_OLDI2C
     if (bits & EVTGROUP_WRITE)
       job->lastError = i2cWrite(i2c, job->address, job->buffer, job->size, true, job->timeout);
     else if (bits & EVTGROUP_READ)

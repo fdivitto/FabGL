@@ -39,6 +39,8 @@
 
 #include "esp32-hal.h"
 
+#include "core_version.h"
+
 #include "fabutils.h"
 #include "fabglconf.h"
 
@@ -51,6 +53,13 @@
  */
 
 
+#if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0) && !defined(ARDUINO_ESP32_RELEASE_2_0_1) && !defined(ARDUINO_ESP32_RELEASE_2_0_2)
+  #define FABGL_OLDI2C
+#endif
+
+
+
+
 namespace fabgl {
 
 
@@ -61,7 +70,7 @@ struct I2CJobInfo {
   uint16_t  size;
   uint16_t  timeout;
   uint32_t  readCount;
-  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  #ifdef FABGL_OLDI2C
   i2c_err_t lastError;
   #else
   esp_err_t lastError;
@@ -152,7 +161,7 @@ private:
 
   static void commTaskFunc(void * pvParameters);
 
-  #if FABGL_ESP_IDF_VERSION < FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)
+  #ifdef FABGL_OLDI2C
   i2c_t *            m_i2c;
   #endif
   
