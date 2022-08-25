@@ -106,7 +106,7 @@ class MyApp : public uiApp {
     // rename button
     auto renameBtn = new uiButton(frame, "Rename", Point(160, 75), Size(90, 20));
     renameBtn->onClick = [&]() {
-      int maxlen = fabgl::imax(16, strlen(fileBrowser->filename()));
+      int maxlen = fabgl::imax(16, (int) strlen(fileBrowser->filename()));
       char filename[maxlen + 1];
       strcpy(filename, fileBrowser->filename());
       if (inputBox("Rename File", "New name", filename, maxlen, "Rename", "Cancel") == uiMessageBoxResult::Button1) {
@@ -216,7 +216,7 @@ class MyApp : public uiApp {
         while (http.connected() && (len > 0 || len == -1)) {
           size_t size = stream->available();
           if (size) {
-            int c = stream->readBytes(buf, fabgl::imin(sizeof(buf), size));
+            int c = stream->readBytes(buf, fabgl::imin(sizeof(buf), (int) size));
             fwrite(buf, c, 1, f);
             if (len > 0)
               len -= c;
