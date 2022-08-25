@@ -35,7 +35,7 @@
 
 
 
-
+#include <string>
 
 #include "fabgl.h"
 #include "src/supervisor.h"
@@ -50,11 +50,13 @@
 #define MAXFILES           6     // SDCARD: each file takes about 4K of RAM! On ESP32 2.0.0 this may fail without PSRAM, so set to "4"
 
 
+using std::string;
+
 
 // globals
 
-//fabgl::VGA16Controller   DisplayController; // unsupported on ESP32 core 2.0.0!!
-fabgl::VGATextController DisplayController;
+fabgl::VGA16Controller   DisplayController; // unsupported on ESP32 core 2.0.0!!
+//fabgl::VGATextController DisplayController;
 fabgl::PS2Controller     PS2Controller;
 
 Supervisor supervisor(&DisplayController);
@@ -65,8 +67,8 @@ Supervisor supervisor(&DisplayController);
 char const * basepath = nullptr;
 
 
-String driveA_path;
-String driveB_path;
+string driveA_path;
+string driveB_path;
 
 
 
@@ -111,12 +113,21 @@ void setup()
   //FileBrowser::format(fabgl::DriveType::SPIFFS, 0);
   //FileBrowser::format(fabgl::DriveType::SDCard, 0);
 
-  driveA_path = String(basepath) + String("/driveA");
-  driveB_path = String(basepath) + String("/driveB");
+  FileBrowser fb(basepath);
 
-  FileBrowser fb;
+  //driveA_path = string(basepath) + string("/driveA");
+  //driveB_path = string(basepath) + string("/driveB");
 
-  fb.setDirectory(basepath);
+  auto sz = fb.getFullPath("driveA", nullptr, 0);
+  char pathA[sz];
+  fb.getFullPath("driveA", pathA, sz);
+  driveA_path = pathA;
+
+  sz = fb.getFullPath("driveB", nullptr, 0);
+  char pathB[sz];
+  fb.getFullPath("driveB", pathB, sz);
+  driveB_path = pathB;
+
   if (!fb.exists("driveA", false)) {
 
     fb.makeDirectory("driveA");
