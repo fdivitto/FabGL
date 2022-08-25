@@ -220,6 +220,14 @@ int calcI2STimingParams(int sampleRate, int * outA, int * outB, int * outN, int 
 #endif
 
 
+inline void taskExit()
+{
+  #ifndef FABGL_EMULATED
+  vTaskDelete(NULL);
+  #endif
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
