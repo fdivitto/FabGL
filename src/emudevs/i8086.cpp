@@ -680,7 +680,7 @@ inline __attribute__((always_inline)) uint16_t i8086::WMEM16(int addr, uint16_t 
 
 
 // Set auxiliary and overflow flag after arithmetic operations
-void IRAM_ATTR set_AF_OF_arith(int32_t op_result)
+void set_AF_OF_arith(int32_t op_result)
 {
   FLAG_AF = (bool)((op_source ^= op_dest ^ op_result) & 0x10);
   if (op_result == op_dest)
@@ -691,7 +691,7 @@ void IRAM_ATTR set_AF_OF_arith(int32_t op_result)
 
 
 // Assemble and return emulated CPU FLAGS register
-uint16_t IRAM_ATTR i8086::make_flags()
+uint16_t i8086::make_flags()
 {
   #if I80186MODE
   uint16_t r = 0x0002;    // to pass test186 tests, just unused bit nr. 1 is set to 1 (some programs checks this to know if this is a 80186 or 8086)
@@ -703,7 +703,7 @@ uint16_t IRAM_ATTR i8086::make_flags()
 }
 
 
-void IRAM_ATTR i8086::set_flags(int new_flags)
+void i8086::set_flags(int new_flags)
 {
   FLAG_CF = (bool)(new_flags & 0x001);
   FLAG_PF = (bool)(new_flags & 0x004);
@@ -719,7 +719,7 @@ void IRAM_ATTR i8086::set_flags(int new_flags)
 
 // Convert raw opcode to translated opcode index. This condenses a large number of different encodings of similar
 // instructions into a much smaller number of distinct functions, which we then execute
-void IRAM_ATTR set_opcode(uint8_t opcode)
+void set_opcode(uint8_t opcode)
 {
   raw_opcode_id  = opcode;
   xlat_opcode_id = xlat_ids[opcode];
@@ -730,7 +730,7 @@ void IRAM_ATTR set_opcode(uint8_t opcode)
 
 
 // Execute INT #interrupt_num on the emulated machine
-void IRAM_ATTR i8086::pc_interrupt(uint8_t interrupt_num)
+void i8086::pc_interrupt(uint8_t interrupt_num)
 {
   // fab: interrupt can exit from halt state
   if (s_halted) {
@@ -851,7 +851,7 @@ static uint8_t optcodes[] = {
 };
 
 
-void IRAM_ATTR i8086::step()
+void i8086::step()
 {
 
   // Interrupts handling
@@ -1096,7 +1096,7 @@ void IRAM_ATTR i8086::step()
 }
 
 
-void IRAM_ATTR i8086::stepEx(uint8_t const * opcode_stream)
+void i8086::stepEx(uint8_t const * opcode_stream)
 {
   set_opcode(*opcode_stream);
 
