@@ -693,7 +693,10 @@ bool FileBrowser::setDirectory(const char * path)
     free(m_dir);
     #ifdef FABGL_EMULATED
     m_dir = (char*)malloc(PATH_MAX);
-    sprintf(m_dir, "%s%s", BASEPATH, path);
+    if (memcmp(path, BASEPATH, strlen(BASEPATH)) == 0)
+      sprintf(m_dir, "%s", path);
+    else
+      sprintf(m_dir, "%s%s", BASEPATH, path);
     #else
     m_dir = strdup(path);
     #endif
