@@ -1604,6 +1604,9 @@ private:
   bool                      m_coloredAttributesMaintainStyle;
   int                       m_coloredAttributesMask;    // related bit 1 if enabled
   Color                     m_coloredAttributesColor[4];
+  
+  // true if inside ::end()
+  volatile bool             m_endingState;
 
 };
 
