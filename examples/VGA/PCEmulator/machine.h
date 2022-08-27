@@ -76,6 +76,9 @@ public:
   void setBaseDirectory(char const * value)    { m_baseDir = value; }
 
   void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
+  
+  bool diskChanged(int drive)                  { return m_diskChanged[drive]; }
+  void resetDiskChanged(int drive)             { m_diskChanged[drive] = false; }
 
   void setBootDrive(int drive)                 { m_bootDrive = drive; }
 
@@ -174,6 +177,7 @@ private:
   // 0, 1 = floppy
   // >= 2 = hard disk
   char *                   m_diskFilename[DISKCOUNT];
+  bool                     m_diskChanged[DISKCOUNT];
   FILE *                   m_disk[DISKCOUNT];
   uint64_t                 m_diskSize[DISKCOUNT];
   uint16_t                 m_diskCylinders[DISKCOUNT];

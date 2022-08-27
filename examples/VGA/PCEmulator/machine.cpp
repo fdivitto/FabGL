@@ -101,6 +101,7 @@ Machine::Machine() :
     #endif
     m_diskFilename(),
     m_disk(),
+    m_diskChanged(),
     m_frameBuffer(nullptr),
     m_bootDrive(0),
     m_sysReqCallback(nullptr),
@@ -174,6 +175,8 @@ void Machine::setDriveImage(int drive, char const * filename, int cylinders, int
   m_diskCylinders[drive] = cylinders;
   m_diskHeads[drive]     = heads;
   m_diskSectors[drive]   = sectors;
+  
+  m_diskChanged[drive]   = true;
 
   if (filename) {
     m_diskFilename[drive] = strdup(filename);

@@ -905,6 +905,7 @@ void BIOS::diskHandler_floppy()
       }
       i8086::setAL(sects);
       diskHandler_floppyExit(sects == 0 ? 4 : 0, true);
+      m_machine->resetDiskChanged(drive);
       return;
     }
 
@@ -941,6 +942,7 @@ void BIOS::diskHandler_floppy()
       }
       free(buf);
       diskHandler_floppyExit(0x00, true);
+      m_machine->resetDiskChanged(drive);
       return;
     }
 
@@ -1002,7 +1004,7 @@ void BIOS::diskHandler_floppy()
 
     // Detect Media Change
     case 0x16:
-      diskHandler_floppyExit(m_mediaType[drive] == mediaUnknown ? 0x06 : 0x00, true);
+      diskHandler_floppyExit(m_machine->diskChanged(drive) ? 0x06 : 0x00, true);
       return;
 
     // Set Diskette Type
@@ -1038,6 +1040,7 @@ void BIOS::diskHandler_floppy()
           break;
 
       }
+      m_machine->resetDiskChanged(drive);
       return;
 
     // Set Media Type for Format
@@ -1058,6 +1061,7 @@ void BIOS::diskHandler_floppy()
         diskHandler_floppyExit(0x0c, true);
         printf("  INT 13h, FDD, 18h: unsupported media type, t=%d (%d), s=%d (%d)\n", propTracks, tracks, propSPT, SPT);
       }
+      m_machine->resetDiskChanged(drive);
       return;
     }
 
