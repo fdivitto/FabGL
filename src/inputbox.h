@@ -693,7 +693,7 @@ private:
   uint16_t                            m_autoOK;                                    // auto ok in seconds
   int16_t                             m_buttonSubItem;                             // in case of button with subitems, specifies the selected subitem                     //
   char const *                        m_buttonText[InputForm::BUTTONS]     = { };
-  char const *                        m_buttonSubItems[InputForm::BUTTONS] = { };  // ext button is uiButton is nullptr, uiSplitButton otherwise
+  char const *                        m_buttonSubItems[InputForm::BUTTONS] = { };  // ext button is uiButton if nullptr, uiSplitButton otherwise
   uint16_t                            m_buttonSubItemsHeight[InputForm::BUTTONS] = { };
   InputResult                         m_lastResult = InputResult::None;
   int16_t                             m_minButtonsWidth;

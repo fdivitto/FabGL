@@ -346,6 +346,8 @@ void InputForm::init(uiApp * app_, bool modalDialog_)
     auto btext = inputBox->buttonText(i);
     if (btext) {
       int buttonExtent = app->canvas()->textExtent(font, btext) + 10;
+      if (inputBox->buttonSubItems(i))
+        buttonExtent += 12; // add space for combobox open button
       buttonsWidth     = imax(buttonsWidth, buttonExtent);
       ++totButtons;
     }
