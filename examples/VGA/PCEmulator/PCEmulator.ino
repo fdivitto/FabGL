@@ -211,7 +211,9 @@ void updateDateTime()
       sntp_stop();
       ibox.setAutoOK(2);
       ibox.message("", "Date and Time updated. Restarting...");
+      #ifndef FABGL_EMULATED
       esp_restart();
+      #endif
     });
 
   } else {
@@ -309,12 +311,17 @@ void sysReqCallback()
   machine->graphicsAdapter()->enableVideo(false);
   ibox.begin(VGA_640x480_60Hz, 500, 400, 4);
 
-  int s = ibox.menu("", "Select a command", "Restart (Boot Menu);Continue;Mount Disk");
+  int s = ibox.menu("", "Select a command", "Restart Emulator;Restart Machine;Mount Disk;Continue");
   switch (s) {
 
-    // Restart
+    // Restart Emulator
     case 0:
       esp_restart();
+      break;
+      
+    // Restart Machine
+    case 1:
+      machine->trigReset();
       break;
 
     // Mount Disk
@@ -408,8 +415,8 @@ void setup()
       dconfs.append(conf->desc);
     dconfs.select(idx, true);
 
-    ibox.setupButton(0, "Browse Files");
-    ibox.setupButton(1, "Options", "Edit;New;Remove", 52);
+    ibox.setupButton(0, "Files");
+    ibox.setupButton(1, "Machine", "Edit;New;Remove", 52);
     auto r = ibox.select("Machine Configurations", "Please select a machine configuration", &dconfs, nullptr, "Run");
 
     idx = dconfs.getFirstSelected();
@@ -420,7 +427,7 @@ void setup()
         ibox.folderBrowser("Browse Files", SD_MOUNT_PATH);
         break;
       case InputResult::ButtonExt1:
-        // Options
+        // Machine
         switch (ibox.selectedSubItem()) {
           // Edit
           case 0:
@@ -469,7 +476,9 @@ void setup()
     // disk downloaded from the Internet, need to reboot to fully disable wifi
     ibox.setAutoOK(2);
     ibox.message("", "Disks downloaded. Restarting...");
+    #ifndef FABGL_EMULATED
     esp_restart();
+    #endif
   }
 
   ibox.end();
