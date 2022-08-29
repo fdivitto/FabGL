@@ -230,7 +230,7 @@ public:
   /**
    * @brief Activates or disattivaes Break
    *
-   * @param If True Break is active (keep TX low)
+   * @param value If True Break is active (keep TX low)
    */
   void sendBreak(bool value);
   
