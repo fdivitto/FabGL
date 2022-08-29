@@ -17,7 +17,7 @@
       "maintainer": true
     }
   ],
-  "version": "1.0.8",
+  "version": "1.0.9",
   "frameworks": ["espidf", "arduino"],
   "platforms": "espressif32",
   "headers": "fabgl.h",
