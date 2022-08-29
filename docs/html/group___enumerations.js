@@ -177,6 +177,7 @@ var group___enumerations =
       [ "fabgl::uiCheckBoxKind::CheckBox", "group___enumerations_gacfde9a9ea22383d7dab2856f9319bec9.html#ggacfde9a9ea22383d7dab2856f9319bec9a7ea0f1332ade5b23b34502a3bfe715a2", null ],
       [ "fabgl::uiCheckBoxKind::RadioButton", "group___enumerations_gacfde9a9ea22383d7dab2856f9319bec9.html#ggacfde9a9ea22383d7dab2856f9319bec9accf0503df958552a245a3593e1063cd8", null ]
     ] ],
+    [ "fabgl::uiFrameItem", "group___enumerations_ga4e00b75dd4cc9252bf7e74f1b01ef24d.html#ga4e00b75dd4cc9252bf7e74f1b01ef24d", null ],
     [ "fabgl::uiHAlign", "group___enumerations_ga878ce849208099631ecb3f931c2d0e11.html#ga878ce849208099631ecb3f931c2d0e11", [
       [ "fabgl::uiHAlign::Left", "group___enumerations_ga878ce849208099631ecb3f931c2d0e11.html#gga878ce849208099631ecb3f931c2d0e11a945d5e233cf7d6240f6b783b36a374ff", null ],
       [ "fabgl::uiHAlign::Right", "group___enumerations_ga878ce849208099631ecb3f931c2d0e11.html#gga878ce849208099631ecb3f931c2d0e11a92b09c7c48c520c3c55e497875da437c", null ],
@@ -205,6 +206,7 @@ var group___enumerations =
       [ "fabgl::uiOrigin::Parent", "group___enumerations_gae0a6bb526c02e563aee7e7ccd4df7212.html#ggae0a6bb526c02e563aee7e7ccd4df7212a30269022e9d8f51beaabb52e5d0de2b7", null ],
       [ "fabgl::uiOrigin::Window", "group___enumerations_gae0a6bb526c02e563aee7e7ccd4df7212.html#ggae0a6bb526c02e563aee7e7ccd4df7212ac89686a387d2b12b3c729ce35a0bcb5b", null ]
     ] ],
+    [ "fabgl::uiScrollBarItem", "group___enumerations_gae29ed1fa3e9784f2636d6c5d1e066cbd.html#gae29ed1fa3e9784f2636d6c5d1e066cbd", null ],
     [ "fabgl::VGAScanStart", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#gac2082e5f1e16f3780b8e7d796ea10632", [
       [ "fabgl::FrontPorch", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#ggac2082e5f1e16f3780b8e7d796ea10632a3fe66d1dbf572a4f40096a3780f5f5cd", null ],
       [ "fabgl::Sync", "group___enumerations_gac2082e5f1e16f3780b8e7d796ea10632.html#ggac2082e5f1e16f3780b8e7d796ea10632aa1c3e25967ce8edc4bf943ae05fa7af9", null ],

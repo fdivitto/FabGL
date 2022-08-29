@@ -63,6 +63,7 @@ var fabui_8h =
       [ "CheckBox", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9a7ea0f1332ade5b23b34502a3bfe715a2", null ],
       [ "RadioButton", "fabui_8h.html#ggacfde9a9ea22383d7dab2856f9319bec9accf0503df958552a245a3593e1063cd8", null ]
     ] ],
+    [ "uiFrameItem", "fabui_8h.html#ga4e00b75dd4cc9252bf7e74f1b01ef24d", null ],
     [ "uiHAlign", "fabui_8h.html#ga878ce849208099631ecb3f931c2d0e11", [
       [ "Left", "fabui_8h.html#gga878ce849208099631ecb3f931c2d0e11a945d5e233cf7d6240f6b783b36a374ff", null ],
       [ "Right", "fabui_8h.html#gga878ce849208099631ecb3f931c2d0e11a92b09c7c48c520c3c55e497875da437c", null ],
@@ -90,5 +91,6 @@ var fabui_8h =
       [ "Screen", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212a2fc3359e12b2a9104121dcf04246f6a0", null ],
       [ "Parent", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212a30269022e9d8f51beaabb52e5d0de2b7", null ],
       [ "Window", "fabui_8h.html#ggae0a6bb526c02e563aee7e7ccd4df7212ac89686a387d2b12b3c729ce35a0bcb5b", null ]
-    ] ]
+    ] ],
+    [ "uiScrollBarItem", "fabui_8h.html#gae29ed1fa3e9784f2636d6c5d1e066cbd", null ]
 ];

@@ -44,6 +44,8 @@ var hierarchy =
     [ "RGBA2222", "structfabgl_1_1_r_g_b_a2222.html", null ],
     [ "RGBA8888", "structfabgl_1_1_r_g_b_a8888.html", null ],
     [ "Scene", "classfabgl_1_1_scene.html", null ],
+    [ "SerialPort", "classfabgl_1_1_serial_port.html", null ],
+    [ "SerialPortTerminalConnector", "classfabgl_1_1_serial_port_terminal_connector.html", null ],
     [ "Size", "structfabgl_1_1_size.html", null ],
     [ "SoundGenerator", "classfabgl_1_1_sound_generator.html", null ],
     [ "Sprite", "structfabgl_1_1_sprite.html", null ],

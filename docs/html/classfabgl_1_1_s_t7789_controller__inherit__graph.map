@@ -1,4 +1,5 @@
 <map id="ST7789Controller" name="ST7789Controller">
-<area shape="rect" id="node1" title="Implements ST7789 display driver controller." alt="" coords="5,80,128,107"/>
-<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="15,5,118,32"/>
+<area shape="rect" id="node1" title="Implements ST7789 display driver controller." alt="" coords="39,80,161,107"/>
+<area shape="rect" id="node3" href="$classfabgl_1_1_t_t_g_o_t_display_v11_controller.html" title="Implements TTGO T&#45;Display V1.1 display driver controller." alt="" coords="5,155,195,181"/>
+<area shape="rect" id="node2" href="$classfabgl_1_1_t_f_t_controller.html" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="49,5,151,32"/>
 </map>

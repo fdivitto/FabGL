@@ -1,0 +1,21 @@
+<map id="serialport.h" name="serialport.h">
+<area shape="rect" id="node1" title="This file contains fabgl::SerialPort definition." alt="" coords="496,5,583,32"/>
+<area shape="rect" id="node2" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="457,80,518,107"/>
+<area shape="rect" id="node19" href="$serialport_8cpp_source.html" title=" " alt="" coords="543,80,643,107"/>
+<area shape="rect" id="node3" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,155,123,181"/>
+<area shape="rect" id="node5" href="$_p_c8250_8h.html" title="This file contains fabgl::PC8250 definition." alt="" coords="154,155,234,181"/>
+<area shape="rect" id="node7" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="273,155,357,181"/>
+<area shape="rect" id="node9" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="393,155,475,181"/>
+<area shape="rect" id="node11" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="506,155,589,181"/>
+<area shape="rect" id="node13" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="624,155,748,181"/>
+<area shape="rect" id="node15" href="$i8042_8h_source.html" title=" " alt="" coords="786,155,850,181"/>
+<area shape="rect" id="node17" href="$i8086_8h_source.html" title=" " alt="" coords="887,155,951,181"/>
+<area shape="rect" id="node4" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,229,116,256"/>
+<area shape="rect" id="node6" href="$_p_c8250_8cpp_source.html" title=" " alt="" coords="140,229,235,256"/>
+<area shape="rect" id="node8" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="259,229,358,256"/>
+<area shape="rect" id="node10" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="382,229,478,256"/>
+<area shape="rect" id="node12" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="503,229,600,256"/>
+<area shape="rect" id="node14" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="625,229,763,256"/>
+<area shape="rect" id="node16" href="$i8042_8cpp_source.html" title=" " alt="" coords="788,229,867,256"/>
+<area shape="rect" id="node18" href="$i8086_8cpp_source.html" title=" " alt="" coords="891,229,969,256"/>
+</map>

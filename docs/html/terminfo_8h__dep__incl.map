@@ -1,21 +1,25 @@
 <map id="terminfo.h" name="terminfo.h">
-<area shape="rect" id="node1" title="This file contains terminal emulation definitions." alt="" coords="498,5,578,32"/>
-<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition." alt="" coords="444,80,523,107"/>
-<area shape="rect" id="node19" href="$terminfo_8cpp_source.html" title=" " alt="" coords="547,80,641,107"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="402,155,463,181"/>
-<area shape="rect" id="node18" href="$terminal_8cpp_source.html" title=" " alt="" coords="487,155,581,181"/>
-<area shape="rect" id="node4" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,229,123,256"/>
-<area shape="rect" id="node6" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="155,229,239,256"/>
-<area shape="rect" id="node8" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="277,229,359,256"/>
-<area shape="rect" id="node10" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="391,229,474,256"/>
-<area shape="rect" id="node12" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="505,229,629,256"/>
-<area shape="rect" id="node14" href="$i8042_8h_source.html" title=" " alt="" coords="665,229,729,256"/>
-<area shape="rect" id="node16" href="$i8086_8h_source.html" title=" " alt="" coords="766,229,830,256"/>
-<area shape="rect" id="node5" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,304,116,331"/>
-<area shape="rect" id="node7" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="141,304,239,331"/>
-<area shape="rect" id="node9" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="263,304,359,331"/>
-<area shape="rect" id="node11" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="384,304,481,331"/>
-<area shape="rect" id="node13" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="506,304,645,331"/>
-<area shape="rect" id="node15" href="$i8042_8cpp_source.html" title=" " alt="" coords="669,304,748,331"/>
-<area shape="rect" id="node17" href="$i8086_8cpp_source.html" title=" " alt="" coords="772,304,851,331"/>
+<area shape="rect" id="node1" title="This file contains terminal emulation definitions." alt="" coords="586,5,666,32"/>
+<area shape="rect" id="node2" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition." alt="" coords="532,80,611,107"/>
+<area shape="rect" id="node23" href="$terminfo_8cpp_source.html" title=" " alt="" coords="635,80,729,107"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="459,229,521,256"/>
+<area shape="rect" id="node20" href="$serialport_8h.html" title="This file contains fabgl::SerialPort definition." alt="" coords="528,155,615,181"/>
+<area shape="rect" id="node22" href="$terminal_8cpp_source.html" title=" " alt="" coords="639,155,733,181"/>
+<area shape="rect" id="node4" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,304,123,331"/>
+<area shape="rect" id="node6" href="$_p_c8250_8h.html" title="This file contains fabgl::PC8250 definition." alt="" coords="154,304,234,331"/>
+<area shape="rect" id="node8" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="273,304,357,331"/>
+<area shape="rect" id="node10" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="393,304,475,331"/>
+<area shape="rect" id="node12" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="506,304,589,331"/>
+<area shape="rect" id="node14" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="624,304,748,331"/>
+<area shape="rect" id="node16" href="$i8042_8h_source.html" title=" " alt="" coords="786,304,850,331"/>
+<area shape="rect" id="node18" href="$i8086_8h_source.html" title=" " alt="" coords="887,304,951,331"/>
+<area shape="rect" id="node5" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,379,116,405"/>
+<area shape="rect" id="node7" href="$_p_c8250_8cpp_source.html" title=" " alt="" coords="140,379,235,405"/>
+<area shape="rect" id="node9" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="259,379,358,405"/>
+<area shape="rect" id="node11" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="382,379,478,405"/>
+<area shape="rect" id="node13" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="503,379,600,405"/>
+<area shape="rect" id="node15" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="625,379,763,405"/>
+<area shape="rect" id="node17" href="$i8042_8cpp_source.html" title=" " alt="" coords="788,379,867,405"/>
+<area shape="rect" id="node19" href="$i8086_8cpp_source.html" title=" " alt="" coords="891,379,969,405"/>
+<area shape="rect" id="node21" href="$serialport_8cpp_source.html" title=" " alt="" coords="545,229,645,256"/>
 </map>

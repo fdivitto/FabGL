@@ -13,7 +13,8 @@ var dir_10a80204b5b551c852b7cab5e1f7cbce =
     [ "TFTControllerSpecif.cpp", "_t_f_t_controller_specif_8cpp_source.html", null ],
     [ "TFTControllerSpecif.h", "_t_f_t_controller_specif_8h.html", [
       [ "ILI9341Controller", "classfabgl_1_1_i_l_i9341_controller.html", "classfabgl_1_1_i_l_i9341_controller" ],
-      [ "ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", "classfabgl_1_1_s_t7789_controller" ]
+      [ "ST7789Controller", "classfabgl_1_1_s_t7789_controller.html", "classfabgl_1_1_s_t7789_controller" ],
+      [ "TTGOTDisplayV11Controller", "classfabgl_1_1_t_t_g_o_t_display_v11_controller.html", "classfabgl_1_1_t_t_g_o_t_display_v11_controller" ]
     ] ],
     [ "vga16controller.cpp", "vga16controller_8cpp_source.html", null ],
     [ "vga16controller.h", "vga16controller_8h.html", "vga16controller_8h" ],

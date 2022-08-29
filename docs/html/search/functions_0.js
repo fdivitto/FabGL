@@ -9,6 +9,6 @@ var searchData=
   ['appprops_6',['appProps',['../classfabgl_1_1ui_app_a979621c8e5bd5c706f0376981da9fe45.html#a979621c8e5bd5c706f0376981da9fe45',1,'fabgl::uiApp']]],
   ['attach_7',['attach',['../classfabgl_1_1_sound_generator_a04178c4d1679101843945ecfe8c8d3e1.html#a04178c4d1679101843945ecfe8c8d3e1',1,'fabgl::SoundGenerator']]],
   ['available_8',['available',['../classfabgl_1_1_terminal_a4549a76725f2e4c013e4d57018366109.html#a4549a76725f2e4c013e4d57018366109',1,'fabgl::Terminal::available()'],['../classfabgl_1_1_d_s3231_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a',1,'fabgl::DS3231::available()'],['../classfabgl_1_1_m_c_p23_s17_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a',1,'fabgl::MCP23S17::available()'],['../classfabgl_1_1_s_s_d1306_controller_a4a47f12debf6d5d7273c3e5fb360417a.html#a4a47f12debf6d5d7273c3e5fb360417a',1,'fabgl::SSD1306Controller::available()']]],
-  ['availableforwrite_9',['availableForWrite',['../classfabgl_1_1_terminal_a86aa7db83a28e2662e01c57a36681cb0.html#a86aa7db83a28e2662e01c57a36681cb0',1,'fabgl::Terminal']]],
+  ['availableforwrite_9',['availableForWrite',['../classfabgl_1_1_terminal_af189e454edad1851610b3147fa736e79.html#af189e454edad1851610b3147fa736e79',1,'fabgl::Terminal']]],
   ['availablestatus_10',['availableStatus',['../classfabgl_1_1_mouse_adcc67a74d344caca0d4cbcbdba844519.html#adcc67a74d344caca0d4cbcbdba844519',1,'fabgl::Mouse']]]
 ];

@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="fabgl_8h.html">fabgl.h</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;src/supervisor.h&quot;</span></div>
@@ -140,11 +140,13 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line"><span class="preprocessor">#define MAXFILES           6     </span><span class="comment">// SDCARD: each file takes about 4K of RAM! On ESP32 2.0.0 this may fail without PSRAM, so set to &quot;4&quot;</span></div>
 <div class="line"> </div>
 <div class="line"> </div>
+<div class="line"><span class="keyword">using</span> std::string;</div>
+<div class="line"> </div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// globals</span></div>
 <div class="line"> </div>
-<div class="line"><span class="comment">//fabgl::VGA16Controller   DisplayController; // unsupported on ESP32 core 2.0.0!!</span></div>
-<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_v_g_a_text_controller.html">fabgl::VGATextController</a> DisplayController;</div>
+<div class="line"><a id="_a0" name="_a0"></a><a class="code hl_class" href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a>   DisplayController; <span class="comment">// unsupported on ESP32 core 2.0.0!!</span></div>
+<div class="line"><span class="comment">//fabgl::VGATextController DisplayController;</span></div>
 <div class="line"><a id="_a1" name="_a1"></a><a class="code hl_class" href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a>     PS2Controller;</div>
 <div class="line"> </div>
 <div class="line">Supervisor supervisor(&amp;DisplayController);</div>
@@ -155,8 +157,8 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line"><span class="keywordtype">char</span> <span class="keyword">const</span> * basepath = <span class="keyword">nullptr</span>;</div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="line">String driveA_path;</div>
-<div class="line">String driveB_path;</div>
+<div class="line"><span class="keywordtype">string</span> driveA_path;</div>
+<div class="line"><span class="keywordtype">string</span> driveB_path;</div>
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"> </div>
@@ -182,11 +184,11 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line"> </div>
 <div class="line">  <span class="comment">// setup VGA (default configuration with 64 colors)</span></div>
 <div class="line"> </div>
-<div class="line">  DisplayController.<a id="a9" name="a9"></a><a class="code hl_function" href="classfabgl_1_1_v_g_a_text_controller_a406a206bc0e13ee2a48591fcfdae6e22.html#a406a206bc0e13ee2a48591fcfdae6e22">begin</a>();</div>
-<div class="line">  DisplayController.<a id="a10" name="a10"></a><a class="code hl_function" href="classfabgl_1_1_v_g_a_text_controller_a4583a73c34544a3ab09802f045c16664.html#a4583a73c34544a3ab09802f045c16664">setResolution</a>(<a id="a11" name="a11"></a><a class="code hl_define" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>);      <span class="comment">// good when using VGA16Controller</span></div>
+<div class="line">  DisplayController.begin();</div>
+<div class="line">  DisplayController.<a id="a9" name="a9"></a>setResolution(<a id="a10" name="a10"></a><a class="code hl_define" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>);      <span class="comment">// good when using VGA16Controller</span></div>
 <div class="line"> </div>
-<div class="line">  <span class="keyword">auto</span> term = <span class="keyword">new</span> <a id="_a12" name="_a12"></a><a class="code hl_class" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a>;</div>
-<div class="line">  term-&gt;<a id="a13" name="a13"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">begin</a>(&amp;DisplayController);</div>
+<div class="line">  <span class="keyword">auto</span> term = <span class="keyword">new</span> <a id="_a11" name="_a11"></a><a class="code hl_class" href="classfabgl_1_1_terminal.html">fabgl::Terminal</a>;</div>
+<div class="line">  term-&gt;<a id="a12" name="a12"></a><a class="code hl_function" href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">begin</a>(&amp;DisplayController);</div>
 <div class="line">  term-&gt;connectLocally();      <span class="comment">// to use Terminal.read(), available(), etc..</span></div>
 <div class="line">  term-&gt;clear();</div>
 <div class="line">  term-&gt;write(<span class="stringliteral">&quot;Initializing...\r&quot;</span>);</div>
@@ -201,12 +203,21 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line">  <span class="comment">//FileBrowser::format(fabgl::DriveType::SPIFFS, 0);</span></div>
 <div class="line">  <span class="comment">//FileBrowser::format(fabgl::DriveType::SDCard, 0);</span></div>
 <div class="line"> </div>
-<div class="line">  driveA_path = String(basepath) + String(<span class="stringliteral">&quot;/driveA&quot;</span>);</div>
-<div class="line">  driveB_path = String(basepath) + String(<span class="stringliteral">&quot;/driveB&quot;</span>);</div>
+<div class="line">  FileBrowser fb(basepath);</div>
 <div class="line"> </div>
-<div class="line">  FileBrowser fb;</div>
+<div class="line">  <span class="comment">//driveA_path = string(basepath) + string(&quot;/driveA&quot;);</span></div>
+<div class="line">  <span class="comment">//driveB_path = string(basepath) + string(&quot;/driveB&quot;);</span></div>
 <div class="line"> </div>
-<div class="line">  fb.setDirectory(basepath);</div>
+<div class="line">  <span class="keyword">auto</span> sz = fb.getFullPath(<span class="stringliteral">&quot;driveA&quot;</span>, <span class="keyword">nullptr</span>, 0);</div>
+<div class="line">  <span class="keywordtype">char</span> pathA[sz];</div>
+<div class="line">  fb.getFullPath(<span class="stringliteral">&quot;driveA&quot;</span>, pathA, sz);</div>
+<div class="line">  driveA_path = pathA;</div>
+<div class="line"> </div>
+<div class="line">  sz = fb.getFullPath(<span class="stringliteral">&quot;driveB&quot;</span>, <span class="keyword">nullptr</span>, 0);</div>
+<div class="line">  <span class="keywordtype">char</span> pathB[sz];</div>
+<div class="line">  fb.getFullPath(<span class="stringliteral">&quot;driveB&quot;</span>, pathB, sz);</div>
+<div class="line">  driveB_path = pathB;</div>
+<div class="line"> </div>
 <div class="line">  <span class="keywordflow">if</span> (!fb.exists(<span class="stringliteral">&quot;driveA&quot;</span>, <span class="keyword">false</span>)) {</div>
 <div class="line"> </div>
 <div class="line">    fb.makeDirectory(<span class="stringliteral">&quot;driveA&quot;</span>);</div>
@@ -223,7 +234,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line">      <span class="comment">// copy file</span></div>
 <div class="line">      FILE * f = fb.openFile(programs[i].filename, <span class="stringliteral">&quot;wb&quot;</span>);</div>
 <div class="line">      <span class="keywordflow">if</span> (f) {</div>
-<div class="line">        fwrite(programs[i].<a id="a14" name="a14"></a><a class="code hl_variable" href="displaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21.html#a96db82e580e46e24e2b39dd6c5bf7c21">data</a>, 1, programs[i].size, f);</div>
+<div class="line">        fwrite(programs[i].<a id="a13" name="a13"></a><a class="code hl_variable" href="displaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21.html#a96db82e580e46e24e2b39dd6c5bf7c21">data</a>, 1, programs[i].size, f);</div>
 <div class="line">        fclose(f);</div>
 <div class="line">      } <span class="keywordflow">else</span> {</div>
 <div class="line">        term-&gt;write(<span class="stringliteral">&quot;  FAILED!\r\n&quot;</span>);</div>
@@ -248,12 +259,12 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line">  };</div>
 <div class="line"> </div>
 <div class="line">  <span class="comment">// change terminal when pressing F1..F12</span></div>
-<div class="line">  PS2Controller.<a id="a15" name="a15"></a><a class="code hl_function" href="classfabgl_1_1_p_s2_controller_a9e4c9b217d63aeaf19870e5f88c88d9e.html#a9e4c9b217d63aeaf19870e5f88c88d9e">keyboard</a>()-&gt;<a id="a16" name="a16"></a><a class="code hl_variable" href="classfabgl_1_1_keyboard_a41c6325db16da56b81f05e8d9dcabd0e.html#a41c6325db16da56b81f05e8d9dcabd0e">onVirtualKey</a> = [&amp;](<a id="a17" name="a17"></a><a class="code hl_enumeration" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">VirtualKey</a> * vk, <span class="keywordtype">bool</span> keyDown) {</div>
-<div class="line">    <span class="keywordflow">if</span> (*vk &gt;= <a id="a18" name="a18"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">VirtualKey::VK_F1</a> &amp;&amp; *vk &lt;= <a id="a19" name="a19"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">VirtualKey::VK_F12</a>) {</div>
+<div class="line">  PS2Controller.<a id="a14" name="a14"></a><a class="code hl_function" href="classfabgl_1_1_p_s2_controller_a9e4c9b217d63aeaf19870e5f88c88d9e.html#a9e4c9b217d63aeaf19870e5f88c88d9e">keyboard</a>()-&gt;<a id="a15" name="a15"></a><a class="code hl_variable" href="classfabgl_1_1_keyboard_a41c6325db16da56b81f05e8d9dcabd0e.html#a41c6325db16da56b81f05e8d9dcabd0e">onVirtualKey</a> = [&amp;](<a id="a16" name="a16"></a><a class="code hl_enumeration" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">VirtualKey</a> * vk, <span class="keywordtype">bool</span> keyDown) {</div>
+<div class="line">    <span class="keywordflow">if</span> (*vk &gt;= <a id="a17" name="a17"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">VirtualKey::VK_F1</a> &amp;&amp; *vk &lt;= <a id="a18" name="a18"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">VirtualKey::VK_F12</a>) {</div>
 <div class="line">      <span class="keywordflow">if</span> (keyDown) {</div>
 <div class="line">        supervisor.activateSession((<span class="keywordtype">int</span>)*vk - <a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">VirtualKey::VK_F1</a>);</div>
 <div class="line">      }</div>
-<div class="line">      *vk = <a id="a20" name="a20"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06">VirtualKey::VK_NONE</a>;</div>
+<div class="line">      *vk = <a id="a19" name="a19"></a><a class="code hl_enumvalue" href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06">VirtualKey::VK_NONE</a>;</div>
 <div class="line">    }</div>
 <div class="line">  };</div>
 <div class="line"> </div>
@@ -273,34 +284,32 @@ $(document).ready(function(){initNavTree('_v_g_a_2_multitasking_c_p_m_2_multitas
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2_html_a6b94fdf3692083a41291eec4920c62d2"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2.html#a6b94fdf3692083a41291eec4920c62d2">fabgl::BitmappedDisplayController::queueSize</a></div><div class="ttdeci">static int queueSize</div><div class="ttdoc">Size of display controller primitives queue.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00912">displaycontroller.h:912</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2_html_a6b94fdf3692083a41291eec4920c62d2"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2.html#a6b94fdf3692083a41291eec4920c62d2">fabgl::BitmappedDisplayController::queueSize</a></div><div class="ttdeci">static int queueSize</div><div class="ttdoc">Size of display controller primitives queue.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00931">displaycontroller.h:931</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_keyboard_a298b50557e15073b8bca4773f118f1dc_html_a298b50557e15073b8bca4773f118f1dc"><div class="ttname"><a href="classfabgl_1_1_keyboard_a298b50557e15073b8bca4773f118f1dc.html#a298b50557e15073b8bca4773f118f1dc">fabgl::Keyboard::scancodeToVirtualKeyTaskStackSize</a></div><div class="ttdeci">static int scancodeToVirtualKeyTaskStackSize</div><div class="ttdoc">Stack size of the task that converts scancodes to Virtual Keys Keyboard.</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00399">keyboard.h:399</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_keyboard_a41c6325db16da56b81f05e8d9dcabd0e_html_a41c6325db16da56b81f05e8d9dcabd0e"><div class="ttname"><a href="classfabgl_1_1_keyboard_a41c6325db16da56b81f05e8d9dcabd0e.html#a41c6325db16da56b81f05e8d9dcabd0e">fabgl::Keyboard::onVirtualKey</a></div><div class="ttdeci">Delegate&lt; VirtualKey *, bool &gt; onVirtualKey</div><div class="ttdoc">Delegate called whenever a new virtual key is decoded from scancodes.</div><div class="ttdef"><b>Definition:</b> <a href="keyboard_8h_source.html#l00386">keyboard.h:386</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_mouse_afc85801bd90520c15ab4fe1004a45b02_html_afc85801bd90520c15ab4fe1004a45b02"><div class="ttname"><a href="classfabgl_1_1_mouse_afc85801bd90520c15ab4fe1004a45b02.html#afc85801bd90520c15ab4fe1004a45b02">fabgl::Mouse::quickCheckHardware</a></div><div class="ttdeci">static void quickCheckHardware()</div><div class="ttdoc">Disable re-try when a mouse is not found.</div><div class="ttdef"><b>Definition:</b> <a href="mouse_8h_source.html#l00373">mouse.h:373</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_a9e4c9b217d63aeaf19870e5f88c88d9e_html_a9e4c9b217d63aeaf19870e5f88c88d9e"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller_a9e4c9b217d63aeaf19870e5f88c88d9e.html#a9e4c9b217d63aeaf19870e5f88c88d9e">fabgl::PS2Controller::keyboard</a></div><div class="ttdeci">static Keyboard * keyboard()</div><div class="ttdoc">Returns the instance of Keyboard object automatically created by PS2Controller.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8h_source.html#l00179">ps2controller.h:179</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09_html_ab8520612804a921ad834b41214a99c09"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09.html#ab8520612804a921ad834b41214a99c09">fabgl::PS2Controller::begin</a></div><div class="ttdeci">static void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_UNUSED, gpio_num_t port1_datGPIO=GPIO_UNUSED)</div><div class="ttdoc">Initializes PS2 device controller.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8cpp_source.html#l01115">ps2controller.cpp:1115</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_html"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a></div><div class="ttdoc">The PS2 device controller class.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8h_source.html#l00082">ps2controller.h:82</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a77b40b81c5e1ba039ed39891bf8c6a20_html_a77b40b81c5e1ba039ed39891bf8c6a20"><div class="ttname"><a href="classfabgl_1_1_terminal_a77b40b81c5e1ba039ed39891bf8c6a20.html#a77b40b81c5e1ba039ed39891bf8c6a20">fabgl::Terminal::keyboardReaderTaskStackSize</a></div><div class="ttdeci">static int keyboardReaderTaskStackSize</div><div class="ttdoc">Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Termi...</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01528">terminal.h:1528</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_a8508592f91c82a7a4a0c2edf4effce61_html_a8508592f91c82a7a4a0c2edf4effce61"><div class="ttname"><a href="classfabgl_1_1_terminal_a8508592f91c82a7a4a0c2edf4effce61.html#a8508592f91c82a7a4a0c2edf4effce61">fabgl::Terminal::inputQueueSize</a></div><div class="ttdeci">static int inputQueueSize</div><div class="ttdoc">Number of characters the terminal can &quot;write&quot; without pause (increase if you have loss of characters ...</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01510">terminal.h:1510</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_aade947364dc37ddbcd51607715332dd5_html_aade947364dc37ddbcd51607715332dd5"><div class="ttname"><a href="classfabgl_1_1_terminal_aade947364dc37ddbcd51607715332dd5.html#aade947364dc37ddbcd51607715332dd5">fabgl::Terminal::inputConsumerTaskStackSize</a></div><div class="ttdeci">static int inputConsumerTaskStackSize</div><div class="ttdoc">Stack size of the task that processes Terminal input stream.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01519">terminal.h:1519</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5_html_aebaecc1fa474fddc48dd5778024b19a5"><div class="ttname"><a href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">fabgl::Terminal::begin</a></div><div class="ttdeci">bool begin(BaseDisplayController *displayController, int maxColumns=-1, int maxRows=-1, Keyboard *keyboard=nullptr)</div><div class="ttdoc">Initializes the terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00323">terminal.cpp:323</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_terminal_html"><div class="ttname"><a href="classfabgl_1_1_terminal.html">fabgl::Terminal</a></div><div class="ttdoc">An ANSI-VT100 compatible display terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l00953">terminal.h:953</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_v_g_a_text_controller_a406a206bc0e13ee2a48591fcfdae6e22_html_a406a206bc0e13ee2a48591fcfdae6e22"><div class="ttname"><a href="classfabgl_1_1_v_g_a_text_controller_a406a206bc0e13ee2a48591fcfdae6e22.html#a406a206bc0e13ee2a48591fcfdae6e22">fabgl::VGATextController::begin</a></div><div class="ttdeci">void begin(gpio_num_t redGPIO, gpio_num_t greenGPIO, gpio_num_t blueGPIO, gpio_num_t HSyncGPIO, gpio_num_t VSyncGPIO)</div><div class="ttdoc">This is the 8 colors (5 GPIOs) initializer.</div><div class="ttdef"><b>Definition:</b> <a href="vgatextcontroller_8cpp_source.html#l00104">vgatextcontroller.cpp:104</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_v_g_a_text_controller_a4583a73c34544a3ab09802f045c16664_html_a4583a73c34544a3ab09802f045c16664"><div class="ttname"><a href="classfabgl_1_1_v_g_a_text_controller_a4583a73c34544a3ab09802f045c16664.html#a4583a73c34544a3ab09802f045c16664">fabgl::VGATextController::setResolution</a></div><div class="ttdeci">void setResolution(char const *modeline=nullptr, int viewPortWidth=-1, int viewPortHeight=-1, bool doubleBuffered=false)</div><div class="ttdoc">Sets fixed resolution.</div><div class="ttdef"><b>Definition:</b> <a href="vgatextcontroller_8cpp_source.html#l00163">vgatextcontroller.cpp:163</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_v_g_a_text_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_text_controller.html">fabgl::VGATextController</a></div><div class="ttdoc">Represents the VGA text-only controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgatextcontroller_8h_source.html#l00079">vgatextcontroller.h:79</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_a77b40b81c5e1ba039ed39891bf8c6a20_html_a77b40b81c5e1ba039ed39891bf8c6a20"><div class="ttname"><a href="classfabgl_1_1_terminal_a77b40b81c5e1ba039ed39891bf8c6a20.html#a77b40b81c5e1ba039ed39891bf8c6a20">fabgl::Terminal::keyboardReaderTaskStackSize</a></div><div class="ttdeci">static int keyboardReaderTaskStackSize</div><div class="ttdoc">Stack size of the task that reads keys from keyboard and send ANSI/VT codes to output stream in Termi...</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01376">terminal.h:1376</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_a8508592f91c82a7a4a0c2edf4effce61_html_a8508592f91c82a7a4a0c2edf4effce61"><div class="ttname"><a href="classfabgl_1_1_terminal_a8508592f91c82a7a4a0c2edf4effce61.html#a8508592f91c82a7a4a0c2edf4effce61">fabgl::Terminal::inputQueueSize</a></div><div class="ttdeci">static int inputQueueSize</div><div class="ttdoc">Number of characters the terminal can &quot;write&quot; without pause (increase if you have loss of characters ...</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01358">terminal.h:1358</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_aade947364dc37ddbcd51607715332dd5_html_aade947364dc37ddbcd51607715332dd5"><div class="ttname"><a href="classfabgl_1_1_terminal_aade947364dc37ddbcd51607715332dd5.html#aade947364dc37ddbcd51607715332dd5">fabgl::Terminal::inputConsumerTaskStackSize</a></div><div class="ttdeci">static int inputConsumerTaskStackSize</div><div class="ttdoc">Stack size of the task that processes Terminal input stream.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l01367">terminal.h:1367</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5_html_aebaecc1fa474fddc48dd5778024b19a5"><div class="ttname"><a href="classfabgl_1_1_terminal_aebaecc1fa474fddc48dd5778024b19a5.html#aebaecc1fa474fddc48dd5778024b19a5">fabgl::Terminal::begin</a></div><div class="ttdeci">bool begin(BaseDisplayController *displayController, int maxColumns=-1, int maxRows=-1, Keyboard *keyboard=nullptr)</div><div class="ttdoc">Initializes the terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8cpp_source.html#l00307">terminal.cpp:307</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_terminal_html"><div class="ttname"><a href="classfabgl_1_1_terminal.html">fabgl::Terminal</a></div><div class="ttdoc">An ANSI-VT100 compatible display terminal.</div><div class="ttdef"><b>Definition:</b> <a href="terminal_8h_source.html#l00886">terminal.h:886</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_v_g_a16_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a16_controller.html">fabgl::VGA16Controller</a></div><div class="ttdoc">Represents the VGA 16 colors bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vga16controller_8h_source.html#l00082">vga16controller.h:82</a></div></div>
 <div class="ttc" id="adisplaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21_html_a96db82e580e46e24e2b39dd6c5bf7c21"><div class="ttname"><a href="displaycontroller_8h_a96db82e580e46e24e2b39dd6c5bf7c21.html#a96db82e580e46e24e2b39dd6c5bf7c21">data</a></div><div class="ttdeci">uint8_t const  * data</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00004">displaycontroller.h:4</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
 <div class="ttc" id="afabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8_html_a2d4571e9072b78877c36bf32bc9423f8"><div class="ttname"><a href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a></div><div class="ttdeci">#define VGA_640x480_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00246">fabglconf.h:246</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_gad0e6e31d5953384be4ea987eb3923e02"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">fabgl::VirtualKey</a></div><div class="ttdeci">VirtualKey</div><div class="ttdoc">Represents each possible real or derived (SHIFT + real) key.</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01097">fabutils.h:1097</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">fabgl::VK_F12</a></div><div class="ttdeci">@ VK_F12</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01277">fabutils.h:1277</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">fabgl::VK_F1</a></div><div class="ttdeci">@ VK_F1</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01266">fabutils.h:1266</a></div></div>
-<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06">fabgl::VK_NONE</a></div><div class="ttdeci">@ VK_NONE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01098">fabutils.h:1098</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_gad0e6e31d5953384be4ea987eb3923e02"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#gad0e6e31d5953384be4ea987eb3923e02">fabgl::VirtualKey</a></div><div class="ttdeci">VirtualKey</div><div class="ttdoc">Represents each possible real or derived (SHIFT + real) key.</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01217">fabutils.h:1217</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a0587819039d24d9780c51ee62538e031">fabgl::VK_F12</a></div><div class="ttdeci">@ VK_F12</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01397">fabutils.h:1397</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02a50c8d8e7090ac699e7a411ace07d6e47">fabgl::VK_F1</a></div><div class="ttdeci">@ VK_F1</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01386">fabutils.h:1386</a></div></div>
+<div class="ttc" id="agroup___enumerations_gad0e6e31d5953384be4ea987eb3923e02_html_ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06"><div class="ttname"><a href="group___enumerations_gad0e6e31d5953384be4ea987eb3923e02.html#ggad0e6e31d5953384be4ea987eb3923e02acf5be65ce657a8918912d7751a8d6b06">fabgl::VK_NONE</a></div><div class="ttdeci">@ VK_NONE</div><div class="ttdef"><b>Definition:</b> <a href="fabutils_8h_source.html#l01218">fabutils.h:1218</a></div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:04 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

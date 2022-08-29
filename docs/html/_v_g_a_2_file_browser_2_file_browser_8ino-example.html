@@ -196,7 +196,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_file_browser_2_file_browser_8
 <div class="line">    <span class="comment">// rename button</span></div>
 <div class="line">    <span class="keyword">auto</span> renameBtn = <span class="keyword">new</span> uiButton(frame, <span class="stringliteral">&quot;Rename&quot;</span>, Point(160, 75), Size(90, 20));</div>
 <div class="line">    renameBtn-&gt;onClick = [&amp;]() {</div>
-<div class="line">      <span class="keywordtype">int</span> maxlen = fabgl::imax(16, strlen(fileBrowser-&gt;filename()));</div>
+<div class="line">      <span class="keywordtype">int</span> maxlen = fabgl::imax(16, (<span class="keywordtype">int</span>) strlen(fileBrowser-&gt;filename()));</div>
 <div class="line">      <span class="keywordtype">char</span> filename[maxlen + 1];</div>
 <div class="line">      strcpy(filename, fileBrowser-&gt;filename());</div>
 <div class="line">      <span class="keywordflow">if</span> (inputBox(<span class="stringliteral">&quot;Rename File&quot;</span>, <span class="stringliteral">&quot;New name&quot;</span>, filename, maxlen, <span class="stringliteral">&quot;Rename&quot;</span>, <span class="stringliteral">&quot;Cancel&quot;</span>) == uiMessageBoxResult::Button1) {</div>
@@ -306,7 +306,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_file_browser_2_file_browser_8
 <div class="line">        <span class="keywordflow">while</span> (http.connected() &amp;&amp; (len &gt; 0 || len == -1)) {</div>
 <div class="line">          <span class="keywordtype">size_t</span> size = stream-&gt;available();</div>
 <div class="line">          <span class="keywordflow">if</span> (size) {</div>
-<div class="line">            <span class="keywordtype">int</span> c = stream-&gt;readBytes(buf, fabgl::imin(<span class="keyword">sizeof</span>(buf), size));</div>
+<div class="line">            <span class="keywordtype">int</span> c = stream-&gt;readBytes(buf, fabgl::imin(<span class="keyword">sizeof</span>(buf), (<span class="keywordtype">int</span>) size));</div>
 <div class="line">            fwrite(buf, c, 1, f);</div>
 <div class="line">            <span class="keywordflow">if</span> (len &gt; 0)</div>
 <div class="line">              len -= c;</div>
@@ -369,7 +369,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_file_browser_2_file_browser_8
 <div class="line"> </div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09_html_ab8520612804a921ad834b41214a99c09"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller_ab8520612804a921ad834b41214a99c09.html#ab8520612804a921ad834b41214a99c09">fabgl::PS2Controller::begin</a></div><div class="ttdeci">static void begin(gpio_num_t port0_clkGPIO, gpio_num_t port0_datGPIO, gpio_num_t port1_clkGPIO=GPIO_UNUSED, gpio_num_t port1_datGPIO=GPIO_UNUSED)</div><div class="ttdoc">Initializes PS2 device controller.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8cpp_source.html#l01115">ps2controller.cpp:1115</a></div></div>
 <div class="ttc" id="aclassfabgl_1_1_p_s2_controller_html"><div class="ttname"><a href="classfabgl_1_1_p_s2_controller.html">fabgl::PS2Controller</a></div><div class="ttdoc">The PS2 device controller class.</div><div class="ttdef"><b>Definition:</b> <a href="ps2controller_8h_source.html#l00082">ps2controller.h:82</a></div></div>
-<div class="ttc" id="aclassfabgl_1_1_v_g_a_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></div><div class="ttdoc">Represents the VGA bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgacontroller_8h_source.html#l00089">vgacontroller.h:89</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_v_g_a_controller_html"><div class="ttname"><a href="classfabgl_1_1_v_g_a_controller.html">fabgl::VGAController</a></div><div class="ttdoc">Represents the VGA bitmapped controller.</div><div class="ttdef"><b>Definition:</b> <a href="vgacontroller_8h_source.html#l00083">vgacontroller.h:83</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
 <div class="ttc" id="afabglconf_8h_a8052201f91850dfc935be639a91da6ee_html_a8052201f91850dfc935be639a91da6ee"><div class="ttname"><a href="fabglconf_8h_a8052201f91850dfc935be639a91da6ee.html#a8052201f91850dfc935be639a91da6ee">VGA_400x300_60Hz</a></div><div class="ttdeci">#define VGA_400x300_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00192">fabglconf.h:192</a></div></div>
 <div class="ttc" id="afabui_8h_html"><div class="ttname"><a href="fabui_8h.html">fabui.h</a></div><div class="ttdoc">This file contains all classes related to FabGL Graphical User Interface.</div></div>
@@ -378,7 +378,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_file_browser_2_file_browser_8
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:04 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

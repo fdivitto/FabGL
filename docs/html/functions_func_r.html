@@ -94,6 +94,8 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 <li>readReg()&#160;:&#160;<a class="el" href="classfabgl_1_1_m_c_p23_s17_ae09cec89e003ed8907ffcae9afcc86aa.html#ae09cec89e003ed8907ffcae9afcc86aa">MCP23S17</a></li>
 <li>readReg16()&#160;:&#160;<a class="el" href="classfabgl_1_1_m_c_p23_s17_a6ce7f6e8f2563790be2cb010d99a2947.html#a6ce7f6e8f2563790be2cb010d99a2947">MCP23S17</a></li>
 <li>readScreen()&#160;:&#160;<a class="el" href="classfabgl_1_1_v_g_a_controller_a9fe2788ded3fe1ea2fedbe1ea16155fb.html#a9fe2788ded3fe1ea2fedbe1ea16155fb">VGAController</a></li>
+<li>readyToReceive()&#160;:&#160;<a class="el" href="classfabgl_1_1_serial_port_ab3aa6a8b37d2b4c5a1dfb4db904f660c.html#ab3aa6a8b37d2b4c5a1dfb4db904f660c">SerialPort</a></li>
+<li>readyToSend()&#160;:&#160;<a class="el" href="classfabgl_1_1_serial_port_af8142810dfa41077384608e625d91a83.html#af8142810dfa41077384608e625d91a83">SerialPort</a></li>
 <li>rect()&#160;:&#160;<a class="el" href="classfabgl_1_1ui_window_a41357976992bb4050acab67d425d1abd.html#a41357976992bb4050acab67d425d1abd">uiWindow</a></li>
 <li>refreshSprites()&#160;:&#160;<a class="el" href="classfabgl_1_1_bitmapped_display_controller_aeb689cfc2364a4d66e3ac3368146c70d.html#aeb689cfc2364a4d66e3ac3368146c70d">BitmappedDisplayController</a></li>
 <li>reload()&#160;:&#160;<a class="el" href="classfabgl_1_1_file_browser_a772a14af288b5ce7d7b12a47814f82f0.html#a772a14af288b5ce7d7b12a47814f82f0">FileBrowser</a></li>
@@ -113,8 +115,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 <li>resizeWindow()&#160;:&#160;<a class="el" href="classfabgl_1_1ui_app_a17aba5d17a9ac61de3f413359f90ab9e.html#a17aba5d17a9ac61de3f413359f90ab9e">uiApp</a></li>
 <li>resumeBackgroundPrimitiveExecution()&#160;:&#160;<a class="el" href="classfabgl_1_1_bitmapped_display_controller_a5e5288dfa4b4cdcb9380711da9fa1e65.html#a5e5288dfa4b4cdcb9380711da9fa1e65">BitmappedDisplayController</a>, <a class="el" href="classfabgl_1_1_s_s_d1306_controller_a39c1a8fe6bcfa44007921d844ab7a353.html#a39c1a8fe6bcfa44007921d844ab7a353">SSD1306Controller</a>, <a class="el" href="classfabgl_1_1_t_f_t_controller_a39c1a8fe6bcfa44007921d844ab7a353.html#a39c1a8fe6bcfa44007921d844ab7a353">TFTController</a>, <a class="el" href="classfabgl_1_1_v_g_a_controller_a39c1a8fe6bcfa44007921d844ab7a353.html#a39c1a8fe6bcfa44007921d844ab7a353">VGAController</a></li>
 <li>resumePort()&#160;:&#160;<a class="el" href="classfabgl_1_1_p_s2_device_ae5e89fd1fac0904104dfab776e4fb15c.html#ae5e89fd1fac0904104dfab776e4fb15c">PS2Device</a></li>
+<li>RIStatus()&#160;:&#160;<a class="el" href="classfabgl_1_1_serial_port_aeaea07f7202930c796e4a66438ec9331.html#aeaea07f7202930c796e4a66438ec9331">SerialPort</a></li>
 <li>rootWindow()&#160;:&#160;<a class="el" href="classfabgl_1_1ui_app_aba8fd0c77e10b0be60d11771564db176.html#aba8fd0c77e10b0be60d11771564db176">uiApp</a></li>
-<li>RTSStatus()&#160;:&#160;<a class="el" href="classfabgl_1_1_terminal_a5bcaf5e465dc0194b83c47053744140f.html#a5bcaf5e465dc0194b83c47053744140f">Terminal</a></li>
+<li>RTSStatus()&#160;:&#160;<a class="el" href="classfabgl_1_1_serial_port_a5bcaf5e465dc0194b83c47053744140f.html#a5bcaf5e465dc0194b83c47053744140f">SerialPort</a></li>
 <li>run()&#160;:&#160;<a class="el" href="classfabgl_1_1ui_app_a07dcf556fc74c9216516270bf081e06e.html#a07dcf556fc74c9216516270bf081e06e">uiApp</a>, <a class="el" href="classfabgl_1_1_v_g_a_direct_controller_a13a43e6d814de94978c515cb084873b1.html#a13a43e6d814de94978c515cb084873b1">VGADirectController</a></li>
 <li>runAsync()&#160;:&#160;<a class="el" href="classfabgl_1_1ui_app_af45f188efda10923b6fba94ca33fa726.html#af45f188efda10923b6fba94ca33fa726">uiApp</a></li>
 </ul>
@@ -123,7 +126,7 @@ $(document).ready(function(){initNavTree('functions_func_r.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 22 2022 11:19:47 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:07 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

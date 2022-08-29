@@ -767,7 +767,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span> </div>
 <div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span> </div>
 <div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span><span class="comment">// Set auxiliary and overflow flag after arithmetic operations</span></div>
-<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span><span class="keywordtype">void</span> IRAM_ATTR set_AF_OF_arith(int32_t op_result)</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span><span class="keywordtype">void</span> set_AF_OF_arith(int32_t op_result)</div>
 <div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>{</div>
 <div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>  FLAG_AF = (bool)((op_source ^= op_dest ^ op_result) &amp; 0x10);</div>
 <div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>  <span class="keywordflow">if</span> (op_result == op_dest)</div>
@@ -778,7 +778,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span> </div>
 <div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span> </div>
 <div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span><span class="comment">// Assemble and return emulated CPU FLAGS register</span></div>
-<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>uint16_t IRAM_ATTR i8086::make_flags()</div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>uint16_t i8086::make_flags()</div>
 <div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>{</div>
 <div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span><span class="preprocessor">  #if I80186MODE</span></div>
 <div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>  uint16_t r = 0x0002;    <span class="comment">// to pass test186 tests, just unused bit nr. 1 is set to 1 (some programs checks this to know if this is a 80186 or 8086)</span></div>
@@ -790,7 +790,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>}</div>
 <div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span> </div>
 <div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span> </div>
-<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span><span class="keywordtype">void</span> IRAM_ATTR i8086::set_flags(<span class="keywordtype">int</span> new_flags)</div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span><span class="keywordtype">void</span> i8086::set_flags(<span class="keywordtype">int</span> new_flags)</div>
 <div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>{</div>
 <div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>  FLAG_CF = (bool)(new_flags &amp; 0x001);</div>
 <div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>  FLAG_PF = (bool)(new_flags &amp; 0x004);</div>
@@ -806,7 +806,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span> </div>
 <div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span><span class="comment">// Convert raw opcode to translated opcode index. This condenses a large number of different encodings of similar</span></div>
 <div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span><span class="comment">// instructions into a much smaller number of distinct functions, which we then execute</span></div>
-<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span><span class="keywordtype">void</span> IRAM_ATTR set_opcode(uint8_t opcode)</div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span><span class="keywordtype">void</span> set_opcode(uint8_t opcode)</div>
 <div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>{</div>
 <div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>  raw_opcode_id  = opcode;</div>
 <div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>  xlat_opcode_id = xlat_ids[opcode];</div>
@@ -817,7 +817,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span> </div>
 <div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span> </div>
 <div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span><span class="comment">// Execute INT #interrupt_num on the emulated machine</span></div>
-<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span><span class="keywordtype">void</span> IRAM_ATTR i8086::pc_interrupt(uint8_t interrupt_num)</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span><span class="keywordtype">void</span> i8086::pc_interrupt(uint8_t interrupt_num)</div>
 <div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>{</div>
 <div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>  <span class="comment">// fab: interrupt can exit from halt state</span></div>
 <div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>  <span class="keywordflow">if</span> (s_halted) {</div>
@@ -938,7 +938,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00851" name="l00851"></a><span class="lineno">  851</span>};</div>
 <div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span> </div>
 <div class="line"><a id="l00853" name="l00853"></a><span class="lineno">  853</span> </div>
-<div class="line"><a id="l00854" name="l00854"></a><span class="lineno">  854</span><span class="keywordtype">void</span> IRAM_ATTR i8086::step()</div>
+<div class="line"><a id="l00854" name="l00854"></a><span class="lineno">  854</span><span class="keywordtype">void</span> i8086::step()</div>
 <div class="line"><a id="l00855" name="l00855"></a><span class="lineno">  855</span>{</div>
 <div class="line"><a id="l00856" name="l00856"></a><span class="lineno">  856</span> </div>
 <div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span>  <span class="comment">// Interrupts handling</span></div>
@@ -1183,7 +1183,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div class="line"><a id="l01096" name="l01096"></a><span class="lineno"> 1096</span>}</div>
 <div class="line"><a id="l01097" name="l01097"></a><span class="lineno"> 1097</span> </div>
 <div class="line"><a id="l01098" name="l01098"></a><span class="lineno"> 1098</span> </div>
-<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span><span class="keywordtype">void</span> IRAM_ATTR i8086::stepEx(uint8_t <span class="keyword">const</span> * opcode_stream)</div>
+<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span><span class="keywordtype">void</span> i8086::stepEx(uint8_t <span class="keyword">const</span> * opcode_stream)</div>
 <div class="line"><a id="l01100" name="l01100"></a><span class="lineno"> 1100</span>{</div>
 <div class="line"><a id="l01101" name="l01101"></a><span class="lineno"> 1101</span>  set_opcode(*opcode_stream);</div>
 <div class="line"><a id="l01102" name="l01102"></a><span class="lineno"> 1102</span> </div>
@@ -2060,7 +2060,7 @@ $(document).ready(function(){initNavTree('i8086_8cpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_8be7dd06aece89a21c34f4f57592b45a.html">emudevs</a></li><li class="navelem"><b>i8086.cpp</b></li>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:05 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

@@ -40,6 +40,7 @@ var fabglconf_8h =
     [ "SVGA_800x600_56Hz", "fabglconf_8h_a0eee2772f4d1f6601f4c2584857b513a.html#a0eee2772f4d1f6601f4c2584857b513a", null ],
     [ "SVGA_800x600_60Hz", "fabglconf_8h_a2b508213a3ab1ad056d8c4e59b1708d3.html#a2b508213a3ab1ad056d8c4e59b1708d3", null ],
     [ "SVGA_960x540_60Hz", "fabglconf_8h_a3ebbbad6eadde815fb809e7f731bf7df.html#a3ebbbad6eadde815fb809e7f731bf7df", null ],
+    [ "TFT_135x240", "fabglconf_8h_a6aab0ea5fd02cb1edcf3e26af6d18d00.html#a6aab0ea5fd02cb1edcf3e26af6d18d00", null ],
     [ "TFT_240x240", "fabglconf_8h_a89682a57a015e43069041705b4cc6d89.html#a89682a57a015e43069041705b4cc6d89", null ],
     [ "TFT_240x320", "fabglconf_8h_a4318011b5f7c0b1cf2cbbfb65f9fa9e1.html#a4318011b5f7c0b1cf2cbbfb65f9fa9e1", null ],
     [ "VESA_640x350_85Hz", "fabglconf_8h_a2e0bf63e5ba6bfe1badb621c235e3f9b.html#a2e0bf63e5ba6bfe1badb621c235e3f9b", null ],

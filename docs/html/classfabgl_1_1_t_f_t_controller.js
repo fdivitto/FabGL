@@ -1,9 +1,9 @@
 var classfabgl_1_1_t_f_t_controller =
 [
     [ "begin", "classfabgl_1_1_t_f_t_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2", null ],
-    [ "begin", "classfabgl_1_1_t_f_t_controller_ab251e10b12bf2f0ff100b48676669c71.html#ab251e10b12bf2f0ff100b48676669c71", null ],
-    [ "begin", "classfabgl_1_1_t_f_t_controller_a1b13226481c274805483522dd587387e.html#a1b13226481c274805483522dd587387e", null ],
-    [ "begin", "classfabgl_1_1_t_f_t_controller_a20fc26f4bd4369c4f129b0bb2cd2c3dc.html#a20fc26f4bd4369c4f129b0bb2cd2c3dc", null ],
+    [ "begin", "classfabgl_1_1_t_f_t_controller_a33392310f310cf77b01b532bce77dd5e.html#a33392310f310cf77b01b532bce77dd5e", null ],
+    [ "begin", "classfabgl_1_1_t_f_t_controller_a968486470b4a1e512d6a24e9cee4ff85.html#a968486470b4a1e512d6a24e9cee4ff85", null ],
+    [ "begin", "classfabgl_1_1_t_f_t_controller_a5ba0fad14c4c6f0c5dbd40f21be8d4a2.html#a5ba0fad14c4c6f0c5dbd40f21be8d4a2", null ],
     [ "colorsCount", "classfabgl_1_1_t_f_t_controller_a811a555ee536c2845522b045cb63f713.html#a811a555ee536c2845522b045cb63f713", null ],
     [ "controllerType", "classfabgl_1_1_t_f_t_controller.html#a2337a67770ebd18e0ced22ba40d79d24", null ],
     [ "enableBackgroundPrimitiveExecution", "classfabgl_1_1_t_f_t_controller.html#abd0898e61591117a7b8dce2fa4b4c4d4", null ],
@@ -13,6 +13,7 @@ var classfabgl_1_1_t_f_t_controller =
     [ "getViewPortHeight", "classfabgl_1_1_t_f_t_controller.html#a5308b6853d3778845649f08832e96535", null ],
     [ "getViewPortWidth", "classfabgl_1_1_t_f_t_controller.html#a69dd55b31e9c284aeec6f2b91a8da525", null ],
     [ "isDoubleBuffered", "classfabgl_1_1_t_f_t_controller.html#a37da1545d5037b279fbb10c622121427", null ],
+    [ "isDoubleBufferedEnabled", "classfabgl_1_1_t_f_t_controller.html#a15d6a17833353e05e7470e4c10824b98", null ],
     [ "nativePixelFormat", "classfabgl_1_1_t_f_t_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91", null ],
     [ "processPrimitives", "classfabgl_1_1_t_f_t_controller.html#a94887c6019244300620e71d52e61a554", null ],
     [ "refreshSprites", "classfabgl_1_1_t_f_t_controller.html#aeb689cfc2364a4d66e3ac3368146c70d", null ],
@@ -30,5 +31,6 @@ var classfabgl_1_1_t_f_t_controller =
     [ "setScreenCol", "classfabgl_1_1_t_f_t_controller_a0f34f7525ceed2da2c6900783ddc5085.html#a0f34f7525ceed2da2c6900783ddc5085", null ],
     [ "setScreenRow", "classfabgl_1_1_t_f_t_controller_ae169c4d09811973beaa2eecf5521572d.html#ae169c4d09811973beaa2eecf5521572d", null ],
     [ "setSprites", "classfabgl_1_1_t_f_t_controller.html#a75ba732cc6ae90f53757b588f6c75d7e", null ],
-    [ "suspendBackgroundPrimitiveExecution", "classfabgl_1_1_t_f_t_controller_a1837955f56453a1a351577c189bdfad6.html#a1837955f56453a1a351577c189bdfad6", null ]
+    [ "suspendBackgroundPrimitiveExecution", "classfabgl_1_1_t_f_t_controller_a1837955f56453a1a351577c189bdfad6.html#a1837955f56453a1a351577c189bdfad6", null ],
+    [ "suspendDoubleBuffering", "classfabgl_1_1_t_f_t_controller_abcd394fa7a4ba17d39e8086ae358d751.html#abcd394fa7a4ba17d39e8086ae358d751", null ]
 ];

@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('_t_f_t_controller_specif_8cpp_source.h
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  SPIBeginWrite();</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  writeCommand(ST7789_SWRST);</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  SPIEndWrite();</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  vTaskDelay(150 / portTICK_PERIOD_MS);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  vTaskDelay(5 / portTICK_PERIOD_MS);</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  SPIBeginWrite();</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
@@ -460,16 +460,53 @@ $(document).ready(function(){initNavTree('_t_f_t_controller_specif_8cpp_source.h
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>}</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
 <div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>} <span class="comment">// end of namespace</span></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="comment">// TTGOTDisplayV11Controller</span></div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span> </div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="keywordtype">void</span> TTGOTDisplayV11Controller::updateOrientationOffsets()</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>{</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>  <span class="keywordflow">switch</span> (m_orientation) {</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da291b44223b90e70be1fade1eff8a55e0">TFTOrientation::Rotate0</a>:</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>      m_rotOffsetX = 52;</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>      m_rotOffsetY = 40;</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da1d20b3969ea74725dd1a5b7669d60a98">TFTOrientation::Rotate90</a>:</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>      m_rotOffsetX = 40;</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>      m_rotOffsetY = 53;</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da371980c5d153a94cf022d6b4daa4d34c">TFTOrientation::Rotate180</a>:</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>      m_rotOffsetX = 53;</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>      m_rotOffsetY = 40;</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da59c609399b2fb3956ecac7df34a76c2f">TFTOrientation::Rotate270</a>:</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>      m_rotOffsetX = 40;</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>      m_rotOffsetY = 52;</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>    <span class="keywordflow">default</span>:</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>      m_rotOffsetX = 0;</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>      m_rotOffsetY = 0;</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>      <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>  }</div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>}</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>} <span class="comment">// end of namespace</span></div>
 <div class="ttc" id="a_t_f_t_controller_specif_8h_html"><div class="ttname"><a href="_t_f_t_controller_specif_8h.html">TFTControllerSpecif.h</a></div><div class="ttdoc">This file contains TFT controllers definitions.</div></div>
 <div class="ttc" id="afabutils_8h_html"><div class="ttname"><a href="fabutils_8h.html">fabutils.h</a></div><div class="ttdoc">This file contains some utility classes and functions.</div></div>
+<div class="ttc" id="agroup___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d_html_gga74f510e97d94644d4fc7a3cfd736e59da1d20b3969ea74725dd1a5b7669d60a98"><div class="ttname"><a href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da1d20b3969ea74725dd1a5b7669d60a98">fabgl::TFTOrientation::Rotate90</a></div><div class="ttdeci">@ Rotate90</div></div>
+<div class="ttc" id="agroup___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d_html_gga74f510e97d94644d4fc7a3cfd736e59da291b44223b90e70be1fade1eff8a55e0"><div class="ttname"><a href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da291b44223b90e70be1fade1eff8a55e0">fabgl::TFTOrientation::Rotate0</a></div><div class="ttdeci">@ Rotate0</div></div>
+<div class="ttc" id="agroup___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d_html_gga74f510e97d94644d4fc7a3cfd736e59da371980c5d153a94cf022d6b4daa4d34c"><div class="ttname"><a href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da371980c5d153a94cf022d6b4daa4d34c">fabgl::TFTOrientation::Rotate180</a></div><div class="ttdeci">@ Rotate180</div></div>
+<div class="ttc" id="agroup___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d_html_gga74f510e97d94644d4fc7a3cfd736e59da59c609399b2fb3956ecac7df34a76c2f"><div class="ttname"><a href="group___enumerations_ga74f510e97d94644d4fc7a3cfd736e59d.html#gga74f510e97d94644d4fc7a3cfd736e59da59c609399b2fb3956ecac7df34a76c2f">fabgl::TFTOrientation::Rotate270</a></div><div class="ttdeci">@ Rotate270</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_10a80204b5b551c852b7cab5e1f7cbce.html">dispdrivers</a></li><li class="navelem"><b>TFTControllerSpecif.cpp</b></li>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:04 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

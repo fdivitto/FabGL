@@ -1,30 +1,30 @@
 <map id="vgapalettedcontroller.h" name="vgapalettedcontroller.h">
-<area shape="rect" id="node1" title="This file contains fabgl::VGAPalettedController definition." alt="" coords="459,5,611,32"/>
-<area shape="rect" id="node2" href="$inputbox_8h.html" title="This file contains the InputBox class." alt="" coords="433,80,515,107"/>
-<area shape="rect" id="node19" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition." alt="" coords="150,80,270,107"/>
-<area shape="rect" id="node22" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition." alt="" coords="295,80,408,107"/>
-<area shape="rect" id="node24" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition." alt="" coords="540,80,653,107"/>
-<area shape="rect" id="node26" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition." alt="" coords="677,80,791,107"/>
-<area shape="rect" id="node28" href="$vgapalettedcontroller_8cpp_source.html" title=" " alt="" coords="815,80,981,107"/>
-<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="549,155,610,181"/>
-<area shape="rect" id="node18" href="$inputbox_8cpp_source.html" title=" " alt="" coords="429,155,525,181"/>
-<area shape="rect" id="node4" href="$_m_c146818_8h_source.html" title=" " alt="" coords="174,229,270,256"/>
-<area shape="rect" id="node6" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="301,229,385,256"/>
-<area shape="rect" id="node8" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="423,229,506,256"/>
-<area shape="rect" id="node10" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="538,229,621,256"/>
-<area shape="rect" id="node12" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="652,229,776,256"/>
-<area shape="rect" id="node14" href="$i8042_8h_source.html" title=" " alt="" coords="811,229,875,256"/>
-<area shape="rect" id="node16" href="$i8086_8h_source.html" title=" " alt="" coords="913,229,977,256"/>
-<area shape="rect" id="node5" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="152,304,263,331"/>
-<area shape="rect" id="node7" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="287,304,386,331"/>
-<area shape="rect" id="node9" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="410,304,506,331"/>
-<area shape="rect" id="node11" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="531,304,628,331"/>
-<area shape="rect" id="node13" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="653,304,791,331"/>
-<area shape="rect" id="node15" href="$i8042_8cpp_source.html" title=" " alt="" coords="816,304,895,331"/>
-<area shape="rect" id="node17" href="$i8086_8cpp_source.html" title=" " alt="" coords="919,304,997,331"/>
-<area shape="rect" id="node20" href="$fabutils_8cpp_source.html" title=" " alt="" coords="164,155,253,181"/>
-<area shape="rect" id="node21" href="$vga16controller_8cpp_source.html" title=" " alt="" coords="5,155,140,181"/>
-<area shape="rect" id="node23" href="$vga2controller_8cpp_source.html" title=" " alt="" coords="277,155,404,181"/>
-<area shape="rect" id="node25" href="$vga4controller_8cpp_source.html" title=" " alt="" coords="635,155,761,181"/>
-<area shape="rect" id="node27" href="$vga8controller_8cpp_source.html" title=" " alt="" coords="785,155,912,181"/>
+<area shape="rect" id="node1" title="This file contains fabgl::VGAPalettedController definition." alt="" coords="534,5,686,32"/>
+<area shape="rect" id="node2" href="$vga16controller_8h.html" title="This file contains fabgl::VGA16Controller definition." alt="" coords="691,80,811,107"/>
+<area shape="rect" id="node22" href="$vga2controller_8h.html" title="This file contains fabgl::VGA2Controller definition." alt="" coords="416,80,529,107"/>
+<area shape="rect" id="node24" href="$vga4controller_8h.html" title="This file contains fabgl::VGA4Controller definition." alt="" coords="279,80,392,107"/>
+<area shape="rect" id="node26" href="$vga8controller_8h.html" title="This file contains fabgl::VGA8Controller definition." alt="" coords="553,80,667,107"/>
+<area shape="rect" id="node28" href="$vgapalettedcontroller_8cpp_source.html" title=" " alt="" coords="836,80,1003,107"/>
+<area shape="rect" id="node3" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="459,155,521,181"/>
+<area shape="rect" id="node20" href="$inputbox_8cpp_source.html" title=" " alt="" coords="545,155,641,181"/>
+<area shape="rect" id="node21" href="$vga16controller_8cpp_source.html" title=" " alt="" coords="816,155,951,181"/>
+<area shape="rect" id="node4" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,229,123,256"/>
+<area shape="rect" id="node6" href="$_p_c8250_8h.html" title="This file contains fabgl::PC8250 definition." alt="" coords="154,229,234,256"/>
+<area shape="rect" id="node8" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="273,229,357,256"/>
+<area shape="rect" id="node10" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="393,229,475,256"/>
+<area shape="rect" id="node12" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="506,229,589,256"/>
+<area shape="rect" id="node14" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="624,229,748,256"/>
+<area shape="rect" id="node16" href="$i8042_8h_source.html" title=" " alt="" coords="786,229,850,256"/>
+<area shape="rect" id="node18" href="$i8086_8h_source.html" title=" " alt="" coords="887,229,951,256"/>
+<area shape="rect" id="node5" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,304,116,331"/>
+<area shape="rect" id="node7" href="$_p_c8250_8cpp_source.html" title=" " alt="" coords="140,304,235,331"/>
+<area shape="rect" id="node9" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="259,304,358,331"/>
+<area shape="rect" id="node11" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="382,304,478,331"/>
+<area shape="rect" id="node13" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="503,304,600,331"/>
+<area shape="rect" id="node15" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="625,304,763,331"/>
+<area shape="rect" id="node17" href="$i8042_8cpp_source.html" title=" " alt="" coords="788,304,867,331"/>
+<area shape="rect" id="node19" href="$i8086_8cpp_source.html" title=" " alt="" coords="891,304,969,331"/>
+<area shape="rect" id="node23" href="$vga2controller_8cpp_source.html" title=" " alt="" coords="308,155,435,181"/>
+<area shape="rect" id="node25" href="$vga4controller_8cpp_source.html" title=" " alt="" coords="157,155,284,181"/>
+<area shape="rect" id="node27" href="$vga8controller_8cpp_source.html" title=" " alt="" coords="665,155,792,181"/>
 </map>

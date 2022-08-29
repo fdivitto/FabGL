@@ -93,14 +93,14 @@ $(document).ready(function(){initNavTree('terminal_8h.html',''); initResizable()
 
 <p>This file contains <a class="el" href="classfabgl_1_1_terminal.html" title="An ANSI-VT100 compatible display terminal.">fabgl::Terminal</a> definition.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Arduino.h&quot;</code><br />
-<code>#include &quot;Stream.h&quot;</code><br />
-<code>#include &lt;ctype.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;ctype.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
 <code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
 <code>#include &quot;freertos/task.h&quot;</code><br />
 <code>#include &quot;freertos/timers.h&quot;</code><br />
 <code>#include &quot;freertos/semphr.h&quot;</code><br />
+<code>#include &quot;Arduino.h&quot;</code><br />
+<code>#include &quot;Stream.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="fabglconf_8h_source.html">fabglconf.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="canvas_8h_source.html">canvas.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="keyboard_8h_source.html">devdrivers/keyboard.h</a>&quot;</code><br />
@@ -111,66 +111,66 @@ Include dependency graph for terminal.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="terminal_8h__incl.png" border="0" usemap="#aterminal_8h" alt=""/></div>
 <map name="aterminal_8h" id="aterminal_8h">
-<area shape="rect" title="This file contains fabgl::Terminal definition." alt="" coords="461,5,539,32"/>
-<area shape="rect" title=" " alt="" coords="5,80,83,107"/>
-<area shape="rect" title=" " alt="" coords="107,80,181,107"/>
-<area shape="rect" title=" " alt="" coords="206,80,271,107"/>
-<area shape="rect" title=" " alt="" coords="295,80,361,107"/>
-<area shape="rect" title=" " alt="" coords="789,543,933,569"/>
-<area shape="rect" title=" " alt="" coords="527,461,633,487"/>
-<area shape="rect" title=" " alt="" coords="1207,461,1324,487"/>
-<area shape="rect" title=" " alt="" coords="5823,543,5945,569"/>
-<area shape="rect" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="658,461,745,487"/>
-<area shape="rect" href="canvas_8h.html" title="This file contains fabgl::Canvas definition." alt="" coords="975,304,1049,331"/>
-<area shape="rect" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="658,155,809,181"/>
-<area shape="rect" href="terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="692,80,772,107"/>
-<area shape="rect" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System." alt="" coords="1650,379,1803,405"/>
-<area shape="rect" title=" " alt="" coords="661,543,742,569"/>
-<area shape="rect" title=" " alt="" coords="1349,461,1414,487"/>
-<area shape="rect" title=" " alt="" coords="972,461,1041,487"/>
-<area shape="rect" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="973,379,1099,405"/>
-<area shape="rect" title=" " alt="" coords="1066,461,1182,487"/>
-<area shape="rect" href="fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="1489,461,1564,487"/>
-<area shape="rect" title=" " alt="" coords="1295,543,1385,569"/>
-<area shape="rect" title=" " alt="" coords="1409,543,1513,569"/>
-<area shape="rect" title=" " alt="" coords="1538,543,1646,569"/>
-<area shape="rect" title=" " alt="" coords="1670,543,1805,569"/>
-<area shape="rect" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition." alt="" coords="663,304,823,331"/>
-<area shape="rect" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="1157,229,1219,256"/>
-<area shape="rect" href="codepages_8h.html" title="This file contains codepages declarations." alt="" coords="1543,304,1639,331"/>
-<area shape="rect" href="kbdlayouts_8h.html" title="This file contains keyboard layouts." alt="" coords="1428,379,1524,405"/>
-<area shape="rect" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition." alt="" coords="689,379,796,405"/>
-<area shape="rect" title=" " alt="" coords="1226,304,1265,331"/>
-<area shape="rect" href="fabfonts_8h_source.html" title=" " alt="" coords="3645,379,3725,405"/>
-<area shape="rect" title=" " alt="" coords="4730,461,4846,487"/>
-<area shape="rect" title=" " alt="" coords="4870,461,4986,487"/>
-<area shape="rect" title=" " alt="" coords="5010,461,5126,487"/>
-<area shape="rect" title=" " alt="" coords="5150,461,5266,487"/>
-<area shape="rect" title=" " alt="" coords="5290,461,5406,487"/>
-<area shape="rect" title=" " alt="" coords="5431,461,5553,487"/>
-<area shape="rect" title=" " alt="" coords="5577,461,5700,487"/>
-<area shape="rect" title=" " alt="" coords="5724,461,5847,487"/>
-<area shape="rect" title=" " alt="" coords="1996,461,2119,487"/>
-<area shape="rect" title=" " alt="" coords="2143,461,2265,487"/>
-<area shape="rect" title=" " alt="" coords="2289,461,2412,487"/>
-<area shape="rect" title=" " alt="" coords="2437,461,2553,487"/>
-<area shape="rect" title=" " alt="" coords="2577,461,2693,487"/>
-<area shape="rect" title=" " alt="" coords="2717,461,2840,487"/>
-<area shape="rect" title=" " alt="" coords="2864,461,2987,487"/>
-<area shape="rect" title=" " alt="" coords="3011,461,3133,487"/>
-<area shape="rect" title=" " alt="" coords="3157,461,3280,487"/>
-<area shape="rect" title=" " alt="" coords="3304,461,3427,487"/>
-<area shape="rect" title=" " alt="" coords="3451,461,3581,487"/>
-<area shape="rect" title=" " alt="" coords="3606,461,3765,487"/>
-<area shape="rect" title=" " alt="" coords="3789,453,3920,495"/>
-<area shape="rect" title=" " alt="" coords="3944,453,4075,495"/>
-<area shape="rect" title=" " alt="" coords="4099,461,4245,487"/>
-<area shape="rect" title=" " alt="" coords="4269,453,4392,495"/>
-<area shape="rect" title=" " alt="" coords="4416,453,4555,495"/>
-<area shape="rect" title=" " alt="" coords="4579,453,4706,495"/>
-<area shape="rect" title=" " alt="" coords="1588,461,1681,487"/>
-<area shape="rect" title=" " alt="" coords="1705,461,1820,487"/>
-<area shape="rect" title=" " alt="" coords="1845,461,1971,487"/>
+<area shape="rect" title="This file contains fabgl::Terminal definition." alt="" coords="4579,5,4657,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,71,107"/>
+<area shape="rect" title=" " alt="" coords="95,80,160,107"/>
+<area shape="rect" title=" " alt="" coords="4642,543,4786,569"/>
+<area shape="rect" title=" " alt="" coords="4101,461,4207,487"/>
+<area shape="rect" title=" " alt="" coords="4751,461,4869,487"/>
+<area shape="rect" title=" " alt="" coords="3939,543,4062,569"/>
+<area shape="rect" title=" " alt="" coords="5367,543,5445,569"/>
+<area shape="rect" title=" " alt="" coords="4682,80,4757,107"/>
+<area shape="rect" href="fabglconf_8h.html" title="This file contains FabGL library configuration settings, like number of supported colors,..." alt="" coords="4893,461,4980,487"/>
+<area shape="rect" href="canvas_8h.html" title="This file contains fabgl::Canvas definition." alt="" coords="4194,304,4269,331"/>
+<area shape="rect" href="keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="4504,155,4655,181"/>
+<area shape="rect" href="terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="4578,80,4658,107"/>
+<area shape="rect" href="soundgen_8h.html" title="This file contains all classes related to FabGL Sound System." alt="" coords="5253,379,5407,405"/>
+<area shape="rect" title=" " alt="" coords="4928,543,5009,569"/>
+<area shape="rect" title=" " alt="" coords="4475,461,4540,487"/>
+<area shape="rect" title=" " alt="" coords="4381,461,4450,487"/>
+<area shape="rect" href="displaycontroller_8h.html" title="This file contains fabgl::BitmappedDisplayController definition." alt="" coords="4091,379,4217,405"/>
+<area shape="rect" title=" " alt="" coords="3960,461,4076,487"/>
+<area shape="rect" href="fabutils_8h.html" title="This file contains some utility classes and functions." alt="" coords="4231,461,4306,487"/>
+<area shape="rect" title=" " alt="" coords="4506,543,4597,569"/>
+<area shape="rect" title=" " alt="" coords="4086,543,4190,569"/>
+<area shape="rect" title=" " alt="" coords="4215,543,4323,569"/>
+<area shape="rect" title=" " alt="" coords="4347,543,4481,569"/>
+<area shape="rect" title=" " alt="" coords="4810,543,4903,569"/>
+<area shape="rect" href="ps2device_8h.html" title="This file contains fabgl::PS2Device definition." alt="" coords="4765,304,4925,331"/>
+<area shape="rect" href="fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="4333,229,4394,256"/>
+<area shape="rect" href="codepages_8h.html" title="This file contains codepages declarations." alt="" coords="3869,304,3965,331"/>
+<area shape="rect" href="kbdlayouts_8h.html" title="This file contains keyboard layouts." alt="" coords="4343,379,4439,405"/>
+<area shape="rect" href="ps2controller_8h.html" title="This file contains fabgl::PS2Controller definition." alt="" coords="4666,379,4773,405"/>
+<area shape="rect" title=" " alt="" coords="4344,304,4383,331"/>
+<area shape="rect" href="fabfonts_8h_source.html" title=" " alt="" coords="2211,379,2291,405"/>
+<area shape="rect" title=" " alt="" coords="399,461,515,487"/>
+<area shape="rect" title=" " alt="" coords="539,461,655,487"/>
+<area shape="rect" title=" " alt="" coords="679,461,795,487"/>
+<area shape="rect" title=" " alt="" coords="819,461,935,487"/>
+<area shape="rect" title=" " alt="" coords="959,461,1075,487"/>
+<area shape="rect" title=" " alt="" coords="1099,461,1222,487"/>
+<area shape="rect" title=" " alt="" coords="1246,461,1369,487"/>
+<area shape="rect" title=" " alt="" coords="1393,461,1515,487"/>
+<area shape="rect" title=" " alt="" coords="1539,461,1662,487"/>
+<area shape="rect" title=" " alt="" coords="1686,461,1809,487"/>
+<area shape="rect" title=" " alt="" coords="1833,461,1955,487"/>
+<area shape="rect" title=" " alt="" coords="1980,461,2096,487"/>
+<area shape="rect" title=" " alt="" coords="2120,461,2236,487"/>
+<area shape="rect" title=" " alt="" coords="2415,461,2538,487"/>
+<area shape="rect" title=" " alt="" coords="2562,461,2685,487"/>
+<area shape="rect" title=" " alt="" coords="2709,461,2831,487"/>
+<area shape="rect" title=" " alt="" coords="2855,461,2978,487"/>
+<area shape="rect" title=" " alt="" coords="3002,461,3125,487"/>
+<area shape="rect" title=" " alt="" coords="2261,461,2391,487"/>
+<area shape="rect" title=" " alt="" coords="3149,461,3308,487"/>
+<area shape="rect" title=" " alt="" coords="3333,453,3463,495"/>
+<area shape="rect" title=" " alt="" coords="3487,453,3618,495"/>
+<area shape="rect" title=" " alt="" coords="3642,461,3789,487"/>
+<area shape="rect" title=" " alt="" coords="3813,453,3935,495"/>
+<area shape="rect" title=" " alt="" coords="235,453,374,495"/>
+<area shape="rect" title=" " alt="" coords="5273,461,5387,487"/>
+<area shape="rect" title=" " alt="" coords="5412,461,5539,487"/>
+<area shape="rect" title=" " alt="" coords="5563,461,5652,487"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -178,23 +178,27 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="terminal_8h__dep__incl.png" border="0" usemap="#aterminal_8hdep" alt=""/></div>
 <map name="aterminal_8hdep" id="aterminal_8hdep">
-<area shape="rect" title="This file contains fabgl::Terminal definition." alt="" coords="444,5,523,32"/>
-<area shape="rect" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="402,80,463,107"/>
-<area shape="rect" href="terminal_8cpp_source.html" title=" " alt="" coords="487,80,581,107"/>
-<area shape="rect" href="_m_c146818_8h_source.html" title=" " alt="" coords="27,155,123,181"/>
-<area shape="rect" href="_p_i_c8259_8h_source.html" title=" " alt="" coords="155,155,239,181"/>
-<area shape="rect" href="_p_i_t8253_8h_source.html" title=" " alt="" coords="277,155,359,181"/>
-<area shape="rect" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="391,155,474,181"/>
-<area shape="rect" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="505,155,629,181"/>
-<area shape="rect" href="i8042_8h_source.html" title=" " alt="" coords="665,155,729,181"/>
-<area shape="rect" href="i8086_8h_source.html" title=" " alt="" coords="766,155,830,181"/>
-<area shape="rect" href="_m_c146818_8cpp_source.html" title=" " alt="" coords="5,229,116,256"/>
-<area shape="rect" href="_p_i_c8259_8cpp_source.html" title=" " alt="" coords="141,229,239,256"/>
-<area shape="rect" href="_p_i_t8253_8cpp_source.html" title=" " alt="" coords="263,229,359,256"/>
-<area shape="rect" href="_v_i_a6522_8cpp_source.html" title=" " alt="" coords="384,229,481,256"/>
-<area shape="rect" href="graphicsadapter_8cpp_source.html" title=" " alt="" coords="506,229,645,256"/>
-<area shape="rect" href="i8042_8cpp_source.html" title=" " alt="" coords="669,229,748,256"/>
-<area shape="rect" href="i8086_8cpp_source.html" title=" " alt="" coords="772,229,851,256"/>
+<area shape="rect" title="This file contains fabgl::Terminal definition." alt="" coords="532,5,611,32"/>
+<area shape="rect" href="fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="459,155,521,181"/>
+<area shape="rect" href="serialport_8h.html" title="This file contains fabgl::SerialPort definition." alt="" coords="528,80,615,107"/>
+<area shape="rect" href="terminal_8cpp_source.html" title=" " alt="" coords="639,80,733,107"/>
+<area shape="rect" href="_m_c146818_8h_source.html" title=" " alt="" coords="27,229,123,256"/>
+<area shape="rect" href="_p_c8250_8h.html" title="This file contains fabgl::PC8250 definition." alt="" coords="154,229,234,256"/>
+<area shape="rect" href="_p_i_c8259_8h_source.html" title=" " alt="" coords="273,229,357,256"/>
+<area shape="rect" href="_p_i_t8253_8h_source.html" title=" " alt="" coords="393,229,475,256"/>
+<area shape="rect" href="_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="506,229,589,256"/>
+<area shape="rect" href="graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="624,229,748,256"/>
+<area shape="rect" href="i8042_8h_source.html" title=" " alt="" coords="786,229,850,256"/>
+<area shape="rect" href="i8086_8h_source.html" title=" " alt="" coords="887,229,951,256"/>
+<area shape="rect" href="_m_c146818_8cpp_source.html" title=" " alt="" coords="5,304,116,331"/>
+<area shape="rect" href="_p_c8250_8cpp_source.html" title=" " alt="" coords="140,304,235,331"/>
+<area shape="rect" href="_p_i_c8259_8cpp_source.html" title=" " alt="" coords="259,304,358,331"/>
+<area shape="rect" href="_p_i_t8253_8cpp_source.html" title=" " alt="" coords="382,304,478,331"/>
+<area shape="rect" href="_v_i_a6522_8cpp_source.html" title=" " alt="" coords="503,304,600,331"/>
+<area shape="rect" href="graphicsadapter_8cpp_source.html" title=" " alt="" coords="625,304,763,331"/>
+<area shape="rect" href="i8042_8cpp_source.html" title=" " alt="" coords="788,304,867,331"/>
+<area shape="rect" href="i8086_8cpp_source.html" title=" " alt="" coords="891,304,969,331"/>
+<area shape="rect" href="serialport_8cpp_source.html" title=" " alt="" coords="545,155,645,181"/>
 </map>
 </div>
 </div>
@@ -227,13 +231,6 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ga58734f6595a1eefb555afc0f1897fc3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines a character style.  <a href="group___enumerations_ga58734f6595a1eefb555afc0f1897fc3f.html#ga58734f6595a1eefb555afc0f1897fc3f">More...</a><br /></td></tr>
 <tr class="separator:ga58734f6595a1eefb555afc0f1897fc3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae88006c219f95bae663fe0f2a2561dd7"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#gae88006c219f95bae663fe0f2a2561dd7">FlowControl</a> { <a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a6adf97f83acf6453d4a6a4b1070f3754">None</a>
-, <a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a719d067b229178f03bcfa1da4ac4dede">Software</a>
-, <a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7a3c02a379965ab0dfcd77b1c484450433">Hardware</a>
-, <a class="el" href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#ggae88006c219f95bae663fe0f2a2561dd7aa1e74360bdc370e9471d00cedfdeecbe">Hardsoft</a>
- }</td></tr>
-<tr class="memdesc:gae88006c219f95bae663fe0f2a2561dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines various serial port flow control methods.  <a href="group___enumerations_gae88006c219f95bae663fe0f2a2561dd7.html#gae88006c219f95bae663fe0f2a2561dd7">More...</a><br /></td></tr>
-<tr class="separator:gae88006c219f95bae663fe0f2a2561dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab18ae5ee717bbc4b0722f7c3f5cffbf6"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#gab18ae5ee717bbc4b0722f7c3f5cffbf6">LineEditorSpecialChar</a> { <a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#ggab18ae5ee717bbc4b0722f7c3f5cffbf6a49176da75a1269d7cda14dd52331c7da">CursorUp</a>
 , <a class="el" href="group___enumerations_gab18ae5ee717bbc4b0722f7c3f5cffbf6.html#ggab18ae5ee717bbc4b0722f7c3f5cffbf6a3f96d33d45dfd7be341bf60569f3e623">CursorDown</a>
  }</td></tr>
@@ -253,7 +250,7 @@ Enumerations</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="terminal_8h.html">terminal.h</a></li>
-    <li class="footer">Generated on Sun May 22 2022 11:19:46 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:05 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

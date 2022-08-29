@@ -141,7 +141,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classfabgl_1_1_i2_c_a93f66e29e22bca7a9f5d8e3d5af2d6a2.html#a93f66e29e22bca7a9f5d8e3d5af2d6a2">   53</a></span><a class="code hl_function" href="classfabgl_1_1_i2_c_a93f66e29e22bca7a9f5d8e3d5af2d6a2.html#a93f66e29e22bca7a9f5d8e3d5af2d6a2">I2C::I2C</a>(<span class="keywordtype">int</span> bus)</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  :</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    #if FABGL_ESP_IDF_VERSION &lt; FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    #ifdef FABGL_OLDI2C</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    m_i2c(nullptr),</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    #endif</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    m_i2cAvailable(false),</div>
@@ -185,7 +185,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    vTaskDelete(m_commTaskHandle);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  m_commTaskHandle = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="preprocessor">  #if FABGL_ESP_IDF_VERSION &lt; FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="preprocessor">  #ifdef FABGL_OLDI2C</span></div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  <span class="keywordflow">if</span> (m_i2c)</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    i2cRelease(m_i2c);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  m_i2c = <span class="keyword">nullptr</span>;</div>
@@ -214,7 +214,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  <span class="comment">// wait for comm task to finish job</span></div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  xEventGroupSync(m_eventGroup, EVTGROUP_WRITE, EVTGROUP_DONE, portMAX_DELAY);</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">  #if FABGL_ESP_IDF_VERSION &lt; FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">  #ifdef FABGL_OLDI2C</span></div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordtype">bool</span> ret = (m_jobInfo.lastError == I2C_ERROR_OK);</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">  #else</span></div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="keywordtype">bool</span> ret = (m_jobInfo.lastError == ESP_OK);</div>
@@ -251,7 +251,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>}</div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="preprocessor">#if FABGL_ESP_IDF_VERSION &gt;= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="preprocessor">#ifndef FABGL_OLDI2C</span></div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="keyword">static</span> <span class="keywordtype">int</span> i2cGetFrequency(uint8_t i2c_num)</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>{</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  uint32_t r;</div>
@@ -271,7 +271,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  <span class="keyword">auto</span> initRes = i2cInit(ths-&gt;m_bus, ths-&gt;m_SDAGPIO, ths-&gt;m_SCLGPIO, I2C_DEFAULT_FREQUENCY);</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="preprocessor">  #if FABGL_ESP_IDF_VERSION &lt; FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="preprocessor">  #ifdef FABGL_OLDI2C</span></div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  <span class="keywordflow">if</span> (!initRes) {</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    ESP_LOGE(<span class="stringliteral">&quot;FabGL&quot;</span>, <span class="stringliteral">&quot;unable to init I2C&quot;</span>);</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    abort();</div>
@@ -309,7 +309,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>      i2cSetFrequency(i2c, freq);</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    }</div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="preprocessor">    #if FABGL_ESP_IDF_VERSION &lt; FABGL_ESP_IDF_VERSION_VAL(4, 4, 0)</span></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="preprocessor">    #ifdef FABGL_OLDI2C</span></div>
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <span class="keywordflow">if</span> (bits &amp; EVTGROUP_WRITE)</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>      job-&gt;lastError = i2cWrite(i2c, job-&gt;address, job-&gt;buffer, job-&gt;size, <span class="keyword">true</span>, job-&gt;timeout);</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (bits &amp; EVTGROUP_READ)</div>
@@ -342,7 +342,7 @@ $(document).ready(function(){initNavTree('tsi2c_8cpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b741fed86bf5fa30eab98075f2fe4281.html">comdrivers</a></li><li class="navelem"><b>tsi2c.cpp</b></li>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:04 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

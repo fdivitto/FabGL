@@ -146,6 +146,12 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line"> </div>
 <div class="line"> </div>
 <div class="line"> </div>
+<div class="line"><span class="comment">// UART Pins for USB serial</span></div>
+<div class="line"><span class="preprocessor">#define UART_URX 3</span></div>
+<div class="line"><span class="preprocessor">#define UART_UTX 1</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
 <div class="line"><span class="keyword">using</span> std::unique_ptr;</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">using</span> fabgl::StringList;</div>
@@ -295,7 +301,9 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">      sntp_stop();</div>
 <div class="line">      ibox.setAutoOK(2);</div>
 <div class="line">      ibox.message(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Date and Time updated. Restarting...&quot;</span>);</div>
+<div class="line"><span class="preprocessor">      #ifndef FABGL_EMULATED</span></div>
 <div class="line">      esp_restart();</div>
+<div class="line"><span class="preprocessor">      #endif</span></div>
 <div class="line">    });</div>
 <div class="line"> </div>
 <div class="line">  } <span class="keywordflow">else</span> {</div>
@@ -319,6 +327,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">  ibox.progressBox(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Abort&quot;</span>, <span class="keyword">true</span>, 380, [&amp;](fabgl::ProgressForm * form) {</div>
 <div class="line">    form-&gt;update(0, <span class="stringliteral">&quot;Preparing to download %s&quot;</span>, filename);</div>
 <div class="line">    HTTPClient http;</div>
+<div class="line">    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);</div>
 <div class="line">    http.begin(URL);</div>
 <div class="line">    <span class="keywordtype">int</span> httpCode = http.GET();</div>
 <div class="line">    <span class="keywordflow">if</span> (httpCode == HTTP_CODE_OK) {</div>
@@ -361,7 +370,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line"> </div>
 <div class="line">  <span class="keywordtype">char</span> <span class="keyword">const</span> * filename = <span class="keyword">nullptr</span>;</div>
 <div class="line">  <span class="keywordflow">if</span> (url) {</div>
-<div class="line">    <span class="keywordflow">if</span> (strncmp(<span class="stringliteral">&quot;://&quot;</span>, url + 4, 3) == 0) {</div>
+<div class="line">    <span class="keywordflow">if</span> (strncmp(<span class="stringliteral">&quot;http://&quot;</span>, url, 7) == 0 || strncmp(<span class="stringliteral">&quot;https://&quot;</span>, url, 7) == 0) {</div>
 <div class="line">      <span class="comment">// this is actually an URL</span></div>
 <div class="line">      filename = strrchr(url, <span class="charliteral">&#39;/&#39;</span>) + 1;</div>
 <div class="line">      <span class="keywordflow">if</span> (filename &amp;&amp; !fb.exists(filename, <span class="keyword">false</span>)) {</div>
@@ -392,12 +401,17 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">  machine-&gt;graphicsAdapter()-&gt;enableVideo(<span class="keyword">false</span>);</div>
 <div class="line">  ibox.begin(<a id="a0" name="a0"></a><a class="code hl_define" href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a>, 500, 400, 4);</div>
 <div class="line"> </div>
-<div class="line">  <span class="keywordtype">int</span> s = ibox.menu(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Select a command&quot;</span>, <span class="stringliteral">&quot;Restart (Boot Menu);Continue;Mount Disk&quot;</span>);</div>
+<div class="line">  <span class="keywordtype">int</span> s = ibox.menu(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Select a command&quot;</span>, <span class="stringliteral">&quot;Restart Emulator;Restart Machine;Mount Disk;Continue&quot;</span>);</div>
 <div class="line">  <span class="keywordflow">switch</span> (s) {</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">// Restart</span></div>
+<div class="line">    <span class="comment">// Restart Emulator</span></div>
 <div class="line">    <span class="keywordflow">case</span> 0:</div>
 <div class="line">      esp_restart();</div>
+<div class="line">      <span class="keywordflow">break</span>;</div>
+<div class="line">      </div>
+<div class="line">    <span class="comment">// Restart Machine</span></div>
+<div class="line">    <span class="keywordflow">case</span> 1:</div>
+<div class="line">      machine-&gt;trigReset();</div>
 <div class="line">      <span class="keywordflow">break</span>;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Mount Disk</span></div>
@@ -491,8 +505,8 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">      dconfs.append(conf-&gt;desc);</div>
 <div class="line">    dconfs.select(idx, <span class="keyword">true</span>);</div>
 <div class="line"> </div>
-<div class="line">    ibox.setupButton(0, <span class="stringliteral">&quot;Browse Files&quot;</span>);</div>
-<div class="line">    ibox.setupButton(1, <span class="stringliteral">&quot;Options&quot;</span>, <span class="stringliteral">&quot;Edit;New;Remove&quot;</span>, 52);</div>
+<div class="line">    ibox.setupButton(0, <span class="stringliteral">&quot;Files&quot;</span>);</div>
+<div class="line">    ibox.setupButton(1, <span class="stringliteral">&quot;Machine&quot;</span>, <span class="stringliteral">&quot;Edit;New;Remove&quot;</span>, 52);</div>
 <div class="line">    <span class="keyword">auto</span> r = ibox.select(<span class="stringliteral">&quot;Machine Configurations&quot;</span>, <span class="stringliteral">&quot;Please select a machine configuration&quot;</span>, &amp;dconfs, <span class="keyword">nullptr</span>, <span class="stringliteral">&quot;Run&quot;</span>);</div>
 <div class="line"> </div>
 <div class="line">    idx = dconfs.getFirstSelected();</div>
@@ -503,7 +517,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">        ibox.folderBrowser(<span class="stringliteral">&quot;Browse Files&quot;</span>, SD_MOUNT_PATH);</div>
 <div class="line">        <span class="keywordflow">break</span>;</div>
 <div class="line">      <span class="keywordflow">case</span> InputResult::ButtonExt1:</div>
-<div class="line">        <span class="comment">// Options</span></div>
+<div class="line">        <span class="comment">// Machine</span></div>
 <div class="line">        <span class="keywordflow">switch</span> (ibox.selectedSubItem()) {</div>
 <div class="line">          <span class="comment">// Edit</span></div>
 <div class="line">          <span class="keywordflow">case</span> 0:</div>
@@ -552,10 +566,16 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">    <span class="comment">// disk downloaded from the Internet, need to reboot to fully disable wifi</span></div>
 <div class="line">    ibox.setAutoOK(2);</div>
 <div class="line">    ibox.message(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;Disks downloaded. Restarting...&quot;</span>);</div>
+<div class="line"><span class="preprocessor">    #ifndef FABGL_EMULATED</span></div>
 <div class="line">    esp_restart();</div>
+<div class="line"><span class="preprocessor">    #endif</span></div>
 <div class="line">  }</div>
 <div class="line"> </div>
 <div class="line">  ibox.end();</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">// without WiFi it is possible to increase SD card speed</span></div>
+<div class="line">  FileBrowser::setSDCardMaxFreqKHz(SDMMC_FREQ_DEFAULT);</div>
+<div class="line">  FileBrowser::remountSDCard();</div>
 <div class="line"> </div>
 <div class="line">  machine = <span class="keyword">new</span> Machine;</div>
 <div class="line"> </div>
@@ -564,6 +584,10 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">    machine-&gt;setDriveImage(i, diskFilename[i], conf-&gt;cylinders[i], conf-&gt;heads[i], conf-&gt;sectors[i]);</div>
 <div class="line"> </div>
 <div class="line">  machine-&gt;setBootDrive(conf-&gt;bootDrive);</div>
+<div class="line">  </div>
+<div class="line">  <span class="keyword">auto</span> serial1 = <span class="keyword">new</span> SerialPort;</div>
+<div class="line">  serial1-&gt;setSignals(UART_URX, UART_UTX);</div>
+<div class="line">  machine-&gt;setCOM1(serial1);</div>
 <div class="line"> </div>
 <div class="line">  <span class="comment">/*</span></div>
 <div class="line"><span class="comment">  printf(&quot;MALLOC_CAP_32BIT : %d bytes (largest %d bytes)\r\n&quot;, heap_caps_get_free_size(MALLOC_CAP_32BIT), heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));</span></div>
@@ -609,7 +633,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"> </div>
-<div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2_html_a6b94fdf3692083a41291eec4920c62d2"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2.html#a6b94fdf3692083a41291eec4920c62d2">fabgl::BitmappedDisplayController::queueSize</a></div><div class="ttdeci">static int queueSize</div><div class="ttdoc">Size of display controller primitives queue.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00912">displaycontroller.h:912</a></div></div>
+<div class="ttc" id="aclassfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2_html_a6b94fdf3692083a41291eec4920c62d2"><div class="ttname"><a href="classfabgl_1_1_bitmapped_display_controller_a6b94fdf3692083a41291eec4920c62d2.html#a6b94fdf3692083a41291eec4920c62d2">fabgl::BitmappedDisplayController::queueSize</a></div><div class="ttdeci">static int queueSize</div><div class="ttdoc">Size of display controller primitives queue.</div><div class="ttdef"><b>Definition:</b> <a href="displaycontroller_8h_source.html#l00931">displaycontroller.h:931</a></div></div>
 <div class="ttc" id="afabgl_8h_html"><div class="ttname"><a href="fabgl_8h.html">fabgl.h</a></div><div class="ttdoc">This file is the all in one include file. Application can just include this file to use FabGL library...</div></div>
 <div class="ttc" id="afabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8_html_a2d4571e9072b78877c36bf32bc9423f8"><div class="ttname"><a href="fabglconf_8h_a2d4571e9072b78877c36bf32bc9423f8.html#a2d4571e9072b78877c36bf32bc9423f8">VGA_640x480_60Hz</a></div><div class="ttdeci">#define VGA_640x480_60Hz</div><div class="ttdef"><b>Definition:</b> <a href="fabglconf_8h_source.html#l00246">fabglconf.h:246</a></div></div>
 </div><!-- fragment --> </div><!-- contents -->
@@ -617,7 +641,7 @@ $(document).ready(function(){initNavTree('_v_g_a_2_p_c_emulator_2_p_c_emulator_8
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 22 2022 11:19:45 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:04 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>

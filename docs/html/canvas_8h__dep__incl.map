@@ -1,32 +1,36 @@
 <map id="canvas.h" name="canvas.h">
-<area shape="rect" id="node1" title="This file contains fabgl::Canvas definition." alt="" coords="734,5,809,32"/>
-<area shape="rect" id="node2" href="$canvas_8cpp_source.html" title=" " alt="" coords="593,80,683,107"/>
-<area shape="rect" id="node3" href="$fabui_8cpp_source.html" title=" " alt="" coords="769,229,843,256"/>
-<area shape="rect" id="node4" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="707,80,769,107"/>
-<area shape="rect" id="node25" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition." alt="" coords="919,304,997,331"/>
-<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="402,379,463,405"/>
-<area shape="rect" id="node20" href="$inputbox_8h.html" title="This file contains the InputBox class." alt="" coords="181,155,263,181"/>
-<area shape="rect" id="node22" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="505,155,592,181"/>
-<area shape="rect" id="node29" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition." alt="" coords="845,155,917,181"/>
-<area shape="rect" id="node6" href="$_m_c146818_8h_source.html" title=" " alt="" coords="27,453,123,480"/>
-<area shape="rect" id="node8" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="155,453,239,480"/>
-<area shape="rect" id="node10" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="277,453,359,480"/>
-<area shape="rect" id="node12" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="391,453,474,480"/>
-<area shape="rect" id="node14" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="505,453,629,480"/>
-<area shape="rect" id="node16" href="$i8042_8h_source.html" title=" " alt="" coords="665,453,729,480"/>
-<area shape="rect" id="node18" href="$i8086_8h_source.html" title=" " alt="" coords="766,453,830,480"/>
-<area shape="rect" id="node7" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="5,528,116,555"/>
-<area shape="rect" id="node9" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="141,528,239,555"/>
-<area shape="rect" id="node11" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="263,528,359,555"/>
-<area shape="rect" id="node13" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="384,528,481,555"/>
-<area shape="rect" id="node15" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="506,528,645,555"/>
-<area shape="rect" id="node17" href="$i8042_8cpp_source.html" title=" " alt="" coords="669,528,748,555"/>
-<area shape="rect" id="node19" href="$i8086_8cpp_source.html" title=" " alt="" coords="772,528,851,555"/>
-<area shape="rect" id="node21" href="$inputbox_8cpp_source.html" title=" " alt="" coords="174,229,270,256"/>
-<area shape="rect" id="node23" href="$keyboard_8cpp_source.html" title=" " alt="" coords="295,229,395,256"/>
-<area shape="rect" id="node24" href="$ps2controller_8cpp_source.html" title=" " alt="" coords="625,229,745,256"/>
-<area shape="rect" id="node27" href="$terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="470,229,550,256"/>
-<area shape="rect" id="node26" href="$terminal_8cpp_source.html" title=" " alt="" coords="979,379,1073,405"/>
-<area shape="rect" id="node28" href="$terminfo_8cpp_source.html" title=" " alt="" coords="471,304,565,331"/>
-<area shape="rect" id="node30" href="$mouse_8cpp_source.html" title=" " alt="" coords="919,229,1005,256"/>
+<area shape="rect" id="node1" title="This file contains fabgl::Canvas definition." alt="" coords="653,5,728,32"/>
+<area shape="rect" id="node2" href="$canvas_8cpp_source.html" title=" " alt="" coords="513,80,602,107"/>
+<area shape="rect" id="node3" href="$fabui_8cpp_source.html" title=" " alt="" coords="688,229,763,256"/>
+<area shape="rect" id="node4" href="$fabui_8h.html" title="This file contains all classes related to FabGL Graphical User Interface." alt="" coords="627,80,688,107"/>
+<area shape="rect" id="node27" href="$terminal_8h.html" title="This file contains fabgl::Terminal definition." alt="" coords="841,304,919,331"/>
+<area shape="rect" id="node5" href="$fabgl_8h.html" title="This file is the all in one include file. Application can just include this file to use FabGL library..." alt="" coords="467,453,528,480"/>
+<area shape="rect" id="node22" href="$inputbox_8h.html" title="This file contains the InputBox class." alt="" coords="100,155,183,181"/>
+<area shape="rect" id="node24" href="$keyboard_8h.html" title="This file contains fabgl::Keyboard definition." alt="" coords="425,155,511,181"/>
+<area shape="rect" id="node33" href="$mouse_8h.html" title="This file contains fabgl::Mouse definition." alt="" coords="764,155,836,181"/>
+<area shape="rect" id="node6" href="$_m_c146818_8h_source.html" title=" " alt="" coords="35,528,131,555"/>
+<area shape="rect" id="node8" href="$_p_c8250_8h.html" title="This file contains fabgl::PC8250 definition." alt="" coords="161,528,241,555"/>
+<area shape="rect" id="node10" href="$_p_i_c8259_8h_source.html" title=" " alt="" coords="281,528,365,555"/>
+<area shape="rect" id="node12" href="$_p_i_t8253_8h_source.html" title=" " alt="" coords="400,528,483,555"/>
+<area shape="rect" id="node14" href="$_v_i_a6522_8h.html" title="This file contains fabgl::VIA6522 definition." alt="" coords="513,528,596,555"/>
+<area shape="rect" id="node16" href="$graphicsadapter_8h.html" title="This file contains fabgl::GraphicsAdapter definition." alt="" coords="631,528,755,555"/>
+<area shape="rect" id="node18" href="$i8042_8h_source.html" title=" " alt="" coords="793,528,857,555"/>
+<area shape="rect" id="node20" href="$i8086_8h_source.html" title=" " alt="" coords="895,528,959,555"/>
+<area shape="rect" id="node7" href="$_m_c146818_8cpp_source.html" title=" " alt="" coords="13,603,123,629"/>
+<area shape="rect" id="node9" href="$_p_c8250_8cpp_source.html" title=" " alt="" coords="147,603,242,629"/>
+<area shape="rect" id="node11" href="$_p_i_c8259_8cpp_source.html" title=" " alt="" coords="267,603,365,629"/>
+<area shape="rect" id="node13" href="$_p_i_t8253_8cpp_source.html" title=" " alt="" coords="389,603,485,629"/>
+<area shape="rect" id="node15" href="$_v_i_a6522_8cpp_source.html" title=" " alt="" coords="510,603,607,629"/>
+<area shape="rect" id="node17" href="$graphicsadapter_8cpp_source.html" title=" " alt="" coords="632,603,771,629"/>
+<area shape="rect" id="node19" href="$i8042_8cpp_source.html" title=" " alt="" coords="795,603,874,629"/>
+<area shape="rect" id="node21" href="$i8086_8cpp_source.html" title=" " alt="" coords="898,603,977,629"/>
+<area shape="rect" id="node23" href="$inputbox_8cpp_source.html" title=" " alt="" coords="93,229,189,256"/>
+<area shape="rect" id="node25" href="$keyboard_8cpp_source.html" title=" " alt="" coords="265,229,365,256"/>
+<area shape="rect" id="node26" href="$ps2controller_8cpp_source.html" title=" " alt="" coords="544,229,664,256"/>
+<area shape="rect" id="node31" href="$terminfo_8h.html" title="This file contains terminal emulation definitions." alt="" coords="389,229,469,256"/>
+<area shape="rect" id="node28" href="$serialport_8h.html" title="This file contains fabgl::SerialPort definition." alt="" coords="855,379,942,405"/>
+<area shape="rect" id="node30" href="$terminal_8cpp_source.html" title=" " alt="" coords="967,379,1060,405"/>
+<area shape="rect" id="node29" href="$serialport_8cpp_source.html" title=" " alt="" coords="849,453,949,480"/>
+<area shape="rect" id="node32" href="$terminfo_8cpp_source.html" title=" " alt="" coords="382,304,477,331"/>
+<area shape="rect" id="node34" href="$mouse_8cpp_source.html" title=" " alt="" coords="838,229,925,256"/>
 </map>

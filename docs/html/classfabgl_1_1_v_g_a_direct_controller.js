@@ -11,6 +11,7 @@ var classfabgl_1_1_v_g_a_direct_controller =
     [ "getViewPortHeight", "classfabgl_1_1_v_g_a_direct_controller.html#a5308b6853d3778845649f08832e96535", null ],
     [ "getViewPortWidth", "classfabgl_1_1_v_g_a_direct_controller.html#a69dd55b31e9c284aeec6f2b91a8da525", null ],
     [ "isDoubleBuffered", "classfabgl_1_1_v_g_a_direct_controller.html#a37da1545d5037b279fbb10c622121427", null ],
+    [ "isDoubleBufferedEnabled", "classfabgl_1_1_v_g_a_direct_controller.html#a15d6a17833353e05e7470e4c10824b98", null ],
     [ "nativePixelFormat", "classfabgl_1_1_v_g_a_direct_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91", null ],
     [ "processPrimitives", "classfabgl_1_1_v_g_a_direct_controller.html#a94887c6019244300620e71d52e61a554", null ],
     [ "refreshSprites", "classfabgl_1_1_v_g_a_direct_controller.html#aeb689cfc2364a4d66e3ac3368146c70d", null ],

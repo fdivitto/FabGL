@@ -14,7 +14,7 @@ var searchData=
   ['fillrectangle_11',['fillRectangle',['../classfabgl_1_1_canvas_a02a657b4391aa25216ff993a0569a3c5.html#a02a657b4391aa25216ff993a0569a3c5',1,'fabgl::Canvas::fillRectangle(int X1, int Y1, int X2, int Y2)'],['../classfabgl_1_1_canvas_a4ca98d4ae9195ec469544fd39a67fae5.html#a4ca98d4ae9195ec469544fd39a67fae5',1,'fabgl::Canvas::fillRectangle(Rect const &amp;rect)']]],
   ['firstchild_12',['firstChild',['../classfabgl_1_1ui_window_a25a0b091ca95850c4aa4616c8182a7d3.html#a25a0b091ca95850c4aa4616c8182a7d3',1,'fabgl::uiWindow']]],
   ['firstselecteditem_13',['firstSelectedItem',['../classfabgl_1_1ui_custom_list_box_a10902034f8386257b94064db39bf22ba.html#a10902034f8386257b94064db39bf22ba',1,'fabgl::uiCustomListBox']]],
-  ['flowcontrol_14',['flowControl',['../classfabgl_1_1_terminal_adf2404af2ad4bb11154ecb712b7b0c97.html#adf2404af2ad4bb11154ecb712b7b0c97',1,'fabgl::Terminal::flowControl(bool enableRX)'],['../classfabgl_1_1_terminal_ad6163e7fda163d4fe9f119c59f19f607.html#ad6163e7fda163d4fe9f119c59f19f607',1,'fabgl::Terminal::flowControl()']]],
+  ['flowcontrol_14',['flowControl',['../classfabgl_1_1_serial_port_adf2404af2ad4bb11154ecb712b7b0c97.html#adf2404af2ad4bb11154ecb712b7b0c97',1,'fabgl::SerialPort']]],
   ['flush_15',['flush',['../classfabgl_1_1_terminal_af04a513134593e61c4575b266c8bf0ee.html#af04a513134593e61c4575b266c8bf0ee',1,'fabgl::Terminal::flush(bool waitVSync)'],['../classfabgl_1_1_terminal_adac116554b543b7c4228c018a85882f5.html#adac116554b543b7c4228c018a85882f5',1,'fabgl::Terminal::flush()']]],
   ['focusedwindow_16',['focusedWindow',['../classfabgl_1_1ui_app_ae180b5c5d41a7ed2ac91254b5d9ccb93.html#ae180b5c5d41a7ed2ac91254b5d9ccb93',1,'fabgl::uiApp']]],
   ['focusindex_17',['focusIndex',['../classfabgl_1_1ui_window_ab994df5c260330a1a283e04d8b1d4455.html#ab994df5c260330a1a283e04d8b1d4455',1,'fabgl::uiWindow']]],
@@ -22,5 +22,6 @@ var searchData=
   ['format_19',['format',['../classfabgl_1_1_file_browser_a6b2124790d3f9f59c771c45192768f90.html#a6b2124790d3f9f59c771c45192768f90',1,'fabgl::FileBrowser']]],
   ['frameprops_20',['frameProps',['../classfabgl_1_1ui_frame_a759dfc4503e8f3f3256ba32482e0f40d.html#a759dfc4503e8f3f3256ba32482e0f40d',1,'fabgl::uiFrame']]],
   ['framestate_21',['frameState',['../classfabgl_1_1ui_frame_ab87d77bdbdf9323af5e7a050de60b2be.html#ab87d77bdbdf9323af5e7a050de60b2be',1,'fabgl::uiFrame']]],
-  ['framestyle_22',['frameStyle',['../classfabgl_1_1ui_frame_aa9ffa546e881a6a7a3dbc990eadedbe4.html#aa9ffa546e881a6a7a3dbc990eadedbe4',1,'fabgl::uiFrame']]]
+  ['framestyle_22',['frameStyle',['../classfabgl_1_1ui_frame_aa9ffa546e881a6a7a3dbc990eadedbe4.html#aa9ffa546e881a6a7a3dbc990eadedbe4',1,'fabgl::uiFrame']]],
+  ['framingerror_23',['framingError',['../classfabgl_1_1_serial_port_af68a9e5366f3df37bc0e13f01f3cca22.html#af68a9e5366f3df37bc0e13f01f3cca22',1,'fabgl::SerialPort']]]
 ];

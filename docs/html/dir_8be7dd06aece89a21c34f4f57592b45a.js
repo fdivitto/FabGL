@@ -16,6 +16,8 @@ var dir_8be7dd06aece89a21c34f4f57592b45a =
     [ "MOS6502.h", "_m_o_s6502_8h.html", [
       [ "MOS6502", "classfabgl_1_1_m_o_s6502.html", null ]
     ] ],
+    [ "PC8250.cpp", "_p_c8250_8cpp_source.html", null ],
+    [ "PC8250.h", "_p_c8250_8h.html", null ],
     [ "PIC8259.cpp", "_p_i_c8259_8cpp_source.html", null ],
     [ "PIC8259.h", "_p_i_c8259_8h_source.html", null ],
     [ "PIT8253.cpp", "_p_i_t8253_8cpp_source.html", null ],

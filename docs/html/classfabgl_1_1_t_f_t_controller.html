@@ -104,6 +104,7 @@ Inheritance diagram for TFTController:</div>
 <area shape="rect" title="Base abstract class for TFT drivers with SPI connection." alt="" coords="88,5,191,32"/>
 <area shape="rect" href="classfabgl_1_1_i_l_i9341_controller.html" title="Implements ILI9341 display driver controller." alt="" coords="5,80,127,107"/>
 <area shape="rect" href="classfabgl_1_1_s_t7789_controller.html" title="Implements ST7789 display driver controller." alt="" coords="151,80,274,107"/>
+<area shape="rect" href="classfabgl_1_1_t_t_g_o_t_display_v11_controller.html" title="Implements TTGO T&#45;Display V1.1 display driver controller." alt="" coords="118,155,307,181"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -112,15 +113,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2">begin</a> ()</td></tr>
 <tr class="memdesc:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller.  <a href="classfabgl_1_1_t_f_t_controller_ab0bdf5cca484fb2ba637c39384b27fb2.html#ab0bdf5cca484fb2ba637c39384b27fb2">More...</a><br /></td></tr>
 <tr class="separator:ab0bdf5cca484fb2ba637c39384b27fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab251e10b12bf2f0ff100b48676669c71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_ab251e10b12bf2f0ff100b48676669c71.html#ab251e10b12bf2f0ff100b48676669c71">begin</a> (int SCK, int MOSI, int DC, int RESX, int CS, int host)</td></tr>
-<tr class="memdesc:ab251e10b12bf2f0ff100b48676669c71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller.  <a href="classfabgl_1_1_t_f_t_controller_ab251e10b12bf2f0ff100b48676669c71.html#ab251e10b12bf2f0ff100b48676669c71">More...</a><br /></td></tr>
-<tr class="separator:ab251e10b12bf2f0ff100b48676669c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b13226481c274805483522dd587387e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a1b13226481c274805483522dd587387e.html#a1b13226481c274805483522dd587387e">begin</a> (SPIClass *spi, gpio_num_t DC, gpio_num_t RESX=GPIO_UNUSED, gpio_num_t CS=GPIO_UNUSED)</td></tr>
-<tr class="memdesc:a1b13226481c274805483522dd587387e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="classfabgl_1_1_t_f_t_controller_a1b13226481c274805483522dd587387e.html#a1b13226481c274805483522dd587387e">More...</a><br /></td></tr>
-<tr class="separator:a1b13226481c274805483522dd587387e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20fc26f4bd4369c4f129b0bb2cd2c3dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a20fc26f4bd4369c4f129b0bb2cd2c3dc.html#a20fc26f4bd4369c4f129b0bb2cd2c3dc">begin</a> (SPIClass *spi, int DC, int RESX=-1, int CS=-1)</td></tr>
-<tr class="memdesc:a20fc26f4bd4369c4f129b0bb2cd2c3dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="classfabgl_1_1_t_f_t_controller_a20fc26f4bd4369c4f129b0bb2cd2c3dc.html#a20fc26f4bd4369c4f129b0bb2cd2c3dc">More...</a><br /></td></tr>
-<tr class="separator:a20fc26f4bd4369c4f129b0bb2cd2c3dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33392310f310cf77b01b532bce77dd5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a33392310f310cf77b01b532bce77dd5e.html#a33392310f310cf77b01b532bce77dd5e">begin</a> (int SCK, int MOSI, int DC, int RESX, int CS, int host, int BL=-1, int freq=40000000)</td></tr>
+<tr class="memdesc:a33392310f310cf77b01b532bce77dd5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller.  <a href="classfabgl_1_1_t_f_t_controller_a33392310f310cf77b01b532bce77dd5e.html#a33392310f310cf77b01b532bce77dd5e">More...</a><br /></td></tr>
+<tr class="separator:a33392310f310cf77b01b532bce77dd5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a968486470b4a1e512d6a24e9cee4ff85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a968486470b4a1e512d6a24e9cee4ff85.html#a968486470b4a1e512d6a24e9cee4ff85">begin</a> (SPIClass *spi, gpio_num_t DC, gpio_num_t RESX=GPIO_UNUSED, gpio_num_t CS=GPIO_UNUSED, gpio_num_t BL=GPIO_UNUSED, int freq=40000000)</td></tr>
+<tr class="memdesc:a968486470b4a1e512d6a24e9cee4ff85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="classfabgl_1_1_t_f_t_controller_a968486470b4a1e512d6a24e9cee4ff85.html#a968486470b4a1e512d6a24e9cee4ff85">More...</a><br /></td></tr>
+<tr class="separator:a968486470b4a1e512d6a24e9cee4ff85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba0fad14c4c6f0c5dbd40f21be8d4a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a5ba0fad14c4c6f0c5dbd40f21be8d4a2.html#a5ba0fad14c4c6f0c5dbd40f21be8d4a2">begin</a> (SPIClass *spi, int DC, int RESX=-1, int CS=-1, int BL=-1, int freq=40000000)</td></tr>
+<tr class="memdesc:a5ba0fad14c4c6f0c5dbd40f21be8d4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes TFT display controller with Arduino style SPIClass object.  <a href="classfabgl_1_1_t_f_t_controller_a5ba0fad14c4c6f0c5dbd40f21be8d4a2.html#a5ba0fad14c4c6f0c5dbd40f21be8d4a2">More...</a><br /></td></tr>
+<tr class="separator:a5ba0fad14c4c6f0c5dbd40f21be8d4a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a811a555ee536c2845522b045cb63f713"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a811a555ee536c2845522b045cb63f713.html#a811a555ee536c2845522b045cb63f713">colorsCount</a> ()</td></tr>
 <tr class="memdesc:a811a555ee536c2845522b045cb63f713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines number of colors this display can provide.  <a href="classfabgl_1_1_t_f_t_controller_a811a555ee536c2845522b045cb63f713.html#a811a555ee536c2845522b045cb63f713">More...</a><br /></td></tr>
 <tr class="separator:a811a555ee536c2845522b045cb63f713"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37da1545d5037b279fbb10c622121427"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller_a37da1545d5037b279fbb10c622121427.html#a37da1545d5037b279fbb10c622121427">isDoubleBuffered</a> ()</td></tr>
 <tr class="memdesc:a37da1545d5037b279fbb10c622121427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers.">BitmappedDisplayController</a> is on double buffered mode.  <a href="classfabgl_1_1_bitmapped_display_controller_a37da1545d5037b279fbb10c622121427.html#a37da1545d5037b279fbb10c622121427">More...</a><br /></td></tr>
 <tr class="separator:a37da1545d5037b279fbb10c622121427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15d6a17833353e05e7470e4c10824b98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_bitmapped_display_controller_a15d6a17833353e05e7470e4c10824b98.html#a15d6a17833353e05e7470e4c10824b98">isDoubleBufferedEnabled</a> ()</td></tr>
+<tr class="memdesc:a15d6a17833353e05e7470e4c10824b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether <a class="el" href="classfabgl_1_1_bitmapped_display_controller.html" title="Represents the base abstract class for bitmapped display controllers.">BitmappedDisplayController</a> is on double buffered mode and it is actually enabled.  <a href="classfabgl_1_1_bitmapped_display_controller_a15d6a17833353e05e7470e4c10824b98.html#a15d6a17833353e05e7470e4c10824b98">More...</a><br /></td></tr>
+<tr class="separator:a15d6a17833353e05e7470e4c10824b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b34c94e321e3cdd1f027e93a11bec91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___enumerations_ga03403b592cc00776d70bc5ad6c177276.html#ga03403b592cc00776d70bc5ad6c177276">NativePixelFormat</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91">nativePixelFormat</a> ()</td></tr>
 <tr class="memdesc:a4b34c94e321e3cdd1f027e93a11bec91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents the native pixel format used by this display.  <a href="classfabgl_1_1_t_f_t_controller_a4b34c94e321e3cdd1f027e93a11bec91.html#a4b34c94e321e3cdd1f027e93a11bec91">More...</a><br /></td></tr>
 <tr class="separator:a4b34c94e321e3cdd1f027e93a11bec91"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +207,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1837955f56453a1a351577c189bdfad6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_a1837955f56453a1a351577c189bdfad6.html#a1837955f56453a1a351577c189bdfad6">suspendBackgroundPrimitiveExecution</a> ()</td></tr>
 <tr class="memdesc:a1837955f56453a1a351577c189bdfad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends drawings.  <a href="classfabgl_1_1_t_f_t_controller_a1837955f56453a1a351577c189bdfad6.html#a1837955f56453a1a351577c189bdfad6">More...</a><br /></td></tr>
 <tr class="separator:a1837955f56453a1a351577c189bdfad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcd394fa7a4ba17d39e8086ae358d751"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfabgl_1_1_t_f_t_controller_abcd394fa7a4ba17d39e8086ae358d751.html#abcd394fa7a4ba17d39e8086ae358d751">suspendDoubleBuffering</a> (bool value)</td></tr>
+<tr class="memdesc:abcd394fa7a4ba17d39e8086ae358d751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suspends or resumes double buffering.  <a href="classfabgl_1_1_t_f_t_controller_abcd394fa7a4ba17d39e8086ae358d751.html#abcd394fa7a4ba17d39e8086ae358d751">More...</a><br /></td></tr>
+<tr class="separator:abcd394fa7a4ba17d39e8086ae358d751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -224,7 +231,7 @@ void setup() {
   cv.drawText(0, 0, "Hello World!");
 }
 </pre> 
-<p class="definition">Definition at line <a class="el" href="_t_f_t_controller_generic_8h_source.html#l00093">93</a> of file <a class="el" href="_t_f_t_controller_generic_8h_source.html">TFTControllerGeneric.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_t_f_t_controller_generic_8h_source.html#l00095">95</a> of file <a class="el" href="_t_f_t_controller_generic_8h_source.html">TFTControllerGeneric.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="_t_f_t_controller_generic_8h_source.html">TFTControllerGeneric.h</a></li>
 <li><a class="el" href="_t_f_t_controller_generic_8cpp_source.html">TFTControllerGeneric.cpp</a></li>
@@ -235,7 +242,7 @@ void setup() {
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>fabgl</b></li><li class="navelem"><a class="el" href="classfabgl_1_1_t_f_t_controller.html">TFTController</a></li>
-    <li class="footer">Generated on Sun May 22 2022 11:19:46 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated on Mon Aug 29 2022 13:52:06 for FabGL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
 </body>
