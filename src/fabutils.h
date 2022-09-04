@@ -35,6 +35,7 @@
  *
  */
 
+#include <cstring>
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
