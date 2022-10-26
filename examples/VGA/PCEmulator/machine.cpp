@@ -100,8 +100,8 @@ Machine::Machine() :
     m_stepCallback(nullptr),
     #endif
     m_diskFilename(),
-    m_disk(),
     m_diskChanged(),
+    m_disk(),
     m_frameBuffer(nullptr),
     m_bootDrive(0),
     m_sysReqCallback(nullptr),
