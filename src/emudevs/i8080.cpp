@@ -294,6 +294,19 @@ void i8080::retrieve_flags()
 }
 
 
+int i8080::interruptRST(int nRST)
+{
+  if(IFF)
+  {
+    IFF = 0;
+    PUSH(PC);
+    PC = (nRST << 3) & 0x0038;
+    return 11;    // return cpu_cycles
+  }
+  else return 0;
+}
+
+
 int i8080::step()
 {
   int opcode = RD_BYTE(PC++);

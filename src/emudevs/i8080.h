@@ -127,6 +127,8 @@ public:
   int regs_e()   { return cpu.de.b.l;  }
   int regs_h()   { return cpu.hl.b.h;  }
   int regs_l()   { return cpu.hl.b.l;  }
+  
+  int interruptRST(int nRST);
 
 
 private:
