@@ -207,6 +207,12 @@ public:
    */
   bool initDevice(uint8_t hwAddr);
 
+  /**
+   * @brief FabGL board detection
+   *
+   * @return True if the board is FabGL dev-board.
+   */
+bool isChipPackageFabGlDevelopmentBoard();
 
   //// registers read/write ////
 

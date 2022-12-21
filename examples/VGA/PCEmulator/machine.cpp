@@ -100,8 +100,8 @@ Machine::Machine() :
     m_stepCallback(nullptr),
     #endif
     m_diskFilename(),
-    m_disk(),
     m_diskChanged(),
+    m_disk(),
     m_frameBuffer(nullptr),
     m_bootDrive(0),
     m_sysReqCallback(nullptr),
@@ -192,6 +192,12 @@ void Machine::setDriveImage(int drive, char const * filename, int cylinders, int
         autoDetectDriveGeometry(drive);
     }
   }
+}
+
+
+bool Machine::isFabGlDevelopmentBoard()
+{
+  return m_MCP23S17.isChipPackageFabGlDevelopmentBoard();
 }
 
 

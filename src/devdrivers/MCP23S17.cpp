@@ -49,6 +49,10 @@ MCP23S17::~MCP23S17()
   end();
 }
 
+bool MCP23S17::isChipPackageFabGlDevelopmentBoard()
+{
+  return (getChipPackage() == ChipPackage::ESP32D0WDQ5);
+}
 
 bool MCP23S17::begin(int MISO, int MOSI, int CLK, int CS, int CSActiveState, int host)
 {
