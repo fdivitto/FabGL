@@ -76,6 +76,8 @@ public:
   void setBaseDirectory(char const * value)    { m_baseDir = value; }
 
   void setDriveImage(int drive, char const * filename, int cylinders = 0, int heads = 0, int sectors = 0);
+
+  bool isFabGlDevelopmentBoard();
   
   bool diskChanged(int drive)                  { return m_diskChanged[drive]; }
   void resetDiskChanged(int drive)             { m_diskChanged[drive] = false; }

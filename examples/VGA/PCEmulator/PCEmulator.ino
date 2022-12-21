@@ -54,20 +54,29 @@ extern "C" {
 #include "mconf.h"
 #include "machine.h"
 
+/*************** Esp32 HW UART settings START ***************/
+// Uncomment it to have UART2 as PC COM2 port 
+// #define ENABLE_UART2_AS_COM2
 
+// UART ports speed
+#define UART_SPEED 115200
 
-// UART Pins for USB serial
-#define UART_URX 3
-#define UART_UTX 1
+// Pins for UART1 (USB serial)
+#define UART1_RX  3
+#define UART1_TX  1
 
-
+#ifdef ENABLE_UART2_AS_COM2
+  // Pins for UART2 (for FabGL development board only)
+  #define UART2_RX  0
+  #define UART2_TX  2
+#endif
+/*************** Esp32 HW UART settings END ***************/
 
 using std::unique_ptr;
 
 using fabgl::StringList;
 using fabgl::imin;
 using fabgl::imax;
-
 
 
 Preferences   preferences;
@@ -374,10 +383,15 @@ void setup()
 
   ibox.onPaint = [&](Canvas * canvas) { drawInfo(canvas); };
 
-  // we need PSRAM for this app, but we will handle it manually, so please DO NOT enable PSRAM on your development env
-  #ifdef BOARD_HAS_PSRAM
-  ibox.message("Warning!", "Please disable PSRAM to improve performance!");
-  #endif
+  // we need PSRAM for this app, but we will handle it manually, so please DO 
+  //   NOT enable PSRAM on your development env
+#ifndef ENABLE_UART2_AS_COM2
+    // On FabGL dev-board and TTGO VGA32v.1.4 board disabling PSRAM causes the
+    //   PC emulator to work slower.  
+    #ifdef BOARD_HAS_PSRAM
+    ibox.message("Warning!", "Please disable PSRAM to improve performance!");
+    #endif
+#endif
 
   // note: we use just 2MB of PSRAM so the infamous PSRAM bug should not happen. But to avoid gcc compiler hack (-mfix-esp32-psram-cache-issue)
   // we enable PSRAM at runtime, otherwise the hack slows down CPU too much (PSRAM_HACK is no more required).
@@ -496,8 +510,21 @@ void setup()
   machine->setBootDrive(conf->bootDrive);
   
   auto serial1 = new SerialPort;
-  serial1->setSignals(UART_URX, UART_UTX);
+  serial1->setSignals(UART1_RX, UART1_TX);
+#ifdef ENABLE_UART2_AS_COM2
+  serial1->setup(1, UART_SPEED, 8, 'N', 1, FlowControl::None);
+#endif
   machine->setCOM1(serial1);
+
+#ifdef ENABLE_UART2_AS_COM2
+  if (machine->isFabGlDevelopmentBoard())
+  {
+    auto serial2 = new SerialPort;
+    serial2->setSignals(UART2_RX, UART2_TX);
+    serial2->setup(2, UART_SPEED, 8, 'N', 1, FlowControl::None);
+    machine->setCOM2(serial2);
+  }
+#endif
 
   /*
   printf("MALLOC_CAP_32BIT : %d bytes (largest %d bytes)\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT), heap_caps_get_largest_free_block(MALLOC_CAP_32BIT));
