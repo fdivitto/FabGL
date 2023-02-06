@@ -392,9 +392,17 @@ void Canvas::selectFont(FontInfo const * fontInfo)
 }
 
 
-void Canvas::drawChar(int X, int Y, char c)
+void Canvas::drawChar(int X, int Y, char c, bool checkwidth)
 {
-  drawGlyph(X, Y, m_fontInfo->width, m_fontInfo->height, m_fontInfo->data, c);
+  if (checkWidth && fontInfo->chptr) {
+    // variable width.
+    uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)c];
+    fontWidth = *chptr++;
+    drawGlyph(X, Y, fontWidth, fontInfo->height, chptr, 0);
+  } else {
+    // fixed width.
+    drawGlyph(X, Y, m_fontInfo->width, m_fontInfo->height, m_fontInfo->data, c);
+  }
 }
 
 
@@ -414,15 +422,7 @@ void Canvas::drawText(FontInfo const * fontInfo, int X, int Y, char const * text
       X = 0;
       Y += fontInfo->height;
     }
-    if (fontInfo->chptr) {
-      // variable width
-      uint8_t const * chptr = fontInfo->data + fontInfo->chptr[(int)(*text)];
-      fontWidth = *chptr++;
-      drawGlyph(X, Y, fontWidth, fontInfo->height, chptr, 0);
-    } else {
-      // fixed width
-      drawGlyph(X, Y, fontInfo->width, fontInfo->height, fontInfo->data, *text);
-    }
+    drawChar(X, Y, *text, /*checkWidth=*/ true);
   }
 }
 

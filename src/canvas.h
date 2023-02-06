@@ -22,7 +22,7 @@
   You should have received a copy of the GNU General Public License
   along with FabGL.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 
 #pragma once
 
@@ -298,7 +298,7 @@ public:
    * @param value Pen width (minimum is 1).
    *
    * Example:
-   * 
+   *
    *     Canvas.setPenWidth(4);
    *     Canvas.drawLine(10, 10, 100, 10);
    */
@@ -611,7 +611,7 @@ public:
    *     // Draw a 'C' at position 100, 100
    *     Canvas.drawChar(100, 100, 'C');
    */
-  void drawChar(int X, int Y, char c);
+  void drawChar(int X, int Y, char c, bool checkwidth = false);
 
   /**
    * @brief Draws a string at specified position.
