@@ -49,6 +49,8 @@
 
 #ifdef ARDUINO
 #include "Arduino.h"
+#else
+#include <cstring>
 #endif
 
 
