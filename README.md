@@ -1,4 +1,11 @@
-# FabGL
+# vdp-gl
+
+This is a fork of FabGL 1.0.8, the version used by agon-vdp. The goal is to customize FabGL for agon-vdp's needs.
+
+=========
+
+
+FabGL
 ### **ESP32** Display Controller (VGA, Color NTSC/PAL Composite, I2C and SPI displays), PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game/Emulation Engine and ANSI/VT Terminal
 
 **[Please look here for full API documentation](http://www.fabglib.org)**
