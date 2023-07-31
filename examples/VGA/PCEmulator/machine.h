@@ -36,7 +36,7 @@
 #include "emudevs/MC146818.h"
 #include "emudevs/PC8250.h"
 #include "devdrivers/MCP23S17.h"
-#include "CH32V003.h"
+#include "devdrivers/CH32V003.h"
 
 #include "bios.h"
 
