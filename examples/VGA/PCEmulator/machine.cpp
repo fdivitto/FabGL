@@ -82,7 +82,25 @@
 #define EXTIO_CONFIG_AVAILABLE            0x01   // 1 = external IO available, 0 = not available
 #define EXTIO_CONFIG_INT_POLARITY         0x02   // 1 = positive polarity, 0 = negative polarity (default)
 
+// I/O expander (based on CH32V003) ports
 
+#define CH32_STATUS                     0x00f0   // 1 - CH32V003 available; 0 - CH32V003 NOT available;
+
+#define CH32_GPIO_SELECT                0x00f1   // GPIO select - (0 - UEXT pin 3; 1 - UEXT pin 4; ... 7 - UEXT pin 10)
+#define CH32_GPIO_CONFIG                0x00f2   // bit 0 - direction (0 - output; 1 - input); bit 1 - (0 - pulldown; 1 - pullup)
+#define CH32_GPIO_LEVEL                 0x00f3   // R/W selecter GPIO level get/set
+
+#define CH32_I2C_CLOCK_L                0x00f4   // I2C clock in KHz - LSB  (up to 400 KHz)
+#define CH32_I2C_CLOCK_H                0x00f5   // I2C clock in KHz - MSB  (up to 400 KHz)
+#define CH32_I2C_ADDRESS                0x00f6   // I2C slave address from 0 to 127
+#define CH32_I2C_REGISTER               0x00f7   // I2C slave register
+#define CH32_I2C_DATA                   0x00f8   // I2C slave register value
+
+#define CH32_SPI_MODE                   0x00f9   // SPI mode 0 - 3
+#define CH32_SPI_CLOCK                  0x00fa   // SPI clock up to 50 KHz
+#define CH32_SPI_DATA                   0x00fb   // SPI 8-bit transfer data
+#define CH32_SPI_DATA_L                 0x00fc   // SPI 16-bit transfer data LSB
+#define CH32_SPI_DATA_H                 0x00fd   // SPI 16-bit transfer data MSB
 
 //////////////////////////////////////////////////////////////////////////////////////
 // Machine
@@ -148,6 +166,16 @@ void Machine::init()
 
   m_MCP23S17.begin();
   m_MCP23S17Sel = 0;
+
+  m_CH32V003.begin();
+  m_CH32V003_GPIO_Sel = 0;
+  m_CH32V003_I2C_Clock = 0;
+  m_CH32V003_I2C_Address = 0;
+  m_CH32V003_I2C_Register = 0;
+  m_CH32V003_SPI_Mode = 0;
+  m_CH32V003_SPI_Clock = 0;
+  m_CH32V003_SPI_Data8 = 0;
+  m_CH32V003_SPI_Data16 = 0;
 
   m_BIOS.init(this);
 
@@ -330,7 +358,7 @@ void Machine::runTask(void * pvParameters)
     #endif
 
     i8086::step();
-		m->tick();
+    m->tick();
 
 	}
 }
@@ -667,6 +695,71 @@ void Machine::writePort(void * context, int address, uint8_t value)
       m->m_MCP23S17.writeGPIO(m->m_MCP23S17Sel, value);
       break;
 
+    // I/O expander CH32V003 GPIO
+    case CH32_GPIO_SELECT:
+      m->m_CH32V003_GPIO_Sel = value & 0x7;
+      break;
+
+    case CH32_GPIO_CONFIG:
+      m->m_CH32V003.configureUEXT(m->m_CH32V003_GPIO_Sel, value & 1, (value & 2) != 0);
+      break;
+
+    case CH32_GPIO_LEVEL:
+      m->m_CH32V003.writeUEXT(m->m_CH32V003_GPIO_Sel, value);
+      break;
+
+    // I/O expander CH32V003 I2C
+    case CH32_I2C_CLOCK_L:
+      m->m_CH32V003_I2C_Clock &= (uint16_t)0xFF00;
+      m->m_CH32V003_I2C_Clock |= (uint16_t)value;
+      m->m_CH32V003.configureI2C(m->m_CH32V003_I2C_Clock * 1000);
+      break;
+
+    case CH32_I2C_CLOCK_H:
+      m->m_CH32V003_I2C_Clock &= (uint16_t)0x00FF;
+      m->m_CH32V003_I2C_Clock |= (uint16_t)(value << 8);
+      m->m_CH32V003.configureI2C(m->m_CH32V003_I2C_Clock * 1000);
+      break;
+
+    case CH32_I2C_ADDRESS:
+      m->m_CH32V003_I2C_Address = value;
+      break;
+
+    case CH32_I2C_REGISTER:
+      m->m_CH32V003_I2C_Register = value;
+      break;
+
+    case CH32_I2C_DATA:
+      m->m_CH32V003.writeRegI2C(m->m_CH32V003_I2C_Address, m->m_CH32V003_I2C_Register, value);
+      break;
+
+    // I/O expander CH32V003 SPI
+    case CH32_SPI_MODE:
+      m->m_CH32V003_SPI_Mode = value;
+      m->m_CH32V003.configureSPI(m->m_CH32V003_SPI_Mode, m->m_CH32V003_SPI_Clock * 1000);
+      break;
+
+    case CH32_SPI_CLOCK:
+      m->m_CH32V003_SPI_Clock = value;
+      m->m_CH32V003.configureSPI(m->m_CH32V003_SPI_Mode, m->m_CH32V003_SPI_Clock * 1000);
+      break;
+
+
+    case CH32_SPI_DATA:
+      m->m_CH32V003.transferSPI8(&value, &m->m_CH32V003_SPI_Data8, 1);
+      break;
+
+    case CH32_SPI_DATA_L:
+      m->m_CH32V003_SPI_Data16 &= (uint16_t)0xFF00;
+      m->m_CH32V003_SPI_Data16 |= (uint16_t)value;
+      break;
+
+    case CH32_SPI_DATA_H:
+      m->m_CH32V003_SPI_Data16 &= (uint16_t)0x00FF;
+      m->m_CH32V003_SPI_Data16 |= (uint16_t)(value << 8);
+    m->m_CH32V003.transferSPI16(&m->m_CH32V003_SPI_Data16, &m->m_CH32V003_SPI_Data16, 1);
+      break;
+
     default:
       //printf("OUT %04x=%02x\n", address, value);
       break;
@@ -792,6 +885,49 @@ uint8_t Machine::readPort(void * context, int address)
     // I/O expander - GPIO read
     case EXTIO_GPIO:
       return m->m_MCP23S17.readGPIO(m->m_MCP23S17Sel);
+
+    // I/O expander CH32V003
+    case CH32_STATUS:
+      return m->m_CH32V003.available();
+
+    // I/O expander CH32V003 GPIO
+    case CH32_GPIO_SELECT:
+      return m->m_CH32V003_GPIO_Sel;
+
+    case CH32_GPIO_LEVEL:
+      return m->m_CH32V003.readUEXT(m->m_CH32V003_GPIO_Sel);
+
+    // I/O expander CH32V003 I2C
+    case CH32_I2C_CLOCK_L:
+      return (uint8_t)(m->m_CH32V003_I2C_Clock & 0x00FF);
+
+    case CH32_I2C_CLOCK_H:
+      return (uint8_t)((m->m_CH32V003_I2C_Clock >> 8) & 0x00FF);
+
+    case CH32_I2C_ADDRESS:
+      return m->m_CH32V003_I2C_Address;
+
+    case CH32_I2C_REGISTER:
+      return m->m_CH32V003_I2C_Register;
+
+    case CH32_I2C_DATA:
+      return m->m_CH32V003.readRegI2C(m->m_CH32V003_I2C_Address, m->m_CH32V003_I2C_Register);
+
+    // I/O expander CH32V003 SPI
+    case CH32_SPI_MODE:
+      return m->m_CH32V003_SPI_Mode;
+
+    case CH32_SPI_CLOCK:
+      return m->m_CH32V003_SPI_Clock;
+
+    case CH32_SPI_DATA:
+      return m->m_CH32V003_SPI_Data8;
+
+    case CH32_SPI_DATA_L:
+      return (uint8_t)(m->m_CH32V003_SPI_Data16 & 0x00FF);
+
+    case CH32_SPI_DATA_H:
+      return (uint8_t)((m->m_CH32V003_SPI_Data16 >> 8) & 0x00FF);
 
   }
 

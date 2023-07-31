@@ -225,9 +225,8 @@ void WiiNunchuk::WiiNunchukUpdate(void * arg) {
 			// Read  following WiiNunchukPacket
 			nunchuk->readPacket(0x00, &packet);
 			xQueueOverwrite(nunchuk->packetQueue, &packet);
-		} else {
-			vTaskDelay(pdMS_TO_TICKS(1));
 		}
+		vTaskDelay(pdMS_TO_TICKS(1));
 	}
 }
 
