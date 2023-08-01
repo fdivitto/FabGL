@@ -102,6 +102,9 @@
 #define CH32_SPI_DATA_L                 0x00fc   // SPI 16-bit transfer data LSB
 #define CH32_SPI_DATA_H                 0x00fd   // SPI 16-bit transfer data MSB
 
+#define CH32_VERSION_L                  0x00fe   // CH32V003 firmware version - minor
+#define CH32_VERSION_H                  0x00ff   // CH32V003 firmware version - major
+
 //////////////////////////////////////////////////////////////////////////////////////
 // Machine
 
@@ -889,6 +892,12 @@ uint8_t Machine::readPort(void * context, int address)
     // I/O expander CH32V003
     case CH32_STATUS:
       return m->m_CH32V003.available();
+
+    case CH32_VERSION_L:
+      return (uint8_t)(m->m_CH32V003.version() & 0xFF);
+
+    case CH32_VERSION_H:
+      return (uint8_t)(m->m_CH32V003.version() >> 8);
 
     // I/O expander CH32V003 GPIO
     case CH32_GPIO_SELECT:

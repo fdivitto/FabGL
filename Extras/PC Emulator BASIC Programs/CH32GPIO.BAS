@@ -4,6 +4,8 @@ REM QBASIC program to control CH32V003 I/O expander inside PC Emulator
 DECLARE FUNCTION HexByte$ (I)
 DECLARE FUNCTION INT$ (I, L)
 DECLARE FUNCTION ch32Available ()
+DECLARE FUNCTION ch32VersionMinor ()
+DECLARE FUNCTION ch32VersionMajor ()
 DECLARE SUB gpioSelect (gpio)
 DECLARE SUB gpioConfig (cfg)
 DECLARE SUB gpioSet (level)
@@ -16,6 +18,8 @@ IF ch32Available = 0 THEN
   PRINT "CH32V003 expander not available on this board!"
   END
 END IF
+
+PRINT "CH32V003 expander firmware version "; INT$(ch32VersionMajor, 0); "."; INT$(ch32VersionMinor, 0); " found"
 
 PRINT "Configure GPIO 6 as input pull-down"
 gpioSelect (6)
@@ -52,6 +56,14 @@ END FUNCTION
 
 FUNCTION ch32Available
   ch32Available = (INP(&HF0) AND 1)
+END FUNCTION
+
+FUNCTION ch32VersionMinor
+  ch32VersionMinor = INP(&HFE)
+END FUNCTION
+
+FUNCTION ch32VersionMajor
+  ch32VersionMajor = INP(&HFF)
 END FUNCTION
 
 SUB gpioSelect (gpio)

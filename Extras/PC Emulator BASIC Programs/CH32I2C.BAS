@@ -1,9 +1,11 @@
 
 REM QBASIC program to control CH32V003 I/O expander inside PC Emulator
 
-DECLARE FUNCTION ch32Available ()
 DECLARE FUNCTION HexByte$ (i)
 DECLARE FUNCTION INT$ (i, l)
+DECLARE FUNCTION ch32Available ()
+DECLARE FUNCTION ch32VersionMinor ()
+DECLARE FUNCTION ch32VersionMajor ()
 DECLARE SUB i2cInit (clock)
 DECLARE SUB i2cSlave (slave)
 DECLARE FUNCTION i2cReadReg (reg)
@@ -16,6 +18,8 @@ IF ch32Available = 0 THEN
   PRINT "CH32V003 expander not available on this board!"
   END
 END IF
+
+PRINT "CH32V003 expander firmware version "; INT$(ch32VersionMajor, 0); "."; INT$(ch32VersionMinor, 0); " found"
 
 PRINT "Configure I2C clock to 300 KHz"
 i2cInit (300)
@@ -37,7 +41,7 @@ WEND
 
 REM CLS
 
-LOCATE 2, 1
+LOCATE 3, 1
 PRINT "Configure I2C slave RTC      "
 CALL i2cSlave(&H68)
 
@@ -63,6 +67,14 @@ END FUNCTION
 
 FUNCTION ch32Available
   ch32Available = (INP(&HF0) AND 1)
+END FUNCTION
+
+FUNCTION ch32VersionMinor
+  ch32VersionMinor = INP(&HFE)
+END FUNCTION
+
+FUNCTION ch32VersionMajor
+  ch32VersionMajor = INP(&HFF)
 END FUNCTION
 
 SUB i2cInit (clock)
