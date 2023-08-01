@@ -220,7 +220,7 @@ void MCP23S17::writeReg16(uint8_t addr, uint16_t value, uint8_t hwAddr)
 
 uint16_t MCP23S17::readReg16(uint8_t addr, uint8_t hwAddr)
 {
-  if (!available()) return 0;
+  if (m_SPIDevHandle == nullptr) return;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[4] = { (uint8_t)(0b01000001 | (hwAddr << 1)), addr };
