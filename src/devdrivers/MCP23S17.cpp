@@ -179,7 +179,7 @@ void MCP23S17::writeReg(uint8_t addr, uint8_t value, uint8_t hwAddr)
 
 uint8_t MCP23S17::readReg(uint8_t addr, uint8_t hwAddr)
 {
-  if (!available()) return 0;
+  if (m_SPIDevHandle == nullptr) return;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[3] = { (uint8_t)(0b01000001 | (hwAddr << 1)), addr };
