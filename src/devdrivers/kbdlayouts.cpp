@@ -1152,5 +1152,67 @@ const KeyboardLayout JapaneseLayout {
 };
 
 
-} // end of namespace
 
+/**************************************************************************************/
+/* Dvorak US LAYOUT                                                                   */
+/**************************************************************************************/
+const KeyboardLayout DvorakLayout {
+  // name
+  "dvorak",
+
+  // desc
+  "Dvorak US",
+
+  // inherited layout
+  &USLayout,
+
+  // single byte scancodes
+  {
+    { 0x15, VK_QUOTE },
+    { 0x1D, VK_COMMA },
+    { 0x24, VK_PERIOD },
+    { 0x2D, VK_p },
+    { 0x2C, VK_y },
+    { 0x35, VK_f },
+    { 0x3C, VK_g },
+    { 0x43, VK_c },
+    { 0x44, VK_r },
+    { 0x4D, VK_l },
+    { 0x1C, VK_a },
+    { 0x1b, VK_o },
+    { 0x23, VK_e },
+    { 0x2b, VK_u },
+    { 0x34, VK_i },
+    { 0x33, VK_d },
+    { 0x3B, VK_h },
+    { 0x42, VK_t },
+    { 0x4B, VK_n },
+    { 0x1A, VK_SEMICOLON },
+    { 0x22, VK_q },
+    { 0x21, VK_j },
+    { 0x2A, VK_k },
+    { 0x32, VK_x },
+    { 0x31, VK_b },
+    { 0x3A, VK_m },
+    //{ 0x4E, VK_MINUS },
+    { 0x4E, VK_LEFTBRACKET },
+    //{ 0x55, VK_EQUALS },
+    { 0x55, VK_RIGHTBRACKET },
+    //{ 0x54, VK_LEFTBRACKET },
+    { 0x54, VK_SLASH },
+    //{ 0x5B, VK_RIGHTBRACKET },
+    { 0x5B, VK_EQUALS },
+    //{ 0x4C, VK_SEMICOLON },
+    { 0x4C, VK_s },
+    //{ 0x52, VK_QUOTE },
+    { 0x52, VK_MINUS },
+    //{ 0x41, VK_COMMA },
+    { 0x41, VK_w },
+    //{ 0x49, VK_PERIOD },
+    { 0x49, VK_v },
+    //{ 0x4A, VK_SLASH },
+    { 0x4A, VK_z },
+  },
+};
+
+} // end of namespace
