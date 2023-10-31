@@ -1,6 +1,6 @@
 /*
   Created by Fabrizio Di Vittorio (fdivitto2013@gmail.com) - <http://www.fabgl.com>
-  Copyright (c) 2019-2022 Fabrizio Di Vittorio.
+  Copyright (c) 2019-2023 Fabrizio Di Vittorio.
   All rights reserved.
 
 
@@ -410,8 +410,15 @@ struct TestApp : public uiApp {
 
   void testWifi() {
     // use API directly to be able to call esp_wifi_deinit() and free necessary memory to mount sd card
+
     esp_event_loop_create_default();
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+
+    // reduce wifi memory footprint    
+    cfg.static_rx_buf_num = 2;
+    cfg.static_tx_buf_num = 1;
+    cfg.ampdu_rx_enable = cfg.ampdu_tx_enable = cfg.amsdu_tx_enable = 0;
+
     esp_wifi_init(&cfg);
     uint16_t number = 8;
     wifi_ap_record_t ap_info[number];
@@ -436,6 +443,7 @@ struct TestApp : public uiApp {
       wifiResultLabel->labelStyle().textColor = Color::Green;
       wifiResultLabel->setTextFmt("Ok, Found %d Networks", ap_count);
     }
+
   }
 
 } app;
@@ -444,6 +452,8 @@ struct TestApp : public uiApp {
 void setup()
 {
   //Serial.begin(115200); delay(500); Serial.write("\n\n\n"); // DEBUG ONLY
+  //Serial.printf("MALLOC_CAP_32BIT: %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_32BIT));
+  //Serial.printf("MALLOC_CAP_8BIT: %d bytes\r\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
 
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
 
