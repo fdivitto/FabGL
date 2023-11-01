@@ -38,6 +38,7 @@
 #include "fabgl.h"
 #include "fabui.h"
 #include "devdrivers/MCP23S17.h"
+#include "devdrivers/CH32V003.h"
 
 #include <WiFi.h>
 #include "esp_wifi.h"
@@ -70,12 +71,15 @@ struct TestApp : public uiApp {
   uiLabel *        extgpioLabel[16];
   uiButton *       extgpioPlay;
   uiLabel *        extIntLabel;
+  uiLabel *        extPwrLabel;
+  uiLabel *        extBatLabel;
 
   int              gpioIn, gpioOut;
   bool             gpioInPrevState;
   int              intOffDelay;
 
   fabgl::MCP23S17  mcp;
+  CH32V003         ch32v003;
 
 
   ~TestApp() {
@@ -225,6 +229,55 @@ struct TestApp : public uiApp {
       y += 50;
     }
 
+    if (initCH32V003()) {
+      extPwrLabel = new uiLabel(frame, "PWR", Point(393, y - 45), Size(60, 22));
+      extPwrLabel->labelStyle().textAlign = uiHAlign::Center;
+      extPwrLabel->labelStyle().backgroundColor = RGB888(64, 0, 0);
+
+      extBatLabel = new uiLabel(frame, "BAT", Point(462, y - 45), Size(80, 22));
+      extBatLabel->labelStyle().textAlign = uiHAlign::Center;
+      extBatLabel->labelStyle().backgroundColor = RGB888(64, 00, 0);
+
+      new uiStaticLabel(frame, "EXT GPIO TEST:", Point(10, y));
+      new uiStaticLabel(frame, "Outputs", Point(110, y - 13));
+      new uiStaticLabel(frame, "Inputs", Point(200, y - 13));
+      constexpr int w = 20;
+      constexpr int h = 22;
+      for (int i = GPIO_0; i <= GPIO_7; ++i) {
+        extgpioLabel[i] = new uiLabel(frame, "", Point(110 + i * (w + 2), y + 3), Size(w, h));
+        extgpioLabel[i]->labelStyle().textAlign = uiHAlign::Center;
+        extgpioLabel[i]->setTextFmt("%c%d", 'V', i);
+        if (i > GPIO_3) {
+          // configure as IN
+          ch32v003.configureUEXT(i, DIRECTION_IN, PULL_DOWN);
+          extgpioLabel[i]->labelStyle().backgroundColor = RGB888(64, 0, 0);
+          // generate a flag/interrupt whenever input changes
+          ch32v003.enableUEXTInterrupt(i, FRONT_CHANGE);
+        } else {
+          // configure as OUT
+          ch32v003.configureUEXT(i, DIRECTION_OUT);
+          extgpioLabel[i]->labelStyle().backgroundColor = RGB888(0, 64, 0);
+          auto pch32v003 = &ch32v003;
+          extgpioLabel[i]->onClick = [=]() {
+            extGPIOSet(i, !pch32v003->readUEXT(i));
+          };
+        }
+      }
+
+      // IO_EXP_IRQ pin
+      extIntLabel = new uiLabel(frame, "INT", Point(462, y + 3), Size(25, h));
+      extIntLabel->labelStyle().textAlign = uiHAlign::Center;
+      extIntLabel->labelStyle().backgroundColor = RGB888(64, 64, 0);
+
+      pinMode(IO_EXP_IRQ, INPUT);
+
+      // play button
+      extgpioPlay = new uiButton(frame, "Play", Point(500, y + 3), Size(42, 22));
+      extgpioPlay->onClick = [&]() { playExtGPIOS(); };
+
+      updatePower();
+      y += 50;
+    }
 
     // wifi
     new uiStaticLabel(frame, "WIFI TEST:", Point(10, y));
@@ -265,6 +318,20 @@ struct TestApp : public uiApp {
     }
   }
 
+  void updatePower() {
+      if (ch32v003.powerSense()) {
+        extPwrLabel->labelStyle().backgroundColor = RGB888(0, 255, 0);
+        extBatLabel->labelStyle().backgroundColor = RGB888( 64, 0, 0);
+        extBatLabel->setText("BAT");
+      } else {
+        extPwrLabel->labelStyle().backgroundColor = RGB888(64, 0, 0);
+        extBatLabel->labelStyle().backgroundColor = RGB888(0, 255, 0);
+        extBatLabel->setTextFmt("%d %%", ch32v003.batteryPercent());
+      }
+      extPwrLabel->repaint();
+      extBatLabel->repaint();
+  }
+
   void updateGPIOInState() {
     // read internal GPIOs
     if (gpioInPrevState != digitalRead(gpioIn)) {
@@ -291,14 +358,46 @@ struct TestApp : public uiApp {
         }
       }
     }
+
+    if (ch32v003.available()) {
+      if (digitalRead(IO_EXP_IRQ) == HIGH) {
+        extIntLabel->labelStyle().backgroundColor = RGB888(255, 255, 0);
+        extIntLabel->repaint();
+        updatePower();
+        intOffDelay = 2;
+      } else if (--intOffDelay == 0) {
+        extIntLabel->labelStyle().backgroundColor = RGB888(64, 64, 0);
+        extIntLabel->repaint();
+      }
+      if (ch32v003.getUEXTIntFlags()) {
+        // read GPIOs
+        for (int i = GPIO_4; i <= GPIO_7; ++i) {
+          extgpioLabel[i]->labelStyle().backgroundColor = ch32v003.readUEXT(i) ? RGB888(255, 0, 0) : RGB888(64, 0, 0);
+          extgpioLabel[i]->repaint();
+        }
+      }
+    }
   }
 
   bool initMCP() {
     return mcp.begin();
   }
 
+  bool initCH32V003() {
+    if (ch32v003.begin()) {
+      ch32v003.initUEXT();
+      return true;
+    }
+    return false;
+  }
+
   void extGPIOSet(int gpio, bool value) {
-    mcp.writeGPIO(gpio, value);
+    if (mcp.available()) {
+      mcp.writeGPIO(gpio, value);
+    }
+    if (ch32v003.available()) {
+      ch32v003.writeUEXT(gpio, value);
+    }
     extgpioLabel[gpio]->labelStyle().backgroundColor = value ? RGB888(0, 255, 0) : RGB888(0, 64, 0);
     extgpioLabel[gpio]->repaint();
   }
@@ -307,44 +406,88 @@ struct TestApp : public uiApp {
     showWindow(extgpioPlay, false);
     // single left<->right
     for (int j = 0; j < 4; ++j) {
-      for (int i = MCP_A0; i <= MCP_B2; ++i) {
-        extGPIOSet(i, true);
-        if (i > MCP_A0)
-          extGPIOSet(i - 1, false);
-        processEvents();
-        delay(80);
+      if (mcp.available()) {
+        for (int i = MCP_A0; i <= MCP_B2; ++i) {
+          extGPIOSet(i, true);
+          if (i > MCP_A0)
+            extGPIOSet(i - 1, false);
+          processEvents();
+          delay(80);
+        }
+        for (int i = MCP_B2; i >= MCP_A0; --i) {
+          extGPIOSet(i, true);
+          if (i < MCP_B2)
+            extGPIOSet(i + 1, false);
+          processEvents();
+          delay(80);
+        }
       }
-      for (int i = MCP_B2; i >= MCP_A0; --i) {
-        extGPIOSet(i, true);
-        if (i < MCP_B2)
-          extGPIOSet(i + 1, false);
-        processEvents();
-        delay(80);
+      if (ch32v003.available()) {
+        for (int i = GPIO_0; i <= GPIO_3; ++i) {
+          extGPIOSet(i, true);
+          if (i > GPIO_0)
+            extGPIOSet(i - 1, false);
+          processEvents();
+          delay(80);
+        }
+        for (int i = GPIO_3; i >= GPIO_0; --i) {
+          extGPIOSet(i, true);
+          if (i < GPIO_3)
+            extGPIOSet(i + 1, false);
+          processEvents();
+          delay(80);
+        }
       }
     }
     // all together
     for (int j = 0; j < 4; ++j) {
-      for (int i = MCP_A0; i <= MCP_B2; ++i) {
-        extGPIOSet(i, true);
-        processEvents();
-        delay(80);
+      if (mcp.available()) {
+        for (int i = MCP_A0; i <= MCP_B2; ++i) {
+          extGPIOSet(i, true);
+          processEvents();
+          delay(80);
+        }
+        for (int i = MCP_A0; i <= MCP_B2; ++i) {
+          extGPIOSet(i, false);
+          processEvents();
+          delay(80);
+        }
       }
-      for (int i = MCP_A0; i <= MCP_B2; ++i) {
-        extGPIOSet(i, false);
-        processEvents();
-        delay(80);
+      if (ch32v003.available()) {
+        for (int i = GPIO_0; i <= GPIO_3; ++i) {
+          extGPIOSet(i, true);
+          processEvents();
+          delay(80);
+        }
+        for (int i = GPIO_0; i <= GPIO_3; ++i) {
+          extGPIOSet(i, false);
+          processEvents();
+          delay(80);
+        }
       }
     }
     // flashing
     for (int j = 0; j < 10; ++j) {
-      for (int i = MCP_A0; i <= MCP_B2; ++i)
-        extGPIOSet(i, true);
-      processEvents();
-      delay(120);
-      for (int i = MCP_A0; i <= MCP_B2; ++i)
-        extGPIOSet(i, false);
-      processEvents();
-      delay(120);
+      if (mcp.available()) {
+        for (int i = MCP_A0; i <= MCP_B2; ++i)
+          extGPIOSet(i, true);
+        processEvents();
+        delay(120);
+        for (int i = MCP_A0; i <= MCP_B2; ++i)
+          extGPIOSet(i, false);
+        processEvents();
+        delay(120);
+      }
+      if (ch32v003.available()) {
+        for (int i = GPIO_0; i <= GPIO_3; ++i)
+          extGPIOSet(i, true);
+        processEvents();
+        delay(120);
+        for (int i = GPIO_0; i <= GPIO_3; ++i)
+          extGPIOSet(i, false);
+        processEvents();
+        delay(120);
+      }
     }
     showWindow(extgpioPlay, true);
   }
@@ -352,7 +495,14 @@ struct TestApp : public uiApp {
   void testSD() {
     // disable MCP (just because SD should be initialized before MCP)
     bool mcpAvailable = mcp.available();
-    mcp.end();
+    if (mcpAvailable)
+      mcp.end();
+
+    // disable CH32V003 (just because SD should be initialized before CH32V003)
+    bool ch32v003Available = ch32v003.available();
+    if (ch32v003Available)
+      ch32v003.end();
+
     // mount test
     FileBrowser fb;
     fb.unmountSDCard();
@@ -362,6 +512,8 @@ struct TestApp : public uiApp {
       sdResultLabel->setText("Mount Failed!");
       if (mcpAvailable)
         initMCP();
+      if (ch32v003Available)
+        initCH32V003();
       return;
     }
     // write test
@@ -398,6 +550,8 @@ struct TestApp : public uiApp {
     fb.unmountSDCard();
     if (mcpAvailable)
       initMCP();
+    if (ch32v003Available)
+      initCH32V003();
     if (!f || !ok) {
       sdResultLabel->labelStyle().textColor = Color::BrightRed;
       sdResultLabel->setText("Read Failed!");

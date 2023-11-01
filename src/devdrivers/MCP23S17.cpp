@@ -161,6 +161,7 @@ void MCP23S17::SPIEnd()
 
 void MCP23S17::writeReg(uint8_t addr, uint8_t value, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[3] = { (uint8_t)(0b01000000 | (hwAddr << 1)), addr, value };
@@ -178,6 +179,7 @@ void MCP23S17::writeReg(uint8_t addr, uint8_t value, uint8_t hwAddr)
 
 uint8_t MCP23S17::readReg(uint8_t addr, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return 0;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[3] = { (uint8_t)(0b01000001 | (hwAddr << 1)), addr };
@@ -200,6 +202,7 @@ uint8_t MCP23S17::readReg(uint8_t addr, uint8_t hwAddr)
 
 void MCP23S17::writeReg16(uint8_t addr, uint16_t value, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[4] = { (uint8_t)(0b01000000 | (hwAddr << 1)), addr, (uint8_t)(value & 0xff), (uint8_t)(value >> 8) };
@@ -217,6 +220,7 @@ void MCP23S17::writeReg16(uint8_t addr, uint16_t value, uint8_t hwAddr)
 
 uint16_t MCP23S17::readReg16(uint8_t addr, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return 0;
   spi_device_acquire_bus(m_SPIDevHandle, portMAX_DELAY);
 
   uint8_t txdata[4] = { (uint8_t)(0b01000001 | (hwAddr << 1)), addr };
@@ -311,6 +315,7 @@ void MCP23S17::disableInterrupt(int gpio, uint8_t hwAddr)
 
 void MCP23S17::writePort(int port, void const * buffer, size_t length, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return;
   // - disable sequential mode
   // - select bank 1 (to avoid switching between A and B registers)
   writeReg(MCP_IOCON, m_IOCON[hwAddr] | MCP_IOCON_SEQOP | MCP_IOCON_BANK);
@@ -338,6 +343,7 @@ void MCP23S17::writePort(int port, void const * buffer, size_t length, uint8_t h
 
 void MCP23S17::readPort(int port, void * buffer, size_t length, uint8_t hwAddr)
 {
+  if (m_SPIDevHandle == nullptr) return;
   // - disable sequential mode
   // - select bank 1 (to avoid switching between A and B registers)
   writeReg(MCP_IOCON, m_IOCON[hwAddr] | MCP_IOCON_SEQOP | MCP_IOCON_BANK);

@@ -36,6 +36,7 @@
 #include "emudevs/MC146818.h"
 #include "emudevs/PC8250.h"
 #include "devdrivers/MCP23S17.h"
+#include "devdrivers/CH32V003.h"
 
 #include "bios.h"
 
@@ -236,6 +237,19 @@ private:
   // extended I/O (MCP23S17)
   MCP23S17                 m_MCP23S17;
   uint8_t                  m_MCP23S17Sel;
+
+  // extended I/O (CH32V003)
+  CH32V003                 m_CH32V003;
+  uint8_t                  m_CH32V003_GPIO_Sel;
+
+  uint16_t                 m_CH32V003_I2C_Clock;
+  uint8_t                  m_CH32V003_I2C_Address;
+  uint8_t                  m_CH32V003_I2C_Register;
+
+  uint8_t                  m_CH32V003_SPI_Mode;
+  uint8_t                  m_CH32V003_SPI_Clock;
+  uint8_t                  m_CH32V003_SPI_Data8;
+  uint16_t                 m_CH32V003_SPI_Data16;
 
   uint8_t                  m_bootDrive;
 

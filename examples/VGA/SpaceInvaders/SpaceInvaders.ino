@@ -27,6 +27,8 @@
 #include "fabgl.h"
 #include "fabutils.h"
 
+#include "wiiNunchuk.h"
+
 #include "sprites.h"
 #include "sounds.h"
 
@@ -39,6 +41,7 @@ using fabgl::iclamp;
 fabgl::VGAController DisplayController;
 fabgl::Canvas        canvas(&DisplayController);
 fabgl::PS2Controller PS2Controller;
+fabgl::WiiNunchuk    wii_nunchuk;
 SoundGenerator       soundGenerator;
 
 
@@ -52,7 +55,7 @@ struct IntroScene : public Scene {
   static const int TEXT_X   = 130;
   static const int TEXT_Y   = 122;
 
-  static int controller_; // 1 = keyboard, 2 = mouse
+  static int controller_; // 1 = keyboard, 2 = mouse, 3 = wii_nunchuk
 
   int textRow_  = 0;
   int textCol_  = 0;
@@ -134,6 +137,8 @@ struct IntroScene : public Scene {
           canvas.drawText(80, 75, "Press [SPACE] to Play");
         else if (mouse && mouse->isMouseAvailable())
           canvas.drawText(105, 75, "Click to Play");
+        else if (wii_nunchuk.isAvailable())
+          canvas.drawText(105, 75, "Press a button to Play");
       }
 
       // handle keyboard or mouse (after two seconds)
@@ -142,6 +147,13 @@ struct IntroScene : public Scene {
           controller_ = 1;  // select keyboard as controller
         else if (mouse && mouse->isMouseAvailable() && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
           controller_ = 2;  // select mouse as controller
+        else if (wii_nunchuk.isAvailable()) {
+          fabgl::WiiNunchukStatus wii_status = wii_nunchuk.getStatus();
+          if (wii_status.buttons.c || wii_status.buttons.z) {
+             controller_ = 3; // select wii_nunchuk as controller
+          }
+        }
+
         starting_ = (controller_ > 0);  // start only when a controller has been selected
       }
     }
@@ -380,6 +392,8 @@ struct GameScene : public Scene {
       canvas.drawText(110, 100, "Press [SPACE]");
     else if (IntroScene::controller_ == 2)
       canvas.drawText(93, 100, "Click to continue");
+    else if (IntroScene::controller_ == 3)
+      canvas.drawText(93, 100, "Press a button");
     // change state
     gameState_ = GAMESTATE_GAMEOVER;
     level_ = 1;
@@ -473,8 +487,8 @@ struct GameScene : public Scene {
             gameState_ = GAMESTATE_PLAYING;
           }
         }
-      } else if (IntroScene::controller_ == 1 && playerVelX_ != 0) {
-        // move player using Keyboard
+      } else if ((IntroScene::controller_ == 1 || IntroScene::controller_ == 3) && playerVelX_ != 0) {
+        // move player using Keyboard or WiiNunchuk
         player_->x += playerVelX_;
         player_->x = iclamp(player_->x, 0, getWidth() - player_->getWidth());
         updateSprite(player_);
@@ -542,6 +556,14 @@ struct GameScene : public Scene {
           if (delta.buttons.left && !playerFire_->visible)    // player fire?
             fire();
         }
+      } else if (IntroScene::controller_ == 3) {
+        // WiiNunchuk controller
+        fabgl::WiiNunchukStatus wii_status = wii_nunchuk.getStatus();
+        int joystick_x = wii_status.joystick.x / 48;
+        int wii_button = wii_status.buttons.c || wii_status.buttons.z;
+        playerVelX_ = joystick_x;
+        if (wii_button && !playerFire_->visible)  // player fire?
+          fire();
       }
     }
 
@@ -563,8 +585,12 @@ struct GameScene : public Scene {
         player_->setFrame( player_->getFrameIndex() == 1 ? 2 : 1);
 
       // wait for SPACE or click from mouse
-      if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) ||
-          (IntroScene::controller_ == 2 && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)) {
+      if ((IntroScene::controller_ == 1 && keyboard->isVKDown(fabgl::VK_SPACE)) 
+          ||
+          (IntroScene::controller_ == 2 && mouse->deltaAvailable() && mouse->getNextDelta(nullptr, 0) && mouse->status().buttons.left)
+          ||
+          (IntroScene::controller_ == 3 && wii_nunchuk.isAvailable() && (wii_nunchuk.getStatus().buttons.c || wii_nunchuk.getStatus().buttons.z))
+      ) {
         stop();
         DisplayController.removeSprites();
       }
@@ -661,9 +687,10 @@ int GameScene::score_   = 0;
 void setup()
 {
   PS2Controller.begin(PS2Preset::KeyboardPort0_MousePort1, KbdMode::GenerateVirtualKeys);
+  wii_nunchuk.begin(300000);
 
   DisplayController.begin();
-  DisplayController.setResolution(VGA_320x200_75Hz);
+  DisplayController.setResolution(QVGA_320x240_60Hz);
 
   // adjust this to center screen in your monitor
   //DisplayController.moveScreen(20, -2);
