@@ -38,10 +38,7 @@
 #include "fabgl.h"
 #include "fabui.h"
 #include "devdrivers/MCP23S17.h"
-
-#include <WiFi.h>
-#include "esp_wifi.h"
-#include "esp_event.h"
+#include "network/netutils.h"
 
 
 
@@ -409,41 +406,19 @@ struct TestApp : public uiApp {
   }
 
   void testWifi() {
-    // use API directly to be able to call esp_wifi_deinit() and free necessary memory to mount sd card
-
-    esp_event_loop_create_default();
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-
-    // reduce wifi memory footprint    
-    cfg.static_rx_buf_num = 2;
-    cfg.static_tx_buf_num = 1;
-    cfg.ampdu_rx_enable = cfg.ampdu_tx_enable = cfg.amsdu_tx_enable = 0;
-
-    esp_wifi_init(&cfg);
-    uint16_t number = 8;
-    wifi_ap_record_t ap_info[number];
-    uint16_t ap_count = 0;
-    memset(ap_info, 0, sizeof(ap_info));
-    esp_wifi_set_mode(WIFI_MODE_STA);
-    esp_wifi_start();
-    auto r = esp_wifi_scan_start(NULL, true);
-    esp_wifi_scan_get_ap_records(&number, ap_info);
-    esp_wifi_scan_get_ap_num(&ap_count);
-    esp_wifi_stop();
-    esp_wifi_deinit();
-    esp_event_loop_delete_default();
-
-    if (r != ESP_OK) {
+    fabgl::WiFiScanner scanner;
+    if (scanner.scan(0, true)) {
+      if (scanner.count() == 0) {
+        wifiResultLabel->labelStyle().textColor = Color::Yellow;
+        wifiResultLabel->setText("Ok, No Network Found!");
+      } else {
+        wifiResultLabel->labelStyle().textColor = Color::Green;
+        wifiResultLabel->setTextFmt("Ok, Found %d Networks", scanner.count());
+      }
+    } else {
       wifiResultLabel->labelStyle().textColor = Color::BrightRed;
       wifiResultLabel->setText("Wifi Scan Failed!");
-    } else if (ap_count == 0) {
-      wifiResultLabel->labelStyle().textColor = Color::Yellow;
-      wifiResultLabel->setText("Ok, No Network Found!");
-    } else {
-      wifiResultLabel->labelStyle().textColor = Color::Green;
-      wifiResultLabel->setTextFmt("Ok, Found %d Networks", ap_count);
     }
-
   }
 
 } app;
