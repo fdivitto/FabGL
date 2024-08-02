@@ -9,7 +9,7 @@
 You can support development by purchasing my own [development board](https://www.tindie.com/products/24612/) and [Serial Terminal](https://www.tindie.com/products/26801/).
 You may also support me donating hardware (boards, lab instruments, etc...).
 
-=================================================================================
+======================================================
 
 License terms:
 
@@ -25,7 +25,57 @@ Please contact fdivitto2013@gmail.com if you need a commercial license.
 
 **Please don't remove copyright and/or original author from FabGL examples (ie from screens, dialogs, etc..), even from derived works which use examples as base.**
 
-=================================================================================
+========================================
+
+## How to install ##
+
+### Set up the Arduino environment ###
+
+1. Install and start Arduino IDE, get it from: https://www.arduino.cc/en/software
+
+2. Add the esp32 board support by Espressif using the Board Manager (Tools > Board > Board Manager and search for "esp32"). Use the package called “esp32” by Esoressif Systems and use the version selector to load a version 2.x.x! IMPORTANT! At the time of writing this, the FabGL library is NOT compatible with version 3.x.x or newer of the package. From the drop-down menu select version 2.0.x, we used 2.0.11.
+
+3. The Olimex fork of FabGL adds support for the ESP32-SBC-FabGL board and needs to be installed as a local library. You'll also need to first uninstall Fabrizio's FabGL library if it's already installed.
+    - Go to the Olimex FabGLrepo at GitHub: https://github.com/OLIMEX/FabGL
+    - Click "Download ZIP" from the green "Code" drop-down button, top-right. Save the ZIP file as "Olimex-FabGL.zip" so you don't get confused with Fabrizio's library and repo.
+    - Unzip and copy the contents to a new folder in the "Documents\Arduino\libraries" folder (e.g. "C:\Users\username\Documents\Arduino\libraries\Olimex-FabGL").
+
+4. Close Arduino IDE. The next time the IDE is started, the local Olimex FabGL library will be available for use.
+
+### Compile and download examples to ESP32-SBC-FabGL ###
+
+1. Connect the ESP32-SBC-FabGL board to your desktop PC using a USB cable. The USB-C port on the board serves as both power and data.
+
+2. Start Arduino IDE.
+
+3. Verify the Olimex FabGL library is loaded by:
+
+    - Opening the Library Manager (Tools > Manage Libraries).
+    - Typing "FabGL" in to the "filter" textbox.
+    - Changing the "Type" to "Installed".
+    - It should list "FabGL 1.0.9" (at the time of this writing) as one of the installed libraries.
+
+5. Select a FabGL demo from (File > Examples > FabGL). The FabGL examples will be at the bottom of a lengthy list.
+
+6. Configure the board.
+    - Select the "ESP32 Dev Module" board (Tools > Board > esp32 > ESP32 Dev Module).
+    - Set the board port to upload to (Tools > Port > COM#).
+    - Set the partition scheme (Tools > Partition > Huge APP).
+    - Disable PSRAM (Tools > PSRAM > Disabled).
+    - Set the Upload Speed (Tools > Upload Speed > 921600).
+    - If an upload error occurs, lower the transfer speed.
+
+8. Edit the demo if needed. Most demos are well-commented on what has to be edited. Some demos require also preparing an SD card or else in specific manner.
+
+9. Compile and upload to the board (Sketch > Upload).
+
+    - If all goes well, the ESP32-SBC-FabGL board will reboot after the compilation and upload complete.
+    - If the wireless parameters were not set, a prompt asking to configure the wireless connection will appear.
+    - After that, the boot menu should show.
+
+If you have compilation problems with most of the examples you probably installed latest version of espressif package for ESP32. The most important part is to use ESP32 package version older than 3.x.x ESP32 package (we used Espressif 2.0.11). Also do NOT use the “Arduino ESP32 Boards” package! Use the “esp32” package by espressif systems!
+
+=======================================
 
 
 FabGL is mainly a Graphics Library for ESP32. It implements several display drivers (VGA output, PAL/NTSC Color Composite, I2C and SPI displays).
