@@ -6,8 +6,7 @@
 **[See also my youtube channel where you can find demos and tutorials](https://www.youtube.com/user/fdivitto/videos)**
 
 
-You can support development by purchasing my own [development board](https://www.tindie.com/products/24612/) and [Serial Terminal](https://www.tindie.com/products/26801/).
-You may also support me donating hardware (boards, lab instruments, etc...).
+You may support development by purchasing the [ESP32-SBC-FabGL](https://www.olimex.com/Products/Retro-Computers/ESP32-SBC-FabGL/open-source-hardware) Olimex board.
 
 =================================================================================
 
