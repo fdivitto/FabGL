@@ -1,6 +1,8 @@
 # FabGL
 ### **ESP32** Display Controller (VGA, Color NTSC/PAL Composite, I2C and SPI displays), PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game/Emulation Engine and ANSI/VT Terminal
 
+# Warning! The latest version of the Espressif ESP32 library that FabGL runs on is *2.0.17*. Unfortunately, the latest versions of Espressif leave too little memory free for applications, and a project the size of FabGL can no longer function as intended.
+
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
 **[See also my youtube channel where you can find demos and tutorials](https://www.youtube.com/user/fdivitto/videos)**
