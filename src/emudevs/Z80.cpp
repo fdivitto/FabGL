@@ -115,14 +115,14 @@ namespace fabgl {
 
 #define Z80_WRITE_WORD_INTERRUPT(address, x)  Z80_WRITE_WORD((address), (x))
 
-#define Z80_INPUT_BYTE(port, x)                                         \
+#define Z80_INPUT_BYTE(portLow, portHigh, x)                            \
 {                                                                       \
-  (x) = m_readIO(m_context, (port));                                    \
+  (x) = m_readIO(m_context, ((portHigh) << 8 | (portLow)));             \
 }
 
-#define Z80_OUTPUT_BYTE(port, x)                                        \
+#define Z80_OUTPUT_BYTE(portLow, portHigh, x)                           \
 {                                                                       \
-  m_writeIO(m_context, (port), (x));                                    \
+  m_writeIO(m_context, ((portHigh) << 8 | (portLow)), (x));             \
 }
 
 
@@ -3830,7 +3830,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
         int     n;
 
         READ_N(n);
-        Z80_INPUT_BYTE(n, A);
+        Z80_INPUT_BYTE(n, A, A);
 
         elapsed_cycles += 4;
 
@@ -3841,7 +3841,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
       case IN_R_C: {
 
         int     x;
-        Z80_INPUT_BYTE(C, x);
+        Z80_INPUT_BYTE(C, B, x);
         if (Y(opcode) != INDIRECT_HL)
 
           R(Y(opcode)) = x;
@@ -3865,7 +3865,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
 
         int     x, f;
 
-        Z80_INPUT_BYTE(C, x);
+        Z80_INPUT_BYTE(C, B, x);
         WRITE_BYTE(HL, x);
 
         f = SZYX_FLAGS_TABLE[--B & 0xff]
@@ -3916,7 +3916,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
 
           r += 2;
 
-          Z80_INPUT_BYTE(C, x);
+          Z80_INPUT_BYTE(C, B, x);
           Z80_WRITE_BYTE(hl, x);
 
           hl += d;
@@ -3971,7 +3971,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
         int     n;
 
         READ_N(n);
-        Z80_OUTPUT_BYTE(n, A);
+        Z80_OUTPUT_BYTE(n, A, A);
 
         elapsed_cycles += 4;
 
@@ -3986,7 +3986,7 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
         x = Y(opcode) != INDIRECT_HL
         ? R(Y(opcode))
         : 0;
-        Z80_OUTPUT_BYTE(C, x);
+        Z80_OUTPUT_BYTE(C, B, x);
 
         elapsed_cycles += 4;
 
@@ -3999,11 +3999,12 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
         int     x, f;
 
         READ_BYTE(HL, x);
-        Z80_OUTPUT_BYTE(C, x);
+        B--;
+        Z80_OUTPUT_BYTE(C, B, x);
 
         HL += opcode == OPCODE_OUTI ? +1 : -1;
 
-        f = SZYX_FLAGS_TABLE[--B & 0xff]
+        f = SZYX_FLAGS_TABLE[B & 0xff]
         | (x >> (7 - Z80_N_FLAG_SHIFT));
         x += HL & 0xff;
         f |= x & 0x0100 ? HC_FLAGS : 0;
@@ -4031,10 +4032,11 @@ int Z80::intemulate(int opcode, int elapsed_cycles)
           r += 2;
 
           Z80_READ_BYTE(hl, x);
-          Z80_OUTPUT_BYTE(C, x);
+          b--;
+          Z80_OUTPUT_BYTE(C, b, x);
 
           hl += d;
-          if (--b)
+          if (b)
 
             elapsed_cycles += 21;
 
