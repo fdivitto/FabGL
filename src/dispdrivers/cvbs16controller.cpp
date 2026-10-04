@@ -32,7 +32,11 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "esp_spi_flash.h"
+#if __has_include("esp_private/cache_utils.h")
+  #include "esp_private/cache_utils.h"
+#else
+  #include "esp_spi_flash.h"
+#endif
 
 #include "fabutils.h"
 #include "cvbs16controller.h"

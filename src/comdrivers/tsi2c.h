@@ -27,7 +27,8 @@
 #pragma once
 
 
-#ifdef ARDUINO
+// I2C needs the Arduino core or the IDF I2C master driver (IDF 5.2+)
+#if defined(ARDUINO) || __has_include("driver/i2c_master.h")
 
 
 #include <stdint.h>
@@ -36,10 +37,16 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
+#include "freertos/event_groups.h"
 
-#include "esp32-hal.h"
-
-#include "core_version.h"
+#ifdef ARDUINO
+  #include "esp32-hal.h"
+  #if __has_include("core_version.h")
+    #include "core_version.h"
+  #endif
+#else
+  #include "driver/i2c_master.h"
+#endif
 
 #include "fabutils.h"
 #include "fabglconf.h"
@@ -53,7 +60,7 @@
  */
 
 
-#if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0) && !defined(ARDUINO_ESP32_RELEASE_2_0_1) && !defined(ARDUINO_ESP32_RELEASE_2_0_2)
+#if defined(ARDUINO) && FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(4, 4, 0) && !defined(ARDUINO_ESP32_RELEASE_2_0_1) && !defined(ARDUINO_ESP32_RELEASE_2_0_2)
   #define FABGL_OLDI2C
 #endif
 
@@ -69,7 +76,7 @@ struct I2CJobInfo {
   uint8_t   address;
   uint16_t  size;
   uint16_t  timeout;
-  uint32_t  readCount;
+  size_t    readCount;
   #ifdef FABGL_OLDI2C
   i2c_err_t lastError;
   #else
@@ -164,6 +171,16 @@ private:
   #ifdef FABGL_OLDI2C
   i2c_t *            m_i2c;
   #endif
+
+  #ifndef ARDUINO
+  // native IDF I2C master driver
+  bool setupDevice(int address, int frequency);
+
+  i2c_master_bus_handle_t m_busHandle;
+  i2c_master_dev_handle_t m_devHandle;
+  int                     m_devAddress;
+  int                     m_devFrequency;
+  #endif
   
   bool               m_i2cAvailable;
 
@@ -190,6 +207,4 @@ private:
 } // end of namespace
 
 
-
-#endif // #ifdef ARDUINO
-
+#endif  // #if defined(ARDUINO) || __has_include("driver/i2c_master.h")

@@ -22,6 +22,9 @@
 #include "esp_attr.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#if !__has_include("esp32/ulp.h")
+  #error "FabGL needs the ULP FSM coprocessor: set CONFIG_ULP_COPROC_ENABLED=y, CONFIG_ULP_COPROC_TYPE_FSM=y and CONFIG_ULP_COPROC_RESERVE_MEM=4096 in sdkconfig"
+#endif
 #include "esp32/ulp.h"
 
 #include "soc/soc.h"
@@ -141,7 +144,7 @@ static esp_err_t do_single_reloc(ulp_insn_t* program, uint32_t load_addr,
         case SUB_OPCODE_STAGEB:
         case SUB_OPCODE_B: {
             int32_t offset = ((int32_t) label_info.addr) - ((int32_t) branch_info.addr);
-ESP_LOGW(TAG, "%d\n", offset);
+            ESP_LOGD(TAG, "branch offset %d", (int) offset);
             uint32_t abs_offset = abs(offset);
             uint32_t sign = (offset >= 0) ? 0 : 1;
             if (abs_offset > 127) {

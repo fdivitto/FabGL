@@ -33,13 +33,10 @@
 #include <ctype.h>
 #include <math.h>
 
-#include "driver/dac.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
 #include <soc/sens_reg.h>
 #include "esp_log.h"
-#include "driver/sigmadelta.h"
 
 
 #include "soundgen.h"
@@ -473,7 +470,7 @@ SoundGenerator::~SoundGenerator()
     
   if (m_isr_handle) {
     // cleanup DAC mode
-    periph_module_disable(PERIPH_I2S0_MODULE);
+    I2SModuleEnable(0, false);
     esp_intr_free(m_isr_handle);
     for (int i = 0; i < 2; ++i)
       heap_caps_free(m_sampleBuffer[i]);
@@ -485,6 +482,11 @@ SoundGenerator::~SoundGenerator()
     esp_timer_stop(m_timerHandle);
     esp_timer_delete(m_timerHandle);
     m_timerHandle = nullptr;
+    #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+    sdm_channel_disable(m_sdmChannel);
+    sdm_del_channel(m_sdmChannel);
+    m_sdmChannel = nullptr;
+    #endif
   }
   
   #ifdef FABGL_EMULATED
@@ -528,7 +530,7 @@ void SoundGenerator::dac_init()
   m_DMAChain[1].sosf = 1;
   m_DMAChain[1].qe.stqe_next = (lldesc_t *) m_DMAChain; // closes DMA chain
     
-  periph_module_enable(PERIPH_I2S0_MODULE);
+  I2SModuleEnable(0, true);
 
   // Initialize I2S device
   I2S0.conf.tx_reset                     = 1;
@@ -579,20 +581,28 @@ void SoundGenerator::dac_init()
   I2S0.out_link.start = 1;
   I2S0.conf.tx_start  = 1;
 
-  dac_i2s_enable();
-  dac_output_enable(m_gpio == GPIO_NUM_25 ? DAC_CHANNEL_1 : DAC_CHANNEL_2);
+  DACEnableI2SOutput(m_gpio);
   #endif
 }
 
 
 void SoundGenerator::sigmadelta_init()
 {
+  #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  sdm_config_t sdm_cfg = { };
+  sdm_cfg.gpio_num       = m_gpio;
+  sdm_cfg.clk_src        = SDM_CLK_SRC_DEFAULT;
+  sdm_cfg.sample_rate_hz = 80000000 / 11;  // same as legacy prescale = 10
+  sdm_new_channel(&sdm_cfg, &m_sdmChannel);
+  sdm_channel_enable(m_sdmChannel);
+  #else
   sigmadelta_config_t sigmadelta_cfg;
   sigmadelta_cfg.channel             = SIGMADELTA_CHANNEL_0;
   sigmadelta_cfg.sigmadelta_prescale = 10;
   sigmadelta_cfg.sigmadelta_duty     = 0;
   sigmadelta_cfg.sigmadelta_gpio     = m_gpio;
   sigmadelta_config(&sigmadelta_cfg);
+  #endif
 
   esp_timer_create_args_t args = { };
   args.callback        = timerHandler;
@@ -770,7 +780,11 @@ void SoundGenerator::timerHandler(void * args)
 {
   auto soundGenerator = (SoundGenerator *) args;
 
+  #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  sdm_channel_set_pulse_density(soundGenerator->m_sdmChannel, soundGenerator->getSample());
+  #else
   sigmadelta_set_duty(SIGMADELTA_CHANNEL_0, soundGenerator->getSample());
+  #endif
 }
 
 

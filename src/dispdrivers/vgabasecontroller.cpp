@@ -35,7 +35,6 @@
 
 #include "soc/i2s_struct.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
 
 #include "fabutils.h"
@@ -140,7 +139,7 @@ void VGABaseController::end()
 void VGABaseController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
   configureGPIO(gpio, mode);
-  gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
+  esp_rom_gpio_connect_out_signal(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
 }
 
 
@@ -194,7 +193,9 @@ bool VGABaseController::setDMABuffersCount(int buffersCount)
     // buffers head
     if (m_doubleBufferOverDMA && m_DMABuffersHead == nullptr) {
       m_DMABuffersHead = (lldesc_t*) heap_caps_malloc(sizeof(lldesc_t), MALLOC_CAP_DMA);
-      m_DMABuffersHead->eof    = m_DMABuffersHead->sosf = m_DMABuffersHead->offset = 0;
+      m_DMABuffersHead->eof    = 0;
+      m_DMABuffersHead->sosf   = 0;
+      m_DMABuffersHead->offset = 0;
       m_DMABuffersHead->owner  = 1;
       m_DMABuffersHead->size   = 0;
       m_DMABuffersHead->length = 0;
@@ -342,7 +343,7 @@ bool VGABaseController::convertModelineToTimings(char const * modeline, VGATimin
 // Can be nested
 void VGABaseController::suspendBackgroundPrimitiveExecution()
 {
-  ++m_primitiveProcessingSuspended;
+  m_primitiveProcessingSuspended = m_primitiveProcessingSuspended + 1;
 }
 
 
@@ -714,7 +715,7 @@ void VGABaseController::setDMABufferView(int index, int row, int scan, bool isSt
 void volatile * VGABaseController::getDMABuffer(int index, int * length)
 {
   *length = m_DMABuffers[index].length;
-  return m_DMABuffers[index].buf;
+  return (void volatile *) m_DMABuffers[index].buf;
 }
 
 

@@ -5,6 +5,9 @@
 #include "esp_attr.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#if !__has_include("esp32/ulp.h")
+  #error "FabGL needs the ULP FSM coprocessor: set CONFIG_ULP_COPROC_ENABLED=y, CONFIG_ULP_COPROC_TYPE_FSM=y and CONFIG_ULP_COPROC_RESERVE_MEM=4096 in sdkconfig"
+#endif
 #include "esp32/ulp.h"
 
 #include "soc/soc.h"

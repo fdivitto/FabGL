@@ -28,7 +28,8 @@
 
 
 
-#ifdef ARDUINO
+// I2C needs the Arduino core or the IDF I2C master driver (IDF 5.2+)
+#if defined(ARDUINO) || __has_include("driver/i2c_master.h")
 
 
 /**
@@ -311,9 +312,4 @@ private:
 } // end of namespace
 
 
-
-#endif // #ifdef ARDUINO
-
-
-
-
+#endif  // #if defined(ARDUINO) || __has_include("driver/i2c_master.h")

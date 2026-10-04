@@ -40,9 +40,14 @@
 #include <memory>
 
 #include "esp32-hal-psram.h"
-extern "C" {
-#include "esp_spiram.h"
-}
+#if __has_include("esp_psram.h")
+  // IDF 5+
+  #include "esp_psram.h"
+#else
+  extern "C" {
+  #include "esp_spiram.h"
+  }
+#endif
 #include "esp_sntp.h"
 
 #include <Preferences.h>
@@ -201,14 +206,14 @@ void updateDateTime()
 
     // we need time right now
     ibox.progressBox("", nullptr, true, 200, [&](fabgl::ProgressForm * form) {
-      sntp_setoperatingmode(SNTP_OPMODE_POLL);
-      sntp_setservername(0, (char*)"pool.ntp.org");
-      sntp_init();
+      esp_sntp_setoperatingmode(ESP_SNTP_OPMODE_POLL);
+      esp_sntp_setservername(0, "pool.ntp.org");
+      esp_sntp_init();
       for (int i = 0; i < 12 && sntp_get_sync_status() != SNTP_SYNC_STATUS_COMPLETED; ++i) {
         form->update(i * 100 / 12, "Getting date-time from SNTP...");
         delay(500);
       }
-      sntp_stop();
+      esp_sntp_stop();
       ibox.setAutoOK(2);
       ibox.message("", "Date and Time updated. Restarting...");
       #ifndef FABGL_EMULATED
@@ -381,11 +386,17 @@ void setup()
 
   // note: we use just 2MB of PSRAM so the infamous PSRAM bug should not happen. But to avoid gcc compiler hack (-mfix-esp32-psram-cache-issue)
   // we enable PSRAM at runtime, otherwise the hack slows down CPU too much (PSRAM_HACK is no more required).
+  #if __has_include("esp_psram.h")
+  // IDF 5+: esp_psram_init() also maps PSRAM into the address space. Nothing to do when it has been done at boot.
+  if (!esp_psram_is_initialized() && esp_psram_init() != ESP_OK)
+    ibox.message("Error!", "This app requires a board with PSRAM!", nullptr, nullptr);
+  #else
   if (esp_spiram_init() != ESP_OK)
     ibox.message("Error!", "This app requires a board with PSRAM!", nullptr, nullptr);
 
   #ifndef BOARD_HAS_PSRAM
   esp_spiram_init_cache();
+  #endif
   #endif
 
   if (!FileBrowser::mountSDCard(false, SD_MOUNT_PATH, 8))   // @TODO: reduce to 4?

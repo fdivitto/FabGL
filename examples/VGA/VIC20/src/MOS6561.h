@@ -47,24 +47,24 @@ class MOS6561 {
 
 public:
 
-  static const int CharWidth          = 8;
+  static constexpr int CharWidth          = 8;
 
   // assume VGA_256x384_60Hz
-  static const int VGAWidth           = 256;
-  static const int VGAHeight          = 384;
+  static constexpr int VGAWidth           = 256;
+  static constexpr int VGAHeight          = 384;
 
   // PAL specific params
-  static const int PHI2               = 4433618;  // VIC frequency (CPU frequency is PHI2/4)
-  static const int FrameWidth         = 284;   // includes horizontal blanking (must be a multiple of 4)
-  static const int FrameHeight        = 312;   // includes vertical blanking
-  static const int HorizontalBlanking = 63;
-  static const int VerticalBlanking   = 28;
-  static const int ScreenWidth        = FrameWidth - HorizontalBlanking;  // ScreenWidth  = 233
-  static const int ScreenHeight       = FrameHeight - VerticalBlanking;   // ScreenHeight = 284
-  static const int ScreenOffsetX      = (((VGAWidth - ScreenWidth) / 2) & 0xffc) + 4; // must be 32 bit aligned
-  static const int ScreenOffsetY      = (VGAHeight - ScreenHeight) / 2;
-  static const int CyclesPerFrame     = FrameWidth * FrameHeight / 4;
-  static const int MaxTextColumns     = 32;
+  static constexpr int PHI2               = 4433618;  // VIC frequency (CPU frequency is PHI2/4)
+  static constexpr int FrameWidth         = 284;   // includes horizontal blanking (must be a multiple of 4)
+  static constexpr int FrameHeight        = 312;   // includes vertical blanking
+  static constexpr int HorizontalBlanking = 63;
+  static constexpr int VerticalBlanking   = 28;
+  static constexpr int ScreenWidth        = FrameWidth - HorizontalBlanking;  // ScreenWidth  = 233
+  static constexpr int ScreenHeight       = FrameHeight - VerticalBlanking;   // ScreenHeight = 284
+  static constexpr int ScreenOffsetX      = (((VGAWidth - ScreenWidth) / 2) & 0xffc) + 4; // must be 32 bit aligned
+  static constexpr int ScreenOffsetY      = (VGAHeight - ScreenHeight) / 2;
+  static constexpr int CyclesPerFrame     = FrameWidth * FrameHeight / 4;
+  static constexpr int MaxTextColumns     = 32;
 
 
   MOS6561(Machine * machine, fabgl::VGAController * displayController);

@@ -945,10 +945,11 @@ uiTimerHandle uiApp::setTimer(uiEvtHandler * dest, int periodMS)
 
 void uiApp::killTimer(uiTimerHandle handle)
 {
-  auto dest = (uiEvtHandler *) pvTimerGetTimerID(handle);
-  m_timers.remove(uiTimerAssoc(dest, handle));
-  xTimerStop(handle, portMAX_DELAY);
-  xTimerDelete(handle, portMAX_DELAY);
+  auto timer = (TimerHandle_t) handle;
+  auto dest = (uiEvtHandler *) pvTimerGetTimerID(timer);
+  m_timers.remove(uiTimerAssoc(dest, timer));
+  xTimerStop(timer, portMAX_DELAY);
+  xTimerDelete(timer, portMAX_DELAY);
 }
 
 
@@ -990,13 +991,13 @@ void uiApp::suspendCaret(bool value)
   if (m_caretTimer) {
     if (value) {
       if (m_caretInvertState != -1) {
-        xTimerStop(m_caretTimer, 0);
+        xTimerStop((TimerHandle_t) m_caretTimer, 0);
         blinkCaret(true); // force off
         m_caretInvertState = -1;
       }
     } else {
       if (m_caretInvertState == -1) {
-        xTimerStart(m_caretTimer, 0);
+        xTimerStart((TimerHandle_t) m_caretTimer, 0);
         m_caretInvertState = 0;
         blinkCaret();
       }

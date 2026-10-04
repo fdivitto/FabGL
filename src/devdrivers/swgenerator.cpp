@@ -32,7 +32,6 @@
 
 #include "soc/i2s_struct.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
 
 #include "fabutils.h"
@@ -108,7 +107,7 @@ void GPIOStream::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
       PIN_FUNC_SELECT(GPIO_PIN_REG_0, FUNC_GPIO0_CLK_OUT1);
     } else {
       configureGPIO(gpio, mode);
-      gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
+      esp_rom_gpio_connect_out_signal(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
     }
     
   }
@@ -120,7 +119,7 @@ void GPIOStream::play(int freq, lldesc_t volatile * dmaBuffers)
   if (!m_DMAStarted) {
 
     // Power on device
-    periph_module_enable(PERIPH_I2S1_MODULE);
+    I2SModuleEnable(1, true);
 
     // Initialize I2S device
     I2S1.conf.tx_reset = 1;
@@ -184,8 +183,8 @@ void GPIOStream::play(int freq, lldesc_t volatile * dmaBuffers)
 void GPIOStream::stop()
 {
   if (m_DMAStarted) {
-    rtc_clk_apll_enable(false, 0, 0, 0, 0);
-    periph_module_disable(PERIPH_I2S1_MODULE);
+    APLLEnable(false);
+    I2SModuleEnable(1, false);
 
     m_DMAStarted = false;
   }
@@ -206,7 +205,7 @@ void GPIOStream::setupClock(int freq)
   
   I2S1.sample_rate_conf.tx_bck_div_num = 1; // this makes I2S1O_BCK = I2S1_CLK
 
-  rtc_clk_apll_enable(true, p.sdm0, p.sdm1, p.sdm2, p.o_div);
+  APLLEnable(true, p.sdm0, p.sdm1, p.sdm2, p.o_div);
 
   I2S1.clkm_conf.clka_en = 1;
 }

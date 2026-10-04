@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <math.h>
+#include <time.h>
 
 #include "ff.h"
 #include "diskio.h"
@@ -44,9 +45,20 @@ extern "C" {
 #include "soc/rtc.h"
 #include "esp_ipc.h"
 #include "soc/adc_channel.h"
+#include "soc/dport_reg.h"
+#include "soc/sens_struct.h"
+#include "soc/rtc_io_struct.h"
+#include "driver/rtc_io.h"
 
 #include "fabutils.h"
 #include "fabglconf.h"
+
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  #include "esp_adc/adc_oneshot.h"
+  #include "esp_private/periph_ctrl.h"
+#else
+  #include "driver/periph_ctrl.h"
+#endif
 
 
 
@@ -170,29 +182,158 @@ ChipPackage getChipPackage()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio)
+// ADC1
+
+#ifndef FABGL_EMULATED
+
+static int ADC1_GPIO2Channel(gpio_num_t gpio)
 {
   switch (gpio) {
     case ADC1_CHANNEL_0_GPIO_NUM:
-      return ADC1_CHANNEL_0;
+      return 0;
     case ADC1_CHANNEL_1_GPIO_NUM:
-      return ADC1_CHANNEL_1;
+      return 1;
     case ADC1_CHANNEL_2_GPIO_NUM:
-      return ADC1_CHANNEL_2;
+      return 2;
     case ADC1_CHANNEL_3_GPIO_NUM:
-      return ADC1_CHANNEL_3;
+      return 3;
     case ADC1_CHANNEL_4_GPIO_NUM:
-      return ADC1_CHANNEL_4;
+      return 4;
     case ADC1_CHANNEL_5_GPIO_NUM:
-      return ADC1_CHANNEL_5;
+      return 5;
     case ADC1_CHANNEL_6_GPIO_NUM:
-      return ADC1_CHANNEL_6;
+      return 6;
     case ADC1_CHANNEL_7_GPIO_NUM:
-      return ADC1_CHANNEL_7;
+      return 7;
     default:
-      return ADC1_CHANNEL_0;
+      return 0;
   }
 }
+
+
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+
+static adc_oneshot_unit_handle_t s_ADC1Handle     = nullptr;
+static int                       s_ADC1WidthBits  = 12;
+static uint8_t                   s_ADC1Configured = 0;  // one bit per channel
+
+
+void ADC1_setup(gpio_num_t gpio, int widthBits, int atten)
+{
+  if (!s_ADC1Handle) {
+    adc_oneshot_unit_init_cfg_t unitCfg = { };
+    unitCfg.unit_id = ADC_UNIT_1;
+    if (adc_oneshot_new_unit(&unitCfg, &s_ADC1Handle) != ESP_OK)
+      return;
+  }
+  auto channel = ADC1_GPIO2Channel(gpio);
+  s_ADC1WidthBits = widthBits;
+  adc_oneshot_chan_cfg_t chanCfg = { };
+  chanCfg.atten    = (adc_atten_t) atten;
+  chanCfg.bitwidth = (adc_bitwidth_t) widthBits;
+  if (adc_oneshot_config_channel(s_ADC1Handle, (adc_channel_t) channel, &chanCfg) == ESP_OK)
+    s_ADC1Configured |= 1 << channel;
+}
+
+
+int ADC1_read(gpio_num_t gpio)
+{
+  auto channel = ADC1_GPIO2Channel(gpio);
+  if (!(s_ADC1Configured & (1 << channel)))
+    ADC1_setup(gpio, s_ADC1WidthBits, 0);
+  int value = 0;
+  if (s_ADC1Handle)
+    adc_oneshot_read(s_ADC1Handle, (adc_channel_t) channel, &value);
+  return value;
+}
+
+#else
+
+void ADC1_setup(gpio_num_t gpio, int widthBits, int atten)
+{
+  adc1_config_width((adc_bits_width_t) (widthBits - 9));
+  adc1_config_channel_atten((adc1_channel_t) ADC1_GPIO2Channel(gpio), (adc_atten_t) atten);
+}
+
+
+int ADC1_read(gpio_num_t gpio)
+{
+  return adc1_get_raw((adc1_channel_t) ADC1_GPIO2Channel(gpio));
+}
+
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// I2SModuleEnable
+
+void I2SModuleEnable(int num, bool enable)
+{
+  #ifdef PERIPH_RCC_ATOMIC
+  // PERIPH_I2S1_MODULE is no more available, so set bus clock and reset directly
+  uint32_t clk = num == 0 ? DPORT_I2S0_CLK_EN : DPORT_I2S1_CLK_EN;
+  uint32_t rst = num == 0 ? DPORT_I2S0_RST : DPORT_I2S1_RST;
+  PERIPH_RCC_ATOMIC() {
+    if (enable) {
+      DPORT_SET_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, clk);
+      DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, rst);
+    } else {
+      DPORT_CLEAR_PERI_REG_MASK(DPORT_PERIP_CLK_EN_REG, clk);
+      DPORT_SET_PERI_REG_MASK(DPORT_PERIP_RST_EN_REG, rst);
+    }
+  }
+  #else
+  auto module = num == 0 ? PERIPH_I2S0_MODULE : PERIPH_I2S1_MODULE;
+  if (enable)
+    periph_module_enable(module);
+  else
+    periph_module_disable(module);
+  #endif
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// APLLEnable
+
+void APLLEnable(bool enable, uint32_t sdm0, uint32_t sdm1, uint32_t sdm2, uint32_t o_div)
+{
+  #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  rtc_clk_apll_enable(enable);
+  if (enable)
+    rtc_clk_apll_coeff_set(o_div, sdm0, sdm1, sdm2);
+  #else
+  rtc_clk_apll_enable(enable, sdm0, sdm1, sdm2, o_div);
+  #endif
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// DACEnableI2SOutput
+// Equivalent to legacy dac_i2s_enable() + dac_output_enable(). The new DAC driver cannot be used
+// because it wants to own I2S0.
+
+void DACEnableI2SOutput(gpio_num_t gpio)
+{
+  // I2S0 clock and data connected to the DAC
+  SENS.sar_dac_ctrl1.dac_dig_force = 1;
+  SENS.sar_dac_ctrl1.dac_clk_inv   = 1;
+
+  // DAC pad as floating RTC pad
+  rtc_gpio_init(gpio);
+  rtc_gpio_set_direction(gpio, RTC_GPIO_MODE_DISABLED);
+  rtc_gpio_pullup_dis(gpio);
+  rtc_gpio_pulldown_dis(gpio);
+
+  // power up
+  int channel = (gpio == GPIO_NUM_25 ? 0 : 1);
+  RTCIO.pad_dac[channel].dac_xpd_force = 1;
+  RTCIO.pad_dac[channel].xpd_dac       = 1;
+
+  // ADC1 sampling must not drive DAC power
+  SENS.sar_meas_ctrl2.sar1_dac_xpd_fsm = 0;
+}
+
+#endif  // #ifndef FABGL_EMULATED
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1177,7 +1318,14 @@ bool FileBrowser::format(DriveType driveType, int drive)
 
 bool FileBrowser::format(DriveType driveType, int drive)
 {
+  #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  esp_task_wdt_config_t wdtConfig = { };
+  wdtConfig.timeout_ms = 45000;
+  if (esp_task_wdt_reconfigure(&wdtConfig) == ESP_ERR_INVALID_STATE)
+    esp_task_wdt_init(&wdtConfig);
+  #else
   esp_task_wdt_init(45, false);
+  #endif
 
   if (driveType == DriveType::SDCard && s_SDCardMounted) {
 
@@ -1197,7 +1345,13 @@ bool FileBrowser::format(DriveType driveType, int drive)
     }
 
     // make filesystem
-    if (f_mkfs(drv, FM_ANY, 16 * 1024, buffer, FF_MAX_SS) != FR_OK) {
+    #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+    MKFS_PARM mkfsParm = { FM_ANY, 0, 0, 0, 16 * 1024 };
+    auto mkfsRes = f_mkfs(drv, &mkfsParm, buffer, FF_MAX_SS);
+    #else
+    auto mkfsRes = f_mkfs(drv, FM_ANY, 16 * 1024, buffer, FF_MAX_SS);
+    #endif
+    if (mkfsRes != FR_OK) {
       free(buffer);
       return false;
     }
@@ -1258,7 +1412,7 @@ bool FileBrowser::mountSDCard(bool formatOnFail, char const * mountPath, size_t 
   s_SDCardMounted            = false;
 
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-  host.slot = HSPI_HOST;
+  host.slot = SPI2_HOST;
 
   #if FABGL_ESP_IDF_VERSION <= FABGL_ESP_IDF_VERSION_VAL(3, 3, 5)
 

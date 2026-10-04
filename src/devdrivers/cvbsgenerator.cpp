@@ -29,9 +29,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#include "driver/dac.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
 #include <soc/sens_reg.h>
 
@@ -300,7 +298,7 @@ void CVBSGenerator::setVideoGPIO(gpio_num_t gpio)
 void CVBSGenerator::runDMA(lldesc_t volatile * dmaBuffers)
 {
   if (!m_DMAStarted) {
-    periph_module_enable(PERIPH_I2S0_MODULE);
+    I2SModuleEnable(0, true);
 
     // Initialize I2S device
     I2S0.conf.tx_reset                     = 1;
@@ -355,7 +353,7 @@ void CVBSGenerator::runDMA(lldesc_t volatile * dmaBuffers)
       I2S0.clkm_conf.clkm_div_a            = a;
       I2S0.clkm_conf.clkm_div_num          = 2;  // not less than 2
       I2S0.sample_rate_conf.tx_bck_div_num = 1;  // this makes I2S0O_BCK = I2S0_CLK
-      rtc_clk_apll_enable(true, p.sdm0, p.sdm1, p.sdm2, p.o_div);
+      APLLEnable(true, p.sdm0, p.sdm1, p.sdm2, p.o_div);
       I2S0.clkm_conf.clka_en               = 1;
     }
 
@@ -378,14 +376,13 @@ void CVBSGenerator::runDMA(lldesc_t volatile * dmaBuffers)
     I2S0.out_link.start = 1;
     I2S0.conf.tx_start  = 1;
 
-    dac_i2s_enable();
     if (usePLL) {
       // enable both DACs
-      dac_output_enable(DAC_CHANNEL_1); // GPIO25: DAC1, right channel
-      dac_output_enable(DAC_CHANNEL_2); // GPIO26: DAC2, left channel
+      DACEnableI2SOutput(GPIO_NUM_25); // GPIO25: DAC1, right channel
+      DACEnableI2SOutput(GPIO_NUM_26); // GPIO26: DAC2, left channel
     } else {
       // enable just used DAC
-      dac_output_enable(m_gpio == GPIO_NUM_25 ? DAC_CHANNEL_1 : DAC_CHANNEL_2);
+      DACEnableI2SOutput(m_gpio);
     }
 
     m_DMAStarted = true;
@@ -889,7 +886,7 @@ void CVBSGenerator::stop()
 {
   if (m_DMAStarted) {
 
-    periph_module_disable(PERIPH_I2S0_MODULE);
+    I2SModuleEnable(0, false);
     m_DMAStarted = false;
 
     if (m_isr_handle) {
@@ -1007,8 +1004,8 @@ void IRAM_ATTR CVBSGenerator::ISRHandler(void * arg)
           *((uint32_t*)(visibleBuf)) = blackFillX2;
       }
       
-      ++s_activeLineIndex;
-      ++s_frameLine;
+      s_activeLineIndex = s_activeLineIndex + 1;
+      s_frameLine = s_frameLine + 1;
       ++s_subCarrierPhase;
       s_lineSwitch = !s_lineSwitch;
       

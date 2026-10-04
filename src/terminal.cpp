@@ -653,7 +653,7 @@ void Terminal::loadFont(FontInfo const * font)
     if (m_glyphsBuffer.map)
       break;
     // no enough memory, reduce m_rows
-    --m_rows;
+    m_rows = m_rows - 1;
   }
   m_glyphsBuffer.columns      = m_columns;
   m_glyphsBuffer.rows         = m_rows;
@@ -3696,14 +3696,13 @@ void Terminal::consumeFabGLSeq()
     //    GPIONUM (text)     : '32'...'39'
     case FABGLEXTX_SETUPADC:
     {
-      auto width   = (adc_bits_width_t) (extGetIntParam() - 9);
+      auto width = extGetIntParam();
       extGetByteParam();  // ';'
-      auto atten   = (adc_atten_t) extGetIntParam();
+      auto atten = extGetIntParam();
       extGetByteParam();  // ';'
-      auto channel = ADC1_GPIO2Channel((gpio_num_t)extGetIntParam());
+      auto gpio  = (gpio_num_t) extGetIntParam();
       extGetByteParam();  // FABGLEXT_ENDCODE
-      adc1_config_width(width);
-      adc1_config_channel_atten(channel, atten);
+      ADC1_setup(gpio, width, atten);
       break;
     }
 
@@ -3724,7 +3723,7 @@ void Terminal::consumeFabGLSeq()
     //       '0'
     case FABGLEXTX_READADC:
     {
-      auto val = adc1_get_raw(ADC1_GPIO2Channel((gpio_num_t)extGetIntParam()));
+      auto val = ADC1_read((gpio_num_t)extGetIntParam());
       extGetByteParam(); // FABGLEXT_ENDCODE
       send(FABGLEXT_REPLYCODE);
       send(toupper(digit2hex((val & 0xF00) >> 8)));

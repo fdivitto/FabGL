@@ -3903,7 +3903,7 @@ void BDOS::searchNextFillDMA_FCB(FileSearchState * state, bool isFirst, char con
   }
 
   // RC
-  m_HAL->writeByte(DMA + FCB_RC, fabgl::tmin((state->size + 127) / 128, 128));
+  m_HAL->writeByte(DMA + FCB_RC, fabgl::tmin<int>((state->size + 127) / 128, 128));
 
   int extentSize = m_HAL->readByte(DMA + FCB_RC) * 128;
 

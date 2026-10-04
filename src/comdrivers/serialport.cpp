@@ -238,8 +238,8 @@ void SerialPort::setup(int uartIndex, uint32_t baud, int dataLength, char parity
   setFrame(dataLength, parity, stopBits);
 
   // TX/RX Pin logic
-  gpio_matrix_in(m_rxPin, URXD_IN_IDX[m_idx], m_inverted);
-  gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
+  esp_rom_gpio_connect_in_signal(m_rxPin, URXD_IN_IDX[m_idx], m_inverted);
+  esp_rom_gpio_connect_out_signal(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
 
   // Flow Control
   WRITE_PERI_REG(UART_FLOW_CONF_REG(m_idx), 0);
@@ -340,11 +340,11 @@ void SerialPort::sendBreak(bool value)
   while (m_dev->status.txfifo_cnt == 0x7F)
     ;
   if (value) {
-    gpio_matrix_out(m_txPin, MATRIX_DETACH_OUT_SIG, m_inverted, false);
+    esp_rom_gpio_connect_out_signal(m_txPin, MATRIX_DETACH_OUT_SIG, m_inverted, false);
     configureGPIO(m_txPin, GPIO_MODE_OUTPUT);
     gpio_set_level(m_txPin, 0);
   } else {
-    gpio_matrix_out(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
+    esp_rom_gpio_connect_out_signal(m_txPin, UTXD_OUT_IDX[m_idx], m_inverted, false);
   }
 }
 

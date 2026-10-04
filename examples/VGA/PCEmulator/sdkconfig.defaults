@@ -1,0 +1,12 @@
+# ESP-IDF settings of PCEmulator (used by idf/ArduinoSketch)
+#
+# The emulator uses PSRAM directly as memory of the emulated machine: it has to be mapped into the
+# address space, but it must not become part of the heap.
+# The compiler workaround for the PSRAM cache bug of ESP32 rev.1 slows down everything, so it is disabled:
+# the emulator takes care of the bug by itself.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_BOOT_INIT=y
+CONFIG_SPIRAM_IGNORE_NOTFOUND=y
+CONFIG_SPIRAM_USE_MEMMAP=y
+# CONFIG_SPIRAM_CACHE_WORKAROUND is not set
+# CONFIG_SPIRAM_MEMTEST is not set

@@ -102,7 +102,7 @@ void CVBSBaseController::freeViewPort()
 // Can be nested
 void CVBSBaseController::suspendBackgroundPrimitiveExecution()
 {
-  ++m_primitiveProcessingSuspended;
+  m_primitiveProcessingSuspended = m_primitiveProcessingSuspended + 1;
 }
 
 

@@ -209,6 +209,7 @@ struct uiEvent {
 
   uiEvent() : dest(nullptr), id(UIEVT_NULL) { }
   uiEvent(uiEvent const & e) { dest = e.dest; id = e.id; params = e.params; }
+  uiEvent & operator=(uiEvent const & e) = default;
   uiEvent(uiEvtHandler * dest_, uiEventID id_) : dest(dest_), id(id_) { }
 };
 

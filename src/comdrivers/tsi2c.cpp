@@ -24,11 +24,14 @@
  */
 
 
-#ifdef ARDUINO
+// I2C needs the Arduino core or the IDF I2C master driver (IDF 5.2+)
+#if defined(ARDUINO) || __has_include("driver/i2c_master.h")
 
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
+#include "esp_log.h"
 
 #include "tsi2c.h"
 
@@ -39,7 +42,11 @@
 namespace fabgl {
 
 
-#define I2C_COMMTASK_STACK    1000
+#ifdef ARDUINO
+  #define I2C_COMMTASK_STACK  1000
+#else
+  #define I2C_COMMTASK_STACK  3072  // IDF master driver needs more stack than Arduino HAL
+#endif
 #define I2C_COMMTASK_PRIORITY 5
 #define I2C_DEFAULT_FREQUENCY 100000
 
@@ -54,6 +61,12 @@ I2C::I2C(int bus)
   :
     #ifdef FABGL_OLDI2C
     m_i2c(nullptr),
+    #endif
+    #ifndef ARDUINO
+    m_busHandle(nullptr),
+    m_devHandle(nullptr),
+    m_devAddress(-1),
+    m_devFrequency(0),
     #endif
     m_i2cAvailable(false),
     m_bus(bus),
@@ -100,6 +113,16 @@ void I2C::end()
   if (m_i2c)
     i2cRelease(m_i2c);
   m_i2c = nullptr;
+  #endif
+
+  #ifndef ARDUINO
+  if (m_devHandle)
+    i2c_master_bus_rm_device(m_devHandle);
+  m_devHandle = nullptr;
+  if (m_busHandle)
+    i2c_del_master_bus(m_busHandle);
+  m_busHandle  = nullptr;
+  m_devAddress = -1;
   #endif
 
   if (m_eventGroup)
@@ -161,6 +184,8 @@ int I2C::read(int address, uint8_t * buffer, int size, int frequency, int timeOu
   return ret;
 }
 
+
+#ifdef ARDUINO
 
 #ifndef FABGL_OLDI2C
 static int i2cGetFrequency(uint8_t i2c_num)
@@ -236,9 +261,88 @@ void I2C::commTaskFunc(void * pvParameters)
 
 }
 
+#else  // #ifdef ARDUINO
+
+
+// the IDF master driver binds address and frequency to a device handle: keep just one, replacing it when they change
+bool I2C::setupDevice(int address, int frequency)
+{
+  if (m_devHandle && address == m_devAddress && frequency == m_devFrequency)
+    return true;
+
+  if (m_devHandle)
+    i2c_master_bus_rm_device(m_devHandle);
+  m_devHandle = nullptr;
+
+  i2c_device_config_t devCfg = { };
+  devCfg.dev_addr_length = I2C_ADDR_BIT_LEN_7;
+  devCfg.device_address  = address;
+  devCfg.scl_speed_hz    = frequency;
+  if (i2c_master_bus_add_device(m_busHandle, &devCfg, &m_devHandle) != ESP_OK) {
+    m_devHandle = nullptr;
+    return false;
+  }
+
+  m_devAddress   = address;
+  m_devFrequency = frequency;
+  return true;
+}
+
+
+void I2C::commTaskFunc(void * pvParameters)
+{
+  I2C * ths = (I2C*) pvParameters;
+
+  i2c_master_bus_config_t busCfg = { };
+  busCfg.i2c_port                     = ths->m_bus;
+  busCfg.sda_io_num                   = ths->m_SDAGPIO;
+  busCfg.scl_io_num                   = ths->m_SCLGPIO;
+  busCfg.clk_source                   = I2C_CLK_SRC_DEFAULT;
+  busCfg.glitch_ignore_cnt            = 7;
+  busCfg.flags.enable_internal_pullup = true;
+
+  if (i2c_new_master_bus(&busCfg, &ths->m_busHandle) != ESP_OK) {
+    ESP_LOGE("FabGL", "unable to init I2C");
+    abort();
+  }
+
+  ths->m_i2cAvailable = true;
+
+  I2CJobInfo * job = &ths->m_jobInfo;
+
+  // main send/receive loop
+  while (true) {
+
+    // unlock waiting task
+    xEventGroupSetBits(ths->m_eventGroup, EVTGROUP_DONE);
+
+    // wait for another job
+    auto bits = xEventGroupWaitBits(ths->m_eventGroup, EVTGROUP_WRITE | EVTGROUP_READ, true, false, portMAX_DELAY);
+
+    job->readCount = 0;
+
+    if (!ths->setupDevice(job->address, job->frequency)) {
+      job->lastError = ESP_FAIL;
+      continue;
+    }
+
+    if (bits & EVTGROUP_WRITE) {
+      job->lastError = i2c_master_transmit(ths->m_devHandle, job->buffer, job->size, job->timeout);
+    } else if (bits & EVTGROUP_READ) {
+      job->lastError = i2c_master_receive(ths->m_devHandle, job->buffer, job->size, job->timeout);
+      if (job->lastError == ESP_OK)
+        job->readCount = job->size;
+    }
+
+  }
+
+}
+
+#endif  // #ifdef ARDUINO
+
 
 
 } // end of namespace
 
 
-#endif  // #ifdef ARDUINO
+#endif  // #if defined(ARDUINO) || __has_include("driver/i2c_master.h")

@@ -1,0 +1,10 @@
+# Arduino core as IDF component (see also ../sdkconfig.fabgl)
+CONFIG_AUTOSTART_ARDUINO=y
+
+# required by Arduino NetworkClientSecure library
+CONFIG_MBEDTLS_PSK_MODES=y
+CONFIG_MBEDTLS_KEY_EXCHANGE_PSK=y
+
+# 3 MB application, 960 KB SPIFFS (same layout VIC20 and PCEmulator examples ask for)
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"

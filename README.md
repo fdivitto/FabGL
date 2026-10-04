@@ -3,6 +3,10 @@
 
 # Warning! The latest version of the Espressif ESP32 library that FabGL runs on is *2.0.17* (or even earlier). Unfortunately, the latest versions of Espressif leave too little memory free for applications, and a project the size of FabGL can no longer function as intended.
 
+### ESP-IDF 6 (work in progress)
+
+The library and all the examples now also build with ESP-IDF 6, as plain IDF component or with Arduino core 4.0 as IDF component. See [idf](idf/README.md). Built with this configuration FabGL has more free memory than with Arduino core 2.0.17. So far only `idf/NativeVGATerminal` has been run on real hardware (ESP32-PICO-D4 rev. 1.0); the rest is verified by building only.
+
 **[Please look here for full API documentation](http://www.fabglib.org)**
 
 **[See also my youtube channel where you can find demos and tutorials](https://www.youtube.com/user/fdivitto/videos)**

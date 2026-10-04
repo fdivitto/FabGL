@@ -1090,7 +1090,10 @@ public:
    *
    * @return The size (in characters) of remaining space in the display queue.
    */
-  int availableForWrite(bool fromISR = false);
+  int availableForWrite(bool fromISR);
+
+  // overrides Print::availableForWrite() on Arduino cores which have it
+  int availableForWrite() { return availableForWrite(false); }
 
   /**
    * @brief Sets the terminal type to emulate

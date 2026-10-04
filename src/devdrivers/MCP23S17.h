@@ -173,7 +173,7 @@ public:
    * @param CSActiveState CS active state (-1 default, depends by the board)
    * @param host SPI host
    */
-  bool begin(int MISO = -1, int MOSI = -1, int CLK = -1, int CS = -1, int CSActiveState = -1, int host = HSPI_HOST);
+  bool begin(int MISO = -1, int MOSI = -1, int CLK = -1, int CS = -1, int CSActiveState = -1, int host = SPI2_HOST);
 
   /**
    * @brief Deinitializes MCP23S17 driver

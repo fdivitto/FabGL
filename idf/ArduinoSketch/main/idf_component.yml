@@ -1,0 +1,4 @@
+dependencies:
+  # Arduino core 4.0.0-alpha1 is based on ESP-IDF 6.0, 4.0.0-rc1 on ESP-IDF 6.1
+  espressif/arduino-esp32:
+    version: "4.0.0-alpha1"

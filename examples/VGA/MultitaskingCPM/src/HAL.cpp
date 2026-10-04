@@ -26,7 +26,13 @@
 
 
 #include "driver/gpio.h"
-#include "driver/dac.h"
+#if __has_include("driver/dac_oneshot.h")
+  // IDF 5+
+  #include "driver/dac_oneshot.h"
+  static dac_oneshot_handle_t s_DAC1 = nullptr;
+#else
+  #include "driver/dac.h"
+#endif
 
 
 #include "HAL.h"
@@ -50,7 +56,14 @@ HAL::HAL()
   m_serialStream[0] = nullptr;
   m_serialStream[1] = nullptr;
 
+  #if __has_include("driver/dac_oneshot.h")
+  if (!s_DAC1) {
+    dac_oneshot_config_t dacConfig = { DAC_CHAN_0 };
+    dac_oneshot_new_channel(&dacConfig, &s_DAC1);
+  }
+  #else
   dac_output_enable(DAC_CHANNEL_1);
+  #endif
 
   m_Z80.setCallbacks(this, readByte, writeByte, readWord, writeWord, readIO, writeIO);
   CPU_reset();
@@ -398,7 +411,11 @@ void HAL::writeIO(uint16_t addr, uint8_t value)
   logf("writeIO(%04x, %02x)\r\n", addr, value);
   #endif
   if (addr == 0x50) {
+    #if __has_include("driver/dac_oneshot.h")
+    dac_oneshot_output_voltage(s_DAC1, value);
+    #else
     dac_output_voltage(DAC_CHANNEL_1, value);
+    #endif
   }
 }
 

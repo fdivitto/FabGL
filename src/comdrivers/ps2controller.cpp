@@ -28,10 +28,16 @@
 
 #include "freertos/FreeRTOS.h"
 
+#if !__has_include("esp32/ulp.h")
+  #error "FabGL needs the ULP FSM coprocessor: set CONFIG_ULP_COPROC_ENABLED=y, CONFIG_ULP_COPROC_TYPE_FSM=y and CONFIG_ULP_COPROC_RESERVE_MEM=4096 in sdkconfig"
+#endif
 #include "esp32/ulp.h"
 #include "driver/rtc_io.h"
 #include "soc/sens_reg.h"
-#if __has_include("soc/rtc_io_periph.h")
+#include "soc/rtc_io_reg.h"
+#if __has_include("hal/rtc_io_periph.h")
+  #include "hal/rtc_io_periph.h"
+#elif __has_include("soc/rtc_io_periph.h")
   #include "soc/rtc_io_periph.h"
 #endif
 #include "esp_log.h"
@@ -305,6 +311,17 @@ namespace fabgl {
 // check RTC memory occupation
 #if RTCMEM_LASTVAR >= 0x800
 #error "ULP program too big"
+#endif
+
+// Since IDF 5 the system keeps its own data in RTC slow memory, just after the area reserved to the ULP.
+// Program and variables must stay inside the reserved area, otherwise they overlap that data.
+#define RTCMEM_REQUIRED_BYTES ((RTCMEM_LASTVAR + 1) * 4)
+#if defined(CONFIG_ULP_COPROC_RESERVE_MEM) && CONFIG_ULP_COPROC_RESERVE_MEM < RTCMEM_REQUIRED_BYTES && FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  #ifdef ARDUINO
+    #warning "CONFIG_ULP_COPROC_RESERVE_MEM is too small for FabGL PS2Controller (at least 2112 bytes required, 4096 suggested)"
+  #else
+    #error "CONFIG_ULP_COPROC_RESERVE_MEM is too small for FabGL PS2Controller: set it to at least 2112 (4096 suggested) in sdkconfig"
+  #endif
 #endif
 
 

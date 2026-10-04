@@ -1,0 +1,33 @@
+# Settings FabGL relies on when built with ESP-IDF 5 or 6, either as plain IDF component
+# or together with the Arduino core as IDF component.
+
+CONFIG_IDF_TARGET="esp32"
+
+# FabGL has been tuned for a 240 MHz CPU and 1 ms ticks (what the Arduino core uses)
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+CONFIG_FREERTOS_HZ=1000
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y
+
+# PS/2 ports are driven by the ULP FSM coprocessor. Its program and variables take 2112 bytes of
+# RTC slow memory, which must be entirely reserved because IDF places its own data just after.
+CONFIG_ULP_COPROC_ENABLED=y
+CONFIG_ULP_COPROC_TYPE_FSM=y
+CONFIG_ULP_COPROC_RESERVE_MEM=4096
+
+# Video interrupt handlers keep running while the flash cache is disabled
+CONFIG_FREERTOS_IN_IRAM=y
+
+# FabGL allocates its interrupts on a specific core through the IPC tasks: with the default 1024 bytes
+# less than 400 bytes of their stack remain free
+CONFIG_ESP_IPC_TASK_STACK_SIZE=2048
+
+# Emulators keep core 1 busy for long periods: watch the idle task of core 0 only, like the Arduino core
+# CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU1 is not set
+
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# Keep WiFi and PHY code out of IRAM, like the Arduino core 2.x does: unused IRAM becomes heap,
+# which FabGL uses for 32 bit data (see MALLOC_CAP_32BIT allocations)
+# CONFIG_ESP_WIFI_IRAM_OPT is not set
+# CONFIG_ESP_WIFI_RX_IRAM_OPT is not set
+# CONFIG_ESP_PHY_IRAM_OPT is not set

@@ -400,7 +400,8 @@ BitmappedDisplayController::~BitmappedDisplayController()
 
 void BitmappedDisplayController::setDoubleBuffered(bool value)
 {
-  m_doubleBufferedSetup = m_doubleBufferedEnabled = value;
+  m_doubleBufferedSetup   = value;
+  m_doubleBufferedEnabled = value;
   if (m_execQueue)
     vQueueDelete(m_execQueue);
   // on double buffering a queue of single element is enough and necessary (see addPrimitive() for details)

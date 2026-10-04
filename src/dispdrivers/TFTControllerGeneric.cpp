@@ -205,7 +205,7 @@ void TFTController::begin(int SCK, int MOSI, int DC, int RESX, int CS, int host,
 
 void TFTController::begin()
 {
-  begin(18, 23, 22, 21, 5, VSPI_HOST);
+  begin(18, 23, 22, 21, 5, SPI3_HOST);
 }
 
 
@@ -655,7 +655,7 @@ void TFTController::updateTaskFunc(void * pvParameters)
 
 void TFTController::suspendBackgroundPrimitiveExecution()
 {
-  ++m_updateTaskFuncSuspended;
+  m_updateTaskFuncSuspended = m_updateTaskFuncSuspended + 1;
   while (m_updateTaskRunning)
     taskYIELD();
 }

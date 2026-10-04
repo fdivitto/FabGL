@@ -35,9 +35,12 @@
 
 #include "soc/i2s_struct.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
-#include "esp_spi_flash.h"
+#if __has_include("esp_private/cache_utils.h")
+  #include "esp_private/cache_utils.h"
+#else
+  #include "esp_spi_flash.h"
+#endif
 #include "esp_heap_caps.h"
 
 #include "fabutils.h"
@@ -160,7 +163,7 @@ void VGADirectController::setScanlineBuffer(int scanline, uint8_t volatile * lin
 
 uint8_t volatile * VGADirectController::getScanlineBuffer(int scanline)
 {
-  return s_DMALines[scanline]->buf;
+  return (uint8_t volatile *) s_DMALines[scanline]->buf;
 }
 
 

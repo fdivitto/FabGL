@@ -26,6 +26,7 @@
 
 
 #include <string.h>
+#include <algorithm>
 
 #include "esp_event.h"
 #include "esp_wifi.h"
@@ -258,11 +259,10 @@ int HTTPRequest::GET(char const * URL)
   if (m_client) {
     esp_http_client_set_url(m_client, URL);
   } else {
-    esp_http_client_config_t config = {
-      .url           = URL,
-      .event_handler = httpEventHandler,
-      .user_data     = this,
-    };
+    esp_http_client_config_t config = { };
+    config.url           = URL;
+    config.event_handler = httpEventHandler;
+    config.user_data     = this;
     m_client = esp_http_client_init(&config);
   }  
   return esp_http_client_perform(m_client) == ESP_OK ? esp_http_client_get_status_code(m_client) : 0;

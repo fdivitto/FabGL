@@ -41,18 +41,10 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 
-#include <driver/adc.h>
 #include <esp_system.h>
-#include "sdmmc_cmd.h"
-#include "soc/frc_timer_reg.h"
-#include "rom/lldesc.h"
-
-#ifdef ARDUINO
-#include "Arduino.h"
+#if __has_include("esp_idf_version.h")
+  #include "esp_idf_version.h"
 #endif
-
-
-namespace fabgl {
 
 
 // manage IDF versioning
@@ -63,6 +55,47 @@ namespace fabgl {
   #define FABGL_ESP_IDF_VERSION_VAL(major, minor, patch) ((major << 16) | (minor << 8) | (patch))
   #define FABGL_ESP_IDF_VERSION                          FABGL_ESP_IDF_VERSION_VAL(0, 0, 0)
 #endif
+
+
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  // IDF 5 dropped the legacy ADC driver and many headers are no longer included implicitly
+  #include "driver/gpio.h"
+  #include "esp_timer.h"
+  #include "esp_rom_sys.h"
+  #include "esp_cpu.h"
+  #include "esp_heap_caps.h"
+  #include "hal/adc_types.h"
+  #include "soc/gpio_periph.h"
+  #include "soc/io_mux_reg.h"
+  #include "esp32/rom/lldesc.h"
+  #include "esp32/rom/ets_sys.h"
+  #include "esp32/rom/gpio.h"
+#else
+  #include <driver/adc.h>
+  #include "rom/lldesc.h"
+#endif
+#include "esp_rom_gpio.h"
+#include "sdmmc_cmd.h"
+#include "soc/frc_timer_reg.h"
+#include "soc/gpio_sig_map.h"
+#include "hal/spi_types.h"
+
+// HSPI_HOST and VSPI_HOST are no more defined since IDF 5
+#ifndef HSPI_HOST
+  #define HSPI_HOST SPI2_HOST
+#endif
+#ifndef VSPI_HOST
+  #define VSPI_HOST SPI3_HOST
+#endif
+
+#ifdef ARDUINO
+#include "Arduino.h"
+#endif
+
+
+namespace fabgl {
+
+
 
 
 
@@ -85,6 +118,11 @@ namespace fabgl {
   #ifdef CONFIG_SPIRAM_SUPPORT
     #define FABGL_NEED_PSRAM_DISABLE_HACK
   #endif
+#endif
+
+// since IDF 5 the compiler workaround has its own option (and CONFIG_SPIRAM_SUPPORT does not exist anymore)
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0) && defined(CONFIG_SPIRAM_CACHE_WORKAROUND)
+  #define FABGL_NEED_PSRAM_DISABLE_HACK
 #endif
 
 #ifdef FABGL_NEED_PSRAM_DISABLE_HACK
@@ -282,6 +320,7 @@ struct Rect {
   Rect() : X1(0), Y1(0), X2(0), Y2(0) { }
   Rect(int X1_, int Y1_, int X2_, int Y2_) : X1(X1_), Y1(Y1_), X2(X2_), Y2(Y2_) { }
   Rect(Rect const & r) { X1 = r.X1; Y1 = r.Y1; X2 = r.X2; Y2 = r.Y2; }
+  Rect & operator=(Rect const & r) = default;
 
   bool operator==(Rect const & r)                { return X1 == r.X1 && Y1 == r.Y1 && X2 == r.X2 && Y2 == r.Y2; }
   bool operator!=(Rect const & r)                { return X1 != r.X1 || Y1 != r.Y1 || X2 != r.X2 || Y2 != r.Y2; }
@@ -476,7 +515,7 @@ template <typename ...Params>
 struct Delegate {
 
   // empty constructor
-  Delegate() : m_func(nullptr) {
+  Delegate() : m_closure(nullptr), m_func(nullptr) {
   }
 
   // denied copy
@@ -1073,7 +1112,21 @@ inline __attribute__((always_inline)) uint32_t getCycleCount() {
 void replacePathSep(char * path, char newSep);
 
 
-adc1_channel_t ADC1_GPIO2Channel(gpio_num_t gpio);
+// ADC1 helpers (GPIO 32..39). "widthBits" is 9..12, "atten" is 0..3 (0dB, 2.5dB, 6dB, 11dB)
+void ADC1_setup(gpio_num_t gpio, int widthBits, int atten);
+int ADC1_read(gpio_num_t gpio);
+
+
+// enables/disables bus clock of the specified I2S module (0 = I2S0, 1 = I2S1)
+void I2SModuleEnable(int num, bool enable);
+
+
+// enables APLL using specified coefficients, or disables it
+void APLLEnable(bool enable, uint32_t sdm0 = 0, uint32_t sdm1 = 0, uint32_t sdm2 = 0, uint32_t o_div = 0);
+
+
+// routes I2S0 output to the internal DAC and powers up the DAC channel of the specified gpio (GPIO_NUM_25 or GPIO_NUM_26)
+void DACEnableI2SOutput(gpio_num_t gpio);
 
 
 void esp_intr_alloc_pinnedToCore(int source, int flags, intr_handler_t handler, void * arg, intr_handle_t * ret_handle, int core);

@@ -24,7 +24,8 @@
  */
 
 
-#ifdef ARDUINO
+// I2C needs the Arduino core or the IDF I2C master driver (IDF 5.2+)
+#if defined(ARDUINO) || __has_include("driver/i2c_master.h")
 
 
 #include <string.h>
@@ -429,7 +430,7 @@ void SSD1306Controller::updateTaskFunc(void * pvParameters)
 
 void SSD1306Controller::suspendBackgroundPrimitiveExecution()
 {
-  ++m_updateTaskFuncSuspended;
+  m_updateTaskFuncSuspended = m_updateTaskFuncSuspended + 1;
   while (m_updateTaskRunning)
     taskYIELD();
 }
@@ -642,5 +643,4 @@ bool SSD1306Controller::suspendDoubleBuffering(bool value)
 } // end of namespace
 
 
-
-#endif // #ifdef ARDUINO
+#endif  // #if defined(ARDUINO) || __has_include("driver/i2c_master.h")

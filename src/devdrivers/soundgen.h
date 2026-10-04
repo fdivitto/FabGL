@@ -53,6 +53,13 @@
 #include "fabglconf.h"
 #include "fabutils.h"
 
+#if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  #include "driver/sdm.h"
+#else
+  #include "driver/dac.h"
+  #include "driver/sigmadelta.h"
+#endif
+
 
 
 namespace fabgl {
@@ -525,6 +532,10 @@ private:
   bool                m_initDone;
   
   esp_timer_handle_t  m_timerHandle;
+
+  #if FABGL_ESP_IDF_VERSION >= FABGL_ESP_IDF_VERSION_VAL(5, 0, 0)
+  sdm_channel_handle_t m_sdmChannel = nullptr;
+  #endif
   
   #ifdef FABGL_EMULATED
   SDL_AudioDeviceID   m_device;

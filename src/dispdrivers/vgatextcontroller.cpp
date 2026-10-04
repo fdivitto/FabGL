@@ -5,7 +5,6 @@
 
 #include "soc/i2s_struct.h"
 #include "soc/i2s_reg.h"
-#include "driver/periph_ctrl.h"
 #include "soc/rtc.h"
 
 #include "fabutils.h"
@@ -156,7 +155,7 @@ void VGATextController::setCursorBackground(Color value)
 void VGATextController::setupGPIO(gpio_num_t gpio, int bit, gpio_mode_t mode)
 {
   configureGPIO(gpio, mode);
-  gpio_matrix_out(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
+  esp_rom_gpio_connect_out_signal(gpio, I2S1O_DATA_OUT0_IDX + bit, false, false);
 }
 
 
