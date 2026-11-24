@@ -1,3 +1,6 @@
+# > **ARCHIVED REPOSITORY**
+> This repository is archived and no longer actively maintained. Development continues on **[FabGL2](https://github.com/fdivitto/FabGL2)**.
+
 # FabGL
 ### **ESP32** Display Controller (VGA, Color NTSC/PAL Composite, I2C and SPI displays), PS/2 Mouse and Keyboard Controller, Graphics Library, Sound Engine, Graphical User Interface (GUI), Game/Emulation Engine and ANSI/VT Terminal
 
